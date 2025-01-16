@@ -72,32 +72,6 @@ export const BodyText = ({ children, ...props }) => (
   </Text>
 );
 
-export const Display = ({ children, ...props }) => (
-  <Text
-    fontFamily="Ubuntu"
-    fontWeight="500"
-    fontSize="34px"
-    lineHeight="44px"
-    color="#252A32"
-    {...props}
-  >
-    {children}
-  </Text>
-);
-
-export const SectionTitle = ({ children, ...props }) => (
-  <Text
-    fontFamily="Ubuntu"
-    fontWeight="400"
-    fontSize="24px"
-    lineHeight="40px"
-    color="#252A32"
-    {...props}
-  >
-    {children}
-  </Text>
-);
-
 function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -265,38 +239,65 @@ function Products() {
           </Text>
         </Text>
 
-        <VStack spacing={isMobileMod() ? 8 : 120}>
+        <VStack spacing={{base: "80px", lg: "112px"}} width="100%">
           <HStack
-            flexDirection={isMobileMod() && "column"}
-            justifyContent="center"
-            gridGap={isMobileMod() ? "0" : "160px"}
+            width="100%"
+            flexDirection={{base: "column", lg: "row"}}
+            justifyContent="space-between"
+            alignItems="flex-start"
+            spacing={0}
+            gap={{base: "40px", lg: "160px"}}
           >
-            <Stack maxWidth={isMobileMod() ? "300px" : "430px"}>
+            <Stack
+              maxWidth={{base: "100%", lg: "490px"}}
+              spacing={0}
+            >
               <Text
-                fontFamily="Ubuntu"
+                fontFamily="Roboto"
+                fontWeight="400"
                 fontSize="14px"
-                fontWeight="300"
-                color="#6F6F6F"
-                letterSpacing="0.5px"
-                lineHeight="24px"
+                lineHeight="20px"
+                color="#71757A"
+                paddingBottom="10px"
               >
                 {t('products.filters')}
               </Text>
 
-              <SectionTitle marginTop="0 !important">{t('products.search_as_you_want')}</SectionTitle>
               <Text
                 fontFamily="Roboto"
-                lineHeight="24px"
-                fontSize="16px"
-                fontWeight="400"
+                fontWeight="500"
+                fontSize="24px"
+                lineHeight="36px"
                 color="#252A32"
+                paddingBottom="18px"
+              >
+                {t('products.search_as_you_want')}
+              </Text>
+
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="18px"
+                lineHeight="26px"
+                color="#464A51"
+                paddingBottom="24px"
               >
                 {t('products.search_description')}
               </Text>
 
               <Link
-                marginTop="24px !important"
+                width="fit-content"
                 href={"/search"}
+                fontSize="18px"
+                lineHeight="26px"
+                fontWeight="400"
+                paddingBottom="2px"
+                borderBottom="1px solid #0068C5"
+                color="#0068C5"
+                _hover={{
+                  color: "#0057A4",
+                  borderColor: "#0057A4"
+                }}
               >
                 {t('products.start_search')}
               </Link>
@@ -304,105 +305,154 @@ function Products() {
 
             <Stack>
               <ProductsFiltersImage
-                widthImage={isMobileMod() ? "300px" : "550px"}
-                heightImage={isMobileMod() && "250px"}
+                widthImage={{base: "100%", lg: "625px"}}
+                heightImage={{base: "100%", lg: "300px"}}
               />
             </Stack>
           </HStack>
 
           <HStack
-            flexDirection={isMobileMod() && "column"}
-            justifyContent="center"
-            gridGap={isMobileMod() ? "0" : "160px"}
+            width="100%"
+            flexDirection={{base: "column", lg: "row"}}
+            justifyContent="space-between"
+            alignItems="flex-start"
+            spacing={0}
+            gap={{base: "40px", lg: "160px"}}
           >
             <Stack 
-              order={isMobileMod() ? 0 : 1}
-              maxWidth={isMobileMod() ? "300px" : "430px"}
+              order={{base: 0, lg: 1}}
+              maxWidth={{base: "100%", lg: "490px"}}
+              spacing={0}
             >
-              <HStack spacing={1}>
-                <Text
-                  fontFamily="Ubuntu"
-                  fontSize="14px"
-                  fontWeight="300"
-                  color="#6F6F6F"
-                  letterSpacing="0.5px"
-                  lineHeight="24px"
-                >
-                  {t('products.processed_tables')}
-                </Text>
-              </HStack>
-              
-              <SectionTitle marginTop="0 !important">{t('products.access_quality_data')}</SectionTitle>
               <Text
                 fontFamily="Roboto"
-                lineHeight="24px"
-                fontSize="16px"
                 fontWeight="400"
+                fontSize="14px"
+                lineHeight="20px"
+                color="#71757A"
+                paddingBottom="10px"
+              >
+                {t('products.processed_tables')}
+              </Text>
+
+              <Text
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="24px"
+                lineHeight="36px"
                 color="#252A32"
+                paddingBottom="18px"
+              >
+                {t('products.access_quality_data')}
+              </Text>
+
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="18px"
+                lineHeight="26px"
+                color="#464A51"
+                paddingBottom="24px"
               >
                 {t('products.processed_tables_description')}
               </Text>
 
               <Link
-                marginTop="24px !important"
+                width="fit-content"
                 href={"/search?contains=tables"}
+                fontSize="18px"
+                lineHeight="26px"
+                fontWeight="400"
+                paddingBottom="2px"
+                borderBottom="1px solid #0068C5"
+                color="#0068C5"
+                _hover={{
+                  color: "#0057A4",
+                  borderColor: "#0057A4"
+                }}
               >
                 {t('products.view_available_data')}
               </Link>
             </Stack>
 
-            <Stack order={isMobileMod() ? 1 : 0}>
+            <Stack order={{base: 1, lg: 0}}>
               <ProcessedDataImage
-                widthImage={isMobileMod() ? "300px" : "550px"}
-                heightImage={isMobileMod() && "250px"}
+                widthImage={{base: "100%", lg: "625px"}}
+                heightImage={{base: "100%", lg: "300px"}}
               />
             </Stack>
           </HStack>
 
           <HStack
-            flexDirection={isMobileMod() && "column"}
-            justifyContent="center"
-            gridGap={isMobileMod() ? "100px" : "160px"}
+            width="100%"
+            flexDirection={{base: "column", lg: "row"}}
+            justifyContent="space-between"
+            alignItems="flex-start"
             spacing={0}
+            gap={{base: "40px", lg: "160px"}}
           >
-            <Stack maxWidth={isMobileMod() ? "300px" : "430px"}>
+            <Stack
+              maxWidth={{base: "100%", lg: "490px"}}
+              spacing={0}
+            >
               <Text
-                fontFamily="Ubuntu"
+                fontFamily="Roboto"
+                fontWeight="400"
                 fontSize="14px"
-                fontWeight="300"
-                color="#6F6F6F"
-                letterSpacing="0.5px"
-                lineHeight="24px"
+                lineHeight="20px"
+                color="#71757A"
+                paddingBottom="10px"
               >
                 {t('products.packages')}
               </Text>
 
-              <SectionTitle marginTop="0 !important">{t('products.explore_in_your_favorite_language')}</SectionTitle>
               <Text
                 fontFamily="Roboto"
-                lineHeight="24px"
-                fontSize="16px"
-                fontWeight="400"
+                fontWeight="500"
+                fontSize="24px"
+                lineHeight="36px"
                 color="#252A32"
+                paddingBottom="18px"
+              >
+                {t('products.explore_in_your_favorite_language')}
+              </Text>
+
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="18px"
+                lineHeight="26px"
+                color="#464A51"
+                paddingBottom="24px"
               >
                 {t('products.packages_description')}
               </Text>
 
               <Link
-                marginTop="24px !important"
+                width="fit-content"
                 href={
                   locale === "en" ? "https://basedosdados.github.io/sdk/en" :
                   locale === "es" ? "https://basedosdados.github.io/sdk/es" :
                   "https://basedosdados.github.io/sdk"
                 }
+                fontSize="18px"
+                lineHeight="26px"
+                fontWeight="400"
+                paddingBottom="2px"
+                borderBottom="1px solid #0068C5"
+                color="#0068C5"
+                _hover={{
+                  color: "#0057A4",
+                  borderColor: "#0057A4"
+                }}
               >
                 {t('products.learn_how_to_access')}
               </Link>
             </Stack>
 
             <Stack
-              maxWidth={isMobileMod() ? "320px" : "550px"}
-              minWidth={isMobileMod() ? "320px" : "550px"}
+              maxWidth={{base: "100%", lg: "550px"}}
+              minWidth={{base: "100%", lg: "550px"}}
               height="100%"
             >
               <Box
@@ -447,12 +497,27 @@ function Products() {
 export function TextPix ({ title, text }) {
   return (
     <Box>
-      <BodyText fontSize="16px" letterSpacing="0.2px" color="#FF8484" fontWeight="500">
+      <Text
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="18px"
+        lineHeight="28px"
+        color="#252A32"
+        textAlign="justify"
+      >
         {title}
-      </BodyText>
-      <BodyText fontSize="16px" letterSpacing="0.2px" marginBottom="8px">
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="18px"
+        lineHeight="28px"
+        color="#464A51"
+        textAlign="justify"
+        marginBottom="10px"
+      >
         {text}
-      </BodyText>
+      </Text>
     </Box>
   )
 }
@@ -482,50 +547,57 @@ function Support() {
   const { t } = useTranslation('common');
   const { locale } = useRouter();
   const { hasCopied, onCopy } = useClipboard("42494318000116");
-  const isMobile = isMobileMod(); // Call hook at the top level
 
   return (
     <VStack
-      spacing={20}
-      width={{ base: "90%", lg: "85%" }}
+      spacing={0}
+      width="100%"
+      paddingX="24px"
       margin="auto"
     >
-      <VStack id="support" position="relative" width="95%">
-        <Display
-          letterSpacing={isMobile ? "0.2px" : "-0.4px"}
+      <VStack id="support" position="relative" width="100%" spacing={0}>
+        <Text
+          display={{base: "block", md:"flex"}}
+          flexDirection="column"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           position="relative"
           zIndex="1"
           width="100%"
           textAlign="center"
-          margin={isMobile ? "80px 0px 24px" : "104px 0px 24px"}
+          margin="104px 0px 40px"
         >
-          {t('support.existence_through_effort')} {!isMobile && <br/>} {t('support.those_who_believe_in_quality_open_data')}
-        </Display>
+          <Text as="span">{t('support.existence_through_effort')}</Text>
+          <Text as="span">{t('support.those_who_believe_in_quality_open_data')}</Text>
+        </Text>
 
         {locale === 'pt' && (
           <>
-
             <Text
               position="relative"
               zIndex="1"
-              color="#6F6F6F"
-              fontFamily="Ubuntu"
-              fontSize={isMobile ? "16px" : "18px"}
-              alignSelf="center"
-              letterSpacing={isMobile ? "0.2px" : "0.1px"}
-              fontWeight="300"
-              margin="0 0 48px !important"
+              textAlign="center"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="24px"
+              lineHeight="36px"
+              color="#464A51"
+              paddingBottom="40px"
             >
               {t('support.support_us_too')}
             </Text>
 
             <Stack
               width="100%"
-              margin="0 0 80px !important"
+              paddingBottom="40px"
               justifyContent="center"
               alignItems="center"
               direction={{ base: "column", lg: "row" }}
-              gridGap="48px"
+              gap="40px"
+              spacing={0}
             >
               <ShadowBox
                 width="266px"
@@ -537,71 +609,92 @@ function Support() {
                   />
                 }
                 title={t('support.enthusiast')}
-                spacing={4}
               >
-                <BodyText
+                <Text
                   textAlign="center"
-                  fontWeight="300"
+                  fontFamily="Roboto"
+                  fontWeight="400"
                   fontSize="14px"
-                  letterSpacing="0.2px"
-                  margin="10px 0 24px !important"
-                  lineHeight="24px"
+                  lineHeight="20px"
+                  color="#464A51"
+                  padding="10px 0 24px"
                 >
                   {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
-                </BodyText>
+                </Text>
                 <Link
-                  _hover={{ opacity:"none" }}
-                  margin="0 !important"
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/15"
                 >
-                  <Button backgroundColor="#FF8484" width="200px">
-                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>15</p>/ {t('support.month')}
+                  <Button
+                    backgroundColor="#0D99FC"
+                    _hover={{
+                      backgroundColor: "#0B86DE"
+                    }}
+                    width="200px"
+                    justifyContent="center"
+                    height="54px"
+                  >
+                    <Text
+                      fontFamily="Roboto"
+                      fontWeight="700"
+                      fontSize="16px"
+                      lineHeight="18px"
+                      color="#FFFFFF"
+                    >
+                      R$ <Text as="span" fontSize="24px" lineHeight="28px">15</Text>/ {t('support.month')}
+                    </Text>
                   </Button>
                 </Link>
               </ShadowBox>
 
               <ShadowBox
-                width={isMobile ? "266px" : "320px"}
-                height={isMobile ? "400" : "428px"}
+                width={{base: "266px", lg: "320px"}}
+                height={{base: "400", lg: "428px"}}
                 image={
                   <DatabaseImage 
                     widthImage="100%"
                     heightImage="100%"
-                    backgroundColor="#FF8484"
+                    backgroundColor="#454955"
                   />
                 }
                 title={t('support.databaser')}
-                titleStyle={{
-                  fontSize:"22px",
-                  color:"#FF8484",
-                  fontWeight:"500",
-                  letterSpacing:"0.1px"
-                }}
-                spacing={4}
               >
-                <BodyText
+                <Text
                   display="flex"
                   flexDirection="column"
                   textAlign="center"
-                  fontSize="16px"
-                  margin="16px 0 24px !important"
-                  letterSpacing="0.2px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#464A51"
+                  padding="10px 0 24px"
                 >
-                  <b style={{fontWeight:"500"}}>{t('support.donate_1_real_per_day')}</b>
-                  <span>{t('support.to_make_databasers_happy')}</span>
-                </BodyText>
+                  <Text as="span" fontWeight="500">{t('support.donate_1_real_per_day')}</Text>
+                  <Text as="span">{t('support.to_make_databasers_happy')}</Text>
+                </Text>
                 <Link
-                  _hover={{ opacity:"none" }}
-                  marginTop="0 !important"
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/30"
                 >
                   <Button
-                    backgroundColor="#FF8484"
+                    backgroundColor="#0D99FC"
+                    _hover={{
+                      backgroundColor: "#0B86DE"
+                    }}
                     width="200px"
+                    justifyContent="center"
+                    height="54px"
                   >
-                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>30</p>/ {t('support.month')}
+                    <Text
+                      fontFamily="Roboto"
+                      fontWeight="700"
+                      fontSize="16px"
+                      lineHeight="18px"
+                      color="#FFFFFF"
+                    >
+                      R$ <Text as="span" fontSize="24px" lineHeight="28px">30</Text>/ {t('support.month')}
+                    </Text>
                   </Button>
                 </Link>
               </ShadowBox>
@@ -616,26 +709,32 @@ function Support() {
                   />
                 }
                 title={t('support.master_of_data')}
-                spacing={4}
               >
-                <BodyText
+                <Text
                   textAlign="center"
-                  fontWeight="300"
+                  fontFamily="Roboto"
+                  fontWeight="400"
                   fontSize="14px"
-                  letterSpacing="0.2px"
-                  margin="10px 0 24px !important"
-                  lineHeight="24px"
+                  lineHeight="20px"
+                  color="#464A51"
+                  padding="10px 0 24px"
                 >
                   {t('support.master_of_data_description')}
-                </BodyText>
+                </Text>
                 <Link
-                  _hover={{ opacity:"none" }}
-                  marginTop="0 !important"
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/50"
                 >
-                  <Button backgroundColor="#FF8484" width="200px">
-                    R$ <p style={{fontSize:"24px", margin:"0 5px"}}>50</p>/ {t('support.month')}
+                  <Button
+                    backgroundColor="#0D99FC"
+                    _hover={{
+                      backgroundColor: "#0B86DE"
+                    }}
+                    width="200px"
+                    justifyContent="center"
+                    height="54px"
+                  >
+                    R$ <Text as="span" fontSize="24px" lineHeight="28px">50</Text>/ {t('support.month')}
                   </Button>
                 </Link>
               </ShadowBox>
@@ -645,66 +744,77 @@ function Support() {
               <Text
                 width="100%"
                 textAlign="center"
-                fontFamily="Ubuntu"
-                fontSize="20px"
-                letterSpacing="0.2px"
-                color="#7D7D7D"
-                fontWeight="400"
-                lineHeight="32px"
-                paddingBottom={!isMobile && "32px"}
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="28px"
+                color="#71757A"
+                paddingBottom="32px"
               >
                 {t('support.donate_any_amount_via_pix')}
               </Text>
 
               <Grid
-                templateColumns={isMobile ? "repeat(1, 3fr)" : "repeat(3, 1fr)"}
-                gridGap={isMobile && "40px"}
+                templateColumns={{base: "repeat(1, 3fr)", lg: "repeat(3, 1fr)"}}
+                gap={{base: "40px", lg: "0"}}
                 justifyItems="center"
                 width="100%"
               >
                 <GridItem
-                  marginTop={isMobile && "32px !important"}
+                  paddingTop={{base: "32px", lg: "0"}}
                   justifyContent="center"
                   alignItems="flex-start"
                 >
                   <TextPix title={t('support.company_name')} text="Instituto Base dos Dados"/>
                   <TextPix title={t('support.cnpj')} text="42494318/0001-16"/>
                   <TextPix title={t('support.bank')} text="PagSeguro"/>
-                  <Box display="flex" gridGap="48px">
+                  <Box display="flex" gap="48px">
                     <TextPix title={t('support.agency')} text="0001"/>
                     <TextPix title={t('support.account')} text="31401653-6"/>
                   </Box>
                 </GridItem>
 
-                <GridItem marginBottom={isMobile && "24px"}>
+                <GridItem>
                   <ChakraImage
                     alt="QR code para apoiador"
                     position="relative"
                     top="-5px"
-                    width="250px"
-                    height="250px"
+                    width="286px"
+                    height="286px"
                     objectFit="contain"
                     boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
                     src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
                   />
                   <Button 
-                    fontSize="15px"
-                    fontWeight="700"
-                    backgroundColor="#FF8484"
+                    fontSize="20px"
+                    lineHeight="30px"
+                    backgroundColor="#0D99FC"
+                    _hover={{
+                      backgroundColor: "#0B89E2"
+                    }}
                     paddingX="30px"
                     width="100%"
-                    gridGap="6px"
+                    height="54px"
+                    gap="6px"
                     onClick={onCopy}
-                    opacity={hasCopied && "0.8"}
                     marginTop="32px"
+                    textAlign="center"
+                    justifyContent="center"
                   >
                     <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
                       {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
                   </Button>
                 </GridItem>
 
-                <GridItem display={isMobile && "none"}>
-                  <BodyText letterSpacing="0.2px" fontSize="16px" color="#FF8484" fontWeight="500" marginBottom="24px">{t('support.follow_the_steps')}</BodyText>
+                <GridItem display={{base: "none", lg: "flex"}} flexDirection="column">
+                  <Text
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="18px"
+                    lineHeight="28px"
+                    color="#252A32"
+                    marginBottom="24px"
+                  >{t('support.follow_the_steps')}</Text>
                   <StepText index="1" text={t('support.step_1')}/>
                   <StepText index="2" text={t('support.step_2')}/>
                   <StepText index="3" text={t('support.step_3')}/>
@@ -741,13 +851,12 @@ function Support() {
             <Text
               width="100%"
               textAlign="center"
-              fontFamily="Ubuntu"
+              fontFamily="Roboto"
               fontSize="20px"
-              letterSpacing="0.2px"
-              color="#7D7D7D"
               fontWeight="400"
               lineHeight="32px"
-              paddingBottom={!isMobile && "32px"}
+              color="#71757A"
+              paddingBottom={{base: "0", lg: "32px"}}
             >
               {t('support.donate_any_amount_via_paypal')}
             </Text>
@@ -763,15 +872,16 @@ function Support() {
 
 function BDEdu () {
   const { t } = useTranslation('common');
-  const closeDate = new Date(2024, 2, 26)
+  const closeDate = new Date(2025, 2, 26)
   const currentDate = new Date()
 
   if(currentDate > closeDate) return null
   return (
     <Stack
       id="edu" 
-      width={{ base: "90%", lg: "85%" }}
-      maxWidth="1264px"
+      width="100%"
+      paddingX="24px"
+      maxWidth="1440px"
       margin="104px auto"
       alignItems="center"
     >
@@ -780,23 +890,42 @@ function BDEdu () {
         heightImage="54px"
         marginBottom="24px"
       />
-      <Display
+      <Text
+        display={{base: "block", md:"flex"}}
+        flexDirection="column"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="50px"
+        lineHeight="60px"
+        color="#252A32"
         textAlign="center"
-        margin="0 0 24px !important"
+        paddingBottom="24px"
       >
-        {t('edu.learn_from_the_reference')}
-        {!isMobileMod() &&<br/>}
-        {t('edu.in_making_public_data_available')}
-      </Display>
-      <BodyText
+        <Text as="span">{t('edu.learn_from_the_reference')}</Text>
+        <Text as="span">{t('edu.in_making_public_data_available')}</Text>
+      </Text>
+      <Text
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="24px"
+        lineHeight="36px"
+        color="#71757A"
         textAlign="center"
-        margin="0 0 24px !important"
+        paddingBottom="24px"
       >
         {t('edu.with_our_course_you_can_go_further')}
-      </BodyText>
+      </Text>
       <Button
-        margin="0 !important"
-        backgroundColor="#8262D1"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="20px"
+        lineHeight="30px"
+        height="56px"
+        padding="10px 16px"
+        backgroundColor="#0D99FC"
+        _hover={{
+          backgroundColor: "#0B89E2"
+        }}
       >
         <a href={`https://info.basedosdados.org/bd-edu-sql`} target="_blank">
           {t('edu.take_advantage_of_the_promotional_price')}

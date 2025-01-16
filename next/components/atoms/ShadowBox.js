@@ -1,22 +1,14 @@
 import { VStack, Box, Text } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 export function ShadowBox({
   title,
   image,
   children,
-  spacing = 5,
+  spacing = 0,
   textStyle,
   titleStyle,
   ...props
 }) {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   return (
     <VStack
@@ -51,11 +43,12 @@ export function ShadowBox({
         {...textStyle}
       >
         <Text
-          fontFamily="Ubuntu"
+          fontFamily="Roboto"
+          fontWeight="500"
           fontSize="20px"
-          fontWeight="400"
-          letterSpacing="0.1px"
+          lineHeight="30px"
           color="#252A32"
+          textAlign="center"
           {...titleStyle}
         >
           {title}
