@@ -53,7 +53,7 @@ Ainda não foram encontrados indícios de linhas duplicadas nessa base. Mas é i
 Essas tabelas são desidentificadas, ou seja, não temos as informações dos CNPJs nem dos CPFs envolvidos. Isso significa que não é possível fazer um cruzamento entre elas, nem com outras bases de dados que possuam CNPJ. Assim, esse conjunto de dados é interessante de ser cruzado com outras bases através das colunas de CNAE ou de CEP, como o CAGED. 
 
 # Download dos dados
-A tabela da RAIS disponibilizada pela BD contém todos os vínculos empregatícios do país desde 1984, o que representa mais de 350 GB armazenados. Um computador normal costuma não ter capacidade de processamento para essa quantidade de dados, por isso é necessário primeiro trabalhar com queries no bigquery (que tem processamento em nuvem) e fazer filtros e agregações antes de baixar os dados. Recomendamos fazer filtros utilizando as colunas de partições (ano, sigla_uf) e selecionar apenas as colunas que sejam do seu interesse.
+A tabela da RAIS disponibilizada pela BD contém todos os vínculos empregatícios do país desde 1984, o que representa mais de 350 GB armazenados. Um computador normal costuma não ter capacidade de processamento para essa quantidade de dados, por isso é necessário primeiro trabalhar com queries no bigquery (que tem processamento em nuvem) e fazer filtros e agregações antes de baixar os dados. Recomendamos fazer filtros utilizando as colunas de partições (`ano`, `sigla_uf`) e selecionar apenas as colunas que sejam do seu interesse.
 
 # Instituição responsável
 Ministério do Trabalho e Emprego (MTE)
