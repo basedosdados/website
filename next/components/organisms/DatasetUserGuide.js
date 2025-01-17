@@ -405,6 +405,8 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
       >
         {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
 
+        <Box id="hotjarSurveyGuiaDeUso" marginTop="40px"/>
+
         <Box
           marginTop="40px"
           borderRadius="16px"
