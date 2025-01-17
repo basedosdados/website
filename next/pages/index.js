@@ -59,19 +59,6 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-export const BodyText = ({ children, ...props }) => (
-  <Text
-    fontFamily="ubuntu"
-    fontWeight="300"
-    fontSize="18px"
-    lineHeight="28px"
-    color="#252A32"
-    {...props}
-  >
-    {children}
-  </Text>
-);
-
 function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -179,9 +166,9 @@ function Hero({ dataThemeCatalog, locale }) {
 
           <VStack
             margin="0 !important"
-            paddingTop={{base: "80px", lg: "153px"}}
+            paddingTop={{base: "80px", lg: "120px"}}
             width="100%"
-            spacing="65px"
+            spacing="32px"
             position="relative"
             id="theme"
           >
@@ -525,20 +512,25 @@ export function TextPix ({ title, text }) {
 export function StepText ({index, text}) {
   return (
     <Box marginBottom="20px !important">
-      <BodyText
-        fontSize="16px" letterSpacing="0.2px"
+      <Text
         display="flex"
-        gridGap="8px"
+        gap="8px"
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize="18px"
+        lineHeight="28px"
+        color="#464A51"
       >
         <Text
           as="span"
-          color="#FF8484"
+          color="#252A32"
           fontWeight="500"
+          width="12px"
         >
           {index}
         </Text>
         {text}
-      </BodyText>
+      </Text>
     </Box>
   )
 }
@@ -818,30 +810,38 @@ function Support() {
                   <StepText index="1" text={t('support.step_1')}/>
                   <StepText index="2" text={t('support.step_2')}/>
                   <StepText index="3" text={t('support.step_3')}/>
-                  <StepText index="❤" text={t('support.step_4')}/>
+                  <StepText index="." text={t('support.step_4')}/>
                 </GridItem>
               </Grid>
 
-              <BodyText
+              <Text
+                display="block"
+                flexDirection="column"
+                fontFamily="Roboto"
+                fontWeight="400"
                 fontSize="16px"
-                letterSpacing="0.2px"
+                lineHeight="24px"
+                color="#252A32"
                 textAlign="center"
-                margin="32px 0 !important"
+                justifyContent="center"
+                gap="4px"
+                padding="32px 0"
               >
-                💰 {t('support.want_to_institutionally_support_db')}
+                <Text as="span">💰 {t('support.want_to_institutionally_support_db')}</Text>
                 <Link
-                  display="inline"
-                  fontFamily="ubuntu"
-                  textDecoration="none"
-                  fontWeight="500"
+                  display="default"
+                  fontWeight="400"
                   fontSize="16px"
-                  letterSpacing="0.2px"
-                  color="#0D99FC"
+                  lineHeight="24px"
+                  color="#0068C5"
+                  _hover={{
+                    color: "#0057A4"
+                  }}
                   href="/contact"
                 >
                   {t('support.contact_us')}
                 </Link>
-              </BodyText>
+              </Text>
             </Box>
           </>
         )}
