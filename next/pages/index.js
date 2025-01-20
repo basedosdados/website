@@ -927,7 +927,7 @@ function BDEdu () {
           backgroundColor: "#0B89E2"
         }}
       >
-        <a href={`https://info.basedosdados.org/bd-edu-sql`} target="_blank">
+        <a href={`https://info.basedosdados.org/bd-edu-cursos`} target="_blank">
           {t('edu.take_advantage_of_the_promotional_price')}
         </a>
       </Button>

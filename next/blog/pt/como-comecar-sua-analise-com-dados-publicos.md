@@ -169,7 +169,7 @@ Abaixo você encontra uma seção com diversos links úteis para seu trabalho e 
 
 - [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/sdk/)
 - [Assine gratuitamente nossa BDleter para receber mensalmente nossas novidades;](https://info.basedosdados.org/newsletter)
-- [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-sql)
+- [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-cursos)
 - [Se inscreva em nosso canal no YouTube](https://www.youtube.com/@BasedosDados) e siga a gente no [instagram](https://www.instagram.com/basedosdados/), [linkedin](https://www.linkedin.com/company/base-dos-dados/mycompany/) e [twitter](https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22).
 - [Faça parte da nossa comunidade do Discord para tirar dúvidas direto com nossa equipe e conhecer mais pessoas entusismadas com dados;](https://discord.gg/huKWpsVYx4)
 

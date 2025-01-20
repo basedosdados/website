@@ -1013,7 +1013,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         {
           icon: <BDLogoEduImage widthImage="54px"/>,
           name: [t('data_courses')],
-          href: "https://info.basedosdados.org/bd-edu-sql"
+          href: "https://info.basedosdados.org/bd-edu-cursos"
         },
         {
           icon: <BDLogoLabImage widthImage="54px"/>,
