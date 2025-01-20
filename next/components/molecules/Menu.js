@@ -293,7 +293,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             padding="4px 8px"
             marginTop="10px !important"
           >
-            {isUserPro ? t('DBPro') : t('DBFree')}
+            {isUserPro
+              ? (userData?.plan === "bd_pro_empresas"
+                ? t('DBEnterprise')
+                : userData?.plan === "bd_pro"
+                  ? t('DBPro')
+                  : null)
+              : t('DBFree')
+            }
           </Box>
         </Stack>
 
@@ -518,7 +525,14 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               padding="4px 8px"
               marginTop="10px"
             >
-              {isUserPro ? t('DBPro') : t('DBFree')}
+              {isUserPro
+                ? (userData?.plan === "bd_pro_empresas"
+                  ? t('DBEnterprise')
+                  : userData?.plan === "bd_pro"
+                    ? t('DBPro')
+                    : null)
+                : t('DBFree')
+              }
             </Box>
           </MenuItem>
 
@@ -969,10 +983,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     if(userBD !== null && userBD !== "undefined") {
       try {
         const res = JSON.parse(userBD)
+
         setUserData({
           email: res.email,
           username: res.username,
           picture: res.picture || "",
+          plan: res?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
         })
       } catch (error) {
         console.error("Error parsing user data:", error)
