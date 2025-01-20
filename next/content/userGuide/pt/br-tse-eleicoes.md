@@ -110,7 +110,7 @@ A maior parte dos dados só é atualizado de 2 em 2 anos a cada nova eleição r
 # Tratamentos feitos pela BD:
 
 #### Coluna: `data_nascimento` 
-Datas apresentam as vezes valores com até mais de mil anos no futuro da atual eleição. Anulamos qualquer data que estaja a mais de 120 anos no futuro da eleição em questão.
+Alguns candidados apresentam datas de nascimentos que equivalem a mais de mil anos de idade. Anulamos qualquer data que o candidado tenha uma idade maior de 120 anos ou seja menor de idade.
 
 #### Coluna: `tipo_eleicao`
 
@@ -120,10 +120,12 @@ Datas apresentam as vezes valores com até mais de mil anos no futuro da atual e
 
 São retirados acentos, espaços excessivos e colocado tudo em minusculo para uma padronização dos dados.
 
-#### Mudanças Pontuais
+#### Tratamentos Pontuais
 - Troca de `brasileira nata` para `brasileira` na coluna `nacionalidade`
 - "#NULO", "#NULO#", "#NE", "NÃO DIVULGÁVEL", "Não Divulgável", "-1", "-4", "-3". São todos substitudos por valores nulos.
-- Todas as tabelas são removidas linhas duplicadas.
+- Linhas de dados que são completamente identicas são removidas em todas as tabelas.
+- Alguamas tabelas apresentam zeros a esquerda em colunas com [IDs IBGE][ids-ibge] de municípios. Para conectar com o nosso [diretorio][diretorio-municipios] esses zeros a esquerda foram removidos.
+- Dados originalmente estão com um `encoding` de [`ISO-8859-1`][iso]. Depois do tratamento eles são salvo como `utf-8`
 
 # Materiais de apoio
 * [Site de dados abertos do TSE](https://dadosabertos.tse.jus.br/dataset/): Arquivos disponíveis apra downaload quebrados por ano e unidade da federação. Possui também dicionários de dados com especificações mais detalhadas de cada coluna
@@ -131,3 +133,10 @@ São retirados acentos, espaços excessivos e colocado tudo em minusculo para um
 * [Divulgação de Candidaturas e Contas Eleitorais](https://divulgacandcontas.tse.jus.br/divulga/#/home): Painel para consulta de informações sobre cada candidatura. Muito prático para entender a situação de um canditado por vez. Não muito útil para fazer comparações entre diversos candidatos de uma única vez.
 * [Siga o dinheiro](https://www.sigaodinheiro.org/): Painel desenvolvido pela BD para entender de onde vem e onde está sendo gasto o dinheiro de campanha.   
 * [Curso de Análise de Dados Eleitorais](https://info.basedosdados.org/bd-edu-eleicoes): Criamos um curso personalizado para você aprender desde o contexto e as regras eleitorais, até como criar análises, visualizações e mapas com dados de eleições brasileiras
+
+
+<!-- variaveis -->
+
+[ids-ibge]: https://www.ibge.gov.br/explica/codigos-dos-municipios.php
+[diretorio-municipios]: https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056
+[iso]: https://pt.wikipedia.org/wiki/ISO/IEC_8859-1
