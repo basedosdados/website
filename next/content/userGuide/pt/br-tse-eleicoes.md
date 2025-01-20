@@ -109,16 +109,21 @@ A maior parte dos dados só é atualizado de 2 em 2 anos a cada nova eleição r
 
 # Tratamentos feitos pela BD:
 
-### Colunas: "data_eleicao", "data_receita", "data_nascimento"...
-Algumas colunas com datas apresentam as vezes datas com até mais de mil anos no futuro da atual eleição. Anulamos qualquer data que estaja a mais de 120 anos no futuro da eleição em questão.
+#### Coluna: `data_nascimento` 
+Datas apresentam as vezes valores com até mais de mil anos no futuro da atual eleição. Anulamos qualquer data que estaja a mais de 120 anos no futuro da eleição em questão.
 
-### Colunas: "tipo_eleicao", "cargo", "situacao", "ocupacao", "genero", "instrucao", "estado_civil", "nacionalidade", "raca"..
+#### Coluna: `tipo_eleicao`
+
+`eleicoes municipais` são colocadas como `eleicao ordinaria`
+
+#### Colunas: `tipo_eleicao`, `cargo`, `situacao`, `ocupacao`, `genero`, `instrucao`, `estado_civil`, `nacionalidade`, `raca`..
 
 São retirados acentos, espaços excessivos e colocado tudo em minusculo para uma padronização dos dados.
 
-### Mudanças Pontuais
+#### Mudanças Pontuais
 - Troca de `brasileira nata` para `brasileira` na coluna `nacionalidade`
 - "#NULO", "#NULO#", "#NE", "NÃO DIVULGÁVEL", "Não Divulgável", "-1", "-4", "-3". São todos substitudos por valores nulos.
+- Todas as tabelas são removidas linhas duplicadas.
 
 # Materiais de apoio
 * [Site de dados abertos do TSE](https://dadosabertos.tse.jus.br/dataset/): Arquivos disponíveis apra downaload quebrados por ano e unidade da federação. Possui também dicionários de dados com especificações mais detalhadas de cada coluna
