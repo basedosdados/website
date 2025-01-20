@@ -110,7 +110,7 @@ A maior parte dos dados só é atualizado de 2 em 2 anos a cada nova eleição r
 # Tratamentos feitos pela BD:
 
 #### Coluna: `data_nascimento` 
-Alguns candidados apresentam datas de nascimentos que equivalem a mais de mil anos de idade. Anulamos qualquer data que o candidado tenha uma idade maior de 120 anos ou seja menor de idade.
+Anulamos qualquer data que o candidado tenha uma idade maior de 120 anos ou menor de 18 anos
 
 #### Coluna: `tipo_eleicao`
 
@@ -127,6 +127,11 @@ São retirados acentos, espaços excessivos e colocado tudo em minusculo para um
 - Alguamas tabelas apresentam zeros a esquerda em colunas com [IDs IBGE][ids-ibge] de municípios. Para conectar com o nosso [diretorio][diretorio-municipios] esses zeros a esquerda foram removidos.
 - Dados originalmente estão com um `encoding` de [`ISO-8859-1`][iso]. Depois do tratamento eles são salvo como `utf-8`
 
+#### Codigos de Tratamento:
+- [Pipeline][code-pipeline]
+- [Notebook][code-notebook]
+- [Stata][code-stata]
+
 # Materiais de apoio
 * [Site de dados abertos do TSE](https://dadosabertos.tse.jus.br/dataset/): Arquivos disponíveis apra downaload quebrados por ano e unidade da federação. Possui também dicionários de dados com especificações mais detalhadas de cada coluna
 * [Painel de estatítiscas eleitorais do TSE](https://sig.tse.jus.br/ords/dwapr/seai/r/sig-eleicao/home?session=17112009236550): Painel com uma grande diversidade de filtros e possibilidades de análise para quem não quer mexer com os dados brutos e completos.
@@ -140,3 +145,6 @@ São retirados acentos, espaços excessivos e colocado tudo em minusculo para um
 [ids-ibge]: https://www.ibge.gov.br/explica/codigos-dos-municipios.php
 [diretorio-municipios]: https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056
 [iso]: https://pt.wikipedia.org/wiki/ISO/IEC_8859-1
+[code-stata]: https://github.com/basedosdados/sdk/tree/master/bases/br_tse_eleicoes/code
+[code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
+[code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
