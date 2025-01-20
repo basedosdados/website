@@ -13,12 +13,11 @@ import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
-import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
 
 import {
@@ -87,14 +86,6 @@ export default function SearchDatasetPage() {
     setSelectedFilters(fetchFilter(query))
     setFetchApi(fetchFunc)
   }, [query])
-
-  const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
-
-    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
-    return false
-  }
 
   function flattenArray(arr) {
     let result = []
@@ -192,7 +183,7 @@ export default function SearchDatasetPage() {
             widthImage="100%"
             heightImage="100%"
             marginBottom="16px"
-            marginTop={isMobileMod() && "24px"}
+            marginTop={{base: "24px", lg: "0"}}
           />
         }
 
@@ -365,7 +356,7 @@ export default function SearchDatasetPage() {
             <TagFilter
               key={key}
               text={value.displayName}
-              handleClick={() => handleSelectFilter([`${key}`,`${value}`])}
+              handleClick={() => handleSelectFilter([`${key}`,`${value.name}`])}
             />
           )
         )}
@@ -544,7 +535,7 @@ export default function SearchDatasetPage() {
         paddingTop="24px"
         marginX="auto"
         flexDirection={{ base: "column", lg: "row" }}
-        spacing={isMobileMod() ? 10 : 0}
+        spacing={{base: 10, lg: 0}}
       >
         <VStack
           justifyContent="flex-start"
@@ -723,7 +714,7 @@ export default function SearchDatasetPage() {
         <VStack
           alignItems="flex-start"
           width="100%"
-          paddingLeft={isMobileMod() ? "" : "40px !important"}
+          paddingLeft={{base: "0", lg: "40px !important"}}
           spacing="40px"
         >
           <FilterTags/>
