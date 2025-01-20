@@ -108,7 +108,17 @@ Ao longo dos anos, o sistema eleitoral passou por diversas mudanças, refletidas
 A maior parte dos dados só é atualizado de 2 em 2 anos a cada nova eleição regular. As informações de receitas e despesas são atualizadas todos os dias em época de campanha eleitoral.
 
 # Tratamentos feitos pela BD:
-**O Luiz vai preecher aqui de maneira resumida qual os tratamentos que fazemos, olhar os outros guias como referência**
+
+### Colunas: "data_eleicao", "data_receita", "data_nascimento"...
+Algumas colunas com datas apresentam as vezes datas com até mais de mil anos no futuro da atual eleição. Anulamos qualquer data que estaja a mais de 120 anos no futuro da eleição em questão.
+
+### Colunas: "tipo_eleicao", "cargo", "situacao", "ocupacao", "genero", "instrucao", "estado_civil", "nacionalidade", "raca"..
+
+São retirados acentos, espaços excessivos e colocado tudo em minusculo para uma padronização dos dados.
+
+### Mudanças Pontuais
+- Troca de `brasileira nata` para `brasileira` na coluna `nacionalidade`
+- "#NULO", "#NULO#", "#NE", "NÃO DIVULGÁVEL", "Não Divulgável", "-1", "-4", "-3". São todos substitudos por valores nulos.
 
 # Materiais de apoio
 * [Site de dados abertos do TSE](https://dadosabertos.tse.jus.br/dataset/): Arquivos disponíveis apra downaload quebrados por ano e unidade da federação. Possui também dicionários de dados com especificações mais detalhadas de cada coluna
