@@ -186,7 +186,11 @@ export default function UserPage({ getUser, isUserPro }) {
                   }}
                   borderRadius="8px"
                   padding="6px 8px"
-                  onClick={() => router.push({pathname: `/user/${userInfo.username}`, query: section.value})}
+                  onClick={() => router.replace(
+                    { pathname: `/user/${userInfo.username}`, query: section.value },
+                    undefined,
+                    { shallow: true }
+                  )}
                 >
                   { section.bar }
                 </Text>
