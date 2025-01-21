@@ -2,13 +2,15 @@ import {
     Box,
     VStack,
     Stack,
-    Text,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Display from "../components/atoms/Text/Display";
+import BodyText from "../components/atoms/Text/BodyText";
+import LabelText from "../components/atoms/Text/LabelText"
 import Link from "../components/atoms/Link";
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
@@ -22,45 +24,6 @@ export async function getStaticProps({ locale }) {
     },
   };
 }
-
-const Display = ({ children, ...props }) => (
-  <Text
-    fontFamily="Roboto"
-    fontWeight="500"
-    fontSize="36px"
-    lineHeight="48px"
-    color="#2B8C4D"
-    {...props}
-  >
-    {children}
-  </Text>
-);
-
-const BodyText = ({ children, ...props }) => (
-  <Text
-    fontFamily="Roboto"
-    fontWeight="400"
-    fontSize="16px"
-    lineHeight="24px"
-    color="#71757A"
-    {...props}
-  >
-    {children}
-  </Text>
-);
-
-const Subtitle = ({ children, ...props }) => (
-  <Text
-    fontFamily="Roboto"
-    fontWeight="500"
-    fontSize="20px"
-    lineHeight="30px"
-    color="#252A32"
-    {...props}
-  >
-    {children}
-  </Text>
-);
 
 export default function Contact({ pages }) {
   const { t } = useTranslation('contact');
@@ -115,24 +78,24 @@ export default function Contact({ pages }) {
       >
         <VStack maxWidth={{ base: "100%", lg: "45%" }}>
           <Box contentalign="flex-start">
-            <Display marginBottom="16px">
+            <Display marginBottom="16px" color="#2B8C4D" typography="small">
               {t('contactTitle')}
             </Display>
-            <BodyText marginBottom="32px">
+            <BodyText marginBottom="32px" color="#71757A">
               {t('contactDescription')}
             </BodyText>
 
-            <Subtitle marginBottom="8px">
+            <LabelText marginBottom="8px" typography="x-large">
               {t('institutionalSupportTitle')}
-            </Subtitle>
-            <BodyText marginBottom="32px">
+            </LabelText>
+            <BodyText marginBottom="32px" color="#71757A">
               {t('institutionalSupportDescription')}
             </BodyText>
 
-            <Subtitle marginBottom="8px">
+            <LabelText marginBottom="8px" typography="x-large">
               {t('servicesTitle')}
-            </Subtitle>
-            <BodyText marginBottom="32px">
+            </LabelText>
+            <BodyText marginBottom="32px" color="#71757A">
               {t('servicesDescription')}
               <Link
                 display="inline"
@@ -146,20 +109,20 @@ export default function Contact({ pages }) {
               </Link> {t('servicesLinkText')}
             </BodyText>
 
-            <Subtitle marginBottom="8px">
+            <LabelText marginBottom="8px" typography="x-large">
               {t('projectsPartnershipsTitle')}
-            </Subtitle>
-            <BodyText marginBottom="32px">
+            </LabelText>
+            <BodyText marginBottom="32px" color="#71757A">
               {t('projectsPartnershipsDescription')}
             </BodyText>
 
-            <Subtitle marginBottom="8px">
+            <LabelText marginBottom="8px" typography="x-large">
               {t('dataTitle')}
-            </Subtitle>
-            <BodyText marginBottom="16px">
+            </LabelText>
+            <BodyText marginBottom="16px" color="#71757A">
               {t('dataDescription')}
             </BodyText>
-            <BodyText>
+            <BodyText color="#71757A">
               {t('questionsText')}
               <Link
                 display="inline"
