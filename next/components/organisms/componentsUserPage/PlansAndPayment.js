@@ -64,8 +64,8 @@ export default function PlansAndPayment ({ userData }) {
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
+  const [isLoadingClientSecret, setIsLoadingClientSecret] = useState(true)
   const [hasSubscribed, setHasSubscribed] = useState(true)
-
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
 
@@ -492,6 +492,7 @@ export default function PlansAndPayment ({ userData }) {
           flexDirection={{base: "column", lg: "row"}}
           gap="80px"
           spacing={0}
+          pointerEvents={isLoadingClientSecret ? "none" : "default"}
         >
           <Stack
             flex={1}
@@ -766,6 +767,7 @@ export default function PlansAndPayment ({ userData }) {
               coupon={coupon}
               onSucess={() => openModalSucess()}
               onErro={() => openModalErro()}
+              isLoading={(e) => setIsLoadingClientSecret(e)}
             />
 
             <Box display={{base:"flex", lg: "none"}} marginTop="auto !important">

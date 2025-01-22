@@ -80,7 +80,14 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
   )
 }
 
-export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro }) {
+export default function PaymentSystem({
+  userData,
+  plan,
+  coupon,
+  onSucess,
+  onErro,
+  isLoading
+}) {
   const [clientSecret, setClientSecret] = useState("")
 
   const appearance = {
@@ -146,11 +153,13 @@ export default function PaymentSystem({ userData, plan, coupon, onSucess, onErro
 
     if (clientSecret) {
       setClientSecret(clientSecret)
+      return isLoading(false)
     }
   }
 
   useEffect(() => {
     setClientSecret("")
+    isLoading(true)
     customerCreatPost(plan, coupon)
   }, [plan, coupon])
 
