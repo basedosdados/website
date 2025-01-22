@@ -281,7 +281,7 @@ export const mdxComponents = {
     />
   ),
   ol: (props) => <OrderedList {...props} />,
-  ul: (props) => <UnorderedList {...props} margin="4px 0 4px 20px"/>,
+  ul: (props) => <UnorderedList margin="8px 0 8px 20px" {...props} />,
   li: (props) => (
     <ListItem
       fontFamily="Roboto"
@@ -290,7 +290,7 @@ export const mdxComponents = {
       lineHeight="20px"
       letterSpacing="0.1px"
       color="#464A51"
-      margin={0}
+      margin="0 0 4px 0"
       {...props}
     />
   ),
@@ -405,7 +405,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
       >
         {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
 
-        <Box display={hasGuide ? "flex" : "none"} id="hotjarSurveyGuiaDeUso" marginTop="40px"/>
+        <Box display={hasGuide ? "flex" : "none"} justifyContent="center" id="hotjarSurveyGuiaDeUso" marginTop="40px"/>
 
         <Box
           marginTop="40px"
