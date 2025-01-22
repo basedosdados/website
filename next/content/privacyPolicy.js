@@ -7,36 +7,32 @@ import {
 } from "@chakra-ui/react";
 import { SimpleTable } from "../components/atoms/SimpleTable";
 import { useTranslation } from 'react-i18next';
+import TitleTextComponent from "../components/atoms/Text/TitleText";
+import BodyText from "../components/atoms/Text/BodyText";
 
 export default function PrivacyPolicy() {
   const { t } = useTranslation('terms');
 
   const TitleText = ({ children, ...props }) => {
     return (
-      <Text
-        fontFamily="Roboto"
-        fontSize="18px"
-        lineHeight="28px"
-        fontWeight="500"
+      <TitleTextComponent
+        typography="small"
         {...props}
       >
         {children}
-      </Text>
+      </TitleTextComponent>
     )
   }
 
   const SecText = ({ children, ...props }) => {
     return (
-      <Text
-        fontFamily="Roboto"
-        fontSize="18px"
-        lineHeight="26px"
-        fontWeight="400"
+      <BodyText
+        typography="large"
         color="#464A51"
         {...props}
       >
         {children}
-      </Text>
+      </BodyText>
     )
   }
 

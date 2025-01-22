@@ -4,7 +4,6 @@ import {
   Image,
   Box,
   Skeleton,
-  Text,
   Grid,
   GridItem
 } from "@chakra-ui/react";
@@ -21,7 +20,12 @@ import {
   getAllCaseStudies
 } from "./api/caseStudies"
 
+import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 
 import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
 import CheckIcon from "../public/img/icons/checkIcon";
@@ -56,33 +60,26 @@ function Slogan () {
         heightImage={{base: "30px", lg: "60px"}}
         marginBottom={{base: "24px", lg: "40px"}}
       />
-      <Text
-        color="#252A32"
-        fontFamily="Roboto"
-        fontSize="60px"
-        lineHeight="70px"
-        fontWeight="500"
+      <Display
+        typography="large"
         textAlign="center"
         margin="0 0 24px !important"
       > 
         {t('slogan.title')}
-      </Text>
-      <Text
+      </Display>
+      <TitleText
+        typography="large"
         color="#71757A"
-        fontFamily="Roboto"
-        fontSize="28px"
-        lineHeight="42px"
-        fontWeight="500"
         textAlign="center"
       >
         {t('slogan.description')}
-      </Text>
+      </TitleText>
       <Link
         href="/contact-consulting"
+        target="_self"
       >
-        <Box
-          as="p"
-          target="_self"
+        <LabelText
+          typography="x-large"
           display="flex"
           alignItems="center"
           height="56px"
@@ -92,17 +89,13 @@ function Slogan () {
           padding="10px 16px"
           cursor="pointer"
           color="#FFF"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="20px"
-          lineHeight="30px"
           marginTop="24px !important"
           _hover={{
             backgroundColor: "#0B89E2"
           }}
         >
           {t('slogan.cta')}
-        </Box>
+        </LabelText>
       </Link>
     </Stack>
   )
@@ -127,24 +120,19 @@ function BoxBenefits ({ benefits, children }) {
           height="28px"
           fill="#2B8C4D"
         />
-        {benefits && 
-          <Text 
-            fontFamily="Roboto"
-            fontSize="18px"
-            lineHeight="26px"
+        {benefits &&
+          <BodyText
+            typography="large"
             fontWeight="500"
             color="#464A51"
           >
             {benefits}:
-          </Text>}
+          </BodyText>}
       </Box>
-      <Text
-        fontFamily="Roboto"
-        fontSize="18px"
-        lineHeight="26px"
-        fontWeight="400"
+      <BodyText
+        typography="large"
         color="#464A51"
-      >{children}</Text>
+      >{children}</BodyText>
     </Stack>
   )
 }
@@ -160,25 +148,16 @@ function BorderBox({ title, children }) {
       height="100%"
       spacing={4}
     >
-      <Text
-        fontFamily="Roboto"
-        fontSize="18px"
-        lineHeight="28px"
-        fontWeight="500"
-        color="#252A32"
-      >
+      <TitleText typography="small">
         {title}
-      </Text>
-      <Text
-        fontFamily="Roboto"
-        fontSize="18px"
-        lineHeight="26px"
-        fontWeight="400"
+      </TitleText>
+      <BodyText
+        typography="large"
         color="#464A51"
         textAlign="center"
       >
         {children}
-      </Text>
+      </BodyText>
     </VStack>
   )
 }
@@ -202,37 +181,26 @@ function WorkflowBox({ order, title, subtitle, children}) {
       }}
       spacing={0}
     >
-      <Text
-        fontFamily="Roboto"
-        color="#252A32"
-        fontSize="18px"
-        lineHeight="28px"
-        fontWeight="500"
+      <TitleText
+        typography="small"
         textAlign="center"
       >
           {title}
-      </Text>
-      <Text
-        fontFamily="Roboto"
+      </TitleText>
+      <LabelText
+        typography="large"
         color="#71757A"
-        fontSize="18px"
-        lineHeight="28px"
-        fontWeight="500"
         textAlign="center"
         paddingBottom="16px"
       >
           {subtitle}
-      </Text>
-      <Text
-        fontFamily="Roboto"
+      </LabelText>
+      <BodyText
         color="#464A51"
-        fontSize="16px"
-        lineHeight="24px"
-        fontWeight="400"
         textAlign="center"
       >
         {children}
-      </Text>
+      </BodyText>
     </VStack>
   )
 }
@@ -255,28 +223,20 @@ function CaseStudies ({ data }) {
       margin="0 auto !important"
       spacing={0}
     >
-      <Text
-        fontFamily="Roboto"
-        color="#252A32"
-        fontSize="36px"
-        lineHeight="48px"
-        fontWeight="500"
+      <Display
+        typography="small"
         textAlign="center"
         paddingBottom="16px"
       >
         {t('caseStudies.title')}
-      </Text>
-      <Text
-        fontFamily="Roboto"
+      </Display>
+      <TitleText
         color="#71757A"
-        fontSize="24px"
-        lineHeight="36px"
-        fontWeight="500"
         textAlign="center"
         paddingBottom="40px"
       >
         {t('caseStudies.subtitle')}
-      </Text>
+      </TitleText>
 
       <Stack
         flexWrap="wrap"
@@ -333,20 +293,17 @@ function CaseStudies ({ data }) {
               }
             </Box>
 
-            <Text
+            <BodyText
+              typography="large"
               marginBottom="8px !important"
               minHeight="110px"
               maxHeight="110px"
               textAlign="justify"
               overflow="hidden"
-              fontFamily="Roboto"
               color="#464A51"
-              fontSize="18px"
-              lineHeight="26px"
-              fontWeight="400"
             >
               {elm?.summary && elm?.summary.slice(0,useCheckMobile() ? 160 :178)+"..."}
-            </Text>
+            </BodyText>
 
             <Link
               target="_self"
@@ -414,14 +371,9 @@ export default function Services({ caseStudiesContent }) {
             <Link href={`#${service_ids[k]}`} key={v}>
               <VStack justify="flex-end">
                 <Image alt="" marginBottom="15px" height="100px" src={v} />
-                <Text
-                  fontFamily="Roboto"
-                  fontSize="20px"
-                  lineHeight="30px"
-                  fontWeight="500"
-                >
+                <LabelText typography="x-large">
                   {k}
-                </Text>
+                </LabelText>
               </VStack>
             </Link>
           ))}
@@ -438,49 +390,28 @@ export default function Services({ caseStudiesContent }) {
           textAlign="center"
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            color="#252A32"
-            fontSize="50px"
-            lineHeight="60px"
-            fontWeight="500"
+          <Display
             textAlign="center"
             paddingBottom="8px"
           >
             {t('dataCapture.title')}
-          </Text>
+          </Display>
 
-          <Text
-            paddingBottom="24px"
-            fontFamily="Roboto"
-            fontSize="24px"
-            lineHeight="32px"
-            fontWeight="500"
-            color="#252A32"
-          >
+          <TitleText paddingBottom="24px">
             {t('dataCapture.description')}
-          </Text>
-          <Text
+          </TitleText>
+          <BodyText
+            typography="large"
             maxWidth="800px"
-            fontFamily="Roboto"
-            fontSize="18px"
-            lineHeight="26px"
-            fontWeight="400"
             color="#464A51"
           >
             {t('dataCapture.longDescription')}
-          </Text>
+          </BodyText>
 
           <Stack paddingTop="40px">
-            <Text
-              fontFamily="Roboto"
-              fontSize="18px"
-              lineHeight="28px"
-              fontWeight="500"
-              color="#252A32"
-            >
+            <LabelText typography="large">
               {t('dataCapture.advantages.title')}
-            </Text>
+            </LabelText>
 
             <BoxBenefits benefits={t('dataCapture.advantages.speed')}>
               {t('dataCapture.advantages.speedDescription')}
@@ -494,15 +425,9 @@ export default function Services({ caseStudiesContent }) {
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <Text
-              fontFamily="Roboto"
-              fontSize="18px"
-              lineHeight="28px"
-              fontWeight="500"
-              color="#252A32"
-            >
+            <LabelText typography="large">
               {t('dataCapture.work.title')}
-            </Text>
+            </LabelText>
 
             <Stack
               justifyContent="space-between"
@@ -540,49 +465,28 @@ export default function Services({ caseStudiesContent }) {
           textAlign="center"
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            color="#252A32"
-            fontSize="50px"
-            lineHeight="60px"
-            fontWeight="500"
+          <Display
             textAlign="center"
             paddingBottom="8px"
           >
             {t('dataAnalysis.title')}
-          </Text>
+          </Display>
 
-          <Text
-            paddingBottom="24px"
-            fontFamily="Roboto"
-            fontSize="24px"
-            lineHeight="32px"
-            fontWeight="500"
-            color="#252A32"
-          >
+          <TitleText paddingBottom="24px">
             {t('dataAnalysis.description')}
-          </Text>
-          <Text
+          </TitleText>
+          <BodyText
+            typography="large"
             maxWidth="800px"
-            fontFamily="Roboto"
-            fontSize="18px"
-            lineHeight="26px"
-            fontWeight="400"
             color="#464A51"
           >
             {t('dataAnalysis.longDescription')}
-          </Text>
+          </BodyText>
 
           <Stack paddingTop="40px">
-          <Text
-              fontFamily="Roboto"
-              fontSize="18px"
-              lineHeight="28px"
-              fontWeight="500"
-              color="#252A32"
-            >
+            <LabelText typography="large">
               {t('dataAnalysis.examples.title')}
-            </Text>
+            </LabelText>
 
             <BoxBenefits>
               {t('dataAnalysis.examples.example1')}
@@ -605,49 +509,28 @@ export default function Services({ caseStudiesContent }) {
           textAlign="center"
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            color="#252A32"
-            fontSize="50px"
-            lineHeight="60px"
-            fontWeight="500"
+          <Display
             textAlign="center"
             paddingBottom="8px"
           >
             {t('dataConsulting.title')}
-          </Text>
+          </Display>
 
-          <Text
-            paddingBottom="24px"
-            fontFamily="Roboto"
-            fontSize="24px"
-            lineHeight="32px"
-            fontWeight="500"
-            color="#252A32"
-          >
+          <TitleText paddingBottom="24px">
             {t('dataConsulting.description')}
-          </Text>
-          <Text
+          </TitleText>
+          <BodyText
+            typography="large"
             maxWidth="800px"
-            fontFamily="Roboto"
-            fontSize="18px"
-            lineHeight="26px"
-            fontWeight="400"
             color="#464A51"
           >
             {t('dataConsulting.longDescription')}
-          </Text>
+          </BodyText>
 
           <Stack paddingTop="40px">
-            <Text
-              fontFamily="Roboto"
-              fontSize="18px"
-              lineHeight="28px"
-              fontWeight="500"
-              color="#252A32"
-            >
+            <LabelText typography="large">
               {t('dataConsulting.advantages.title')}
-            </Text>
+            </LabelText>
 
             <BoxBenefits>
               {t('dataConsulting.advantages.advantage1')}
@@ -661,15 +544,9 @@ export default function Services({ caseStudiesContent }) {
           </Stack>
 
           <Stack paddingTop="40px" spacing="40px">
-            <Text
-              fontFamily="Roboto"
-              fontSize="18px"
-              lineHeight="28px"
-              fontWeight="500"
-              color="#252A32"
-            >
+            <LabelText typography="large">
               {t('dataConsulting.areas.title')}
-            </Text>
+            </LabelText>
 
             <Stack
               justifyContent="space-between"
@@ -706,28 +583,20 @@ export default function Services({ caseStudiesContent }) {
           textAlign="center"
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            color="#252A32"
-            fontSize="36px"
-            lineHeight="48px"
-            fontWeight="500"
+          <Display
+            typography="small"
             textAlign="center"
             paddingBottom="24px"
           >
             {t('workflow.title')}
-          </Text>
-          <Text
+          </Display>
+          <TitleText
             maxWidth="800px"
-            fontFamily="Roboto"
             color="#71757A"
-            fontSize="24px"
-            lineHeight="36px"
-            fontWeight="500"
             textAlign="center"
           >
             {t('workflow.description')}
-          </Text>
+          </TitleText>
 
           <Stack spacing={0} width="100%" alignItems="center">
             <WorkflowBox order={1} title={t('workflow.steps.demand.title')} subtitle={t('workflow.steps.demand.subtitle')}>
@@ -750,21 +619,12 @@ export default function Services({ caseStudiesContent }) {
 
         <Link
           href="/contact-consulting"
+          target="_self"
         >
-          <Box
-            as="p"
-            target="_self"
-            display="flex"
-            alignItems="center"
+          <Button
             height="56px"
-            width="fit-content"
-            borderRadius="8px"
             backgroundColor="#0D99FC"
             padding="10px 16px"
-            cursor="pointer"
-            color="#FFF"
-            fontFamily="Roboto"
-            fontWeight="500"
             fontSize="20px"
             lineHeight="30px"
             marginTop="24px !important"
@@ -773,7 +633,7 @@ export default function Services({ caseStudiesContent }) {
             }}
           >
             {t('slogan.cta')}
-          </Box>
+          </Button>
         </Link>
       </Stack>
     </MainPageTemplate>

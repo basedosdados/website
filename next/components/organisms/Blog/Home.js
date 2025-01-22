@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Heading,
   Image,
   Text,
   UnorderedList,
@@ -13,6 +12,10 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { categories } from "../../../pages/api/blog/categories";
+import Display from "../../atoms/Text/Display";
+import TitleText from "../../atoms/Text/TitleText";
+import LabelText from "../../atoms/Text/LabelText";
+import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
 
 import FilterIcon from "../../../public/img/icons/filterIcon";
@@ -32,16 +35,12 @@ export function DatePost({ date, slug }) {
   }
 
   return (
-    <Text
+    <BodyText
       as="span"
-      fontFamily="Roboto"
-      fontWeight="400"
-      fontSize="16px"
-      lineHeight="24px"
       color="#71757A"
     >
       {dateToLocatePt(date)}
-    </Text>
+    </BodyText>
   );
 }
 
@@ -93,31 +92,20 @@ function LatestBlogCard({ slug, frontmatter }) {
         width="100%"
         spacing="8px"
       >
-        <Heading as="h1">
-          <Link
-            href={`/blog/${slug}`}
-            fontFamily="Roboto"
-            fontSize="50px"
-            lineHeight="60px"
-            fontWeight="500"
-            color="#252A32"
-            _hover={{
-              opacity: 0.9
-            }}
-          >
-            {title}
-          </Link>
-        </Heading>
-
-        <Text
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="16px"
-          lineHeight="24px"
-          color="#71757A"
+        <Link
+          href={`/blog/${slug}`}
+          _hover={{
+            opacity: 0.9
+          }}
         >
+          <Display as="h1">
+              {title}
+          </Display>
+        </Link>
+
+        <BodyText color="#71757A">
           {description}
-        </Text>
+        </BodyText>
 
         <Box
           display="flex"
@@ -125,15 +113,9 @@ function LatestBlogCard({ slug, frontmatter }) {
           marginTop="24px !important"
         >
           {authors ? (
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#252A32"
-            >
+            <BodyText>
               {authors[0].name}
-            </Text>
+            </BodyText>
           ) : null}
           <DatePost date={date.created} slug={slug} />
         </Box>
@@ -150,55 +132,22 @@ function MiniBlogCard({ slug, frontmatter }) {
       spacing={0}
     >
       <Box role="group" marginBottom="8px">
-        {/* <Box
-          overflow={"hidden"}
-          border="1px solid #DEDFE0"
-          borderRadius="16px"
-          marginBottom="24px"
-        >
-          <Link href={`/blog/${slug}`}>
-            <Image
-              width={"100%"}
-              style={{ aspectRatio: "16/9" }}
-              src={
-                frontmatter.thumbnail ||
-                "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
-              }
-              objectFit={"cover"}
-              transition={
-                "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
-              }
-              _groupHover={{ transform: "scale(1.03)" }}
-            />
-          </Link>
-        </Box> */}
 
-        <Heading as="h3" marginTop="4px">
-          <Link
-            href={`/blog/${slug}`}
-            fontFamily="Roboto"
-            fontSize="24px"
-            lineHeight="36px"
-            fontWeight="500"
-            color="#252A32"
-            _hover={{
-              opacity: 0.9
-            }}
-          >
-            {title}
-          </Link>
-        </Heading>
+        <Link
+          href={`/blog/${slug}`}
+          _hover={{
+            opacity: 0.9
+          }}
+        >
+          <TitleText as="h3" marginTop="4px">
+              {title}
+          </TitleText>
+        </Link>
       </Box>
 
-      <Text
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="16px"
-        lineHeight="24px"
-        color="#71757A"
-      >
+      <BodyText color="#71757A">
         {description}
-      </Text>
+      </BodyText>
 
       <Box
         display="flex"
@@ -206,15 +155,9 @@ function MiniBlogCard({ slug, frontmatter }) {
         marginTop="16px !important"
       >
         {authors ? (
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
-            color="#252A32"
-          >
+          <BodyText>
             {authors[0].name}
-          </Text>
+          </BodyText>
         ) : null}
         <DatePost date={date.created} slug={slug} />
       </Box>
@@ -234,19 +177,14 @@ function BlogHeader({ category }) {
           height="20px"
           fill="#252A32"
         />
-        <Text
+        <LabelText
           as="span"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="16px"
-          lineHeight="24px"
-          color="#252A32"
           textAlign="center"
           width="100%"
           marginLeft="8px"
         >
           {t('filter')}
-        </Text>
+        </LabelText>
       </Box>
 
       <Box as="nav">
@@ -353,15 +291,9 @@ export function BlogGrid({ posts, category }) {
                 justifyContent="space-between"
                 marginBottom="40px"
               >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="20px"
-                  lineHeight="30px"
-                  color="#252A32"
-                >
+                <LabelText typography="x-large">
                   {categories?.[key] || t(key)}
-                </Text>
+                </LabelText>
 
                 {value.length > 7 &&
                   <Link
@@ -426,16 +358,12 @@ export function BlogGrid({ posts, category }) {
         })
         :
         <Box width="100%">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="20px"
-            lineHeight="30px"
-            color="#252A32"
+          <LabelText
+            typography="x-large"
             marginBottom="40px"
           >
             {categories?.[category] || category}
-          </Text>
+          </LabelText>
 
           <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
             {posts.map((post, index) => {
