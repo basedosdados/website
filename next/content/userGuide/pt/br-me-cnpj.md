@@ -16,7 +16,7 @@ Esse conjunto possui quatro tabelas de microdados:
 - **Sócios:** Registra os sócios vinculados às empresas.  
 - **Estabelecimentos:** Detalha os locais de operação das empresas.  
 - **Simples:** Indica empresas enquadradas no Simples Nacional ou MEI.  
-A tabela que relaciona todas elas é a tabela de empresa. Uma empresa pode ter vários sócios, vários estabeleciomentos e pode ser qualificado como simples ou mei. As tabelas podem ser cruzadas usando as colunas cnpj_basico e data. 
+A tabela que relaciona todas elas é a tabela de empresa. Uma empresa pode ter vários sócios, vários estabelecimentos e pode ser qualificado como simples ou mei. As tabelas podem ser cruzadas usando as colunas cnpj_basico e data. 
 
 Este conjunto de dados é divulgado pela fonte original no formato de fotografias. Para cada data tem-se um retrato do universo de Cadastro Nacional das Pessoas Jurídicas (CNPJs) e seus atributos. Com exceção das tabelas de dicionários e simples, a coluna data informa a data na qual os dados foram extraídos pelo ministério da economia. 
 
