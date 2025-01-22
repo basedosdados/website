@@ -12,10 +12,10 @@ authors:
 ---
 # Introdução 
 Esse conjunto possui quatro tabelas de microdados:  
-- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos como natureza jurídica e tipo de quadro societário  
-- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem algumas características do sócio e qualificam a relação com a empresa 
+- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos como natureza jurídica e tipo de quadro societário.  
+- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem algumas características do sócio e qualificam a relação com a empresa.
 - **Estabelecimentos:** Cada linha representa um estabelecimento de operação de uma empresa. As colunas detalham informações sobre localização, atividade econômica e informações de contato.
-- **Simples:** Indica empresas enquadradas no Simples Nacional ou MEI.  
+- **Simples:** Cada linha representa uma empresa e indica se a empresa está no Simples Nacional ou MEI.  
 
 A tabela que relaciona todas elas é a tabela Empresas. Uma empresa pode ter vários sócios, vários estabelecimentos e pode ser qualificada como Simples Nacional ou MEI. 
 
