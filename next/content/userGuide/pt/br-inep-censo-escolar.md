@@ -11,8 +11,7 @@ authors:
     role: Texto
 ---
 # Introdução
-Esse conjunto possui quatro tabelas 
-:  
+Esse conjunto possui quatro tabelas de microdados:  
 - **Escolas:** Única tabela disponibilizada pelo INEP a partir de 2021, cada linha representa uma escola. As colunas incluem características da escola, como infraestrutura física disponível, a equipe pedagógica, a infraestrutura pedagógica, marcas do período letivo, e informações agregadas sobre matrículas, docentes e turmas.
 - **Turmas:** Tabela disponibilizada a partir de requisições via pedidos LAI. Cada linha representa uma turma ativa no ano escolar, as colunas contém informações de disciplinas feitas pela turma, o horário de começo das aulas, o número de alunos da turma e o nível de ensino.
 - **Matrículas:** Mantida para consulta histórica, mas não atualizada desde 2021. Cada linha representa uma matricula, as colunas incluem variáveis sociodemográficas, atividades que o aluno realiza e a forma de transporte para acesso a escola. 
@@ -22,7 +21,7 @@ Esse conjunto possui quatro tabelas
 ## Seleção de variáveis
 Não disponibilizamos todas as variáveis que aparecem no Censo. Selecionamos a maioria das variáveis, as que aparecem mais vezes. Pegamos as variáveis que aparecem 8 ou mais vezes ao longo dos 12 anos, além de outras variáveis que julgamos serem cruciais por serem identificadoras importantes. Isso significa que, se a variável só aparece em 2 anos, por exemplo, ela não foi incluída nas nossas tabelas.
 
-## Informação de raça** 
+## Informação de raça
 A coluna de raça é conhecidamente pouco preenchida. A forma de preenchimento dessa informação é feita pela administração da escola e não pelo proprio aluno o que pode gerar problemas. Outra fonte de dados de raça é a prova SAEB que coleta essa informação. As informações de raça do censo escolar e do SAEB diferem bastante por conta de metodologias diferentes e também pela falta de preenchimento dessa informação no censo escolar. 
 
 # Limitações
@@ -47,9 +46,6 @@ Além disso essas tabelas podem ser complementadas com informações de outros c
 
 # Download dos dados
 Essas tabelas são muito grandes para o download direto, é muito importante fazer seleção de colunas e filtros temporais ou geográficos antes de fazer o download dos dados
-
-# Instituição responsável
-Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP)
 
 # Instrumento de coleta
 Os dados do censo escolar são coletados em duas etapas. A primeira é feita no primeiro semestre do ano através da coleta de dados utilizando 5 tipos de formulários (escolas, gestores, turmas, alunos e profissionais escolares em sala de aula) que devem ser preenchidos por todos os estabelecimentos públicos e privados de educação básica e educação profissional e tecnológica. A segunda etapa do Censo Escolar coleta as informações de rendimento e movimento escolar ao final do ano letivo. Para fornecer informações sobre rendimento do aluno no Sistema Educacenso, a escola declara a condição de aprovado, reprovado, transferido, deixou de frequentar ou falecido.

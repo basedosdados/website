@@ -12,80 +12,75 @@ authors:
 ---
 
 # Introdução
-
-> Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
-
-Essa base possui 2 tabelas com microdados: 
-- **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um determinado ano. As colunas descrevem características sobre a empresa e seus empregados
-- **Microdados Vínculos:** Cada linha representa um vínculo de trabalho em um determinado ano. As colunas descrevem características sobre o tipo do vínculo, do empregado e da empresa contratante.
+Este conjunto de dados possui duas tabelas de microdados: 
+- **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um ano específico. As colunas mostram detalhes sobre a empresa e seus empregados.
+- **Microdados Vínculos:** Cada linha representa um vínculo de trabalho em um ano específico. As colunas mostram informações sobre o vínculo, o empregado e a empresa contratante.
 
 # Considerações para análises
 ## Vínculos e filtragem de dados
-A tabela de Vínculos inclui todos os vínculos registrados por uma empresa durante o ano. Portanto, se um empregado foi demitido e outro contratado no mesmo ano, ambos terão uma linha para a mesma posição na empresa. Caso o objetivo seja avaliar o total de empregados ativos em um setor ou região, é necessário utilizar a coluna `vinculo_ativo_3112` para filtrar apenas os vínculos que estão ativos na data mencionada.
+A tabela de vínculos mostra todos os vínculos registrados por uma empresa durante o ano. Se um empregado for demitido e outro contratado no mesmo ano, ambos terão uma registro de vínculo para a mesma posição. Para contar os empregados ativos em um setor ou região, use a coluna `vinculo_ativo_3112`.
 
 ## Informações de endereço
-Segundo o manual de preenchimento da RAIS, o empregado não fornece informações sobre seu endereço. O campo `id_municipio` se refere ao município da empresa contratante, enquanto `id_municipio_trabalho` é utilizado quando o trabalhador presta serviços fora do município da empresa contratante.
+<!-- TO DO -->
+A RAIS não possui informações sobre o endereço dos empregados. A coluna `id_municipio` se refere ao município da empresa, e a coluna `id_municipio_trabalho` se refere ao município onde o trabalhador presta serviços, caso seja diferente.
 
 # Limitações
-* Os dados disponibilizados são limitados a trabalhadores com vínculo empregatício formal, não incluindo informações sobre trabalhadores informais ou autônomos.
-* Os dados públicos são anonimizados
+Os dados são limitados a trabalhadores com vínculo formal e não incluem trabalhadores informais ou autônomos. Os dados públicos são anonimizados.
 
 # Inconsistências
-## Colunas quantidade_vinculos_ativos e tamanho_estabelecimento
-As colunas `quantidade_vinculos_ativos` e `tamanho_estabelecimento` da tabela de estabelecimentos têm informações discrepantes entre si. A primeira tem um valor inteiro representando o total de vínculos daquele estabelecimento, e a segunda é uma categoria definida pelo total de vínculos. No entanto, encontramos vários casos em que a quantidade de vínculos não está dentro da faixa definida pelo tamanho do estabelecimento. Ainda não se sabe por que essa inconsistência ocorre.  
+## Colunas `quantidade_vinculos_ativos` e `tamanho_estabelecimento`
+Há discrepâncias entre as colunas `quantidade_vinculos_ativos` e `tamanho_estabelecimento`. A primeira mostra o total de vínculos, enquanto a segunda classifica o estabelecimento por número de vínculos. Em alguns casos, a quantidade de vínculos não corresponde à categoria do tamanho do estabelecimento.
 
 ## Coerência entre RAIS e CAGED
-A base da RAIS deveria registrar todos os vínculos de trabalho uma vez ao ano, enquanto o CAGED seria responsável por todas as movimentações desses vínculos. Teoricamente, ao somar ou subtrair todas as movimentações registradas no CAGED a partir de um total de vínculos em um determinado ano dado pela RAIS, seria possível chegar ao total do ano seguinte. No entanto, isso não ocorre na prática. Ainda não sabemos por que isso acontece, mas como os dois sistemas operam de forma independente, é provável que cada um acumule diferentes tipos de erros, resultando em divergências nos números.  
+A RAIS registra vínculos de trabalho anualmente e o CAGED registra movimentações durante o ano. Teoricamente, somando ou subtraindo as movimentações do CAGED ao total de vínculos da RAIS, seria possível calcular o total do ano seguinte, mas isso não acontece. Como os sistemas operam de forma independente, as divergências podem ser causadas por erros acumulados em cada um. 
 
 ## Coluna id_municipio_trabalho
-Os valores de `id_municipio_trabalho` nos dados de vínculos estão disponíveis apenas nos anos de 2005-2011 e 2017-2021. Não sabemos o motivo.  
+A coluna `id_municipio_trabalho` está preenchida apenas entre 2005-2011 e 2017-2021. Não se sabe o motivo.  
 
 ## Dados desatualizados
 Às vezes, os dados da RAIS são atualizados fora do calendário esperado, e nossa equipe nem sempre fica sabendo. Se você está confiante de que está fazendo as queries corretas, entre em contato conosco enviando a query e a diferença com o site oficial, para que possamos avaliar a situação e, se necessário, corrigir.  
 
 # Observações ao longo tempo
-A cada ano, a base é atualizada, o que faz com que um estabelecimento apareça em todos os anos em que o seu CNPJ esteve ativo. Da mesma forma, um vínculo pode aparecer em mais de um ano se continuar ativo. Como a base é desidentificada (não contém o CNPJ nem o CPF), não é possível acompanhar a evolução dos vínculos ou das empresas ao longo do tempo. O que pode ser analisado é o crescimento ou a redução do número de funcionários com carteira em um determinado setor (CNAE), endereço (CEP), função (CBO) ou outras combinações de diferentes colunas disponibilizadas.
+A cada ano, o conjunto de dados é atualizado, fazendo com que um estabelecimento ou vínculo apareça em todos os anos em que esteve ativo. Como os dados são anonimizados, não é possível acompanhar a evolução de vínculos ou empresas ao longo do tempo, mas é possível analisar o número de empregados com carteira de trabalho em diferentes setores ou locais.
 
 # Linhas duplicadas
-Ainda não foram encontrados indícios de linhas duplicadas nessa base. Mas é importante ter claro que a base de Vínculos inclui todos os vínculos que uma empresa teve durante o ano. Assim, se algum empregado foi demitido e outro contratado dentro do mesmo ano, terão 2 linhas para a mesma posição naquela empresa.
+Não foram encontradas linhas duplicadas neste conjunto de dados. No entanto, a tabela Microdados Vínculos inclui todos os vínculos de uma empresa, então, se um empregado foi demitido e outro contratado no mesmo ano, terão duas linhas para a mesma posição.
 
 # Cruzamentos
-Essas tabelas são desidentificadas, ou seja, não temos as informações dos CNPJs nem dos CPFs envolvidos. Isso significa que não é possível fazer um cruzamento entre elas, nem com outras bases de dados que possuam CNPJ. Assim, esse conjunto de dados é interessante de ser cruzado com outras bases através das colunas de CNAE ou de CEP, como o CAGED. 
+Os dados são anonimizadas, não contendo CNPJs nem CPFs. Isso limita os cruzamentos com outros conjuntos, mas é possível usar colunas como `cnae` e `cep` para tal.
 
 # Download dos dados
-A tabela da RAIS disponibilizada pela BD contém todos os vínculos empregatícios do país desde 1984, o que representa mais de 350 GB armazenados. Um computador normal costuma não ter capacidade de processamento para essa quantidade de dados, por isso é necessário primeiro trabalhar com queries no bigquery (que tem processamento em nuvem) e fazer filtros e agregações antes de baixar os dados. Recomendamos fazer filtros utilizando as colunas de partições (ano, sigla_uf) e selecionar apenas as colunas que sejam do seu interesse.
+Os microdados somam mais de 350 GB. Para evitar sobrecarregar seu computador, recomendamos usar queries no BigQuery para processar os dados em nuvem antes de baixá-los. Filtre pelas colunas de partição (como ano e UF) e selecione apenas as colunas relevantes.
 
 # Instituição responsável
 Ministério do Trabalho e Emprego (MTE)
 
 # Instrumento de coleta
-O instrumento de coleta atual é um formulário que deve ser preenchido pelos empregadores do país sobre seus empregados. 
+O instrumento de coleta atual é um formulário que deve ser preenchido pelos empregadores sobre seus empregados.
 
 # Mudanças na coleta
-Algumas colunas pararam de ser coletadas e outras foram incluídas ao longo do tempo. Para obter os detalhes de quais colunas entraram e saíram ver a coluna de cobertura temporal da coluna no site
+Algumas colunas foram adicionadas ou retiradas ao longo do tempo.
 
 # Atualizações
-Normalmente, a base completa é atualizada no início do ano seguinte ao período de coleta. Isso significa que os dados referentes a 2022 só estarão disponíveis no início de 2024. O MTE libera primeiro os dados parciais e, posteriormente, os completos. No entanto, ocasionalmente, as atualizações da RAIS (tanto parciais quanto completas) ocorrem fora do calendário previsto, e nossa equipe pode não ser informada a tempo. Se você perceber que nossos dados estão desatualizados, entre em contato conosco.
+Os dados têm atualização parcial e completa. A atualização parcial ocorre em setembro do ano de coleta e a completa ocorre até o início do ano seguinte ao ano de coleta. Isso significa que os dados referentes a 2023, que foram coletados em 2024, ficaram parcialmente disponíveis em setembro de 2024 e a versão completa foi disponibilizada até o início de 2025. Às vezes, a atualização pode ocorrer fora do calendário previsto. Se perceber que os dados estão desatualizados, entre em contato com nossa equipe.
 
 # Dados identificados
-Para obter os dados identificados da RAIS, é preciso realizar uma solicitação por meio deste link ao Ministério do Trabalho. Contudo, vale destacar que o processo pode ser demorado e não há garantia de aprovação.
+Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados da RAIS, é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
 
 # Comparação com o dashboard do MTE
 Caso os dados do nosso sistema não coincidam com os apresentados no [dashboard](https://app.powerbi.com/view?r=eyJrIjoiYTJlODQ5MWYtYzgyMi00NDA3LWJjNjAtYjI2NTI1MzViYTdlIiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9) do MTE, é importante esclarecer que utilizamos a base diretamente do FTP do MTE. Por isso, ainda não conseguimos identificar quais agrupamentos ou cálculos foram aplicados às variáveis na construção do dashboard.
 
 # Tratamentos feitos pela BD
-O tratamento das duas tabelas do conjunto é muito similar: 
-* Padronização das colunas que identificam municípios para o formato ID Município IBGE (7 dígitos).
-* Adequação das colunas que identificam Unidades Federativas ao padrão de Sigla UF.
-* Substituição de códigos inválidos(como “9999” ou “000”) por valores nulos nas colunas de bairros, CBO, CNAE e ano.
+Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, os [códigos de tratamento](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais) estão disponíveis no repositório do GitHub para consulta. 
+Os tratamentos realizados foram: 
+* Adequação das colunas que identificam municípios ao formato ID Município IBGE (7 dígitos);
+* Adequação das colunas que identificam Unidades Federativas ao padrão de sigla UF;
+* Substituição de códigos inválidos (como “9999” ou “000”) por valores nulos nas colunas de `bairros`, `cbo`, `cnae` e `ano`;
 * Padronização dos códigos na coluna `tipo_estabelecimento` para garantir consistência entre diferentes anos.
 
-Caso queira entender melhor o tratamento: https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code
-
 # Materiais de apoio
-* [Manual de Orientação](http://www.rais.gov.br/sitio/rais_ftp/ManualRAIS2023.pdf): Tem todas as instruções de como os empregadores devem preencher os campos. Ajuda a compreender o que cada campo representa com mais detalhe. 
-* [Site do MTE](http://www.rais.gov.br/sitio/sobre.jsf): Várias informações detalhadas sobre a RAIS 
-
+* [Manual de orientação para os empregadores sobre como preencher os campos do formulário](http://www.rais.gov.br/sitio/rais_ftp/ManualRAIS2023.pdf)
+* [Informações detalhadas sobre a RAIS no site do MTE](http://www.rais.gov.br/sitio/sobre.jsf)
 
 
 

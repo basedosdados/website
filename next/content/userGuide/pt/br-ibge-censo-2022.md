@@ -44,9 +44,6 @@ As tabelas do censo podem ser cruzadas com outras utlizando os recortes geográf
 # Download dos dados
 A maior parte das tabelas do censo não são muito grandes, algumas delas é possível fazer o download direto pela nossa plataforma, outras é necessário fazer o download via python ou R. 
 
-# Instituição responsável
-Instituto Brasileiro de Geografia e Estatística (IBGE)
-
 # Instrumento de coleta
 A coleta das informações foi conduzida, em geral, através de entrevista presencial (entrevista direta – face a face – com os moradores do domicílio). Além desta modalidade tradicional, para o Censo Demográfico 2022 abriu-se a possibilidade de coleta por meio da Internet. O Recenseador poderia oferecer essa alternativa a pedido do morador; ou quando houvesse restrições de acesso a áreas específicas, por exemplo, no caso de condomínios fechados; ou quando fosse encontrada qualquer outra dificuldade para fazer a coleta na modalidade entrevista presencial. Houve também um aumento de coleta nos Povos e Comunidades Tradicionais, onde pesquisou-se, pela primeira vez, as comunidades quilombolas.
 
