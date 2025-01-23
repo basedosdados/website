@@ -11,9 +11,15 @@ authors:
     role: Texto
 ---
 
+# Introdução
+Esse conjunto possui duas tabelas de microdados:  
+- **Microdados:** Cada linha representa uma coleção de medições de uma estação em um horário. As colunas trazem informações sobre a precipitação, a pressão, a radiação, a temperatura, a umidade e o vento.  
+- **Estação:** Cada linha representa uma estação metereológica. As colunas trazem informações geográficas dessa estação
+
 # Considerações para análises
-## Compreensão dos dados
-  Antes de realizar cálculos com os dados da BDMEP, é crucial entender como cada medida foi compilada. Algumas colunas apresentam valores médios, enquanto outras contêm valores máximos ou mínimos. A escolha da variável adequada dependerá das necessidades específicas da análise.
+
+## Forma de cálculo
+  Antes de realizar operações com os dados da BDMEP, é crucial entender como cada medida foi calculada. Algumas colunas apresentam valores médios, enquanto outras contêm valores máximos ou mínimos. A escolha da variável adequada dependerá das necessidades específicas da análise.
 
 ## Linhas vazias, falhas e dados inexistentes
 Os dados do INMET-BDMEP possuem falhas, como linhas vazias devido a problemas nos sensores e na comunicação das estações meteorológicas. Essas falhas podem ser identificadas por todas as colunas de valores estarem nulas. É importante considerar essas falhas ao realizar análises e tratá-las como dados inexistentes.
@@ -42,9 +48,6 @@ A tabela de microdados pode ser associada à tabela de estações por meio da co
 
 # Download dos dados
 A tabela de microdados possui mais de 10GB, assim, dependendo da capacidade do seu computador, recomendamos selecionar colunas e fazer filtros temporais e geográficos na query sql antes de fazer o download.
-
-# Instituição responsável
-Instituto Nacional de Metereologia (INMET)
 
 # Instrumento de coleta
 Os dados são coletados por estações metereológica automática (EMA). A coleta de dados é feita través de sensores para medição dos parâmetros meteorológicos a serem observados. As medidas são tomadas em intervalos de minuto a minuto e integralizadas no período de uma hora. Os dados coletados pelas EMAs são enviados automaticamente para a sede do INMET em Brasília, de hora em hora e disponibilizados a todos usuários

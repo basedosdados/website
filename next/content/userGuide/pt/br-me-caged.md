@@ -11,62 +11,62 @@ authors:
     role: Texto
 ---
 # Introdução
-Esse conjunto possui cinco tabelas de microdados divididas entre duas do antigo CAGED e três do novo CAGED. As metodologias do modelo antigo e novo não são compatíveis, o que afeta análises temporais. 
+Este conjunto de dados possui cinco tabelas de microdados, divididas entre duas do antigo CAGED e três do novo CAGED. As metodologias do modelo antigo e do novo não são compatíveis, o que afeta análises temporais.
 - **Microdados Antigos:** Cada linha representa um registro de admissão ou demissão até dezembro de 2019. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 
-- **Microdados Antigos de Ajustes:** Complementa a tabela de Microdados Antigos com ajustes admissões e demissões mensais, inclui o que atualmente está separado entre cancelamentos e movimentações fora do prazo.
-- **Microdados Movimentações:** Cada linha representa um registro de admissão ou demissão a partir de janeiro de 2020. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 
-- **Microdados Movimentações Excluídas:** Complementa a tabela de Microdados Movimentações com cancelamentos de uma admissão ou demissão. Esses cancelamentos impactam o saldo do CAGED de forma inversa ao evento original.
-- **Microdados Movimentações Fora do Prazo:** Complementa a tabela de Microdados Movimentações registrando eventos fora do período regular.
+- **Microdados Antigos de Ajustes:** Complementa a tabela Microdados Antigos com ajustes de admissões e demissões mensais, incluindo cancelamentos e movimentações fora do prazo.
+- **Microdados Movimentações:** Cada linha representa um registro de admissão ou demissão a partir de janeiro de 2020. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa.
+- **Microdados Movimentações Excluídas:** Complementa a tabela Microdados Movimentações com cancelamentos de admissões ou demissões. Esses cancelamentos impactam o saldo do CAGED de forma inversa ao evento original.
+- **Microdados Movimentações Fora do Prazo:** Complementa a tabela Microdados Movimentações registrando eventos fora do período regular.
 
 # Considerações para análises
 ## Saldo de movimentações
-É fundamental observar a coluna `saldo_movimentacao`, que indica se a linha representa uma demissão ou uma admissão. O crescimento ou redução de empregos em um grupo pode ser determinado pela soma dessa coluna.
+O crescimento ou redução de empregos em um grupo pode ser determinado pela soma da coluna `saldo_movimentacao`. Verifique nessa coluna se a linha representa uma admissão ou demissão. 
 
 ## Exclusões e movimentações fora do prazo
-Além das movimentações regulares, é importante considerar as tabelas de "Microdados de Movimentações Excluídas" e "Microdados de Movimentações Fora do Prazo". A primeira contém cancelamentos de eventos, como admissões informadas erroneamente e excluídas posteriormente. Esses cancelamentos impactam o saldo do CAGED de forma inversa ao evento original. Já as "Movimentações Fora do Prazo" incluem eventos registrados após o período regular, mas também afetam os resultados.
+Além das movimentações regulares, é importante considerar as tabelas Microdados Movimentações Excluídas e Microdados Movimentações Fora do Prazo para obter um saldo mais preciso. Cancelamentos impactam o saldo de forma inversa ao evento original, enquanto as movimentações fora do prazo incluem eventos registrados após o período regular.
 
 # Limitações
-* Os dados disponibilizados são limitados a trabalhadores com vínculo empregatício formal, não incluindo informações sobre trabalhadores informais ou autônomos.
+Os dados são limitados a trabalhadores com vínculo empregatício formal, não incluindo informações sobre trabalhadores informais ou autônomos.
 
 # Inconsistências
 ## Coluna `salario_mensal`
-Foram identificados valores fora do esperado na coluna salario_mensal, como salários na faixa de milhões de reais para cnaes e cbos que costumeiramente não recebem tanto assim. Acreditamos serem erros de registro ou valores atípicos não tratados
+Foram identificados valores fora do esperado, como salários na faixa de milhões de reais para setores que geralmente não pagam quantias tão elevadas. Isso pode ser devido a erros de registro ou valores atípicos.
 
 ## Painel de empregos do CAGED
-Foram identificadas inconsistências entre os dados disponíveis e o painel de empregos do CAGED. Uma possível origem do problema é a falta, em nossos dados, da coluna que especifica o mês de referência para movimentações fora do prazo e movimentações excluídas. No entanto, parte dos arquivos fornecidos pelo Ministério do Trabalho encontra-se corrompida, o que impede a atualização. Estamos aguardando a resolução dessa situação para realizar os ajustes necessários.  
+Foram identificadas inconsistências entre os dados disponíveis e o painel do CAGED. Isso pode ser causado pela ausência da coluna de mês de referência para movimentações fora do prazo e excluídas. No entanto, parte dos arquivos fornecidos pelo Ministério do Trabalho encontra-se corrompida, o que impede a atualização. Estamos aguardando a resolução dessa situação para realizar os ajustes necessários.
 
 # Observações ao longo tempo
-Cada linha representa uma contratação ou demissão e os dados são desidentificados, assim, não é possível acompanhar um indivíduo ou uma empresa ao longo do tempo. O que é possível fazer é acompanhar o crescimento ou queda de funcionários com carteira em um determinado setor (CNAE), função (CBO) ou combinações de diferentes colunas que são disponibilizadas
-Além disso é importante se atentar que a metodologia caged mudou no início de 2020 e por isso análises temporais devem ser feitas até 2019 ou a partir de 2020. 
+Cada linha representa uma contratação ou demissão. Como os dados são desidentificados, não é possível acompanhar indivíduos ou empresas ao longo do tempo. O que é possível fazer é acompanhar o crescimento ou queda de funcionários com carteira em um determinado setor (`cnae`), função (`cbo`) ou outras combinações das colunas disponíveis. Além disso é importante se atentar que a metodologia do CAGED mudou no início de 2020 e por isso análises temporais devem ser feitas até 2019 ou a partir de 2020.
 
 # Linhas duplicadas
-Ainda não foram encontrados indícios de linhas duplicadas nas tabelas desse conjunto
+Não foram encontradas linhas duplicadas neste conjunto de dados.
 
 # Cruzamentos
-Essas tabelas são desidentificadas, ou seja, não temos as informações dos CNPJs nem dos CPFs envolvidos. Isso significa que não é possível fazer um cruzamento  com bases de dados que possuam CNPJ. Assim, esse conjunto de dados é interessante de ser cruzado com outras bases através das colunas de CNAE e id_municipio.
+Os dados são anonimizadas, não contendo CNPJs nem CPFs. Isso limita os cruzamentos com outros conjuntos que possuem CNPJs, mas é possível usar colunas como `cnae` e `id_municipio` para fazer cruzamentos interessantes.
 
 # Download dos dados
-A tabela de microdados atualizados disponibilizada pela BD contém mais de 20 GB. A maior parte dos computadores não tem capacidade de processamento para essa quantidade de dados, por isso é recomendado primeiro trabalhar com queries no bigquery (que tem processamento em nuvem) e fazer filtros e agregações antes de baixar os dados. Recomendamos fazer filtros utilizando as colunas de partições (ano, sigla_uf) e selecionar apenas as colunas que sejam do seu interesse e depois baixar os dados.
-
-# Instituição responsável
-Ministério do Trabalho e Emprego (MTE)
+Os microdados somam mais de 20 GB. Para evitar sobrecarregar seu computador, recomendamos usar queries no BigQuery para processar os dados em nuvem antes de baixá-los. Filtre pelas colunas de partição (como ano e UF) e selecione apenas as colunas relevantes.
 
 # Instrumento de coleta
-O Novo Caged é um compilado de dados do emprego formal por meio de informações captadas de 3 diferentes sistemas: eSocial, Caged e Empregador Web. A SEPRT apura tecnicamente o recebimento dessas informações nos registros administrativos antes de disponibilizar para o público.
+O Novo CAGED compila dados do emprego formal a partir de sistemas como eSocial, CAGED e Empregador Web. Os registros administrativos passam por apuração antes de serem disponibilizados ao público.
 
 # Mudanças na coleta
-Em 2020, os dados do CAGED passaram por uma reformulação que  trouxe maior automatização na coleta de informações. Como resultado, houve ampliação na cobertura e maior agilidade na disponibilização dos dados, mas os novos dados coletados são incompatíveis com as séries históricas. Por isso esse conjunto possui 2 grupos de tabelas de microdados um para o formato anterior a 2020 e outro para o novo formato. Para mais detalhes sobre essas modificações adicionamos alguns links nos materiais de apoio
+Em 2020, o CAGED passou por reformulação, automatizando a coleta de informações e ampliando a cobertura. No entanto, isso resultou em incompatibilidade com as séries históricas anteriores. Para mais informações sobre essas modificações, consultar os [materiais de apoio](https://basedosdados.org/dataset/562b56a3-0b01-4735-a049-eeac5681f056?tab=userGuide#tratamentos-feitos-pela-bd).
 
 # Atualizações
-Os microdados do CAGED são atualizados com 1 mês de defasagem. Isto é, supondo que o mês corrente seja março, os dados de fevereiro serão atualizados no final de março. O MTE disponibiliza um [calendário de atualização](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/calendario-de-divulgacao-do-novo-caged) disponível para consulta
+Os microdados são atualizados com defasagem de um mês. O calendário de atualizações pode ser consultado no [site do MTE](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/calendario-de-divulgacao-do-novo-caged).
+
+# Dados identificados
+Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados da RAIS, é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
 
 # Tratamentos feitos pela BD:
-O tratamento das três tabelas mais atualizadas do conjunto é muito similar: 
-* Renomeação das colunas para adequação ao manual de estilo da BD.
-* Criação das colunas de ano e mes a partir dos arquivos
-* Adequação das colunas que identificam Unidades Federativas ao padrão de Sigla UF.
-* Remoção das colunas: valorsalariofixo, unidadesalariocodigo, competenciaexc, competenciadec
+Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, [os códigos de extração e tratamento](https://github.com/basedosdados/queries-basedosdados-dev/blob/main/models/br_me_caged/code/crawler_caged.py) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_caged) estão disponíveis no repositório do GitHub para consulta.
+Os tratamentos realizados foram:
+* Renomeação das colunas para adequação ao manual de estilo;
+* Criação das colunas de `ano` e `mes`;
+* Adequação das colunas de unidades federativas ao padrão de sigla UF;
+* Remoção das colunas: `valorsalariofixo`, `unidadesalariocodigo`, `competenciaexc`, `competenciadec`
 
 # Materiais de apoio
-* [Reportagem sobre mudanças no CAGED](https://g1.globo.com/economia/noticia/2021/04/28/serie-historica-do-emprego-formal-nao-pode-ser-comparada-com-novo-caged-dizem-analistas.ghtml): Reportagem do G1 levantando considerações de especialistas sobre as mudanças do CAGED
-* [Nota sobre o Novo CAGED](ftp//:ftp.mtps.gov.br/pdet/microdados/NOVO%20CAGED/Sobre%20o%20Novo%20Caged.pdf): Nota do MTE que explica principais mudanças ocorridas no Novo Caged
+* [Reportagem do G1 sobre mudanças no CAGED](https://g1.globo.com/economia/noticia/2021/04/28/serie-historica-do-emprego-formal-nao-pode-ser-comparada-com-novo-caged-dizem-analistas.ghtml): Reportagem do G1 levantando considerações de especialistas sobre as mudanças do CAGED
+* [Nota do MTE explicando as principais alterações no Novo CAGED](ftp//:ftp.mtps.gov.br/pdet/microdados/NOVO%20CAGED/Sobre%20o%20Novo%20Caged.pdf): Nota do MTE que explica principais mudanças ocorridas no Novo Caged
