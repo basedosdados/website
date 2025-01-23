@@ -475,9 +475,9 @@ export default function ProfileConfiguration({ userInfo }) {
                     <Text
                       paddingTop="8px"
                       cursor="pointer"
-                      fontFamily="Lato"
+                      fontFamily="Roboto"
                       fontSize="14px"
-                      letterSpacing="0.5px"
+                      lineHeight="20px"
                       fontWeight="400"
                       color="#252A32"
                       _hover={{ color: "#2B8C4D" }}

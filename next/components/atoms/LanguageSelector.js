@@ -40,7 +40,7 @@ export default function LanguageSelector({ theme = "light" }) {
         lineHeight: "20px",
         ml: "8px",
         mr: "4px",
-        fontFamily: "Ubuntu"
+        fontFamily: "Roboto"
       },
       icon: {
         width: "20px",

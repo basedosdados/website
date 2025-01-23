@@ -12,18 +12,14 @@ import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { DebouncedSimpleControlledInput } from "../components/atoms/ControlledInput";
 
 import {
   getAllFAQs,
 } from "./api/faqs";
-
-import { DebouncedControlledInput } from "../components/atoms/ControlledInput";
-import Display from "../components/atoms/Display";
-import BodyText from "../components/atoms/BodyText";
 
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
@@ -82,11 +78,10 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         onClick={() => OpenCloseQuestion()}
       >
         <Text
-          fontFamily="ubuntu"
-          fontSize={isMobileMod() ? "18px" : "20px"}
-          fontWeight="400"
-          lineHeight={isMobileMod() ? "28px" :"22px"}
-          letterSpacing={isMobileMod() ? "0.1px" : "0.2px"}
+          fontFamily="Roboto"
+          fontSize="20px"
+          fontWeight="500"
+          lineHeight="30px"
           color="#252A32"
         >
           {question}
@@ -107,12 +102,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
           marginBottom={isActive && "32px !important"}
           overflow="hidden"
           transition="all 1s ease"
-          fontFamily="ubuntu"
-          color="#252A32"
-          letterSpacing="0.1px"
+          fontFamily="Roboto"
+          color="#464A51"
           fontSize="18px"
           lineHeight="28px"
-          fontWeight="300"
+          fontWeight="400"
         >
           <ReactMarkdown>{answer}</ReactMarkdown>
         </Box>
@@ -121,6 +115,19 @@ const QuestionsBox = ({ question, answer, id, active }) => {
     </Stack>
   )
 }
+
+const Display = ({ children, ...props }) => (
+  <Text
+    fontFamily="Roboto"
+    fontWeight="500"
+    fontSize="36px"
+    lineHeight="48px"
+    color="#2B8C4D"
+    {...props}
+  >
+    {children}
+  </Text>
+);
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
@@ -135,18 +142,35 @@ export default function FAQ({ faqs }) {
     setQuestions(faqs)
   },[faqs])
 
+  const searcher = new FuzzySearch(
+    categorySelected ? questions : allQuestions,
+    ["question", "keywords"],
+    {sort: true}
+  )
+
+  const filterByCategory = (category) => {
+    return allQuestions.filter((elm) =>
+      elm.categories.includes(category)
+    );
+  }
+
   useEffect(() => {
     if(categorySelected) return setQuestions(filterByCategory(categorySelected))
   },[categorySelected])
 
-  const searcher = new FuzzySearch(
-    categorySelected ? questions : allQuestions, ["question", "keywords"], {sort: true}
-  )
+  useEffect(() => {
+    if (categorySelected) {
+      const filteredQuestions = filterByCategory(categorySelected);
+      setQuestions(filteredQuestions);
+    } else {
+      setQuestions(allQuestions);
+    }
+    setSearchFilter("");
+  }, [categorySelected, allQuestions]);
 
   useEffect(() => {
     if(searchFilter.trim() === "") {
-      setSearchFilter("")
-      setQuestions(faqs)
+      setQuestions(categorySelected ? filterByCategory(categorySelected) : allQuestions);
     } else {
       const result = searcher.search(searchFilter.trim())
       setQuestions(result)
@@ -155,46 +179,37 @@ export default function FAQ({ faqs }) {
     }
   },[searchFilter])
 
-  const filterByCategory = (category) => {
-    const filtedCategory = allQuestions.filter((elm) => {
-      const indexCategory = elm.categories.findIndex((res) => res === category)
-      if(indexCategory > -1) return elm.categories[indexCategory]
-    })
-    return filtedCategory
-  }
-
   const cleanFilter = () => {
-    setSearchFilter("")
-
-    if(categorySelected) return setQuestions(filterByCategory(categorySelected))
-
-    setQuestions(allQuestions)
+    setSearchFilter("");
+    setQuestions(categorySelected ? filterByCategory(categorySelected) : allQuestions);
   }
 
   const CategoryText = ({ category }) => {
-    function handlerClick(elm) {
-      if(elm === categorySelected) {
+    function handlerClick() {
+      if(category === categorySelected) {
         setCategorySelected("")
         setQuestions(allQuestions)
-        setCloseQuestion(!closeQuestion)
-        window.scrollTo({top: 1})
       } else {
-        setCategorySelected(elm)
-        setCloseQuestion(!closeQuestion)
-        window.scrollTo({top: 1})
+        setCategorySelected(category)
       }
+
+      setCloseQuestion(!closeQuestion)
+      window.scrollTo({top: 1})
     }
 
     return (
       <Text
-        fontSize="16px"
-        color={categorySelected === category ? "#2B8C4D" :"#6F6F6F"}
-        fontFamily="ubuntu"
+        color={categorySelected === category ? "#2B8C4D" :"#71757A"}
+        fontFamily="Roboto"
         fontWeight="500"
+        fontSize="16px"
+        lineHeight="24px"
         width="max-content"
         cursor="pointer"
-        letterSpacing="0.2px"
-        onClick={() => handlerClick(category)}
+        _hover={{
+          color: "#2B8C4D"
+        }}
+        onClick={handlerClick}
       >
         {category}
       </Text>
@@ -219,72 +234,60 @@ export default function FAQ({ faqs }) {
 
       <VStack
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         margin="50px auto auto"
         spacing={0}
       >
         <Display
-          paddingBottom={isMobileMod() ? "56px" : "66px" }
+          paddingBottom={{base: "56px", lg: "66px" }}
           color="#2B8C4D"
+          textAlign="center"
         >
           {t('title')}
         </Display>
 
-        <DebouncedControlledInput
-          value={searchFilter}
-          onChange={(val) => setSearchFilter(val)}
-          paddingBottom={isMobileMod() ? "56px" : "126px" }
+        <DebouncedSimpleControlledInput
+          width="100%"
           maxWidth="600px"
+          paddingBottom={{base: "56px", lg: "126px" }}
+          value={searchFilter}
+          onChange={setSearchFilter}
           placeholder={t('searchPlaceholder')}
-          inputStyle={{
-            padding: "12px 32px 12px 16px",
-            height: "48px",
-            borderRadius: "18px",
-            backgroundColor: "#ffffff",
-            fontSize: "16px",
-            border: "1px solid #DEDFE0 !important",
-            _placeholder:{ color: "#6F6F6F" }
-          }}
-          inputElementStyle={{
-            height: "48px"
-          }}
-          rightIcon={
-            (searchFilter ?
-              <CrossIcon
-                alt="limpar pesquisa"
-                width="22px"
-                height="22px"
-                cursor="pointer"
-                fill="#252A32"
-                onClick={() => cleanFilter()}
-              />
-              :
-              <SearchIcon
-                alt="pesquisar"
-                width="20px"
-                height="20px"
-                cursor="normal"
-                fill="#D0D0D0"
-              />
-            )
-          }
+          icon={(searchFilter ?
+            <CrossIcon
+              alt="limpar pesquisa"
+              width="17px"
+              height="17px"
+              cursor="pointer"
+              fill="#464A51"
+              onClick={() => cleanFilter()}
+            />
+            :
+            <SearchIcon
+              alt="pesquisar"
+              width="17px"
+              height="17px"
+              cursor="normal"
+              fill="#464A51"
+            />
+          )}
         />
 
         <Stack
           width="100%"
           position="relative"
-          gridGap={isMobileMod() ? "64px" : "120px"}
+          gap={{base: "64px", lg: "160px"}}
           spacing={0}
-          flexDirection={isMobileMod() ? "column" :"row"} 
+          flexDirection={{base: "column", lg: "row"} }
           paddingBottom="32px"
         >
           <Box
             display="flex"
             height="100%"
             flexDirection="column"
-            gridGap="16px"
-            position={isMobileMod() ? "relative" : "sticky"}
-            top={isMobileMod()? "0" : "120px"}
+            gap="16px"
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "120px"}}
           >
             <CategoryText category="Dados"/>
             <CategoryText category="Planos Pagos"/>
@@ -299,9 +302,15 @@ export default function FAQ({ faqs }) {
             spacing={8}
           >
             {questions.length === 0 ?
-              <BodyText color="#7D7D7D">
+              <Text
+                fontFamily="Roboto"
+                fontSize="20px"
+                fontWeight="500"
+                lineHeight="30px"
+                color="#252A32"
+              >
                 {t('noQuestionsFound')}
-              </BodyText>
+              </Text>
             :
               questions.map((elm, i) => 
                 <QuestionsBox
@@ -315,20 +324,20 @@ export default function FAQ({ faqs }) {
             <Text
               marginTop="60px !important"
               color="#252A32"
-              fontFamily="ubuntu"
+              fontFamily="Roboto"
               fontSize="16px"
-              fontWeight="500"
-              lineHeight="16px"
-              letterSpacing="0.2px"
+              fontWeight="400"
+              lineHeight="24px"
             >
               {t('contactText')} 
               <Link
                 display="inline"
                 href="/contact"
-                color="#42B0FF"
-                fontFamily="ubuntu"
+                color="#0068C5"
                 fontSize="16px"
-                fontWeight="500"
+                fontWeight="400"
+                lineHeight="24px"
+                _hover={{color: "#0057A4"}}
               >
                 {t('contactLink')}
               </Link>

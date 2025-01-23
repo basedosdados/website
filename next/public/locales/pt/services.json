@@ -3,7 +3,7 @@
     "metaTitle": "Serviços – Base dos Dados",
     "slogan": {
       "title": "Nossos serviços",
-      "description": "A Base dos Dados é a especialista que ajuda você ou sua equipe a trabalhar e extrair o máximo de valor dos dados.",
+      "description": "A Base dos Dados é a especialista que ajuda você ou sua equipe a trabalhar e extrair o máximo de valor dos dados",
       "cta": "Vamos fazer um projeto juntos"
     },
     "services": {
@@ -18,7 +18,7 @@
     },
     "dataCapture": {
       "title": "Captura de dados",
-      "description": "Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo.",
+      "description": "Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo",
       "longDescription": "Você não precisa se preocupar em criar e manter uma infraestrutura própria ou escrever códigos - nós cuidamos disso. Tudo é feito seguindo a metodologia de tratamento e padronização da Base dos Dados, e conforme as melhores práticas de engenharia de dados do mercado. As tabelas tratadas podem ser disponibilizadas com exclusividade ou serem públicas.",
       "advantages": {
         "title": "Principais vantagens",
@@ -47,7 +47,7 @@
     },
     "dataAnalysis": {
       "title": "Análise de dados",
-      "description": "Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão.",
+      "description": "Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão",
       "longDescription": "As informações e insights são gerados a partir de diversos conjuntos de dados já tratados no nosso datalake público atrelado à expertise da nossa equipe de Dados. E mais: utilizamos nossa metodologia padrão de tratamento para que você também possa cruzar esses dados com quaisquer outras bases disponíveis no datalake.",
       "examples": {
         "title": "Exemplos de perguntas que podemos responder",
@@ -84,7 +84,7 @@
     },
     "workflow": {
       "title": "Nosso fluxo de trabalho",
-      "description": "Uma mesma metodologia de trabalho para todos os serviços, pautada na satisfação dos clientes e na primazia pela qualidade.",
+      "description": "Uma mesma metodologia de trabalho para todos os serviços, pautada na satisfação dos clientes e na primazia pela qualidade",
       "steps": {
         "demand": {
           "title": "Demanda",

@@ -21,7 +21,7 @@ import {
   MenuList,
   MenuItem
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
 import { useTranslation } from 'next-i18next';
 import cookies from "js-cookie";
@@ -29,7 +29,7 @@ import MenuDropdown from "./MenuDropdown";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
-import RoundedButton from "../atoms/RoundedButton";
+import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
 import DomainComponent from "../atoms/DomainComponent";
@@ -81,18 +81,17 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           {Object.entries(links).map(([key, elm]) => {
             if(key === "Button") {
               return elm.map(b => 
-                <RoundedButton
+                <Button
                   key={b.name}
                   backgroundColor={b.color}
                   minWidth="100px"
                   height="38px"
-                  fontFamily="Roboto"
                   fontSize="20px"
-                  borderRadius="30px"
+                  lineHeight="26px"
                   onClick={() => router.push(b.href)}
                 >
                   {b.name}
-                </RoundedButton>
+                </Button>
               )
             }
             if (typeof elm === "object") {
@@ -294,7 +293,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             padding="4px 8px"
             marginTop="10px !important"
           >
-            {isUserPro ? t('DBPro') : t('DBFree')}
+            {isUserPro
+              ? (userData?.plan === "bd_pro_empresas"
+                ? t('DBEnterprise')
+                : userData?.plan === "bd_pro"
+                  ? t('DBPro')
+                  : null)
+              : t('DBFree')
+            }
           </Box>
         </Stack>
 
@@ -519,7 +525,14 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               padding="4px 8px"
               marginTop="10px"
             >
-              {isUserPro ? t('DBPro') : t('DBFree')}
+              {isUserPro
+                ? (userData?.plan === "bd_pro_empresas"
+                  ? t('DBEnterprise')
+                  : userData?.plan === "bd_pro"
+                    ? t('DBPro')
+                    : null)
+                : t('DBFree')
+              }
             </Box>
           </MenuItem>
 
@@ -762,19 +775,15 @@ function DesktopLinks({
           if (k === "Button") {
             return v.map((b, j) => (
               <a key={`button-${j}`} href={b.href} target="_blank">
-                <RoundedButton
+                <Button
+                  onClick={() => {}}
                   backgroundColor={b.color}
                   minWidth="80px"
                   height="35px"
-                  fontSize="14px"
-                  fontFamily="Roboto"
-                  letterSpacing="0.1px"
                   fontWeight="400"
-                  lineHeight="20px"
-                  borderRadius="30px"
                 >
                   {b.name}
-                </RoundedButton>
+                </Button>
               </a>
             ))
           }
@@ -969,24 +978,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     }
   }, [lastScrollY, router.pathname])
 
-  function maxWidthDataset() {
-    if( route === "/search" ||
-        route === "/dataset/[dataset]" ||
-        route === "/user/[username]" ||
-        route === "/blog"
-      ) return "1440px"
-    return "1264px"
-  }
-
   useEffect(() => {
     if(isLoading) return
     if(userBD !== null && userBD !== "undefined") {
       try {
         const res = JSON.parse(userBD)
+
         setUserData({
           email: res.email,
           username: res.username,
           picture: res.picture || "",
+          plan: res?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
         })
       } catch (error) {
         console.error("Error parsing user data:", error)
@@ -1011,7 +1013,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         {
           icon: <BDLogoEduImage widthImage="54px"/>,
           name: [t('data_courses')],
-          href: "https://info.basedosdados.org/bd-edu-sql"
+          href: "https://info.basedosdados.org/bd-edu-cursos"
         },
         {
           icon: <BDLogoLabImage widthImage="54px"/>,
@@ -1132,7 +1134,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
           width="100%"
           height="40px"
-          maxWidth={maxWidthDataset()}
+          maxWidth="1440px"
           margin="0 auto"
           spacing={6}
         >

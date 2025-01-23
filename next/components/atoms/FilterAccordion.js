@@ -13,16 +13,13 @@ import {
 import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from "react";
 import Checkbox from "../atoms/Checkbox";
-import { ControlledInput, ControlledInputSimple } from "./ControlledInput";
-import SectionText from "./SectionText";
+import { ControlledInputSimple } from "./ControlledInput";
 import SearchIcon from "../../public/img/icons/searchIcon";
 
 export function BaseFilterAccordion({
   fieldName,
   children,
-  overflowX = "scroll",
   isOpen = null,
-  isActive = false,
   onChange = () => { },
   alwaysOpen = false,
   isHovering = true
@@ -204,147 +201,3 @@ export function CheckboxFilterAccordion({
   );
 }
 
-export function RangeFilterAccordion({
-  fieldName,
-  onChange,
-  onToggle,
-  isOpen = null,
-  alwaysOpen = false,
-  isActive = false,
-  maxValue = null,
-  minValue = null,
-}) {
-  const { t } = useTranslation('search');
-  const [min, setMin] = useState();
-  const [max, setMax] = useState();
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    setError(null);
-
-    if (min > max) return;
-    if ((!min && min < 0) || (!max && max < 0)) return setError(t('too_old'));
-    if (!min && !max) return;
-
-    onChange({ min, max });
-  }, [min, max]);
-
-  useEffect(() => {
-    setMin(minValue);
-    setMax(maxValue);
-  }, []);
-
-  return (
-    <BaseFilterAccordion
-      isOpen={alwaysOpen ? alwaysOpen : isOpen}
-      alwaysOpen={alwaysOpen}
-      isActive={isActive}
-      onChange={onToggle}
-      overflowX="hidden"
-      fieldName={fieldName}
-    >
-      <VStack align="flex-start">
-        <HStack padding="8px 0px" width="100%">
-          <ControlledInput
-            value={min}
-            onChange={setMin}
-            width="100%"
-            placeholder={t('min')}
-            inputStyle={{
-              height: "40px",
-              fontSize: "14px",
-              width: "100%",
-              borderRadius: "16px",
-              type: "number"
-            }}
-          />
-          <ControlledInput
-            value={max}
-            onChange={setMax}
-            width="100%"
-            placeholder={t('max')}
-            inputStyle={{
-              height: "40px",
-              fontSize: "14px",
-              width: "100%",
-              borderRadius: "16px",
-              type: "number"
-            }}
-          />
-        </HStack>
-        {error ? (
-          <SectionText
-            paddingLeft="20px"
-            color="red"
-            fontWeight="bold"
-            fontSize="12px"
-          >
-            {error}
-          </SectionText>
-        ) : (
-          <></>
-        )}
-      </VStack>
-    </BaseFilterAccordion>
-  );
-}
-
-export function SimpleFilterAccordion({
-  fieldName,
-  children,
-  isOpen = null,
-  isActive = false,
-  onChange = () => { },
-  isHovering = true,
-  styleChildren
-}) {
-  return (
-    <Accordion allowToggle width="100%">
-      <AccordionItem border="0px">
-        {({ isExpanded }) => (
-          <>
-            <Text>
-              <AccordionButton
-                onClick={onChange}
-                _hover={isHovering ? { cursor: "pointer", opacity: "0.7" } : "none"}
-                padding="16px 16px 0 0"
-                marginBottom="8px"
-              >
-                <HStack
-                  spacing={2}
-                  alignContent="baseline"
-                  justifyContent="flex-start"
-                  width="100%"
-                >
-                  <Box
-                    width="fit-content"
-                    fontWeight="500"
-                    fontFamily="Ubuntu"
-                    fontSize="16px"
-                    color={isActive ? "#2B8C4D" : "#252A32"}
-                    letterSpacing="0.2px"
-                  >
-                    {fieldName}
-                  </Box>
-                </HStack>
-                <AccordionIcon color={isActive ? "#2B8C4D" : null} marginLeft="auto" fontSize="18px" />
-              </AccordionButton>
-            </Text>
-            {(isOpen && isOpen === true) || (isOpen == null && isExpanded) ? (
-              <VStack
-                overflowY="auto"
-                width="100%"
-                alignItems="flex-start"
-                {...styleChildren}
-              >
-                {children}
-              </VStack>
-            ) : (
-              <></>
-            )}
-          </>
-        )}
-      </AccordionItem>
-    </Accordion>
-  );
-}

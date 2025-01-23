@@ -1,51 +1,62 @@
 import {
   VStack,
-  Tabs,
-  TabList,
-  TabPanel,
-  TabPanels,
+  Box,
   Grid,
   GridItem,
   Image,
   Text,
+  Stack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
 
-import BigTitle from "../../components/atoms/BigTitle";
-import GreenTab from "../../components/atoms/GreenTab";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
+import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
-import CrossingIcon from "../../public/img/icons/crossingIcon";
+import BookIcon from "../../public/img/icons/bookIcon";
 
 import {
   getDataset,
   getListDatasets,
 } from "../api/datasets/index";
 
+import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
+
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
+  let contentUserGuide = null;
+  let userGuide = null;
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
-
   } catch (error) {
     console.error("Fetch error:", error.message);
+  }
+
+  if(dataset?.usageGuide) {
+    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  }
+
+  try {
+    userGuide = await serializeUserGuide(contentUserGuide);
+  } catch (error) {
+    userGuide = null;
   }
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
+    userGuide,
   };
   
   return {
@@ -65,16 +76,85 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
+export default function DatasetPage ({ dataset, userGuide }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
-  const { locale } = router
-  const { query } = router
+  const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
   const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  const pushQuery = (key, value) => {
+    router.replace({
+      pathname: `/dataset/${query.dataset}`,
+      query: { [key]: value }
+    },
+      undefined, { shallow: true }
+    )
+  }
+
+  function sortElements(a, b) {
+    if (a.order < b.order) {
+      return -1
+    }
+    if (a.order > b.order) {
+      return 1
+    }
+    return 0
+  }
+
+  const datasetTab = () => {
+    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .filter((elm) => elm?.slug !== "dicionario")
+      .filter((elm) => elm?.slug !== "dictionary")
+      .sort(sortElements) || []
+
+    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
+    
+    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
+      .filter((elm) => elm?.status?.slug !== "under_review")
+      .sort(sortElements) || []
+
+    if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
+    if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
+    if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
+  }
+
+  useEffect(() => {
+    if(!!query.tab) setTabIndex(1)
+  }, [query.tab])
+
+  const TabSelect = ({ index, onClick, children }) => {
+    return (
+      <Box
+        as="div"
+        cursor="pointer"
+        position="relative"
+        top="1px"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="14px"
+        lineHeight="20px"
+        color={tabIndex === index ? "#2B8C4D" :"#71757A"}
+        fill={tabIndex === index ? "#2B8C4D" :"#71757A"}
+        pointerEvents={tabIndex === index ? "none" : "default"}
+        borderBottom={tabIndex === index && "3px solid #2B8C4D"}
+        padding="12px 24px 13px"
+        _hover={{
+          color: "#464A51",
+          fill: "#464A51"
+        }}
+        onClick={onClick}
+      >
+        {children}
+      </Box>
+    )
+  }
 
   if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
 
@@ -113,8 +193,8 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
-        overflow="auto"
         paddingX="24px"
+        height="100%"
         spacing={0}
       >
         <Grid
@@ -145,17 +225,18 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
               gap="8px"
             >
               <GridItem colSpan={5}>
-                <BigTitle
+                <Text
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
                   whiteSpace={{base: "inherit", lg:"nowrap"}}
                   fontFamily="Roboto"
                   fontWeight="500"
+                  fontSize="28px"
                   lineHeight="42px"
                 >
                   {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
-                </BigTitle>
+                </Text>
               </GridItem>
 
               <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
@@ -243,54 +324,59 @@ export default function DatasetPage ({ dataset, mdxSource, headings, infoId }) {
           </GridItem>
         </Grid>
 
-        <Tabs
-          onChange={(index) => setTabIndex(index)}
-          variant="unstyled"
-          isLazy
-          width="100%"
-        >
-          <TabList
-            padding="0px"
-            borderBottom="1px solid #DEDFE0 !important"
-          >
-            <GreenTab>
+        <Stack spacing={0} width="100%" height="100%">
+          <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
+            <TabSelect
+              index={0}
+              onClick={() => {
+                setTabIndex(0)
+                datasetTab()
+              }}
+            >
               <DataBaseIcon
-                alt="dados"
+                alt={t('dataAlt')}
                 width="18px"
                 height="18px"
                 marginRight="6px"
               />
               {t('data')}
-            </GreenTab>
+            </TabSelect>
 
-            <GreenTab display="none">
-            </GreenTab>
-
-            <GreenTab display="none">
-              <CrossingIcon
-                alt="cruzamento"
-                width="28px"
-                height="24px"
-                marginRight="2px"
+            <TabSelect
+              index={1}
+              onClick={() => {
+                setTabIndex(1)
+                router.replace({
+                  pathname: `/dataset/${query.dataset}`,
+                  query: { tab: "userGuide" }
+                },
+                  undefined, { shallow: true }
+                )
+              }}
+            >
+              <BookIcon
+                alt={t('userGuideAlt')}
+                width="24px"
+                height="16px"
+                marginRight="6px"
               />
-              {t('crossing')}
-            </GreenTab>
-          </TabList>
+              {t('userGuide')}
+            </TabSelect>
+          </Stack>
 
-          <TabPanels>
-            <TabPanel padding="0px">
-              <DatasetResource
-                dataset={dataset}
-              />
-            </TabPanel>
-
-            <TabPanel padding="0px">
-            </TabPanel>
-
-            <TabPanel padding="0px">
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+          {tabIndex === 0 &&
+            <DatasetResource
+              dataset={dataset}
+            />
+          }
+          {tabIndex === 1 &&
+            <DatasetUserGuide
+              data={userGuide}
+              locale={locale}
+              slug={dataset?.usageGuide}
+            />
+          }
+        </Stack>
       </VStack>
     </MainPageTemplate>
   )

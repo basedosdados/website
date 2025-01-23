@@ -2,23 +2,23 @@ import {
   Stack,
   Text,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Input,
-  UnorderedList,
-  ListItem
+  List
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import InputForm from "../../components/atoms/SimpleInput";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 
-import Display from "../../components/atoms/Display";
+import {
+  LabelTextForm,
+  InputForm,
+  ErrorMessage,
+  Button,
+  ListChecked
+} from "../../components/molecules/uiUserPage";
+
 import Link from "../../components/atoms/Link";
-import Button from "../../components/atoms/RoundedButton";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailRecoveryImage } from "../../public/img/emailImage";
@@ -167,20 +167,6 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
     }
   }
 
-  function LabelTextForm ({ text, ...props }) {
-    return (
-      <FormLabel
-        color="#252A32"
-        fontFamily="ubuntu"
-        letterSpacing="0.2px"
-        fontSize="16px"
-        fontWeight="400"
-        lineHeight="16px"
-        {...props}
-      >{text}</FormLabel>
-    )
-  }
-
   if(confirmed) return (
     <MainPageTemplate
       display="flex"
@@ -191,7 +177,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       <Stack
         display="flex"
         justifyContent="center"
-        width="510px"
+        width="600px"
         height="100%"
         marginTop="50px"
         marginX="27px"
@@ -200,19 +186,23 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       >
         <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
 
-        <Display
-          fontSize={isMobileMod() ? "28px" : "34px"}
-          lineHeight={isMobileMod() ? "16px" : "44px"}
-          letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontweith="500"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           textAlign="center"
-        >{t('passwordRecovery.titleConfirmed')}</Display>
+        >
+          {t('passwordRecovery.titleConfirmed')}
+        </Text>
 
         <form
           style={{
             display: "flex",
             flexDirection: "column",
-            width: "100%"
+            width: "100%",
+            maxWidth: "550px"
           }}
           onSubmit={handleSubmit}
         >
@@ -226,57 +216,91 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               value={formData.password}
               onChange={(e) => handleInputChange(e, "password")}
               placeholder={t('passwordRecovery.newPasswordPlaceholder')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-              styleElmRight={{
-                width: "50px",
-                height: "40px",
+              inputElementStyle={{
                 cursor: "pointer",
                 onClick: () => setShowPassword(!showPassword)
               }}
-              elmRight={showPassword ?
+              icon={showPassword ?
                 <EyeOffIcon
                   alt="esconder senha"
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               :
                 <EyeIcon
                   alt="exibir senhar"
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               }
             />
             <Text 
               margin="8px 0"
-              color= { errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#7D7D7D" : "#7D7D7D" }
-              fontFamily= "Ubuntu"
-              fontSize= "12px"
-              fontWeight= "400"
-              lineHeight= "16px"
-              letterSpacing= "0.3px"
+              color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
+              fontFamily="Roboto"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
               display="flex"
               flexDirection="row"
-              gap="4px"
+              gap="8px"
               alignItems="flex-start"
-            ><Exclamation width="14px" height="14px" fill="#BF3434" display={ errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}/> {t('passwordRecovery.passwordRequirements')}</Text>
-            <UnorderedList fontSize="12px" fontFamily="Ubuntu" position="relative" left="2px">
-              <ListItem fontSize="12px" color={errors?.regexPassword?.amount ? "#BF3434" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementChars')}</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.upperCase ? "#BF3434" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementUppercase')}</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.lowerCase ? "#BF3434" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementLowercase')}</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.number ? "#BF3434" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementDigit')}</ListItem>
-              <ListItem fontSize="12px" color={errors?.regexPassword?.special ? "#BF3434" :"#7D7D7D"}>{t('passwordRecovery.passwordRequirementSpecial')}</ListItem>
-            </UnorderedList>
+            >
+              <Exclamation
+                display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
+                width="18px"
+                height="18px"
+                fill="#BF3434"
+              /> {t('username.passwordRequirements')}
+            </Text>
+
+            <List
+              fontFamily="Roboto"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              position="relative"
+              left="2px"
+              display="flex"
+              flexDirection="column"
+              gap="8px"
+            >
+              <ListChecked 
+                checked={formData.password.length >= 8}
+                err={errors?.regexPassword?.amount}
+              >
+                {t('username.minCharacters')}
+              </ListChecked>
+              <ListChecked
+                checked={/[A-Z]/.test(formData.password)}
+                err={errors?.regexPassword?.upperCase}
+              >
+                {t('username.uppercaseLetter')}
+              </ListChecked>
+              <ListChecked
+                checked={/[a-z]/.test(formData.password)}
+                err={errors?.regexPassword?.lowerCase}
+              >
+                {t('username.lowercaseLetter')}
+              </ListChecked>
+              <ListChecked
+                checked={/\d/.test(formData.password)}
+                err={errors?.regexPassword?.number}
+              >
+                {t('username.digit')}
+              </ListChecked>
+              <ListChecked
+                checked={/[!@#?%&*]/.test(formData.password)}
+                err={errors?.regexPassword?.special}
+              >
+                {t('username.specialCharacter')}
+              </ListChecked>
+            </List>
+
             {errors.password &&
-              <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-                <Exclamation marginTop="4px" fill="#BF3434"/>{errors.password}
-              </FormErrorMessage>
+              <ErrorMessage>{errors.password}</ErrorMessage>
             }
           </FormControl>
 
@@ -290,44 +314,34 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
               value={formData.confirmPassword}
               onChange={(e) => handleInputChange(e, "confirmPassword")}
               placeholder={t('passwordRecovery.confirmPasswordPlaceholder')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-              styleElmRight={{
-                width: "50px",
-                height: "40px",
+              inputElementStyle={{
                 cursor: "pointer",
                 onClick: () => setShowConfirmPassword(!showConfirmPassword)
               }}
-              elmRight={showConfirmPassword ?
+              icon={showConfirmPassword ?
                 <EyeOffIcon
                   alt="esconder senha"
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               :
                 <EyeIcon
                   alt="exibir senhar"
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               }
             />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="4px" fill="#BF3434"/>{errors.confirmPassword}
-            </FormErrorMessage>
+            <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
           </FormControl>
 
           <Button
             type="submit"
-            borderRadius="30px"
+            onClick={() => {}}
+            width="100%"
             margin="40px auto 0"
-            _hover={{transform: "none", opacity: 0.8}}
-            width="fit-content"
           >
             {t('passwordRecovery.updatePassword')}
           </Button>
@@ -346,7 +360,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       <Stack
         display="flex"
         justifyContent="center"
-        width="510px"
+        width="550px"
         height="100%"
         marginTop="50px"
         marginX="27px"
@@ -355,63 +369,48 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       >
         <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
 
-        <Display
-          fontSize={isMobileMod() ? "28px" : "34px"}
-          lineHeight={isMobileMod() ? "16px" : "44px"}
-          letterSpacing={isMobileMod() ? "0" : "-0.4px"}
-          fontweith="500"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           textAlign="center"
-        >{t('passwordRecovery.title')}</Display>
+          marginBottom="40px"
+        >
+          {t('passwordRecovery.title')}
+        </Text>
 
         <Text
           textAlign="center"
-          color= "#7D7D7D"
-          fontFamily= "Ubuntu"
-          fontSize= "16px"
+          color= "#464A51"
+          fontFamily= "Roboto"
           fontWeight= "400"
-          lineHeight= "24px"
-          letterSpacing= "0.2px"
+          fontSize= "18px"
+          lineHeight= "26px"
         >
           {t('passwordRecovery.description')}
         </Text>
 
-        <FormControl
-          fontFamily="ubuntu"
-          color="#252A32"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="16px"
-          letterSpacing="0.2px"
-          isInvalid={!!error}
-        >
-          <FormLabel fontWeight="400">{t('passwordRecovery.emailLabel')}</FormLabel>
-          <Input
+        <FormControl isInvalid={!!error}>
+          <LabelTextForm text={t('passwordRecovery.emailLabel')}/>
+          <InputForm
             type="email"
             placeholder={t('passwordRecovery.emailPlaceholder')}
-            _placeholder={{color: "#A3A3A3"}}
-            _focus={{border:"2px solid #42B0FF !important" }}
-            _hover={{border:"2px solid #42B0FF !important" }}
             value={email}
             onKeyDown={handleSpaceKey}
             onChange={(e) => setEmail(e.target.value)}
-            padding="8px 12px 8px 16px"
-            borderRadius="16px"
-            fontSize="14px"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-            border="1px solid #DEDFE0 !important"
           />
-          <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-            <Exclamation marginTop="4px" fill="#BF3434"/>{error}
-          </FormErrorMessage>
+          <ErrorMessage >
+            {error}
+          </ErrorMessage>
         </FormControl>
 
         <Button
           cursor={forwardingDisabled ? "default" : "pointer"}
-          _hover={{opacity:forwardingDisabled ? 1 : 0.7, transform: forwardingDisabled ? "none" : "translateY(-3px)"}}
-          backgroundColor={forwardingDisabled ? "#C4C4C4" : "#42B0FF"}
+          _hover={{backgroundColor:forwardingDisabled ? "#2B8C4D" : "#22703E"}}
+          backgroundColor={forwardingDisabled ? "#C4C4C4" : "#2B8C4D"}
           pointerEvents={forwardingDisabled ? "none" : ""}
-          borderRadius="30px"
           width="fit-content"
           onClick={() => handleEmailPasswordRecovery(email)}
         >
@@ -420,18 +419,20 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
 
         <Text
           textAlign="center"
-          color= "#252A32"
-          fontFamily= "Ubuntu"
-          fontSize= "14px"
-          fontWeight= "400"
-          lineHeight= "27px"
-          letterSpacing= "0.3px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
         >
           {t('passwordRecovery.needHelp')}{' '}
           <Link 
-            display="inline" 
-            fontFamily="ubuntu" 
-            color="#42B0FF" 
+            display="inline"
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
             href="/contact"
           >
             {t('passwordRecovery.contactUs')}

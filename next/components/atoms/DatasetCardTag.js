@@ -4,19 +4,21 @@ import { Tag } from '@chakra-ui/react';
 export function DatasetCardTag({ slug, name, locale, ...props }) {
   return (
     <Tag
-      borderRadius="8px"
-      padding="2px 8px"
-      backgroundColor="#DEDFE0"
+      borderRadius="100px"
+      padding="8px 12px"
+      border="1px solid #DEDFE0"
+      backgroundColor="#FFFFFF"
       cursor="pointer"
     >
       <Link
         href={`/search?tag=${slug}`}
         locale={locale}
-        fontWeight="300"
-        fontFamily="ubuntu"
-        fontSize="10px"
-        color="#252A32"
-        letterSpacing="0.2px"
+        fontFamily="Roboto"
+        fontWeight="500"
+        fontSize="12px"
+        lineHeight="18px"
+        letterSpacing="0.1px"
+        color="#464A51"
         position="relative"
         whiteSpace="nowrap"
         {...props}

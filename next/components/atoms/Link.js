@@ -1,6 +1,7 @@
 import { Text } from "@chakra-ui/react";
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from "react";
 
 export default function Link({
   children,
@@ -11,15 +12,18 @@ export default function Link({
   ...props
 }) {
   const { locale } = useRouter();
+  const [isExternalLink, setIsExternalLink] = useState(false);
 
-  const isExternalLink = (() => {
-    try {
-      const linkUrl = new URL(href, window.location.origin);
-      return linkUrl.origin !== window.location.origin;
-    } catch (error) {
-      return false;
+  useEffect(() => {
+    if (typeof window !== "undefined" && href) {
+      try {
+        const linkUrl = new URL(href, window.location.origin);
+        setIsExternalLink(linkUrl.origin !== window.location.origin);
+      } catch (error) {
+        setIsExternalLink(false);
+      }
     }
-  })();
+  }, [href]);
 
   if (isExternalLink) {
     return (

@@ -63,7 +63,7 @@ export default function ContactConsulting() {
 
       <Stack
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         alignItems="center"
         margin="0 auto"
       >

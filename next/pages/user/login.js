@@ -1,9 +1,8 @@
 import {
+  Text,
   Box,
   Stack,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
@@ -12,12 +11,13 @@ import cookies from 'js-cookie';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Display from "../../components/atoms/Display";
-import Input from "../../components/atoms/SimpleInput";
-import Button from "../../components/atoms/RoundedButton";
-import ButtonSimple from "../../components/atoms/SimpleButton";
-import SectionText from "../../components/atoms/SectionText";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook"
+import {
+  LabelTextForm,
+  InputForm,
+  ErrorMessage,
+  Button
+} from "../../components/molecules/uiUserPage";
+import Link from "../../components/atoms/Link";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -108,20 +108,6 @@ export default function Login() {
     return router.push('/')
   }
 
-  const LabelTextForm = ({ text, ...props }) => {
-    return (
-      <FormLabel
-        color="#252A32"
-        fontFamily="ubuntu"
-        letterSpacing="0.2px"
-        fontSize="16px"
-        fontWeight="400"
-        lineHeight="16px"
-        {...props}
-      >{text}</FormLabel>
-    )
-  }
-
   return (
     <MainPageTemplate
       display="flex"
@@ -138,13 +124,17 @@ export default function Login() {
         marginX="27px"
         spacing={0}
       >
-        <Display
-          fontSize={isMobileMod() ? "34px" : "60px"}
-          lineHeight={isMobileMod() ? "44px" : "72px"}
-          letterSpacing={isMobileMod() ? "-0.4px" : "-1.5px"}
-          marginBottom="40px"
+        <Text
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
+          color="#252A32"
           textAlign="center"
-        >{t('login.title')}</Display>
+          marginBottom="40px"
+        >
+          {t('login.title')}
+        </Text>
 
         {errors.login && 
           <Box
@@ -152,135 +142,118 @@ export default function Login() {
             flexDirection="row"
             gap="8px"
             alignItems="center"
-            fontSize="12px"
-            fontFamily="ubuntu"
             marginBottom="24px !important"
-            color="#BF3434"
           >
-            <Exclamation fill="#BF3434"/>
-            {errors.login}
+            <Exclamation width="19px" height="19px" fill="#BF3434"/>
+            <Text
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#BF3434"
+            >
+              {errors.login}
+            </Text>
           </Box>
         }
 
         <form onSubmit={handleSubmit}>
           <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
             <LabelTextForm text={t('login.emailLabel')}/>
-            <Input
+            <InputForm
               id="username"
               name="username"
-              type="email"
               autoComplete="username"
+              type="email"
               value={formData.email}
               onChange={(e) => handleInputChange(e, "email")}
               placeholder={t('login.emailPlaceholder')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
             />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="3px" fill="#BF3434"/>{errors.email}
-            </FormErrorMessage>
+            <ErrorMessage>
+              {errors.email}
+            </ErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.password} marginBottom="24px !important">
-            <Box
-              display="flex"
-              flexDirection="row"
-              width="100%"
-              marginBottom="8px"
-            >
-              <LabelTextForm text={t('login.passwordLabel')} margin="0 !important"/>
-              <ButtonSimple
-                position="relative"
-                top="-2px"
-                width="fit-content"
-                marginLeft="auto !important"
-                fontWeight="700"
-                color="#42B0FF"
-                letterSpacing="0.3px"
-                fontSize="14px"
-                justifyContent="end"
-                _hover={{opacity: "0.6"}}
-                onClick={() => router.push('/user/password-recovery')}
-              >{t('login.forgotPassword')}
-              </ButtonSimple>
-            </Box>
-
-            <Input
+          <FormControl isInvalid={!!errors.password} marginBottom="8px !important">
+            <LabelTextForm text={t('login.passwordLabel')}/>
+            <InputForm
+              type={showPassword ? "password" : "text"}
               id="password"
               name="password"
-              type={showPassword ? "password" : "text"}
               autoComplete="current-password"
               value={formData.password}
               onChange={(e) => handleInputChange(e, "password")}
               placeholder={t('login.passwordPlaceholder')}
-              fontFamily="ubuntu"
-              height="40px"
-              fontSize="14px"
-              borderRadius="16px"
-              _invalid={{boxShadow:"0 0 0 2px #BF3434"}}
-              styleElmRight={{
-                width: "50px",
-                height: "40px",
+              inputElementStyle={{
                 cursor: "pointer",
                 onClick: () => setShowPassword(!showPassword)
               }}
-              elmRight={showPassword ?
+              icon={showPassword ?
                 <EyeOffIcon
-                  alt="esconder senha"
+                  alt={t('login.hidePassword')}
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               :
                 <EyeIcon
-                  alt="exibir senhar"
+                  alt={t('login.showPassword')}
                   width="20px"
                   height="20px"
-                  fill="#D0D0D0"
+                  fill="#464A51"
                 />
               }
             />
-            <FormErrorMessage fontFamily="ubuntu" fontSize="12px" color="#BF3434" display="flex" flexDirection="row" gap="4px" alignItems="center">
-              <Exclamation marginTop="3px" fill="#BF3434"/>{errors.password}
-            </FormErrorMessage>
+            <ErrorMessage>{errors.password}</ErrorMessage>
           </FormControl>
+
+          <Link
+            width="fit-content"
+            marginBottom="24px"
+            href='/user/password-recovery'
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
+          >
+            {t('login.forgotPassword')}
+          </Link>
 
           <Button
             type="submit"
             width="100%"
-            borderRadius="30px"
+            onClick={() => {}}
             marginBottom="24px !important"
-            backgroundColor="#42B0FF"
           >
             {t('login.loginButton')}
           </Button>
         </form>
 
-        <SectionText
+        <Text
           width="100%"
           display="flex"
           flexDirection="row"
           justifyContent="center"
-          fontWeight="500"
+          textAlign="center"
+          fontFamily="Roboto"
+          fontWeight="400"
           fontSize="14px"
-          fontFamily="ubuntu"
+          lineHeight="20px"
+          color="#252A32"
         >
           {t('login.noAccount')}
-          <ButtonSimple
-            width="none"
-            fontSize="14px"
-            justifyContent="start"
-            fontWeight="700"
-            color="#42B0FF"
-            _hover={{opacity: "0.6"}}
+          <Link
             marginLeft="2px"
-            onClick={() => router.push('/user/register')}
+            href='/user/register'
+            fontWeight="400"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4"
+            }}
           >{t('login.signUp')}
-          </ButtonSimple>.
-        </SectionText>
+          </Link>.
+        </Text>
       </Stack>
     </MainPageTemplate>
   )
