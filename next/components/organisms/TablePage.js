@@ -2,7 +2,6 @@ import {
   HStack,
   Stack,
   Box,
-  Text,
   Skeleton,
   SkeletonText,
   Divider,
@@ -480,20 +479,13 @@ export default function TablePage({ id }) {
           height="20px"
           width={resource?.cloudTables ? "fit-content" : "500px"}
         >
-          <Text
-            as="a"
+          <Link
             id="acessar_o_bigquery_section"
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
             gap="8px"
             href={`https://console.cloud.google.com/bigquery?p=${resource?.cloudTables?.[0]?.gcpProjectId}&d=${resource?.cloudTables?.[0]?.gcpDatasetId}&t=${resource?.cloudTables?.[0]?.gcpTableId}&page=table`}
             target="_blank"
             cursor="pointer"
-            fontFamily="Roboto"
             fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
             color={resource?.cloudTables ? "#0068C5" : "#464A51"}
             pointerEvents={resource?.cloudTables ? "default" : "none"}
             fill="#0068C5"
@@ -512,7 +504,7 @@ export default function TablePage({ id }) {
               width="12px"
               height="12px"
             />
-          </Text>
+          </Link>
         </StackSkeleton>
       </Stack>
 
@@ -582,16 +574,9 @@ export default function TablePage({ id }) {
             color="#464A51"
           >
             {resource?.auxiliaryFilesUrl ?
-              <Text
-                as="a"
-                display="flex"
-                flexDirection="row"
+              <Link
                 gap="8px"
-                alignItems="center"
-                fontFamily="Roboto"
                 fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
                 color="#0068C5"
                 fill="#0068C5"
                 _hover={{
@@ -605,7 +590,7 @@ export default function TablePage({ id }) {
                   width="16px"
                   height="16px"
                 />
-              </Text>
+              </Link>
             :
               t('table.notProvided')
             }
