@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Por ter mais de 20 tabelas, este conjunto pode ser complexo à primeira vista. Para facilitar, organizamos as informações em grupos temáticos e detalhamos o conteúdo de cada tabela
 
 ## Candidatos

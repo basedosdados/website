@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Este conjunto de dados possui duas tabelas de microdados: 
 - **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um ano específico. As colunas mostram detalhes sobre a empresa e seus empregados.
 - **Microdados Vínculos:** Cada linha representa um vínculo de trabalho em um ano específico. As colunas mostram informações sobre o vínculo, o empregado e a empresa contratante.

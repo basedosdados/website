@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Este conjunto de dados possui cinco tabelas de microdados, divididas entre duas do antigo CAGED e três do novo CAGED. As metodologias do modelo antigo e do novo não são compatíveis, o que afeta análises temporais.
 - **Microdados Antigos:** Cada linha representa um registro de admissão ou demissão até dezembro de 2019. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 
 - **Microdados Antigos de Ajustes:** Complementa a tabela Microdados Antigos com ajustes de admissões e demissões mensais, incluindo cancelamentos e movimentações fora do prazo.

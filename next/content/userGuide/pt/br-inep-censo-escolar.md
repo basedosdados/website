@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Esse conjunto possui quatro tabelas de microdados:  
 - **Escolas:** Única tabela disponibilizada pelo INEP a partir de 2021, cada linha representa uma escola. As colunas incluem características da escola, como infraestrutura física disponível, a equipe pedagógica, a infraestrutura pedagógica, marcas do período letivo, e informações agregadas sobre matrículas, docentes e turmas.
 - **Turmas:** Tabela disponibilizada a partir de requisições via pedidos LAI. Cada linha representa uma turma ativa no ano escolar, as colunas contém informações de disciplinas feitas pela turma, o horário de começo das aulas, o número de alunos da turma e o nível de ensino.

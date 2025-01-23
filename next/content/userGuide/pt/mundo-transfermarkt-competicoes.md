@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Esse conjunto possui duas tabelas de microdados:  
 - **Brasileirão Série A:** Cada linha representa uma partida. As colunas trazem informações sobre características da partida, os resultados e estatítiscas de jogo 
 - **Copa do Brasil:** Cada linha representa uma partida. As colunas trazem informações sobre características da partida, os resultados e estatítiscas de jogo 
