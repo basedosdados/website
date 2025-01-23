@@ -363,7 +363,7 @@ export const mdxComponents = {
 
 export default function DatasetUserGuide({ data, locale = "pt", slug }) {
   const { t } = useTranslation('dataset');
-  const [mdxSource] = useState(data.mdxSource)
+  const [mdxSource] = useState(data?.mdxSource || null)
   const [hasGuide] = useState(!!data?.mdxSource?.frontmatter?.title)
 
   const repository = () => {

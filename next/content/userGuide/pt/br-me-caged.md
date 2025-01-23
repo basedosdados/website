@@ -10,6 +10,7 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+
 # Introdução
 Este conjunto de dados possui cinco tabelas de microdados, divididas entre duas do antigo CAGED e três do novo CAGED. As metodologias do modelo antigo e do novo não são compatíveis, o que afeta análises temporais.
 - **Microdados Antigos:** Cada linha representa um registro de admissão ou demissão até dezembro de 2019. As colunas qualificam as características do empregado, do tipo de vínculo e da empresa. 

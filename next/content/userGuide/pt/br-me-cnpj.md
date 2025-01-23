@@ -10,6 +10,7 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+
 # Introdução 
 Esse conjunto possui quatro tabelas de microdados:  
 - **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos como natureza jurídica e tipo de quadro societário.  

@@ -21,7 +21,6 @@ Este conjunto de dados possui duas tabelas de microdados:
 A tabela de vínculos mostra todos os vínculos registrados por uma empresa durante o ano. Se um empregado for demitido e outro contratado no mesmo ano, ambos terão uma registro de vínculo para a mesma posição. Para contar os empregados ativos em um setor ou região, use a coluna `vinculo_ativo_3112`.
 
 ## Informações de endereço
-<!-- TO DO -->
 A RAIS não possui informações sobre o endereço dos empregados. A coluna `id_municipio` se refere ao município da empresa, e a coluna `id_municipio_trabalho` se refere ao município onde o trabalhador presta serviços, caso seja diferente.
 
 # Limitações
