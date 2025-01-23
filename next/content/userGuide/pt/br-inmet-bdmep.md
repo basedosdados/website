@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Esse conjunto possui duas tabelas de microdados:  
 - **Microdados:** Cada linha representa uma coleção de medições de uma estação em um horário. As colunas trazem informações sobre a precipitação, a pressão, a radiação, a temperatura, a umidade e o vento.  
 - **Estação:** Cada linha representa uma estação metereológica. As colunas trazem informações geográficas dessa estação
@@ -19,7 +22,7 @@ Esse conjunto possui duas tabelas de microdados:
 # Considerações para análises
 
 ## Forma de cálculo
-  Antes de realizar operações com os dados da BDMEP, é crucial entender como cada medida foi calculada. Algumas colunas apresentam valores médios, enquanto outras contêm valores máximos ou mínimos. A escolha da variável adequada dependerá das necessidades específicas da análise.
+Antes de realizar operações com os dados da BDMEP, é crucial entender como cada medida foi calculada. Algumas colunas apresentam valores médios, enquanto outras contêm valores máximos ou mínimos. A escolha da variável adequada dependerá das necessidades específicas da análise.
 
 ## Linhas vazias, falhas e dados inexistentes
 Os dados do INMET-BDMEP possuem falhas, como linhas vazias devido a problemas nos sensores e na comunicação das estações meteorológicas. Essas falhas podem ser identificadas por todas as colunas de valores estarem nulas. É importante considerar essas falhas ao realizar análises e tratá-las como dados inexistentes.
@@ -28,7 +31,7 @@ Os dados do INMET-BDMEP possuem falhas, como linhas vazias devido a problemas no
 Todas as informações de horário estão em UTC. Para convertê-las para o horário oficial de Brasília, é necessário subtrair 3 horas. Por exemplo, 12:00 UTC é equivalente a 9:00 pelo horário de Brasília.
 
 ## Dados brutos e não validados
- Os dados das estações automáticas são brutos e não passam por um processo de validação de consistência.
+Os dados das estações automáticas são brutos e não passam por um processo de validação de consistência.
 
 # Limitações
 * A tabela de microdados disponibilizada pela BD inclui exclusivamente dados de estações automáticas.

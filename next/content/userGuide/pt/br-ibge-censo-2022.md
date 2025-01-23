@@ -13,7 +13,7 @@ authors:
 
 # Introdução
 
-> Este é um guia de uso da Relação Anual de Informações Sociais (RAIS). Este material contém informações sobre as variáveis mais importantes, perguntas frequentes e exemplos de uso do conjunto da RAIS 
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
 
 Essa base possui 2 tabelas com microdados: 
 - **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um determinado ano. As colunas descrevem características sobre a empresa e seus empregados

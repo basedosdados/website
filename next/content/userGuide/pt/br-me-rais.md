@@ -12,6 +12,9 @@ authors:
 ---
 
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Este conjunto de dados possui duas tabelas de microdados: 
 - **Microdados Estabelecimentos:** Cada linha representa um estabelecimento em um ano específico. As colunas mostram detalhes sobre a empresa e seus empregados.
 - **Microdados Vínculos:** Cada linha representa um vínculo de trabalho em um ano específico. As colunas mostram informações sobre o vínculo, o empregado e a empresa contratante.
@@ -21,7 +24,6 @@ Este conjunto de dados possui duas tabelas de microdados:
 A tabela de vínculos mostra todos os vínculos registrados por uma empresa durante o ano. Se um empregado for demitido e outro contratado no mesmo ano, ambos terão uma registro de vínculo para a mesma posição. Para contar os empregados ativos em um setor ou região, use a coluna `vinculo_ativo_3112`.
 
 ## Informações de endereço
-<!-- TO DO -->
 A RAIS não possui informações sobre o endereço dos empregados. A coluna `id_municipio` se refere ao município da empresa, e a coluna `id_municipio_trabalho` se refere ao município onde o trabalhador presta serviços, caso seja diferente.
 
 # Limitações

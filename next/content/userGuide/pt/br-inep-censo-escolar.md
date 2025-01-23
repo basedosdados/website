@@ -10,7 +10,11 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Esse conjunto possui quatro tabelas de microdados:  
 - **Escolas:** Única tabela disponibilizada pelo INEP a partir de 2021, cada linha representa uma escola. As colunas incluem características da escola, como infraestrutura física disponível, a equipe pedagógica, a infraestrutura pedagógica, marcas do período letivo, e informações agregadas sobre matrículas, docentes e turmas.
 - **Turmas:** Tabela disponibilizada a partir de requisições via pedidos LAI. Cada linha representa uma turma ativa no ano escolar, as colunas contém informações de disciplinas feitas pela turma, o horário de começo das aulas, o número de alunos da turma e o nível de ensino.
@@ -49,7 +53,7 @@ Essas tabelas são muito grandes para o download direto, é muito importante faz
 
 # Instrumento de coleta
 Os dados do censo escolar são coletados em duas etapas. A primeira é feita no primeiro semestre do ano através da coleta de dados utilizando 5 tipos de formulários (escolas, gestores, turmas, alunos e profissionais escolares em sala de aula) que devem ser preenchidos por todos os estabelecimentos públicos e privados de educação básica e educação profissional e tecnológica. A segunda etapa do Censo Escolar coleta as informações de rendimento e movimento escolar ao final do ano letivo. Para fornecer informações sobre rendimento do aluno no Sistema Educacenso, a escola declara a condição de aprovado, reprovado, transferido, deixou de frequentar ou falecido.
-  
+
 # Mudanças na coleta
 A mais importante mudança ao longo dos anos foi pararem de disponibilizar as tabelas de matriculas, docentes e de gestor escolar para passar a disponibilizar apenas a tabela escola com informações agregadas.   A partir da mudança em 2021, foram adicionadas 123 variáveis na tabela de escola que garantiram o acesso as algumas informações referentes a matrículas e docentes de maneira agregada 
 

@@ -10,7 +10,11 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Por ter mais de 20 tabelas, este conjunto pode ser complexo à primeira vista. Para facilitar, organizamos as informações em grupos temáticos e detalhamos o conteúdo de cada tabela
 
 ## Candidatos
@@ -30,7 +34,6 @@ Por ter mais de 20 tabelas, este conjunto pode ser complexo à primeira vista. P
 - **`perfil_eleitorado_local_votacao`, `perfil_eleitorado_municipio_zona`, `perfil_eleitorado_secao`**: Tabelas agregadas com estrutura semelhante. Cada linha representa um estrato do perfil sociodemográfico dos eleitores (gênero, idade, estado civil, instrução). A diferença está no nível de agregação: por município, por zona ou por seção. As colunas indicam o perfil sociodemográfico, a situação em relação à biometria e o total de eleitores.
 - **`detalhes_votacao_municipio`, `detalhes_votacao_municipio_zona`, `detalhes_votacao_secao`**: Tabelas agregadas com estrutura semelhante. Cada linha representa os detalhes da votação em uma eleição. A diferença está no nível de agregação: por município, por zona ou por seção. As colunas indicam o total de abstenções e votos por tipo.
 - **`local_secao`**: Tabela de microdados. Cada linha representa uma seção eleitoral em um ano. Essa é a única tabela que não foi disponibilizada pelo TSE; ela foi criada por uma organização externa. As colunas incluem estimativas para o ponto de localização geográfica de cada seção eleitoral.
-
 
 # Considerações para análises
 ## Repasses entre candidatos na tabela de receitas
@@ -113,7 +116,6 @@ Os tratamentos realizados foram:
 * [Siga o dinheiro: Painel desenvolvido pela BD para entender de onde vem e onde está sendo gasto o dinheiro das campanhas](https://www.sigaodinheiro.org/)
 * [Curso de Análise de Dados Eleitorais da BD](https://info.basedosdados.org/bd-edu-eleicoes)
 
-<!-- variaveis -->
 [code-stata]: https://github.com/basedosdados/sdk/tree/master/bases/br_tse_eleicoes/code
 [code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
 [code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb

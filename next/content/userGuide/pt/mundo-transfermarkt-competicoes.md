@@ -10,7 +10,11 @@ authors:
   - name: Laura Amaral
     role: Texto
 ---
+
 # Introdução
+
+> O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
+
 Esse conjunto possui duas tabelas de microdados:  
 - **Brasileirão Série A:** Cada linha representa uma partida. As colunas trazem informações sobre características da partida, os resultados e estatítiscas de jogo 
 - **Copa do Brasil:** Cada linha representa uma partida. As colunas trazem informações sobre características da partida, os resultados e estatítiscas de jogo 
@@ -46,7 +50,7 @@ O Transfermarkt obtém informações detalhadas sobre jogos de futebol por meio 
 * Equipe de Dados: Uma equipe dedicada de mais de 50 entusiastas do futebol de diversas partes do mundo realiza pesquisas detalhadas e atualiza constantemente as informações
 * Contribuições da Comunidade: Usuários registrados podem propor correções e atualizações.
 * Fontes Oficiais e Parceiros: O site também utiliza dados de fontes oficiais, como ligas, federações e clubes, além de parceiros especializados em estatísticas esportivas.
-  
+
 # Mudanças na coleta
 Os dados coletados mudaram bastante ao longo do tempo. Entre 2003 e 2006, os dados preenchidos eram básicos, como datas, estádios, rodadas e placares. Informações sobre árbitros, público, técnicos e estatísticas de jogo estavam completamente ausentes.
 A partir de 2007, o preenchimento começou a expandir, com a inclusão dos árbitros e, gradualmente, técnicos e colocações dos times. Dados de público começaram a aparecer consistentemente em 2012, enquanto estatísticas financeiras e demográficas, como valores de equipes e idades médias, passaram a ser mais detalhadas entre 2013 e 2016.
