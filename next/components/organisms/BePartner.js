@@ -8,6 +8,9 @@ import {
   Avatar
 } from "@chakra-ui/react";
 import { useTranslation } from 'next-i18next';
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import Carousel from "../atoms/Carousel";
 
 function Testimonial({ children, name, position, src }) {
@@ -32,41 +35,30 @@ function Testimonial({ children, name, position, src }) {
       >
         “
       </Text>
-      <Text
-        fontFamily="Roboto"
-        fontSize="28px"
-        fontWeight="500"
-        lineHeight="42px"
+      <TitleText
+        typography="large"
         color="#464A51"
         textAlign="center"
         marginBottom="72px !important"
         height="100%"
       >
         {children}
-      </Text>
+      </TitleText>
 
       <HStack width="100%" spacing="10px" justifyContent="end">
         <VStack spacing={0} align="flex-end">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="16px"
-            lineHeight="24px"
+          <LabelText
             textAlign="right"
             color="#464A51"
           >
             {name}
-          </Text>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
+          </LabelText>
+          <BodyText
             textAlign="right"
             color="#464A51"
           >
             {position}
-          </Text>
+          </BodyText>
         </VStack>
         <Avatar
           name=""
@@ -117,17 +109,14 @@ export function BePartner() {
         direction="column"
         spacing="24px"
       >
-        <Text
+        <LabelText
+          typography="large"
           zIndex={2}
           textAlign="center"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="28px"
           color="#71757A"
         >
           {t('partners.partnershipsWith')}
-        </Text>
+        </LabelText>
 
         <Stack
           direction="row"

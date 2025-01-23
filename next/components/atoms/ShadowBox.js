@@ -1,4 +1,5 @@
 import { VStack, Box, Text } from "@chakra-ui/react";
+import LabelText from "./Text/LabelText";
 
 export function ShadowBox({
   title,
@@ -42,17 +43,13 @@ export function ShadowBox({
         borderTopRadius="0"
         {...textStyle}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="20px"
-          lineHeight="30px"
-          color="#252A32"
+        <LabelText
+          typography="x-large"
           textAlign="center"
           {...titleStyle}
         >
           {title}
-        </Text>
+        </LabelText>
         {children}
       </VStack>
     </VStack>

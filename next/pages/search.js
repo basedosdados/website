@@ -15,10 +15,13 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Button from "../components/atoms/Button";
-import Link from "../components/atoms/Link";
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
+import Button from "../components/atoms/Button";
+import Link from "../components/atoms/Link";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 
 import {
   getSearchDatasets
@@ -180,47 +183,33 @@ export default function SearchDatasetPage() {
       >
         {image && 
           <NotFoundImage
-            widthImage="100%"
-            heightImage="100%"
+            widthImage="256px"
+            heightImage="186px"
             marginBottom="16px"
             marginTop={{base: "24px", lg: "0"}}
           />
         }
 
         {display &&
-          <Text
+          <TitleText
+            typography="large"
             width="100%"
             textAlign="center"
             marginBottom="16px !important"
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="28px"
-            lineHeight="42px"
-            color="#252A32"
-          >{display}</Text>
+          >{display}</TitleText>
         }
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize={display ? "18px" : "24px"}
-          lineHeight="36px"
-          textAlign="center"
-          color="#252A32"
-        >
+        <TitleText textAlign="center" fontSize={display ? "18px" : "24px"}>
           {text}
-        </Text>
+        </TitleText>
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="28px"
+        <TitleText
+          typography="small"
           textAlign="center"
           color="#71757A"
         >
           {bodyText}
-        </Text>
+        </TitleText>
 
         <HStack
           width="100%"
@@ -403,17 +392,14 @@ export default function SearchDatasetPage() {
         endColor="#F3F3F3"
         isLoaded={!isLoading}
       >
-        <Text
+        <BodyText
+          typography="small"
           as="label"
           display="flex"
           width="100%"
           cursor="pointer"
           gap="2px"
           alignItems="center"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
           height="20px"
           color="#71757A"
           overflow="hidden"
@@ -445,7 +431,7 @@ export default function SearchDatasetPage() {
           <Text as="span" flexShrink={0}>
             {`(${count})`}
           </Text>
-        </Text>
+        </BodyText>
       </Skeleton>
     )
   }
@@ -551,18 +537,13 @@ export default function SearchDatasetPage() {
               height="20px"
               fill="#252A32"
             />
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#252A32"
+            <LabelText
               textAlign="center"
               width="100%"
               marginLeft="8px"
             >
               {t('filter')}
-            </Text>
+            </LabelText>
           </Box>
 
           <Box
@@ -572,16 +553,12 @@ export default function SearchDatasetPage() {
             gap="14px"
             alignItems="start"
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="16px"
-              lineHeight="24px"
+            <LabelText
               color="#464A51"
               marginBottom="4px"
             >
               {t('datasetsWith')}
-            </Text>
+            </LabelText>
 
             <CheckboxFilterComponent
               value="tables"
@@ -594,12 +571,6 @@ export default function SearchDatasetPage() {
               text={t('rawDataSources')}
               count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
-
-            {/* <CheckboxFilterComponent
-              value="information_requests"
-              text={t('informationRequests')}
-              count={aggregations?.contains_information_requests?.filter(elm => elm.key === 1)[0]?.count || 0}
-            /> */}
           </Box>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -611,16 +582,12 @@ export default function SearchDatasetPage() {
             gap="14px"
             alignItems="start"
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="16px"
-              lineHeight="24px"
+            <LabelText
               color="#464A51"
               marginBottom="4px"
             >
               {t('resources')}
-            </Text>
+            </LabelText>
 
             <CheckboxFilterComponent
               value="open_data"
@@ -724,16 +691,13 @@ export default function SearchDatasetPage() {
             justify="center"
             align="baseline"
           >
-            <Text
+            <BodyText
+              typography="small"
               as="div"
               display="flex"
               flexDirection="column"
               gap="6px"
               width="100%"
-              fontFamily="Roboto"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
               color="#71757A"
             >
               {count ? (
@@ -753,7 +717,7 @@ export default function SearchDatasetPage() {
                   </Text>
                 </Box>
               )}
-            </Text>
+            </BodyText>
           </Flex>
 
           {showEmptyState &&

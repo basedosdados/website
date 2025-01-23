@@ -20,6 +20,9 @@ import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
 import { useTranslation } from 'next-i18next';
 import Button from "../atoms/Button";
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import Link from "../atoms/Link";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
@@ -73,17 +76,13 @@ function Toc({ headings }) {
 
   return (
     <Box>
-      <Text
+      <LabelText
+        typography="small"
         paddingLeft="15px"
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#252A32"
         marginBottom="8px"
       >
         {t("tableContents")}
-      </Text>
+      </LabelText>
 
       <Box>
         {headings.map(({ id, title, level }, i) => (
@@ -116,7 +115,8 @@ function Toc({ headings }) {
               placement="top"
               maxWidth="100%"
             >
-              <Text
+              <LabelText
+                typography="small"
                 as="a"
                 href={`#${id}`}
                 ref={(el) => (textRefs.current[i] = el)}
@@ -124,10 +124,6 @@ function Toc({ headings }) {
                 whiteSpace="nowrap"
                 overflow="hidden"
                 width="100%"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="14px"
-                lineHeight="20px"
                 color={id === activeId  ? "#2B8C4D" : "#71757A"}
                 backgroundColor={id === activeId  && "#F7F7F7"}
                 _hover={{
@@ -137,7 +133,7 @@ function Toc({ headings }) {
                 padding="6px 8px"
               >
                 {title}
-              </Text>
+              </LabelText>
             </Tooltip>
           </HStack>
         ))}
@@ -148,32 +144,27 @@ function Toc({ headings }) {
 
 function HeadingWithAnchor(props) {
   return (
-    <Text
+    <TitleText
       as="h2"
       scrollMarginTop="100px"
-      fontFamily="Roboto"
-      fontWeight="500"
-      color="#252A32"
-      fontSize="24px"
-      lineHeight="36px" 
       margin="40px 0 16px"
       role="group"
       _first={{ marginTop: "0" }}
       {...props}
     >
       {props.children}
-    </Text>
+    </TitleText>
   );
 }
 
 function HeadingSimple(props) {
   return (
     <Text
-      {...props}
       fontFamily="Roboto"
       fontWeight="500"
       color="#252A32"
       margin="16px 0 8px"
+      {...props}
     >
       {props.children}
     </Text>
@@ -185,8 +176,8 @@ export const mdxComponents = {
   h2: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
   h3: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
   h4: (props) => <HeadingSimple as="h4" fontSize="18px" lineHeight="28px" {...props} />,
-  h5: (props) => <HeadingSimple as="h5" fontSize="16px" {...props} />,
-  h6: (props) => <HeadingSimple as="h6" fontSize="15px" {...props} />,
+  h5: (props) => <HeadingSimple as="h5" fontSize="16px" lineHeight="24px" {...props} />,
+  h6: (props) => <HeadingSimple as="h6" fontSize="15px" lineHeight="24px" {...props} />,
   blockquote: (props) => (
     <Box
       as="blockquote"
@@ -221,25 +212,18 @@ export const mdxComponents = {
           padding="2px"
           fill="#0068C5"
         />
-        <Text
+        <BodyText
+          typography="small"
           as="span"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
           {...props}
         />
       </Stack>
     </Box>
   ),
   a: (props) => (
-  <Text
+  <BodyText
+    typography="small"
     as="a"
-    fontFamily="Roboto"
-    fontSize="14px"
-    fontWeight="400"
-    lineHeight="20px"
     color="#0068C5"
     _hover={{
       color: "#0057A4"
@@ -257,12 +241,9 @@ export const mdxComponents = {
     />
   ),
   p: (props) => (
-    <Text
+    <BodyText
+      typography="small"
       as="p"
-      fontFamily="Roboto"
-      fontSize="14px"
-      fontWeight="400"
-      lineHeight="20px"
       color="#464A51"
       marginBottom="4px"
       {...props}
@@ -337,21 +318,13 @@ export const mdxComponents = {
         >
           “
         </Text>
-        <Text
-          as="p"
-          fontFamily="Roboto"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="24px"
-          color="#252A32"
+        <BodyText
           marginTop="35px"
           {...body.props}
         />
         {figcaption ? (
-          <Text
-            as="p"
+          <BodyText
             marginTop="16px"
-            fontFamily="Roboto"
             color="#71757A"
             {...figcaption.props}
           />
@@ -413,22 +386,12 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
           border={hasGuide ? "1px solid #DEDFE0" : ""}
           padding="40px 24px"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            textAlign="center"
-            color="#252A32"
-          >{hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}</Text>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="28px"
+          <TitleText textAlign="center">{hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}</TitleText>
+          <TitleText
+            typography="small"
             textAlign="center"
             color="#71757A"
-          >{t("contributeToTheUsageGuide")}</Text>
+          >{t("contributeToTheUsageGuide")}</TitleText>
 
           <Box
             display="flex"
@@ -473,13 +436,10 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
             </Link>
           </Box>
 
-          <Text
+          <BodyText
+            typography="small"
             display={hasGuide ? "none" : "flex"}
             marginTop="32px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
             color="#71757A"
             justifyContent="center"
             textAlign="center"
@@ -500,7 +460,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
             >
               {t("pageFaq")}
             </Link>.
-          </Text>
+          </BodyText>
         </Box>
       </Box>
     </Stack>

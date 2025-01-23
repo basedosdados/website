@@ -3,7 +3,6 @@ import {
   Box,
   HStack,
   Divider,
-  Text,
   Tooltip,
   Menu,
   MenuButton,
@@ -17,6 +16,8 @@ import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import { capitalize } from 'lodash';
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 
 import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
@@ -121,17 +122,13 @@ export default function DatasetResource({
           borderColor="#DEDFE0"
         />
 
-        <Text
+        <LabelText
+          typography="small"
           paddingLeft="15px"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
           marginBottom="8px"
         >
           {fieldName}
-        </Text>
+        </LabelText>
 
         <Box>
           {choices.map((elm, i) => (
@@ -164,16 +161,13 @@ export default function DatasetResource({
                 placement="top"
                 maxWidth="100%"
               >
-                <Text
+                <LabelText
+                  typography="small"
                   ref={(el) => (textRefs.current[i] = el)}
                   textOverflow="ellipsis"
                   whiteSpace="nowrap"
                   overflow="hidden"
                   width="100%"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="14px"
-                  lineHeight="20px"
                   color={elm._id === value ? "#2B8C4D" : "#71757A"}
                   backgroundColor={elm._id === value && "#F7F7F7"}
                   _hover={{
@@ -184,7 +178,7 @@ export default function DatasetResource({
                   onClick={() => onChange(elm._id)}
                 >
                   {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                </Text>
+                </LabelText>
               </Tooltip>
             </HStack>
           ))}
@@ -226,16 +220,11 @@ export default function DatasetResource({
 
     return (
       <Menu>
-        <Text
+        <LabelText
           as="label"
           display="flex"
           flexDirection="column"
           gap="8px"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="16px"
-          lineHeight="24px"
-          color="#252A32"
         >
           {t('selectResource')}
 
@@ -244,16 +233,13 @@ export default function DatasetResource({
             maxWidth="360px"
             borderRadius="8px"
             padding="14px 20px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
             backgroundColor="#EEEEEE"
-            color="#464A51"
             textAlign="start"
           >
-            <Text
+            <BodyText
+              typography="small"
               display="flex"
+              color="#464A51"
               justifyContent="space-between"
               alignItems="center"
             >
@@ -262,9 +248,9 @@ export default function DatasetResource({
                 marginLeft="auto"
                 transform="rotate(90deg)"
               />
-            </Text>
+            </BodyText>
           </MenuButton>
-        </Text>
+        </LabelText>
 
         <MenuList
           minWidth={widthScreen}

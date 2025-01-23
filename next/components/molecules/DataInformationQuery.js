@@ -24,6 +24,9 @@ import 'highlight.js/styles/obsidian.css'
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
 
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import Button from "../atoms/Button";
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
@@ -161,14 +164,11 @@ export function CodeHighlight({ language, children }) {
             height="24px"
             transform={isExpanded ? "rotate(-90deg)" : "rotate(90deg)"}
           />
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="12px"
-            lineHeight="18px"
+          <LabelText
+            typography="x-small"
           >
             {isExpanded ? t('table.collapse') : t('table.expand')}
-          </Text>
+          </LabelText>
         </Box>
       )}
     </Box>
@@ -317,17 +317,13 @@ export default function DataInformationQuery({ resource }) {
         }}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Text
+          <TitleText
             width="100%"
-            fontFamily="Roboto"
             fontWeight="400"
-            color="#252A32"
-            fontSize="24px"
             textAlign="center"
-            lineHeight="40px"
           >
             {t('table.compareThePlans')}
-          </Text>
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -375,14 +371,9 @@ export default function DataInformationQuery({ resource }) {
               width="fit-content"
               isLoaded={!hasLoadingColumns}
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                color="#252A32"
-              >
+              <BodyText typography="small">
                 {tabAccessIndex === 0 ? t('table.selectColumns') : t('table.checkColumns')}
-              </Text>
+              </BodyText>
             </Skeleton>
 
             <TableColumns
@@ -430,25 +421,21 @@ export default function DataInformationQuery({ resource }) {
                 gap="8px"
                 alignItems="center"
               >
-                <Box
+                <BodyText
+                  typography="small"
                   as="label"
                   display="flex"
                   flexDirection="row"
                   alignItems="center"
                   gap="16px"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#252A32"
                   pointerEvents={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "none" : ""}
                 >
                   <Toggle
                     defaultChecked={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? false : true}
                     value={includeTranslation}
                     onChange={() => setIncludeTranslation(!includeTranslation)}
-                  /><Text>{t('table.translateInstitutionalCodes')}</Text>
-                </Box>
+                  /><Text as="span">{t('table.translateInstitutionalCodes')}</Text>
+                </BodyText>
                 <Tooltip
                   label={t('table.translateTooltip')}
                   hasArrow
@@ -492,7 +479,7 @@ export default function DataInformationQuery({ resource }) {
                   {t('table.warningLargeTable', { returnObjects: true })[0]}
                   <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text marginRight="4px" as="a" href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                  <Text as="a" marginRight="4px" href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[3]}
                   <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
@@ -555,19 +542,20 @@ export default function DataInformationQuery({ resource }) {
               {isUserPro() === false && downloadWarning === "free" &&
                 <AlertDiscalimerBox type="info">
                   {t('table.infoDataAvailability', { returnObjects: true })[0]}
-                  <Text
-                    as="a"
+                  <Link
+                    display="inline"
                     target="_blank"
                     href={
                       locale === "en" ? "https://basedosdados.github.io/sdk/en/colab_data/" :
                       locale === "es" ? "https://basedosdados.github.io/sdk/es/colab_data/" :
                       "https://basedosdados.github.io/sdk/colab_data/"
                     }
+                    fontWeight="400"
                     color="#0068C5"
                     _hover={{color: "#0057A4"}}
                   >
                     {t('table.infoDataAvailability', { returnObjects: true })[1]}
-                  </Text>.
+                  </Link>.
                 </AlertDiscalimerBox>
               }
               {isUserPro() === false && downloadWarning === "100mbBetween1gb" &&
@@ -666,15 +654,9 @@ export default function DataInformationQuery({ resource }) {
                       width="fit-content"
                       isLoaded={!isLoadingCode}
                     >
-                      <Text
-                        fontFamily="Roboto"
-                        fontWeight="400"
-                        fontSize="14px"
-                        lineHeight="20px"
-                        color="#252A32"
-                      >
+                      <BodyText typography="small">
                         {t('table.bigQueryInstructions')}
-                      </Text>
+                      </BodyText>
                     </Skeleton>
 
                     <Skeleton
@@ -685,22 +667,23 @@ export default function DataInformationQuery({ resource }) {
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <AlertDiscalimerBox type="info" >
+                      <AlertDiscalimerBox type="info">
                         {t('table.firstTimeBigQuery')}
-                        <Text
+                        <Link
+                          display="inline"
                           marginLeft="4px"
-                          as="a"
                           target="_blank"
                           href={
                             locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_bq/#getting-started" :
                             locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_bq/#pinitos" :
                             "https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos"
                           }
+                          fontWeight="400"
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
                           {t('table.followStepByStep')}
-                        </Text>
+                        </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
 
@@ -738,14 +721,9 @@ export default function DataInformationQuery({ resource }) {
                             color:"#22703E"
                           }}
                         >
-                          <Text
-                            fontFamily="Roboto"
-                            fontWeight="500"
-                            fontSize="14px"
-                            lineHeight="20px"
-                          >
+                          <BodyText typography="small">
                             {t('table.accessBigQuery')}
-                          </Text>
+                          </BodyText>
                         </Box>
                       </Box>
                     </Skeleton>
@@ -780,15 +758,9 @@ export default function DataInformationQuery({ resource }) {
                       width="fit-content"
                       isLoaded={!isLoadingCode}
                     >
-                      <Text
-                        fontFamily="Roboto"
-                        fontWeight="400"
-                        fontSize="14px"
-                        lineHeight="20px"
-                        color="#252A32"
-                      >
+                      <BodyText typography="small">
                         {t('table.pythonInstructions')}
-                      </Text>
+                      </BodyText>
                     </Skeleton>
 
                     <Skeleton
@@ -801,20 +773,21 @@ export default function DataInformationQuery({ resource }) {
                     >
                       <AlertDiscalimerBox type="info" >
                         {t('table.firstTimePython')}
-                        <Text
+                        <Link
+                          display="inline"
                           marginLeft="4px"
-                          as="a"
                           target="_blank"
                           href={
                             locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_python/" :
                             locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_python/" :
                             "https://basedosdados.github.io/sdk/api_reference_python/"
                           }
+                          fontWeight="400"
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
                           {t('table.followStepByStep')}
-                        </Text>
+                        </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
 
@@ -855,15 +828,9 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       width="fit-content"
                       isLoaded={!isLoadingCode}
                     >
-                      <Text
-                        fontFamily="Roboto"
-                        fontWeight="400"
-                        fontSize="14px"
-                        lineHeight="20px"
-                        color="#252A32"
-                      >
+                      <BodyText typography="small">
                         {t('table.rInstructions')}
-                      </Text>
+                      </BodyText>
                     </Skeleton> 
 
                     <Skeleton
@@ -876,20 +843,21 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                     >
                       <AlertDiscalimerBox type="info" >
                         {t('table.firstTimeR')}
-                        <Text
+                        <Link
+                          display="inline"
                           marginLeft="4px"
-                          as="a"
                           target="_blank"
                           href={
                             locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_r/" :
                             locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_r/" :
                             "https://basedosdados.github.io/sdk/api_reference_r/"
                           }
+                          fontWeight="400"
                           color="#0068C5"
                           _hover={{color: "#0057A4"}}
                         >
                           {t('table.followStepByStep')}
-                        </Text>
+                        </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
 

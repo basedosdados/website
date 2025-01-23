@@ -8,15 +8,14 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from 'next-i18next';
 import { capitalize } from "lodash";
-import { useRouter } from 'next/router';
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Link from '../atoms/Link';
+import TitleText from "../atoms/Text/TitleText";
+import BodyText from "../atoms/Text/BodyText";
 
 import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
-import axios from "axios";
-import { useState, useEffect } from "react";
 
 export default function Dataset({
   id,
@@ -189,22 +188,18 @@ export default function Dataset({
               <Link
                 href={`/dataset/${id}`}
                 width="100%"
-                color="#252A32"
-                fontWeight="500"
               >
-                <Text
+                <TitleText
+                  typography="small"
                   width="100%"
                   noOfLines={2}
                   textOverflow="ellipsis"
-                  fontFamily="Roboto"
-                  fontSize="18px"
-                  lineHeight="28px"
                   _hover={{
                     opacity: 0.7
                   }}
                 >
                   {name}
-                </Text>
+                </TitleText>
               </Link>
             </Stack>
 
@@ -218,31 +213,25 @@ export default function Dataset({
                 direction={{ base: "column", lg: "row" }}
                 spacing={1}
               >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                <BodyText
+                  typography="small"
                   color="#464A51"
                 >
                   {t('organization')}:
-                </Text>
+                </BodyText>
                 <Link
                   href={`/search?organization=${organizations[0]?.slug}`}
-                  color="#71757A"
-                  fontWeight="400"
-                  _hover={{
-                    color: "#464A51"
-                  }}
                 >
-                  <Text
-                    fontFamily="Roboto"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  <BodyText
+                    typography="small"
+                    color="#71757A"
+                    _hover={{
+                      color: "#464A51"
+                    }}
                     textOverflow="ellipsis"
                   >
                     {organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name}
-                  </Text>
+                  </BodyText>
                 </Link>
               </Stack>
 
@@ -250,24 +239,18 @@ export default function Dataset({
                 direction={{ base: "column", lg: "row" }}
                 spacing={1}
               >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                <BodyText
+                  typography="small"
                   color="#464A51"
                 >
                   {t('temporalCoverage')}:
-                </Text>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                </BodyText>
+                <BodyText
+                  typography="small"
                   color="#71757A"
                 >
                   {temporalCoverageText ? temporalCoverageText : t('notProvided')}
-                </Text>
+                </BodyText>
               </Stack>
 
               {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
@@ -275,24 +258,18 @@ export default function Dataset({
                   direction={{ base: "column", lg: "row" }}
                   spacing={1}
                 >
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="400"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  <BodyText
+                    typography="small"
                     color="#464A51"
                   >
                     {t('spatialCoverage')}:
-                  </Text>
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="400"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  </BodyText>
+                  <BodyText
+                    typography="small"
                     color="#71757A"
                   >
                     {spatialCoverage ? spatialCoverage : t('notProvided')}
-                  </Text>
+                  </BodyText>
                 </Stack>
               }
 
@@ -300,25 +277,19 @@ export default function Dataset({
                 direction={{ base: "column", lg: "row" }}
                 spacing={1}
               >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                <BodyText
+                  typography="small"
                   color="#464A51"
                 >
                   {t('resources')}:
-                </Text>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                </BodyText>
+                <BodyText
+                  typography="small"
                   color="#71757A"
                 >
                   {contains.free && t('openData')} {contains.free && contains.pro && t('datasetCard.and')} {contains.pro && t('closedData')}
                   {!contains.free && !contains.pro && t('none')}
-                </Text>
+                </BodyText>
               </Stack>
             </VStack>
           </VStack>
