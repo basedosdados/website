@@ -90,6 +90,7 @@ export function CheckboxFilterAccordion({
   const [inputFocus, setInputFocus] = useState(false)
 
   useEffect(() => {
+    if (choices === null) return
     if (choices.length === 0) return
     setOptions(choices)
   }, [choices])
