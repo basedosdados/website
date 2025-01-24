@@ -2,13 +2,15 @@ import {
   HStack,
   Stack,
   VStack,
-  Text,
   Box
 } from "@chakra-ui/react";
 import Link from "../atoms/Link";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import Display from "../atoms/Text/Display";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 
 import YoutubeIcon from "../../public/img/icons/youtubeIcon";
 import XIcon from "../../public/img/icons/xIcon";
@@ -23,16 +25,13 @@ import LanguageSelector from "../atoms/LanguageSelector";
 function SectionCategories({ title, children, ...props }) {
   return (
     <VStack spacing={0} alignItems="flex-start" {...props}>
-      <Text
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
+      <BodyText
+        typography="small"
         color="#FFF"
         paddingBottom={{base: "24px", lg: "16px"}}
       >
         {title}
-      </Text>
+      </BodyText>
       <Stack spacing="10px">
         {children}
       </Stack>
@@ -57,7 +56,6 @@ function SocialLink({ href, icon }) {
 function FooterLink(props) {
   return (
     <Link
-      fontFamily="Roboto"
       fontWeight="500"
       fontSize="16px"
       lineHeight="24px"
@@ -71,17 +69,14 @@ function FooterLink(props) {
 
 function TextFooterSimple({children, ...props}) {
   return (
-    <Text
-      fontFamily="Roboto"
+    <LabelText
+      typography="x-small"
       fontWeight="400"
-      fontSize="12px"
-      lineHeight="18px"
-      letterSpacing="0.1px"
       color="#464A51"
       {...props}
     >
       {children}
-    </Text>
+    </LabelText>
   )
 }
 
@@ -173,17 +168,15 @@ export default function Footer({ template, ocult = false }) {
           spacing={0}
           gridGap="24px"
         >
-          <Text
-            minWidth="250px"
-            fontFamily="Roboto"
+          <Display
+            typography="small"
+            minWidth="260px"
             fontWeight="400"
-            fontSize="34px"
-            lineHeight="39px"
             color="#FFF"
             paddingBottom="40px"
           >
             {t('footer.title')}
-          </Text>
+          </Display>
 
           <Stack
             paddingBottom="40px"
@@ -320,18 +313,15 @@ export default function Footer({ template, ocult = false }) {
             marginTop={{base: "16px", lg: "0"}}
           >
             <HStack spacing="30px">
-              <Text
-                fontFamily="Roboto"
+              <LabelText
+                typography="x-small"
                 fontWeight="400"
-                fontSize="12px"
-                lineHeight="18px"
                 color="#FFFFFF"
               >
                 {t('footer.copyright', { year: new Date().getFullYear() })}
-              </Text>
+              </LabelText>
 
               <Link
-                fontFamily="Roboto"
                 fontWeight="400"
                 fontSize="12px"
                 lineHeight="18px"
@@ -341,7 +331,6 @@ export default function Footer({ template, ocult = false }) {
                 {t('footer.termsOfUse')}
               </Link>
               <Link
-                fontFamily="Roboto"
                 fontWeight="400"
                 fontSize="12px"
                 lineHeight="18px"

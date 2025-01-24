@@ -1,4 +1,4 @@
-import { VStack, Box, Text } from "@chakra-ui/react";
+import { VStack, Box } from "@chakra-ui/react";
 import LabelText from "./Text/LabelText";
 
 export function ShadowBox({
