@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Text,
   Divider,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -10,6 +9,8 @@ import { serialize } from 'cookie';
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
+import TitleText from "../../components/atoms/Text/TitleText";
+import LabelText from "../../components/atoms/Text/LabelText";
 
 import {
   ProfileConfiguration,
@@ -143,17 +144,13 @@ export default function UserPage({ getUser, isUserPro }) {
           width="272px"
           boxSizing="content-box"
         >
-          <Text
+          <TitleText
+            typography="large"
             display={{base: "none", lg: "flex"}}
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="28px"
-            lineHeight="42px"
-            color="#252A32"
             paddingLeft="15px"
           >
             {t('username.settings')}
-          </Text>
+          </TitleText>
 
           <Stack width="267px" spacing={0}>
             {choices.map((section, index) => (
@@ -173,12 +170,9 @@ export default function UserPage({ getUser, isUserPro }) {
                   backgroundColor={sectionSelected === index && "#2B8C4D"}
                   borderRadius="10px"
                 />
-                <Text
+                <LabelText
+                  typography="small"
                   width="100%"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="14px"
-                  lineHeight="20px"
                   color={sectionSelected === index ? "#2B8C4D" : "#71757A"}
                   backgroundColor={sectionSelected === index && "#F7F7F7"}
                   _hover={{
@@ -193,7 +187,7 @@ export default function UserPage({ getUser, isUserPro }) {
                   )}
                 >
                   { section.bar }
-                </Text>
+                </LabelText>
               </Stack>
             ))}
           </Stack>
@@ -205,16 +199,9 @@ export default function UserPage({ getUser, isUserPro }) {
           padding={{base: "", lg: "56px 0 0 24px"}}
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-            marginBottom="8px"
-          >
+          <TitleText marginBottom="8px">
             {choices[sectionSelected].title}
-          </Text>
+          </TitleText>
           <Divider marginBottom="24px !important" borderColor="#DEDFE0"/>
 
           {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}

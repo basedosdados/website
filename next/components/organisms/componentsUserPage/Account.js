@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Text,
   FormControl,
   useDisclosure,
   ModalCloseButton,
@@ -11,6 +10,7 @@ import cookies from 'js-cookie';
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import Link from "../../atoms/Link";
+import TitleText from "../../atoms/Text/TitleText";
 
 import {
   LabelTextForm,
@@ -90,13 +90,7 @@ export default function Account({ userInfo }) {
         onClose={usernameModal.onClose}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.changeUsername')}</Text>
+          <TitleText>{t('username.changeUsername')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -136,13 +130,7 @@ export default function Account({ userInfo }) {
         propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.confirmAccountDeletion')}</Text>
+          <TitleText>{t('username.confirmAccountDeletion')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -204,13 +192,7 @@ export default function Account({ userInfo }) {
         propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.deleteAccountSuccessTitle')}</Text>
+          <TitleText>{t('username.deleteAccountSuccessTitle')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"

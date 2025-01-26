@@ -160,7 +160,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         {userData ? (
           <></>
         ) : (
-          <Stack display={isMobile ? "flex" : "none"} marginTop="auto" gap="16px">
+          <Stack display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
             <Link
               href="/user/login"
               display="flex"
@@ -1037,7 +1037,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={isMobile ? "15px 20px" : "15px 24px"}
+        padding={{base: "15px 20px", lg: "15px 24px"}}
         zIndex="99"
         transition="0.5s"
         as="nav"

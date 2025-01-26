@@ -1,5 +1,4 @@
 import {
-  Text,
   Stack,
   VStack
 } from "@chakra-ui/react";
@@ -9,6 +8,8 @@ import { Button } from "../../components/molecules/uiUserPage";
 import Link from "../../components/atoms/Link";
 import { MainPageTemplate } from "../../components/templates/main";
 import { EmailConfirmImage, EmailRecoveryImage } from "../../public/img/emailImage";
+import Display from "../../components/atoms/Text/Display";
+import BodyText from "../../components/atoms/Text/BodyText";
 
 export async function getServerSideProps(context) {
   const { query, locale } = context;
@@ -30,14 +31,11 @@ export default function ActiveAccount({ data }) {
 
   const SectionText = ({ children }) => {
     return (
-      <Text
+      <BodyText
+        typography="large"
         color= "#464A51"
-        fontFamily= "Roboto"
-        fontWeight= "400"
-        fontSize= "18px"
-        lineHeight= "26px"
         textAlign="center"
-      >{children}</Text>
+      >{children}</BodyText>
     )
   }
 
@@ -61,14 +59,10 @@ export default function ActiveAccount({ data }) {
 
         {data?.success === true ?
           <VStack spacing={4}>
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="36px"
-              lineHeight="48px"
-              color="#252A32"
+            <Display
+              typography="small"
               textAlign="center"
-            >{t('activate.accountActive')}</Text>
+            >{t('activate.accountActive')}</Display>
 
             <SectionText>{t('activate.congratulations')}</SectionText>
             <SectionText>{t('activate.thankYou')}</SectionText>
@@ -82,14 +76,10 @@ export default function ActiveAccount({ data }) {
           </VStack>
         :
           <VStack spacing={4}>
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="36px"
-              lineHeight="48px"
-              color="#252A32"
+            <Display
+              typography="small"
               textAlign="center"
-            >{t('activate.somethingWentWrong')}</Text>
+            >{t('activate.somethingWentWrong')}</Display>
 
             <SectionText textAlign="center">{t('activate.activationProblem')}</SectionText>
             <Link href='/contact'>

@@ -12,7 +12,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
@@ -49,8 +48,8 @@ export const CardPrice = ({
       display="flex"
       flexDirection="column"
       position="relative"
-      width={isMobileMod() ? "100%" : "272px"}
-      boxSizing={isMobileMod() ? "inherit" : "content-box"}
+      width={{base: "100%", lg: "272px"}}
+      boxSizing={{base: "inherit", lg: "content-box"}}
       borderRadius="16px"
       boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       padding="40px 24px"
@@ -385,7 +384,7 @@ export function SectionPrice() {
       </Box>
 
       <Stack
-        display={isMobileMod() ? "flex" : "grid"}
+        display={{base: "flex", lg: "grid"}}
         gridTemplateColumns="repeat(3, 320px)"
         gridTemplateRows="1fr"
         justifyContent="center"
