@@ -73,4 +73,4 @@ Os tratamentos realizados foram:
 
 # Materiais de apoio
 * [Reportagem do G1 sobre mudanças no CAGED](https://g1.globo.com/economia/noticia/2021/04/28/serie-historica-do-emprego-formal-nao-pode-ser-comparada-com-novo-caged-dizem-analistas.ghtml): Reportagem do G1 levantando considerações de especialistas sobre as mudanças do CAGED
-* [Nota do MTE explicando as principais alterações no Novo CAGED](ftp//:ftp.mtps.gov.br/pdet/microdados/NOVO%20CAGED/Sobre%20o%20Novo%20Caged.pdf): Nota do MTE que explica principais mudanças ocorridas no Novo Caged
+* [Nota do MTE explicando as principais alterações no Novo CAGED](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/o-que-e-o-novo-caged): Nota do MTE que explica principais mudanças ocorridas no Novo Caged
