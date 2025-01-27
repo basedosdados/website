@@ -1,6 +1,5 @@
 import {
   Stack,
-  Text,
   FormControl,
   List
 } from "@chakra-ui/react";
@@ -19,6 +18,8 @@ import {
 } from "../../components/molecules/uiUserPage";
 
 import Link from "../../components/atoms/Link";
+import Display from "../../components/atoms/Text/Display";
+import BodyText from "../../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import { EmailRecoveryImage } from "../../public/img/emailImage";
@@ -186,16 +187,9 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       >
         <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
-          textAlign="center"
-        >
+        <Display textAlign="center">
           {t('passwordRecovery.titleConfirmed')}
-        </Text>
+        </Display>
 
         <form
           style={{
@@ -236,13 +230,10 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
                 />
               }
             />
-            <Text 
+            <BodyText
+              typography="small"
               margin="8px 0"
               color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
-              fontFamily="Roboto"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
               display="flex"
               flexDirection="row"
               gap="8px"
@@ -254,7 +245,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
                 height="18px"
                 fill="#BF3434"
               /> {t('username.passwordRequirements')}
-            </Text>
+            </BodyText>
 
             <List
               fontFamily="Roboto"
@@ -369,28 +360,20 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
       >
         <EmailRecoveryImage justifyContent="center" marginBottom="8px"/>
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
+        <Display
           textAlign="center"
           marginBottom="40px"
         >
           {t('passwordRecovery.title')}
-        </Text>
+        </Display>
 
-        <Text
+        <BodyText
+          typography="large"
           textAlign="center"
           color= "#464A51"
-          fontFamily= "Roboto"
-          fontWeight= "400"
-          fontSize= "18px"
-          lineHeight= "26px"
         >
           {t('passwordRecovery.description')}
-        </Text>
+        </BodyText>
 
         <FormControl isInvalid={!!error}>
           <LabelTextForm text={t('passwordRecovery.emailLabel')}/>
@@ -417,13 +400,9 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
           {forwardingDisabled ? t('passwordRecovery.waitSeconds', { count }) : t('passwordRecovery.sendResetEmail')}
         </Button>
 
-        <Text
+        <BodyText
+          typography="small"
           textAlign="center"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
         >
           {t('passwordRecovery.needHelp')}{' '}
           <Link 
@@ -438,7 +417,7 @@ export default function PasswordRecovery({ confirmed, uid, confirmToken }) {
             {t('passwordRecovery.contactUs')}
           </Link>
           .
-        </Text>
+        </BodyText>
       </Stack>
     </MainPageTemplate>
   )

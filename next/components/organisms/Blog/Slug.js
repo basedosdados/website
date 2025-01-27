@@ -25,6 +25,9 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
 import Link from "../../atoms/Link";
+import Display from "../../atoms/Text/Display";
+import LabelText from "../../atoms/Text/LabelText";
+import BodyText from "../../atoms/Text/BodyText";
 import {
   DatePost,
   dateToLocatePt
@@ -34,7 +37,6 @@ import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import FacebookIcon from "../../../public/img/icons/facebookIcon";
 import LinkedInIcon from "../../../public/img/icons/linkedinIcon";
 import XIcon from "../../../public/img/icons/xIcon";
-import ForkIcon from "../../../public/img/icons/forkIcon";
 import ShareIcon from "../../../public/img/icons/shareIcon";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 
@@ -68,14 +70,14 @@ function CodeBlock({ children }) {
         {language ? (
           <Text
             as="span"
-            display={"block"}
-            paddingLeft={"7px"}
-            fontWeight={500}
+            display="block"
+            paddingLeft="7px"
+            fontWeight="500"
             fontSize="12px"
             color="#878A8E"
-            textTransform={"capitalize"}
-            userSelect={"none"}
-            fontFamily={"Roboto"}
+            textTransform="capitalize"
+            userSelect="none"
+            fontFamily="Roboto"
           >
             {["sh", "sql"].includes(language)
               ? language.toUpperCase()
@@ -86,11 +88,11 @@ function CodeBlock({ children }) {
           variant="unstyled"
           onClick={onCopy}
           _groupActive={{ background: "transparent" }}
-          backgroundColor={"transparent"}
-          padding={0}
-          display={"flex"}
-          marginLeft={"auto"}
-          alignItems={"center"}
+          backgroundColor="transparent"
+          padding="0"
+          display="flex"
+          marginLeft="auto"
+          alignItems="center"
           fontFamily="Roboto"
           fontWeight="500"
           fontSize="12px"
@@ -116,17 +118,17 @@ function CodeBlock({ children }) {
         display="flex"
         justifyContent="space-between"
         width="100%"
-        maxHeight={"70vh"}
+        maxHeight="70vh"
         overflowX="auto"
-        overflowY={"auto"}
-        whiteSpace={"pre"}
-        borderBottomLeftRadius={"8px"}
-        borderBottomRightRadius={"8px"}
+        overflowY="auto"
+        whiteSpace="pre"
+        borderBottomLeftRadius="8px"
+        borderBottomRightRadius="8px"
       >
         <Text
           as="code"
-          paddingTop={"0 !important"}
-          width={"100%"}
+          paddingTop="0 !important"
+          width="100%"
           className={`hljs ${language}`}
           dangerouslySetInnerHTML={{ __html: highlighted.value }}
         />
@@ -261,16 +263,12 @@ function FigCaption(props) {
 export function Toc({ headings }) {
   return (
     <Box>
-      <Text
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="18px"
-        lineHeight="28px"
-        color="#252A32"
+      <LabelText
+        typography="large"
         marginBottom="2px"
       >
         Tabela de conteúdo
-      </Text>
+      </LabelText>
       <Box as="hr" borderWidth="2px" borderColor="#DEDFE0" marginBottom="8px"/>
       <UnorderedList margin="0">
         {headings.map(({ id, title, level }) => (
@@ -299,65 +297,21 @@ export function Toc({ headings }) {
   );
 }
 
-export function Contribute({ slug }) {
-  return (
-    <Box>
-      <Text
-        as="p"
-        color="gray"
-        fontSize={"0.9rem"}
-        fontFamily={"Roboto"}
-        marginBottom={"1rem"}
-      >
-        Todos os documentos são abertos. Viu algo errado ou pouco claro? Envie
-        um pull request e contribua na Base dos Dados {"💚"}
-      </Text>
-      <Link
-        href={`https://github.com/basedosdados/website/edit/main/next/blog/${slug}.md`}
-        display={"flex"}
-        alignItems={"center"}
-        borderRadius="8px"
-        fontFamily={"Roboto"}
-        fontWeight={"500"}
-        letterSpacing={"0"}
-        _hover={{ textDecoration: "none" }}
-        isexternal="true"
-      >
-        <>
-          <ForkIcon width={"16px"} height={"16px"} marginRight={"0.5rem"} />
-          Editar essa página no GitHub
-        </>
-      </Link>
-    </Box>
-  );
-}
-
 export function Header({ frontmatter, slug }) {
   const { t } = useTranslation('blog')
 
   return (
     <Box as="header" marginBottom="64px">
-      <Heading
-        as="h1"
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="50px"
-        lineHeight="60px"
-        color="#252A32"
-      >
+      <Display as="h1">
         {frontmatter.title}
-      </Heading>
-      <Heading
+      </Display>
+      <BodyText
         as="h2"
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="16px"
-        lineHeight="24px"
         color="#71757A"
         margin="8px 0 24px"
       >
         {frontmatter.description}
-      </Heading>
+      </BodyText>
 
       <Stack
         width="100%"
@@ -367,15 +321,9 @@ export function Header({ frontmatter, slug }) {
       >
         <Stack spacing={0} width="100%">
           {frontmatter.authors && (
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#252A32"
-            >
+            <BodyText>
               {frontmatter.authors.map((elm) => elm.name).join(', ')}
-            </Text>
+            </BodyText>
           )}
 
           {frontmatter?.date &&
@@ -385,16 +333,12 @@ export function Header({ frontmatter, slug }) {
                   <DatePost date={frontmatter.date.created} slug={slug} />
 
                   {frontmatter.date?.updated && 
-                    <Text
+                    <BodyText
                       as="span"
-                      fontFamily="Roboto"
-                      fontWeight="400"
-                      fontSize="16px"
-                      lineHeight="24px"
                       color="#71757A"
                     >
                       {`${t("edited")} ${dateToLocatePt(frontmatter.date.updated)}`}
-                    </Text>
+                    </BodyText>
                   }
                 </>
               }
@@ -408,15 +352,9 @@ export function Header({ frontmatter, slug }) {
           gap="18px"
           spacing={0}
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
-            color="#252A32"
-          >
+          <BodyText>
             {t("share")}
-          </Text>
+          </BodyText>
 
           <ShareButtons frontmatter={frontmatter}/>
         </Stack>
@@ -442,12 +380,8 @@ export const mdxComponents = {
     />
   ),
   a: (props) => (
-  <Text
+  <BodyText
     as="a"
-    fontFamily="Roboto"
-    fontSize="16px"
-    fontWeight="400"
-    lineHeight="24px"
     color="#0068C5"
     _hover={{
       color: "#0057A4"
@@ -465,26 +399,18 @@ export const mdxComponents = {
     />
   ),
   p: (props) => (
-    <Text
-      as={"p"}
-      fontFamily="Roboto"
-      fontSize="16px"
-      fontWeight="400"
-      lineHeight="24px"
-      color="#252A32"
-      {...props}
-    />
+    <BodyText {...props}/>
   ),
   // Inline code
   code: (props) => (
     <Text
       as="code"
-      fontFamily={"ui-monospace, monospace"}
-      backgroundColor={"#e7e7e7"}
+      fontFamily="ui-monospace, monospace"
+      backgroundColor="#e7e7e7"
       color="#3b3b3b"
-      fontSize={"90%"}
+      fontSize="90%"
       padding="2px 4px"
-      borderRadius={"3px"}
+      borderRadius="3px"
       {...props}
     />
   ),
@@ -509,18 +435,18 @@ export const mdxComponents = {
   tr: (props) => <Tr {...props} />,
   td: (props) => (
     <Td
-      fontFamily={"Roboto"}
+      fontFamily="Roboto"
       color="rgb(55, 65, 81)"
-      paddingY={"0.5rem"}
+      paddingY="0.5rem"
       style={{ textWrap: "wrap" }}
       {...props}
     />
   ),
-  th: (props) => <Th fontFamily={"Roboto"} {...props} />,
+  th: (props) => <Th fontFamily="Roboto" {...props} />,
   // custom components
   Image: (props) => (
-    <Box as="figure" marginY={"2rem"}>
-      <Image margin={"0 auto"} src={props.src} />
+    <Box as="figure" marginY="2rem">
+      <Image margin="0 auto" src={props.src} />
       <FigCaption {...props} />
     </Box>
   ),
@@ -561,21 +487,10 @@ export const mdxComponents = {
         >
           “
         </Text>
-        <Text
-          as="p"
-          fontFamily="Roboto"
-          fontSize="16px"
-          fontWeight="400"
-          lineHeight="24px"
-          color="#252A32"
-          marginTop="35px"
-          {...body.props}
-        />
+        <BodyText marginTop="35px" {...body.props}/>
         {figcaption ? (
-          <Text
-            as="p"
+          <BodyText
             marginTop="16px"
-            fontFamily="Roboto"
             color="#71757A"
             {...figcaption.props}
           />

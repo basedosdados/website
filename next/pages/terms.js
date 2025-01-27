@@ -2,18 +2,20 @@ import {
   Box,
   VStack,
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { MainPageTemplate } from "../components/templates/main";
 import TermsOfService from "../content/termsOfService";
 import PrivacyPolicy from "../content/privacyPolicy";
 import { withPages } from "../hooks/pages.hook";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
 
 export async function getStaticProps({ locale }) {
   const pages = await withPages();
@@ -79,21 +81,17 @@ export default function TermsAndPolicies() {
 
     
     return (
-      <Text
+      <LabelText
         cursor="pointer"
         color={sectionSelected === section ? "#2B8C4D" :"#71757A"}
         _hover={{
           color: "#2B8C4D"
         }}
         width="max-content"
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="16px"
-        lineHeight="24px"
         onClick={() => handlerClick(section)}
       >
         {t(section)}
-      </Text>
+      </LabelText>
     )
   }
 
@@ -114,16 +112,13 @@ export default function TermsAndPolicies() {
         margin="50px auto 0"
         spacing={0}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="36px"
-          lineHeight="48px"
+        <Display
+          typography="small"
           color="#2B8C4D"
           paddingBottom={{base: "56px", lg: "66px" }}
         >
           {t('mainTitle')}
-        </Text>
+        </Display>
 
         <Stack
           width="100%"
@@ -156,13 +151,7 @@ export default function TermsAndPolicies() {
               spacing={8}
               alignItems="flex-start"
             >
-              <Text
-                fontFamily="Roboto"
-                fontSize="24px"
-                lineHeight="36px"
-                fontWeight="500"
-                color="#252A32"
-              >{t('termsOfService')}</Text>
+              <TitleText>{t('termsOfService')}</TitleText>
               <TermsOfService/>
             </VStack>
 
@@ -173,13 +162,7 @@ export default function TermsAndPolicies() {
               spacing={8}
               alignItems="flex-start"
             >
-              <Text
-                fontFamily="Roboto"
-                fontSize="24px"
-                lineHeight="36px"
-                fontWeight="500"
-                color="#252A32"
-              >{t('privacyPolicy')}</Text>
+              <TitleText>{t('privacyPolicy')}</TitleText>
               <PrivacyPolicy/>
             </VStack>
           </Stack>

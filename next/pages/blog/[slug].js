@@ -10,6 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
 import { categories } from "../api/blog/categories";
+import BodyText from "../../components/atoms/Text/BodyText";
 import Link from "../../components/atoms/Link";
 import {
   Header,
@@ -123,15 +124,11 @@ export default function Post({ slug, locale, mdxSource, headings }) {
         />
       </Head>
 
-      <Text
+      <BodyText
         as="div"
+        typography="small"
         display="flex"
         flexDirection="row"
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#252A32"
         padding="24px 0 48px"
         gap="8px"
       >
@@ -160,7 +157,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
             >{categories?.[elm] || t(elm)}</Link>
           )
         })}
-      </Text>
+      </BodyText>
 
       <Box>
         <Header frontmatter={frontmatter} slug={slug} />
@@ -189,27 +186,16 @@ export default function Post({ slug, locale, mdxSource, headings }) {
                 opacity="1"
                 margin="24px 0"
               />
-              <Text
-                fontFamily="Roboto"
-                fontSize="16px"
-                fontWeight="400"
-                lineHeight="24px"
-                color="#252A32"
-                marginTop="24px"
-              >{t("noticedSomething")} </Text>
-              <Text
+              <BodyText marginTop="24px">{t("noticedSomething")} </BodyText>
+              <BodyText
                 as="a"
                 href={`https://github.com/basedosdados/website/edit/${repository()}/next/blog/${locale}/${slug}.md`}
                 isexternal="true"
-                fontFamily="Roboto"
-                fontSize="16px"
-                fontWeight="400"
-                lineHeight="24px"
                 color="#0068C5"
                 _hover={{
                   color: "#0057A4"
                 }}
-              >{t("contributeToBD")}</Text>
+              >{t("contributeToBD")}</BodyText>
               <Box id="hotjarSurveyBlog"/>
             </Box>
           </Box>

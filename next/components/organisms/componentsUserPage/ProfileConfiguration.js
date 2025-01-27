@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Text,
   Input,
   FormControl,
   FormLabel,
@@ -21,6 +20,8 @@ import cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import ImageCrop from "../../molecules/ImgCrop";
 import Checkbox from "../../atoms/Checkbox";
+import LabelText from "../../atoms/Text/LabelText";
+import BodyText from "../../atoms/Text/BodyText";
 import { cleanString } from "../../../utils";
 
 import {
@@ -337,16 +338,13 @@ export default function ProfileConfiguration({ userInfo }) {
           </ErrorMessage>
         </FormControl>
 
-        <Text
-          fontFamily="Roboto"
-          fontSize="12px"
+        <LabelText
+          typography="small"
           fontWeight="400"
-          lineHeight="18px"
-          letterSpacing="0.1px"
           color="#71757A"
         >
           {t('username.shareInfo')}
-        </Text>
+        </LabelText>
 
         <Button
           onClick={() => handleUpdateProfile()}
@@ -361,15 +359,9 @@ export default function ProfileConfiguration({ userInfo }) {
         spacing="8px"
         alignItems={{base: "start", lg:"center"}}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="16px"
-          lineHeight="24px"
-          color="#252A32"
-        >
+        <LabelText>
           {t('username.profilePicture')}
-        </Text>
+        </LabelText>
 
         <SkeletonCircle
           position="relative"
@@ -472,17 +464,13 @@ export default function ProfileConfiguration({ userInfo }) {
                       />
                     </FormControl>
 
-                    <Text
+                    <BodyText
+                      typography="small"
                       paddingTop="8px"
                       cursor="pointer"
-                      fontFamily="Roboto"
-                      fontSize="14px"
-                      lineHeight="20px"
-                      fontWeight="400"
-                      color="#252A32"
                       _hover={{ color: "#2B8C4D" }}
                       onClick={() => hanlderRemovePicture()}
-                    >{t('username.removePicture')}</Text>
+                    >{t('username.removePicture')}</BodyText>
                   </PopoverBody>
                 </PopoverContent>
               </Popover>

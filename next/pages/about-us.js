@@ -18,6 +18,11 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import Button from "../components/atoms/Button";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 
@@ -39,20 +44,6 @@ export async function getServerSideProps({ locale }) {
     },
   }
 }
-
-export const BodyText = ({ children, ...props }) => (
-  <Text
-    fontFamily="Roboto"
-    fontWeight="400"
-    fontSize="18px"
-    lineHeight="26px"
-    textAlign="center"
-    color="#464A51"
-    {...props}
-  >
-    {children}
-  </Text>
-)
 
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -80,25 +71,18 @@ const HistoryBox = ({ children, title, date, image }) => {
       </Box>
       
       <Box padding="40px 24px 0">
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          color="#252A32"
-          fontSize="24px"
-          lineHeight="36px"
+        <TitleText
           marginBottom="8px"
-        >{title}</Text>
-        <Text
-          fontFamily="Roboto"
+        >{title}</TitleText>
+        <LabelText
           fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
           color="#71757A"
           marginBottom="16px"
+          typography="small"
         >
           {date}
-        </Text>
-        <BodyText textAlign="start">
+        </LabelText>
+        <BodyText textAlign="start" color="#464A51" typography="large">
           {children}
         </BodyText>
       </Box>
@@ -240,36 +224,32 @@ const TeamBox = ({
           alignItems="center"
           marginBottom="4px"
         >
-          <BodyText
-            lineHeight="28px"
-            color="#252A32"
-            fontWeight="500"
+          <LabelText
+            typography="large"
             textAlign="start"
           >
             {name}
-          </BodyText>
+          </LabelText>
           <IconLinks display={{base: "none", lg: "flex"}}/>
         </Box>
 
-        <BodyText
-          fontSize="16px"
-          lineHeight="24px"
-          fontWeight="500"
+        <LabelText
           color="#71757A"
           textAlign="start"
           marginBottom="4px"
         >
           {role()}
-        </BodyText>
+        </LabelText>
 
-        <BodyText
-          fontSize="18px"
-          lineHeight="28px"
+        <LabelText
+          fontWeight="400"
+          typography="large"
           textAlign="start"
+          color="#464A51"
           marginBottom={{base: "12px", lg: "0"}}
         >
           {description}
-        </BodyText>
+        </LabelText>
         <IconLinks display={{base: "flex", lg: "none"}}/>
       </Box>
     </Box>
@@ -386,19 +366,6 @@ export default function AboutUs() {
     }
   }
 
-  const Display = ({ children, ...props }) => (
-    <Text
-      fontFamily="Roboto"
-      fontWeight="500"
-      fontSize="60px"
-      lineHeight="70px"
-      color="#252A32"
-      {...props}
-    >
-      {children}
-    </Text>
-  );
-
   return (
     <MainPageTemplate >
       <Head>
@@ -445,6 +412,7 @@ export default function AboutUs() {
             <Display
               as="h1"
               width="100%"
+              typography="large"
               display={{base: "block", lg: "flex"}}
               flexDirection="column"
               textAlign="center"
@@ -472,51 +440,39 @@ export default function AboutUs() {
               paddingX="24px"
             >
               <Center flexDirection="column">
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="28px"
-                  lineHeight="42px"
+                <TitleText
                   textAlign="center"
-                  color="#252A32"
+                  typography="large"
                 >
                   {t('usersCount')}
-                </Text>
-                <Text
+                </TitleText>
+                <LabelText
                   paddingTop="4px"
-                  fontFamily="Roboto"
                   fontWeight="400"
-                  fontSize="18px"
-                  lineHeight="28px"
                   textAlign="center"
                   color="#464A51"
+                  typography="large"
                 >
                   {t('usersText')}
-                </Text>
+                </LabelText>
               </Center>
 
               <Center flexDirection="column">
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="28px"
-                  lineHeight="42px"
+                <TitleText
                   textAlign="center"
-                  color="#252A32"
+                  typography="large"
                 >
                   {t('queriesCount')}
-                </Text>
-                <Text
+                </TitleText>
+                <LabelText
                   paddingTop="4px"
-                  fontFamily="Roboto"
                   fontWeight="400"
-                  fontSize="18px"
-                  lineHeight="28px"
                   textAlign="center"
-                  color="#252A32"
+                  color="#464A51"
+                  typography="large"
                 >
                   {t('queriesText')}
-                </Text>
+                </LabelText>
               </Center>   
             </Stack>
           </Stack>
@@ -529,24 +485,20 @@ export default function AboutUs() {
             spacing="24px"
             width={{ base: "100%", lg: "650px" }}
           >
-            <Text
+            <Display
               as="h2"
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="50px"
-              lineHeight="60px"
               textAlign="center"
               color="#252A32"
             >
               {t('aboutTitle')}
-            </Text>
-            <BodyText>
+            </Display>
+            <BodyText typography="large" color="#464A51">
               {t('aboutText1')}
             </BodyText>
-            <BodyText>
+            <BodyText typography="large" color="#464A51">
               {t('aboutText2')}
             </BodyText>
-            <BodyText>
+            <BodyText typography="large" color="#464A51">
               {t('aboutText3')}
             </BodyText>
           </Stack>
@@ -558,18 +510,13 @@ export default function AboutUs() {
             padding="94px 24px 144px"
             spacing={0}
           >
-            <Text
+            <Display
               as="h2"
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="50px"
-              lineHeight="60px"
               textAlign="center"
-              color="#252A32"
               paddingBottom="104px"
             >
               {t('recognitionTitle')}
-            </Text>
+            </Display>
 
             <Stack
               flexDirection={{base: "column", lg: "row"}}
@@ -589,18 +536,13 @@ export default function AboutUs() {
                   height="140px"
                   margin="0 auto 48px"
                 />
-                <Text 
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="24px"
-                  lineHeight="36px"
+                <TitleText 
                   textAlign="center"
-                  color="#252A32"
                   marginBottom="20px"
                 >
                   {t('googleCloudAwardTitle')}
-                </Text>
-                <BodyText marginBottom="8px">
+                </TitleText>
+                <BodyText marginBottom="8px" typography="large" color="#464A51">
                   {t('googleCloudAwardText')}
                 </BodyText>
                 <Link
@@ -636,18 +578,13 @@ export default function AboutUs() {
                   height="140px"
                   margin="0 auto 48px"
                 />
-                <Text 
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="24px"
-                  lineHeight="36px"
+                <TitleText 
                   textAlign="center"
-                  color="#252A32"
                   marginBottom="20px"
                 >
                   {t('treasuryAwardTitle')}
-                </Text>
-                <BodyText marginBottom="8px">
+                </TitleText>
+                <BodyText marginBottom="8px" typography="large" color="#464A51">
                   {t('treasuryAwardText')}
                 </BodyText>
                 <Link
@@ -684,26 +621,18 @@ export default function AboutUs() {
         bgGradient={{base: "linear(#34A15A 38%, #FFF 38%)", lg: "linear(#34A15A 45%, #FFF 45%)"}}
       >
         <Center flexDirection="column" padding="56px 24px">
-          <Text
+          <Display
             as="h2"
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="50px"
-            lineHeight="60px"
             textAlign="center"
             color="#FFFFFF"
             paddingBottom="16px"
           >
             {t('historyTitle')}
-          </Text>
-          <Text
-            fontFamily="Roboto"
-            fontSize="24px"
-            lineHeight="36px"
-            fontWeight="500"
+          </Display>
+          <TitleText
             textAlign="center"
             color="#FFFFFF"
-          >{t('historySubtitle')}</Text>
+          >{t('historySubtitle')}</TitleText>
         </Center>
 
         <Center
@@ -807,18 +736,13 @@ export default function AboutUs() {
         margin="auto"
         spacing={0}
       >
-        <Text
+        <Display
           as="h2"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
           textAlign="center"
           paddingBottom="104px"
-          color="#252A32"
         >
           {t('teamTitle')}
-        </Text>
+        </Display>
 
         {!loadingData ?
           <Stack>
@@ -849,22 +773,18 @@ export default function AboutUs() {
                 z-index="20"
               >
                 {t('teamCategories', { returnObjects: true }).map((elm, i) => (
-                  <Text
+                  <LabelText
                     key={i}
                     color={filterTeam === elm ? "#2B8C4D" :"#71757A"}
                     _hover={{
                       color: "#2B8C4D"
                     }}
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="16px"
-                    lineHeight="24px"
                     width="max-content"
                     cursor="pointer"
                     onClick={() => handleSelect(elm)}
                   >
                     {elm}
-                  </Text>
+                  </LabelText>
                 ))}
               </Box>
 
@@ -925,38 +845,24 @@ export default function AboutUs() {
             boxShadow="0 2px 8px 1px rgba(64, 60, 67, 0.16)"
             backgroundColor="#FFFFFF"
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="28px"
-              lineHeight="42px"
-              color="#252A32"
+            <TitleText
               paddingBottom="8px"
+              typography="large"
             >
               {t('joinUsTitle')}
-            </Text>
+            </TitleText>
 
-            <BodyText textAlign="start" paddingBottom="24px">
+            <BodyText color="#464A51" textAlign="start" paddingBottom="24px" typography="large">
               {t('joinUsText')}
             </BodyText>
             <Link
               target="_blank"
               href="https://info.basedosdados.org/carreiras"
             >
-              <Box
-                as="span"
-                target="_self"
-                display="flex"
-                alignItems="center"
+              <Button
                 height="54px"
-                width="fit-content"
-                borderRadius="8px"
                 backgroundColor="#0D99FC"
                 padding="10px 16px"
-                cursor="pointer"
-                color="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
                 fontSize="20px"
                 lineHeight="30px"
                 _hover={{
@@ -971,7 +877,7 @@ export default function AboutUs() {
                   height="18px"
                   marginLeft="8px"
                 />
-              </Box>
+              </Button>
             </Link>
           </Box>
         </Stack>

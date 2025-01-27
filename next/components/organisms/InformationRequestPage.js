@@ -1,7 +1,5 @@
 import {
   Stack,
-  Box,
-  Text,
   Skeleton,
   SkeletonText,
   Divider
@@ -11,6 +9,9 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from "lodash";
 import Button from "../atoms/Button";
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import ReadMore from "../atoms/ReadMore";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
@@ -66,20 +67,11 @@ export default function InformationRequestPage({ id }) {
         isLoaded={!isLoading}
         {...props}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
-        >{title}</Text>
-        <Text
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
+        <LabelText typography="small">{title}</LabelText>
+        <BodyText
+          typography="small"
           color="#464A51"
-        >{text || t('informationRequest.notProvided')}</Text>
+        >{text || t('informationRequest.notProvided')}</BodyText>
       </SkeletonText>
     )
   }
@@ -115,19 +107,14 @@ export default function InformationRequestPage({ id }) {
         alignItems="center"
         gap="8px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="24px"
-          lineHeight="36px"
-          color="#252A32"
+        <TitleText
           width="fit-content"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
           {t('informationRequest.requestNumber', { number: resource?.number })}
-        </Text>
+        </TitleText>
       </StackSkeleton>
 
       <StackSkeleton
@@ -186,9 +173,10 @@ export default function InformationRequestPage({ id }) {
         </Button>
       </StackSkeleton>
 
-      <Stack spacing="12px">
+      <Stack spacing="8px">
         <StackSkeleton width="160px" height="20px">
-          <Text
+          <TitleText
+
             fontFamily="Roboto"
             fontWeight="500"
             fontSize="18px"
@@ -196,7 +184,7 @@ export default function InformationRequestPage({ id }) {
             color="#252A32"
           >
             {t('informationRequest.description')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <SkeletonText
@@ -219,16 +207,10 @@ export default function InformationRequestPage({ id }) {
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="20px"
-          color="#252A32"
-        >
+      <StackSkeleton width="190px" height="28px" marginBottom="20px !important">
+        <TitleText typography="small">
           {t('informationRequest.additionalInformation')}
-        </Text>
+        </TitleText>
       </StackSkeleton>
 
       <AddInfoTextBase

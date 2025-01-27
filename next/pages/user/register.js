@@ -1,5 +1,4 @@
 import {
-  Text,
   Stack,
   FormControl,
   List,
@@ -20,6 +19,8 @@ import {
 } from "../../components/molecules/uiUserPage";
 
 import Link from "../../components/atoms/Link";
+import Display from "../../components/atoms/Text/Display";
+import BodyText from "../../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../../components/templates/main";
 import { cleanString } from "../../utils";
 
@@ -174,17 +175,12 @@ export default function Register() {
         marginTop="50px"
         marginX="27px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
+        <Display
           textAlign="center"
           marginBottom="40px"
         >
           {t('signup.title')}
-        </Text>
+        </Display>
 
         <form onSubmit={handleSubmit}>
           <VStack
@@ -281,13 +277,10 @@ export default function Register() {
                   />
                 }
               />
-              <Text 
+              <BodyText
+                typography="small" 
                 margin="8px 0"
                 color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="20px"
                 display="flex"
                 flexDirection="row"
                 gap="8px"
@@ -299,7 +292,7 @@ export default function Register() {
                   height="18px"
                   fill="#BF3434"
                 /> {t('username.passwordRequirements')}
-              </Text>
+              </BodyText>
 
               <List
                 fontFamily="Roboto"
@@ -403,24 +396,18 @@ export default function Register() {
             marginBottom="24px !important"
           >
             <Exclamation width="19px" height="19px" fill="#BF3434"/>
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
+            <BodyText
+              typography="small"
               color="#BF3434"
             >
               {errors.register}
-            </Text>
+            </BodyText>
           </Box>
         }
 
-        <Text
+        <BodyText
+          typography="small"
           textAlign="center"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
           color="#71757A"
           marginTop="16px !important"
         >
@@ -449,15 +436,11 @@ export default function Register() {
             {t('signup.termsAgreement.privacyLink')}
           </Link>
           {t('signup.termsAgreement.part3')}
-        </Text>
+        </BodyText>
 
-        <Text
+        <BodyText
+          typography="small"
           textAlign="center"
-          color= "#252A32"
-          fontFamily= "Roboto"
-          fontWeight= "400"
-          fontSize= "14px"
-          lineHeight= "20px"
           marginTop="24px !important"
         >
           {t('signup.alreadyHaveAccount')} <Link
@@ -471,7 +454,7 @@ export default function Register() {
           >
             {t('signup.login')}
           </Link>.
-        </Text>
+        </BodyText>
       </Stack>
     </MainPageTemplate>
   )

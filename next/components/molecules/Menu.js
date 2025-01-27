@@ -32,7 +32,8 @@ import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
 import { triggerGAEvent } from "../../utils";
-import DomainComponent from "../atoms/DomainComponent";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
@@ -159,7 +160,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         {userData ? (
           <></>
         ) : (
-          <Stack display={isMobile ? "flex" : "none"} marginTop="auto" gap="16px">
+          <Stack display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
             <Link
               href="/user/login"
               display="flex"
@@ -169,12 +170,6 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               borderRadius="8px"
               padding="8px 4px"
               cursor="pointer"
-              color="#252A32"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              letterSpacing="0.1px"
-              lineHeight="20px"
               gap="8px"
               _hover={{
                 opacity: 0.7
@@ -194,12 +189,8 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               padding="8px 16px"
               cursor="pointer"
               color="#FFF"
-              fontFamily="Roboto"
               fontWeight="400"
-              fontSize="14px"
-              letterSpacing="0.1px"
               gap="8px"
-              lineHeight="20px"
               _hover={{
                 backgroundColor: "#0B89E2"
               }}
@@ -263,29 +254,15 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
               src={userData?.picture ? userData?.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
-          <Text
-            color="#252A32"
-            fontFamily="Roboto"
-            letterSpacing="0.1px"
-            fontSize="12px"
-            fontWeight="500"
-            lineHeight="18px"
-          >{userData?.username || ""}</Text>
-          <Text
+          <LabelText typography="x-small">{userData?.username || ""}</LabelText>
+          <LabelText
+            typography="x-small"
             color="#71757A"
-            fontFamily="Roboto"
-            letterSpacing="0.1px"
-            fontSize="12px"
-            fontWeight="500"
-            lineHeight="18px"
-          >{userData?.email || ""}</Text>
+          >{userData?.email || ""}</LabelText>
 
-          <Box
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="12px"
-            lineHeight="18px"
-            letterSpacing="0.1px"
+          <LabelText
+            typography="x-small"
+            as="div"
             border="1px solid #2B8C4D"
             backgroundColor={isUserPro ? "#2B8C4D" : "#FFFFFF"}
             color={isUserPro ? "#FFFFFF" : "#2B8C4D"}
@@ -301,7 +278,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
                   : null)
               : t('DBFree')
             }
-          </Box>
+          </LabelText>
         </Stack>
 
         <Accordion allowToggle width="100%" defaultIndex={0}>
@@ -313,15 +290,9 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             >
               <Stack spacing={0} flexDirection="row" alignItems="center" gap="8px">
                 <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
-                <Text
-                  fontSize="14px"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  lineHeight="20px"
-                  color="#252A32"
-                >
+                <BodyText typography="small">
                   {t('settings')}
-                </Text>
+                </BodyText>
               </Stack>
               <AccordionIcon />
             </AccordionButton>
@@ -337,11 +308,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
                   <Link
                     key={index}
                     color="#71757A"
-                    fontSize="14px"
-                    fontFamily="Roboto"
-                    letterSpacing="0.1px"
                     fontWeight="400"
-                    lineHeight="20px"
                     onClick={() => {
                       onClose()
                       router.push({pathname: `/user/${userData.username}`, query: elm.value})}
@@ -374,15 +341,12 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
           }}
         >
           <SignOutIcon width="20px" height="20px"/>
-          <Text
-            fontFamily="Roboto"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
+          <BodyText
+            typography="small"
             marginLeft="8px !important"
           >
             {t('exit')}
-          </Text>
+          </BodyText>
         </Stack>
       </DrawerContent>
     </Drawer>
@@ -491,33 +455,19 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
                 src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
               />
             </Box>
-            <Text
-              color="#252A32"
-              fontFamily="Roboto"
-              letterSpacing="0.1px"
-              fontSize="12px"
-              fontWeight="500"
-              lineHeight="18px"
-            >
+            <LabelText typography="x-small">
               {userData?.username ? userData?.username : ""}
-            </Text>
-            <Text
+            </LabelText>
+            <LabelText
+              typography="x-small"
               color="#71757A"
-              fontFamily="Roboto"
-              fontSize="12px"
-              fontWeight="500"
-              lineHeight="18px"
-              letterSpacing="0.1px"
             >
               {userData?.email ? userData?.email : ""}
-            </Text>
+            </LabelText>
 
-            <Box
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="12px"
-              lineHeight="18px"
-              letterSpacing="0.1px"
+            <LabelText
+              typography="x-small"
+              as="div"
               border="1px solid #2B8C4D"
               backgroundColor={isUserPro ? "#2B8C4D" : "#FFFFFF"}
               color={isUserPro ? "#FFFFFF" : "#2B8C4D"}
@@ -533,7 +483,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
                     : null)
                 : t('DBFree')
               }
-            </Box>
+            </LabelText>
           </MenuItem>
 
           <MenuItem
@@ -546,15 +496,9 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             onClick={() => router.push(`/user/${userData.username}`)}
           >
             <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
-            <Text
-              color="#252A32"
-              fontFamily="Roboto"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
-            >
+            <BodyText typography="small">
               {t('settings')}
-            </Text>
+            </BodyText>
           </MenuItem>
           <Divider borderColor="#DEDFE0"/>
           <MenuItem
@@ -571,21 +515,14 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             }}
           >
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
-            <Text
-              color="#252A32"
-              fontFamily="Roboto"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
-            >
+            <BodyText typography="small">
               {t('exit')}
-            </Text>
+            </BodyText>
           </MenuItem>
         </MenuList>
       </Menu>
     )
   }
-
 }
 
 function SearchInputUser ({ user }) {
@@ -732,19 +669,13 @@ function DesktopLinks({
 
     return (
       <Link
-        display="flex"
         flexDirection="colunm"
         _hover={{ opacity: "0.7" }}
         target={url.slice(0,4) === "http" ? "_blank" : "_self"}
         color="#252A32"
-        fontSize="14px"
-        fontFamily="Roboto"
         fontWeight="400"
-        lineHeight="20px"
-        letterSpacing="0.1px"
         href={url}
         padding="10px 0"
-        alignItems="center"
         gap="16px"
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
@@ -824,11 +755,7 @@ function DesktopLinks({
             <Link
               key={`link-${i}`}
               _hover={{ opacity: "0.7" }}
-              fontSize="14px"
-              fontFamily="Roboto"
-              letterSpacing="0.1px"
               fontWeight="400"
-              lineHeight="20px"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
             >
@@ -878,19 +805,12 @@ function DesktopLinks({
           <>
             <Link
               href="/user/login"
-              display="flex"
-              alignItems="center"
               height="40px"
               width="fit-content"
               borderRadius="8px"
               padding="8px 4px"
-              cursor="pointer"
               color="#252A32"
-              fontFamily="Roboto"
               fontWeight="400"
-              fontSize="14px"
-              letterSpacing="0.1px"
-              lineHeight="20px"
               gap="8px"
               _hover={{
                 opacity: 0.7
@@ -901,21 +821,14 @@ function DesktopLinks({
             
             <Link
               href="/user/register"
-              display="flex"
-              alignItems="center"
               height="40px"
               width="fit-content"
               borderRadius="8px"
               backgroundColor="#0D99FC"
               padding="8px 16px"
-              cursor="pointer"
               color="#FFF"
-              fontFamily="Roboto"
               fontWeight="400"
-              fontSize="14px"
-              letterSpacing="0.1px"
               gap="8px"
-              lineHeight="20px"
               _hover={{
                 backgroundColor: "#0B89E2"
               }}
@@ -932,7 +845,7 @@ function DesktopLinks({
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
   const { t } = useTranslation('menu');
   const router = useRouter()
-  const { route, locale } = router
+  const { locale } = router
   const [userBD, setUserBD] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const isMobile = useIsMobileMod();
@@ -1124,7 +1037,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={isMobile ? "15px 20px" : "15px 24px"}
+        padding={{base: "15px 20px", lg: "15px 24px"}}
         zIndex="99"
         transition="0.5s"
         as="nav"

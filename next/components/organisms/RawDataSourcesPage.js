@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Text,
   Skeleton,
   SkeletonText,
   Tooltip,
@@ -13,6 +12,9 @@ import { useRouter } from 'next/router';
 import { capitalize } from "lodash";
 
 import Button from "../atoms/Button";
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import ReadMore from "../atoms/ReadMore";
 import ObservationLevel from "../atoms/ObservationLevelTable";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
@@ -103,16 +105,12 @@ export default function RawDataSourcesPage({ id }) {
   const TooltipText = ({ text, info, ...props }) => {
     return (
       <Box>
-        <Text
+        <TitleText
+          typography="small"
           display="flex"
           flexDirection="row"
           alignItems="center"
           gap="8px"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="20px"
-          color="#252A32"
           {...props}
         >
           {text}
@@ -140,7 +138,7 @@ export default function RawDataSourcesPage({ id }) {
               height="16px"
             />
           </Tooltip>
-        </Text>
+        </TitleText>
       </Box>
     )
   }
@@ -176,20 +174,11 @@ export default function RawDataSourcesPage({ id }) {
         isLoaded={!isLoading}
         {...props}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
-        >{title}</Text>
-        <Text
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
+        <LabelText typography="small">{title}</LabelText>
+        <BodyText
+          typography="small"
           color="#464A51"
-        >{text || t('rawDataSource.notProvided')}</Text>
+        >{text || t('rawDataSource.notProvided')}</BodyText>
       </SkeletonText>
     )
   }
@@ -209,19 +198,14 @@ export default function RawDataSourcesPage({ id }) {
         alignItems="center"
         gap="8px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="24px"
-          lineHeight="36px"
-          color="#252A32"
+        <TitleText
           width="fit-content"
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
           {resource?.[`name${capitalize(locale)}`] || resource?.name}
-        </Text>
+        </TitleText>
       </StackSkeleton>
 
       <StackSkeleton
@@ -259,17 +243,11 @@ export default function RawDataSourcesPage({ id }) {
         </Button>
       </StackSkeleton>
 
-      <Stack spacing="12px">
-        <StackSkeleton width="160px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
+      <Stack spacing="8px">
+        <StackSkeleton width="160px" height="28px">
+          <TitleText typography="small">
             {t('rawDataSource.description')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <SkeletonText
@@ -292,16 +270,10 @@ export default function RawDataSourcesPage({ id }) {
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-      <StackSkeleton width="190px" height="20px" marginBottom="20px !important">
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="20px"
-          color="#252A32"
-        >
+      <StackSkeleton width="190px" height="28px" marginBottom="20px !important">
+        <TitleText typography="small">
           {t('rawDataSource.additionalInfo')}
-        </Text>
+        </TitleText>
       </StackSkeleton>
 
       <AddInfoTextBase
@@ -330,7 +302,7 @@ export default function RawDataSourcesPage({ id }) {
       />
 
       <Stack marginBottom="24px !important">
-        <StackSkeleton width="190px" height="20px">
+        <StackSkeleton width="190px" height="28px">
           <TooltipText
             text={t('rawDataSource.observationLevel')}
             info={t('rawDataSource.observationLevelTooltip')}
@@ -349,15 +321,12 @@ export default function RawDataSourcesPage({ id }) {
           {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
             <ObservationLevel resource={resource}/>
             :
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
+            <BodyText
+              typography="small"
               color="#464A51"
             >
               {t('rawDataSource.notProvided')}
-            </Text>
+            </BodyText>
           }
         </Skeleton>       
       </Stack>

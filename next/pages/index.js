@@ -17,6 +17,10 @@ import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { ControlledInput } from "../components/atoms/ControlledInput";
 import Link from "../components/atoms/Link";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import Button from "../components/atoms/Button";
 import ThemeCatalog from "../components/molecules/ThemeCatalog";
@@ -172,18 +176,15 @@ function Hero({ dataThemeCatalog, locale }) {
             position="relative"
             id="theme"
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="20px"
-              lineHeight="30px"
+            <LabelText
+              typography="x-large"
               color="#71757A"
               minHeight="30px"
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
               {t('search_by_theme')}
-            </Text>
+            </LabelText>
 
             <ThemeCatalog data={dataThemeCatalog} locale={locale}/>
           </VStack>
@@ -205,17 +206,12 @@ function Products() {
       margin="0 auto"
     >
       <VStack spacing={0} width="100%">
-        <Text
+        <Display
           display={{base: "block", md:"flex"}}
           flexDirection="column"
           position="relative"
           zIndex="1"
           width="100%"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
           textAlign="center"
           margin="104px 0 112px"
         >
@@ -224,7 +220,7 @@ function Products() {
             {t('products.analysis_distance')}
             <Text as="span" color="#2B8C4D">{t('products.good_question')}</Text>.
           </Text>
-        </Text>
+        </Display>
 
         <VStack spacing={{base: "80px", lg: "112px"}} width="100%">
           <HStack
@@ -239,38 +235,25 @@ function Products() {
               maxWidth={{base: "100%", lg: "490px"}}
               spacing={0}
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
+              <BodyText
+                typography="small"
                 color="#71757A"
                 paddingBottom="10px"
               >
                 {t('products.filters')}
-              </Text>
+              </BodyText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="24px"
-                lineHeight="36px"
-                color="#252A32"
-                paddingBottom="18px"
-              >
+              <TitleText paddingBottom="18px">
                 {t('products.search_as_you_want')}
-              </Text>
+              </TitleText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="18px"
-                lineHeight="26px"
+              <BodyText
+                typography="large"
                 color="#464A51"
                 paddingBottom="24px"
               >
                 {t('products.search_description')}
-              </Text>
+              </BodyText>
 
               <Link
                 width="fit-content"
@@ -311,38 +294,25 @@ function Products() {
               maxWidth={{base: "100%", lg: "490px"}}
               spacing={0}
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
+              <BodyText
+                typography="small"
                 color="#71757A"
                 paddingBottom="10px"
               >
                 {t('products.processed_tables')}
-              </Text>
+              </BodyText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="24px"
-                lineHeight="36px"
-                color="#252A32"
-                paddingBottom="18px"
-              >
+              <TitleText paddingBottom="18px">
                 {t('products.access_quality_data')}
-              </Text>
+              </TitleText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="18px"
-                lineHeight="26px"
+              <BodyText
+                typography="large"
                 color="#464A51"
                 paddingBottom="24px"
               >
                 {t('products.processed_tables_description')}
-              </Text>
+              </BodyText>
 
               <Link
                 width="fit-content"
@@ -382,38 +352,25 @@ function Products() {
               maxWidth={{base: "100%", lg: "490px"}}
               spacing={0}
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
+              <BodyText
+                typography="small"
                 color="#71757A"
                 paddingBottom="10px"
               >
                 {t('products.packages')}
-              </Text>
+              </BodyText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="24px"
-                lineHeight="36px"
-                color="#252A32"
-                paddingBottom="18px"
-              >
+              <TitleText paddingBottom="18px">
                 {t('products.explore_in_your_favorite_language')}
-              </Text>
+              </TitleText>
 
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="18px"
-                lineHeight="26px"
+              <BodyText
+                typography="large"
                 color="#464A51"
                 paddingBottom="24px"
               >
                 {t('products.packages_description')}
-              </Text>
+              </BodyText>
 
               <Link
                 width="fit-content"
@@ -484,27 +441,20 @@ function Products() {
 export function TextPix ({ title, text }) {
   return (
     <Box>
-      <Text
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="18px"
-        lineHeight="28px"
-        color="#252A32"
+      <TitleText
+        typography="small"
         textAlign="justify"
       >
         {title}
-      </Text>
-      <Text
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="18px"
-        lineHeight="28px"
+      </TitleText>
+      <BodyText
+        typography="large"
         color="#464A51"
         textAlign="justify"
         marginBottom="10px"
       >
         {text}
-      </Text>
+      </BodyText>
     </Box>
   )
 }
@@ -512,13 +462,10 @@ export function TextPix ({ title, text }) {
 export function StepText ({index, text}) {
   return (
     <Box marginBottom="20px !important">
-      <Text
+      <BodyText
+        typography="large"
         display="flex"
         gap="8px"
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="18px"
-        lineHeight="28px"
         color="#464A51"
       >
         <Text
@@ -530,7 +477,7 @@ export function StepText ({index, text}) {
           {index}
         </Text>
         {text}
-      </Text>
+      </BodyText>
     </Box>
   )
 }
@@ -548,14 +495,10 @@ function Support() {
       margin="auto"
     >
       <VStack id="support" position="relative" width="100%" spacing={0}>
-        <Text
+        <Display
           display={{base: "block", md:"flex"}}
           flexDirection="column"
           fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
           position="relative"
           zIndex="1"
           width="100%"
@@ -564,23 +507,19 @@ function Support() {
         >
           <Text as="span">{t('support.existence_through_effort')}</Text>
           <Text as="span">{t('support.those_who_believe_in_quality_open_data')}</Text>
-        </Text>
+        </Display>
 
         {locale === 'pt' && (
           <>
-            <Text
+            <TitleText
               position="relative"
               zIndex="1"
               textAlign="center"
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="24px"
-              lineHeight="36px"
               color="#464A51"
               paddingBottom="40px"
             >
               {t('support.support_us_too')}
-            </Text>
+            </TitleText>
 
             <Stack
               width="100%"
@@ -602,17 +541,14 @@ function Support() {
                 }
                 title={t('support.enthusiast')}
               >
-                <Text
+                <BodyText
+                  typography="small"
                   textAlign="center"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
                   color="#464A51"
                   padding="10px 0 24px"
                 >
                   {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
-                </Text>
+                </BodyText>
                 <Link
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/15"
@@ -651,20 +587,17 @@ function Support() {
                 }
                 title={t('support.databaser')}
               >
-                <Text
+                <BodyText
+                  typography="small"
                   display="flex"
                   flexDirection="column"
                   textAlign="center"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
                   color="#464A51"
                   padding="10px 0 24px"
                 >
                   <Text as="span" fontWeight="500">{t('support.donate_1_real_per_day')}</Text>
                   <Text as="span">{t('support.to_make_databasers_happy')}</Text>
-                </Text>
+                </BodyText>
                 <Link
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/30"
@@ -702,17 +635,14 @@ function Support() {
                 }
                 title={t('support.master_of_data')}
               >
-                <Text
+                <BodyText
+                  typography="small"
                   textAlign="center"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
                   color="#464A51"
                   padding="10px 0 24px"
                 >
                   {t('support.master_of_data_description')}
-                </Text>
+                </BodyText>
                 <Link
                   target="_blank"
                   href="https://apoia.se/support/basedosdados/new/50"
@@ -733,18 +663,15 @@ function Support() {
             </Stack>
 
             <Box padding="0px">
-              <Text
+              <LabelText
+                typography="large"
                 width="100%"
                 textAlign="center"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="18px"
-                lineHeight="28px"
                 color="#71757A"
                 paddingBottom="32px"
               >
                 {t('support.donate_any_amount_via_pix')}
-              </Text>
+              </LabelText>
 
               <Grid
                 templateColumns={{base: "repeat(1, 3fr)", lg: "repeat(3, 1fr)"}}
@@ -799,14 +726,10 @@ function Support() {
                 </GridItem>
 
                 <GridItem display={{base: "none", lg: "flex"}} flexDirection="column">
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="18px"
-                    lineHeight="28px"
-                    color="#252A32"
+                  <LabelText
+                    typography="large"
                     marginBottom="24px"
-                  >{t('support.follow_the_steps')}</Text>
+                  >{t('support.follow_the_steps')}</LabelText>
                   <StepText index="1" text={t('support.step_1')}/>
                   <StepText index="2" text={t('support.step_2')}/>
                   <StepText index="3" text={t('support.step_3')}/>
@@ -814,14 +737,9 @@ function Support() {
                 </GridItem>
               </Grid>
 
-              <Text
+              <BodyText
                 display="block"
                 flexDirection="column"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="16px"
-                lineHeight="24px"
-                color="#252A32"
                 textAlign="center"
                 justifyContent="center"
                 gap="4px"
@@ -841,25 +759,22 @@ function Support() {
                 >
                   {t('support.contact_us')}
                 </Link>
-              </Text>
+              </BodyText>
             </Box>
           </>
         )}
 
         {locale !== 'pt' && (
           <>
-            <Text
+            <LabelText
+              typography="x-large"
               width="100%"
               textAlign="center"
-              fontFamily="Roboto"
-              fontSize="20px"
-              fontWeight="400"
-              lineHeight="32px"
               color="#71757A"
               paddingBottom={{base: "0", lg: "32px"}}
             >
               {t('support.donate_any_amount_via_paypal')}
-            </Text>
+            </LabelText>
             <Box marginTop="32px">
               <PayPalButton />
             </Box>
@@ -890,31 +805,22 @@ function BDEdu () {
         heightImage="54px"
         marginBottom="24px"
       />
-      <Text
+      <Display
         display={{base: "block", md:"flex"}}
         flexDirection="column"
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="50px"
-        lineHeight="60px"
-        color="#252A32"
         textAlign="center"
         paddingBottom="24px"
       >
         <Text as="span">{t('edu.learn_from_the_reference')}</Text>
         <Text as="span">{t('edu.in_making_public_data_available')}</Text>
-      </Text>
-      <Text
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="24px"
-        lineHeight="36px"
+      </Display>
+      <TitleText
         color="#71757A"
         textAlign="center"
         paddingBottom="24px"
       >
         {t('edu.with_our_course_you_can_go_further')}
-      </Text>
+      </TitleText>
       <Button
         fontFamily="Roboto"
         fontWeight="500"
