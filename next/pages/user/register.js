@@ -3,6 +3,7 @@ import {
   FormControl,
   List,
   VStack,
+  Box
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from 'next-i18next';
@@ -144,8 +145,8 @@ export default function Register() {
       }
       if(result?.errors?.length > 0) {
         result.errors.map((elm) => {
-          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: t('signup.errors.email.exists')})
-          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: t('signup.errors.username.exists')})
+          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: t('signup.errors.email.exists'), register: t('signup.errors.registerEmail')})
+          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: t('signup.errors.username.exists'), register: t('signup.errors.registerUsername')})
         })
       }
       setErrors(arrayErrors)

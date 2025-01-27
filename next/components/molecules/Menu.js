@@ -57,7 +57,6 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
   const router = useRouter();
-  const isMobile = useIsMobileMod();
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
