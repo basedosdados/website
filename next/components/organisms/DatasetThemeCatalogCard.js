@@ -11,6 +11,7 @@ import { capitalize } from "lodash";
 import Card from "../molecules/Card";
 import { CategoryIcon } from "../atoms/CategoryIcon";
 import Link from "../atoms/Link";
+import LabelText from "../atoms/Text/LabelText";
 import { DatasetCardTag } from "../atoms/DatasetCardTag";
 
 export default function DatasetCard({
@@ -73,33 +74,25 @@ export default function DatasetCard({
       spacing={0}
     >
       <Link href={link}>
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="16px"
-          lineHeight="24px"
-          color="#252A32"
+        <LabelText
           minHeight="48px"
           textOverflow="ellipsis"
           marginBottom="10px"
           noOfLines={2}
         >
           {name}
-        </Text>
+        </LabelText>
       </Link>
       <Link href={`/search?organization=${organizations?.[0]?.slug}`}>
-        <Text
+        <LabelText
+          typography="x-small"
           noOfLines={2}
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="12px"
-          lineHeight="18px"
           letterSpacing="0.1px"
           textOverflow="ellipsis"
           color="#71757A"
         >
           {organizations?.[0]?.[`name${capitalize(locale)}`] || organizations?.[0]?.name || organizations?.[0]?.slug}
-        </Text>
+        </LabelText>
       </Link>
 
       <VStack spacing={1} align="flex-start" marginTop="auto">
@@ -145,7 +138,6 @@ export default function DatasetCard({
                 href={tables?.number > 0 ? `${link}?table=${tables?.id}` : ""}
                 target="_blank"
                 display="flex"
-                fontFamily="Roboto"
                 fontWeight="500"
                 fontSize="12px"
                 lineHeight="18px"
@@ -183,7 +175,6 @@ export default function DatasetCard({
                 href={rawDataSources?.number > 0 ? `${link}?raw_data_source=${rawDataSources?.id}` : ""}
                 target="_blank"
                 display="flex"
-                fontFamily="Roboto"
                 fontWeight="500"
                 fontSize="12px"
                 lineHeight="18px"

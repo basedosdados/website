@@ -10,6 +10,10 @@ import { MainPageTemplate } from "../components/templates/main";
 import { ControlledInputSimple } from "../components/atoms/ControlledInput";
 import { useTranslation } from 'next-i18next';
 import { triggerGAEvent } from "../utils";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import BodyText from "../components/atoms/Text/BodyText"
+
 import Link from "../components/atoms/Link";
 import SearchIcon from "../public/img/icons/searchIcon";
 
@@ -41,29 +45,10 @@ export default function FourOFour() {
         marginTop={{base: "120px", md: "0"}}
         padding="80px 24px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
-          marginBottom="24px"
-        >{t('error.ops')}</Text>
+        <Display marginBottom="24px">{t('error.ops')}</Display>
         <Center flexDirection="column" marginBottom="24px" gap="8px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="28px"
-            lineHeight="42px"
-            color="#252A32"
-          >{t('error.notFoundPage')}</Text>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="26px"
-            color="#252A32"
-          >{t('error.searchNewBases')}</Text>
+          <TitleText typography="large">{t('error.notFoundPage')}</TitleText>
+          <BodyText typography="large">{t('error.searchNewBases')}</BodyText>
         </Center>
 
         <ControlledInputSimple

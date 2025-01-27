@@ -2,7 +2,6 @@ import {
   Box,
   VStack,
   Stack,
-  Text,
   Divider,
   Collapse,
 } from "@chakra-ui/react";
@@ -13,6 +12,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
+import Display from "../components/atoms/Text/Display";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DebouncedSimpleControlledInput } from "../components/atoms/ControlledInput";
@@ -77,15 +79,9 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         justifyContent="space-between"
         onClick={() => OpenCloseQuestion()}
       >
-        <Text
-          fontFamily="Roboto"
-          fontSize="20px"
-          fontWeight="500"
-          lineHeight="30px"
-          color="#252A32"
-        >
+        <LabelText typography="x-large">
           {question}
-        </Text>
+        </LabelText>
         <CrossIcon
           alt={isActive ? "fecha pergunta" : "abrir pergunta"}
           color="#252A32"
@@ -115,19 +111,6 @@ const QuestionsBox = ({ question, answer, id, active }) => {
     </Stack>
   )
 }
-
-const Display = ({ children, ...props }) => (
-  <Text
-    fontFamily="Roboto"
-    fontWeight="500"
-    fontSize="36px"
-    lineHeight="48px"
-    color="#2B8C4D"
-    {...props}
-  >
-    {children}
-  </Text>
-);
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
@@ -198,12 +181,8 @@ export default function FAQ({ faqs }) {
     }
 
     return (
-      <Text
+      <LabelText
         color={categorySelected === category ? "#2B8C4D" :"#71757A"}
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="16px"
-        lineHeight="24px"
         width="max-content"
         cursor="pointer"
         _hover={{
@@ -212,7 +191,7 @@ export default function FAQ({ faqs }) {
         onClick={handlerClick}
       >
         {category}
-      </Text>
+      </LabelText>
     )
   }
 
@@ -242,6 +221,7 @@ export default function FAQ({ faqs }) {
           paddingBottom={{base: "56px", lg: "66px" }}
           color="#2B8C4D"
           textAlign="center"
+          typography="small"
         >
           {t('title')}
         </Display>
@@ -302,15 +282,9 @@ export default function FAQ({ faqs }) {
             spacing={8}
           >
             {questions.length === 0 ?
-              <Text
-                fontFamily="Roboto"
-                fontSize="20px"
-                fontWeight="500"
-                lineHeight="30px"
-                color="#252A32"
-              >
+              <LabelText typography="x-large">
                 {t('noQuestionsFound')}
-              </Text>
+              </LabelText>
             :
               questions.map((elm, i) => 
                 <QuestionsBox
@@ -321,14 +295,7 @@ export default function FAQ({ faqs }) {
                   active={closeQuestion}
                 />
             )}
-            <Text
-              marginTop="60px !important"
-              color="#252A32"
-              fontFamily="Roboto"
-              fontSize="16px"
-              fontWeight="400"
-              lineHeight="24px"
-            >
+            <BodyText marginTop="60px !important" >
               {t('contactText')} 
               <Link
                 display="inline"
@@ -341,7 +308,7 @@ export default function FAQ({ faqs }) {
               >
                 {t('contactLink')}
               </Link>
-            </Text>
+            </BodyText>
           </Stack>
         </Stack>
       </VStack>

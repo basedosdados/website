@@ -57,14 +57,16 @@
                 "chars": "8 caracteres",
                 "uppercase": "Uma letra maiúscula",
                 "lowercase": "Uma letra minúscula",
-                "digit": "Um dígito",
+                "digit": "Um número",
                 "special": "Um caractere especial, dentre ! @ # ? ! % & *"
             },
             "confirmPassword": {
                 "required": "Por favor, insira a senha.",
                 "mismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente."
             },
-            "register": "Error ao tentar se cadastrar, tente novamente mais tarde!"
+            "register": "Erro ao tentar se cadastrar, tente novamente mais tarde!",
+            "registerEmail": "Erro ao tentar se cadastrar: o usuário já existe!",
+            "registerUsername": "Erro ao tentar se cadastrar: o nome de usuário já existe!"
         }
     },
     "survey": {
@@ -212,7 +214,7 @@
         "minCharacters": "8 caracteres",
         "uppercaseLetter": "Uma letra maiúscula",
         "lowercaseLetter": "Uma letra minúscula",
-        "digit": "Um dígito",
+        "digit": "Um número",
         "specialCharacter": "um caractere especial, dentre ! @ # ? ! % & *",
         "updatePassword": "Atualizar senha",
         "currentPlan": "Plano atual",
@@ -406,7 +408,7 @@
         "passwordRequirementChars": "8 caracteres",
         "passwordRequirementUppercase": "Uma letra maiúscula",
         "passwordRequirementLowercase": "Uma letra minúscula",
-        "passwordRequirementDigit": "Um dígito",
+        "passwordRequirementDigit": "Um número",
         "passwordRequirementSpecial": "Um caractere especial, dentre ! @ # ? ! % & *",
         "confirmPasswordRequired": "Confirmar a senha é necessário",
         "passwordNoSpaces": "As senhas inseridas não podem conter espaçamentos.",

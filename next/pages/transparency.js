@@ -9,6 +9,12 @@ import { useRouter } from "next/router";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
+
+import Button from "../components/atoms/Button";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 import Link from "../components/atoms/Link";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
@@ -44,45 +50,6 @@ export default function Transparency({ pages }) {
     )
   }
 
-  const Display = ({ children, ...props }) => (
-    <Text
-      fontFamily="Roboto"
-      fontWeight="500"
-      fontSize="50px"
-      lineHeight="60px"
-      color="#2B8C4D"
-      {...props}
-    >
-      {children}
-    </Text>
-  );
-
-  const TitleSection = ({ children, ...props }) => (
-    <Text
-      fontFamily="Roboto"
-      fontWeight="500"
-      fontSize="28px"
-      lineHeight="42px"
-      color="#252A32"
-      {...props}
-    >
-      {children}
-    </Text>
-  );
-
-  const BodyText = ({ children, ...props }) => (
-    <Text
-      fontFamily="Roboto"
-      fontWeight="400"
-      fontSize="18px"
-      lineHeight="26px"
-      color="#464A51"
-      {...props}
-    >
-      {children}
-    </Text>
-  );
-
   const GraphicsBox = ({ text, url, ...props }) => {
     return (
       <Box
@@ -96,19 +63,14 @@ export default function Transparency({ pages }) {
         {...props}
       >
         {text &&
-          <Text
+          <TitleText
             width="100%"
-            fontFamily="Roboto"   
             textAlign={{base: "start", md: "center"}}
-            fontSize="24px"
-            lineHeight="36px"
-            fontWeight="500"
             minHeight="30px"
             marginBottom={{base: "0px", lg: "32px"}}
-            color="#252A32"
           >
             {text}
-          </Text>
+          </TitleText>
         }
 
         <iframe
@@ -132,6 +94,7 @@ export default function Transparency({ pages }) {
       {...props}
     >
       <Link
+        width="fit-content"
         target="_blank"
         color="#0068C5"
         _hover={{color: "#0057A4"}}
@@ -179,8 +142,8 @@ export default function Transparency({ pages }) {
             <Text as="span">{t('mainTitle2')}</Text>
             <Text as="span">{t('mainTitle3')}</Text>
           </Display>
-          <BodyText paddingBottom="24px" dangerouslySetInnerHTML={{ __html: t('mainDescription1') }} />
-          <BodyText paddingBottom="24px">{t('mainDescription2')}</BodyText>
+          <BodyText typography="large" color="#464A51" paddingBottom="24px" dangerouslySetInnerHTML={{ __html: t('mainDescription1') }} />
+          <BodyText typography="large" color="#464A51" paddingBottom="24px">{t('mainDescription2')}</BodyText>
         </Stack>
 
         <Stack 
@@ -204,11 +167,12 @@ export default function Transparency({ pages }) {
           display={{base: "flex", md: "none"}}
           width="100%"
         >
-          <TitleSection
+          <TitleText
+            typography="large"
             paddingBottom="40px"
           >
             {t('survivalIndicator')}
-          </TitleSection>
+          </TitleText>
         </Stack>
 
         <Stack 
@@ -231,16 +195,17 @@ export default function Transparency({ pages }) {
           paddingTop={{base: "24px", lg: "0px"}}
           spacing={0}
         >
-          <TitleSection
+          <TitleText
+            typography="large"
             display={{base: "none", md: "flex"}}
             paddingBottom={{base: "8px", lg: "24px"}}
           >
             {t('survivalIndicator')}
-          </TitleSection>
-          <BodyText paddingBottom="24px">
+          </TitleText>
+          <BodyText typography="large" color="#464A51" paddingBottom="24px">
             {t('survivalDescription1')}
           </BodyText>
-          <BodyText paddingBottom="24px">
+          <BodyText typography="large" color="#464A51" paddingBottom="24px">
             {t('survivalDescription2')}
           </BodyText>
         </Stack>
@@ -252,15 +217,18 @@ export default function Transparency({ pages }) {
         paddingX="24px"
         alignItems={{base: "start", md: "center"}}
       >
-        <TitleSection
+        <TitleText
+          typography="large"
           textAlign={{base: "start", md: "center"}}
           paddingBottom={{base: "24px", md: "8px"}}
         >
           {t('accountingData')}
-        </TitleSection>
+        </TitleText>
         <BodyText
+          typography="large"
           display={{base: "block", md:"flex"}}
           flexDirection="column"
+          color="#464A51"
           textAlign={{base: "start", md: "center"}}
           paddingBottom={{base: "24px", md: "16px"}}
         >
@@ -272,20 +240,10 @@ export default function Transparency({ pages }) {
           target="_blank"
           href="/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9"
         >
-          <Box
-            as="p"
-            target="_self"
-            display="flex"
-            alignItems="center"
+          <Button
             height="54px"
-            width="fit-content"
-            borderRadius="8px"
             backgroundColor="#0D99FC"
             padding="10px 16px"
-            cursor="pointer"
-            color="#FFF"
-            fontFamily="Roboto"
-            fontWeight="500"
             fontSize="20px"
             lineHeight="30px"
             _hover={{
@@ -293,7 +251,7 @@ export default function Transparency({ pages }) {
             }}
           >
             {t('accessButton')}
-          </Box>
+          </Button>
         </Link>
       </SectionBox>
 
@@ -319,14 +277,10 @@ export default function Transparency({ pages }) {
           />
         </Stack>
 
-        <Text
+        <BodyText
           marginRight="24px"
           paddingTop="40px"
           textAlign={{base: "start", md: "end"}}
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="16px"
-          lineHeight="24px"
           color="#464A51"
         >
           {t('fullDashboard')} <Link
@@ -338,7 +292,7 @@ export default function Transparency({ pages }) {
           fontSize="16px"
           fontWeight="400"
           > {t('here')}</Link>.
-        </Text>
+        </BodyText>
       </SectionBox>
 
       <SectionBox
@@ -346,11 +300,12 @@ export default function Transparency({ pages }) {
         flexDirection="column"
         paddingX="24px"
       >
-        <TitleSection
+        <TitleText
+          typography="large"
           paddingBottom="24px"
         >
           {t('statuteReports')}
-        </TitleSection>
+        </TitleText>
 
         <Stack
           width="100%"
@@ -358,11 +313,11 @@ export default function Transparency({ pages }) {
           justifyContent="space-between"
           spacing={0}
         >
-          <BodyText paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
+          <BodyText typography="large" color="#464A51" paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
             {t('statuteDescription')}
           </BodyText>
         
-          <BodyText paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
+          <BodyText typography="large" color="#464A51" paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
             {t('reportsDescription')}
           </BodyText>
         </Stack>
@@ -412,21 +367,19 @@ export default function Transparency({ pages }) {
             maxWidth={{ base: "100%", lg: "580px" }}
             spacing={0}
           >
-            <Text
+            <TitleText
+              typography="large"
               display={{base: "block", md:"flex"}}
               flexDirection="column"
               paddingBottom={{base: "20px", lg: "24px"}}
               maxWidth={{ base: "100%", lg: "400px" }}
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="28px"
-              lineHeight="42px"
               color="#FFF"
             >
               {t('supportTitle1')}
               {t('supportTitle2')}
-            </Text>
+            </TitleText>
             <BodyText 
+              typography="large"
               paddingBottom="24px"
               color="#FFF"
             >
@@ -437,20 +390,10 @@ export default function Transparency({ pages }) {
               target="_blank"
               href="/#support"
             >
-              <Box
-                as="p"
-                target="_self"
-                display="flex"
-                alignItems="center"
+              <Button
                 height="54px"
-                width="fit-content"
-                borderRadius="8px"
                 backgroundColor="#0D99FC"
                 padding="10px 16px"
-                cursor="pointer"
-                color="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
                 fontSize="20px"
                 lineHeight="30px"
                 _hover={{
@@ -458,7 +401,7 @@ export default function Transparency({ pages }) {
                 }}
               >
                 {t('supportButton')}
-              </Box>
+              </Button>
             </Link>
           </Stack>
 

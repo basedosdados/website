@@ -1,7 +1,6 @@
 import {
   Box,
   Stack,
-  Text,
   Progress,
   Spinner
 } from "@chakra-ui/react";
@@ -10,6 +9,8 @@ import cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 
 import Button from "../../components/atoms/Button";
+import Display from "../../components/atoms/Text/Display";
+import LabelText from "../../components/atoms/Text/LabelText";
 import { MainPageTemplate } from "../../components/templates/main";
 import { triggerGAEvent } from "../../utils";
 
@@ -228,30 +229,23 @@ export default function Survey() {
         spacing={0}
         marginY="40px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="36px"
-          lineHeight="48px"
+        <Display
+          typography="small"
           marginY="64px"
-          color="#252A32"
         >
           {question[index].question}
-        </Text>
+        </Display>
 
         {err && (
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="28px"
+          <LabelText
+            typography="large"
             marginBottom="40px !important"
             alignItems="center"
             gap="8px"
             color="#BF3434"
           >
             <Exclamation fill="#BF3434" /> {err}
-          </Text>
+          </LabelText>
         )}
 
         <Stack

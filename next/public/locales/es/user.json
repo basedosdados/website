@@ -57,14 +57,16 @@
                 "chars": "8 caracteres",
                 "uppercase": "Una letra mayúscula",
                 "lowercase": "Una letra minúscula",
-                "digit": "Un dígito",
+                "digit": "Un numero",
                 "special": "Un carácter especial, entre ! @ # ? ! % & *"
             },
             "confirmPassword": {
                 "required": "Es necesario confirmar la contraseña.",
                 "mismatch": "La contraseña ingresada no coincide con la contraseña creada en el campo anterior. Por favor, verifique si no hay errores de escritura e intente nuevamente."
             },
-            "register": "Error al intentar registrarse, ¡intente nuevamente más tarde!"
+            "register": "Error al intentar registrarse, ¡intente nuevamente más tarde!",
+            "registerEmail": "Error al intentar registrarse: ¡el usuario ya existe!",
+            "registerUsername": "Error al intentar registrarse: ¡el nombre de usuario ya existe!"
         }
     },
     "username": {
@@ -110,7 +112,7 @@
         "minCharacters": "Al menos 8 caracteres",
         "uppercaseLetter": "Una letra mayúscula",
         "lowercaseLetter": "Una letra minúscula",
-        "digit": "Un número",
+        "digit": "Un numero",
         "specialCharacter": "Un carácter especial (!@#$%^&*)",
         "updatePassword": "Actualizar contraseña",
         "currentPlan": "Plan actual",
@@ -284,7 +286,7 @@
         "passwordRequirementChars": "8 caracteres",
         "passwordRequirementUppercase": "Una letra mayúscula",
         "passwordRequirementLowercase": "Una letra minúscula",
-        "passwordRequirementDigit": "Un dígito",
+        "passwordRequirementDigit": "Un numero",
         "passwordRequirementSpecial": "Un carácter especial, entre ! @ # ? ! % & *",
         "confirmPasswordRequired": "Es necesario confirmar la contraseña",
         "passwordNoSpaces": "Las contraseñas ingresadas no pueden contener espacios.",

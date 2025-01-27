@@ -57,14 +57,16 @@
                 "chars": "8 characters",
                 "uppercase": "An uppercase letter",
                 "lowercase": "A lowercase letter",
-                "digit": "A digit",
+                "digit": "A number",
                 "special": "A special character, among ! @ # ? ! % & *"
             },
             "confirmPassword": {
                 "required": "Confirming the password is required.",
                 "mismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again."
             },
-            "register": "Error trying to register, try again later!"
+            "register": "Error trying to register, try again later!",
+            "registerEmail": "Error while trying to register: the user already exists!",
+            "registerUsername": "Error while trying to register: the username already exists!"
         }
     },
     "survey": {
@@ -393,7 +395,7 @@
         "passwordRequirementChars": "8 characters",
         "passwordRequirementUppercase": "An uppercase letter",
         "passwordRequirementLowercase": "A lowercase letter",
-        "passwordRequirementDigit": "A digit",
+        "passwordRequirementDigit": "A number",
         "passwordRequirementSpecial": "A special character, among ! @ # ? ! % & *",
         "confirmPasswordRequired": "Confirming the password is required",
         "passwordNoSpaces": "Passwords entered cannot contain spaces.",
