@@ -4,6 +4,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from 'next-i18next';
+import BodyText from "./Text/BodyText";
 
 export default function ReadMore({ children, id, ...props}) {
   const [isReadMore, setIsReadMore] = useState(false)
@@ -72,23 +73,20 @@ export default function ReadMore({ children, id, ...props}) {
         }
       </Text>
       {isOverflowing &&
-        <Text
+        <BodyText
+          typography="small"
           display={isReadMore ? "none" : "flex"}
           onClick={toggleReadMore}
           cursor="pointer"
           _hover={{color: "#0057A4"}}
           color="#0068C5"
-          fontFamily="Roboto"
-          fontSize="14px"
-          fontWeight="400"
-          lineHeight="20px"
           backgroundColor="#FFF"
           position="absolute"
           bottom="0"
           right="0"
         >
-          <span style={{color:"#464A51", marginRight:"4px"}}>...</span>{t('readMore')}
-        </Text>
+          <Text as="span" color="#464A51" marginRight="4px">...</Text>{t('readMore')}
+        </BodyText>
       }
     </Flex>
   )

@@ -1,8 +1,8 @@
 import {
   Stack,
   Box,
-  Text,
 } from "@chakra-ui/react";
+import BodyText from "../atoms/Text/BodyText";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import WarningIcon from "../../public/img/icons/warningIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
@@ -85,17 +85,13 @@ export function AlertDiscalimerBox({ type = "info", text, children, ...props }) 
           />
         }
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
+        <BodyText
+          typography="small"
           whiteSpace={{base: "normal", lg:"break-spaces"}}
         >
           {text}
           {children}
-        </Text>
+        </BodyText>
       </Stack>
     </Box>
   )

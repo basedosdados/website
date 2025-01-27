@@ -1,12 +1,13 @@
 import {
   Stack,
-  Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
+import Display from "../../components/atoms/Text/Display";
+import BodyText from "../../components/atoms/Text/BodyText";
 
 import { MainPageTemplate } from "../../components/templates/main";
 
@@ -75,63 +76,47 @@ export default function CheckEmail() {
       >
         <EmailConfirmImage justifyContent="center" marginBottom="8px"/>
 
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="36px"
-          lineHeight="48px"
-          color="#252A32"
+        <Display
+          typography="small"
           textAlign="center"
-        >{t('checkEmail.confirmEmail')}</Text>
+        >{t('checkEmail.confirmEmail')}</Display>
 
         <Stack spacing="16px">
-          <Text
+          <BodyText
+            typography="large"
             color= "#464A51"
-            fontFamily= "Roboto"
-            fontWeight= "400"
-            fontSize= "18px"
-            lineHeight= "26px"
             textAlign="center"
           >
             {t('checkEmail.sentConfirmation')}
-          </Text>
+          </BodyText>
 
-          <Text
+          <BodyText
+            typography="large"
             textAlign="center"
-            color= "#252A32"
-            fontFamily= "Roboto"
             fontWeight= "500"
-            fontSize= "18px"
-            lineHeight= "26px"
           >
             {email}
-          </Text>
+          </BodyText>
         </Stack>
 
         <Stack spacing="8px">
-          <Text
+          <BodyText
+            typography="large"
             textAlign="center"
             color= "#464A51"
-            fontFamily= "Roboto"
-            fontWeight= "400"
-            fontSize= "18px"
-            lineHeight= "26px"
           >
             {t('checkEmail.checkInbox')}
-          </Text>
+          </BodyText>
 
-          <Text
+          <BodyText
+            typography="large"
             cursor={forwardingDisabled ? "default" : "pointer"}
             _hover={{color:forwardingDisabled ? "#0068C5" : "#0057A4"}}
             pointerEvents={forwardingDisabled ? "none" : ""}
             textAlign="center"
             color={forwardingDisabled ? "#252A32" : "#0068C5"}
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="18px"
-            lineHeight="26px"
             onClick={() => handleEmailConfirm()}
-          >{forwardingDisabled ? t('checkEmail.waitSeconds', { count }) : t('checkEmail.resendEmail')}</Text>
+          >{forwardingDisabled ? t('checkEmail.waitSeconds', { count }) : t('checkEmail.resendEmail')}</BodyText>
         </Stack>
       </Stack>
     </MainPageTemplate>

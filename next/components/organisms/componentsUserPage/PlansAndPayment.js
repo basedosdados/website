@@ -17,6 +17,10 @@ import { useTranslation } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
+import Display from "../../atoms/Text/Display";
+import TitleText from "../../atoms/Text/TitleText";
+import LabelText from "../../atoms/Text/LabelText";
+import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { CardPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
@@ -224,13 +228,10 @@ export default function PlansAndPayment ({ userData }) {
           :
           <CheckIcon fill="#2B8C4D" width="24px" height="24px" marginRight="8px"/>
         }
-        <Text
+        <BodyText
+          typography="small"
           color="#464A51"
-          fontFamily="Roboto"
-          fontSize="14px"
-          fontWeight="400"
-          lineHeight="20px"
-        >{elm.name}</Text>
+        >{elm.name}</BodyText>
         {elm.tooltip &&
           <Tooltip
             label={elm.tooltip}
@@ -459,26 +460,16 @@ export default function PlansAndPayment ({ userData }) {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
-          <Text
+          <BodyText
+            typography="small"
             width="100%"
-            fontFamily="Roboto"
-            fontWeight="400"
             color="#2B8C4D"
-            fontSize="14px"
-            lineHeight="20px"
           >
             {t('username.step2of2')}
-          </Text>
-          <Text
-            width="100%"
-            fontFamily="Roboto"
-            fontWeight="500"
-            color="#252A32"
-            fontSize="24px"
-            lineHeight="36px"
-          >
+          </BodyText>
+          <TitleText width="100%">
             {t('username.payment')}
-          </Text>
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -509,21 +500,11 @@ export default function PlansAndPayment ({ userData }) {
                 gap="8px"
                 width="100%"
               >
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="16px"
-                  lineHeight="24px"
-                  color="#252A32"
-                >
+                <LabelText>
                   {checkoutInfos?.productName}
-                </Text>
-                <Text
+                </LabelText>
+                <BodyText
                   cursor="pointer"
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="16px"
-                  lineHeight="24px"
                   color="#0068C5"
                   _hover={{color: "#0057A4"}}
                   marginLeft="auto"
@@ -534,7 +515,7 @@ export default function PlansAndPayment ({ userData }) {
                     setValueCoupon("")
                     PlansModal.onOpen()
                   }}
-                >{t('username.changePlan')}</Text>
+                >{t('username.changePlan')}</BodyText>
               </Box>
 
               <Box
@@ -561,30 +542,22 @@ export default function PlansAndPayment ({ userData }) {
                         onChange={() => changeIntervalPlanCheckout()}
                       />
                   }
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="400"
-                    fontSize="16px"
-                    lineHeight="24px"
-                    color="#252A32"
-                  >
+                  <BodyText>
                     {t('username.annualDiscount')}
-                  </Text>
+                  </BodyText>
                 </Box>
 
-                <Text
+                <TitleText
+                  typography="small"
                   as="span"
                   color="#2B8C4D"
                   backgroundColor="#D5E8DB"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  lineHeight="28px"
                   padding="2px 4px"
                   borderRadius="4px"
                   height="32px"
                 >
                   {t('username.save20')}
-                </Text>
+                </TitleText>
               </Box>
             </Stack>
 
@@ -593,15 +566,9 @@ export default function PlansAndPayment ({ userData }) {
               spacing={0}
               gap="8px"
             >
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="16px"
-                lineHeight="24px"
-                color="#252A32"
-              >
+              <LabelText>
                 {t('username.discountCoupon')}
-              </Text>
+              </LabelText>
 
               <Box
                 display="flex"
@@ -659,13 +626,10 @@ export default function PlansAndPayment ({ userData }) {
               </Box>
 
               {errCoupon && 
-                <Text
+                <BodyText
+                  typography="small"
                   display="flex"
                   flexDirection="row"
-                  fontFamily="Roboto"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  fontWeight="400"
                   color="#BF3434"
                   gap="8px"
                   height="24px"
@@ -676,20 +640,17 @@ export default function PlansAndPayment ({ userData }) {
                     height="21px"
                     fill="#BF3434"
                   /> {t('username.enterValidCoupon')}
-                </Text>
+                </BodyText>
               }
             </Stack>
 
-            <Text
+            <BodyText
               display={hasSubscribed ? "none" : "flex"}
               fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
               color="#464A51"
             >
               {t('username.trialPeriod')}
-            </Text>
+            </BodyText>
 
             <Divider borderColor="#DEDFE0" />
 
@@ -718,15 +679,9 @@ export default function PlansAndPayment ({ userData }) {
             </Grid>
 
             {(couponInfos?.duration === "once" || couponInfos?.duration === "repeating") &&
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="16px"
-                lineHeight="24px"
-                color="#464A51"
-              >
+              <BodyText color="#464A51">
                 {t('username.couponDuration', { returnObjects: true })[0]}{couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}{t('username.couponDuration', { returnObjects: true })[1]}{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
-              </Text>
+              </BodyText>
             }
 
             <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
@@ -752,15 +707,9 @@ export default function PlansAndPayment ({ userData }) {
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#252A32"
-            >
+            <LabelText>
               {t('username.paymentDetails')}
-            </Text>
+            </LabelText>
             <PaymentSystem
               userData={userData}
               plan={plan}
@@ -801,16 +750,13 @@ export default function PlansAndPayment ({ userData }) {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0}>
-          <Text
+          <BodyText
+            typography="small"
             width="100%"
-            fontFamily="Roboto"
-            fontWeight="400"
             color="#2B8C4D"
-            fontSize="14px"
-            lineHeight="20px"
           >
             {t('username.step1of2')}
-          </Text>
+          </BodyText>
           <ModalCloseButton
             fontSize="14px"
             top="28px"
@@ -820,39 +766,22 @@ export default function PlansAndPayment ({ userData }) {
         </Stack>
 
         <Stack marginBottom={{base: "24px", lg: "285px !important"}}>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            color="#252A32"
-            fontSize="24px"
-            lineHeight="36px"
-          >
+          <TitleText>
             {t('username.BQEmail')}
-          </Text>
+          </TitleText>
 
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
+          <BodyText
             color="#464A51"
-            fontSize="16px"
-            lineHeight="24px"
             marginBottom="32px !important"
           >
             {t('username.BQEmailDescription1')}
             <Text as="span" fontWeight="500">{t('username.BQEmailDescription2')}</Text> 
             {t('username.BQEmailDescription3')}
-          </Text>
+          </BodyText>
 
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            color="#252A32"
-            fontSize="16px"
-            lineHeight="24px"
-            marginBottom="8px !important"
-          >
+          <LabelText marginBottom="8px !important">
             {t('username.BQEmail')}
-          </Text>
+          </LabelText>
 
           <Stack
             spacing={0}
@@ -880,13 +809,10 @@ export default function PlansAndPayment ({ userData }) {
           </Stack>
 
           {errEmailGCP && 
-            <Text
+            <BodyText
+              typography="small"
               display="flex"
               flexDirection="row"
-              fontFamily="Roboto"
-              fontSize="14px"
-              lineHeight="20px"
-              fontWeight="400"
               color="#BF3434"
               gap="8px"
               height="24px"
@@ -897,7 +823,7 @@ export default function PlansAndPayment ({ userData }) {
                 height="21px"
                 fill="#BF3434"
               /> {t('username.pleaseEnterValidEmail')}
-            </Text>
+            </BodyText>
           }
         </Stack>
 
@@ -972,27 +898,15 @@ export default function PlansAndPayment ({ userData }) {
             height="64px"
             fill="#34A15A"
           />
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >
+          <TitleText>
             {t('username.congratulations')}
-          </Text>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
-            color="#464A51"
-          >
+          </TitleText>
+          <BodyText color="#464A51">
             {t('username.BQEmailDescription4')} <Text as="span" fontWeight="500">{emailGCP}</Text>.
             {t('username.BQEmailDescription5')}
 
             {t('username.BQEmailDescription6')} <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>{t('username.BQEmailDescription7')}</Text>
-          </Text>
+          </BodyText>
         </Stack>
 
         <Stack
@@ -1058,18 +972,9 @@ export default function PlansAndPayment ({ userData }) {
             height="64px"
             fill="#BF3434"
           />
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.paymentFailed')}</Text>
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
+          <TitleText>{t('username.paymentFailed')}</TitleText>
+          <BodyText
+            typography="small"
             color="#464A51"
             marginBottom="8px"
           >
@@ -1080,16 +985,13 @@ export default function PlansAndPayment ({ userData }) {
               _hover={{
                 color: "#0057A4"
               }}
-              fontFamily="Roboto"
               fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
               href="/contact"
               target="_self"
               marginLeft="2px"
-              >{t('username.contactUs')}</Link>
+            >{t('username.contactUs')}</Link>
             .
-          </Text>
+          </BodyText>
         </Stack>
 
         <Stack
@@ -1124,17 +1026,12 @@ export default function PlansAndPayment ({ userData }) {
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
-          <Text
+          <TitleText
             width="100%"
-            fontFamily="Roboto"
-            fontWeight="500"
-            color="#252A32"
-            fontSize="24px"
-            lineHeight="36px"
             paddingLeft="10px"
           >
             {t('username.comparePlans')}
-          </Text>
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1162,33 +1059,29 @@ export default function PlansAndPayment ({ userData }) {
               value={toggleAnual}
               onChange={() => setToggleAnual(!toggleAnual)}
             />
-            <Text
+            <LabelText
+              typography="large"
               position="relative"
               top="-2px"
               gap="8px"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="18px"
-              lineHeight="20px"
               display="flex"
+              fontWeight="400"
               alignItems="center"
               textAlign="center"
-              color="#252A32"
             >
               {t('username.annualDiscount')}
-              <Text
+              <LabelText
+                typography="large"
                 as="span"
                 color="#2B8C4D"
                 backgroundColor="#D5E8DB"
-                fontWeight="500"
-                lineHeight="28px"
                 padding="2px 4px"
                 borderRadius="4px"
                 height="32px"
               >
                 {t('username.save20')}
-              </Text>
-            </Text>
+              </LabelText>
+            </LabelText>
           </Box>
 
           <Stack
@@ -1279,13 +1172,7 @@ export default function PlansAndPayment ({ userData }) {
           marginBottom="16px"
           height={{base: "100%", lg: "fit-content"}}
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.planChange')}</Text>
+          <TitleText>{t('username.planChange')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1327,14 +1214,7 @@ export default function PlansAndPayment ({ userData }) {
           spacing={0}
           marginBottom="16px"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-            marginRight="24px"
-          >{t('username.confirmPlanCancellation')}</Text>
+          <TitleText marginRight="24px">{t('username.confirmPlanCancellation')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -1411,31 +1291,18 @@ export default function PlansAndPayment ({ userData }) {
               gap="8px"
               alignItems="center"
             >
-              <Text
-                color="#252A32"
-                fontFamily="Roboto"
-                fontSize="18px"
-                fontWeight="500"
-                lineHeight="28px"
-              >{controlResource().title}</Text>
-              <Text
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                letterSpacing="0.1px"
+              <LabelText typography="large">{controlResource().title}</LabelText>
+              <LabelText
+                typography="x-small"
                 color="#71757A"
               >
                 {formattedPlanInterval(subscriptionInfo?.planInterval)}
-              </Text>
+              </LabelText>
             </Box>
 
             <Box display={subscriptionInfo ? "flex" : "none"}>
-              <Text
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
+              <BodyText
+                typography="small"
                 color="#71757A"
               >
                 {subscriptionInfo?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}<Text
@@ -1445,7 +1312,7 @@ export default function PlansAndPayment ({ userData }) {
                 >
                   {formatTimeStamp(subscriptionInfo?.canceledAt ? subscriptionInfo?.canceledAt : subscriptionInfo?.nextBillingCycle)}
                 </Text>
-              </Text>
+              </BodyText>
             </Box>
           </Stack>
 
@@ -1470,14 +1337,11 @@ export default function PlansAndPayment ({ userData }) {
           flexDirection={{base: "column", lg: "row"}}
         >
           <Stack minWidth="350px" spacing="8px">
-            <Text
+            <BodyText
+              typography="small"
               color="#464A51"
-              fontFamily="Roboto"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="20px"
               marginBottom="8px"
-            >{t('username.includes')}</Text>
+            >{t('username.includes')}</BodyText>
             {defaultResource.resources.map((elm, index) => {
               if(elm === "") return
               return <ListFeature elm={elm} index={index} key={index}/>
@@ -1501,14 +1365,11 @@ export default function PlansAndPayment ({ userData }) {
 
           <Stack spacing="8px">
             {subscriptionInfo?.stripeSubscription !== "bd_pro_empresas" &&
-              <Text
+              <BodyText
+                typography="small"
                 color="#464A51"
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="20px"
                 marginBottom="8px"
-              >{t('username.doesNotInclude')}</Text>}
+              >{t('username.doesNotInclude')}</BodyText>}
 
               {!planActive && 
                 <>
@@ -1528,15 +1389,12 @@ export default function PlansAndPayment ({ userData }) {
               }
 
             {!subscriptionInfo?.isActive &&
-              <Text
+              <BodyText
+                typography="small"
                 as="button"
                 display="flex"
                 justifyContent="start"
-                fontFamily="Roboto"
-                lineHeight="20px"
                 color="#0068C5"
-                fontSize="14px"
-                fontWeight="400"
                 _hover={{color: "#0057A4"}}
                 marginTop="16px !important"
                 onClick={() => {
@@ -1545,7 +1403,7 @@ export default function PlansAndPayment ({ userData }) {
                 }}
               >
                 {t('username.viewAllAndComparePlans')}
-              </Text>
+              </BodyText>
             }
           </Stack>
         </Stack>

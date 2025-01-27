@@ -1,7 +1,6 @@
 import {
   Stack,
   HStack,
-  Text,
   Box,
   Tooltip,
   useDisclosure,
@@ -12,6 +11,8 @@ import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
+import TitleText from "../atoms/Text/TitleText";
+import BodyText from "../atoms/Text/BodyText";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
@@ -30,16 +31,13 @@ export function TemporalCoverageBar ({ value }) {
 
   const TextData = ({ string, ...style }) => {
     return (
-      <Text
+      <BodyText
+        typography="small"
         color="#464A51"
-        fontSize="14px"
-        lineHeight="20px"
-        fontWeight="400"
-        fontFamily="Roboto"
         {...style}
       >
         {string}
-      </Text>
+      </BodyText>
     )
   }
 
@@ -80,17 +78,13 @@ export function TemporalCoverageBar ({ value }) {
         isCentered={false}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Text
+          <TitleText
             width="100%"
-            fontFamily="Roboto"
             fontWeight="400"
-            color="#252A32"
-            fontSize="24px"
             textAlign="center"
-            lineHeight="40px"
           >
             {t('temporalCoverageBar.comparePlans')}
-          </Text>
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"

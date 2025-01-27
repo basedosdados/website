@@ -1,7 +1,6 @@
 import {
   Stack,
   Box,
-  Text,
   FormControl,
   useDisclosure,
   ModalCloseButton,
@@ -10,6 +9,8 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Link from "../../atoms/Link";
+import TitleText from "../../atoms/Text/TitleText";
+import BodyText from "../../atoms/Text/BodyText";
 
 import {
   LabelTextForm,
@@ -148,13 +149,7 @@ export default function NewPassword({ userInfo }) {
             height="90px"
             fill="#34A15A"
           />
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="24px"
-            lineHeight="36px"
-            color="#252A32"
-          >{t('username.passwordChangedSuccessfully')}</Text>
+          <TitleText>{t('username.passwordChangedSuccessfully')}</TitleText>
         </Stack>
 
         <Button
@@ -239,13 +234,10 @@ export default function NewPassword({ userInfo }) {
               />
             }
           />
-          <Text 
+          <BodyText
+            typography="small" 
             margin="8px 0"
             color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
-            fontFamily="Roboto"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="20px"
             display="flex"
             flexDirection="row"
             gap="8px"
@@ -257,7 +249,7 @@ export default function NewPassword({ userInfo }) {
               height="18px"
               fill="#BF3434"
             /> {t('username.passwordRequirements')}
-          </Text>
+          </BodyText>
 
           <List
             fontFamily="Roboto"

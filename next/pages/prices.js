@@ -1,7 +1,6 @@
 import {
   Box,
   Stack,
-  Text,
   Tooltip,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -13,8 +12,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Toggle from "../components/atoms/Toggle";
 import { MainPageTemplate } from "../components/templates/main";
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
+import Display from "../components/atoms/Text/Display";
+import TitleText from "../components/atoms/Text/TitleText";
+import LabelText from "../components/atoms/Text/LabelText";
+import BodyText from "../components/atoms/Text/BodyText";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
@@ -46,8 +48,8 @@ export const CardPrice = ({
       display="flex"
       flexDirection="column"
       position="relative"
-      width={isMobileMod() ? "100%" : "272px"}
-      boxSizing={isMobileMod() ? "inherit" : "content-box"}
+      width={{base: "100%", lg: "272px"}}
+      boxSizing={{base: "inherit", lg: "content-box"}}
       borderRadius="16px"
       boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       padding="40px 24px"
@@ -64,29 +66,23 @@ export const CardPrice = ({
           alignItems="center"
           marginBottom="8px"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="28px"
-            lineHeight="42px"
+          <TitleText
+            typography="large"
             textAlign="center"
-            color="#252A32"
           >
             {title}
-          </Text>
+          </TitleText>
         </Box>
 
-        <Text
-          fontFamily="Roboto"
+        <LabelText
+          typography="large"
           fontWeight="400"
-          fontSize="18px"
-          lineHeight="28px"
           textAlign="center"
           color="#71757A"
           marginBottom="24px"
         >
           {subTitle}
-        </Text>
+        </LabelText>
 
         <Box
           justifyContent="center"
@@ -101,39 +97,24 @@ export const CardPrice = ({
             height="60px"
             alignItems="center"
           >
-            <Text
-              color="#252A32"
-              fontSize="50px"
-              fontWeight="500"
-              lineHeight="60px"
-              fontFamily="Roboto"
-              textAlign="center"
-            >R$ {anualPlan ? price/12 : price}</Text>
-            <Text
+            <Display textAlign="center">R$ {anualPlan ? price/12 : price}</Display>
+            <TitleText
+              typography="small"
               position="relative"
               top="16px"
               right="-4px"
-              color="#252A32"
-              fontSize="18px"
-              fontWeight="500"
-              lineHeight="28px"
-              fontFamily="Roboto"
               textAlign="center"
-            >{t('perMonth')}</Text>
+            >{t('perMonth')}</TitleText>
           </Box>
 
-          <Text
+          <BodyText
             height="24px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
             color="#464A51"
             marginTop="24px"
             alignItems="center"
           >{anualPlan && t('annualBillingMessage', {
             price: price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })
-          })}</Text>
+          })}</BodyText>
         </Box>
       </Box>
 
@@ -145,17 +126,13 @@ export const CardPrice = ({
         justifyContent="space-between"
       >
         <Box marginBottom="24px">
-          <Text
+          <BodyText
             color="#71757A"
-            fontSize="16px"
-            fontWeight="400"
-            lineHeight="24px"
-            fontFamily="Roboto"
             alignItems="center"
             marginBottom="16px"
           >
             {textResource}
-          </Text>
+          </BodyText>
 
           {resources.map((elm, i) => {
             return (
@@ -173,16 +150,12 @@ export const CardPrice = ({
                   height="24px"
                   fill="#2B8C4D"
                 />
-                <Text
-                  fontFamily="Roboto"
-                  fontSize="16px"
-                  lineHeight="24px"
-                  fontWeight="400"
+                <BodyText
                   alignItems="center"
                   color="#464A51"
                 >
                   {elm.name}
-                </Text>
+                </BodyText>
                 {elm.tooltip &&
                   <Tooltip
                     label={elm.tooltip}
@@ -214,7 +187,8 @@ export const CardPrice = ({
           gap="16px"
         >
           {button.isCurrentPlan ? (
-            <Box
+            <LabelText
+              typography="x-large"
               display="flex"
               justifyContent="center"
               alignItems="center"
@@ -223,12 +197,9 @@ export const CardPrice = ({
               textAlign="center"
               color="#7D7D7D"
               cursor="default"
-              fontWeight="500"
-              lineHeight="30px"
-              fontFamily="Roboto"
             >
               {t('currentPlan')}
-            </Box>
+            </LabelText>
           ) : (
             <Link
               href={button.onClick ? '#' : button.href}
@@ -259,21 +230,17 @@ export const CardPrice = ({
             </Link>
           )}
 
-          <Text 
+          <BodyText 
             display="flex"
             flexDirection="row"
             justifyContent="center"
             textAlign="center"
             color="#71757A"
-            fontWeight="400"
-            fontSize="16px"
-            lineHeight="24px"
-            fontFamily="Roboto"
             height="24px"
           >{t('readThe')}
             <Link href="/terms?section=terms" locale={locale} passHref>
-              <Text
-                as="a"
+              <BodyText
+                as="span"
                 cursor="pointer"
                 marginLeft="4px"
                 target="_blank"
@@ -284,10 +251,10 @@ export const CardPrice = ({
                 }}
               >
                 {t('termsOfService')}
-              </Text>
+              </BodyText>
             </Link>
             .
-          </Text>
+          </BodyText>
         </Box>
       </Box>
     </Box>
@@ -393,35 +360,31 @@ export function SectionPrice() {
           value={toggleAnual}
           onChange={() => setToggleAnual(!toggleAnual)}
         />
-        <Text
+        <LabelText
+          typography="large"
           position="relative"
           top="-2px"
           gap="8px"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="18px"
-          lineHeight="20px"
           display="flex"
+          fontWeight="400"
           alignItems="center"
           textAlign="center"
-          color="#252A32"
         >
           {t('annualDiscount')}
-          <Text
+          <LabelText
+            typography="large"
             as="span"
             color="#2B8C4D"
             backgroundColor="#D5E8DB"
-            fontWeight="500"
-            lineHeight="28px"
             padding="2px 4px"
             borderRadius="4px"
             height="32px"
-          >{t('save20')}</Text>
-        </Text>
+          >{t('save20')}</LabelText>
+        </LabelText>
       </Box>
 
       <Stack
-        display={isMobileMod() ? "flex" : "grid"}
+        display={{base: "flex", lg: "grid"}}
         gridTemplateColumns="repeat(3, 320px)"
         gridTemplateRows="1fr"
         justifyContent="center"
@@ -511,17 +474,13 @@ export default function Price() {
         margin="auto"
         spacing={0}
       >
-        <Text
+        <Display
+          typography="large"
           width="100%"
-          fontFamily="Roboto"
-          fontWeight="500"
-          color="#252A32"
-          fontSize="60px"
           textAlign="center"
-          lineHeight="70px"
         >
           {t('comparePlans')}
-        </Text>
+        </Display>
 
         <SectionPrice/>
       </Stack>

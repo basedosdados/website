@@ -1,10 +1,8 @@
 import {
   VStack,
-  Box,
   Grid,
   GridItem,
   Image,
-  Text,
   Stack,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -14,6 +12,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { capitalize } from 'lodash';
 
+import TitleText from "../../components/atoms/Text/TitleText";
+import LabelText from "../../components/atoms/Text/LabelText";
+import BodyText from "../../components/atoms/Text/BodyText";
 import Link from '../../components/atoms/Link';
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
@@ -131,15 +132,12 @@ export default function DatasetPage ({ dataset, userGuide }) {
 
   const TabSelect = ({ index, onClick, children }) => {
     return (
-      <Box
+      <LabelText
+        typography="small"
         as="div"
         cursor="pointer"
         position="relative"
         top="1px"
-        fontFamily="Roboto"
-        fontWeight="500"
-        fontSize="14px"
-        lineHeight="20px"
         color={tabIndex === index ? "#2B8C4D" :"#71757A"}
         fill={tabIndex === index ? "#2B8C4D" :"#71757A"}
         pointerEvents={tabIndex === index ? "none" : "default"}
@@ -152,7 +150,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
         onClick={onClick}
       >
         {children}
-      </Box>
+      </LabelText>
     )
   }
 
@@ -225,18 +223,15 @@ export default function DatasetPage ({ dataset, userGuide }) {
               gap="8px"
             >
               <GridItem colSpan={5}>
-                <Text
+                <TitleText
+                  typography="large"
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
                   whiteSpace={{base: "inherit", lg:"nowrap"}}
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="28px"
-                  lineHeight="42px"
                 >
                   {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
-                </Text>
+                </TitleText>
               </GridItem>
 
               <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
@@ -246,70 +241,49 @@ export default function DatasetPage ({ dataset, userGuide }) {
               </GridItem>
 
               <GridItem colSpan={5} marginBottom="8px">
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="18px"
-                  lineHeight="28px"
-                  color="#252A32"
+                <LabelText
+                  typography="large"
                   marginBottom="8px"
                 >
                   {t('organization')}
-                </Text>
+                </LabelText>
                 <Link
                   href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
-                  color="#464A51"
-                  fontWeight="400"
                 >
-                  <Text
-                    fontFamily="Roboto"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  <BodyText
+                    typography="small"
+                    color="#464A51"
                   >
                     {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
-                  </Text>
+                  </BodyText>
                 </Link>
               </GridItem>
 
               <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="18px"
-                  lineHeight="28px"
-                  color="#252A32"
+                <LabelText
+                  typography="large"
                   marginBottom="8px"
                 >
                   {t('temporalCoverage')}
-                </Text>
-                <Text
-                  fontFamily="Roboto"
-                  fontWeight="400"
-                  fontSize="14px"
-                  lineHeight="20px"
+                </LabelText>
+                <BodyText
+                  typography="small"
                   color="#464A51"
                 >
                   {dataset.temporalCoverage || t('notProvided')}
-                </Text>
+                </BodyText>
               </GridItem>
 
               {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="18px"
-                    lineHeight="28px"
-                    color="#252A32"
+                  <LabelText
+                    typography="large"
                     marginBottom="8px"
                   >
                     {t('spatialCoverage')}
-                  </Text>
-                  <Text
-                    fontFamily="Roboto"
-                    fontWeight="400"
-                    fontSize="14px"
-                    lineHeight="20px"
+                  </LabelText>
+                  <BodyText
+                    typography="small"
                     color="#464A51"
                   >
                     {dataset?.[`spatialCoverageName${capitalize(locale)}`]
@@ -317,7 +291,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
                           .sort((a, b) => a.localeCompare(b, locale))
                           .join(', ')
                       : t('notProvided')}
-                  </Text>
+                  </BodyText>
                 </GridItem>
               }
             </Grid>

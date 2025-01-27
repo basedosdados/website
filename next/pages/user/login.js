@@ -1,5 +1,4 @@
 import {
-  Text,
   Box,
   Stack,
   FormControl,
@@ -18,6 +17,8 @@ import {
   Button
 } from "../../components/molecules/uiUserPage";
 import Link from "../../components/atoms/Link";
+import Display from "../../components/atoms/Text/Display";
+import BodyText from "../../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../../components/templates/main";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -124,17 +125,12 @@ export default function Login() {
         marginX="27px"
         spacing={0}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="50px"
-          lineHeight="60px"
-          color="#252A32"
+        <Display
           textAlign="center"
           marginBottom="40px"
         >
           {t('login.title')}
-        </Text>
+        </Display>
 
         {errors.login && 
           <Box
@@ -145,15 +141,12 @@ export default function Login() {
             marginBottom="24px !important"
           >
             <Exclamation width="19px" height="19px" fill="#BF3434"/>
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
+            <BodyText
+              typography="small"
               color="#BF3434"
             >
               {errors.login}
-            </Text>
+            </BodyText>
           </Box>
         }
 
@@ -230,17 +223,13 @@ export default function Login() {
           </Button>
         </form>
 
-        <Text
+        <BodyText
+          typography="small"
           width="100%"
           display="flex"
           flexDirection="row"
           justifyContent="center"
           textAlign="center"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
         >
           {t('login.noAccount')}
           <Link
@@ -253,7 +242,7 @@ export default function Login() {
             }}
           >{t('login.signUp')}
           </Link>.
-        </Text>
+        </BodyText>
       </Stack>
     </MainPageTemplate>
   )

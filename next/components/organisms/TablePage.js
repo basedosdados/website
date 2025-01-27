@@ -2,19 +2,21 @@ import {
   HStack,
   Stack,
   Box,
-  Text,
   Skeleton,
   SkeletonText,
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
-import Link from "../atoms/Link";
 import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
-import ReadMore from "../atoms/ReadMore";
 import { formatBytes } from "../../utils";
+import Link from "../atoms/Link";
+import ReadMore from "../atoms/ReadMore";
+import TitleText from "../atoms/Text/TitleText";
+import LabelText from "../atoms/Text/LabelText";
+import BodyText from "../atoms/Text/BodyText";
 import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
@@ -66,16 +68,13 @@ export default function TablePage({ id }) {
   const TooltipText = ({ text, info, ...props }) => {
     return (
       <Box>
-        <Text
+        <TitleText
+          typography="small"
           display="flex"
           flexDirection="row"
           alignItems="center"
           gap="8px"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="20px"
-          color="#252A32"
+          {...props}
         >
           {text}
           <Tooltip
@@ -103,7 +102,7 @@ export default function TablePage({ id }) {
               height="16px"
             />
           </Tooltip>
-        </Text>
+        </TitleText>
       </Box>
     )
   }
@@ -148,16 +147,13 @@ export default function TablePage({ id }) {
   const PublishedOrDataCleanedBy = ({ resource }) => {
     if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
       return (
-        <Text
+        <BodyText
+          typography="small"
           marginRight="4px !important"
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
           color="#464A51"
         >
           {t('table.notProvided')}
-        </Text>
+        </BodyText>
       );
     }
 
@@ -167,19 +163,16 @@ export default function TablePage({ id }) {
       <Stack spacing="8px">
         {people.map((person, index) => (
           <HStack key={index} spacing="4px">
-            <Text
+            <BodyText
+              typography="small"
               marginRight="4px !important"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
               color="#464A51"
             >
               {person?.firstName && person?.lastName 
                 ? `${person.firstName} ${person.lastName}`
                 : t('table.notProvided')
               }
-            </Text>
+            </BodyText>
             {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
             {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
             {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
@@ -260,29 +253,21 @@ export default function TablePage({ id }) {
         alignItems={{base: "start", lg: "center"}}
         gap="8px"
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="24px"
-          lineHeight="36px"
-          color="#252A32"
+        <TitleText
           width={{base: "100%", lg:"fit-content"}}
           overflow="hidden"
           textOverflow="ellipsis"
           whiteSpace={{base: "normal", lg:"nowrap"}}
         >
           {resource?.[`name${capitalize(locale)}`] || resource?.name}
-        </Text>
+        </TitleText>
         {resource?.uncompressedFileSize &&
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="12px"
-            lineHeight="18px"
+          <LabelText
+            typography="x-small"
             color="#71757A"
           >
             {`(${formatBytes(resource.uncompressedFileSize)})`}
-          </Text>
+          </LabelText>
         }
       </StackSkeleton>
 
@@ -304,17 +289,11 @@ export default function TablePage({ id }) {
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="300px" height="28px">
+          <TitleText typography="small">
             {t('table.temporalCoverage')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <StackSkeleton
@@ -326,28 +305,19 @@ export default function TablePage({ id }) {
       </Stack>
 
       {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
-        <Stack spacing="12px"  marginBottom="40px !important">
-          <StackSkeleton width="300px" height="20px">
-            <Text
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="18px"
-              lineHeight="20px"
-              color="#252A32"
-            >
+        <Stack spacing="8px"  marginBottom="40px !important">
+          <StackSkeleton width="300px" height="28px">
+            <TitleText typography="small">
               {t('table.spatialCoverage')}
-            </Text>
+            </TitleText>
           </StackSkeleton>
 
           <StackSkeleton
             height="20px"
             width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
           >
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
+            <BodyText
+              typography="small"
               color="#464A51"
             >
               {resource?.[`spatialCoverageName${capitalize(locale)}`]
@@ -355,22 +325,16 @@ export default function TablePage({ id }) {
                     .sort((a, b) => a.localeCompare(b, locale))
                     .join(', ')
                 : t('table.notProvided')}
-            </Text>
+            </BodyText>
           </StackSkeleton>
         </Stack>
       }
 
-      <Stack spacing="12px" marginBottom="40px !important">
-        <StackSkeleton width="200px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="200px" height="28px">
+          <TitleText typography="small">
             {t('table.dataAccess')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <DataInformationQuery
@@ -378,17 +342,11 @@ export default function TablePage({ id }) {
         />
       </Stack>
 
-      <Stack marginBottom="40px !important">
-        <StackSkeleton width="380px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="380px" height="28px">
+          <TitleText typography="small">
             {t('table.dataUpdateFrequency')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <SkeletonText
@@ -399,7 +357,6 @@ export default function TablePage({ id }) {
           spacing="4px"
           skeletonHeight="18px"
           noOfLines={3}
-          marginTop="12px !important"
           isLoaded={!isLoading}
         >
           <Box
@@ -419,38 +376,30 @@ export default function TablePage({ id }) {
               t('table.notProvided')
             }: {t('table.lastUpdateBD')}
             {resource?.updates?.[0]?.frequency &&
-              <Text
+              <LabelText
+                typography="x-small"
                 width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                color="#252A32"
               >
                 {resource?.updates?.[0]?.frequency === 1 ?
                   getUpdateFormat(resource.updates[0].entity.slug)
                 :
                   getUpdateFormat(resource.updates[0].entity.slug, true, resource?.updates?.[0]?.frequency)
                 }
-              </Text>
+              </LabelText>
             }
             {!resource?.updates?.[0]?.frequency &&
-              <Text
+              <LabelText
+                typography="x-small"
                 width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                color="#252A32"
               >
                 {t('table.noUpdateScheduled')}
-              </Text>
+              </LabelText>
             }
           </Box>
           <Box
@@ -471,43 +420,35 @@ export default function TablePage({ id }) {
               t('table.notProvided')
             }: {t('table.lastUpdateRawDataSource')}
             {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
-              <Text
+              <LabelText
+                typography="x-small"
                 width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                color="#252A32"
               >
                 {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency === 1 ?
                   getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)
                 :
                   getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug, true, resource?.rawDataSource?.[0]?.updates?.[0]?.frequency)
                 }
-              </Text>
+              </LabelText>
             :
             !resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency ?
-              <Text
+              <LabelText
+                typography="x-small"
                 width="fit-content"
                 backgroundColor="#EEEEEE"
                 padding="2px 4px"
                 borderRadius="4px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="12px"
-                lineHeight="18px"
-                color="#252A32"
               >
                 {t('table.noUpdateScheduled')}
-              </Text>
+              </LabelText>
               :
               <></>
             }
           </Box>
-          <Text
+          <Box
             display="flex"
             flexDirection={{base: "column", lg: "row"}}
             gap="4px"
@@ -523,42 +464,28 @@ export default function TablePage({ id }) {
               :
               t('table.notProvided')
             }: {t('table.lastCheckRawDataSource')}
-          </Text>
+          </Box>
         </SkeletonText>
       </Stack>
 
-      <Stack marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
-          <Text
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="18px"
-            lineHeight="20px"
-            color="#252A32"
-          >
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="300px" height="28px">
+          <TitleText typography="small">
             {t('table.bigQueryID')}
-          </Text>
+          </TitleText>
         </StackSkeleton>
 
         <StackSkeleton
           height="20px"
           width={resource?.cloudTables ? "fit-content" : "500px"}
-          marginTop="12px !important"
         >
-          <Text
-            as="a"
+          <Link
             id="acessar_o_bigquery_section"
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
             gap="8px"
             href={`https://console.cloud.google.com/bigquery?p=${resource?.cloudTables?.[0]?.gcpProjectId}&d=${resource?.cloudTables?.[0]?.gcpDatasetId}&t=${resource?.cloudTables?.[0]?.gcpTableId}&page=table`}
             target="_blank"
             cursor="pointer"
-            fontFamily="Roboto"
             fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
             color={resource?.cloudTables ? "#0068C5" : "#464A51"}
             pointerEvents={resource?.cloudTables ? "default" : "none"}
             fill="#0068C5"
@@ -577,13 +504,13 @@ export default function TablePage({ id }) {
               width="12px"
               height="12px"
             />
-          </Text>
+          </Link>
         </StackSkeleton>
       </Stack>
 
 
-      <Stack marginBottom="40px !important">
-        <StackSkeleton width="260px" height="20px">
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="260px" height="28px">
           <TooltipText
             text={t("table.partitionsInBigQuery")}
             info={t("table.partitionsTooltip")}
@@ -592,22 +519,18 @@ export default function TablePage({ id }) {
         <StackSkeleton
           height="20px"
           width={resource?.partitions ? "100%" : "200px"}
-          marginTop="12px !important"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
+          <BodyText
+            typography="small"
             color="#464A51"
           >
             {resource?.partitions ? resource.partitions : t('table.notProvided')}
-          </Text>
+          </BodyText>
         </StackSkeleton>
       </Stack>
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="300px" height="20px">
+        <StackSkeleton width="300px" height="28px">
           <TooltipText
             text={t("table.observationLevel")}
             info={t("table.observationLevelTooltip")}
@@ -625,21 +548,18 @@ export default function TablePage({ id }) {
           {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
             <ObservationLevel resource={resource}/>
           :
-            <Text
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
+            <BodyText
+              typography="small"
               color="#464A51"
             >
               {t('table.notProvided')}
-            </Text>
+            </BodyText>
           }
         </Skeleton>       
       </Stack>
 
-      <Stack marginBottom="40px !important">
-        <StackSkeleton width="240px" height="20px">
+      <Stack spacing="8px" marginBottom="40px !important">
+        <StackSkeleton width="240px" height="28px">
           <TooltipText
             text={t("table.auxiliaryFiles")}
             info={t("table.auxiliaryFilesTooltip")}
@@ -648,26 +568,15 @@ export default function TablePage({ id }) {
         <StackSkeleton
           width={resource?.auxiliaryFilesUrl ? "100%" :"178px"}
           height="24px"
-          marginTop="12px !important"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
+          <BodyText
+            typography="small"
             color="#464A51"
           >
             {resource?.auxiliaryFilesUrl ?
-              <Text
-                as="a"
-                display="flex"
-                flexDirection="row"
+              <Link
                 gap="8px"
-                alignItems="center"
-                fontFamily="Roboto"
                 fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
                 color="#0068C5"
                 fill="#0068C5"
                 _hover={{
@@ -681,16 +590,16 @@ export default function TablePage({ id }) {
                   width="16px"
                   height="16px"
                 />
-              </Text>
+              </Link>
             :
               t('table.notProvided')
             }
-          </Text>  
+          </BodyText>  
         </StackSkeleton>
       </Stack>
 
-      <Stack>
-        <StackSkeleton width="240px" height="20px">
+      <Stack spacing="8px">
+        <StackSkeleton width="240px" height="28px">
           <TooltipText
             text={t("table.rawDataSources")}
             info={t("table.rawDataSourcesTooltip")}
@@ -700,13 +609,9 @@ export default function TablePage({ id }) {
         <StackSkeleton
           height="20px"
           width={resource?.rawDataSource?.[0]?.name ? "100%" :"132px"}
-          marginTop="12px !important"
         >
-          <Text
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
+          <BodyText
+            typography="small"
             color="#464A51"
           >
             {resource?.rawDataSource?.[0]?._id ?
@@ -719,10 +624,7 @@ export default function TablePage({ id }) {
                     flexDirection="row"
                     gap="8px"
                     alignItems="center"
-                    fontFamily="Roboto"
                     fontWeight="400"
-                    fontSize="14px"
-                    lineHeight="20px"
                     color="#0068C5"
                     fill="#0068C5"
                     _hover={{
@@ -738,22 +640,16 @@ export default function TablePage({ id }) {
               :
                 t('table.notProvided')
             }
-          </Text>
+          </BodyText>
         </StackSkeleton> 
       </Stack>
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-      <StackSkeleton width="240px" height="20px" marginBottom="20px !important">
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="18px"
-          lineHeight="20px"
-          color="#252A32"
-        >
+      <StackSkeleton width="240px" height="28px" marginBottom="20px !important">
+        <TitleText typography="small">
           {t('table.additionalInformation')}
-        </Text>
+        </TitleText>
       </StackSkeleton>
 
       <SkeletonText
@@ -768,13 +664,7 @@ export default function TablePage({ id }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
-        >{t('table.publishedBy')}</Text>
+        <LabelText typography="small">{t('table.publishedBy')}</LabelText>
         <PublishedOrDataCleanedBy
           resource={resource?.publishedByInfo || t('table.notProvided')}
         />
@@ -792,13 +682,7 @@ export default function TablePage({ id }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
-        >{t('table.dataCleanedBy')}</Text>
+        <LabelText typography="small">{t('table.dataCleanedBy')}</LabelText>
         <PublishedOrDataCleanedBy
           resource={resource?.dataCleanedByInfo || t('table.notProvided')}
         />
@@ -816,20 +700,11 @@ export default function TablePage({ id }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <Text
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          lineHeight="20px"
-          color="#252A32"
-        >{t('table.version')}</Text>
-        <Text
-          fontFamily="Roboto"
-          fontWeight="400"
-          fontSize="14px"
-          lineHeight="20px"
+        <LabelText typography="small">{t('table.version')}</LabelText>
+        <BodyText
+          typography="small"
           color="#464A51"
-        >{resource?.version || t('table.notProvided')}</Text>
+        >{resource?.version || t('table.notProvided')}</BodyText>
       </SkeletonText>
     </Stack>
   )

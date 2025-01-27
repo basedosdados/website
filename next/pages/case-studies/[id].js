@@ -4,7 +4,6 @@ import {
   HStack,
   Box,
   Skeleton,
-  Text
 } from "@chakra-ui/react";
 import Image from 'next/image';
 import { MDXRemote } from "next-mdx-remote";
@@ -13,6 +12,10 @@ import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
+import Display from "../../components/atoms/Text/Display";
+import TitleText from "../../components/atoms/Text/TitleText";
+import LabelText from "../../components/atoms/Text/LabelText";
+import BodyText from "../../components/atoms/Text/BodyText";
 
 import {
   getAllCaseStudies,
@@ -122,38 +125,31 @@ export default function CaseStudies ({ serialize }) {
           href={"/services"}
         >
           <ChevronIcon
-            alt=""
+            alt="back"
             width="16px"
             transform={"rotate(180deg)"}
           />
           {t('backLink')}
         </Link>
 
-        <Text
+        <TitleText
+          typography="large"
           as="h1"
           display={{base: "flex", lg: "none"}}
           margin="0 0 48px !important"
-          fontFamily="Roboto"
-          fontSize="28px"
-          lineHeight="36px"
-          fontWeight="500"
-          color="#252A32"
-        >{frontmatter?.title || ""}</Text>
+        >{frontmatter?.title || ""}</TitleText>
 
         <VStack position="relative" spacing={0} gridGap="16px">
-          <Text
+          <Display
+            typography="small"
             as="h1"
             display={{base: "none", lg: "flex"}}
             position="absolute"
             paddingTop={{base: "80px", lg: "0"}}
-            fontFamily="Roboto"
-            fontSize="36px"
-            lineHeight="48px"
-            fontWeight="500"
             margin="40px 48px"
             color="#FFF"
             zIndex="10"
-          >{frontmatter?.title || ""}</Text>
+          >{frontmatter?.title || ""}</Display>
 
           <Box
             position="relative"
@@ -176,16 +172,15 @@ export default function CaseStudies ({ serialize }) {
           </Box>
 
           {frontmatter.imgDescription && 
-            <Text
+            <BodyText
+              typography="small"
               as="h3"
               width="100%"
-              fontFamily="Roboto"
               textAlign="end"
-              fontSize="14px"
               color="#71757A"
             >
               {frontmatter.imgDescription}
-            </Text>
+            </BodyText>
           }
         </VStack>
 
@@ -224,49 +219,32 @@ export default function CaseStudies ({ serialize }) {
               }
             </Box>
 
-            <Text
-              fontFamily="Roboto"
-              fontSize="16px"
-              color="#252A32"
-              fontWeight="500"
-            >
+            <LabelText>
               {t('about')}
-            </Text>
+            </LabelText>
 
-            <Text
+            <BodyText
               as="h2"
-              fontFamily="Roboto"
               paddingBottom="32px"
-              fontSize="16px"
               color="#71757A"
             >
               {frontmatter?.about || ""}
-            </Text>
+            </BodyText>
 
-            <Text
-              fontFamily="Roboto"
-              fontSize="16px"
-              color="#252A32"
-              fontWeight="500"
-            >
+            <LabelText>
               {t('sector')}
-            </Text>
+            </LabelText>
 
-            <Text
-              fontFamily="Roboto"
+            <BodyText
               paddingBottom="32px"
-              fontSize="16px"
               color="#71757A"
             >
               {frontmatter?.sector || ""}
-            </Text>
+            </BodyText>
 
-            <Text
-              fontFamily="Roboto"
-              paddingBottom="8px"
-            >
+            <BodyText paddingBottom="8px">
               {t('contactText')}
-            </Text>
+            </BodyText>
 
             <Button
               color="#FFFFFF"
