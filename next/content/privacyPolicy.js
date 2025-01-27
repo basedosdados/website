@@ -3,37 +3,40 @@ import {
   VStack,
   Stack,
   Box,
+  Text
 } from "@chakra-ui/react";
-import BodyText from "../components/atoms/BodyText";
-import SectionText from "../components/atoms/SectionText";
 import { SimpleTable } from "../components/atoms/SimpleTable";
 import { useTranslation } from 'react-i18next';
 
 export default function PrivacyPolicy() {
   const { t } = useTranslation('terms');
+
   const TitleText = ({ children, ...props }) => {
     return (
-      <BodyText
+      <Text
+        fontFamily="Roboto"
         fontSize="18px"
-        fontWeight="700"
-        fontFamily="ubuntu"
+        lineHeight="28px"
+        fontWeight="500"
         {...props}
       >
         {children}
-      </BodyText>
+      </Text>
     )
   }
 
   const SecText = ({ children, ...props }) => {
     return (
-      <SectionText
-        fontFamily="ubuntu"
+      <Text
+        fontFamily="Roboto"
         fontSize="18px"
-        color="#6F6F6F"
+        lineHeight="26px"
+        fontWeight="400"
+        color="#464A51"
         {...props}
       >
         {children}
-      </SectionText>
+      </Text>
     )
   }
 

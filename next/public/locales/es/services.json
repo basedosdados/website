@@ -3,7 +3,7 @@
     "metaTitle": "Servicios – Base de los Datos",
     "slogan": {
       "title": "Nuestros servicios",
-      "description": "Base de los Datos es el experto que te ayuda a ti o a tu equipo a trabajar y extraer el máximo valor de los datos.",
+      "description": "Base de los Datos es el experto que te ayuda a ti o a tu equipo a trabajar y extraer el máximo valor de los datos",
       "cta": "Hagamos un proyecto juntos"
     },
     "services": {
@@ -18,7 +18,7 @@
     },
     "dataCapture": {
       "title": "Captura de datos",
-      "description": "Capturamos y ponemos a disposición datos bajo demanda con rapidez, escala y bajo costo.",
+      "description": "Capturamos y ponemos a disposición datos bajo demanda con rapidez, escala y bajo costo",
       "longDescription": "No necesitas preocuparte por crear y mantener una infraestructura propia o escribir códigos - nosotros nos encargamos de eso. Todo se hace siguiendo la metodología de tratamiento y estandarización de Base de los Datos, y conforme a las mejores prácticas de ingeniería de datos del mercado. Las tablas tratadas pueden estar disponibles de forma exclusiva o ser públicas.",
       "advantages": {
         "title": "Principales ventajas",
@@ -47,7 +47,7 @@
     },
     "dataAnalysis": {
       "title": "Análisis de datos",
-      "description": "Construimos análisis, informes e indicadores esenciales para tu investigación o toma de decisiones.",
+      "description": "Construimos análisis, informes e indicadores esenciales para tu investigación o toma de decisiones",
       "longDescription": "La información y los insights se generan a partir de diversos conjuntos de datos ya tratados en nuestro datalake público junto con la experiencia de nuestro equipo de Datos. Y más: utilizamos nuestra metodología estándar de tratamiento para que también puedas cruzar estos datos con cualquier otra base disponible en el datalake.",
       "examples": {
         "title": "Ejemplos de preguntas que podemos responder",
@@ -84,7 +84,7 @@
     },
     "workflow": {
       "title": "Nuestro flujo de trabajo",
-      "description": "Una misma metodología de trabajo para todos los servicios, basada en la satisfacción de los clientes y en la excelencia en la calidad.",
+      "description": "Una misma metodología de trabajo para todos los servicios, basada en la satisfacción de los clientes y en la excelencia en la calidad",
       "steps": {
         "demand": {
           "title": "Demanda",

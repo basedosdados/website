@@ -6,7 +6,6 @@ import {
   Box
 } from "@chakra-ui/react";
 import Link from "../atoms/Link";
-import BodyText from "../atoms/BodyText"
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -24,15 +23,16 @@ import LanguageSelector from "../atoms/LanguageSelector";
 function SectionCategories({ title, children, ...props }) {
   return (
     <VStack spacing={0} alignItems="flex-start" {...props}>
-      <BodyText 
-        color="#FFF"
+      <Text
+        fontFamily="Roboto"
+        fontWeight="400"
         fontSize="14px"
-        fontWeight="300"
-        letterSpacing="0.5px"
-        marginBottom="16px"
+        lineHeight="20px"
+        color="#FFF"
+        paddingBottom={{base: "24px", lg: "16px"}}
       >
         {title}
-      </BodyText>
+      </Text>
       <Stack spacing="10px">
         {children}
       </Stack>
@@ -55,17 +55,15 @@ function SocialLink({ href, icon }) {
 }
 
 function FooterLink(props) {
-  const router = useRouter();
-  const { locale } = router;
-  
   return (
     <Link
-      fontFamily="ubuntu"
-      fontWeight="400"
-      letterSpacing="0.3px"
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="16px"
+      lineHeight="24px"
       color="#FFF"
       target="_blank"
-      href={`${props.href}`}
+      href={props.href}
       {...props}
     />
   )
@@ -169,34 +167,37 @@ export default function Footer({ template, ocult = false }) {
         <Stack
           alignItems="flex-start"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           justifyContent="space-between"
-          direction={{ base: "column", lg: "row" }}
+          flexDirection={{ base: "column", lg: "row" }}
           spacing={0}
           gridGap="24px"
         >
-          <BodyText
-            minWidth="240px"
+          <Text
+            minWidth="250px"
+            fontFamily="Roboto"
             fontWeight="400"
             fontSize="34px"
-            letterSpacing="-0.4px"
+            lineHeight="39px"
             color="#FFF"
             paddingBottom="40px"
-          >{t('footer.title')}</BodyText>
+          >
+            {t('footer.title')}
+          </Text>
 
           <Stack
             paddingBottom="40px"
-            display={isMobileMod() ? "grid" : "flex"}
-            direction={"row"}
-            gridTemplateColumns={isMobileMod() && "1fr 1fr"}
-            gridGap={isMobileMod() && "30px"}
+            display={{base: "grid", lg: "flex"}}
+            flexDirection="row"
+            gridTemplateColumns={{base:"1fr 1fr", lg: ""}}
+            gap={{base: "30px", lg: "80px"}}
             width="100%"
             alignItems="flex-start"
             justifyContent="flex-end"
-            spacing={isMobileMod() ? "0" :"80px"}
+            spacing={0}
             marginLeft="auto"
           >
-            <SectionCategories title={t('footer.products.title')} marginBottom={isMobileMod() && "24px !important"}>
+            <SectionCategories title={t('footer.products.title')}>
               <FooterLink target="_self" href="/search">
                 {t('footer.products.searchEngine')}
               </FooterLink>
@@ -214,7 +215,7 @@ export default function Footer({ template, ocult = false }) {
                 {t('footer.products.DBPro')}
               </FooterLink>
               {locale === 'pt' && (
-                <FooterLink href="https://info.basedosdados.org/bd-edu-sql">
+                <FooterLink href="https://info.basedosdados.org/bd-edu-cursos">
                   {t('footer.products.DBEdu')}
                 </FooterLink>
               )}
@@ -280,7 +281,13 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink target="_self" href="/contact">
                 {t('footer.institutional.contact')}
               </FooterLink>
-              <Link fontWeight="700" color="white" href="/#support">
+              <Link 
+                href="/#support"
+                fontWeight="500"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#FFF"
+              >
                 {t('footer.institutional.supportProject')}
               </Link>
             </SectionCategories>
@@ -290,34 +297,61 @@ export default function Footer({ template, ocult = false }) {
 
       <HStack
         width="100%"
-        height={isMobileMod() ? "100%" :"76px"}
+        height={{base: "100%", lg: "96px"}}
         backgroundColor="#2B8C4D"
         padding="30px"
       >
         <HStack
           width="100%"
-          maxWidth="1264px"
+          height="100%"
+          maxWidth="1440px"
           margin="0 auto"
           justifyContent="space-between"
-          flexDirection={isMobileMod() && "column-reverse"}
-          alignItems="flex-start"
+          flexDirection={{base: "column-reverse", lg: "row"}}
+          alignItems="center"
           spacing={0}
         >
           <HStack
-            spacing={isMobileMod() ? 0 : 4}
+            spacing={0}
             textAlign="center"
-            maxWidth="1264px"
-            flexDirection={isMobileMod() && "column"}
+            maxWidth="1440px"
+            flexDirection={{base: "column", lg: "row"}}
             alignItems="flex-start"
-            marginTop={isMobileMod() && "16px"}
+            marginTop={{base: "16px", lg: "0"}}
           >
-            <HStack spacing={4}>
-              <BodyText color="#FFF" fontSize="16px" letterSpacing="0.2px">
+            <HStack spacing="30px">
+              <Text
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#FFFFFF"
+              >
                 {t('footer.copyright', { year: new Date().getFullYear() })}
-              </BodyText>
-              <Box ml={4}>
-                <LanguageSelector theme="dark" />
-              </Box>
+              </Text>
+
+              <Link
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#FFFFFF"
+                href="/terms?section=terms"
+              >
+                {t('footer.termsOfUse')}
+              </Link>
+              <Link
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="12px"
+                lineHeight="18px"
+                color="#FFFFFF"
+                href="/terms?section=privacy"
+              >
+                {t('footer.privacyPolicy')}
+              </Link>
+
+              <LanguageSelector theme="dark" />
             </HStack>
           </HStack>
 

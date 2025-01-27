@@ -18,11 +18,6 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Display from "../components/atoms/Display";
-import RoundedButton from "../components/atoms/RoundedButton";
-import SectionTitle from "../components/atoms/SectionTitle";
-import BigTitle from "../components/atoms/BigTitle";
-import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
 import Carousel from "../components/atoms/Carousel";
 
@@ -45,6 +40,20 @@ export async function getServerSideProps({ locale }) {
   }
 }
 
+export const BodyText = ({ children, ...props }) => (
+  <Text
+    fontFamily="Roboto"
+    fontWeight="400"
+    fontSize="18px"
+    lineHeight="26px"
+    textAlign="center"
+    color="#464A51"
+    {...props}
+  >
+    {children}
+  </Text>
+)
+
 const HistoryBox = ({ children, title, date, image }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -56,8 +65,8 @@ const HistoryBox = ({ children, title, date, image }) => {
       <Box
         borderRadius="20px"
         overflow="hidden"
-        width={isMobileMod() ? "fit-content" : "500px"}
-        height={isMobileMod() ? "100%" : "300px"}
+        width={{base: "fit-content", lg: "500px"}}
+        height={{base: "100%", lg: "300px"}}
         boxShadow="0 2px 20px 0 #00000026"
         cursor="pointer"
         onClick={onOpen}
@@ -70,27 +79,33 @@ const HistoryBox = ({ children, title, date, image }) => {
         />
       </Box>
       
-      <Box padding={isMobileMod() ? "32px 24px 0" :"40px 24px 0"}>
+      <Box padding="40px 24px 0">
         <Text
-          fontFamily="ubuntu"
-          maxWidth="400px"
+          fontFamily="Roboto"
+          fontWeight="500"
           color="#252A32"
-          fontSize="20px"
-          letterSpacing="0.2px"
+          fontSize="24px"
+          lineHeight="36px"
           marginBottom="8px"
-          lineHeight="26px"
         >{title}</Text>
-        <BodyText fontSize="14px" letterSpacing="0.5px" color="#6F6F6F" marginBottom="16px">{date}</BodyText>
-        <BodyText fontSize="17px" lineHeight="27px">
+        <Text
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#71757A"
+          marginBottom="16px"
+        >
+          {date}
+        </Text>
+        <BodyText textAlign="start">
           {children}
         </BodyText>
       </Box>
 
-      <Modal isCentered isOpen={isOpen} onClose={onClose}>
+      <Modal isCentered={isMobileMod() ? false : true} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay backdropFilter="blur(2px)"/>
         <ModalContent
-          marginTop={isMobileMod() && "5rem"}
-          marginBottom={isMobileMod() && "0"}
           background="transparent"
           maxWidth="1000px"
           margin="24px"
@@ -175,15 +190,15 @@ const TeamBox = ({
       cursor: "pointer",
       width:"22px",
       height:"22px",
-      fill: "#42B0FF",
-      _hover: {opacity: "0.8"},
+      fill:"#0068C5",
+      _hover:{fill: "#0057A4"},
       onClick: () => {window.open(href)}
     }
   }
 
-  const IconLinks = () => {
+  const IconLinks = ({ ...props }) => {
     return (
-      <Box display="flex" flexDirection="row" gridGap="5px">
+      <Box display="flex" flexDirection="row" gap="5px" {...props}>
         {website ? <WebIcon {...iconTeamBox({website: website})}/> : null}
         {email ? <EmailIcon {...iconTeamBox({email: email})}/> : null}
         {twitter ? <XIcon {...iconTeamBox({twitter: twitter})}/> : null}
@@ -196,9 +211,9 @@ const TeamBox = ({
   return (
     <Box
       display="flex"
-      flexDirection={isMobileMod() ? "column" : "row"}
+      flexDirection={{base: "column", lg: "row"}}
       maxWidth="750px"
-      marginLeft={isMobileMod() ? "" : hasLeftSpacing && "200px !important"}
+      marginLeft={{base: "0", lg: hasLeftSpacing ? "200px !important" : "0"}}
     >
       <Box
         minWidth="160px"
@@ -207,7 +222,7 @@ const TeamBox = ({
         maxHeight="160px"
         borderRadius="16px"
         marginRight="32px"
-        marginBottom={isMobileMod() && "20px"}
+        marginBottom={{base: "20px", lg: "0"}}
         overflow="hidden"
       >
         <Image
@@ -218,35 +233,44 @@ const TeamBox = ({
         />
       </Box>
       <Box display="flex" flexDirection="column">
-        <Box marginBottom="4px" display="flex" flexDirection="row">
+        <Box
+          display="flex"
+          gap="16px"
+          flexDirection="row"
+          alignItems="center"
+          marginBottom="4px"
+        >
           <BodyText
-            fontSize="18px"
-            marginRight="16px"
+            lineHeight="28px"
+            color="#252A32"
+            fontWeight="500"
+            textAlign="start"
           >
             {name}
           </BodyText>
-          {!isMobileMod() && <IconLinks/>}
+          <IconLinks display={{base: "none", lg: "flex"}}/>
         </Box>
 
         <BodyText
           fontSize="16px"
-          fontWeight="400"
+          lineHeight="24px"
+          fontWeight="500"
+          color="#71757A"
+          textAlign="start"
           marginBottom="4px"
-          letterSpacing="0.2px"
-          color="#6F6F6F"
         >
           {role()}
         </BodyText>
 
         <BodyText
-          fontSize="16px"
-          letterSpacing="0.2px"
-          lineHeight="25px"
-          marginBottom={isMobileMod() ? "12px" : "0"}
+          fontSize="18px"
+          lineHeight="28px"
+          textAlign="start"
+          marginBottom={{base: "12px", lg: "0"}}
         >
           {description}
         </BodyText>
-        {isMobileMod() && <IconLinks/>}
+        <IconLinks display={{base: "flex", lg: "none"}}/>
       </Box>
     </Box>
   )
@@ -255,6 +279,7 @@ const TeamBox = ({
 export default function AboutUs() {
   const { t } = useTranslation('aboutUs');
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingData, setLoadingData] = useState(false)
   const [data, setData] = useState([])
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
@@ -272,6 +297,7 @@ export default function AboutUs() {
       } catch (error) {
         console.error("Erro:", error);
       }
+      setLoadingData(true)
       setIsLoading(true)
     };
   
@@ -325,36 +351,26 @@ export default function AboutUs() {
     return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
   }
 
-  const schemasTeam = [
-    "Co-fundadores",
-    "Associados",
-    "Administrativo",
-    "Captação, Parcerias e Projetos",
-    "Comunicação",
-    "Dados",
-    "Plataforma",
-    "BD Edu",
-    "Conselho Fiscal"
-  ]
-
   const keyIcon = (url) => {
     return {
       cursor:"pointer",
       width:"35px",
       height:"35px",
-      fill:"#42B0FF",
+      fill:"#0068C5",
+      _hover:{fill: "#0057A4"},
       backgroundColor:"#FFF",
       padding:"6px",
       boxShadow:"1px 1px 0 0 #0000001a",
-      _hover:{opacity: "0.8"},
       onClick:() => {window.open(url)}
     }
   }
 
   const handleSelect = async (elm) => {
     window.open("#teams", "_self")
+    setIsLoading(false)
     if(filterTeam === elm) {
       setFilterTeam("")
+      setIsLoading(true)
       return setPeople(allPeople)
     } else {
       setFilterTeam(elm)
@@ -362,11 +378,26 @@ export default function AboutUs() {
         .then(res => res.json())
       if(result.length === 0) {
         setFilterTeam("")
+        setIsLoading(true)
         return setPeople(allPeople)
-      } 
+      }
+      setIsLoading(true)
       setPeople(sortPeople(result))
     }
   }
+
+  const Display = ({ children, ...props }) => (
+    <Text
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="60px"
+      lineHeight="70px"
+      color="#252A32"
+      {...props}
+    >
+      {children}
+    </Text>
+  );
 
   return (
     <MainPageTemplate >
@@ -386,7 +417,7 @@ export default function AboutUs() {
 
       <Stack spacing={0} >
         <Stack
-          display={isMobileMod() ? "none" :"flex"}
+          display={{base: "none", lg:"flex"}}
           spacing={0}
           position="sticky"
           width="fit-content"
@@ -404,127 +435,172 @@ export default function AboutUs() {
         <VStack spacing={0}>
           <Stack
             width="100%"
-            maxWidth="1264px"
+            maxWidth="1440px"
             margin="auto"
-            paddingTop={{ base: "150px", lg: "0" }}
+            paddingTop={{ base: "128px", lg: "0" }}
             paddingX="24px"
+            paddingBottom="50px"
             alignItems="center"
           >
-            <Display 
-              fontSize={isMobileMod() ? "34px" : "60px"}
-              letterSpacing={isMobileMod() ? "-0.5px" : "-1.5px"}
-              lineHeight={isMobileMod() ? "40px" : "90px"}
-              textAlign="center" 
-              marginBottom={isMobileMod() ? "80px" : "136px"}
+            <Display
+              as="h1"
+              width="100%"
+              display={{base: "block", lg: "flex"}}
+              flexDirection="column"
+              textAlign="center"
+              marginBottom="80px"
             >
-              {t('heroTitle1')} {isMobileMod() ? " " : <br/>} {t('heroTitle2')} {isMobileMod() ? " " : <br/>} {t('heroTitle3')} <a style={{color:"#2B8C4D"}}>{t('heroTitle4')}</a>.
+              <Text as="span">{t('heroTitle1')}</Text>
+              <Text as="span" marginLeft="12px">{t('heroTitle2')}</Text>
+              <Text as="span" marginLeft="12px">
+                {t('heroTitle3')}
+                <Text as="span" width="fit-content" marginLeft="12px" color="#2B8C4D">
+                  {t('heroTitle4')}
+                <Text as="span" color="#252A32">.</Text></Text>
+              </Text>
             </Display>
+
+            <Stack
+              width="100%"
+              flexDirection={{base: "column", lg: "row"}}
+              spacing={{base: "40px", lg: "0"}}
+              gridGap={{base: "0", lg: "128px"}}
+              maxWidth="1440px"
+              justifyContent="center"
+              marginTop="0px !important"
+              paddingBottom={{base: "0", lg: "16px"}}
+              paddingX="24px"
+            >
+              <Center flexDirection="column">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="28px"
+                  lineHeight="42px"
+                  textAlign="center"
+                  color="#252A32"
+                >
+                  {t('usersCount')}
+                </Text>
+                <Text
+                  paddingTop="4px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  textAlign="center"
+                  color="#464A51"
+                >
+                  {t('usersText')}
+                </Text>
+              </Center>
+
+              <Center flexDirection="column">
+                <Text
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="28px"
+                  lineHeight="42px"
+                  textAlign="center"
+                  color="#252A32"
+                >
+                  {t('queriesCount')}
+                </Text>
+                <Text
+                  paddingTop="4px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  textAlign="center"
+                  color="#252A32"
+                >
+                  {t('queriesText')}
+                </Text>
+              </Center>   
+            </Stack>
           </Stack>
 
           <Stack
-            width="100%"
-            flexDirection={{base: "column", lg: "row"}}
-            spacing={{base: "40px", lg: "0"}}
-            gridGap="8%"
-            maxWidth="1264px"
-            justifyContent="center"
-            marginTop="0px !important"
-            paddingBottom={isMobileMod() ? "0" : "16px"}
-            paddingX="24px"
-          >
-            <Center flexDirection="column">
-              <Display>
-                {t('usersCount')}
-              </Display>
-              <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
-                {t('usersText')}
-              </Text>
-            </Center>
-
-            <Center flexDirection="column">
-              <Display>
-                {t('queriesCount')}
-              </Display>
-              <Text paddingTop="4px" letterSpacing="0.1px" fontSize="20px" fontFamily="Ubuntu" color="#252A32" fontWeight="300">
-                {t('queriesText')}
-              </Text>
-            </Center>   
-          </Stack>
-
-          <Stack
-            paddingTop={{ base: "112px", lg: "144px" }}
-            paddingBottom={{ base: "96px", lg: "104px" }}
-            paddingX="24px"
-            marginTop="0px !important"
+            padding="94px 24px 50px"
             textAlign="center"
             justifyContent="center"
-            maxWidth="1264px"
+            maxWidth="1440px"
+            spacing="24px"
             width={{ base: "100%", lg: "650px" }}
           >
-            <Display
-              paddingBottom={isMobileMod() ? "16px" : "24px" }
-              fontSize={isMobileMod() ? "34px" : "50px" }
-              lineHeight={isMobileMod() ? "40px" : "54px"}
-              letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
+            <Text
+              as="h2"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="50px"
+              lineHeight="60px"
+              textAlign="center"
+              color="#252A32"
             >
               {t('aboutTitle')}
-            </Display>
-            <BodyText paddingBottom="20px">
+            </Text>
+            <BodyText>
               {t('aboutText1')}
             </BodyText>
-            <BodyText paddingBottom="20px">
+            <BodyText>
               {t('aboutText2')}
             </BodyText>
-            <BodyText paddingBottom="20px">
+            <BodyText>
               {t('aboutText3')}
             </BodyText>
           </Stack>
 
           <Stack
             width="100%"
-            maxWidth="1264px"
+            maxWidth="1440px"
             margin="auto"
-            paddingBottom={{ base: "80px", lg: "104px" }}
-            paddingX="24px"
+            padding="94px 24px 144px"
             spacing={0}
           >
-            <Display
-              paddingBottom={isMobileMod() ? "56px" : "104px" }
-              fontSize={isMobileMod() ? "34px" : "50px" }
-              lineHeight={isMobileMod() ? "40px" : "54px"}
-              letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
+            <Text
+              as="h2"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="50px"
+              lineHeight="60px"
               textAlign="center"
+              color="#252A32"
+              paddingBottom="104px"
             >
               {t('recognitionTitle')}
-            </Display>
+            </Text>
 
             <Stack
-              flexDirection={isMobileMod() ? "column" : "row"}
+              flexDirection={{base: "column", lg: "row"}}
               justifyContent="space-between"
-              spacing={isMobileMod() ? "80px" : "0"}
+              alignItems="center"
+              gap="80px"
+              spacing="0"
             >
-              <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
+              <Box
+                textAlign="center"
+                maxWidth="600px"
+              >
                 <Image
                   alt="google cloud"
                   src="https://storage.googleapis.com/basedosdados-website/logos/2022/google_cloud.svg"
-                  width={{ base: "100px", lg: "140px" }}
-                  height={{ base: "100px", lg: "140px" }}
-                  margin={{base: "0 auto 24px", lg: "0 auto 48px"}}
+                  width="140px"
+                  height="140px"
+                  margin="0 auto 48px"
                 />
-                <SectionTitle 
-                  fontSize={{base: "20px", lg: "24px"}}
-                  fontWeight="400"
-                  letterSpacing={{base: "0.2px", lg: "0px"}}
-                  marginBottom={{base: "8px", lg: "16px"}}
+                <Text 
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="24px"
+                  lineHeight="36px"
+                  textAlign="center"
+                  color="#252A32"
+                  marginBottom="20px"
                 >
                   {t('googleCloudAwardTitle')}
-                </SectionTitle>
-                <BodyText
-                  fontSize="17px"
-                  lineHeight="27px"
-                  letterSpacing="0.1px"
-                  marginBottom="8px"
-                >
+                </Text>
+                <BodyText marginBottom="8px">
                   {t('googleCloudAwardText')}
                 </BodyText>
                 <Link
@@ -532,58 +608,67 @@ export default function AboutUs() {
                   gridGap="8px"
                   alignItems="center"
                   justifyContent="center"
-                  fontFamily="Ubuntu"
-                  fontSize="16px"
-                  fontWeight="500"
-                  letterSpacing="0.2px"
+                  fontWeight="400"
+                  fontSize="18px"
+                  lineHeight="26px"
                   target="_blank"
-                  color="#42B0FF"
+                  color="#0068C5"
+                  fill="#0068C5"
+                  _hover={{
+                    color: "#0057A4",
+                    fill: "#0057A4"
+                  }}
                   href="https://cloud.google.com/blog/topics/customers/announcing-winners-of-google-cloud-customer-awards"
                 >
                   {t('googleCloudAwardLink')}
-                  <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
+                  <RedirectIcon width="18px" height="18px" alt="hiperlink"/>
                 </Link>
               </Box>
 
-              <Box textAlign="center" maxWidth={isMobileMod() ? "100%" : "45%"}>
+              <Box
+                textAlign="center"
+                maxWidth="600px"
+              >
                 <Image
                   alt="premio tesouro nacional"
                   src="https://storage.googleapis.com/basedosdados-website/logos/2022/premio_tesouro_nacional_2021.png"
-                  width={{ base: "100px", lg: "140px" }}
-                  height={{ base: "100px", lg: "140px" }}
-                  margin={{base: "0 auto 40px", lg: "0 auto 48px"}}
+                  width="140px"
+                  height="140px"
+                  margin="0 auto 48px"
                 />
-                <SectionTitle 
-                  fontSize={{base: "20px", lg: "24px"}}
-                  fontWeight="400"
-                  letterSpacing={{base: "0.2px", lg: "0px"}}
-                  marginBottom={{base: "8px", lg: "16px"}}
+                <Text 
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="24px"
+                  lineHeight="36px"
+                  textAlign="center"
+                  color="#252A32"
+                  marginBottom="20px"
                 >
                   {t('treasuryAwardTitle')}
-                </SectionTitle>
-                <BodyText 
-                  fontSize="17px"
-                  lineHeight="27px"
-                  letterSpacing="0.1px"
-                  marginBottom="8px"
-                >
+                </Text>
+                <BodyText marginBottom="8px">
                   {t('treasuryAwardText')}
                 </BodyText>
                 <Link
                   display="flex"
                   gridGap="8px"
                   alignItems="center"
-                  justifyContent="center" 
-                  fontFamily="Ubuntu"
-                  fontSize="16px"
-                  fontWeight="500"
-                  letterSpacing="0.2px"
+                  justifyContent="center"
+                  fontWeight="400"
+                  fontSize="18px"
+                  lineHeight="26px"
                   target="_blank"
-                  color="#42B0FF"
+                  color="#0068C5"
+                  fill="#0068C5"
+                  _hover={{
+                    color: "#0057A4",
+                    fill: "#0057A4"
+                  }}
                   href="https://www.tesourotransparente.gov.br/descubra-explore-crie/crie"
                 >
                   {t('treasuryAwardLink')}
-                  <RedirectIcon width="12px" height="12px" alt="hiperlink" fill="#42B0FF"/>
+                  <RedirectIcon width="18px" height="18px" alt="hiperlink"/>
                 </Link>
               </Box>
             </Stack>
@@ -595,31 +680,32 @@ export default function AboutUs() {
         width="100%"
         height="100%"
         alignItems="center"
-        paddingBottom={{ base: "40px", lg: "104px" }}
-        bgGradient={isMobileMod() ? "linear(#34A15A 38%, #FFF 38%)" : "linear(#34A15A 45%, #FFF 45%)"}
+        paddingBottom="50px"
+        bgGradient={{base: "linear(#34A15A 38%, #FFF 38%)", lg: "linear(#34A15A 45%, #FFF 45%)"}}
       >
-        <Center flexDirection="column">
-          <Display 
-            padding="56px 0 8px"
-            fontSize={isMobileMod() ? "34px" : "50px" }
-            lineHeight={isMobileMod() ? "40px" : "54px"}
-            letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
-            color="#FFF"
+        <Center flexDirection="column" padding="56px 24px">
+          <Text
+            as="h2"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="50px"
+            lineHeight="60px"
+            textAlign="center"
+            color="#FFFFFF"
+            paddingBottom="16px"
           >
             {t('historyTitle')}
-          </Display>
+          </Text>
           <Text
-            fontFamily="ubuntu"
-            maxWidth="650px"
-            fontSize={{ base: "18px", lg: "20px" }}
-            letterSpacing={{ base: "0.1px", lg: "0.2px" }}
-            fontWeight="300"
+            fontFamily="Roboto"
+            fontSize="24px"
+            lineHeight="36px"
+            fontWeight="500"
             textAlign="center"
-            color="#FFF"
-            margin="8px 0 48px"
+            color="#FFFFFF"
           >{t('historySubtitle')}</Text>
         </Center>
-      
+
         <Center
           width="100%"
           className={styles.historyTimeLine}
@@ -716,21 +802,25 @@ export default function AboutUs() {
       <Stack
         id="teams"
         width="100%"
-        maxWidth="1264px"
-        padding="0 24px"
+        maxWidth="1440px"
+        padding="54px 24px 50px"
         margin="auto"
+        spacing={0}
       >
-        <Display
-          paddingBottom={isMobileMod() ? "56px" : "104px" }
-          fontSize={isMobileMod() ? "34px" : "50px" }
-          lineHeight={isMobileMod() ? "40px" : "54px"}
-          letterSpacing={isMobileMod() ? "-0.5px" : "-0.8px" }
+        <Text
+          as="h2"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="50px"
+          lineHeight="60px"
           textAlign="center"
+          paddingBottom="104px"
+          color="#252A32"
         >
           {t('teamTitle')}
-        </Display>
+        </Text>
 
-        {!isLoading ?
+        {!loadingData ?
           <Stack>
             <Spinner
               margin="0 auto"
@@ -739,20 +829,21 @@ export default function AboutUs() {
               color="#2B8C4D"
             />
           </Stack>
-          :
+        :
           data.length > 0 ?
             <Stack
               position="relative"
-              gridGap="96px"
+              gap="80px"
               spacing={0}
               flexDirection={{base:"column", lg:"row"}}
-              paddingBottom="32px"
+              justifyContent="space-between"
+              paddingBottom="50px"
             >
               <Box
                 display="flex"
                 height="100%"
                 flexDirection="column"
-                gridGap="16px"
+                gap="16px"
                 position={{base:"relative", lg: "sticky"}}
                 top={{base:"0", lg: "120px"}}
                 z-index="20"
@@ -760,13 +851,16 @@ export default function AboutUs() {
                 {t('teamCategories', { returnObjects: true }).map((elm, i) => (
                   <Text
                     key={i}
-                    fontSize="16px"
-                    color={filterTeam === elm ? "#2B8C4D" :"#6F6F6F"}
-                    fontFamily="ubuntu"
+                    color={filterTeam === elm ? "#2B8C4D" :"#71757A"}
+                    _hover={{
+                      color: "#2B8C4D"
+                    }}
+                    fontFamily="Roboto"
                     fontWeight="500"
+                    fontSize="16px"
+                    lineHeight="24px"
                     width="max-content"
                     cursor="pointer"
-                    letterSpacing="0.2px"
                     onClick={() => handleSelect(elm)}
                   >
                     {elm}
@@ -774,63 +868,111 @@ export default function AboutUs() {
                 ))}
               </Box>
 
-              <Stack
-                width="100%"
-                spacing={{ base: "72px", lg: "96px" }}
-              >
-                {people?.map((elm, index) => (
-                  <TeamBox
-                    key={index}
-                    index={index}
-                    name={`${elm.node.firstName} ${elm.node.lastName}`}
-                    picture={elm.node.picture}
-                    description={elm.node.description}
-                    website={elm.node.website}
-                    email={elm.node.email}
-                    twitter={elm.node.twitter}
-                    linkedin={elm.node.linkedin}
-                    github={elm.node.github}
-                    career={elm.node.careers.edges}
+              {!isLoading ?
+                <Stack width="100%" justifyContent="center">
+                  <Spinner
+                    margin="0 auto"
+                    width="200px"
+                    height="200px"
+                    color="#2B8C4D"
                   />
-                ))}
-              </Stack>
+                </Stack>
+              :
+                <Stack
+                  width="fit-content"
+                  spacing={{ base: "72px", lg: "96px" }}
+                >
+                  {people?.map((elm, index) => (
+                    <TeamBox
+                      key={index}
+                      index={index}
+                      name={`${elm.node.firstName} ${elm.node.lastName}`}
+                      picture={elm.node.picture}
+                      description={elm.node.description}
+                      website={elm.node.website}
+                      email={elm.node.email}
+                      twitter={elm.node.twitter}
+                      linkedin={elm.node.linkedin}
+                      github={elm.node.github}
+                      career={elm.node.careers.edges}
+                    />
+                  ))}
+                </Stack>
+              }
             </Stack>
-          :
-            <Stack justifyContent="center" alignItems="center">
-              <InternalError
-                widthImage="300"
-                heightImage="300"
-              />
-            </Stack>
+        :
+          <Stack justifyContent="center" alignItems="center">
+            <InternalError
+              widthImage="300"
+              heightImage="300"
+            />
+          </Stack>
         }
 
         <Stack
           width="100%"
           height="100%"
           alignItems="center"
-          padding="104px 0 64px"
+          padding="94px 24px 14px"
         >
           <Box
-            maxWidth="800px"
+            display="flex"
+            flexDirection="column"
+            align-items="flex-start"
             padding="32px"
+            maxWidth="800px"
             borderRadius="20px"
             boxShadow="0 2px 8px 1px rgba(64, 60, 67, 0.16)"
+            backgroundColor="#FFFFFF"
           >
-            <BigTitle paddingBottom="16px">
+            <Text
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="28px"
+              lineHeight="42px"
+              color="#252A32"
+              paddingBottom="8px"
+            >
               {t('joinUsTitle')}
-            </BigTitle>
+            </Text>
 
-            <BodyText paddingBottom="24px">
+            <BodyText textAlign="start" paddingBottom="24px">
               {t('joinUsText')}
             </BodyText>
-            <RoundedButton
-              paddingX="20px"
-              fontSize="15px"
-              alignItems="center"
-              onClick={() => window.open("https://info.basedosdados.org/carreiras", "_blank")}
+            <Link
+              target="_blank"
+              href="https://info.basedosdados.org/carreiras"
             >
-              {t('joinUsButton')} <RedirectIcon alt="vagas basedosdados" fill="#FFF" width="12px" height="12px" marginLeft="8px"/>
-            </RoundedButton>
+              <Box
+                as="span"
+                target="_self"
+                display="flex"
+                alignItems="center"
+                height="54px"
+                width="fit-content"
+                borderRadius="8px"
+                backgroundColor="#0D99FC"
+                padding="10px 16px"
+                cursor="pointer"
+                color="#FFF"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="20px"
+                lineHeight="30px"
+                _hover={{
+                  backgroundColor: "#0B89E2"
+                }}
+              >
+                {t('joinUsButton')}
+                <RedirectIcon
+                  alt="vagas basedosdados"
+                  fill="#FFFFFF"
+                  width="18px"
+                  height="18px"
+                  marginLeft="8px"
+                />
+              </Box>
+            </Link>
           </Box>
         </Stack>
       </Stack>

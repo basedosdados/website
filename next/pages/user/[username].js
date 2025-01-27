@@ -77,15 +77,18 @@ export async function getServerSideProps(context) {
   const userDataString = JSON.stringify(getUser)
   res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
+  const isUserPro = getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true;
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['menu', 'user', 'prices', 'common'])),
       getUser,
+      isUserPro
     }
   }
 }
 
-export default function UserPage({ getUser }) {
+export default function UserPage({ getUser, isUserPro }) {
   const { t, ready } = useTranslation('user')
   const router = useRouter()
   const { query } = router
@@ -100,17 +103,12 @@ export default function UserPage({ getUser }) {
     }
   }, [getUser])
 
-  const isUserPro = () => {
-    if(getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
-    return false
-  }
-
   const choices = [
     {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile", index: 0},
     {bar: t('username.account'), title: t('username.account'), value: "account", index: 1},
     {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
     {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
-    isUserPro() && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
+    isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
   ].filter(Boolean)
 
   useEffect(() => {
@@ -188,7 +186,11 @@ export default function UserPage({ getUser }) {
                   }}
                   borderRadius="8px"
                   padding="6px 8px"
-                  onClick={() => router.push({pathname: `/user/${userInfo.username}`, query: section.value})}
+                  onClick={() => router.replace(
+                    { pathname: `/user/${userInfo.username}`, query: section.value },
+                    undefined,
+                    { shallow: true }
+                  )}
                 >
                   { section.bar }
                 </Text>

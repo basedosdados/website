@@ -1,51 +1,80 @@
 import {
   Stack,
   VStack,
+  HStack,
   Text,
   Center,
-  Box,
-  Image
+  Image,
+  Avatar
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
-import { NamedAvatar } from "../molecules/NamedAvatar";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import Carousel from "../atoms/Carousel";
 
 function Testimonial({ children, name, position, src }) {
   return (
     <VStack
-      margin={{ base: "0px", lg: "80px 32px 32px" }}
-      width="80%"
+      margin="100px 24px 30px"
+      width="800px"
+      minHeight="482px"
+      boxSizing="border-box"
+      spacing={0}
     >
-      <Stack
-        alignItems="center"
-      >
-        <Image
-          alt="aspas"
-          width="50px"
-          height="36px"
-          src="https://storage.googleapis.com/basedosdados-website/images/quote.png"
-        />
-      </Stack>
       <Text
-        margin="32px 16px 48px !important"
-        fontFamily="Ubuntu"
+        as="span"
+        position="absolute"
+        top="-14px"
+        height="0"
+        pointerEvents="none"
+        userSelect="none"
+        fontFamily="Roboto"
+        fontSize="100px"
+        color="#464A51"
+      >
+        “
+      </Text>
+      <Text
+        fontFamily="Roboto"
         fontSize="28px"
-        fontWeight="300"
-        letterSpacing="-0.1px"
+        fontWeight="500"
+        lineHeight="42px"
+        color="#464A51"
         textAlign="center"
-        lineHeight="45px"
-        color="#252A32"
+        marginBottom="72px !important"
+        height="100%"
       >
         {children}
       </Text>
-      <NamedAvatar
-        alignSelf="flex-end"
-        name={name}
-        position={position}
-        src={src}
-      />
+
+      <HStack width="100%" spacing="10px" justifyContent="end">
+        <VStack spacing={0} align="flex-end">
+          <Text
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="16px"
+            lineHeight="24px"
+            textAlign="right"
+            color="#464A51"
+          >
+            {name}
+          </Text>
+          <Text
+            fontFamily="Roboto"
+            fontWeight="400"
+            fontSize="16px"
+            lineHeight="24px"
+            textAlign="right"
+            color="#464A51"
+          >
+            {position}
+          </Text>
+        </VStack>
+        <Avatar
+          name=""
+          backgroundColor="#FFF"
+          height="75px"
+          src={src} 
+        />
+      </HStack>
     </VStack>
   );
 }
@@ -76,42 +105,36 @@ function PartnerBox({ src, ...props }) {
 }
 
 export function BePartner() {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
   const { t } = useTranslation('common');
 
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
-
   return (
-    <VStack width="80%" margin="auto">
+    <VStack margin="auto" spacing="0">
       <Stack
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         justifyContent="space-between"
-        marginTop="40px"
+        marginTop="64px"
         direction="column"
-        spacing={10}
+        spacing="24px"
       >
-        <Center width="100%">
-          <Text
-            zIndex={2}
-            fontFamily="Ubuntu"
-            fontSize={isMobileMod ? "16px" : "18px"}
-            fontWeight="300"
-            letterSpacing={isMobileMod ? "0.2px" : "0.1px"}
-            color="#7D7D7D"
-          >
-            {t('partners.partnershipsWith')}
-          </Text>
-        </Center>
+        <Text
+          zIndex={2}
+          textAlign="center"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="18px"
+          lineHeight="28px"
+          color="#71757A"
+        >
+          {t('partners.partnershipsWith')}
+        </Text>
+
         <Stack
           direction="row"
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           spacing={0}
-          gridGap="30px"
+          gap="40px"
           alignItems="center"
           justifyContent="center"
           flexWrap="wrap"
@@ -126,46 +149,46 @@ export function BePartner() {
           <PartnerBox alt="aponte" src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png" />
         </Stack>
       </Stack>
-      {!isMobile &&
-        <Center 
-          width="100%"
-          maxWidth="1264px" 
+
+      <Center
+        display={{base : "none", lg: "flex"}}
+        width="100%"
+        maxWidth="1440px" 
+      >
+        <Carousel
+          settings={{
+            loop: true,
+            autoplay: true,
+            pagination: {
+              clickable: true,
+            }
+          }}
         >
-          <Carousel
-            settings={{
-              loop: true,
-              autoplay: true,
-              pagination: {
-                clickable: true,
-              }
-            }}
-          >
-              <Testimonial
-                name={t('partners.testimonials.fernando.name')}
-                position={t('partners.testimonials.fernando.position')}
-                src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
-              >
-                {t('partners.testimonials.fernando.quote')}
-              </Testimonial>
+            <Testimonial
+              name={t('partners.testimonials.fernando.name')}
+              position={t('partners.testimonials.fernando.position')}
+              src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
+            >
+              {t('partners.testimonials.fernando.quote')}
+            </Testimonial>
 
-              <Testimonial
-                name={t('partners.testimonials.marina.name')}
-                position={t('partners.testimonials.marina.position')}
-                src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
-              >
-                {t('partners.testimonials.marina.quote')}
-              </Testimonial>
+            <Testimonial
+              name={t('partners.testimonials.marina.name')}
+              position={t('partners.testimonials.marina.position')}
+              src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
+            >
+              {t('partners.testimonials.marina.quote')}
+            </Testimonial>
 
-              <Testimonial
-                name={t('partners.testimonials.amanda.name')}
-                position={t('partners.testimonials.amanda.position')}
-                src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
-              >
-                {t('partners.testimonials.amanda.quote')}
-              </Testimonial>
-          </Carousel>
-        </Center>
-      }
+            <Testimonial
+              name={t('partners.testimonials.amanda.name')}
+              position={t('partners.testimonials.amanda.position')}
+              src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
+            >
+              {t('partners.testimonials.amanda.quote')}
+            </Testimonial>
+        </Carousel>
+      </Center>
     </VStack>
   );
 }

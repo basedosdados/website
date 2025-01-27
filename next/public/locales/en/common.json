@@ -54,7 +54,7 @@
     "edu": {
         "learn_from_the_reference": "Come learn from those who are a reference",
         "in_making_public_data_available": "in making public data available in Brazil",
-        "with_our_course_you_can_go_further": "With our course, you can go further in your research, profession, or organization.",
+        "with_our_course_you_can_go_further": "With our course, you can go further in your research, profession, or organization",
         "take_advantage_of_the_promotional_price": "Take advantage of the promotional price"
     },
     "tooltip": {
@@ -130,5 +130,14 @@
                 "quote": "We created an important product of ours, the Municipality Photograph, in partnership with DB. The Photograph aggregates various socioeconomic indicators of Brazilian municipalities. A Ponte did the planning and design of the report, while DB took care of the technical part of data visualization and management. The partnership allowed us to advance quickly in the development of the tool and ensured the high data quality we wanted from the beginning."
             }
         }
+    },
+    "error": {
+        "ops": "Ooops...",
+        "notFoundPage": "Unfortunately, we couldn't find this page.",
+        "system": "Unfortunately, an error occurred.",
+        "searchNewBases": "Browse the menu above or search for the data you need in the search bar.",
+        "verifyStatusSystem": "Check our platform's status and try again later.",
+        "searchData": "Search data",
+        "checkStatus": "Check the status"
     }
 }

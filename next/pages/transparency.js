@@ -4,19 +4,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
-import Display from "../components/atoms/Display";
-import BigTitle from "../components/atoms/BigTitle";
-import SectionText from "../components/atoms/SectionText";
-import BodyText from "../components/atoms/BodyText";
 import Link from "../components/atoms/Link";
-import RoundedButton from "../components/atoms/RoundedButton";
 import TransparencyImage from "../public/img/transparencyImage";
 import DonationImage from "../public/img/donationImage";
 
@@ -33,13 +26,6 @@ export async function getStaticProps({ locale }) {
 export default function Transparency({ pages }) {
   const { t } = useTranslation('transparency');
   const { locale } = useRouter();
-  const router = useRouter();
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile();
-
-  useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
 
   const SectionBox = ({ children, ...props }) => {
     return (
@@ -47,9 +33,9 @@ export default function Transparency({ pages }) {
         display="flex"
         justifyContent="space-between"
         flexDirection={{ base: "column", lg: "row" }}
-        paddingTop={isMobileMod ? "112px" : "56px"}
+        paddingTop={{base: "112px", md: "56px"}}
         width="100%"
-        maxWidth="1264px"
+        maxWidth="1440px"
         margin="auto"
         {...props}
       >
@@ -57,6 +43,45 @@ export default function Transparency({ pages }) {
       </Box>
     )
   }
+
+  const Display = ({ children, ...props }) => (
+    <Text
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="50px"
+      lineHeight="60px"
+      color="#2B8C4D"
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+
+  const TitleSection = ({ children, ...props }) => (
+    <Text
+      fontFamily="Roboto"
+      fontWeight="500"
+      fontSize="28px"
+      lineHeight="42px"
+      color="#252A32"
+      {...props}
+    >
+      {children}
+    </Text>
+  );
+
+  const BodyText = ({ children, ...props }) => (
+    <Text
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="18px"
+      lineHeight="26px"
+      color="#464A51"
+      {...props}
+    >
+      {children}
+    </Text>
+  );
 
   const GraphicsBox = ({ text, url, ...props }) => {
     return (
@@ -73,11 +98,11 @@ export default function Transparency({ pages }) {
         {text &&
           <Text
             width="100%"
-            fontFamily="Ubuntu"   
-            textAlign={isMobileMod ? "start" : "center"}
-            fontSize={{base: "20px", lg: "24px"}}
-            fontWeight="400"
-            letterSpacing={{base: "0.2px", lg: "0"}}
+            fontFamily="Roboto"   
+            textAlign={{base: "start", md: "center"}}
+            fontSize="24px"
+            lineHeight="36px"
+            fontWeight="500"
             minHeight="30px"
             marginBottom={{base: "0px", lg: "32px"}}
             color="#252A32"
@@ -96,6 +121,29 @@ export default function Transparency({ pages }) {
       </Box>
     )
   }
+
+  const LinkReports = ({ children, url, ...props }) => (
+    <Stack
+      paddingTop="16px"
+      width="100%"
+      maxWidth="1440px"
+      margin="auto"
+      paddingX="24px"
+      {...props}
+    >
+      <Link
+        target="_blank"
+        color="#0068C5"
+        _hover={{color: "#0057A4"}}
+        fontSize="18px"
+        lineHeight="28px"
+        fontWeight="400"
+        href={url}
+      >
+        {children}
+      </Link>
+    </Stack>
+  );
 
   return (
     <MainPageTemplate paddingBottom="0">
@@ -121,25 +169,24 @@ export default function Transparency({ pages }) {
           spacing={0}
           maxWidth={{ base: "100%", lg: "45%" }}
         >
-          <Display 
+          <Display
+            display={{base: "block", md:"flex"}}
+            flexDirection="column"
             color="#2B8C4D"
-            paddingBottom={isMobileMod ? "24px" : "32px" }
-            fontSize={isMobileMod ? "34px" : "50px" }
-            lineHeight={isMobileMod ? "40px" : "54px"}
-            letterSpacing={isMobileMod ? "-0.5px" : "-0.8px" }
+            paddingBottom="32px"
           >
-            {t('mainTitle1')} {isMobileMod ? " " : <br/>}
-            {t('mainTitle2')} {isMobileMod ? " " : <br/>}
-            {t('mainTitle3')}
+            <Text as="span">{t('mainTitle1')}</Text>
+            <Text as="span">{t('mainTitle2')}</Text>
+            <Text as="span">{t('mainTitle3')}</Text>
           </Display>
           <BodyText paddingBottom="24px" dangerouslySetInnerHTML={{ __html: t('mainDescription1') }} />
           <BodyText paddingBottom="24px">{t('mainDescription2')}</BodyText>
         </Stack>
 
         <Stack 
-          width={isMobileMod ? "100%" : {base: "445px", lg: "550px"}}
-          height={isMobileMod ? "100%" : {base: "356px", lg: "430px"}}
-          marginBottom={isMobileMod ? "0" : "104px"}
+          width={{base: "100%", md: "445px", lg: "550px"}}
+          height={{base:"100%", md: "356px", lg: "430px"}}
+          marginBottom={{base: "0", md: "104px"}}
         >
           <TransparencyImage
             widthImage="100%"
@@ -149,19 +196,19 @@ export default function Transparency({ pages }) {
       </SectionBox>
 
       <SectionBox
-        paddingTop={isMobileMod ? "112px" : "104px"}
+        paddingTop={{base: "112px", md: "104px"}}
         paddingX="24px"
         alignItems="center"
       >
         <Stack
-          display={isMobileMod ? "flex" : "none"}
+          display={{base: "flex", md: "none"}}
           width="100%"
         >
-          <Display
+          <TitleSection
             paddingBottom="40px"
           >
             {t('survivalIndicator')}
-          </Display>
+          </TitleSection>
         </Stack>
 
         <Stack 
@@ -184,12 +231,12 @@ export default function Transparency({ pages }) {
           paddingTop={{base: "24px", lg: "0px"}}
           spacing={0}
         >
-          <Display
-            display={isMobileMod ? "none" : "flex"}
+          <TitleSection
+            display={{base: "none", md: "flex"}}
             paddingBottom={{base: "8px", lg: "24px"}}
           >
             {t('survivalIndicator')}
-          </Display>
+          </TitleSection>
           <BodyText paddingBottom="24px">
             {t('survivalDescription1')}
           </BodyText>
@@ -203,35 +250,55 @@ export default function Transparency({ pages }) {
         flexDirection="column"
         paddingTop={{ base: "88px", lg: "152px" }}
         paddingX="24px"
-        alignItems={isMobileMod ? "start" : "center"}
+        alignItems={{base: "start", md: "center"}}
       >
-        <Display
-          textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom={isMobileMod ? "24px" : "8px"}
+        <TitleSection
+          textAlign={{base: "start", md: "center"}}
+          paddingBottom={{base: "24px", md: "8px"}}
         >
           {t('accountingData')}
-        </Display>
+        </TitleSection>
         <BodyText
-          textAlign={isMobileMod ? "start" : "center"}
-          paddingBottom={isMobileMod ? "24px" : "16px"}
+          display={{base: "block", md:"flex"}}
+          flexDirection="column"
+          textAlign={{base: "start", md: "center"}}
+          paddingBottom={{base: "24px", md: "16px"}}
         >
-          {t('accountingDescription1')} {isMobileMod ? " " : <br/>} {t('accountingDescription2')}
+          <Text as="span">{t('accountingDescription1')}</Text>
+          <Text as="span">{t('accountingDescription2')}</Text>
         </BodyText>
         <Link
-          as={RoundedButton}
-          fontSize="15px"
-          width="fit-content"
-          href="/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9"
-          target="_blank"
           locale={locale}
-          color="#FFFFFF"
+          target="_blank"
+          href="/dataset/8b6c07fd-af78-44ad-8408-da57e6a0b3d4?table=26480073-cb94-41e2-9dfa-6b4ea76da9d9"
         >
-          {t('accessButton')}
+          <Box
+            as="p"
+            target="_self"
+            display="flex"
+            alignItems="center"
+            height="54px"
+            width="fit-content"
+            borderRadius="8px"
+            backgroundColor="#0D99FC"
+            padding="10px 16px"
+            cursor="pointer"
+            color="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="20px"
+            lineHeight="30px"
+            _hover={{
+              backgroundColor: "#0B89E2"
+            }}
+          >
+            {t('accessButton')}
+          </Box>
         </Link>
       </SectionBox>
 
       <SectionBox
-        order={isMobileMod ? 0 : 1}
+        order={{base: 0, md: 1}}
         paddingTop={{ base: "40px", lg: "64px" }}
         paddingX="24px"
         flexDirection="column"
@@ -252,15 +319,26 @@ export default function Transparency({ pages }) {
           />
         </Stack>
 
-        <SectionText
+        <Text
           marginRight="24px"
           paddingTop="40px"
-          textAlign={isMobileMod ? "start" : "end"}
-          fontSize={isMobileMod ? "14px" : "16px"}
+          textAlign={{base: "start", md: "end"}}
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="16px"
+          lineHeight="24px"
+          color="#464A51"
         >
-          {t('fullDashboard')} <Link display="inline" fontSize={isMobileMod ? "14px" : "16px"} target="_blank" color="#42B0FF" href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
+          {t('fullDashboard')} <Link
+          href="https://perguntas.basedosdados.org/public/dashboard/ab21da85-bff2-435b-a819-953d785167b4"
+          display="inline"
+          target="_blank"
+          color="#0068C5"
+          _hover={{color: "#0057A4"}}
+          fontSize="16px"
+          fontWeight="400"
           > {t('here')}</Link>.
-        </SectionText>
+        </Text>
       </SectionBox>
 
       <SectionBox
@@ -268,104 +346,52 @@ export default function Transparency({ pages }) {
         flexDirection="column"
         paddingX="24px"
       >
-        <Display
+        <TitleSection
           paddingBottom="24px"
         >
           {t('statuteReports')}
-        </Display>
+        </TitleSection>
 
         <Stack
           width="100%"
-          flexDirection={isMobileMod ? "column" : "row"}
+          flexDirection={{base:"column", md: "row"}}
           justifyContent="space-between"
           spacing={0}
         >
-          <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
+          <BodyText paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
             {t('statuteDescription')}
           </BodyText>
         
-          <BodyText paddingBottom="24px" maxWidth={isMobileMod ? "100%" : "45%"}>
+          <BodyText paddingBottom="24px" maxWidth={{base: "100%", md: "45%"}}>
             {t('reportsDescription')}
           </BodyText>
         </Stack>
       </SectionBox>
 
-      <Stack
-        paddingTop="16px"
-        width="100%"
-        maxWidth="1264px"
-        margin="auto"
-        paddingX="24px"
+      <LinkReports
+        url="https://storage.googleapis.com/basedosdados-website/pdf/bd_estatuto_social.pdf"
       >
-        <Link
-          fontFamily="Ubuntu"
-          fontSize="18px"
-          letterSpacing="0.3px"
-          target="_blank"
-          color="#42B0FF"
-          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_estatuto_social.pdf"
-        >
           {t('DBStatute')}
-        </Link>
-      </Stack>
+      </LinkReports>
 
-      <Stack
-        paddingTop="16px"
-        width="100%"
-        maxWidth="1264px"
-        margin="auto"
-        paddingX="24px"
+      <LinkReports
+        url="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
       >
-        <Link
-          fontFamily="Ubuntu"
-          fontSize="18px"
-          letterSpacing="0.3px"
-          target="_blank"
-          color="#42B0FF"
-          href="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
-        >
           {t('DBReport2023')}
-        </Link>
-      </Stack>
+      </LinkReports>
 
-      <Stack
-        paddingTop="16px"
-        width="100%"
-        maxWidth="1264px"
-        margin="auto"
-        paddingX="24px"
+      <LinkReports
+        url="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
       >
-        <Link
-          fontFamily="Ubuntu"
-          fontSize="18px"
-          letterSpacing="0.3px"
-          target="_blank"
-          color="#42B0FF"
-          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
-        >
           {t('DBReport2022')}
-        </Link>
-      </Stack>
+      </LinkReports>
 
-      <Stack
-        paddingTop="16px"
-        paddingX="24px"
+      <LinkReports
         paddingBottom={{ base: "80px", lg: "104px" }}
-        width="100%"
-        maxWidth="1264px"
-        margin="auto"
+        url="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2021.pdf"
       >
-        <Link
-          fontFamily="Ubuntu"
-          fontSize="18px"
-          letterSpacing="0.3px"
-          target="_blank"
-          color="#42B0FF"
-          href="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2021.pdf"
-        >
           {t('DBReport2021')}
-        </Link>
-      </Stack>
+      </LinkReports>
 
       <Stack
         backgroundColor="#252A32"
@@ -374,7 +400,7 @@ export default function Transparency({ pages }) {
       >
         <Stack
           width="100%"
-          maxWidth="1264px"
+          maxWidth="1440px"
           paddingTop={{ base: "64px", lg: "80px" }}
           paddingBottom={{ base: "56px", lg: "72px" }}
           justify="space-between"
@@ -383,33 +409,57 @@ export default function Transparency({ pages }) {
         >
           <Stack
             paddingTop={{ base: "0px", lg: "16px" }}
-            maxWidth={{ base: "100%", lg: "42%" }}
+            maxWidth={{ base: "100%", lg: "580px" }}
             spacing={0}
           >
-            <BigTitle 
+            <Text
+              display={{base: "block", md:"flex"}}
+              flexDirection="column"
               paddingBottom={{base: "20px", lg: "24px"}}
+              maxWidth={{ base: "100%", lg: "400px" }}
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="28px"
+              lineHeight="42px"
               color="#FFF"
             >
-              {t('supportTitle1')} {isMobileMod ? " " : <br/>} {t('supportTitle2')}
-            </BigTitle>
+              {t('supportTitle1')}
+              {t('supportTitle2')}
+            </Text>
             <BodyText 
-              fontSize="16px"
-              letterSpacing="0.2px"
-              lineHeight="27px"
               paddingBottom="24px"
               color="#FFF"
             >
               {t('supportDescription')}
             </BodyText>
-            <RoundedButton
-              backgroundColor="#FF8484"
-              width="fit-content"
-              height="40px"
-              fontSize="15px"
-              onClick={() => router.push("/#support")}
+            <Link
+              locale={locale}
+              target="_blank"
+              href="/#support"
             >
-              {t('supportButton')}
-            </RoundedButton>
+              <Box
+                as="p"
+                target="_self"
+                display="flex"
+                alignItems="center"
+                height="54px"
+                width="fit-content"
+                borderRadius="8px"
+                backgroundColor="#0D99FC"
+                padding="10px 16px"
+                cursor="pointer"
+                color="#FFF"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="20px"
+                lineHeight="30px"
+                _hover={{
+                  backgroundColor: "#0B89E2"
+                }}
+              >
+                {t('supportButton')}
+              </Box>
+            </Link>
           </Stack>
 
           <Stack 

@@ -5,7 +5,8 @@ import {
   Image,
   Tooltip,
   Skeleton,
-  SkeletonText
+  SkeletonText,
+  Text
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
@@ -17,7 +18,6 @@ import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../../utils";
 
 import Carousel from "../atoms/Carousel";
-import SectionText from "../atoms/SectionText";
 import DatasetThemeCatalogCard from "../organisms/DatasetThemeCatalogCard";
 import RemoveIcon from "../../public/img/icons/removeIcon";
 import styles from "../../styles/themeCatalog.module.css";
@@ -104,14 +104,19 @@ function Themes ({
               >
                 <Tooltip
                   hasArrow
-                  bg="#2A2F38"
+                  padding="16px"
+                  backgroundColor="#252A32"
+                  boxSizing="border-box"
+                  borderRadius="8px"
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  textAlign="center"
+                  color="#FFFFFF"
+                  placement="top"
+                  maxWidth="160px"
                   label={elm.node[`name${capitalize(locale)}`] || elm.node.name}
-                  fontSize="16px"
-                  fontWeight="500"
-                  padding="5px 16px 6px"
-                  marginTop="10px"
-                  color="#FFF"
-                  borderRadius="6px"
                 >
                   <Image
                     className={styles.iconTheme}
@@ -128,7 +133,7 @@ function Themes ({
                 <RemoveIcon
                   alt="remover tema do filtro"
                   display={found(elm.node.slug) ? "flex" : "none"}
-                  fill="#42B0FF"
+                  fill="#0D99FC"
                   width={responsive.mobileQuery ? "20px" : "30px"}
                   height={responsive.mobileQuery ? "20px" : "30px"}
                   transition="all 0.5s"
@@ -204,21 +209,23 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
   return (
     <Box
       width={responsive.mobileQuery ? "100vw" : "95vw"}
-      maxWidth="1264px"
+      maxWidth="1440px"
       margin={responsive.mobileQuery ? "24px 0 48px !important" : "40px 0 48px !important"}
     >
       {!loading && datasetsCards?.length === 0 &&
         <Center padding="0 40px">
-          <SectionText
+          <Text
+            fontFamily="Roboto"
+            color="#71757A"
             fontSize={responsive.mobileQuery ? "14px" : "18px"}
-            color="#A3A3A3"
+            lineHeight={responsive.mobileQuery ? "20px" : "26px"}
             textAlign="center"
             marginBottom={responsive.mobileQuery ? "16px" : "32px"}
           >
             {t('noDatasetsFound', { returnObjects: true })[0]}
             {useCheckMobile() ? null : <br/>}
             {t('noDatasetsFound', { returnObjects: true })[1]}
-          </SectionText>
+          </Text>
         </Center>
       }
       <Center
@@ -262,10 +269,6 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
                 rawDataSources={{
                   id: elm?.first_raw_data_source_id,
                   number: elm?.n_raw_data_sources
-                }}
-                informationRequests={{
-                  id: elm?.first_information_request_id,
-                  number: elm?.n_information_requests
                 }}
                 link={`/dataset/${elm.id}`}
                 locale={locale}
@@ -328,12 +331,12 @@ export default function ThemeCatalog ({ data, locale }) {
   }, [selectedTheme, locale, defaultDatasetsCards]);
 
   const handleSelectTheme = (elm) => {
-    triggerGAEvent("theme_home", elm)
-    triggerGAEvent("theme", elm)
     router.push("#theme", undefined, { locale: router.locale })
     if(selectedTheme.includes(elm)) {
       setSelectedTheme(selectedTheme.filter(res => res !== elm))
     } else {
+      triggerGAEvent("theme_home", elm)
+      triggerGAEvent("theme", elm)
       setSelectedTheme([elm, ...selectedTheme])
     }
   }

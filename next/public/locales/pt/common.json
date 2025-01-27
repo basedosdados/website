@@ -54,7 +54,7 @@
     "edu": {
         "learn_from_the_reference": "Venha aprender com quem é referência",
         "in_making_public_data_available": "em disponibilizar dados públicos no Brasil",
-        "with_our_course_you_can_go_further": "Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização.",
+        "with_our_course_you_can_go_further": "Com nosso curso você pode ir mais longe na sua pesquisa, profissão, ou organização",
         "take_advantage_of_the_promotional_price": "Aproveite o preço promocional"
     },
     "tooltip": {
@@ -130,5 +130,14 @@
                 "quote": "Criamos um importante produto nosso, a Fotografia do Município, em parceria com a BD. A Fotografia agrega diversos indicadores socioeconômicos dos municípios brasileiros. A Ponte fez o planejamento e desenho do relatório, enquanto a BD cuidou da parte técnica de visualização e gestão de dados. A parceria foi o que nos permitiu avançar rápido no desenvolvimento da ferramenta, e garantiu a qualidade de dados alta como queríamos desde o início."
             }
         }
+    },
+    "error": {
+        "ops": "Ooops...",
+        "notFoundPage": "Infelizmente não encontramos essa página.",
+        "system": "Infelizmente ocorreu um erro.",
+        "searchNewBases": "Navegue pelo menu ali em cima ou busque os dados que voce precisa na barra de pesquisa.",
+        "verifyStatusSystem": "Verifique o status da nossa plataforma e tente acessar novamente mais tarde.",
+        "searchData": "Pesquise dados",
+        "checkStatus": "Confira o status"
     }
 }

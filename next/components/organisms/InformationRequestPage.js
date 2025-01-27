@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from "lodash";
+import Button from "../atoms/Button";
 import ReadMore from "../atoms/ReadMore";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
@@ -148,25 +149,13 @@ export default function InformationRequestPage({ id }) {
         marginTop="8px !important"
         marginBottom="40px !important"
       >
-        <Box
+        <Button
           as="a"
           href={resource?.dataUrl}
           target="_blank"
-          display="flex"
-          alignItems="center"
-          height="40px"
-          width="fit-content"
-          borderRadius="8px"
+          onClick={() => {}}
           backgroundColor={resource?.dataUrl ? "#2B8C4D" : "#ACAEB1"}
-          padding="8px 16px"
           cursor={resource?.dataUrl ? "pointer" : "default"}
-          color="#FFF"
-          fill="#FFF"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          gap="8px"
-          lineHeight="20px"
           _hover={{
             backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1"
           }}
@@ -176,27 +165,15 @@ export default function InformationRequestPage({ id }) {
             width="12px"
             height="12px"
           />
-        </Box>
+        </Button>
 
-        <Box
+        <Button
           as="a"
           href={resource?.url}
           target="_blank"
-          display="flex"
-          alignItems="center"
-          height="40px"
-          width="fit-content"
-          borderRadius="8px"
+          onClick={() => {}}
           backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
-          padding="8px 16px"
           cursor={resource?.url ? "pointer" : "default"}
-          color="#FFF"
-          fill="#FFF"
-          fontFamily="Roboto"
-          fontWeight="500"
-          fontSize="14px"
-          gap="8px"
-          lineHeight="20px"
           _hover={{
             backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
           }}
@@ -206,7 +183,7 @@ export default function InformationRequestPage({ id }) {
             width="12px"
             height="12px"
           />
-        </Box>
+        </Button>
       </StackSkeleton>
 
       <Stack spacing="12px">

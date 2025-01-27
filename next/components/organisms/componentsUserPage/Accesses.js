@@ -8,7 +8,7 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import RoundedButton from "../../components/atoms/RoundedButton";
+import Button from "../../components/atoms/Button";
 
 export default function Accesses ({ userInfo }) {
   return (
@@ -22,7 +22,7 @@ export default function Accesses ({ userInfo }) {
           label={t('username.onlyAvailableInBDEnterprises')}
           fontSize="14px"
           fontWeight="400"
-          fontFamily="Lato"
+          fontFamily="Roboto"
           padding="5px 16px 6px"
           letterSpacing="0.5px"
           lineHeight="24px"
@@ -30,13 +30,10 @@ export default function Accesses ({ userInfo }) {
           borderRadius="6px"
         >
           <Box width={isMobileMod() ? "100%" : "fit-content"}>
-            <RoundedButton
-              borderRadius="30px"
+            <Button
               width={isMobileMod() ? "100%" : "fit-content"}
-              _hover={{transform: "none"}}
               cursor="default"
-              backgroundColor="#C4C4C4"
-            >{t('username.addUser')}</RoundedButton>
+            >{t('username.addUser')}</Button>
           </Box>
         </Tooltip>
       </Stack>

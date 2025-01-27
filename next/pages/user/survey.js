@@ -222,7 +222,7 @@ export default function Survey() {
     >
       <Stack
         width="800px"
-        maxWidth="1264px"
+        maxWidth="1440px"
         maxHeight="575px"
         margin="0 auto"
         spacing={0}
@@ -270,7 +270,7 @@ export default function Survey() {
               pointerEvents={isLoading ? "none" : "default"}
               borderRadius="16px"
               cursor="pointer"
-              border={selectedValueStage(elm[1], index) ? "2px solid #42B0FF" : "1px solid #DEDFE0"}
+              border={selectedValueStage(elm[1], index) ? "2px solid #0D99FC" : "1px solid #DEDFE0"}
               backgroundColor={selectedValueStage(elm[1], index) ? "#CFEBFE" : "#FFF"}
               width="fit-content"
               padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}

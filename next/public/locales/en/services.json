@@ -3,7 +3,7 @@
     "metaTitle": "Services – Data Basis",
     "slogan": {
       "title": "Our services",
-      "description": "Data Basis is the expert that helps you or your team work with and extract maximum value from data.",
+      "description": "Data Basis is the expert that helps you or your team work with and extract maximum value from data",
       "cta": "Let's work on a project together"
     },
     "services": {
@@ -18,7 +18,7 @@
     },
     "dataCapture": {
       "title": "Data capture",
-      "description": "We capture and provide data on demand with speed, scale, and low cost.",
+      "description": "We capture and provide data on demand with speed, scale, and low cost",
       "longDescription": "You don't need to worry about creating and maintaining your own infrastructure or writing code - we take care of that. Everything is done following Data Basis' treatment and standardization methodology, and according to the best data engineering practices in the market. The processed tables can be made available exclusively or be public.",
       "advantages": {
         "title": "Main advantages",
@@ -47,7 +47,7 @@
     },
     "dataAnalysis": {
       "title": "Data analysis",
-      "description": "We build essential analyses, reports, and indicators for your research or decision-making.",
+      "description": "We build essential analyses, reports, and indicators for your research or decision-making",
       "longDescription": "The information and insights are generated from various datasets already processed in our public data lake, coupled with the expertise of our Data team. And more: we use our standard treatment methodology so that you can also cross-reference this data with any other bases available in the data lake.",
       "examples": {
         "title": "Examples of questions we can answer",
@@ -84,7 +84,7 @@
     },
     "workflow": {
       "title": "Our workflow",
-      "description": "The same work methodology for all services, based on customer satisfaction and excellence in quality.",
+      "description": "The same work methodology for all services, based on customer satisfaction and excellence in quality",
       "steps": {
         "demand": {
           "title": "Demand",
