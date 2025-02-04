@@ -83,8 +83,6 @@ export default function DatasetPage ({ dataset, userGuide }) {
   const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
 
-  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
-
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
   const pushQuery = (key, value) => {
@@ -274,7 +272,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
                 </BodyText>
               </GridItem>
 
-              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+              {locale !== 'pt' ?
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <LabelText
                     typography="large"
@@ -293,6 +291,8 @@ export default function DatasetPage ({ dataset, userGuide }) {
                       : t('notProvided')}
                   </BodyText>
                 </GridItem>
+                :
+                <></>
               }
             </Grid>
           </GridItem>

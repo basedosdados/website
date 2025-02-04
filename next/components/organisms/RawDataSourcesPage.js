@@ -333,7 +333,7 @@ export default function RawDataSourcesPage({ id }) {
 
       <AddInfoTextBase
         title={t('rawDataSource.requiresRegistration')}
-        text={TrueOrFalse(resource?.requiredRegistration)}
+        text={TrueOrFalse(resource?.requiresRegistration)}
       />
 
       <AddInfoTextBase
