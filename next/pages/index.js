@@ -70,9 +70,11 @@ function Hero({ dataThemeCatalog, locale }) {
   const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   function openSearchLink() {
-    triggerGAEvent("search", search)
-    triggerGAEvent("search_home", search)
-    router.push(`/search?q=${search}`);
+    if(search.trim() !== "") {
+      triggerGAEvent("search", search)
+      triggerGAEvent("search_home", search)
+      router.push(`/search?q=${search}`);
+    }
   }
 
   return (

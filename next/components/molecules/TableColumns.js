@@ -136,13 +136,6 @@ export default function TableColumns({
   useEffect(() => {
     if(tableId === undefined) return
 
-    const filterClosedTables = (data) => {
-      return data.filter(elm => {
-        const table = elm?.node?.directoryPrimaryKey?.table
-        return table && table.isClosed === true
-      })
-    }
-
     const featchColumns = async () => {
       setHasLoading(true)
 
@@ -530,7 +523,7 @@ export default function TableColumns({
       >
         <TableContainer
           height="100%"
-          maxHeight="300px"
+          maxHeight="50vh"
           overflowY="auto"
           border="1px solid #DEDFE0"
           borderBottom="0px"

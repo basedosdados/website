@@ -30,7 +30,6 @@ export default function Dataset({
   locale
 }) {
   const { t } = useTranslation('dataset');
-  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -163,9 +162,9 @@ export default function Dataset({
               alt={organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name || t('notProvided')}
               borderRadius="16px"
               minWidth="222px"
-              minHeight="138px"
               maxWidth="222px"
-              maxHeight="138px"
+              minHeight={locale !== 'pt' ? "165px" : "138px"}
+              maxHeight={locale !== 'pt' ? "165px" : "138px"}
               objectFit="contain"
             />
           </Box>
@@ -253,7 +252,7 @@ export default function Dataset({
                 </BodyText>
               </Stack>
 
-              {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+              {locale !== 'pt' ?
                 <Stack
                   direction={{ base: "column", lg: "row" }}
                   spacing={1}
@@ -271,6 +270,8 @@ export default function Dataset({
                     {spatialCoverage ? spatialCoverage : t('notProvided')}
                   </BodyText>
                 </Stack>
+                :
+                <></>
               }
 
               <Stack
