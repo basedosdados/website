@@ -1,8 +1,9 @@
 import axios from "axios";
+import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getAllPeople() {
+async function getAllPeople(locale = 'pt') {
   const token = await axios({
     url: API_URL,
     method: "POST",
@@ -37,9 +38,16 @@ async function getAllPeople() {
                 careers {
                   edges {
                     node {
-                      _id
-                      team
-                      role
+                      teamNew {
+                        slug
+                        name
+                        name${capitalize(locale)}
+                      }
+                      roleNew {
+                        slug
+                        name
+                        name${capitalize(locale)}
+                      }
                       startAt
                       endAt
                     }
@@ -57,12 +65,13 @@ async function getAllPeople() {
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
-    console.error(error)
+    console.error(error.response.data)
   }
 }
 
 export default async function handler(req, res) {
-  const result = await getAllPeople()
+  const { locale = 'pt' } = req.query
+  const result = await getAllPeople(locale)
 
   if(result?.status === "err_getTeam_0") return res.status(500).json({errors: result.errors})
   if(result?.status === "err_getTeam_1") return res.status(500).json({errors: "Erro na geração do token"})
