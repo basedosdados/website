@@ -1,8 +1,9 @@
 import axios from "axios";
+import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getAllTeams() {
+export default async function getAllTeams(locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -13,7 +14,11 @@ export default async function getAllTeams() {
             allCareer {
               edges {
                 node {
-                  team
+                  team_new {
+                    _id
+                    name
+                    name${capitalize(locale)}
+                  }
                 }
               }
             }
@@ -25,7 +30,7 @@ export default async function getAllTeams() {
     const teamsSet = new Set()
 
     result.forEach(item => {
-      const team = item.node.team.trim()
+      const team = item.node.team_new.name.trim()
       if (team !== "") {
         teamsSet.add(team)
       }
