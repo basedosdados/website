@@ -23,7 +23,7 @@ async function getAllPeople(locale = 'pt') {
       data: {
         query: `
         query {
-          allAccount (profile: A_1, locale: ${locale}){
+          allAccount (profile: A_1){
             edges {
               node {
                 firstName
@@ -38,14 +38,13 @@ async function getAllPeople(locale = 'pt') {
                 careers {
                   edges {
                     node {
-                      _id
-                      team_new {
-                        _id
+                      teamNew {
+                        slug
                         name
                         name${capitalize(locale)}
                       }
-                      role_new {
-                        _id
+                      roleNew {
+                        slug
                         name
                         name${capitalize(locale)}
                       }
@@ -66,7 +65,7 @@ async function getAllPeople(locale = 'pt') {
     const data = res?.data?.data?.allAccount?.edges
     return data
   } catch (error) {
-    console.error(error)
+    console.error(error.response.data)
   }
 }
 

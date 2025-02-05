@@ -3,7 +3,7 @@ import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getCareerPeople(team, locale = 'pt') {
+async function getTeamMembers(team, locale = 'pt') {
   const token = await axios({
     url: API_URL,
     method: "POST",
@@ -23,7 +23,7 @@ async function getCareerPeople(team, locale = 'pt') {
       data: {
         query: `
         query {
-          allAccount (careers_Team: "${team}", profile: A_1){
+          allAccount (careers_TeamNew_Slug: "${team}", profile: A_1){
             edges {
               node {
                 firstName
@@ -38,14 +38,13 @@ async function getCareerPeople(team, locale = 'pt') {
                 careers {
                   edges {
                     node {
-                      _id
-                      team_new {
-                        _id
+                      teamNew {
+                        slug
                         name
                         name${capitalize(locale)}
                       }
-                      role_new {
-                        _id
+                      roleNew {
+                        slug
                         name
                         name${capitalize(locale)}
                       }
@@ -71,7 +70,7 @@ async function getCareerPeople(team, locale = 'pt') {
 }
 
 export default async function handler(req, res) {
-  const result = await getCareerPeople(req.query.team, req.query.locale)
+  const result = await getTeamMembers(req.query.team, req.query.locale)
 
   if(result?.status === "err_getCareer_0") return res.status(500).json([])
   if(result?.status === "err_getCareer_1") return res.status(500).json([])

@@ -17,6 +17,8 @@ import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { capitalize } from 'lodash';
+import { useRouter } from 'next/router';
 
 import Button from "../components/atoms/Button";
 import Display from "../components/atoms/Text/Display";
@@ -137,13 +139,19 @@ const TeamBox = ({
   twitter,
   linkedin,
   github,
-  career
+  careers,
+  locale
 }) => {
   const hasLeftSpacing = (index % 2 == 0) ? false : true
 
   const role = () => {
     const roles = []
-    career.map((elm) => roles.push(elm.node.role))
+    careers.map((elm) => {
+      const roleData = elm.node.roleNew
+      if (!roleData) return
+      const roleName = roleData[`name${capitalize(locale)}`]
+      if (roleName) roles.push(roleName)
+    })
     roles.sort((a, b) => getRoleScore(a.toLowerCase()) - getRoleScore(b.toLowerCase()))
     return roles.filter((elm) => elm.length > 0).join(", ")
   }
@@ -258,17 +266,19 @@ const TeamBox = ({
 
 export default function AboutUs() {
   const { t } = useTranslation('aboutUs');
+  const { locale } = useRouter();
   const [isLoading, setIsLoading] = useState(false)
   const [loadingData, setLoadingData] = useState(false)
   const [data, setData] = useState([])
   const [allPeople, setAllPeople] = useState([])
   const [people, setPeople] = useState([])
   const [filterTeam, setFilterTeam] = useState("")
+  const [teams, setTeams] = useState([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople`, { method: "GET" });
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople?locale=${locale}`, { method: "GET" });
         if (!response.ok) {
           throw new Error("Erro");
         }
@@ -296,12 +306,46 @@ export default function AboutUs() {
     }
   }, [data])
 
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch(`/api/team/getAllTeams?locale=${locale}`);
+        if (!response.ok) {
+          throw new Error("Error fetching teams");
+        }
+        const result = await response.json();
+        if (result.success) {
+          setTeams(result.resource);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchTeams();
+  }, [locale]);
+
   const sortPeople = (array) => {
     const sortPeopleArray = array
 
     function compareByRole(a, b) {
-      const rolesA = a.node.careers.edges.map(edge => edge.node.role.toLowerCase())
-      const rolesB = b.node.careers.edges.map(edge => edge.node.role.toLowerCase())
+      const rolesA = a.node.careers.edges.map(edge => {
+        const roleData = edge.node.roleNew
+        if (!roleData) return ''
+        const roleName = roleData[`name${capitalize(locale)}`] || roleData.name
+        return roleName?.toLowerCase() || ''
+      }).filter(Boolean)
+
+      const rolesB = b.node.careers.edges.map(edge => {
+        const roleData = edge.node.roleNew
+        if (!roleData) return ''
+        const roleName = roleData[`name${capitalize(locale)}`] || roleData.name
+        return roleName?.toLowerCase() || ''
+      }).filter(Boolean)
+
+      // If no valid roles found, sort to end
+      if (!rolesA.length) return 1
+      if (!rolesB.length) return -1
 
       const sortedRolesA = rolesA.sort((x, y) => getRoleScore(x) - getRoleScore(y))
       const sortedRolesB = rolesB.sort((x, y) => getRoleScore(x) - getRoleScore(y))
@@ -354,7 +398,7 @@ export default function AboutUs() {
       return setPeople(allPeople)
     } else {
       setFilterTeam(elm)
-      const result = await fetch(`/api/team/getCareerPeople?team=${elm}`, {method: "GET"})
+      const result = await fetch(`/api/team/getTeamMembers?team=${elm}&locale=${locale}`, {method: "GET"})
         .then(res => res.json())
       if(result.length === 0) {
         setFilterTeam("")
@@ -772,18 +816,18 @@ export default function AboutUs() {
                 top={{base:"0", lg: "120px"}}
                 z-index="20"
               >
-                {t('teamCategories', { returnObjects: true }).map((elm, i) => (
+                {teams.map((elm, i) => (
                   <LabelText
                     key={i}
-                    color={filterTeam === elm ? "#2B8C4D" :"#71757A"}
+                    color={filterTeam === elm.node.slug ? "#2B8C4D" :"#71757A"}
                     _hover={{
                       color: "#2B8C4D"
                     }}
                     width="max-content"
                     cursor="pointer"
-                    onClick={() => handleSelect(elm)}
+                    onClick={() => handleSelect(elm.node.slug)}
                   >
-                    {elm}
+                    {elm.node[`name${capitalize(locale)}`] || elm.node.name}
                   </LabelText>
                 ))}
               </Box>
@@ -814,7 +858,8 @@ export default function AboutUs() {
                       twitter={elm.node.twitter}
                       linkedin={elm.node.linkedin}
                       github={elm.node.github}
-                      career={elm.node.careers.edges}
+                      careers={elm.node.careers.edges}
+                      locale={locale}
                     />
                   ))}
                 </Stack>

@@ -3,7 +3,7 @@ import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-export default async function getAllTeams(locale = 'pt') {
+async function getAllTeams(locale = 'pt') {
   try {
     const res = await axios({
       url: API_URL,
@@ -11,14 +11,13 @@ export default async function getAllTeams(locale = 'pt') {
       data: {
         query: `
           query {
-            allCareer {
+            allTeam {
               edges {
                 node {
-                  team_new {
-                    _id
-                    name
-                    name${capitalize(locale)}
-                  }
+                  _id
+                  slug
+                  name
+                  name${capitalize(locale)}
                 }
               }
             }
@@ -26,19 +25,24 @@ export default async function getAllTeams(locale = 'pt') {
         `
       }
     })
-    const result = res?.data?.data?.allCareer?.edges
-    const teamsSet = new Set()
-
-    result.forEach(item => {
-      const team = item.node.team_new.name.trim()
-      if (team !== "") {
-        teamsSet.add(team)
-      }
-    })
-
-    const data = Array.from(teamsSet)
-    return data
+    const result = res?.data?.data?.allTeam?.edges
+    return result
   } catch (error) {
     console.error(error)
+  }
+}
+
+export default async function handler(req, res) {
+  const { locale } = req.query;
+  try {
+    const teams = await getAllTeams(locale);
+    
+    if (!teams) {
+      return res.status(500).json({ error: "No teams found", success: false });
+    }
+    
+    return res.status(200).json({ resource: teams, success: true });
+  } catch (error) {
+    return res.status(500).json({ error: error.message, success: false });
   }
 }
