@@ -278,7 +278,7 @@ export default function AboutUs() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/team/getAllPeople?locale=${locale}`, { method: "GET" });
+        const response = await fetch(`/api/team/getAllPeople?locale=${locale}`, { method: "GET" });
         if (!response.ok) {
           throw new Error("Erro");
         }
