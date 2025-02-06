@@ -112,20 +112,55 @@ const HistoryBox = ({ children, title, date, image }) => {
 
 function getRoleScore(role) {
   switch (role) {
-    case "presidente":
+    case "ceo":
       return 1;
-    case "diretora executiva":
+    case "platform_leader":
       return 2;
-    case "co-fundador":
+    case "db_lab_leader":
+      return 2;
+    case "communication_community_leader":
+      return 2;
+    case "db_edu_leader":
+      return 2;
+    case "data_leader":
       return 3;
-    case "associado":
-      return 4;
-    case "gerente":
+    case "board_chair":
       return 5;
-    case "membro do conselho fiscal":
+    case "cofounder":
+      return 6;
+    case "member":
+      return 7;
+    case "fiscal_council_member":
       return 10;
     default:
+      return 4;
+  }
+}
+
+function getTeamScore(slug) {
+  switch (slug) {
+    case "board_directors":
+      return 1;
+    case "platform":
+      return 2;
+    case "db_lab":
+      return 3;
+    case "db_edu":
+      return 4;
+    case "communication":
+      return 5;
+    case "board":
       return 6;
+    case "members":
+      return 7;
+    case "cofounders":
+      return 8;
+    case "fiscal_council":
+      return 9;
+    case "admin":
+      return 10;
+    default:
+      return 11;
   }
 }
 
@@ -147,7 +182,7 @@ const TeamBox = ({
   const role = () => {
     const roles = []
     careers.map((elm) => {
-      const roleData = elm.node.roleNew
+      const roleData = elm.node.role
       if (!roleData) return
       const roleName = roleData[`name${capitalize(locale)}`]
       if (roleName) roles.push(roleName)
@@ -330,17 +365,15 @@ export default function AboutUs() {
 
     function compareByRole(a, b) {
       const rolesA = a.node.careers.edges.map(edge => {
-        const roleData = edge.node.roleNew
+        const roleData = edge.node.role
         if (!roleData) return ''
-        const roleName = roleData[`name${capitalize(locale)}`] || roleData.name
-        return roleName?.toLowerCase() || ''
+        return roleData.slug || ''
       }).filter(Boolean)
 
       const rolesB = b.node.careers.edges.map(edge => {
-        const roleData = edge.node.roleNew
+        const roleData = edge.node.role
         if (!roleData) return ''
-        const roleName = roleData[`name${capitalize(locale)}`] || roleData.name
-        return roleName?.toLowerCase() || ''
+        return roleData.slug || ''
       }).filter(Boolean)
 
       // If no valid roles found, sort to end
@@ -816,7 +849,9 @@ export default function AboutUs() {
                 top={{base:"0", lg: "120px"}}
                 z-index="20"
               >
-                {teams.map((elm, i) => (
+                {teams
+                  .sort((a, b) => getTeamScore(a.node.slug) - getTeamScore(b.node.slug))
+                  .map((elm, i) => (
                   <LabelText
                     key={i}
                     color={filterTeam === elm.node.slug ? "#2B8C4D" :"#71757A"}

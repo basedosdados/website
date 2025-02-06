@@ -23,7 +23,7 @@ async function getTeamMembers(team, locale = 'pt') {
       data: {
         query: `
         query {
-          allAccount (careers_TeamNew_Slug: "${team}", profile: A_1){
+          allAccount (careers_Team_Slug: "${team}", profile: A_1){
             edges {
               node {
                 firstName
@@ -38,12 +38,12 @@ async function getTeamMembers(team, locale = 'pt') {
                 careers {
                   edges {
                     node {
-                      teamNew {
+                      team {
                         slug
                         name
                         name${capitalize(locale)}
                       }
-                      roleNew {
+                      role {
                         slug
                         name
                         name${capitalize(locale)}
