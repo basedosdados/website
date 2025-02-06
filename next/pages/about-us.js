@@ -182,7 +182,7 @@ const TeamBox = ({
   const role = () => {
     const roles = []
     careers.map((elm) => {
-      const roleData = elm.node.roleNew
+      const roleData = elm.node.role
       if (!roleData) return
       const roleName = roleData[`name${capitalize(locale)}`]
       if (roleName) roles.push(roleName)
@@ -365,13 +365,13 @@ export default function AboutUs() {
 
     function compareByRole(a, b) {
       const rolesA = a.node.careers.edges.map(edge => {
-        const roleData = edge.node.roleNew
+        const roleData = edge.node.role
         if (!roleData) return ''
         return roleData.slug || ''
       }).filter(Boolean)
 
       const rolesB = b.node.careers.edges.map(edge => {
-        const roleData = edge.node.roleNew
+        const roleData = edge.node.role
         if (!roleData) return ''
         return roleData.slug || ''
       }).filter(Boolean)

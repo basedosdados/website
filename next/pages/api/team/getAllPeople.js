@@ -38,12 +38,12 @@ async function getAllPeople(locale = 'pt') {
                 careers {
                   edges {
                     node {
-                      teamNew {
+                      team {
                         slug
                         name
                         name${capitalize(locale)}
                       }
-                      roleNew {
+                      role {
                         slug
                         name
                         name${capitalize(locale)}
