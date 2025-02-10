@@ -42,11 +42,12 @@ Ainda não temos reportadas inconsistências
 Os dados são divulgados no formato de fotografias. Para cada data, tem-se um retrato do CNPJs e seus atributos. Com exceção da tabela Simples, a coluna data informa a data na qual os dados foram extraídos. Os dados anteriores a 2021-11-23 são apresentados com o status dessa data.
 
 # Linhas duplicadas
-De modo geral, há algumas dezenas de linhas duplicadas no conjunto de dados. Essas duplicações vêm da fonte original e representam menos de 0.1% dos dados, o que geralmente não impacta as análises. 
-No entanto, existem algumas liberações que possuem grande quantidade de linhas duplicadas. São elas:
+Na maioria dos arquivos disponíveis pela Receita Federal, há apenas algumas dezenas de linhas duplicadas nos dados. Essas duplicações vêm da fonte original e representam menos de 0,1% do total, o que normalmente não afeta as análises.
+
+No entanto, em duas datas específicas, os arquivos da Receita Federal contêm um número significativo de linhas duplicadas::
   - Tabela socios na data 2024-09-18: foram encontradas 4.625.789 linhas duplicadas
   - Tabela estabelecimentos na data 2024-10-16: foram encontradas 8.100.851 linhas duplicadas
-Ao remover as linhas duplicadas durante os testes de integridade, observamos que a quantidade de linhas resultante ficou abaixo do total registrado em datas anteriores. Isso sugere que as duplicações podem ter substituído valores legítimos que acabaram não sendo representados no conjunto de dados.
+Essas linhas duplicadas não foram removidas das tabelas. Durante os testes de integridade, percebeu-se que o número de CNPJs únicos foi menor do que o registrado em datas anteriores. Isso indica que as duplicações podem ter substituído CNPJs que deveriam estar presentes nas tabelas.
 
 # Cruzamentos
 As tabelas podem ser cruzadas usando as colunas `cnpj_básico` e `data`.  É necessário entender as chaves únicas de cada tabela para evitar duplicações.
