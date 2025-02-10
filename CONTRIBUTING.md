@@ -11,7 +11,6 @@ Obrigado por considerar contribuir com a Base dos Dados. Nesse guia vamos mostra
 ## Iniciando
 
 - Faça o [fork](https://docs.github.com/pt/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo) desse repositório
-  - Desmarque a opção `Copy the main branch only`
 - Clone seu fork
 - Entre no respositório clonado
   - `cd website`
@@ -22,17 +21,11 @@ Esse seção cobre o processo de contruição no blog da Base dos Dados.
 
 Algumas informações:
 
-- Todas as postagens estão em `next/blog/`
-- Cada post é um arquivo markdown (`.md`) com o caminho da postagem (slug) no nome do arquivo
+- Todas as postagens estão em `next/blog/`. A pasta `pt` são posts em portugues
+- Cada post é um arquivo markdown (`.md`), o nome do arquivo é a url do blog em `basedosdados.org/blog/<slug>`. `slug` é o nome do arquivo que é o mesmo da URL
 - As imagens de cada postagem está em `public/blog/<slug>` dentro da pasta com o nome do arquivo markdown.
 
-Exemplo: o arquivo [`next/blog/analisando-precos-de-combustiveis-com-a-bd.md`](./next/blog/analisando-precos-de-combustiveis-com-a-bd.md) tem uma pasta em [`next/public/analisando-precos-de-combustiveis-com-a-bd/`](./next/public/blog/analisando-precos-de-combustiveis-com-a-bd/) onde fica todas as imagens usadas no post.
-
-Depois de clonar o repositório crie uma branch a partir do ramo `blog`
-
-```sh
-git checkout -b blog-meu-post blog
-```
+Exemplo: o arquivo [`next/blog/pt/analisando-precos-de-combustiveis-com-a-bd.md`](./next/blog/pt/analisando-precos-de-combustiveis-com-a-bd.md) tem uma pasta em [`next/public/analisando-precos-de-combustiveis-com-a-bd/`](./next/public/blog/analisando-precos-de-combustiveis-com-a-bd/) onde fica todas as imagens usadas no post.
 
 Crie um arquivo markdown em `next/blog/`:
 
@@ -51,14 +44,13 @@ Os metadados do post são em [YAML](https://yaml.org/) em um bloco no topo do ar
   - `created`: Data de criação do post, deve ser uma string `"2024-02-29"` no formato [ISO 8601](https://pt.wikipedia.org/wiki/ISO_8601).
   - `updated` (opcional): Data que o post foi atualizado. Mesmo formato de `created`
 - `thumbnail` (opcional): Caminho para uma imagem.
-- `categories` (opcional): uma lista com as categorias.
-  - As postagens com categoria estarão em `/blog/category/categoryName`
-  - Não está definido se um post pode ter mais de uma categoria
+- `categories` (opcional): uma lista com as categorias. Exemplo: `analise`, `tutorial`
 - `authors` (recomendado): Uma lista de autores. Cada autor tem o seguintes campos:
   - `name` (obrigatório): Nome do autor
   - `role` (opcional): Qual foi o papel dessa pessoa no post
   - `social` (opcional): Uma URL para alguma rede social da pessoa (github, website, linkedin)
   - `avatar` (opcional): URL para uma imagem
+- `published`: Um boolean, `true` ou `false`. Deve sempre ser `true`. Ele é `false` quando por algum motivo queremos remover o post do blog da Base dos Dados.
 
 [Exemplo para `como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos.md`](./next/blog/como-a-disparidade-salarial-por-genero-e-raca-evoluiu-ao-longo-dos-anos.md?plain=1):
 
@@ -80,6 +72,7 @@ authors:
   - name: Giovane Caruso
     role: Edição de texto
     social: https://www.linkedin.com/in/giovanecaruso/
+published: true
 ---
 
 Não é novidade que a desigualdade de gênero e raça reflete na empregabilidade e na remuneração dentro do mercado de trabalho no Brasil. Apesar da legislação que proíbe a disparidade salarial entre indivíduos desempenhando a mesma função, a realidade é que tais disparidades persistem. Recentemente, o Governo Federal tomou medidas para enfrentar esse desafio ao publicar uma portaria que regulamenta a Lei nº 14.611/2023. Essa lei cria mecanismos para equalizar salários entre homens e mulheres ocupando o mesmo cargo em empresas com pelo menos 100 funcionários.
@@ -217,7 +210,7 @@ print("Hello World!!")
 <pre>
 ```r
 library(basedosdados)
-data <- basedosdaos::read_sql("
+data <- basedosdados::read_sql("
 SELECT
   *
 FROM
@@ -231,7 +224,7 @@ Resultado:
 
 ```r
 library(basedosdados)
-data <- basedosdaos::read_sql("
+data <- basedosdados::read_sql("
 SELECT
   *
 FROM
