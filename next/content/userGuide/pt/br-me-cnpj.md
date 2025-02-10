@@ -16,8 +16,8 @@ authors:
 > O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
 
 Esse conjunto possui quatro tabelas de microdados:  
-- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos como natureza jurídica e tipo de quadro societário.  
-- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem algumas características do sócio e qualificam a relação com a empresa.
+- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos, como natureza jurídica e tipo de quadro societário. 
+- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem características do sócio e qualificam a sua relação com a empresa.
 - **Estabelecimentos:** Cada linha representa um estabelecimento de operação de uma empresa. As colunas detalham informações sobre localização, atividade econômica e informações de contato.
 - **Simples:** Cada linha representa uma empresa e indica se a empresa está no Simples Nacional ou MEI.  
 
@@ -42,7 +42,12 @@ Ainda não temos reportadas inconsistências
 Os dados são divulgados no formato de fotografias. Para cada data, tem-se um retrato do CNPJs e seus atributos. Com exceção da tabela Simples, a coluna data informa a data na qual os dados foram extraídos. Os dados anteriores a 2021-11-23 são apresentados com o status dessa data.
 
 # Linhas duplicadas
-Há algumas dezenas de linhas duplicadas no conjunto de dados. Essas duplicações vêm da fonte original e representam menos de 0.1% dos dados, o que geralmente não impacta as análises.
+Na maioria dos arquivos disponíveis pela Receita Federal, há apenas algumas dezenas de linhas duplicadas nos dados. Essas duplicações vêm da fonte original e representam menos de 0,1% do total, o que normalmente não afeta as análises.
+
+No entanto, em duas datas específicas, os arquivos da Receita Federal contêm um número significativo de linhas duplicadas::
+  - Tabela socios na data 2024-09-18: foram encontradas 4.625.789 linhas duplicadas
+  - Tabela estabelecimentos na data 2024-10-16: foram encontradas 8.100.851 linhas duplicadas
+Essas linhas duplicadas não foram removidas das tabelas. Durante os testes de integridade, percebeu-se que o número de CNPJs únicos foi menor do que o registrado em datas anteriores. Isso indica que as duplicações podem ter substituído CNPJs que deveriam estar presentes nas tabelas.
 
 # Cruzamentos
 As tabelas podem ser cruzadas usando as colunas `cnpj_básico` e `data`.  É necessário entender as chaves únicas de cada tabela para evitar duplicações.
