@@ -16,8 +16,8 @@ authors:
 > O guia contém informações detalhadas sobre os dados. Para dúvidas sobre acesso ou uso da plataforma, consulte nossa [página de Perguntas Frequentes](/faq).
 
 Esse conjunto possui quatro tabelas de microdados:  
-- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos como natureza jurídica e tipo de quadro societário.  
-- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem algumas características do sócio e qualificam a relação com a empresa.
+- **Empresas:** Cada linha representa uma empresa e seus atributos. As colunas descrevem seus atributos, como natureza jurídica e tipo de quadro societário. 
+- **Sócios:** Cada linha representa um sócio de uma empresa. As colunas descrevem características do sócio e qualificam a sua relação com a empresa.
 - **Estabelecimentos:** Cada linha representa um estabelecimento de operação de uma empresa. As colunas detalham informações sobre localização, atividade econômica e informações de contato.
 - **Simples:** Cada linha representa uma empresa e indica se a empresa está no Simples Nacional ou MEI.  
 
