@@ -862,7 +862,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    if(user?.isSubscriber) return user?.isSubscriber
     return false
   }
 
@@ -900,7 +900,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           email: res.email,
           username: res.username,
           picture: res.picture || "",
-          plan: res?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
+          plan: res?.proSubscription
         })
       } catch (error) {
         console.error("Error parsing user data:", error)
