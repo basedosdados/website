@@ -55,5 +55,10 @@ export default async function handler(req, res) {
   if (result.errors) return res.status(500).json({ error: result.errors, success: false });
   if (result === "err") return res.status(500).json({ error: "err", success: false });
 
-  return res.status(200).json({ resource: cleanGraphQLResponse(result?.data?.allDataapikey?.edges[0]?.node), success: true });
+  const keyData = result?.data?.allDataapikey?.edges[0]?.node;
+  if (!keyData) {
+    return res.status(404).json({ error: "API key not found", success: false });
+  }
+
+  return res.status(200).json({ resource: cleanGraphQLResponse(keyData), success: true });
 }
