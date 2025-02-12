@@ -347,6 +347,7 @@
         "user": "Usuário",
         "access": "Acessos",
         "administrator": "Administrador",
+        "member": "Membro",
         "errEnterPassword": "Por favor, insira a senha.",
         "enterPassword": "Insira sua senha",
         "bigquerySectionTitle": "E-mail de acesso ao BigQuery",

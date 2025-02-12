@@ -233,6 +233,7 @@
         "addUser": "Agregar usuario",
         "user": "Usuario",
         "access": "Accesos",
+        "member": "Miembro",
         "administrator": "Administrador",
         "errEnterPassword": "Por favor, ingrese la contraseña.",
         "enterPassword": "Ingrese su contraseña",
