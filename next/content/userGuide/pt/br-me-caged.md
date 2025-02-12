@@ -61,7 +61,7 @@ Em 2020, o CAGED passou por reformulação, automatizando a coleta de informaç�
 Os microdados são atualizados com defasagem de um mês. O calendário de atualizações pode ser consultado no [site do MTE](https://www.gov.br/trabalho-e-emprego/pt-br/assuntos/estatisticas-trabalho/o-pdet/calendario-de-divulgacao-do-novo-caged).
 
 # Dados identificados
-Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados da RAIS, é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
+Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
 
 # Tratamentos feitos pela BD:
 Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, [os códigos de extração e tratamento](https://github.com/basedosdados/queries-basedosdados-dev/blob/main/models/br_me_caged/code/crawler_caged.py) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_caged) estão disponíveis no repositório do GitHub para consulta.
