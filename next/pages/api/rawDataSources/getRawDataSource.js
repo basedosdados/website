@@ -79,7 +79,7 @@ async function getRawDataSource(id, locale = 'pt') {
                     }
                   }
                 }
-                requiredRegistration
+                requiresRegistration
                 areaIpAddressRequired {
                   edges {
                     node {

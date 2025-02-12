@@ -38,8 +38,6 @@ export default function TablePage({ id }) {
   const [resource, setResource] = useState({})
   const [isError, setIsError] = useState(false)
 
-  const allowedURLs = ["https://basedosdados.org", "https://staging.basedosdados.org"]
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -304,7 +302,7 @@ export default function TablePage({ id }) {
         </StackSkeleton>
       </Stack>
 
-      {!allowedURLs.includes(process.env.NEXT_PUBLIC_BASE_URL_FRONTEND) &&
+      {locale !== 'pt' ?
         <Stack spacing="8px"  marginBottom="40px !important">
           <StackSkeleton width="300px" height="28px">
             <TitleText typography="small">
@@ -328,6 +326,8 @@ export default function TablePage({ id }) {
             </BodyText>
           </StackSkeleton>
         </Stack>
+        :
+        <></>
       }
 
       <Stack spacing="8px" marginBottom="40px !important">
