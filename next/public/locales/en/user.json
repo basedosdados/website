@@ -342,6 +342,7 @@
         "addUser": "Add user",
         "user": "User",
         "access": "Accesses",
+        "member": "Member",
         "administrator": "Administrator",
         "errEnterPassword": "Please enter the password.",
         "enterPassword": "Enter your password",

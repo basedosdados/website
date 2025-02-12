@@ -1,74 +1,55 @@
 import {
   Stack,
   Box,
-  Text,
   Image,
-  Tooltip,
   Grid,
   GridItem,
+  Spinner
 } from "@chakra-ui/react";
-import { isMobileMod } from "../../hooks/useCheckMobile.hook";
-import Button from "../../components/atoms/Button";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import BodyText from "../../atoms/Text/BodyText";
 
 export default function Accesses ({ userInfo }) {
-  return (
-    <Stack spacing="24px">
-      <Stack alignItems="end">
-        <Tooltip
-          hasArrow
-          top="-10px"
-          placement="top"
-          bg="#2A2F38"
-          label={t('username.onlyAvailableInBDEnterprises')}
-          fontSize="14px"
-          fontWeight="400"
-          fontFamily="Roboto"
-          padding="5px 16px 6px"
-          letterSpacing="0.5px"
-          lineHeight="24px"
-          color="#FFF"
-          borderRadius="6px"
-        >
-          <Box width={isMobileMod() ? "100%" : "fit-content"}>
-            <Button
-              width={isMobileMod() ? "100%" : "fit-content"}
-              cursor="default"
-            >{t('username.addUser')}</Button>
-          </Box>
-        </Tooltip>
-      </Stack>
+  const { t } = useTranslation('user');
+  const [data, setData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [owner, setOwner] = useState(null)
+  const [subscriptionMembers, setSubscriptionMembers] = useState([])
 
-      <Grid templateColumns={isMobileMod() ? "1fr 1fr" : "3fr 1fr"}>
-        <GridItem>
-          <Text
-            backgroundColor="#F6F6F6"
-            padding={isMobileMod() ? "8px 0 8px 16px" : "8px 24px"}
-            color="#6F6F6F"
-            fontFamily="Ubuntu"
-            fontSize="16px"
-            fontWeight="400"
-            lineHeight="16px"
-            letterSpacing="0.2px"
-          >{t('username.user')}</Text>
-        </GridItem>
-        <GridItem>
-          <Text
-            backgroundColor="#F6F6F6"
-            padding={isMobileMod() ? "8px 16px" : "8px 24px"}
-            color="#6F6F6F"
-            fontFamily="Ubuntu"
-            fontSize="16px"
-            fontWeight="400"
-            lineHeight="16px"
-            letterSpacing="0.2px"
-            width="100%"
-          >{t('username.access')}</Text>
-        </GridItem>
+  async function getMembers() {
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
 
+    const res = await fetch(`/api/user/getMembers?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
+    return setData(res)
+  }
+
+  useEffect(() => {
+    getMembers()
+  }, [userInfo])
+
+  useEffect(() => {
+    if(data === null) return
+    if(userInfo?.proSubscriptionRole === "owner") {
+      setOwner(data?.internalSubscription?.edges?.[0]?.node?.admin)
+      setSubscriptionMembers(data?.internalSubscription?.edges?.[0]?.node?.subscribers?.edges)
+    }
+    if(userInfo?.proSubscriptionRole === "member") {
+      setOwner(data?.subscriptionSet?.edges?.[0]?.node?.admin)
+      setSubscriptionMembers(data?.subscriptionSet?.edges?.[0]?.node?.subscribers?.edges)
+    }
+    return setIsLoading(false)
+  }, [data])
+
+  const MembersComponent = ({ data, isOwner }) => {
+    return (
+      <>
         <GridItem
           overflow="hidden"
-          padding={isMobileMod() ? "24px 0" : "24px"}
-          borderBottom="1px solid #DEDFE0"
+          padding={{base: "24px 0", lg: "24px"}}
+          borderBottom="1px solid #EEEEEE"
         >
           <Stack
             width="100%"
@@ -76,45 +57,43 @@ export default function Accesses ({ userInfo }) {
             overflow="hidden"
             flexDir="column"
             spacing={0}
-            paddingLeft={isMobileMod() ? "16px" : "0"}
+            paddingLeft={{base: "16px", lg: "0"}}
             flexDirection="row"
-            alignItems={isMobileMod() ? "stretch" : "stretch"}
+            alignItems={{base: "stretch", lg: "stretch"}}
             height="54px"
           >
             <Box
               position="absolute"
-              width="36px"
-              minWidth="36px"
-              height="36px"
-              minHeight="36px"
+              width="48px"
+              minWidth="48px"
+              height="48px"
+              minHeight="48px"
               borderRadius="50%"
               overflow="hidden"
-              top="9px"
             >
-              <Image width="100%" height="100%" src={userInfo?.picture ? userInfo?.picture :"https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+              <Image 
+                width="100%"
+                height="100%"
+                src={
+                  data?.picture ? data?.picture
+                  :
+                    "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+                }
+              />
             </Box>
-            <Text
-              marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
-              color="#252A32"
-              fontFamily="Ubuntu"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="27px"
-              letterSpacing="0.3px"
+            <BodyText
+              typography="small"
+              marginLeft={{base: "44px !important", lg: "60px !important"}}
               height="27px"
               isTruncated
-            >{userInfo?.username}</Text>
-            <Text
-              marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
-              color="#6F6F6F"
-              fontFamily="Ubuntu"
-              fontSize="14px"
-              fontWeight="400"
-              lineHeight="27px"
-              letterSpacing="0.3px"
+            >{data?.firstName} {data?.lastName || ""}</BodyText>
+            <BodyText
+              typography="small"
+              marginLeft={{base: "44px !important", lg: "60px !important"}}
+              color="#464A51"
               height="27px"
               isTruncated
-            >{userInfo?.email}</Text>
+            >{data?.email}</BodyText>
           </Stack>
         </GridItem>
 
@@ -122,21 +101,52 @@ export default function Accesses ({ userInfo }) {
           display="flex"
           alignItems="center"
           width="100%"
-          padding={isMobileMod() ? "24px 16px" : "24px"}
-          borderBottom="1px solid #DEDFE0"
+          padding={{base: "24px 16px", lg: "24px"}}
+          borderBottom="1px solid #EEEEEE"
         >
-          <Text
-            color="#6F6F6F"
-            fontFamily="Ubuntu"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="27px"
-            letterSpacing="0.3px"
-          >
-            {t('username.administrator')}
-          </Text>
+          <BodyText color="#464A51" typography="small">
+            {isOwner ? t('username.administrator') : t('username.member')}
+          </BodyText>
         </GridItem>
-      </Grid>
+      </>
+    )
+  }
+
+  return (
+    <Stack spacing="24px" flex="1">
+      {isLoading ?
+        <Stack flex="1" justifyContent="center" marginTop="10vh">
+          <Spinner
+            margin="0 auto"
+            width="200px"
+            height="200px"
+            color="#2B8C4D"
+          />
+        </Stack>
+      :
+        <Grid templateColumns={{base: "1fr 1fr", lg: "3fr 1fr"}}>
+          <GridItem>
+            <BodyText
+            backgroundColor="#EEEEEE"
+            padding={{base: "8px 0 8px 16px", lg: "8px 24px"}}
+            color="#464A51"
+          >{t('username.user')}</BodyText>
+          </GridItem>
+          <GridItem>
+            <BodyText
+              backgroundColor="#EEEEEE"
+              padding={{base: "8px 16px", lg: "8px 24px"}}
+              color="#464A51"
+              width="100%"
+            >{t('username.access')}</BodyText>
+          </GridItem>
+
+          {owner && <MembersComponent data={owner} isOwner={true} />}
+          {subscriptionMembers.map((member, index) => (
+            <MembersComponent data={member?.node} isOwner={false} key={index} />
+          ))}
+        </Grid>
+      }
     </Stack>
   )
 }

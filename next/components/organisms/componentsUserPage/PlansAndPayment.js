@@ -316,6 +316,7 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatTimeStamp (value) {
+    if(value === null || value === undefined) return t("username.noDate")
     const date = new Date(value)
     const options = { day: '2-digit', month: 'long', year: 'numeric' }
     const formattedDate = date.toLocaleDateString('pt-BR', options)
@@ -1312,7 +1313,7 @@ export default function PlansAndPayment ({ userData }) {
                   fontWeight="500"
                   color="#464A51"
                 >
-                  {formatTimeStamp(subscriptionInfo()?.canceledAt ? subscriptionInfo()?.canceledAt : subscriptionInfo()?.nextBillingCycle || t("username.noDate"))}
+                  {formatTimeStamp(subscriptionInfo()?.canceledAt ? subscriptionInfo()?.canceledAt : subscriptionInfo()?.nextBillingCycle)}
                 </Text>
               </BodyText>
             </Box>
