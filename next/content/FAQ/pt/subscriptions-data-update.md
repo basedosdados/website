@@ -5,4 +5,4 @@ keywords: pro, empresas, assinatura, dados exclusivos, atualizacao
 id: subscriptions-data-update
 ---
 
-Todos os dados disponíveis na BD Pro são atualizados automaticamente via nossa tecnologia de gerência de fluxos. A BD usa o que há de mais moderno em engenharia de dados para garantir a mais alta qualidade e consistência no que disponibilizamos.
+Todos os dados disponíveis na BD Pro são atualizados automaticamente via pipelines de dados. A BD trabalha com tecnologias open source e todo o processo de limpeza e tratamento está disponível no nosso [github](https://github.com/basedosdados/pipelines)

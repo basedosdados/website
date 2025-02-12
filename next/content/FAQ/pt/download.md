@@ -6,5 +6,5 @@ id: download
 ---
 
 Sim, você pode baixar o arquivo CSV completo das tabelas tratadas direto na plataforma.
-No entanto, tabelas com mais de 200.000 linhas só podem ser acessados através do nosso data lake no BigQuery ou dos nossos pacotes em Python e R.
+No entanto, o limite para download dos dados na nossa plataforma é de 100 MB para o plano não pago e 1GB para nossos planos avançados, Pro e Empresas.
 
