@@ -190,6 +190,8 @@
         "edit": "Editar",
         "updatePicture": "Atualizar foto",
         "removePicture": "Remover foto",
+        "remove": "Remover",
+        "modalRemoveMember": "Tem certeza que deseja remover o usuário?",
         "invalidUsername": "Nome de usuário inválido",
         "noSpacesInUsername": "O nome de usuário não pode conter espaços",
         "invalidOrExistingUsername": "Nome de usuário inválido ou já existente",

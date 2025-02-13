@@ -183,6 +183,8 @@
         "edit": "Edit",
         "updatePicture": "Update picture",
         "removePicture": "Remove picture",
+        "remove": "Remove",
+        "modalRemoveMember": "Are you sure you want to remove the user?",
         "invalidUsername": "Invalid username",
         "noSpacesInUsername": "Username cannot contain spaces",
         "invalidOrExistingUsername": "Invalid or already existing username",
