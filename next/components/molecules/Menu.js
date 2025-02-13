@@ -203,7 +203,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
+function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan }) {
   const router = useRouter();
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
@@ -214,8 +214,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
     {name: t('password'), value: "new_password"},
     {name: t('plans_and_payment'), value: "plans_and_payment"},
     isUserPro && {name: t('bigquery'), value: "big_query"},
+    haveInterprisePlan && {name: t('access'), value: "accesses"},
   ]
-  // {name: "Acessos", value: "accesses"},
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -866,6 +866,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     return false
   }
 
+  const haveInterprisePlan = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    return user?.proSubscription === "bd_pro_empresas"
+  }
+
   useEffect(() => {
     const cookieUserBD = cookies.get("userBD")
     setUserBD(cookieUserBD || null)
@@ -1127,6 +1133,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             isOpen={menuUserMobile.isOpen}
             onClose={menuUserMobile.onClose}
             isUserPro={isUserPro()}
+            haveInterprisePlan={haveInterprisePlan()}
           />
         </HStack>
       </Box>

@@ -109,7 +109,11 @@ export default function Accesses ({ userInfo }) {
         setErrors({})
         getMembers()
       } else {
-        setErrors({ email: result?.error?.[0] || t('username.userNotFound') })
+        setErrors({
+          email: result?.error?.[0] === "Conta possui inscrição ativa" ? t('username.userAlreadyHasSubscription')
+          :
+          result?.error?.[0] || t('username.userNotFound')
+        })
       }
     } catch (error) {
       setErrors({ email: t('username.unexpectedError') })
@@ -214,10 +218,10 @@ export default function Accesses ({ userInfo }) {
 
           {!isOwner && userInfo?.proSubscriptionRole === "owner" &&
             <Box
-              fill="#FF8484"
+              fill="#BF3434"
               marginLeft="auto"
               cursor="pointer"
-              _hover={{opacity: 0.8}}
+              _hover={{fill: "#992A2A"}}
             >
               <Tooltip
                 label={t("username.remove")}
@@ -264,7 +268,7 @@ export default function Accesses ({ userInfo }) {
         }}
         propsModalContent={{
           width: "100%",
-          maxWidth: "500px",
+          maxWidth: "600px",
           margin: "24px"
         }}
       >
@@ -416,7 +420,7 @@ export default function Accesses ({ userInfo }) {
               textAlign="center"
               color="#FFFFFF"
               placement="top"
-              maxWidth="230px"
+              maxWidth="300px"
             >
               <Box
                 display="flex"
