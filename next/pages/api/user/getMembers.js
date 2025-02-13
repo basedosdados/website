@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getUser(id, token) {
+async function getMembers(id, token) {
   try {
     const res = await axios({
       url: API_URL,
@@ -13,47 +13,50 @@ async function getUser(id, token) {
       data: {
         query: `
           query {
-            allAccount (id: "${id}"){
+            allAccount (id: "${id}") {
               edges {
                 node {
-                  id
-                  isAdmin
-                  isActive
-                  isEmailVisible
-                  gcpEmail
-                  picture
-                  username
-                  firstName
-                  lastName
-                  email
-                  website
-                  github
-                  twitter
-                  linkedin
-                  workDataTool
-                  availableForResearch
-                  isSubscriber
-                  proSubscription
-                  proSubscriptionRole
-                  proSubscriptionSlots
                   subscriptionSet (isActive: true) {
                     edges {
                       node {
-                        canceledAt
-                        createdAt
-                        planInterval
+                        subscribers {
+                          edges {
+                            node {
+                              firstName
+                              lastName
+                              email
+                              picture
+                            }
+                          }
+                        }
+                        admin {
+                          firstName
+                          lastName
+                          email
+                          picture
+                        }
                       }
                     }
                   }
                   internalSubscription (isActive: true) {
                     edges {
                       node {
-                        canceledAt
-                        createdAt
-                        isActive
-                        stripeSubscription
-                        planInterval
-                        nextBillingCycle
+                        subscribers {
+                          edges {
+                            node {
+                              firstName
+                              lastName
+                              email
+                              picture
+                            }
+                          }
+                        }
+                        admin {
+                          firstName
+                          lastName
+                          email
+                          picture
+                        }
                       }
                     }
                   }
@@ -78,7 +81,7 @@ export default async function handler(req, res) {
     return req.cookies.token
   }
 
-  const result = await getUser(atob(req.query.p), token())
+  const result = await getMembers(atob(req.query.p), token())
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
