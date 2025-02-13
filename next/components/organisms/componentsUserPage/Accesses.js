@@ -7,16 +7,21 @@ import {
   Spinner,
   Tooltip,
   useDisclosure,
-  ModalCloseButton
+  ModalCloseButton,
+  FormControl
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import BodyText from "../../atoms/Text/BodyText";
 import TitleText from "../../atoms/Text/TitleText";
-import Button from "../../atoms/Button";
 
 import {
-  ModalGeneral
+  ModalGeneral,
+  InputForm,
+  ErrorMessage,
+  ExtraInfoTextForm,
+  LabelTextForm,
+  Button
 } from "../../molecules/uiUserPage";
 
 import TrashIcon from "../../../public/img/icons/trashIcon";
@@ -26,17 +31,22 @@ export default function Accesses ({ userInfo }) {
   const [data, setData] = useState(null)
   const AddMemberModal = useDisclosure()
   const RemoveMemberModal = useDisclosure()
-  const [valueEmail, setValueEmail] = useState("chandra2807@uorak.com")
+  const [valueEmail, setValueEmail] = useState("")
+  const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoadingAddMember, setIsLoadingAddMember] = useState(false)
   const [owner, setOwner] = useState(null)
   const [subscriptionMembers, setSubscriptionMembers] = useState([])
+  const [isMaxMembersReached, setIsMaxMembersReached] = useState(false)
 
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(userInfo?.id)
+  const maxSlots = parseInt(userInfo.proSubscriptionSlots, 10)
 
   async function getMembers() {
     const res = await fetch(`/api/user/getMembers?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
+    setIsLoading(false)
     return setData(res)
   }
 
@@ -45,49 +55,93 @@ export default function Accesses ({ userInfo }) {
   }, [userInfo])
 
   useEffect(() => {
-    if(data === null) return
-    if(userInfo?.proSubscriptionRole === "owner") {
-      setOwner(data?.internalSubscription?.edges?.[0]?.node?.admin)
-      setSubscriptionMembers(data?.internalSubscription?.edges?.[0]?.node?.subscribers?.edges)
-    }
-    if(userInfo?.proSubscriptionRole === "member") {
-      setOwner(data?.subscriptionSet?.edges?.[0]?.node?.admin)
-      setSubscriptionMembers(data?.subscriptionSet?.edges?.[0]?.node?.subscribers?.edges)
-    }
-    return setIsLoading(false)
+    if (!data) return
+  
+    const subData = userInfo?.proSubscriptionRole === "owner"
+      ? data?.internalSubscription?.edges?.[0]?.node
+      : data?.subscriptionSet?.edges?.[0]?.node
+  
+    setOwner(subData?.admin)
+    setSubscriptionMembers(subData?.subscribers?.edges)
+    setIsMaxMembersReached(subData?.subscribers?.edges?.length >= maxSlots)
+    setIsLoading(false)
   }, [data])
 
   const handleAddMember = async () => {
-    setIsLoading(true)
-    const idUser = await fetch(`/api/user/getIdUser?p=${btoa(valueEmail)}`, {method: "GET"})
-      .then(res => res.json())
-    const [ idUserMember ] = reg.exec(idUser?.id)
+    setErrors({})
+    const valueEmailTrim = valueEmail.trim()
 
-    const res = await fetch(`/api/user/addMemberInSubscription?p=${btoa(idUserMember)}&r=${btoa(id)}`, {method: "GET"})
-      .then(res => res.json())
+    if (isMaxMembersReached) {
+      setErrors({ email: t('username.maxMembersReached') });
+      return;
+    }
 
-    if(res.success) {
-      getMembers()
-    } else {
-      setIsLoading(false)
+    if (!valueEmailTrim || !/^\S+@\S+$/.test(valueEmailTrim)) {
+      setErrors({ email: t('username.pleaseEnterValidEmail') });
+      return;
+    }
+
+    setIsLoadingAddMember(true)
+
+    try {
+      const response = await fetch(`/api/user/getIdUser?p=${btoa(valueEmailTrim)}`)
+      const idUser = await response.json()
+
+      if (idUser.error === "err, user not found") {
+        setErrors({ email: t('username.userNotFound') })
+        return
+      }
+
+      const [idUserMember] = reg.exec(idUser?.id) || []
+
+      if (!idUserMember) {
+        setErrors({ email: t('username.userNotFound') })
+        return
+      }
+
+      const res = await fetch(`/api/user/addMemberInSubscription?p=${btoa(idUserMember)}&r=${btoa(id)}`)
+      const result = await res.json()
+
+      if (result.success) {
+        setIsLoading(true)
+        AddMemberModal.onClose()
+        setValueEmail("")
+        setErrors({})
+        getMembers()
+      } else {
+        setErrors({ email: result?.error?.[0] || t('username.userNotFound') })
+      }
+    } catch (error) {
+      setErrors({ email: t('username.unexpectedError') })
+    } finally {
+      setIsLoadingAddMember(false)
     }
   }
 
   const handleRemoveMember = async () => {
     setIsLoading(true)
-    const idUser = await fetch(`/api/user/getIdUser?p=${btoa(valueEmail)}`, {method: "GET"})
-      .then(res => res.json())
-    const [ idUserMember ] = reg.exec(idUser?.id)
+    setErrors({})
+    try {
+      const response = await fetch(`/api/user/getIdUser?p=${btoa(valueEmail)}`)
+      const idUser = await response.json()
+      const [ idUserMember ] = reg.exec(idUser?.id)
 
-    const res = await fetch(`/api/user/removeMemberInSubscription?p=${btoa(idUserMember)}&r=${btoa(id)}`, {method: "GET"})
-      .then(res => res.json())
+      if (!idUserMember) throw new Error("User not found");
 
-    if(res.success) {
-      getMembers()
-    } else {
+      const res = await fetch(`/api/user/removeMemberInSubscription?p=${btoa(idUserMember)}&r=${btoa(id)}`)
+      const result = await res.json()
+
+      if (result.success) {
+        getMembers()
+      } else {
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setErrors({ email: t("username.unexpectedError") })
       setIsLoading(false)
+    } finally {
+      setValueEmail("")
     }
-    setValueEmail("")
   }
 
   const MembersComponent = ({ data, isOwner }) => {
@@ -199,10 +253,13 @@ export default function Accesses ({ userInfo }) {
 
   return (
     <Stack spacing="0" flex="1">
+      <Box display={isLoading || isLoadingAddMember ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+
       <ModalGeneral
         isOpen={AddMemberModal.isOpen}
         onClose={() => {
           setValueEmail("")
+          setErrors({})
           AddMemberModal.onClose()
         }}
         propsModalContent={{
@@ -211,8 +268,47 @@ export default function Accesses ({ userInfo }) {
           margin: "24px"
         }}
       >
-        <Stack spacing={0} marginBottom="40px"></Stack>
-        <Stack spacing={0} marginBottom="40px"></Stack>
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">
+            {t("username.addUser")}
+          </TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+          />
+        </Stack>
+
+        <Stack spacing={0}>
+          <ExtraInfoTextForm marginBottom="16px">
+            {t('username.addUserInfo')}
+          </ExtraInfoTextForm>
+          <FormControl isInvalid={!!errors.email}>
+            <LabelTextForm text={t('username.email')}/>
+            <InputForm
+              id="email"
+              name="email"
+              value={valueEmail}
+              justifyContent="start"
+              onChange={(e) => setValueEmail(e.target.value)}
+            />
+            <ErrorMessage>
+              {errors.email}
+            </ErrorMessage>
+          </FormControl>
+        </Stack>
+
+        <Stack spacing={0} marginTop="24px">
+          <Button
+            width={{base: "100%", lg: "fit-content"}}
+            onClick={() => handleAddMember()}
+            isLoading={isLoadingAddMember}
+            pointerEvents={isLoadingAddMember ? "none" : "default"}
+          >
+            {t('username.addUser')}
+          </Button>
+        </Stack>
       </ModalGeneral>
 
       <ModalGeneral
@@ -295,11 +391,55 @@ export default function Accesses ({ userInfo }) {
       <>
         <Stack
           display={userInfo?.proSubscriptionRole === "owner" ? "flex" : "none"}
-          marginBottom="24px"
+          marginBottom="24px !important"
+          position="relative"
         >
-          <Button marginLeft="auto" onClick={handleAddMember}>
-            {t('username.addUser')}
-          </Button>
+          {!isMaxMembersReached ?
+            <Button
+              marginLeft="auto"
+              onClick={() => AddMemberModal.onOpen()}
+            >
+              {t('username.addUser')}
+            </Button>
+          :
+            <Tooltip
+              label={t('username.maxMembersReached')}
+              hasArrow
+              padding="16px"
+              backgroundColor="#252A32"
+              boxSizing="border-box"
+              borderRadius="8px"
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              textAlign="center"
+              color="#FFFFFF"
+              placement="top"
+              maxWidth="230px"
+            >
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                height="44px"
+                width="fit-content"
+                borderRadius="8px"
+                marginLeft="auto"
+                padding="8px 16px"
+                cursor="pointer"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="14px"
+                lineHeight="20px"
+                letterSpacing="0.1px"
+                backgroundColor="#ACAEB1"
+                color="#FFF"
+              >
+                {t('username.addUser')}
+              </Box>
+            </Tooltip>
+          }
         </Stack>
 
         <Grid templateColumns={{base: "1fr 1fr", lg: "3fr 1fr"}}>
