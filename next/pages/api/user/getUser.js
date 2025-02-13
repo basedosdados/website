@@ -35,6 +35,7 @@ async function getUser(id, token) {
                   isSubscriber
                   proSubscription
                   proSubscriptionRole
+                  proSubscriptionSlots
                   subscriptionSet (isActive: true) {
                     edges {
                       node {

@@ -55,7 +55,7 @@ async function addMemberInSubscription(idAdmin, id, token) {
         `
       }
     })
-    return res.data
+    return res.data?.data?.createStripeCustomerSubscription
   } catch(err) {
     return "err"
   }
