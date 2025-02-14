@@ -36,7 +36,7 @@ Para filtrar apenas os CNPJs ativos, use a coluna `situacao_cadastral`.
 Os dados estão disponíveis apenas a partir de 23-11-2021. Registros anteriores a essa data não podem ser acessados. Porém, a base é cumulativa e não exclui registros. Ela apenas atualiza a situação cadastral e os atributos dos CNPJs. Assim, mesmo sem poder acompanhar mudanças antes de 23-11-2021, é possível consultar todos os CNPJs já abertos no Brasil.
 
 # Inconsistências
-Ainda não temos reportadas inconsistências
+Ainda não foram reportadas inconsistências neste conjunto de dados.
 
 # Observações ao longo tempo
 Os dados são divulgados no formato de fotografias. Para cada data, tem-se um retrato do CNPJs e seus atributos. Com exceção da tabela Simples, a coluna data informa a data na qual os dados foram extraídos. Os dados anteriores a 2021-11-23 são apresentados com o status dessa data.
