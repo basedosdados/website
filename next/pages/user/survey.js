@@ -1,12 +1,7 @@
-import {
-  Box,
-  Stack,
-  Progress,
-  Spinner
-} from "@chakra-ui/react";
+import { Box, Stack, Progress, Spinner } from "@chakra-ui/react";
 import { useState, useCallback } from "react";
-import cookies from 'js-cookie';
-import { useRouter } from 'next/router';
+import cookies from "js-cookie";
+import { useRouter } from "next/router";
 
 import Button from "../../components/atoms/Button";
 import Display from "../../components/atoms/Text/Display";
@@ -19,19 +14,22 @@ import Exclamation from "../../public/img/icons/exclamationIcon";
 import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps() {
-  return await withPages()
+  return await withPages();
 }
 
 export default function Survey() {
   const router = useRouter();
-  const [err, setErr] = useState("")
-  const [index, setIndex] = useState(0)
-  const [stages, setStages] = useState(Array(7).fill([]))
-  const [isLoading, setIsLoading] = useState(false)
+  const [err, setErr] = useState("");
+  const [index, setIndex] = useState(0);
+  const [stages, setStages] = useState(Array(7).fill([]));
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchUpdateProfileSurvey(skip) {
-    setIsLoading(true)
-    const id = JSON.parse(cookies.get("userBD")).id.replace(/\bAccountNode:\b/g, '')
+    setIsLoading(true);
+    const id = JSON.parse(cookies.get("userBD")).id.replace(
+      /\bAccountNode:\b/g,
+      "",
+    );
     const params = {
       p: btoa(id),
       f: btoa(stages[0][0] || ""),
@@ -41,27 +39,31 @@ export default function Survey() {
       g: btoa(stages[4][0] || ""),
       d: btoa(stages[5][0] || ""),
       e: btoa(stages[6][0] || ""),
-      s: skip
+      s: skip,
+    };
+
+    const queryString = new URLSearchParams(params).toString();
+    const result = await fetch(`/api/user/updateProfileSurvey?${queryString}`, {
+      method: "GET",
+    }).then((res) => res.json());
+
+    if (result.errors.length > 0) {
+      setErr(
+        "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.",
+      );
+      console.error(result.errors);
+      return setIsLoading(false);
     }
 
-    const queryString = new URLSearchParams(params).toString()
-    const result = await fetch(`/api/user/updateProfileSurvey?${queryString}`, { method: "GET" })
-      .then(res => res.json())
-
-    if(result.errors.length > 0) {
-      setErr("Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.")
-      console.error(result.errors)
-      return setIsLoading(false)
-    }
-
-    const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
-      .then(res => res.json())
-    cookies.set('userBD', JSON.stringify(userData))
-    triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu")
-    router.push('/')
+    const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {
+      method: "GET",
+    }).then((res) => res.json());
+    cookies.set("userBD", JSON.stringify(userData));
+    triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu");
+    router.push("/");
   }
 
-  const question  = [
+  const question = [
     {
       question: "Em que área você atua?",
       options: [
@@ -72,15 +74,23 @@ export default function Survey() {
         ["Varejo", "VAREJO"],
         ["Energia", "ENERGIA"],
         ["Jornalismo", "JORNALISMO"],
-        ["Outra", "OUTRA"]
+        ["Outra", "OUTRA"],
       ],
       buttons: [
-        {text: "Pular", style: "clean",function: async () => fetchUpdateProfileSurvey("true")},
-        {text: "Continuar", function: () => {
-          if(stages[0].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(1)
-        }}
+        {
+          text: "Pular",
+          style: "clean",
+          function: async () => fetchUpdateProfileSurvey("true"),
+        },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[0].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(1);
+          },
+        },
       ],
     },
     {
@@ -98,16 +108,20 @@ export default function Survey() {
         ["Professor(a)/Pesquisador(a)", "PROFESSOR_PESQUISADOR"],
         ["Freelancer", "FREELANCER"],
         ["Empreendedor(a)", "EMPREENDEDOR"],
-        ["Outro", "OUTRO"]
+        ["Outro", "OUTRO"],
       ],
       buttons: [
-        {text: "Voltar", function: () => setIndex(0), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[1].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(2)
-        }}
-      ]
+        { text: "Voltar", function: () => setIndex(0), style: "clean" },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[1].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(2);
+          },
+        },
+      ],
     },
     {
       question: "Qual o tamanho da empresa em que você trabalha?",
@@ -119,16 +133,21 @@ export default function Survey() {
         ["Mais de 500 funcionários", "GRANDE_MAIS_500"],
       ],
       buttons: [
-        {text: "Voltar", function: () => setIndex(1), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[2].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(3)
-        }}
-      ]
+        { text: "Voltar", function: () => setIndex(1), style: "clean" },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[2].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(3);
+          },
+        },
+      ],
     },
     {
-      question: "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
+      question:
+        "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
       options: [
         ["SQL", "SQL"],
         ["Python", "PYTHON"],
@@ -139,13 +158,17 @@ export default function Survey() {
         ["Outra", "OTHER"],
       ],
       buttons: [
-        {text: "Voltar", function: () => setIndex(2), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[3].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(4)
-        }}
-      ]
+        { text: "Voltar", function: () => setIndex(2), style: "clean" },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[3].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(4);
+          },
+        },
+      ],
     },
     {
       question: "Qual o seu principal objetivo com a BD?",
@@ -160,13 +183,17 @@ export default function Survey() {
         ["Outro", "OTHER"],
       ],
       buttons: [
-        {text: "Voltar", function: () => setIndex(3), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[4].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(5)
-        }}
-      ]
+        { text: "Voltar", function: () => setIndex(3), style: "clean" },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[4].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(5);
+          },
+        },
+      ],
     },
     {
       question: "Como você conheceu a BD?",
@@ -179,39 +206,59 @@ export default function Survey() {
         ["Outros", "OTHER"],
       ],
       buttons: [
-        {text: "Voltar", function: () => setIndex(4), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[5].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(6)
-        }}
-      ]
+        { text: "Voltar", function: () => setIndex(4), style: "clean" },
+        {
+          text: "Continuar",
+          function: () => {
+            if (stages[5].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            setIndex(6);
+          },
+        },
+      ],
     },
     {
-      question: "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
-      options: [["Sim", "YES"], ["Não", "NO"]],
-      buttons: [{text: "Voltar", function: () => setIndex(5), style: "clean"}, {text: "Enviar", function: () => {
-        if(stages[6].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-        setErr("")
-        fetchUpdateProfileSurvey("false")
-      }}]
-    }
-  ]
+      question:
+        "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
+      options: [
+        ["Sim", "YES"],
+        ["Não", "NO"],
+      ],
+      buttons: [
+        { text: "Voltar", function: () => setIndex(5), style: "clean" },
+        {
+          text: "Enviar",
+          function: () => {
+            if (stages[6].length === 0)
+              return setErr("Por favor, selecione uma das opções abaixo.");
+            setErr("");
+            fetchUpdateProfileSurvey("false");
+          },
+        },
+      ],
+    },
+  ];
 
   const handleSelected = useCallback((value, stageIndex) => {
-    setStages((prevStages) => prevStages.map((stage, i) => 
-      i === stageIndex ? (stage.includes(value) ? [] : [value]) : stage
-    ))
-  }, [])
+    setStages((prevStages) =>
+      prevStages.map((stage, i) =>
+        i === stageIndex ? (stage.includes(value) ? [] : [value]) : stage,
+      ),
+    );
+  }, []);
 
-  const selectedValueStage = useCallback((value, stageIndex) => {
-    return stages[stageIndex].includes(value)
-  }, [stages])
+  const selectedValueStage = useCallback(
+    (value, stageIndex) => {
+      return stages[stageIndex].includes(value);
+    },
+    [stages],
+  );
 
   const progressValue = useCallback(() => {
-    const values = [15, 30, 45, 60, 75, 90, 100]
-    return values[index]
-  }, [index])
+    const values = [15, 30, 45, 60, 75, 90, 100];
+    return values[index];
+  }, [index]);
 
   return (
     <MainPageTemplate
@@ -229,10 +276,7 @@ export default function Survey() {
         spacing={0}
         marginY="40px"
       >
-        <Display
-          typography="small"
-          marginY="64px"
-        >
+        <Display typography="small" marginY="64px">
           {question[index].question}
         </Display>
 
@@ -256,7 +300,7 @@ export default function Survey() {
           gap="16px"
           spacing={0}
         >
-          {question[index].options.map((elm, i) => 
+          {question[index].options.map((elm, i) => (
             <Box
               key={i}
               value={elm[1]}
@@ -264,8 +308,14 @@ export default function Survey() {
               pointerEvents={isLoading ? "none" : "default"}
               borderRadius="16px"
               cursor="pointer"
-              border={selectedValueStage(elm[1], index) ? "2px solid #0D99FC" : "1px solid #DEDFE0"}
-              backgroundColor={selectedValueStage(elm[1], index) ? "#CFEBFE" : "#FFF"}
+              border={
+                selectedValueStage(elm[1], index)
+                  ? "2px solid #0D99FC"
+                  : "1px solid #DEDFE0"
+              }
+              backgroundColor={
+                selectedValueStage(elm[1], index) ? "#CFEBFE" : "#FFF"
+              }
               width="fit-content"
               padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}
               fontFamily="Roboto"
@@ -276,7 +326,7 @@ export default function Survey() {
             >
               {elm[0]}
             </Box>
-          )}
+          ))}
         </Stack>
 
         <Stack
@@ -302,7 +352,7 @@ export default function Survey() {
             gap="16px"
             spacing={0}
           >
-            {question[index].buttons.map((elm, i) => 
+            {question[index].buttons.map((elm, i) => (
               <Button
                 key={i}
                 onClick={elm.function}
@@ -316,15 +366,23 @@ export default function Survey() {
                 backgroundColor={elm.style ? "#FFF" : "#0D99FC"}
                 _hover={{
                   color: elm.style ? "#0B89E2" : "#FAFAFA",
-                  backgroundColor: elm.style ? "" : "#0B89E2"
+                  backgroundColor: elm.style ? "" : "#0B89E2",
                 }}
               >
-                {isLoading ? (elm.text === "Pular" || elm.text === "Enviar")  ? <Spinner /> : elm.text : elm.text}
+                {isLoading ? (
+                  elm.text === "Pular" || elm.text === "Enviar" ? (
+                    <Spinner />
+                  ) : (
+                    elm.text
+                  )
+                ) : (
+                  elm.text
+                )}
               </Button>
-            )}
+            ))}
           </Stack>
         </Stack>
       </Stack>
     </MainPageTemplate>
-  )
+  );
 }

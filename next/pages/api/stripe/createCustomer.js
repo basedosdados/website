@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 async function createCustomer(token, userBD) {
-  const user = JSON.parse(userBD)
+  const user = JSON.parse(userBD);
 
   function trimName() {
-    const name = user.firstName + user?.lastName || ""
-    return name.replace(/\s+/g, ' ').trim()
+    const name = user.firstName + user?.lastName || "";
+    return name.replace(/\s+/g, " ").trim();
   }
 
   try {
@@ -15,7 +15,7 @@ async function createCustomer(token, userBD) {
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       data: {
         query: `
@@ -31,24 +31,24 @@ async function createCustomer(token, userBD) {
             }
           }
         }
-        `
-      }
-    })
-    const data = res.data
-    return data
+        `,
+      },
+    });
+    const data = res.data;
+    return data;
   } catch (error) {
-    console.error(error)
-    return "err"
+    console.error(error);
+    return "err";
   }
 }
 
 export default async function handler(req, res) {
-  const token = req.cookies.token
-  const userBD = req.cookies.userBD
-  const result = await createCustomer(token, userBD)
+  const token = req.cookies.token;
+  const userBD = req.cookies.userBD;
+  const result = await createCustomer(token, userBD);
 
-  if(result.errors) return res.status(500).json({error: result.errors})
-  if(result === "err") return res.status(500).json({error: "err"})
+  if (result.errors) return res.status(500).json({ error: result.errors });
+  if (result === "err") return res.status(500).json({ error: "err" });
 
-  res.status(200).json(result?.data?.createStripeCustomer?.customer)
+  res.status(200).json(result?.data?.createStripeCustomer?.customer);
 }

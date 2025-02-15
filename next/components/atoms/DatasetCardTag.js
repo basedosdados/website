@@ -1,5 +1,5 @@
-import Link from './Link';
-import { Tag } from '@chakra-ui/react';
+import Link from "./Link";
+import { Tag } from "@chakra-ui/react";
 
 export function DatasetCardTag({ slug, name, locale, ...props }) {
   return (

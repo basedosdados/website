@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import Button from "../atoms/Button";
 import TitleText from "../atoms/Text/TitleText";
 import LabelText from "../atoms/Text/LabelText";
@@ -27,7 +27,7 @@ import Link from "../atoms/Link";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 function Toc({ headings }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
   const [isOverflow, setIsOverflow] = useState({});
   const textRefs = useRef({});
   const [activeId, setActiveId] = useState(null);
@@ -43,14 +43,14 @@ function Toc({ headings }) {
     };
 
     headings.forEach((elm, i) => {
-      const textElement = textRefs.current[i]
+      const textElement = textRefs.current[i];
       if (textElement) {
         setIsOverflow((prev) => ({
           ...prev,
           [i]: textElement.scrollWidth > textElement.clientWidth,
-        }))
+        }));
       }
-    })
+    });
 
     const observerOptions = {
       root: null,
@@ -58,11 +58,14 @@ function Toc({ headings }) {
       threshold: 0.5,
     };
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
     observerRef.current = observer;
 
     const headingElements = document.querySelectorAll(
-      headings.map(({ id }) => `#${id}`).join(", ")
+      headings.map(({ id }) => `#${id}`).join(", "),
     );
     headingElements.forEach((element) => observer.observe(element));
 
@@ -72,15 +75,11 @@ function Toc({ headings }) {
     };
   }, [headings]);
 
-  if(headings.length === 0) return null
+  if (headings.length === 0) return null;
 
   return (
     <Box>
-      <LabelText
-        typography="small"
-        paddingLeft="15px"
-        marginBottom="8px"
-      >
+      <LabelText typography="small" paddingLeft="15px" marginBottom="8px">
         {t("tableContents")}
       </LabelText>
 
@@ -92,7 +91,7 @@ function Toc({ headings }) {
             cursor="pointer"
             pointerEvents={id === activeId ? "none" : "default"}
           >
-            <Box 
+            <Box
               width="3px"
               height="24px"
               backgroundColor={id === activeId && "#2B8C4D"}
@@ -124,10 +123,10 @@ function Toc({ headings }) {
                 whiteSpace="nowrap"
                 overflow="hidden"
                 width="100%"
-                color={id === activeId  ? "#2B8C4D" : "#71757A"}
-                backgroundColor={id === activeId  && "#F7F7F7"}
+                color={id === activeId ? "#2B8C4D" : "#71757A"}
+                backgroundColor={id === activeId && "#F7F7F7"}
                 _hover={{
-                  backgroundColor: id === activeId  ? "#F7F7F7" :"#EEEEEE",
+                  backgroundColor: id === activeId ? "#F7F7F7" : "#EEEEEE",
                 }}
                 borderRadius="8px"
                 padding="6px 8px"
@@ -173,11 +172,21 @@ function HeadingSimple(props) {
 
 export const mdxComponents = {
   h1: (props) => <HeadingWithAnchor {...props} />,
-  h2: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
-  h3: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
-  h4: (props) => <HeadingSimple as="h4" fontSize="18px" lineHeight="28px" {...props} />,
-  h5: (props) => <HeadingSimple as="h5" fontSize="16px" lineHeight="24px" {...props} />,
-  h6: (props) => <HeadingSimple as="h6" fontSize="15px" lineHeight="24px" {...props} />,
+  h2: (props) => (
+    <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />
+  ),
+  h3: (props) => (
+    <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />
+  ),
+  h4: (props) => (
+    <HeadingSimple as="h4" fontSize="18px" lineHeight="28px" {...props} />
+  ),
+  h5: (props) => (
+    <HeadingSimple as="h5" fontSize="16px" lineHeight="24px" {...props} />
+  ),
+  h6: (props) => (
+    <HeadingSimple as="h6" fontSize="15px" lineHeight="24px" {...props} />
+  ),
   blockquote: (props) => (
     <Box
       as="blockquote"
@@ -206,30 +215,21 @@ export const mdxComponents = {
         backgroundColor="#E4F2FF"
         zIndex="10"
       >
-        <InfoIcon
-          width="20px"
-          height="20px"
-          padding="2px"
-          fill="#0068C5"
-        />
-        <BodyText
-          typography="small"
-          as="span"
-          {...props}
-        />
+        <InfoIcon width="20px" height="20px" padding="2px" fill="#0068C5" />
+        <BodyText typography="small" as="span" {...props} />
       </Stack>
     </Box>
   ),
   a: (props) => (
-  <BodyText
-    typography="small"
-    as="a"
-    color="#0068C5"
-    _hover={{
-      color: "#0057A4"
-    }}
-    {...props} 
-  />
+    <BodyText
+      typography="small"
+      as="a"
+      color="#0068C5"
+      _hover={{
+        color: "#0057A4",
+      }}
+      {...props}
+    />
   ),
   hr: (props) => (
     <Divider
@@ -318,16 +318,9 @@ export const mdxComponents = {
         >
           “
         </Text>
-        <BodyText
-          marginTop="35px"
-          {...body.props}
-        />
+        <BodyText marginTop="35px" {...body.props} />
         {figcaption ? (
-          <BodyText
-            marginTop="16px"
-            color="#71757A"
-            {...figcaption.props}
-          />
+          <BodyText marginTop="16px" color="#71757A" {...figcaption.props} />
         ) : null}
       </Box>
     );
@@ -335,28 +328,27 @@ export const mdxComponents = {
 };
 
 export default function DatasetUserGuide({ data, locale = "pt", slug }) {
-  const { t } = useTranslation('dataset');
-  const [mdxSource] = useState(data?.mdxSource || null)
-  const [hasGuide] = useState(!!data?.mdxSource?.frontmatter?.title)
+  const { t } = useTranslation("dataset");
+  const [mdxSource] = useState(data?.mdxSource || null);
+  const [hasGuide] = useState(!!data?.mdxSource?.frontmatter?.title);
 
   const repository = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
-    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
-    if (baseUrl === "https://staging.basedosdados.org") return "staging"
-    if (baseUrl === "https://basedosdados.org") return "main" 
-    return null
-  }
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND;
+    if (
+      baseUrl === "http://localhost:3000" ||
+      baseUrl === "https://development.basedosdados.org"
+    )
+      return "development";
+    if (baseUrl === "https://staging.basedosdados.org") return "staging";
+    if (baseUrl === "https://basedosdados.org") return "main";
+    return null;
+  };
 
   return (
-    <Stack
-      paddingTop="32px"
-      spacing={0}
-      flexDirection="row"
-      height="100%"
-    >
-      {data?.headings.length > 0 &&
+    <Stack paddingTop="32px" spacing={0} flexDirection="row" height="100%">
+      {data?.headings.length > 0 && (
         <Box
-          display={{base: "none", md: "flex"}}
+          display={{ base: "none", md: "flex" }}
           as="aside"
           position="sticky"
           height="100%"
@@ -369,16 +361,24 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
         >
           <Toc headings={data.headings} />
         </Box>
-      }
+      )}
 
       <Box
         as="section"
         width="100%"
-        paddingLeft={{base: "0", md: data?.headings.length === 0 ? "0" : "24px"}}
+        paddingLeft={{
+          base: "0",
+          md: data?.headings.length === 0 ? "0" : "24px",
+        }}
       >
         {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
 
-        <Box display={hasGuide ? "flex" : "none"} justifyContent="center" id="hotjarSurveyGuiaDeUso" marginTop="40px"/>
+        <Box
+          display={hasGuide ? "flex" : "none"}
+          justifyContent="center"
+          id="hotjarSurveyGuiaDeUso"
+          marginTop="40px"
+        />
 
         <Box
           marginTop="40px"
@@ -386,28 +386,28 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
           border={hasGuide ? "1px solid #DEDFE0" : ""}
           padding="40px 24px"
         >
-          <TitleText textAlign="center">{hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}</TitleText>
-          <TitleText
-            typography="small"
-            textAlign="center"
-            color="#71757A"
-          >{t("contributeToTheUsageGuide")}</TitleText>
+          <TitleText textAlign="center">
+            {hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}
+          </TitleText>
+          <TitleText typography="small" textAlign="center" color="#71757A">
+            {t("contributeToTheUsageGuide")}
+          </TitleText>
 
           <Box
             display="flex"
-            flexDirection={{base: "column", lg: "row"}}
+            flexDirection={{ base: "column", lg: "row" }}
             alignItems="center"
             justifyContent="center"
             gap="16px"
             marginTop="16px"
           >
             <Link
-              width={{base: "100%", lg: "fit-content"}}
+              width={{ base: "100%", lg: "fit-content" }}
               href="/contact"
               target="_self"
             >
               <Button
-                width={{base: "100%", lg: "fit-content"}}
+                width={{ base: "100%", lg: "fit-content" }}
                 justifyContent="center"
               >
                 {t("sendQuestionUsageGuide")}
@@ -415,12 +415,12 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
             </Link>
 
             <Link
-              width={{base: "100%", lg: "fit-content"}}
+              width={{ base: "100%", lg: "fit-content" }}
               href={`https://github.com/basedosdados/website/edit/${repository()}/next/content/userGuide/${locale}/${hasGuide ? slug : "README"}.md`}
               target="_self"
             >
               <Button
-                width={{base: "100%", lg: "fit-content"}}
+                width={{ base: "100%", lg: "fit-content" }}
                 justifyContent="center"
                 color="#2B8C4D"
                 border="1px solid #2B8C4D"
@@ -428,7 +428,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
                 _hover={{
                   backgroundColor: "#FFFFFF",
                   color: "#22703E",
-                  boderColor: "#22703E"
+                  boderColor: "#22703E",
                 }}
               >
                 {t("makeSuggestionUsageGuide")}
@@ -447,7 +447,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
           >
             {t("haveAnyQuestions", { returnObjects: true }).replace(
               "{{content}}",
-              ""
+              "",
             )}
             <Link
               href="/faq"
@@ -455,14 +455,15 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
               fontWeight="400"
               marginLeft="4px"
               _hover={{
-                color: "#0057A4"
+                color: "#0057A4",
               }}
             >
               {t("pageFaq")}
-            </Link>.
+            </Link>
+            .
           </BodyText>
         </Box>
       </Box>
     </Stack>
-  )
+  );
 }

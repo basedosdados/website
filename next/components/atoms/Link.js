@@ -1,6 +1,6 @@
 import { Text } from "@chakra-ui/react";
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Link({
@@ -49,7 +49,7 @@ export default function Link({
   }
 
   return (
-    <NextLink href={href || '#'} locale={locale} passHref legacyBehavior>
+    <NextLink href={href || "#"} locale={locale} passHref legacyBehavior>
       <Text
         as="a"
         display="flex"

@@ -1,12 +1,8 @@
-import {
-  Box,
-  Divider,
-  Text
-} from "@chakra-ui/react";
+import { Box, Divider, Text } from "@chakra-ui/react";
 import Head from "next/head";
 import { MDXRemote } from "next-mdx-remote";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { MainPageTemplate } from "../../components/templates/main";
 import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
 import { categories } from "../api/blog/categories";
@@ -58,7 +54,7 @@ export async function getStaticProps({ params, locale }) {
       slug,
       locale,
       ...serialize,
-      ...(await serverSideTranslations(locale, ['common', 'blog', 'menu'])),
+      ...(await serverSideTranslations(locale, ["common", "blog", "menu"])),
     },
   };
 }
@@ -67,21 +63,25 @@ export async function getStaticPaths() {
   const allPosts = await getAllPosts();
   return {
     paths: allPosts.map(({ slug }) => ({ params: { slug } })),
-    fallback: "blocking"
+    fallback: "blocking",
   };
 }
 
 export default function Post({ slug, locale, mdxSource, headings }) {
-  const { t } = useTranslation('blog')
+  const { t } = useTranslation("blog");
   const { frontmatter } = mdxSource;
 
   const repository = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
-    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
-    if (baseUrl === "https://staging.basedosdados.org") return "staging"
-    if (baseUrl === "https://basedosdados.org") return "main" 
-    return null
-  }
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND;
+    if (
+      baseUrl === "http://localhost:3000" ||
+      baseUrl === "https://development.basedosdados.org"
+    )
+      return "development";
+    if (baseUrl === "https://staging.basedosdados.org") return "staging";
+    if (baseUrl === "https://basedosdados.org") return "main";
+    return null;
+  };
 
   return (
     <MainPageTemplate
@@ -91,7 +91,9 @@ export default function Post({ slug, locale, mdxSource, headings }) {
       paddingX="24px"
     >
       <Head>
-        <title>{frontmatter.title} – {t("pageTitle")}</title>
+        <title>
+          {frontmatter.title} – {t("pageTitle")}
+        </title>
         <meta
           property="og:title"
           content={`${frontmatter.title} – ${t("pageTitle")}`}
@@ -132,16 +134,19 @@ export default function Post({ slug, locale, mdxSource, headings }) {
         padding="24px 0 48px"
         gap="8px"
       >
-        <Link 
+        <Link
           href="/blog"
           fontSize="14px"
           fontWeight="400"
           lineHeight="20px"
           color="#0068C5"
           _hover={{
-            color: "#0057A4"
+            color: "#0057A4",
           }}
-        >{t("blog")}</Link> <Text color="#71757A">/</Text>
+        >
+          {t("blog")}
+        </Link>{" "}
+        <Text color="#71757A">/</Text>
         {frontmatter.categories.map((elm) => {
           return (
             <Link
@@ -152,10 +157,12 @@ export default function Post({ slug, locale, mdxSource, headings }) {
               lineHeight="20px"
               color="#0068C5"
               _hover={{
-                color: "#0057A4"
+                color: "#0057A4",
               }}
-            >{categories?.[elm] || t(elm)}</Link>
-          )
+            >
+              {categories?.[elm] || t(elm)}
+            </Link>
+          );
         })}
       </BodyText>
 
@@ -176,10 +183,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
           >
             <MDXRemote {...mdxSource} components={mdxComponents} />
 
-            <Box
-              display="flex"
-              flexDirection="column"
-            >
+            <Box display="flex" flexDirection="column">
               <Divider
                 borderWidth="0px"
                 borderTop="3px solid #252A32"
@@ -193,10 +197,12 @@ export default function Post({ slug, locale, mdxSource, headings }) {
                 isexternal="true"
                 color="#0068C5"
                 _hover={{
-                  color: "#0057A4"
+                  color: "#0057A4",
                 }}
-              >{t("contributeToBD")}</BodyText>
-              <Box id="hotjarSurveyBlog"/>
+              >
+                {t("contributeToBD")}
+              </BodyText>
+              <Box id="hotjarSurveyBlog" />
             </Box>
           </Box>
           <Box
@@ -213,9 +219,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
             width={{ base: "100%", md: "35%", xl: "35%" }}
           >
             <Box display={{ base: "none", md: "block" }}>
-              {headings.length > 0 ? (
-                <Toc headings={headings} />
-              ) : null}
+              {headings.length > 0 ? <Toc headings={headings} /> : null}
             </Box>
           </Box>
         </Box>

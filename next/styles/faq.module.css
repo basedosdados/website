@@ -1,11 +1,11 @@
 .questionContainer a {
-  color: #0068C5;
+  color: #0068c5;
   font-weight: 500;
   letter-spacing: 0.1px;
 }
 
 .questionContainer a:hover {
-  color: #0057A4;
+  color: #0057a4;
 }
 
 .questionContainer ul {
@@ -23,13 +23,13 @@
   background-color: #282b2e;
   padding: 16px;
   border-radius: 10px;
-  color: #FFF;
+  color: #fff;
   margin: 8px 0;
 }
 
 .link {
-  color: #0068C5;
+  color: #0068c5;
 }
 .link:hover {
-  color: #0057A4;
+  color: #0057a4;
 }

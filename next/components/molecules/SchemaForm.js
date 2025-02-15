@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 // import Form from "@rjsf/core";
-import {
-  CircularProgress,
-  Center,
-  VStack,
-} from "@chakra-ui/react";
+import { CircularProgress, Center, VStack } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/toast";
 import Head from "next/head";
 import { GeoTree } from "./GeoTree";
@@ -21,18 +17,14 @@ export function SchemaForm({
     return data;
   },
 }) {
-  const [spatialCoverageTree, setSpatialCoverageTree] = useState({})
+  const [spatialCoverageTree, setSpatialCoverageTree] = useState({});
 
   useEffect(() => {
-    getSpatialCovarageTree()
-      .then(res => setSpatialCoverageTree(res))
-  },[])
+    getSpatialCovarageTree().then((res) => setSpatialCoverageTree(res));
+  }, []);
 
   const toast = useToast();
-  let { data: schema = {}, isLoading } = useQuery(
-    "schema",
-    loadSchemaFunction
-  );
+  let { data: schema = {}, isLoading } = useQuery("schema", loadSchemaFunction);
   const updateMutation = useMutation(updateFunction, {
     onSuccess({ data }) {
       toast({
@@ -73,18 +65,18 @@ export function SchemaForm({
   //// Geo stuff
 
   const uiSchema = {
-    spatial_coverage:{
+    spatial_coverage: {
       items: {
-      'ui:field' : 'GeoTree'
-      }
+        "ui:field": "GeoTree",
+      },
     },
-    number_rows: {"ui:widget": "hidden"}
-  }
-  const fields = {GeoTree: (props) => GeoTree(props, spatialCoverageTree)}
+    number_rows: { "ui:widget": "hidden" },
+  };
+  const fields = { GeoTree: (props) => GeoTree(props, spatialCoverageTree) };
 
   /////
 
-  if (schema.schema === undefined) schema = {schema: schema} // TODO: remove this after changing all endpoints
+  if (schema.schema === undefined) schema = { schema: schema }; // TODO: remove this after changing all endpoints
 
   return (
     <>
@@ -113,7 +105,7 @@ export function SchemaForm({
               updateMutation.mutate(
                 prepareData({
                   ..._data,
-                })
+                }),
               );
               toast({
                 title: "Salvando...",

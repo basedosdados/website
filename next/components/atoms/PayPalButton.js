@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import Script from 'next/script';
-import { useRouter } from 'next/router';
+import { useEffect } from "react";
+import Script from "next/script";
+import { useRouter } from "next/router";
 
 const PayPalButton = () => {
   const router = useRouter();
@@ -10,9 +10,11 @@ const PayPalButton = () => {
     const renderButton = () => {
       if (window.paypal && window.paypal.HostedButtons) {
         const buttonConfig = getButtonConfig(locale);
-        window.paypal.HostedButtons({
-          hostedButtonId: buttonConfig.id,
-        }).render(`#paypal-container-${buttonConfig.id}`);
+        window.paypal
+          .HostedButtons({
+            hostedButtonId: buttonConfig.id,
+          })
+          .render(`#paypal-container-${buttonConfig.id}`);
       }
     };
 
@@ -32,12 +34,12 @@ const PayPalButton = () => {
 
   const getButtonConfig = (locale) => {
     switch (locale) {
-      case 'en':
-        return { id: '7Z8VZRT49598E', localeParam: 'en_US' };
-      case 'es':
-        return { id: '9T4KS6AZABF92', localeParam: 'es_ES' };
+      case "en":
+        return { id: "7Z8VZRT49598E", localeParam: "en_US" };
+      case "es":
+        return { id: "9T4KS6AZABF92", localeParam: "es_ES" };
       default:
-        return { id: '9XUDXZSNZFS84', localeParam: 'pt_BR' };
+        return { id: "9XUDXZSNZFS84", localeParam: "pt_BR" };
     }
   };
 

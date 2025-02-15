@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const ShareIcon = createIcon({
   displayName: "share",
@@ -8,4 +8,4 @@ const ShareIcon = createIcon({
   ),
 });
 
-export default ShareIcon
+export default ShareIcon;

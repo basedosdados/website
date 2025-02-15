@@ -1,8 +1,4 @@
-import {
-  Box,
-  HStack,
-  Flex
-} from "@chakra-ui/react";
+import { Box, HStack, Flex } from "@chakra-ui/react";
 
 export default function Card({
   children,
@@ -10,7 +6,6 @@ export default function Card({
   spacing = 5,
   padding = "25px 25px 25px 25px",
 }) {
-
   return (
     <Box
       width="280px"
@@ -18,7 +13,7 @@ export default function Card({
       height="320px"
       minHeight="320px"
       boxShadow="0 2px 5px 1px rgba(64, 60, 67, 0.16)"
-      _hover={{ boxShadow:"0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
+      _hover={{ boxShadow: "0px 7px 19px 1px rgb(64 60 67 / 16%)" }}
       backgroundColor="#FFFFFF"
       padding={padding}
       borderRadius="10px"
@@ -44,5 +39,5 @@ export default function Card({
         {children}
       </Flex>
     </Box>
-  )
+  );
 }

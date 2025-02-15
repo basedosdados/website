@@ -1,6 +1,4 @@
-import {
-  Box,
-} from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 export default function Button({ children, onClick, ...props }) {
   return (
@@ -23,11 +21,11 @@ export default function Button({ children, onClick, ...props }) {
       gap="8px"
       lineHeight="20px"
       _hover={{
-        backgroundColor:"#22703E"
+        backgroundColor: "#22703E",
       }}
       {...props}
     >
       {children}
     </Box>
-  )
+  );
 }

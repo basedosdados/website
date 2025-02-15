@@ -11,5 +11,5 @@ export {
   postDataset,
   getDatasetEdit,
   deleteDataset,
-  getDataset
-}
+  getDataset,
+};

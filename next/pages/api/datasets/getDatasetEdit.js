@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 export default async function getDatasetEdit(id) {
   try {
@@ -50,12 +50,12 @@ export default async function getDatasetEdit(id) {
           }
         }
         `,
-        variables: null
-      }
-    })
-    const data = res?.data?.data?.allDataset?.edges[0]?.node
-    return data
+        variables: null,
+      },
+    });
+    const data = res?.data?.data?.allDataset?.edges[0]?.node;
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }

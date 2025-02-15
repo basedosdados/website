@@ -1,22 +1,16 @@
-import {
-  Stack,
-  FormControl,
-  List,
-  VStack,
-  Box
-} from "@chakra-ui/react";
+import { Stack, FormControl, List, VStack, Box } from "@chakra-ui/react";
 import { useState } from "react";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { triggerGAEvent } from "../../utils";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 import {
   LabelTextForm,
   InputForm,
   ErrorMessage,
   Button,
-  ListChecked
+  ListChecked,
 } from "../../components/molecules/uiUserPage";
 
 import Link from "../../components/atoms/Link";
@@ -33,7 +27,7 @@ import { withPages } from "../../hooks/pages.hook";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['user'])),
+      ...(await serverSideTranslations(locale, ["user"])),
       ...(await withPages()),
     },
   };
@@ -41,7 +35,7 @@ export async function getStaticProps({ locale }) {
 
 export default function Register() {
   const router = useRouter();
-  const { t } = useTranslation('user');
+  const { t } = useTranslation("user");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -49,8 +43,8 @@ export default function Register() {
     username: "",
     email: "",
     password: "",
-    confirmPassword: ""
-  })
+    confirmPassword: "",
+  });
   const [errors, setErrors] = useState({
     firstName: "",
     username: "",
@@ -58,68 +52,73 @@ export default function Register() {
     password: "",
     regexPassword: {},
     confirmPassword: "",
-    register: ""
-  })
-  const [showPassword, setShowPassword] = useState(true)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+    register: "",
+  });
+  const [showPassword, setShowPassword] = useState(true);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
       ...prevState,
       [field]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = (event) => {
-    event.preventDefault()
-    triggerGAEvent("user_register", "register_try")
+    event.preventDefault();
+    triggerGAEvent("user_register", "register_try");
 
-    const regexPassword = {}
-    const validationErrors = {}
+    const regexPassword = {};
+    const validationErrors = {};
 
     if (!formData.firstName) {
-      validationErrors.firstName = t('signup.errors.firstName')
+      validationErrors.firstName = t("signup.errors.firstName");
     }
     if (!formData.username) {
-      validationErrors.username = t('signup.errors.username.invalid')
+      validationErrors.username = t("signup.errors.username.invalid");
     }
-    if(/\s/.test(formData.username)) {
-      validationErrors.username = t('signup.errors.username.noSpaces')
+    if (/\s/.test(formData.username)) {
+      validationErrors.username = t("signup.errors.username.noSpaces");
     }
     if (!formData.email) {
-      validationErrors.email = t('signup.errors.email.invalid')
-    } 
+      validationErrors.email = t("signup.errors.email.invalid");
+    }
     if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = t('signup.errors.email.invalid')
+      validationErrors.email = t("signup.errors.email.invalid");
     }
-    if(!/^.{8,}$/.test(formData.password)) {
-      regexPassword = {...regexPassword, amount: true}
+    if (!/^.{8,}$/.test(formData.password)) {
+      regexPassword = { ...regexPassword, amount: true };
     }
-    if(!/[A-Z]/.test(formData.password)) {
-      regexPassword = {...regexPassword, upperCase: true}
+    if (!/[A-Z]/.test(formData.password)) {
+      regexPassword = { ...regexPassword, upperCase: true };
     }
-    if(!/[a-z]/.test(formData.password)) {
-      regexPassword = {...regexPassword, lowerCase: true}
+    if (!/[a-z]/.test(formData.password)) {
+      regexPassword = { ...regexPassword, lowerCase: true };
     }
-    if(!/(?=.*?[0-9])/.test(formData.password)) {
-      regexPassword = {...regexPassword, number: true}
+    if (!/(?=.*?[0-9])/.test(formData.password)) {
+      regexPassword = { ...regexPassword, number: true };
     }
-    if(!/[!@#?!%&*]/.test(formData.password)) {
-      regexPassword = {...regexPassword, special: true}
+    if (!/[!@#?!%&*]/.test(formData.password)) {
+      regexPassword = { ...regexPassword, special: true };
     }
     if (!formData.confirmPassword) {
-      validationErrors.confirmPassword = t('signup.errors.confirmPassword.required')
+      validationErrors.confirmPassword = t(
+        "signup.errors.confirmPassword.required",
+      );
     }
-    if(/\s/.test(formData.confirmPassword)) {
-      validationErrors.password = t('signup.errors.password.noSpaces')
-      validationErrors.confirmPassword = t('signup.errors.password.noSpaces')
+    if (/\s/.test(formData.confirmPassword)) {
+      validationErrors.password = t("signup.errors.password.noSpaces");
+      validationErrors.confirmPassword = t("signup.errors.password.noSpaces");
     }
-    if(formData.confirmPassword !== formData.password) {
-      validationErrors.confirmPassword = t('signup.errors.confirmPassword.mismatch')
+    if (formData.confirmPassword !== formData.password) {
+      validationErrors.confirmPassword = t(
+        "signup.errors.confirmPassword.mismatch",
+      );
     }
 
-    if(Object.keys(regexPassword).length > 0) validationErrors.regexPassword = regexPassword
-    setErrors(validationErrors)
+    if (Object.keys(regexPassword).length > 0)
+      validationErrors.regexPassword = regexPassword;
+    setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
       createRegister({
@@ -128,38 +127,56 @@ export default function Register() {
         username: formData.username,
         email: formData.email,
         password: formData.password,
-      })
+      });
     } else {
-      triggerGAEvent("user_register", "register_err")
+      triggerGAEvent("user_register", "register_err");
     }
-  }
+  };
 
-  const createRegister = async ({ firstName, lastName, username, email, password }) => {
+  const createRegister = async ({
+    firstName,
+    lastName,
+    username,
+    email,
+    password,
+  }) => {
     try {
-      const result = await fetch(`/api/user/registerAccount?f=${btoa(firstName)}&l=${btoa(lastName)}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`, { method: "GET" })
-        .then(res => res.json())
+      const result = await fetch(
+        `/api/user/registerAccount?f=${btoa(firstName)}&l=${btoa(lastName)}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`,
+        { method: "GET" },
+      ).then((res) => res.json());
 
-      let arrayErrors = {}
-      if(result?.success === false) {
-        arrayErrors = ({register: t('signup.errors.register')})
+      let arrayErrors = {};
+      if (result?.success === false) {
+        arrayErrors = { register: t("signup.errors.register") };
       }
-      if(result?.errors?.length > 0) {
+      if (result?.errors?.length > 0) {
         result.errors.map((elm) => {
-          if(elm.field === "email") arrayErrors = ({...arrayErrors, email: t('signup.errors.email.exists'), register: t('signup.errors.registerEmail')})
-          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: t('signup.errors.username.exists'), register: t('signup.errors.registerUsername')})
-        })
+          if (elm.field === "email")
+            arrayErrors = {
+              ...arrayErrors,
+              email: t("signup.errors.email.exists"),
+              register: t("signup.errors.registerEmail"),
+            };
+          if (elm.field === "username")
+            arrayErrors = {
+              ...arrayErrors,
+              username: t("signup.errors.username.exists"),
+              register: t("signup.errors.registerUsername"),
+            };
+        });
       }
-      setErrors(arrayErrors)
+      setErrors(arrayErrors);
 
-      if(result?.success === true) {
-        sessionStorage.setItem('registration_email_bd', `${email}`)
-        triggerGAEvent("user_register", "register_success")
-        router.push('/user/check-email')
+      if (result?.success === true) {
+        sessionStorage.setItem("registration_email_bd", `${email}`);
+        triggerGAEvent("user_register", "register_success");
+        router.push("/user/check-email");
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <MainPageTemplate
@@ -176,48 +193,38 @@ export default function Register() {
         marginTop="50px"
         marginX="27px"
       >
-        <Display
-          textAlign="center"
-          marginBottom="40px"
-        >
-          {t('signup.title')}
+        <Display textAlign="center" marginBottom="40px">
+          {t("signup.title")}
         </Display>
 
         <form onSubmit={handleSubmit}>
-          <VStack
-            spacing={0}
-            gap="24px"
-          >
-            <FormControl isInvalid={!!errors.firstName} >
-              <LabelTextForm text={t('signup.firstName')}/>
+          <VStack spacing={0} gap="24px">
+            <FormControl isInvalid={!!errors.firstName}>
+              <LabelTextForm text={t("signup.firstName")} />
               <InputForm
                 id="firstName"
                 name="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleInputChange(e, "firstName")}
-                placeholder={t('signup.placeholders.firstName')}
+                placeholder={t("signup.placeholders.firstName")}
               />
-              <ErrorMessage>
-                {errors.firstName}
-              </ErrorMessage>
+              <ErrorMessage>{errors.firstName}</ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.lastName}>
-              <LabelTextForm text={t('signup.lastName')}/>
+              <LabelTextForm text={t("signup.lastName")} />
               <InputForm
                 id="lastName"
                 name="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleInputChange(e, "lastName")}
-                placeholder={t('signup.placeholders.lastName')}
+                placeholder={t("signup.placeholders.lastName")}
               />
-              <ErrorMessage>
-                {errors.lastName}
-              </ErrorMessage>
+              <ErrorMessage>{errors.lastName}</ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.email}>
-              <LabelTextForm text={t('signup.email')} />
+              <LabelTextForm text={t("signup.email")} />
               <InputForm
                 id="username"
                 name="username"
@@ -225,15 +232,13 @@ export default function Register() {
                 autoComplete="username"
                 value={formData.email}
                 onChange={(e) => handleInputChange(e, "email")}
-                placeholder={t('signup.placeholders.email')}
+                placeholder={t("signup.placeholders.email")}
               />
-              <ErrorMessage>
-                {errors.email}
-              </ErrorMessage>
+              <ErrorMessage>{errors.email}</ErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.username} >
-              <LabelTextForm text={t('signup.username')}/>
+            <FormControl isInvalid={!!errors.username}>
+              <LabelTextForm text={t("signup.username")} />
               <InputForm
                 id="user"
                 name="user"
@@ -241,15 +246,13 @@ export default function Register() {
                 autoComplete="off"
                 value={formData.username}
                 onChange={(e) => handleInputChange(e, "username")}
-                placeholder={t('signup.placeholders.username')}
+                placeholder={t("signup.placeholders.username")}
               />
-              <ErrorMessage>
-                {errors.username}
-              </ErrorMessage>
+              <ErrorMessage>{errors.username}</ErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.password}>
-              <LabelTextForm text={t('signup.password')} />
+              <LabelTextForm text={t("signup.password")} />
               <InputForm
                 type={showPassword ? "password" : "text"}
                 id="password"
@@ -257,42 +260,57 @@ export default function Register() {
                 autoComplete="current-password"
                 value={formData.password}
                 onChange={(e) => handleInputChange(e, "password")}
-                placeholder={t('signup.placeholders.password')}
+                placeholder={t("signup.placeholders.password")}
                 inputElementStyle={{
                   cursor: "pointer",
-                  onClick: () => setShowPassword(!showPassword)
+                  onClick: () => setShowPassword(!showPassword),
                 }}
-                icon={showPassword ?
-                  <EyeOffIcon
-                    alt="esconder senha"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                :
-                  <EyeIcon
-                    alt="exibir senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
+                icon={
+                  showPassword ? (
+                    <EyeOffIcon
+                      alt="esconder senha"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  ) : (
+                    <EyeIcon
+                      alt="exibir senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  )
                 }
               />
               <BodyText
-                typography="small" 
+                typography="small"
                 margin="8px 0"
-                color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
+                color={
+                  errors?.regexPassword
+                    ? Object.keys(errors?.regexPassword).length > 0
+                      ? "#BF3434"
+                      : "#71757A"
+                    : "#71757A"
+                }
                 display="flex"
                 flexDirection="row"
                 gap="8px"
                 alignItems="flex-start"
               >
                 <Exclamation
-                  display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
+                  display={
+                    errors?.regexPassword
+                      ? Object.keys(errors?.regexPassword).length > 0
+                        ? "flex"
+                        : "none"
+                      : "none"
+                  }
                   width="18px"
                   height="18px"
                   fill="#BF3434"
-                /> {t('username.passwordRequirements')}
+                />{" "}
+                {t("username.passwordRequirements")}
               </BodyText>
 
               <List
@@ -306,45 +324,45 @@ export default function Register() {
                 flexDirection="column"
                 gap="8px"
               >
-                <ListChecked 
+                <ListChecked
                   checked={formData.password.length >= 8}
                   err={errors?.regexPassword?.amount}
                 >
-                  {t('username.minCharacters')}
+                  {t("username.minCharacters")}
                 </ListChecked>
                 <ListChecked
                   checked={/[A-Z]/.test(formData.password)}
                   err={errors?.regexPassword?.upperCase}
                 >
-                  {t('username.uppercaseLetter')}
+                  {t("username.uppercaseLetter")}
                 </ListChecked>
                 <ListChecked
                   checked={/[a-z]/.test(formData.password)}
                   err={errors?.regexPassword?.lowerCase}
                 >
-                  {t('username.lowercaseLetter')}
+                  {t("username.lowercaseLetter")}
                 </ListChecked>
                 <ListChecked
                   checked={/\d/.test(formData.password)}
                   err={errors?.regexPassword?.number}
                 >
-                  {t('username.digit')}
+                  {t("username.digit")}
                 </ListChecked>
                 <ListChecked
                   checked={/[!@#?%&*]/.test(formData.password)}
                   err={errors?.regexPassword?.special}
                 >
-                  {t('username.specialCharacter')}
+                  {t("username.specialCharacter")}
                 </ListChecked>
               </List>
 
-              {errors.password &&
+              {errors.password && (
                 <ErrorMessage>{errors.password}</ErrorMessage>
-              }
+              )}
             </FormControl>
 
             <FormControl isInvalid={!!errors.confirmPassword}>
-              <LabelTextForm text={t('signup.confirmPassword')} />
+              <LabelTextForm text={t("signup.confirmPassword")} />
               <InputForm
                 type={showConfirmPassword ? "password" : "text"}
                 id="confirmPassword"
@@ -352,25 +370,27 @@ export default function Register() {
                 autoComplete="current-password"
                 value={formData.confirmPassword}
                 onChange={(e) => handleInputChange(e, "confirmPassword")}
-                placeholder={t('signup.placeholders.confirmPassword')}
+                placeholder={t("signup.placeholders.confirmPassword")}
                 inputElementStyle={{
                   cursor: "pointer",
-                  onClick: () => setShowConfirmPassword(!showConfirmPassword)
+                  onClick: () => setShowConfirmPassword(!showConfirmPassword),
                 }}
-                icon={showConfirmPassword ?
-                  <EyeOffIcon
-                    alt="esconder senha"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                :
-                  <EyeIcon
-                    alt="exibir senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
+                icon={
+                  showConfirmPassword ? (
+                    <EyeOffIcon
+                      alt="esconder senha"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  ) : (
+                    <EyeIcon
+                      alt="exibir senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  )
                 }
               />
               <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
@@ -384,11 +404,11 @@ export default function Register() {
             marginTop="24px !important"
             backgroundColor={errors?.register ? "#BF3434" : "#2B8C4D"}
           >
-            {t('signup.register')}
+            {t("signup.register")}
           </Button>
         </form>
 
-        {errors?.register &&
+        {errors?.register && (
           <Box
             display="flex"
             flexDirection="row"
@@ -396,15 +416,12 @@ export default function Register() {
             alignItems="center"
             marginBottom="24px !important"
           >
-            <Exclamation width="19px" height="19px" fill="#BF3434"/>
-            <BodyText
-              typography="small"
-              color="#BF3434"
-            >
+            <Exclamation width="19px" height="19px" fill="#BF3434" />
+            <BodyText typography="small" color="#BF3434">
               {errors.register}
             </BodyText>
           </Box>
-        }
+        )}
 
         <BodyText
           typography="small"
@@ -412,31 +429,33 @@ export default function Register() {
           color="#71757A"
           marginTop="16px !important"
         >
-          {t('signup.termsAgreement.part1')}
+          {t("signup.termsAgreement.part1")}
           <Link
             display="inline"
             fontWeight="400"
             color="#0068C5"
             _hover={{
-              color: "#0057A4"
+              color: "#0057A4",
             }}
-            href="/terms?section=terms" target="_blank"
+            href="/terms?section=terms"
+            target="_blank"
           >
-            {t('signup.termsAgreement.termsLink')}
+            {t("signup.termsAgreement.termsLink")}
           </Link>
-          {t('signup.termsAgreement.part2')}
+          {t("signup.termsAgreement.part2")}
           <Link
             display="inline"
             fontWeight="400"
             color="#0068C5"
             _hover={{
-              color: "#0057A4"
+              color: "#0057A4",
             }}
-            href="/terms?section=privacy" target="_blank"
+            href="/terms?section=privacy"
+            target="_blank"
           >
-            {t('signup.termsAgreement.privacyLink')}
+            {t("signup.termsAgreement.privacyLink")}
           </Link>
-          {t('signup.termsAgreement.part3')}
+          {t("signup.termsAgreement.part3")}
         </BodyText>
 
         <BodyText
@@ -444,19 +463,21 @@ export default function Register() {
           textAlign="center"
           marginTop="24px !important"
         >
-          {t('signup.alreadyHaveAccount')} <Link
+          {t("signup.alreadyHaveAccount")}{" "}
+          <Link
             display="inline"
             fontWeight="400"
             color="#0068C5"
             _hover={{
-              color: "#0057A4"
+              color: "#0057A4",
             }}
             href="/user/login"
           >
-            {t('signup.login')}
-          </Link>.
+            {t("signup.login")}
+          </Link>
+          .
         </BodyText>
       </Stack>
     </MainPageTemplate>
-  )
+  );
 }

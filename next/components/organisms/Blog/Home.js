@@ -10,7 +10,7 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import { categories } from "../../../pages/api/blog/categories";
 import Display from "../../atoms/Text/Display";
 import TitleText from "../../atoms/Text/TitleText";
@@ -35,10 +35,7 @@ export function DatePost({ date, slug }) {
   }
 
   return (
-    <BodyText
-      as="span"
-      color="#71757A"
-    >
+    <BodyText as="span" color="#71757A">
       {dateToLocatePt(date)}
     </BodyText>
   );
@@ -66,12 +63,8 @@ function LatestBlogCard({ slug, frontmatter }) {
         width="100%"
         maxWidth={{ base: "100%", md: "100%", lg: "648px" }}
       >
-        <Box
-          overflow="hidden"
-          border="1px solid #DEDFE0"
-          borderRadius="16px"
-        >
-          <Link href={`/blog/${slug}`} >
+        <Box overflow="hidden" border="1px solid #DEDFE0" borderRadius="16px">
+          <Link href={`/blog/${slug}`}>
             <Image
               cursor="pointer"
               width={"100%"}
@@ -79,44 +72,27 @@ function LatestBlogCard({ slug, frontmatter }) {
                 frontmatter.thumbnail ??
                 "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
               }
-              transition={
-                "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
-              }
+              transition={"transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"}
               _groupHover={{ transform: "scale(1.03)" }}
             />
           </Link>
         </Box>
       </Box>
 
-      <Stack
-        width="100%"
-        spacing="8px"
-      >
+      <Stack width="100%" spacing="8px">
         <Link
           href={`/blog/${slug}`}
           _hover={{
-            opacity: 0.9
+            opacity: 0.9,
           }}
         >
-          <Display as="h1">
-              {title}
-          </Display>
+          <Display as="h1">{title}</Display>
         </Link>
 
-        <BodyText color="#71757A">
-          {description}
-        </BodyText>
+        <BodyText color="#71757A">{description}</BodyText>
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          marginTop="24px !important"
-        >
-          {authors ? (
-            <BodyText>
-              {authors[0].name}
-            </BodyText>
-          ) : null}
+        <Box display="flex" flexDirection="column" marginTop="24px !important">
+          {authors ? <BodyText>{authors[0].name}</BodyText> : null}
           <DatePost date={date.created} slug={slug} />
         </Box>
       </Stack>
@@ -127,38 +103,24 @@ function LatestBlogCard({ slug, frontmatter }) {
 function MiniBlogCard({ slug, frontmatter }) {
   const { title, description, date, authors } = frontmatter;
   return (
-    <Stack
-      flexDirection="column"
-      spacing={0}
-    >
+    <Stack flexDirection="column" spacing={0}>
       <Box role="group" marginBottom="8px">
-
         <Link
           href={`/blog/${slug}`}
           _hover={{
-            opacity: 0.9
+            opacity: 0.9,
           }}
         >
           <TitleText as="h3" marginTop="4px">
-              {title}
+            {title}
           </TitleText>
         </Link>
       </Box>
 
-      <BodyText color="#71757A">
-        {description}
-      </BodyText>
+      <BodyText color="#71757A">{description}</BodyText>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        marginTop="16px !important"
-      >
-        {authors ? (
-          <BodyText>
-            {authors[0].name}
-          </BodyText>
-        ) : null}
+      <Box display="flex" flexDirection="column" marginTop="16px !important">
+        {authors ? <BodyText>{authors[0].name}</BodyText> : null}
         <DatePost date={date.created} slug={slug} />
       </Box>
     </Stack>
@@ -166,31 +128,31 @@ function MiniBlogCard({ slug, frontmatter }) {
 }
 
 function BlogHeader({ category }) {
-  const { t } = useTranslation('blog')
+  const { t } = useTranslation("blog");
 
   return (
     <Box margin="0 0 48px">
-      <Box display="flex" width="fit-content" marginBottom="16px" alignItems="center">
+      <Box
+        display="flex"
+        width="fit-content"
+        marginBottom="16px"
+        alignItems="center"
+      >
         <FilterIcon
           alt="filtrar conjuntos"
           width="20px"
           height="20px"
           fill="#252A32"
         />
-        <LabelText
-          as="span"
-          textAlign="center"
-          width="100%"
-          marginLeft="8px"
-        >
-          {t('filter')}
+        <LabelText as="span" textAlign="center" width="100%" marginLeft="8px">
+          {t("filter")}
         </LabelText>
       </Box>
 
       <Box as="nav">
         <UnorderedList marginInlineStart="0" display="flex" gap="8px">
           {[
-            { name: t('all'), shortName: "all", href: "/blog" },
+            { name: t("all"), shortName: "all", href: "/blog" },
             ...Object.entries(categories).map((category) => {
               const [shortName, name] = category;
               return {
@@ -207,7 +169,7 @@ function BlogHeader({ category }) {
               pointerEvents={shortName === category ? "none" : "default"}
               background={shortName === category ? "#2B8C4D" : "#EEEEEE"}
               _hover={{
-                opacity: 0.8
+                opacity: 0.8,
               }}
             >
               <Link
@@ -231,37 +193,37 @@ function BlogHeader({ category }) {
 }
 
 export function BlogGrid({ posts, category }) {
-  const { t } = useTranslation('blog')
-  const [data, setData] = useState({})
+  const { t } = useTranslation("blog");
+  const [data, setData] = useState({});
 
   function groupByCategories(array) {
-    const result = {}
+    const result = {};
 
-    array.forEach(elm => {
-      const { frontmatter } = elm
-      const categories = frontmatter.categories || []
+    array.forEach((elm) => {
+      const { frontmatter } = elm;
+      const categories = frontmatter.categories || [];
 
-      if(categories.length > 0 ) {
-        categories.forEach(category => {
+      if (categories.length > 0) {
+        categories.forEach((category) => {
           if (!result[category]) {
-            result[category] = []
+            result[category] = [];
           }
-          result[category].push({ ...elm })
-        })
+          result[category].push({ ...elm });
+        });
       } else {
         if (!result["no categories"]) {
-          result["no categories"] = []
+          result["no categories"] = [];
         }
-        result["no categories"].push({ ...elm })
+        result["no categories"].push({ ...elm });
       }
-    })
+    });
 
-    return result
+    return result;
   }
 
   useEffect(() => {
-    setData(groupByCategories(posts))
-  }, [posts])
+    setData(groupByCategories(posts));
+  }, [posts]);
 
   return (
     <Stack
@@ -274,8 +236,9 @@ export function BlogGrid({ posts, category }) {
     >
       <BlogHeader category={category} />
 
-      {category === "all" ?
-        data && Object.entries(data).map(([key, value], index) => {
+      {category === "all" ? (
+        data &&
+        Object.entries(data).map(([key, value], index) => {
           return (
             <Box width="100%" key={key}>
               <Divider
@@ -295,7 +258,7 @@ export function BlogGrid({ posts, category }) {
                   {categories?.[key] || t(key)}
                 </LabelText>
 
-                {value.length > 7 &&
+                {value.length > 7 && (
                   <Link
                     display="flex"
                     flexDirection="row"
@@ -310,7 +273,7 @@ export function BlogGrid({ posts, category }) {
                     fill="#0068C5"
                     _hover={{
                       color: "#0057A4",
-                      fill: "#0068C5"
+                      fill: "#0068C5",
                     }}
                   >
                     {t("seeAll")}
@@ -321,10 +284,13 @@ export function BlogGrid({ posts, category }) {
                       width="16px"
                     />
                   </Link>
-                }
+                )}
               </Stack>
 
-              <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
+              <Grid
+                gap="40px"
+                templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
+              >
                 {value.slice(0, 7).map((post, index) => {
                   if (index === 0) {
                     return (
@@ -332,8 +298,8 @@ export function BlogGrid({ posts, category }) {
                         as="article"
                         key={index}
                         gridColumn={{ md: "span 2", xl: "span 3" }}
-                        borderBottom={{base: "1px solid #DEDFE0", md: "none"}}
-                        paddingBottom={{base: "24px", md: "none"}}
+                        borderBottom={{ base: "1px solid #DEDFE0", md: "none" }}
+                        paddingBottom={{ base: "24px", md: "none" }}
                       >
                         <LatestBlogCard key={post.slug} {...post} />
                       </GridItem>
@@ -354,18 +320,18 @@ export function BlogGrid({ posts, category }) {
                 })}
               </Grid>
             </Box>
-          )
+          );
         })
-        :
+      ) : (
         <Box width="100%">
-          <LabelText
-            typography="x-large"
-            marginBottom="40px"
-          >
+          <LabelText typography="x-large" marginBottom="40px">
             {categories?.[category] || category}
           </LabelText>
 
-          <Grid gap="40px" templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}>
+          <Grid
+            gap="40px"
+            templateColumns={{ md: "1fr 1fr", xl: "1fr 1fr 1fr" }}
+          >
             {posts.map((post, index) => {
               if (index === 0) {
                 return (
@@ -373,8 +339,8 @@ export function BlogGrid({ posts, category }) {
                     as="article"
                     key={index}
                     gridColumn={{ md: "span 2", xl: "span 3" }}
-                    borderBottom={{base: "1px solid #DEDFE0", md: "none"}}
-                    paddingBottom={{base: "24px", md: "none"}}
+                    borderBottom={{ base: "1px solid #DEDFE0", md: "none" }}
+                    paddingBottom={{ base: "24px", md: "none" }}
                   >
                     <LatestBlogCard key={post.slug} {...post} />
                   </GridItem>
@@ -395,7 +361,7 @@ export function BlogGrid({ posts, category }) {
             })}
           </Grid>
         </Box>
-      }
+      )}
     </Stack>
   );
 }

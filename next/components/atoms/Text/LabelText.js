@@ -20,10 +20,14 @@ const typographyStyles = {
   "x-large": {
     fontSize: "20px",
     lineHeight: "30px",
-  }
+  },
 };
 
-export default function LabelText ({ children, typography = "medium", ...props }) {
+export default function LabelText({
+  children,
+  typography = "medium",
+  ...props
+}) {
   const { fontSize, lineHeight } = typographyStyles[typography];
 
   return (
@@ -38,4 +42,4 @@ export default function LabelText ({ children, typography = "medium", ...props }
       {children}
     </Text>
   );
-};
+}

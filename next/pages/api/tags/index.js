@@ -1,5 +1,3 @@
 import getAllTags from "./getAllTags";
 
-export {
-  getAllTags
-}
+export { getAllTags };

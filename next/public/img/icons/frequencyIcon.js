@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const FrequencyIcon = createIcon({
   displayName: "frequency",
@@ -8,7 +8,7 @@ const FrequencyIcon = createIcon({
       fill="current-color"
       d="M 10.8833 19.8251 C 15.8217 19.8251 19.8251 15.8217 19.8251 10.8833 C 19.8251 5.9448 15.8217 1.9414 10.8833 1.9414 C 5.9448 1.9414 1.9414 5.9448 1.9414 10.8833 c 0 4.9384 4.0034 8.9418 8.9419 8.9418 L 10.035 15.085 C 9.855 15.265 9.557 15.267 9.374 15.085 L 6.315 12.024 C 6.13 11.842 6.132 11.541 6.315 11.358 L 6.977 10.69 C 7.165 10.513 7.463 10.508 7.646 10.69 L 9.703 12.753 L 14.116 8.342 C 14.301 8.157 14.603 8.159 14.782 8.339 L 15.449 9.005 C 15.629 9.185 15.621 9.484 15.449 9.664 L 10.035 15.085"
     />
-  )
-})
+  ),
+});
 
-export default FrequencyIcon
+export default FrequencyIcon;

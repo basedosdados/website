@@ -1,7 +1,4 @@
-import {
-  Center,
-  Text
-} from "@chakra-ui/react";
+import { Center, Text } from "@chakra-ui/react";
 import InternalErrorImage from "../../public/img/internalError";
 
 export default function InternalError({ children, ...props }) {
@@ -13,11 +10,8 @@ export default function InternalError({ children, ...props }) {
       flexDirection="column"
       {...props}
     >
-      <InternalErrorImage
-        widthImage="256px"
-        heightImage="256px"
-      />
+      <InternalErrorImage widthImage="256px" heightImage="256px" />
       {children}
     </Center>
-  )
+  );
 }

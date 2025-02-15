@@ -9,5 +9,5 @@ export {
   Account,
   NewPassword,
   PlansAndPayment,
-  BigQuery
-}
+  BigQuery,
+};

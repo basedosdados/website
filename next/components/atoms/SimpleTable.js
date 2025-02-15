@@ -8,19 +8,9 @@ import {
   Td,
 } from "@chakra-ui/react";
 
-export function SimpleTable({
-  headers,
-  values,
-  containerStyle,
-  valuesTable
-}) {
-
+export function SimpleTable({ headers, values, containerStyle, valuesTable }) {
   return (
-    <TableContainer
-      width="100%"
-      height="100%"
-      {...containerStyle}
-    >
+    <TableContainer width="100%" height="100%" {...containerStyle}>
       <Table role="table">
         <Thead role="rowgroup">
           {headers.map((h, index) => (
@@ -39,9 +29,7 @@ export function SimpleTable({
               borderBottom="1px solid #DEDFE0 !important"
               boxSizing="content-box"
             >
-              <div role="columnheader">
-                {h}
-              </div>
+              <div role="columnheader">{h}</div>
             </Th>
           ))}
         </Thead>
@@ -73,5 +61,5 @@ export function SimpleTable({
         </Tbody>
       </Table>
     </TableContainer>
-  )
+  );
 }

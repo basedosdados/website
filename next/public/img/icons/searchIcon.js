@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const SearchIcon = createIcon({
   displayName: "search",
@@ -8,7 +8,7 @@ const SearchIcon = createIcon({
       fill="current-color"
       d="M 13.7954 8.5454 M 12.9322 15.0211 C 11.6213 15.966 10.012 16.5227 8.2727 16.5227 C 3.867 16.5227 0.2954 12.9511 0.2954 8.5454 C 0.2954 4.1397 3.867 0.5681 8.2727 0.5681 C 12.6784 0.5681 16.25 4.1397 16.25 8.5455 C 16.25 10.326 15.6666 11.9703 14.6805 13.2977 L 20.9181 19.3878 C 21.4031 19.8613 21.4124 20.6383 20.9389 21.1233 C 20.4654 21.6083 19.6884 21.6176 19.2034 21.1441 L 12.9322 15.0211 M 8.2727 14.0681 A 1 1 0 0 0 8.2727 3.0227 A 1 1 0 0 0 8.2727 14.0681 Z"
     />
-  )
-})
+  ),
+});
 
-export default SearchIcon
+export default SearchIcon;

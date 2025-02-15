@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 async function getDictionaryTable(id, slug) {
   try {
@@ -35,27 +35,28 @@ async function getDictionaryTable(id, slug) {
             }
           }
         }
-        `
-      }
-    })
-    const data = res?.data?.data?.allDataset?.edges[0]?.node?.tables?.edges[0]?.node
-    return data
+        `,
+      },
+    });
+    const data =
+      res?.data?.data?.allDataset?.edges[0]?.node?.tables?.edges[0]?.node;
+    return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
 }
 
 export default async function handler(req, res) {
-  const param = atob(req.query.p)
-  let result = await getDictionaryTable(param, "dicionario")
+  const param = atob(req.query.p);
+  let result = await getDictionaryTable(param, "dicionario");
 
   if (result === undefined) {
-    result = await getDictionaryTable(param, "dictionary")
+    result = await getDictionaryTable(param, "dictionary");
   }
 
   if (result === undefined) {
-    res.status(500).json({ error: "Nenhum resultado encontrado" })
+    res.status(500).json({ error: "Nenhum resultado encontrado" });
   } else {
-    res.status(200).json(result)
+    res.status(200).json(result);
   }
 }

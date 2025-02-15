@@ -1,20 +1,16 @@
-import {
-  Box,
-  Stack,
-  FormControl,
-} from "@chakra-ui/react";
+import { Box, Stack, FormControl } from "@chakra-ui/react";
 import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import cookies from 'js-cookie';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import cookies from "js-cookie";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import {
   LabelTextForm,
   InputForm,
   ErrorMessage,
-  Button
+  Button,
 } from "../../components/molecules/uiUserPage";
 import Link from "../../components/atoms/Link";
 import Display from "../../components/atoms/Text/Display";
@@ -31,82 +27,89 @@ export async function getStaticProps({ locale }) {
   return {
     props: {
       ...pages,
-      ...(await serverSideTranslations(locale, ['user'])),
+      ...(await serverSideTranslations(locale, ["user"])),
     },
   };
 }
 
 export default function Login() {
   const router = useRouter();
-  const { t } = useTranslation('user');
-  const { query } = useRouter()
-  const [formData, setFormData] = useState({ email: "", password: "" })
-  const [errors, setErrors] = useState({ email: "", password: "", login: ""})
-  const [showPassword, setShowPassword] = useState(true)
+  const { t } = useTranslation("user");
+  const { query } = useRouter();
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: "", password: "", login: "" });
+  const [showPassword, setShowPassword] = useState(true);
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
       ...prevState,
       [field]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    let validationErrors = {}
+    let validationErrors = {};
     if (!formData.email) {
-      validationErrors.email = t('login.emailError');
+      validationErrors.email = t("login.emailError");
     } else if (!/^\S+@\S+$/.test(formData.email)) {
-      validationErrors.email = t('login.emailError');
+      validationErrors.email = t("login.emailError");
     }
-    if (!formData.password) validationErrors.password = t('login.passwordError');
-    setErrors(validationErrors)
+    if (!formData.password)
+      validationErrors.password = t("login.passwordError");
+    setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      fetchToken(formData)
+      fetchToken(formData);
     }
   }
 
   async function fetchToken({ email, password }) {
-    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
-      .then(res => res.json())
-    if(result.error) {
-      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
-        .then(res => res.json())
-      if(hasActive.isActive === false)  {
-        const reg = new RegExp("(?<=:).*")
-        const [ id ] = reg.exec(hasActive.id)
+    const result = await fetch(
+      `/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`,
+      { method: "GET" },
+    ).then((res) => res.json());
+    if (result.error) {
+      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {
+        method: "GET",
+      }).then((res) => res.json());
+      if (hasActive.isActive === false) {
+        const reg = new RegExp("(?<=:).*");
+        const [id] = reg.exec(hasActive.id);
 
-        sessionStorage.setItem('registration_email_bd', `${email}`)
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
-        return router.push('/user/check-email?e=1')
+        sessionStorage.setItem("registration_email_bd", `${email}`);
+        await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`,
+        );
+        return router.push("/user/check-email?e=1");
       }
-      return setErrors({login: t('login.loginError')})
+      return setErrors({ login: t("login.loginError") });
     }
 
-    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
-      .then(res => res.json())
-    if(userData.error) return setErrors({login: t('login.serverError')}) 
+    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {
+      method: "GET",
+    }).then((res) => res.json());
+    if (userData.error) return setErrors({ login: t("login.serverError") });
 
-    cookies.set('userBD', JSON.stringify(userData))
+    cookies.set("userBD", JSON.stringify(userData));
 
-    if(query.i) {
+    if (query.i) {
       return router.push({
-        pathname: '/user/[username]',
-        query: { 
+        pathname: "/user/[username]",
+        query: {
           username: userData.username,
-          plans_and_payment: '',
-          i: query.i
-        }
-      })
+          plans_and_payment: "",
+          i: query.i,
+        },
+      });
     }
 
-    if(userData.workDataTool === null) {
-      return router.push('/user/survey')
+    if (userData.workDataTool === null) {
+      return router.push("/user/survey");
     }
-    
-    return router.push('/')
+
+    return router.push("/");
   }
 
   return (
@@ -125,14 +128,11 @@ export default function Login() {
         marginX="27px"
         spacing={0}
       >
-        <Display
-          textAlign="center"
-          marginBottom="40px"
-        >
-          {t('login.title')}
+        <Display textAlign="center" marginBottom="40px">
+          {t("login.title")}
         </Display>
 
-        {errors.login && 
+        {errors.login && (
           <Box
             display="flex"
             flexDirection="row"
@@ -140,19 +140,19 @@ export default function Login() {
             alignItems="center"
             marginBottom="24px !important"
           >
-            <Exclamation width="19px" height="19px" fill="#BF3434"/>
-            <BodyText
-              typography="small"
-              color="#BF3434"
-            >
+            <Exclamation width="19px" height="19px" fill="#BF3434" />
+            <BodyText typography="small" color="#BF3434">
               {errors.login}
             </BodyText>
           </Box>
-        }
+        )}
 
         <form onSubmit={handleSubmit}>
-          <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
-            <LabelTextForm text={t('login.emailLabel')}/>
+          <FormControl
+            isInvalid={!!errors.email}
+            marginBottom="24px !important"
+          >
+            <LabelTextForm text={t("login.emailLabel")} />
             <InputForm
               id="username"
               name="username"
@@ -160,15 +160,16 @@ export default function Login() {
               type="email"
               value={formData.email}
               onChange={(e) => handleInputChange(e, "email")}
-              placeholder={t('login.emailPlaceholder')}
+              placeholder={t("login.emailPlaceholder")}
             />
-            <ErrorMessage>
-              {errors.email}
-            </ErrorMessage>
+            <ErrorMessage>{errors.email}</ErrorMessage>
           </FormControl>
 
-          <FormControl isInvalid={!!errors.password} marginBottom="8px !important">
-            <LabelTextForm text={t('login.passwordLabel')}/>
+          <FormControl
+            isInvalid={!!errors.password}
+            marginBottom="8px !important"
+          >
+            <LabelTextForm text={t("login.passwordLabel")} />
             <InputForm
               type={showPassword ? "password" : "text"}
               id="password"
@@ -176,25 +177,27 @@ export default function Login() {
               autoComplete="current-password"
               value={formData.password}
               onChange={(e) => handleInputChange(e, "password")}
-              placeholder={t('login.passwordPlaceholder')}
+              placeholder={t("login.passwordPlaceholder")}
               inputElementStyle={{
                 cursor: "pointer",
-                onClick: () => setShowPassword(!showPassword)
+                onClick: () => setShowPassword(!showPassword),
               }}
-              icon={showPassword ?
-                <EyeOffIcon
-                  alt={t('login.hidePassword')}
-                  width="20px"
-                  height="20px"
-                  fill="#464A51"
-                />
-              :
-                <EyeIcon
-                  alt={t('login.showPassword')}
-                  width="20px"
-                  height="20px"
-                  fill="#464A51"
-                />
+              icon={
+                showPassword ? (
+                  <EyeOffIcon
+                    alt={t("login.hidePassword")}
+                    width="20px"
+                    height="20px"
+                    fill="#464A51"
+                  />
+                ) : (
+                  <EyeIcon
+                    alt={t("login.showPassword")}
+                    width="20px"
+                    height="20px"
+                    fill="#464A51"
+                  />
+                )
               }
             />
             <ErrorMessage>{errors.password}</ErrorMessage>
@@ -203,14 +206,14 @@ export default function Login() {
           <Link
             width="fit-content"
             marginBottom="24px"
-            href='/user/password-recovery'
+            href="/user/password-recovery"
             fontWeight="400"
             color="#0068C5"
             _hover={{
-              color: "#0057A4"
+              color: "#0057A4",
             }}
           >
-            {t('login.forgotPassword')}
+            {t("login.forgotPassword")}
           </Link>
 
           <Button
@@ -219,7 +222,7 @@ export default function Login() {
             onClick={() => {}}
             marginBottom="24px !important"
           >
-            {t('login.loginButton')}
+            {t("login.loginButton")}
           </Button>
         </form>
 
@@ -231,19 +234,21 @@ export default function Login() {
           justifyContent="center"
           textAlign="center"
         >
-          {t('login.noAccount')}
+          {t("login.noAccount")}
           <Link
             marginLeft="2px"
-            href='/user/register'
+            href="/user/register"
             fontWeight="400"
             color="#0068C5"
             _hover={{
-              color: "#0057A4"
+              color: "#0057A4",
             }}
-          >{t('login.signUp')}
-          </Link>.
+          >
+            {t("login.signUp")}
+          </Link>
+          .
         </BodyText>
       </Stack>
     </MainPageTemplate>
-  )
+  );
 }

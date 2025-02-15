@@ -1,12 +1,7 @@
-import {
-  Stack,
-  Skeleton,
-  SkeletonText,
-  Divider
-} from "@chakra-ui/react";
+import { Stack, Skeleton, SkeletonText, Divider } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { capitalize } from "lodash";
 import Button from "../atoms/Button";
 import TitleText from "../atoms/Text/TitleText";
@@ -19,38 +14,38 @@ import FourOFour from "../templates/404";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function InformationRequestPage({ id }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchInformationRequest = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const url = `/api/informationRequests/getInformationRequest?id=${id}&locale=${locale}`;
-        const response = await fetch(url, { method: "GET" })
-        const result = await response.json()
+        const response = await fetch(url, { method: "GET" });
+        const result = await response.json();
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          setResource(result.resource);
+          setIsError(false);
         } else {
-          console.error(result.error)
-          setIsError(true)
+          console.error(result.error);
+          setIsError(true);
         }
       } catch (error) {
-        console.error("Fetch error: ", error)
-        setIsError(true)
+        console.error("Fetch error: ", error);
+        setIsError(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchInformationRequest()
-  }, [id, locale])
+    fetchInformationRequest();
+  }, [id, locale]);
 
   const AddInfoTextBase = ({ title, text, ...props }) => {
     return (
@@ -68,13 +63,12 @@ export default function InformationRequestPage({ id }) {
         {...props}
       >
         <LabelText typography="small">{title}</LabelText>
-        <BodyText
-          typography="small"
-          color="#464A51"
-        >{text || t('informationRequest.notProvided')}</BodyText>
+        <BodyText typography="small" color="#464A51">
+          {text || t("informationRequest.notProvided")}
+        </BodyText>
       </SkeletonText>
-    )
-  }
+    );
+  };
 
   const StackSkeleton = ({ children, ...props }) => {
     return (
@@ -89,16 +83,16 @@ export default function InformationRequestPage({ id }) {
       >
         {children}
       </Skeleton>
-    )
-  }
+    );
+  };
 
-  if(isError) return <FourOFour/>
+  if (isError) return <FourOFour />;
 
   return (
-    <Stack 
+    <Stack
       flex={1}
       overflow="hidden"
-      paddingLeft={{base: "0", lg: "24px"}}
+      paddingLeft={{ base: "0", lg: "24px" }}
       spacing={0}
     >
       <StackSkeleton
@@ -113,7 +107,7 @@ export default function InformationRequestPage({ id }) {
           textOverflow="ellipsis"
           whiteSpace="nowrap"
         >
-          {t('informationRequest.requestNumber', { number: resource?.number })}
+          {t("informationRequest.requestNumber", { number: resource?.number })}
         </TitleText>
       </StackSkeleton>
 
@@ -123,7 +117,7 @@ export default function InformationRequestPage({ id }) {
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
-          {t('informationRequest.disclaimer')}
+          {t("informationRequest.disclaimer")}
         </AlertDiscalimerBox>
       </StackSkeleton>
 
@@ -144,14 +138,11 @@ export default function InformationRequestPage({ id }) {
           backgroundColor={resource?.dataUrl ? "#2B8C4D" : "#ACAEB1"}
           cursor={resource?.dataUrl ? "pointer" : "default"}
           _hover={{
-            backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1"
+            backgroundColor: resource?.dataUrl ? "#22703E" : "#ACAEB1",
           }}
         >
-          {t('informationRequest.accessData')}
-          <RedirectIcon
-            width="12px"
-            height="12px"
-          />
+          {t("informationRequest.accessData")}
+          <RedirectIcon width="12px" height="12px" />
         </Button>
 
         <Button
@@ -162,28 +153,24 @@ export default function InformationRequestPage({ id }) {
           backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
           cursor={resource?.url ? "pointer" : "default"}
           _hover={{
-            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
+            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1",
           }}
         >
-          {t('informationRequest.accessRequest')}
-          <RedirectIcon
-            width="12px"
-            height="12px"
-          />
+          {t("informationRequest.accessRequest")}
+          <RedirectIcon width="12px" height="12px" />
         </Button>
       </StackSkeleton>
 
       <Stack spacing="8px">
         <StackSkeleton width="160px" height="20px">
           <TitleText
-
             fontFamily="Roboto"
             fontWeight="500"
             fontSize="18px"
             lineHeight="20px"
             color="#252A32"
           >
-            {t('informationRequest.description')}
+            {t("informationRequest.description")}
           </TitleText>
         </StackSkeleton>
 
@@ -200,23 +187,28 @@ export default function InformationRequestPage({ id }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.[`observations${capitalize(locale)}`] || resource?.observations || t('informationRequest.notProvided')}
+            {resource?.[`observations${capitalize(locale)}`] ||
+              resource?.observations ||
+              t("informationRequest.notProvided")}
           </ReadMore>
         </SkeletonText>
       </Stack>
 
-      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
+      <Divider marginY="40px !important" borderColor="#DEDFE0" />
 
       <StackSkeleton width="190px" height="28px" marginBottom="20px !important">
         <TitleText typography="small">
-          {t('informationRequest.additionalInformation')}
+          {t("informationRequest.additionalInformation")}
         </TitleText>
       </StackSkeleton>
 
       <AddInfoTextBase
-        title={t('informationRequest.status')}
-        text={resource?.status?.[`name${capitalize(locale)}`] || resource?.status?.name}
+        title={t("informationRequest.status")}
+        text={
+          resource?.status?.[`name${capitalize(locale)}`] ||
+          resource?.status?.name
+        }
       />
     </Stack>
-  )
+  );
 }

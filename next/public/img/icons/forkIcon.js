@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const ForkIcon = createIcon({
   displayName: "fork",
@@ -11,4 +11,4 @@ const ForkIcon = createIcon({
   ),
 });
 
-export default ForkIcon
+export default ForkIcon;

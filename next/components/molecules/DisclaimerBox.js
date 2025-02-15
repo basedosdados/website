@@ -1,34 +1,31 @@
-import {
-  Stack,
-  Box,
-} from "@chakra-ui/react";
+import { Stack, Box } from "@chakra-ui/react";
 import BodyText from "../atoms/Text/BodyText";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import WarningIcon from "../../public/img/icons/warningIcon";
 import ExclamationIcon from "../../public/img/icons/exclamationIcon";
 import { SolidSuccessIcon } from "../../public/img/icons/successIcon";
 
-export function AlertDiscalimerBox({ type = "info", text, children, ...props }) {
+export function AlertDiscalimerBox({
+  type = "info",
+  text,
+  children,
+  ...props
+}) {
   const backgroundColor = {
     info: "#E4F2FF",
     warning: "#FFF8DF",
     error: "#F6E3E3",
-    success: "#D5E8DB"
-  }
+    success: "#D5E8DB",
+  };
   const borderColor = {
     info: "#0068C5",
     warning: "#F9C50B",
     error: "#BF3434",
-    success: "#2B8C4D"
-  }
+    success: "#2B8C4D",
+  };
 
   return (
-    <Box
-      position="relative"
-      display="flex"
-      flexDirection="row"
-      height="100%"
-    >
+    <Box position="relative" display="flex" flexDirection="row" height="100%">
       <Box
         position="absolute"
         left={0}
@@ -49,50 +46,50 @@ export function AlertDiscalimerBox({ type = "info", text, children, ...props }) 
         zIndex="10"
         {...props}
       >
-        {type === "info" &&
+        {type === "info" && (
           <InfoIcon
             width="20px"
             height="20px"
             padding="2px"
             fill={borderColor[type]}
           />
-        }
+        )}
 
-        {type === "warning" &&
-          <WarningIcon 
+        {type === "warning" && (
+          <WarningIcon
             width="20px"
             height="20px"
             padding="2px"
             fill={borderColor[type]}
           />
-        }
+        )}
 
-        {type === "error" &&
+        {type === "error" && (
           <ExclamationIcon
             width="20px"
             height="20px"
             padding="2px"
             fill={borderColor[type]}
           />
-        }
+        )}
 
-        {type === "success" &&
+        {type === "success" && (
           <SolidSuccessIcon
             width="20px"
             height="20px"
             padding="2px"
             fill={borderColor[type]}
           />
-        }
+        )}
 
         <BodyText
           typography="small"
-          whiteSpace={{base: "normal", lg:"break-spaces"}}
+          whiteSpace={{ base: "normal", lg: "break-spaces" }}
         >
           {text}
           {children}
         </BodyText>
       </Stack>
     </Box>
-  )
+  );
 }

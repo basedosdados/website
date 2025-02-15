@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const IpIcon = createIcon({
   displayName: "ip",
@@ -8,7 +8,7 @@ const IpIcon = createIcon({
       fill="current-color"
       d="M 11.7845 19.5947 C 13.6359 17.3319 17.8584 11.8477 17.8584 8.7672 C 17.8584 5.0311 14.7547 2 10.9292 2 S 4 5.0311 4 8.7672 c 0 3.0805 4.2225 8.5647 6.0739 10.8275 c 0.4439 0.5393 1.2667 0.5393 1.7106 0 z M 10.9292 11.0229 c -1.274 0 -2.3097 -1.0116 -2.3097 -2.2557 s 1.0358 -2.2557 2.3097 -2.2557 s 2.3097 1.0116 2.3097 2.2557 s -1.0358 2.2557 -2.3097 2.2557 z"
     />
-  )
-})
+  ),
+});
 
-export default IpIcon
+export default IpIcon;

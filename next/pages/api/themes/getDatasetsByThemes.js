@@ -7,13 +7,12 @@ export default async function getDatasetsByThemes(req, res) {
   let query = [`locale=${locale || "pt"}`];
 
   if (Array.isArray(themes)) {
-    themes.forEach(element => {
+    themes.forEach((element) => {
       query.push(`theme=${encodeURIComponent(element)}`);
     });
   } else if (themes) {
-    
-    const themeArray = themes.replace(/[\[\]]/g, '').split(',');
-    themeArray.forEach(theme => {
+    const themeArray = themes.replace(/[\[\]]/g, "").split(",");
+    themeArray.forEach((theme) => {
       query.push(`theme=${encodeURIComponent(theme.trim())}`);
     });
   }
@@ -25,6 +24,6 @@ export default async function getDatasetsByThemes(req, res) {
     res.status(200).json(response.data.results);
   } catch (error) {
     console.error(error);
-    return "err"
+    return "err";
   }
 }

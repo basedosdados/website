@@ -1,47 +1,55 @@
-import { appWithTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { appWithTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import "../styles/globals.css";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { locale } = router;
-  const { t } = useTranslation('app');
+  const { t } = useTranslation("app");
 
   const queryClient = new QueryClient({
     cacheTime: 0,
   });
 
-  const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+  const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND;
 
   return (
     <QueryClientProvider client={queryClient}>
       <Head>
         {/* <meta/> para não noindex ambientes de development e staging */}
-        {local === "https://basedosdados.org" ? null: (
+        {local === "https://basedosdados.org" ? null : (
           <meta name="robots" content="noindex" />
         )}
         {/* <meta/> para não noindex ambientes de development e staging */}
-        {locale === 'en' ?
-          <link rel="icon" type="image/ico" href="/favicon_en.ico"/>
-          :
-          <link rel="icon" type="image/ico" href="/favicon_default.ico"/>
-        }
+        {locale === "en" ? (
+          <link rel="icon" type="image/ico" href="/favicon_en.ico" />
+        ) : (
+          <link rel="icon" type="image/ico" href="/favicon_default.ico" />
+        )}
         <link
           rel="image_src"
           href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
         />
 
-        <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
+        <title>
+          {locale === "en"
+            ? "Data Basis"
+            : locale === "es"
+              ? "Base de los Datos"
+              : "Base dos Dados"}
+        </title>
         <meta
           property="description"
           content={
-            locale === 'en' ? 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.' : 
-            locale === 'es' ? 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.' : 
-            'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.'
+            locale === "en"
+              ? "Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata."
+              : locale === "es"
+                ? "Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata."
+                : "Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata."
           }
         />
         <script
@@ -67,18 +75,19 @@ function MyApp({ Component, pageProps }) {
         />
         <meta
           property="og:site_name"
-          content={t('siteName')}
+          content={t("siteName")}
           key="ogsitename"
         />
-        <meta property="og:title" content={t('title')} key="ogtitle" />
+        <meta property="og:title" content={t("title")} key="ogtitle" />
         <meta
           property="og:description"
-          content={t('description')}
+          content={t("description")}
           key="ogdesc"
         />
 
         {/* <!-- Google Tag Manager --> */}
-        {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (
+        {local === "https://staging.basedosdados.org" ||
+        local === "https://basedosdados.org" ? (
           <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -93,7 +102,7 @@ function MyApp({ Component, pageProps }) {
 
         {/* TAG GTM DEVELOPMENT */}
         {/* <!-- Google Tag Manager --> */}
-        {local === "https://development.basedosdados.org" &&
+        {local === "https://development.basedosdados.org" && (
           <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -103,7 +112,7 @@ function MyApp({ Component, pageProps }) {
               })(window,document,'script','dataLayer','GTM-5NWMN98');`,
             }}
           ></script>
-        }
+        )}
         {/* <!-- End Google Tag Manager --> */}
         {/* FIM DA TAG DEVELOPMENT */}
       </Head>
@@ -113,7 +122,8 @@ function MyApp({ Component, pageProps }) {
       </ChakraProvider>
 
       {/*<!-- Google Tag Manager (noscript) -->*/}
-      {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (
+      {local === "https://staging.basedosdados.org" ||
+      local === "https://basedosdados.org" ? (
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98"
@@ -127,7 +137,7 @@ function MyApp({ Component, pageProps }) {
 
       {/* TAG GTM DEVELOPMENT  */}
       {/* <!-- Google Tag Manager (noscript) --> */}
-      {local === "https://development.basedosdados.org" &&
+      {local === "https://development.basedosdados.org" && (
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x"
@@ -136,11 +146,10 @@ function MyApp({ Component, pageProps }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-      }
+      )}
       {/* <!-- End Google Tag Manager (noscript) --> */}
       {/* FIM DA TAG DEVELOPMENT */}
-
-    </QueryClientProvider >
+    </QueryClientProvider>
   );
 }
 

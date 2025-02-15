@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMediaQuery } from "@chakra-ui/react";
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { ControlledInput } from "../components/atoms/ControlledInput";
 import Link from "../components/atoms/Link";
@@ -43,7 +43,7 @@ import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
 import ProductsFiltersImage from "../public/img/productsFiltersImage";
 import ProcessedDataImage from "../public/img/processedDataImage";
-import PayPalButton from '../components/atoms/PayPalButton';
+import PayPalButton from "../components/atoms/PayPalButton";
 
 export async function getStaticProps({ locale }) {
   const themes = await getAllThemes(locale);
@@ -51,28 +51,28 @@ export async function getStaticProps({ locale }) {
 
   let dataThemeCatalog = {
     themes: themes,
-    defaultDataset: defaultDataset
+    defaultDataset: defaultDataset,
   };
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'menu', 'dataset'])),
-      dataThemeCatalog
+      ...(await serverSideTranslations(locale, ["common", "menu", "dataset"])),
+      dataThemeCatalog,
     },
-    revalidate: 30
+    revalidate: 30,
   };
 }
 
 function Hero({ dataThemeCatalog, locale }) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
+  const [mediumQuery] = useMediaQuery("(max-width: 1366px)");
 
   function openSearchLink() {
-    if(search.trim() !== "") {
-      triggerGAEvent("search", search)
-      triggerGAEvent("search_home", search)
+    if (search.trim() !== "") {
+      triggerGAEvent("search", search);
+      triggerGAEvent("search_home", search);
       router.push(`/search?q=${search}`);
     }
   }
@@ -85,12 +85,7 @@ function Hero({ dataThemeCatalog, locale }) {
       zIndex="10"
       position="relative"
     >
-      <VStack
-        position="relative"
-        width="100%"
-        maxWidth="1440px"
-        height="100%"
-      >
+      <VStack position="relative" width="100%" maxWidth="1440px" height="100%">
         <VStack
           width="100%"
           height="100%"
@@ -105,33 +100,37 @@ function Hero({ dataThemeCatalog, locale }) {
             direction="column"
             marginTop={{
               base: "64px",
-              lg: mediumQuery ? "16px" : "80px"
+              lg: mediumQuery ? "16px" : "80px",
             }}
           >
-            {locale === 'en' ? (
-              <DBLogoImage 
-                widthImage={{base: "160px", lg: "200px"}}
-                heightImage={{base: "75px", lg: "94px"}}
+            {locale === "en" ? (
+              <DBLogoImage
+                widthImage={{ base: "160px", lg: "200px" }}
+                heightImage={{ base: "75px", lg: "94px" }}
                 marginBottom="24px"
               />
             ) : (
-              <BDLogoImage 
-                widthImage={{base: "160px", lg: "200px"}}
-                heightImage={{base: "75px", lg: "94px"}}
+              <BDLogoImage
+                widthImage={{ base: "160px", lg: "200px" }}
+                heightImage={{ base: "75px", lg: "94px" }}
                 marginBottom="24px"
               />
             )}
             <VStack
               maxWidth="650px"
-              width={{base: "100vw", lg: "100%"}}
-              paddingX={{base: "24px", lg: "0"}}
+              width={{ base: "100vw", lg: "100%" }}
+              paddingX={{ base: "24px", lg: "0" }}
               spacing={4}
               alignItems="flex-start"
               flex="3"
             >
               <ControlledInput
                 value={search}
-                placeholder={isMobileMod() ? t('search_placeholder_mobile') : t('search_placeholder')}
+                placeholder={
+                  isMobileMod()
+                    ? t("search_placeholder_mobile")
+                    : t("search_placeholder")
+                }
                 onChange={setSearch}
                 onEnterPress={openSearchLink}
                 inputStyle={{
@@ -139,7 +138,7 @@ function Hero({ dataThemeCatalog, locale }) {
                   id: "searchDatabases",
                 }}
                 rightIcon={
-                  (search ?
+                  search ? (
                     <Link
                       href={`/search?q=${search}`}
                       onClick={(e) => {
@@ -149,20 +148,20 @@ function Hero({ dataThemeCatalog, locale }) {
                     >
                       <ArrowIcon
                         alt=""
-                        width={{base: "18px", lg: "28px"}}
-                        height={{base: "18px", lg: "28px"}}
+                        width={{ base: "18px", lg: "28px" }}
+                        height={{ base: "18px", lg: "28px" }}
                         fill="#252A32"
-                        marginRight={{base: "10px", lg: "20px"}}
+                        marginRight={{ base: "10px", lg: "20px" }}
                         cursor="pointer"
                       />
                     </Link>
-                    :
+                  ) : (
                     <SearchIcon
                       alt="pesquisar"
-                      width={{base: "18px", lg: "28px"}}
-                      height={{base: "18px", lg: "28px"}}
+                      width={{ base: "18px", lg: "28px" }}
+                      height={{ base: "18px", lg: "28px" }}
                       fill="#252A32"
-                      marginRight={{base: "10px", lg: "20px"}}
+                      marginRight={{ base: "10px", lg: "20px" }}
                     />
                   )
                 }
@@ -172,7 +171,7 @@ function Hero({ dataThemeCatalog, locale }) {
 
           <VStack
             margin="0 !important"
-            paddingTop={{base: "80px", lg: "120px"}}
+            paddingTop={{ base: "80px", lg: "120px" }}
             width="100%"
             spacing="32px"
             position="relative"
@@ -185,10 +184,10 @@ function Hero({ dataThemeCatalog, locale }) {
               cursor="pointer"
               onClick={() => window.open("#theme", "_self")}
             >
-              {t('search_by_theme')}
+              {t("search_by_theme")}
             </LabelText>
 
-            <ThemeCatalog data={dataThemeCatalog} locale={locale}/>
+            <ThemeCatalog data={dataThemeCatalog} locale={locale} />
           </VStack>
         </VStack>
       </VStack>
@@ -197,19 +196,14 @@ function Hero({ dataThemeCatalog, locale }) {
 }
 
 function Products() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const { locale } = useRouter();
-  
+
   return (
-    <VStack
-      width="100%"
-      maxWidth="1440px"
-      padding="0 24px"
-      margin="0 auto"
-    >
+    <VStack width="100%" maxWidth="1440px" padding="0 24px" margin="0 auto">
       <VStack spacing={0} width="100%">
         <Display
-          display={{base: "block", md:"flex"}}
+          display={{ base: "block", md: "flex" }}
           flexDirection="column"
           position="relative"
           zIndex="1"
@@ -217,44 +211,36 @@ function Products() {
           textAlign="center"
           margin="104px 0 112px"
         >
-          {t('products.facilitation_text')}
+          {t("products.facilitation_text")}
           <Text as="span">
-            {t('products.analysis_distance')}
-            <Text as="span" color="#2B8C4D">{t('products.good_question')}</Text>.
+            {t("products.analysis_distance")}
+            <Text as="span" color="#2B8C4D">
+              {t("products.good_question")}
+            </Text>
+            .
           </Text>
         </Display>
 
-        <VStack spacing={{base: "80px", lg: "112px"}} width="100%">
+        <VStack spacing={{ base: "80px", lg: "112px" }} width="100%">
           <HStack
             width="100%"
-            flexDirection={{base: "column", lg: "row"}}
+            flexDirection={{ base: "column", lg: "row" }}
             justifyContent="space-between"
             alignItems="flex-start"
             spacing={0}
-            gap={{base: "40px", lg: "160px"}}
+            gap={{ base: "40px", lg: "160px" }}
           >
-            <Stack
-              maxWidth={{base: "100%", lg: "490px"}}
-              spacing={0}
-            >
-              <BodyText
-                typography="small"
-                color="#71757A"
-                paddingBottom="10px"
-              >
-                {t('products.filters')}
+            <Stack maxWidth={{ base: "100%", lg: "490px" }} spacing={0}>
+              <BodyText typography="small" color="#71757A" paddingBottom="10px">
+                {t("products.filters")}
               </BodyText>
 
               <TitleText paddingBottom="18px">
-                {t('products.search_as_you_want')}
+                {t("products.search_as_you_want")}
               </TitleText>
 
-              <BodyText
-                typography="large"
-                color="#464A51"
-                paddingBottom="24px"
-              >
-                {t('products.search_description')}
+              <BodyText typography="large" color="#464A51" paddingBottom="24px">
+                {t("products.search_description")}
               </BodyText>
 
               <Link
@@ -268,52 +254,44 @@ function Products() {
                 color="#0068C5"
                 _hover={{
                   color: "#0057A4",
-                  borderColor: "#0057A4"
+                  borderColor: "#0057A4",
                 }}
               >
-                {t('products.start_search')}
+                {t("products.start_search")}
               </Link>
             </Stack>
 
             <Stack>
               <ProductsFiltersImage
-                widthImage={{base: "100%", lg: "625px"}}
-                heightImage={{base: "100%", lg: "300px"}}
+                widthImage={{ base: "100%", lg: "625px" }}
+                heightImage={{ base: "100%", lg: "300px" }}
               />
             </Stack>
           </HStack>
 
           <HStack
             width="100%"
-            flexDirection={{base: "column", lg: "row"}}
+            flexDirection={{ base: "column", lg: "row" }}
             justifyContent="space-between"
             alignItems="flex-start"
             spacing={0}
-            gap={{base: "40px", lg: "160px"}}
+            gap={{ base: "40px", lg: "160px" }}
           >
-            <Stack 
-              order={{base: 0, lg: 1}}
-              maxWidth={{base: "100%", lg: "490px"}}
+            <Stack
+              order={{ base: 0, lg: 1 }}
+              maxWidth={{ base: "100%", lg: "490px" }}
               spacing={0}
             >
-              <BodyText
-                typography="small"
-                color="#71757A"
-                paddingBottom="10px"
-              >
-                {t('products.processed_tables')}
+              <BodyText typography="small" color="#71757A" paddingBottom="10px">
+                {t("products.processed_tables")}
               </BodyText>
 
               <TitleText paddingBottom="18px">
-                {t('products.access_quality_data')}
+                {t("products.access_quality_data")}
               </TitleText>
 
-              <BodyText
-                typography="large"
-                color="#464A51"
-                paddingBottom="24px"
-              >
-                {t('products.processed_tables_description')}
+              <BodyText typography="large" color="#464A51" paddingBottom="24px">
+                {t("products.processed_tables_description")}
               </BodyText>
 
               <Link
@@ -327,59 +305,50 @@ function Products() {
                 color="#0068C5"
                 _hover={{
                   color: "#0057A4",
-                  borderColor: "#0057A4"
+                  borderColor: "#0057A4",
                 }}
               >
-                {t('products.view_available_data')}
+                {t("products.view_available_data")}
               </Link>
             </Stack>
 
-            <Stack order={{base: 1, lg: 0}}>
+            <Stack order={{ base: 1, lg: 0 }}>
               <ProcessedDataImage
-                widthImage={{base: "100%", lg: "625px"}}
-                heightImage={{base: "100%", lg: "300px"}}
+                widthImage={{ base: "100%", lg: "625px" }}
+                heightImage={{ base: "100%", lg: "300px" }}
               />
             </Stack>
           </HStack>
 
           <HStack
             width="100%"
-            flexDirection={{base: "column", lg: "row"}}
+            flexDirection={{ base: "column", lg: "row" }}
             justifyContent="space-between"
             alignItems="flex-start"
             spacing={0}
-            gap={{base: "40px", lg: "160px"}}
+            gap={{ base: "40px", lg: "160px" }}
           >
-            <Stack
-              maxWidth={{base: "100%", lg: "490px"}}
-              spacing={0}
-            >
-              <BodyText
-                typography="small"
-                color="#71757A"
-                paddingBottom="10px"
-              >
-                {t('products.packages')}
+            <Stack maxWidth={{ base: "100%", lg: "490px" }} spacing={0}>
+              <BodyText typography="small" color="#71757A" paddingBottom="10px">
+                {t("products.packages")}
               </BodyText>
 
               <TitleText paddingBottom="18px">
-                {t('products.explore_in_your_favorite_language')}
+                {t("products.explore_in_your_favorite_language")}
               </TitleText>
 
-              <BodyText
-                typography="large"
-                color="#464A51"
-                paddingBottom="24px"
-              >
-                {t('products.packages_description')}
+              <BodyText typography="large" color="#464A51" paddingBottom="24px">
+                {t("products.packages_description")}
               </BodyText>
 
               <Link
                 width="fit-content"
                 href={
-                  locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-                  locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-                  "https://basedosdados.github.io/sdk"
+                  locale === "en"
+                    ? "https://basedosdados.github.io/sdk/en"
+                    : locale === "es"
+                      ? "https://basedosdados.github.io/sdk/es"
+                      : "https://basedosdados.github.io/sdk"
                 }
                 fontSize="18px"
                 lineHeight="26px"
@@ -389,16 +358,16 @@ function Products() {
                 color="#0068C5"
                 _hover={{
                   color: "#0057A4",
-                  borderColor: "#0057A4"
+                  borderColor: "#0057A4",
                 }}
               >
-                {t('products.learn_how_to_access')}
+                {t("products.learn_how_to_access")}
               </Link>
             </Stack>
 
             <Stack
-              maxWidth={{base: "100%", lg: "550px"}}
-              minWidth={{base: "100%", lg: "550px"}}
+              maxWidth={{ base: "100%", lg: "550px" }}
+              minWidth={{ base: "100%", lg: "550px" }}
               height="100%"
             >
               <Box
@@ -407,18 +376,48 @@ function Products() {
                 width="100%"
                 height="100%"
               >
-                <Box display="flex" flexDirection="row" position="relative" padding="6px 12px" alignItems="center">
-                  <Box display="flex" flexDirection="row" gap="8px" position="absolute">
-                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#d9515c"/>
-                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#f5c036"/>
-                    <Box width="14px" height="14px" borderRadius="50%" backgroundColor="#3dc93f"/>
-                  </Box>
-                  <Text fontSize="18px" width="100%" textAlign="center" color="#a2a2a2">bash</Text>
-                </Box>
                 <Box
                   display="flex"
-                  height="180px"
+                  flexDirection="row"
+                  position="relative"
+                  padding="6px 12px"
+                  alignItems="center"
                 >
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    gap="8px"
+                    position="absolute"
+                  >
+                    <Box
+                      width="14px"
+                      height="14px"
+                      borderRadius="50%"
+                      backgroundColor="#d9515c"
+                    />
+                    <Box
+                      width="14px"
+                      height="14px"
+                      borderRadius="50%"
+                      backgroundColor="#f5c036"
+                    />
+                    <Box
+                      width="14px"
+                      height="14px"
+                      borderRadius="50%"
+                      backgroundColor="#3dc93f"
+                    />
+                  </Box>
+                  <Text
+                    fontSize="18px"
+                    width="100%"
+                    textAlign="center"
+                    color="#a2a2a2"
+                  >
+                    bash
+                  </Text>
+                </Box>
+                <Box display="flex" height="180px">
                   <Text
                     display="flex"
                     flexDirection="row"
@@ -428,7 +427,10 @@ function Products() {
                     paddingX="36px"
                     marginTop="50px"
                   >
-                    <Text as="span" color="#a1a1a1">$</Text> pip install basedosdados
+                    <Text as="span" color="#a1a1a1">
+                      $
+                    </Text>{" "}
+                    pip install basedosdados
                   </Text>
                 </Box>
               </Box>
@@ -437,16 +439,13 @@ function Products() {
         </VStack>
       </VStack>
     </VStack>
-  )
+  );
 }
 
-export function TextPix ({ title, text }) {
+export function TextPix({ title, text }) {
   return (
     <Box>
-      <TitleText
-        typography="small"
-        textAlign="justify"
-      >
+      <TitleText typography="small" textAlign="justify">
         {title}
       </TitleText>
       <BodyText
@@ -458,47 +457,32 @@ export function TextPix ({ title, text }) {
         {text}
       </BodyText>
     </Box>
-  )
+  );
 }
 
-export function StepText ({index, text}) {
+export function StepText({ index, text }) {
   return (
     <Box marginBottom="20px !important">
-      <BodyText
-        typography="large"
-        display="flex"
-        gap="8px"
-        color="#464A51"
-      >
-        <Text
-          as="span"
-          color="#252A32"
-          fontWeight="500"
-          width="12px"
-        >
+      <BodyText typography="large" display="flex" gap="8px" color="#464A51">
+        <Text as="span" color="#252A32" fontWeight="500" width="12px">
           {index}
         </Text>
         {text}
       </BodyText>
     </Box>
-  )
+  );
 }
 
 function Support() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const { locale } = useRouter();
   const { hasCopied, onCopy } = useClipboard("42494318000116");
 
   return (
-    <VStack
-      spacing={0}
-      width="100%"
-      paddingX="24px"
-      margin="auto"
-    >
+    <VStack spacing={0} width="100%" paddingX="24px" margin="auto">
       <VStack id="support" position="relative" width="100%" spacing={0}>
         <Display
-          display={{base: "block", md:"flex"}}
+          display={{ base: "block", md: "flex" }}
           flexDirection="column"
           fontFamily="Roboto"
           position="relative"
@@ -507,11 +491,13 @@ function Support() {
           textAlign="center"
           margin="104px 0px 40px"
         >
-          <Text as="span">{t('support.existence_through_effort')}</Text>
-          <Text as="span">{t('support.those_who_believe_in_quality_open_data')}</Text>
+          <Text as="span">{t("support.existence_through_effort")}</Text>
+          <Text as="span">
+            {t("support.those_who_believe_in_quality_open_data")}
+          </Text>
         </Display>
 
-        {locale === 'pt' && (
+        {locale === "pt" && (
           <>
             <TitleText
               position="relative"
@@ -520,7 +506,7 @@ function Support() {
               color="#464A51"
               paddingBottom="40px"
             >
-              {t('support.support_us_too')}
+              {t("support.support_us_too")}
             </TitleText>
 
             <Stack
@@ -535,13 +521,10 @@ function Support() {
               <ShadowBox
                 width="266px"
                 height="400px"
-                image= {
-                  <EnthusiasticImage
-                    widthImage="100%"
-                    heightImage="100%"
-                  />
+                image={
+                  <EnthusiasticImage widthImage="100%" heightImage="100%" />
                 }
-                title={t('support.enthusiast')}
+                title={t("support.enthusiast")}
               >
                 <BodyText
                   typography="small"
@@ -549,7 +532,8 @@ function Support() {
                   color="#464A51"
                   padding="10px 0 24px"
                 >
-                  {t('support.tight_pocket')} <br/> {t('support.enthusiast_description')}
+                  {t("support.tight_pocket")} <br />{" "}
+                  {t("support.enthusiast_description")}
                 </BodyText>
                 <Link
                   target="_blank"
@@ -558,7 +542,7 @@ function Support() {
                   <Button
                     backgroundColor="#0D99FC"
                     _hover={{
-                      backgroundColor: "#0B86DE"
+                      backgroundColor: "#0B86DE",
                     }}
                     width="200px"
                     justifyContent="center"
@@ -571,23 +555,27 @@ function Support() {
                       lineHeight="18px"
                       color="#FFFFFF"
                     >
-                      R$ <Text as="span" fontSize="24px" lineHeight="28px">15</Text>/ {t('support.month')}
+                      R${" "}
+                      <Text as="span" fontSize="24px" lineHeight="28px">
+                        15
+                      </Text>
+                      / {t("support.month")}
                     </Text>
                   </Button>
                 </Link>
               </ShadowBox>
 
               <ShadowBox
-                width={{base: "266px", lg: "320px"}}
-                height={{base: "400", lg: "428px"}}
+                width={{ base: "266px", lg: "320px" }}
+                height={{ base: "400", lg: "428px" }}
                 image={
-                  <DatabaseImage 
+                  <DatabaseImage
                     widthImage="100%"
                     heightImage="100%"
                     backgroundColor="#454955"
                   />
                 }
-                title={t('support.databaser')}
+                title={t("support.databaser")}
               >
                 <BodyText
                   typography="small"
@@ -597,8 +585,10 @@ function Support() {
                   color="#464A51"
                   padding="10px 0 24px"
                 >
-                  <Text as="span" fontWeight="500">{t('support.donate_1_real_per_day')}</Text>
-                  <Text as="span">{t('support.to_make_databasers_happy')}</Text>
+                  <Text as="span" fontWeight="500">
+                    {t("support.donate_1_real_per_day")}
+                  </Text>
+                  <Text as="span">{t("support.to_make_databasers_happy")}</Text>
                 </BodyText>
                 <Link
                   target="_blank"
@@ -607,7 +597,7 @@ function Support() {
                   <Button
                     backgroundColor="#0D99FC"
                     _hover={{
-                      backgroundColor: "#0B86DE"
+                      backgroundColor: "#0B86DE",
                     }}
                     width="200px"
                     justifyContent="center"
@@ -620,22 +610,23 @@ function Support() {
                       lineHeight="18px"
                       color="#FFFFFF"
                     >
-                      R$ <Text as="span" fontSize="24px" lineHeight="28px">30</Text>/ {t('support.month')}
+                      R${" "}
+                      <Text as="span" fontSize="24px" lineHeight="28px">
+                        30
+                      </Text>
+                      / {t("support.month")}
                     </Text>
                   </Button>
                 </Link>
               </ShadowBox>
-              
+
               <ShadowBox
                 width="266px"
                 height="400px"
-                image= {
-                  <MasterOfDatabaseImage
-                    widthImage="100%"
-                    heightImage="100%"
-                  />
+                image={
+                  <MasterOfDatabaseImage widthImage="100%" heightImage="100%" />
                 }
-                title={t('support.master_of_data')}
+                title={t("support.master_of_data")}
               >
                 <BodyText
                   typography="small"
@@ -643,7 +634,7 @@ function Support() {
                   color="#464A51"
                   padding="10px 0 24px"
                 >
-                  {t('support.master_of_data_description')}
+                  {t("support.master_of_data_description")}
                 </BodyText>
                 <Link
                   target="_blank"
@@ -652,13 +643,17 @@ function Support() {
                   <Button
                     backgroundColor="#0D99FC"
                     _hover={{
-                      backgroundColor: "#0B86DE"
+                      backgroundColor: "#0B86DE",
                     }}
                     width="200px"
                     justifyContent="center"
                     height="54px"
                   >
-                    R$ <Text as="span" fontSize="24px" lineHeight="28px">50</Text>/ {t('support.month')}
+                    R${" "}
+                    <Text as="span" fontSize="24px" lineHeight="28px">
+                      50
+                    </Text>
+                    / {t("support.month")}
                   </Button>
                 </Link>
               </ShadowBox>
@@ -672,26 +667,32 @@ function Support() {
                 color="#71757A"
                 paddingBottom="32px"
               >
-                {t('support.donate_any_amount_via_pix')}
+                {t("support.donate_any_amount_via_pix")}
               </LabelText>
 
               <Grid
-                templateColumns={{base: "repeat(1, 3fr)", lg: "repeat(3, 1fr)"}}
-                gap={{base: "40px", lg: "0"}}
+                templateColumns={{
+                  base: "repeat(1, 3fr)",
+                  lg: "repeat(3, 1fr)",
+                }}
+                gap={{ base: "40px", lg: "0" }}
                 justifyItems="center"
                 width="100%"
               >
                 <GridItem
-                  paddingTop={{base: "32px", lg: "0"}}
+                  paddingTop={{ base: "32px", lg: "0" }}
                   justifyContent="center"
                   alignItems="flex-start"
                 >
-                  <TextPix title={t('support.company_name')} text="Instituto Base dos Dados"/>
-                  <TextPix title={t('support.cnpj')} text="42494318/0001-16"/>
-                  <TextPix title={t('support.bank')} text="PagSeguro"/>
+                  <TextPix
+                    title={t("support.company_name")}
+                    text="Instituto Base dos Dados"
+                  />
+                  <TextPix title={t("support.cnpj")} text="42494318/0001-16" />
+                  <TextPix title={t("support.bank")} text="PagSeguro" />
                   <Box display="flex" gap="48px">
-                    <TextPix title={t('support.agency')} text="0001"/>
-                    <TextPix title={t('support.account')} text="31401653-6"/>
+                    <TextPix title={t("support.agency")} text="0001" />
+                    <TextPix title={t("support.account")} text="31401653-6" />
                   </Box>
                 </GridItem>
 
@@ -706,12 +707,12 @@ function Support() {
                     boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
                     src="https://storage.googleapis.com/basedosdados-website/images/bd_qrcode.png"
                   />
-                  <Button 
+                  <Button
                     fontSize="20px"
                     lineHeight="30px"
                     backgroundColor="#0D99FC"
                     _hover={{
-                      backgroundColor: "#0B89E2"
+                      backgroundColor: "#0B89E2",
                     }}
                     paddingX="30px"
                     width="100%"
@@ -722,20 +723,29 @@ function Support() {
                     textAlign="center"
                     justifyContent="center"
                   >
-                    <CopySolidIcon alt="copiar chave PIX" width="22px" height="22px" fill="#FFF"/>
-                      {hasCopied ? t('support.pix_key_copied') : t('support.copy_pix_key')}
+                    <CopySolidIcon
+                      alt="copiar chave PIX"
+                      width="22px"
+                      height="22px"
+                      fill="#FFF"
+                    />
+                    {hasCopied
+                      ? t("support.pix_key_copied")
+                      : t("support.copy_pix_key")}
                   </Button>
                 </GridItem>
 
-                <GridItem display={{base: "none", lg: "flex"}} flexDirection="column">
-                  <LabelText
-                    typography="large"
-                    marginBottom="24px"
-                  >{t('support.follow_the_steps')}</LabelText>
-                  <StepText index="1" text={t('support.step_1')}/>
-                  <StepText index="2" text={t('support.step_2')}/>
-                  <StepText index="3" text={t('support.step_3')}/>
-                  <StepText index="." text={t('support.step_4')}/>
+                <GridItem
+                  display={{ base: "none", lg: "flex" }}
+                  flexDirection="column"
+                >
+                  <LabelText typography="large" marginBottom="24px">
+                    {t("support.follow_the_steps")}
+                  </LabelText>
+                  <StepText index="1" text={t("support.step_1")} />
+                  <StepText index="2" text={t("support.step_2")} />
+                  <StepText index="3" text={t("support.step_3")} />
+                  <StepText index="." text={t("support.step_4")} />
                 </GridItem>
               </Grid>
 
@@ -747,7 +757,9 @@ function Support() {
                 gap="4px"
                 padding="32px 0"
               >
-                <Text as="span">💰 {t('support.want_to_institutionally_support_db')}</Text>
+                <Text as="span">
+                  💰 {t("support.want_to_institutionally_support_db")}
+                </Text>
                 <Link
                   display="default"
                   fontWeight="400"
@@ -755,27 +767,27 @@ function Support() {
                   lineHeight="24px"
                   color="#0068C5"
                   _hover={{
-                    color: "#0057A4"
+                    color: "#0057A4",
                   }}
                   href="/contact"
                 >
-                  {t('support.contact_us')}
+                  {t("support.contact_us")}
                 </Link>
               </BodyText>
             </Box>
           </>
         )}
 
-        {locale !== 'pt' && (
+        {locale !== "pt" && (
           <>
             <LabelText
               typography="x-large"
               width="100%"
               textAlign="center"
               color="#71757A"
-              paddingBottom={{base: "0", lg: "32px"}}
+              paddingBottom={{ base: "0", lg: "32px" }}
             >
-              {t('support.donate_any_amount_via_paypal')}
+              {t("support.donate_any_amount_via_paypal")}
             </LabelText>
             <Box marginTop="32px">
               <PayPalButton />
@@ -787,15 +799,15 @@ function Support() {
   );
 }
 
-function BDEdu () {
-  const { t } = useTranslation('common');
-  const closeDate = new Date(2025, 2, 26)
-  const currentDate = new Date()
+function BDEdu() {
+  const { t } = useTranslation("common");
+  const closeDate = new Date(2025, 2, 26);
+  const currentDate = new Date();
 
-  if(currentDate > closeDate) return null
+  if (currentDate > closeDate) return null;
   return (
     <Stack
-      id="edu" 
+      id="edu"
       width="100%"
       paddingX="24px"
       maxWidth="1440px"
@@ -808,20 +820,16 @@ function BDEdu () {
         marginBottom="24px"
       />
       <Display
-        display={{base: "block", md:"flex"}}
+        display={{ base: "block", md: "flex" }}
         flexDirection="column"
         textAlign="center"
         paddingBottom="24px"
       >
-        <Text as="span">{t('edu.learn_from_the_reference')}</Text>
-        <Text as="span">{t('edu.in_making_public_data_available')}</Text>
+        <Text as="span">{t("edu.learn_from_the_reference")}</Text>
+        <Text as="span">{t("edu.in_making_public_data_available")}</Text>
       </Display>
-      <TitleText
-        color="#71757A"
-        textAlign="center"
-        paddingBottom="24px"
-      >
-        {t('edu.with_our_course_you_can_go_further')}
+      <TitleText color="#71757A" textAlign="center" paddingBottom="24px">
+        {t("edu.with_our_course_you_can_go_further")}
       </TitleText>
       <Button
         fontFamily="Roboto"
@@ -832,15 +840,15 @@ function BDEdu () {
         padding="10px 16px"
         backgroundColor="#0D99FC"
         _hover={{
-          backgroundColor: "#0B89E2"
+          backgroundColor: "#0B89E2",
         }}
       >
         <a href={`https://info.basedosdados.org/bd-edu-cursos`} target="_blank">
-          {t('edu.take_advantage_of_the_promotional_price')}
+          {t("edu.take_advantage_of_the_promotional_price")}
         </a>
       </Button>
     </Stack>
-  )
+  );
 }
 
 export default function Home({ dataThemeCatalog }) {
@@ -849,7 +857,7 @@ export default function Home({ dataThemeCatalog }) {
 
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero dataThemeCatalog={dataThemeCatalog} locale={locale}/>
+      <Hero dataThemeCatalog={dataThemeCatalog} locale={locale} />
       {/* <BDEdu /> */}
       <BePartner />
       <Products />
@@ -860,7 +868,7 @@ export default function Home({ dataThemeCatalog }) {
 
 /**
  * Next-Logger Setup,
- * a.k.a force dependency injection. 
+ * a.k.a force dependency injection.
  * Beware, as it works only with Next.js 12.
  * - https://stackoverflow.com/questions/71422446
  * - https://github.com/sainsburys-tech/next-logger/issues/13
@@ -896,7 +904,5 @@ export const config = {
     "on-exit-leak-free",
     "thread-stream",
     "safe-stable-stringify",
-  ].map(
-      (dep) => `node_modules/${dep}/**/*.+(js|json)`
-  ),
+  ].map((dep) => `node_modules/${dep}/**/*.+(js|json)`),
 };

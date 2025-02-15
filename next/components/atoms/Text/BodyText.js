@@ -15,7 +15,11 @@ const typographyStyles = {
   },
 };
 
-export default function BodyText ({ children, typography = "medium", ...props }) {
+export default function BodyText({
+  children,
+  typography = "medium",
+  ...props
+}) {
   const { fontSize, lineHeight } = typographyStyles[typography];
 
   return (
@@ -30,4 +34,4 @@ export default function BodyText ({ children, typography = "medium", ...props })
       {children}
     </Text>
   );
-};
+}

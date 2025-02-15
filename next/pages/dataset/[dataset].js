@@ -1,21 +1,15 @@
-import {
-  VStack,
-  Grid,
-  GridItem,
-  Image,
-  Stack,
-} from "@chakra-ui/react";
+import { VStack, Grid, GridItem, Image, Stack } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { capitalize } from 'lodash';
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { capitalize } from "lodash";
 
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
-import Link from '../../components/atoms/Link';
+import Link from "../../components/atoms/Link";
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
@@ -25,10 +19,7 @@ import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
 
-import {
-  getDataset,
-  getListDatasets,
-} from "../api/datasets/index";
+import { getDataset, getListDatasets } from "../api/datasets/index";
 
 import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
 
@@ -39,13 +30,13 @@ export async function getStaticProps(context) {
   let userGuide = null;
 
   try {
-    dataset = await getDataset(params.dataset, locale || 'pt');
+    dataset = await getDataset(params.dataset, locale || "pt");
   } catch (error) {
     console.error("Fetch error:", error.message);
   }
 
-  if(dataset?.usageGuide) {
-    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  if (dataset?.usageGuide) {
+    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || "pt");
   }
 
   try {
@@ -55,11 +46,16 @@ export async function getStaticProps(context) {
   }
 
   const props = {
-    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
+    ...(await serverSideTranslations(locale, [
+      "dataset",
+      "common",
+      "menu",
+      "prices",
+    ])),
     dataset,
     userGuide,
   };
-  
+
   return {
     props,
     revalidate: 30,
@@ -67,66 +63,77 @@ export async function getStaticProps(context) {
 }
 
 export async function getStaticPaths(context) {
-  const datasets = await getListDatasets()
+  const datasets = await getListDatasets();
 
   return {
     paths: datasets.map((res) => ({
-      params: { dataset: res }
+      params: { dataset: res },
     })),
-    fallback: "blocking"
-  }
+    fallback: "blocking",
+  };
 }
 
-export default function DatasetPage ({ dataset, userGuide }) {
-  const { t } = useTranslation('dataset', 'common');
-  const router = useRouter()
-  const { locale, query } = router
-  const [tabIndex, setTabIndex] = useState(0)
+export default function DatasetPage({ dataset, userGuide }) {
+  const { t } = useTranslation("dataset", "common");
+  const router = useRouter();
+  const { locale, query } = router;
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+  const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0;
 
   const pushQuery = (key, value) => {
-    router.replace({
-      pathname: `/dataset/${query.dataset}`,
-      query: { [key]: value }
-    },
-      undefined, { shallow: true }
-    )
-  }
+    router.replace(
+      {
+        pathname: `/dataset/${query.dataset}`,
+        query: { [key]: value },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   function sortElements(a, b) {
     if (a.order < b.order) {
-      return -1
+      return -1;
     }
     if (a.order > b.order) {
-      return 1
+      return 1;
     }
-    return 0
+    return 0;
   }
 
   const datasetTab = () => {
-    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .filter((elm) => elm?.slug !== "dicionario")
-      .filter((elm) => elm?.slug !== "dictionary")
-      .sort(sortElements) || []
+    let dataset_tables =
+      dataset?.tables?.edges
+        .map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review")
+        .filter((elm) => elm?.slug !== "dicionario")
+        .filter((elm) => elm?.slug !== "dictionary")
+        .sort(sortElements) || [];
 
-    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
-    
-    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
+    let raw_data_sources =
+      dataset?.rawDataSources?.edges
+        .map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review")
+        .sort(sortElements) || [];
 
-    if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
-    if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
-    if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
-  }
+    let information_request =
+      dataset?.informationRequests?.edges
+        .map((elm) => elm.node)
+        .filter((elm) => elm?.status?.slug !== "under_review")
+        .sort(sortElements) || [];
+
+    if (dataset_tables.length > 0)
+      return pushQuery("table", dataset_tables[0]?._id);
+    if (raw_data_sources.length > 0)
+      return pushQuery("raw_data_source", raw_data_sources[0]?._id);
+    if (information_request.length > 0)
+      return pushQuery("information_request", information_request[0]?._id);
+  };
 
   useEffect(() => {
-    if(!!query.tab) setTabIndex(1)
-  }, [query.tab])
+    if (!!query.tab) setTabIndex(1);
+  }, [query.tab]);
 
   const TabSelect = ({ index, onClick, children }) => {
     return (
@@ -136,28 +143,33 @@ export default function DatasetPage ({ dataset, userGuide }) {
         cursor="pointer"
         position="relative"
         top="1px"
-        color={tabIndex === index ? "#2B8C4D" :"#71757A"}
-        fill={tabIndex === index ? "#2B8C4D" :"#71757A"}
+        color={tabIndex === index ? "#2B8C4D" : "#71757A"}
+        fill={tabIndex === index ? "#2B8C4D" : "#71757A"}
         pointerEvents={tabIndex === index ? "none" : "default"}
         borderBottom={tabIndex === index && "3px solid #2B8C4D"}
         padding="12px 24px 13px"
         _hover={{
           color: "#464A51",
-          fill: "#464A51"
+          fill: "#464A51",
         }}
         onClick={onClick}
       >
         {children}
       </LabelText>
-    )
-  }
+    );
+  };
 
-  if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
+  if (isDatasetEmpty)
+    return (
+      <MainPageTemplate userTemplate>
+        <FourOFour />
+      </MainPageTemplate>
+    );
 
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}</title>
+        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}</title>
 
         <link
           rel="image_src"
@@ -175,12 +187,14 @@ export default function DatasetPage ({ dataset, userGuide }) {
         />
         <meta
           property="og:title"
-          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={dataset[`description${capitalize(locale)}`] || dataset.description}
+          content={
+            dataset[`description${capitalize(locale)}`] || dataset.description
+          }
           key="ogdesc"
         />
       </Head>
@@ -207,7 +221,11 @@ export default function DatasetPage ({ dataset, userGuide }) {
             borderRadius="16px"
           >
             <Image
-              src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              src={
+                dataset?.organizations?.edges?.[0]?.node?.picture
+                  ? dataset?.organizations?.edges?.[0]?.node?.picture
+                  : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`
+              }
               objectFit="contain"
               width="295px"
               height="252px"
@@ -216,142 +234,133 @@ export default function DatasetPage ({ dataset, userGuide }) {
           </GridItem>
 
           <GridItem>
-            <Grid
-              templateColumns="1fr 1fr 1fr 1fr 1fr"
-              gap="8px"
-            >
+            <Grid templateColumns="1fr 1fr 1fr 1fr 1fr" gap="8px">
               <GridItem colSpan={5}>
                 <TitleText
                   typography="large"
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
-                  whiteSpace={{base: "inherit", lg:"nowrap"}}
+                  whiteSpace={{ base: "inherit", lg: "nowrap" }}
                 >
-                  {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
+                  {dataset[`name${capitalize(locale)}`] ||
+                    dataset.name ||
+                    t("noName")}
                 </TitleText>
               </GridItem>
 
               <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
+                  {dataset[`description${capitalize(locale)}`] ||
+                    dataset.description ||
+                    t("noDescription")}
                 </ReadMore>
               </GridItem>
 
               <GridItem colSpan={5} marginBottom="8px">
-                <LabelText
-                  typography="large"
-                  marginBottom="8px"
-                >
-                  {t('organization')}
+                <LabelText typography="large" marginBottom="8px">
+                  {t("organization")}
                 </LabelText>
                 <Link
                   href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
                 >
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
-                    {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
+                  <BodyText typography="small" color="#464A51">
+                    {dataset.organizations?.edges?.[0]?.node?.[
+                      `name${capitalize(locale)}`
+                    ] ||
+                      dataset.organizations?.edges?.[0]?.node?.name ||
+                      t("noOrganization")}
                   </BodyText>
                 </Link>
               </GridItem>
 
               <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
-                <LabelText
-                  typography="large"
-                  marginBottom="8px"
-                >
-                  {t('temporalCoverage')}
+                <LabelText typography="large" marginBottom="8px">
+                  {t("temporalCoverage")}
                 </LabelText>
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {dataset.temporalCoverage || t('notProvided')}
+                <BodyText typography="small" color="#464A51">
+                  {dataset.temporalCoverage || t("notProvided")}
                 </BodyText>
               </GridItem>
 
-              {locale !== 'pt' ?
+              {locale !== "pt" ? (
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
-                  <LabelText
-                    typography="large"
-                    marginBottom="8px"
-                  >
-                    {t('spatialCoverage')}
+                  <LabelText typography="large" marginBottom="8px">
+                    {t("spatialCoverage")}
                   </LabelText>
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
+                  <BodyText typography="small" color="#464A51">
                     {dataset?.[`spatialCoverageName${capitalize(locale)}`]
-                      ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
+                      ? Object.values(
+                          dataset[`spatialCoverageName${capitalize(locale)}`],
+                        )
                           .sort((a, b) => a.localeCompare(b, locale))
-                          .join(', ')
-                      : t('notProvided')}
+                          .join(", ")
+                      : t("notProvided")}
                   </BodyText>
                 </GridItem>
-                :
+              ) : (
                 <></>
-              }
+              )}
             </Grid>
           </GridItem>
         </Grid>
 
         <Stack spacing={0} width="100%" height="100%">
-          <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
+          <Stack
+            spacing={0}
+            flexDirection="row"
+            borderBottom="1px solid #DEDFE0"
+          >
             <TabSelect
               index={0}
               onClick={() => {
-                setTabIndex(0)
-                datasetTab()
+                setTabIndex(0);
+                datasetTab();
               }}
             >
               <DataBaseIcon
-                alt={t('dataAlt')}
+                alt={t("dataAlt")}
                 width="18px"
                 height="18px"
                 marginRight="6px"
               />
-              {t('data')}
+              {t("data")}
             </TabSelect>
 
             <TabSelect
               index={1}
               onClick={() => {
-                setTabIndex(1)
-                router.replace({
-                  pathname: `/dataset/${query.dataset}`,
-                  query: { tab: "userGuide" }
-                },
-                  undefined, { shallow: true }
-                )
+                setTabIndex(1);
+                router.replace(
+                  {
+                    pathname: `/dataset/${query.dataset}`,
+                    query: { tab: "userGuide" },
+                  },
+                  undefined,
+                  { shallow: true },
+                );
               }}
             >
               <BookIcon
-                alt={t('userGuideAlt')}
+                alt={t("userGuideAlt")}
                 width="24px"
                 height="16px"
                 marginRight="6px"
               />
-              {t('userGuide')}
+              {t("userGuide")}
             </TabSelect>
           </Stack>
 
-          {tabIndex === 0 &&
-            <DatasetResource
-              dataset={dataset}
-            />
-          }
-          {tabIndex === 1 &&
+          {tabIndex === 0 && <DatasetResource dataset={dataset} />}
+          {tabIndex === 1 && (
             <DatasetUserGuide
               data={userGuide}
               locale={locale}
               slug={dataset?.usageGuide}
             />
-          }
+          )}
         </Stack>
       </VStack>
     </MainPageTemplate>
-  )
+  );
 }

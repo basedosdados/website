@@ -1,0 +1,19 @@
+name: ci
+
+on:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: next
+
+      - name: Run Biome format check
+        run: ./node_modules/.bin/biome format .
+        working-directory: next

@@ -1,16 +1,13 @@
-import {
-  Flex,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import BodyText from "./Text/BodyText";
 
-export default function ReadMore({ children, id, ...props}) {
-  const [isReadMore, setIsReadMore] = useState(false)
-  const [isOverflowing, setIsOverflowing] = useState(false)
-  const textRef = useRef(null)
-  const { t } = useTranslation('dataset');
+export default function ReadMore({ children, id, ...props }) {
+  const [isReadMore, setIsReadMore] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const textRef = useRef(null);
+  const { t } = useTranslation("dataset");
 
   const modifiedChildren = `
     ${children.trim()}
@@ -29,27 +26,29 @@ export default function ReadMore({ children, id, ...props}) {
       "
       onmouseover="this.style.color='#0057A4'"
       onmouseout="this.style.color='#0068C5'"
-    >${t('readLess')}</span>`
+    >${t("readLess")}</span>`;
 
   useEffect(() => {
     if (textRef.current) {
-      const { clientHeight, scrollHeight } = textRef.current
-      setIsOverflowing(scrollHeight > clientHeight)
+      const { clientHeight, scrollHeight } = textRef.current;
+      setIsOverflowing(scrollHeight > clientHeight);
     }
-  }, [children])
+  }, [children]);
 
   useEffect(() => {
-    const readLess = document.getElementById(id)
-    if (readLess) readLess.addEventListener('click', toggleReadMore)
-    return () => { if (readLess) readLess.removeEventListener('click', toggleReadMore)}
-  }, [isReadMore])
+    const readLess = document.getElementById(id);
+    if (readLess) readLess.addEventListener("click", toggleReadMore);
+    return () => {
+      if (readLess) readLess.removeEventListener("click", toggleReadMore);
+    };
+  }, [isReadMore]);
 
   const toggleReadMore = () => {
-    setIsReadMore(!isReadMore)
-  }
+    setIsReadMore(!isReadMore);
+  };
 
   return (
-    <Flex position="relative" {...props} >
+    <Flex position="relative" {...props}>
       <Text
         ref={textRef}
         display="-webkit-box"
@@ -66,28 +65,31 @@ export default function ReadMore({ children, id, ...props}) {
         lineHeight="20px"
         color="#464A51"
       >
-        {isOverflowing ?
-          <span dangerouslySetInnerHTML={{ __html: modifiedChildren.trim() }}/>
-          :
+        {isOverflowing ? (
+          <span dangerouslySetInnerHTML={{ __html: modifiedChildren.trim() }} />
+        ) : (
           children
-        }
+        )}
       </Text>
-      {isOverflowing &&
+      {isOverflowing && (
         <BodyText
           typography="small"
           display={isReadMore ? "none" : "flex"}
           onClick={toggleReadMore}
           cursor="pointer"
-          _hover={{color: "#0057A4"}}
+          _hover={{ color: "#0057A4" }}
           color="#0068C5"
           backgroundColor="#FFF"
           position="absolute"
           bottom="0"
           right="0"
         >
-          <Text as="span" color="#464A51" marginRight="4px">...</Text>{t('readMore')}
+          <Text as="span" color="#464A51" marginRight="4px">
+            ...
+          </Text>
+          {t("readMore")}
         </BodyText>
-      }
+      )}
     </Flex>
-  )
+  );
 }

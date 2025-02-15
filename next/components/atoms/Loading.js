@@ -1,19 +1,10 @@
-import {
-  Center,
-  Spinner
-} from "@chakra-ui/react";
+import { Center, Spinner } from "@chakra-ui/react";
 
-export default function LoadingSpin ({
-  isLoading = true,
-  ...props
-}) {
-  if(!isLoading) return null
+export default function LoadingSpin({ isLoading = true, ...props }) {
+  if (!isLoading) return null;
 
   return (
-    <Center
-      width="100%"
-      height="100%"
-    >
+    <Center width="100%" height="100%">
       <Spinner
         width="180px"
         height="180px"
@@ -24,5 +15,5 @@ export default function LoadingSpin ({
         {...props}
       />
     </Center>
-  )
+  );
 }

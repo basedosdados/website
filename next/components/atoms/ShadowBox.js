@@ -10,7 +10,6 @@ export function ShadowBox({
   titleStyle,
   ...props
 }) {
-
   return (
     <VStack
       width="300px"
@@ -24,14 +23,11 @@ export function ShadowBox({
       boxShadow="0 1.6px 16px rgba(100, 96, 103, 0.16)"
       {...props}
     >
-      {image &&
-        <Box
-          width="100%"
-          height="100%"
-        >
+      {image && (
+        <Box width="100%" height="100%">
           {image}
         </Box>
-      }
+      )}
       <VStack
         padding="24px 20px 32px"
         backgroundColor="white"
@@ -43,11 +39,7 @@ export function ShadowBox({
         borderTopRadius="0"
         {...textStyle}
       >
-        <LabelText
-          typography="x-large"
-          textAlign="center"
-          {...titleStyle}
-        >
+        <LabelText typography="x-large" textAlign="center" {...titleStyle}>
           {title}
         </LabelText>
         {children}

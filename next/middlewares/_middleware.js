@@ -1,4 +1,4 @@
-import cookieParser from 'cookie-parser';
+import cookieParser from "cookie-parser";
 
 export const config = {
   api: {
@@ -6,7 +6,7 @@ export const config = {
   },
 };
 
-export default function(req, res, next) {
+export default function (req, res, next) {
   cookieParser()(req, res, () => {});
   next();
 }

@@ -15,17 +15,17 @@ export default function GreenTab({ children, ...style }) {
       padding="12px 24px 13px"
       _selected={{
         color: "#2B8C4D",
-        fill:"#2B8C4D",
+        fill: "#2B8C4D",
         pointerEvents: "none",
-        borderBottom: "3px solid #2B8C4D"
+        borderBottom: "3px solid #2B8C4D",
       }}
       _hover={{
         color: "#464A51",
-        fill: "#464A51"
+        fill: "#464A51",
       }}
       {...style}
     >
       {children}
     </Tab>
-  )
+  );
 }

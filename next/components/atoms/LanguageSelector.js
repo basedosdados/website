@@ -1,4 +1,11 @@
-import { Menu, MenuButton, MenuList, MenuItem, Box, Text } from "@chakra-ui/react";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Box,
+  Text,
+} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import GlobeIcon from "../../public/img/icons/globeIcon";
 import { ChevronDownIcon } from "@chakra-ui/icons";
@@ -11,28 +18,28 @@ export default function LanguageSelector({ theme = "light" }) {
     light: {
       colors: {
         text: "#464A51",
-        icon: "#464A51"
+        icon: "#464A51",
       },
       text: {
         fontSize: "12px",
         lineHeight: "18px",
         ml: "6px",
         mr: "4px",
-        fontFamily: "Roboto"
+        fontFamily: "Roboto",
       },
       icon: {
         width: "16px",
-        height: "16px"
+        height: "16px",
       },
       chevron: {
         w: 3,
-        h: 3
-      }
+        h: 3,
+      },
     },
     dark: {
       colors: {
         text: "#FFFFFF",
-        icon: "#FFFFFF"
+        icon: "#FFFFFF",
       },
       text: {
         fontSize: "16px",
@@ -40,17 +47,17 @@ export default function LanguageSelector({ theme = "light" }) {
         lineHeight: "20px",
         ml: "8px",
         mr: "4px",
-        fontFamily: "Roboto"
+        fontFamily: "Roboto",
       },
       icon: {
         width: "20px",
-        height: "20px"
+        height: "20px",
       },
       chevron: {
         w: 4,
-        h: 4
-      }
-    }
+        h: 4,
+      },
+    },
   };
 
   const changeLanguage = (locale) => {
@@ -58,15 +65,15 @@ export default function LanguageSelector({ theme = "light" }) {
   };
 
   const getCurrentLanguage = () => {
-    switch(locale) {
-      case 'pt':
-        return 'Português';
-      case 'en':
-        return 'English';
-      case 'es':
-        return 'Español';
+    switch (locale) {
+      case "pt":
+        return "Português";
+      case "en":
+        return "English";
+      case "es":
+        return "Español";
       default:
-        return 'Português';
+        return "Português";
     }
   };
 
@@ -103,24 +110,26 @@ export default function LanguageSelector({ theme = "light" }) {
               >
                 {getCurrentLanguage()}
               </Text>
-              <ChevronDownIcon 
+              <ChevronDownIcon
                 color={styles[theme].colors.text}
-                w={styles[theme].chevron.w} 
-                h={styles[theme].chevron.h} 
+                w={styles[theme].chevron.w}
+                h={styles[theme].chevron.h}
               />
             </Box>
           </MenuButton>
           <MenuList
             boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
-            _focus={{boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important"}}
+            _focus={{
+              boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important",
+            }}
             padding="16px 0 6px"
             borderRadius="8px"
             zIndex="11"
             color="#252A32"
             minW="100px"
           >
-            <MenuItem 
-              onClick={() => changeLanguage('pt')}
+            <MenuItem
+              onClick={() => changeLanguage("pt")}
               letterSpacing="0.1px"
               lineHeight="18px"
               fontWeight="400"
@@ -129,13 +138,13 @@ export default function LanguageSelector({ theme = "light" }) {
               color="#252A32"
               backgroundColor="#FFF"
               padding="0 16px 10px"
-              _focus={{backgroundColor: "transparent"}}
-              _hover={{backgroundColor: "transparent", opacity: "0.7"}}
+              _focus={{ backgroundColor: "transparent" }}
+              _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             >
               Português
             </MenuItem>
-            <MenuItem 
-              onClick={() => changeLanguage('en')}
+            <MenuItem
+              onClick={() => changeLanguage("en")}
               letterSpacing="0.1px"
               lineHeight="18px"
               fontWeight="400"
@@ -144,13 +153,13 @@ export default function LanguageSelector({ theme = "light" }) {
               color="#252A32"
               backgroundColor="#FFF"
               padding="0 16px 10px"
-              _focus={{backgroundColor: "transparent"}}
-              _hover={{backgroundColor: "transparent", opacity: "0.7"}}
+              _focus={{ backgroundColor: "transparent" }}
+              _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             >
               English
             </MenuItem>
-            <MenuItem 
-              onClick={() => changeLanguage('es')}
+            <MenuItem
+              onClick={() => changeLanguage("es")}
               letterSpacing="0.1px"
               lineHeight="18px"
               fontWeight="400"
@@ -159,8 +168,8 @@ export default function LanguageSelector({ theme = "light" }) {
               color="#252A32"
               backgroundColor="#FFF"
               padding="0 16px 10px"
-              _focus={{backgroundColor: "transparent"}}
-              _hover={{backgroundColor: "transparent", opacity: "0.7"}}
+              _focus={{ backgroundColor: "transparent" }}
+              _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             >
               Español
             </MenuItem>

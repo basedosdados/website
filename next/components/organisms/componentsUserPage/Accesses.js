@@ -10,7 +10,7 @@ import {
 import { isMobileMod } from "../../hooks/useCheckMobile.hook";
 import Button from "../../components/atoms/Button";
 
-export default function Accesses ({ userInfo }) {
+export default function Accesses({ userInfo }) {
   return (
     <Stack spacing="24px">
       <Stack alignItems="end">
@@ -19,7 +19,7 @@ export default function Accesses ({ userInfo }) {
           top="-10px"
           placement="top"
           bg="#2A2F38"
-          label={t('username.onlyAvailableInBDEnterprises')}
+          label={t("username.onlyAvailableInBDEnterprises")}
           fontSize="14px"
           fontWeight="400"
           fontFamily="Roboto"
@@ -33,7 +33,9 @@ export default function Accesses ({ userInfo }) {
             <Button
               width={isMobileMod() ? "100%" : "fit-content"}
               cursor="default"
-            >{t('username.addUser')}</Button>
+            >
+              {t("username.addUser")}
+            </Button>
           </Box>
         </Tooltip>
       </Stack>
@@ -49,7 +51,9 @@ export default function Accesses ({ userInfo }) {
             fontWeight="400"
             lineHeight="16px"
             letterSpacing="0.2px"
-          >{t('username.user')}</Text>
+          >
+            {t("username.user")}
+          </Text>
         </GridItem>
         <GridItem>
           <Text
@@ -62,7 +66,9 @@ export default function Accesses ({ userInfo }) {
             lineHeight="16px"
             letterSpacing="0.2px"
             width="100%"
-          >{t('username.access')}</Text>
+          >
+            {t("username.access")}
+          </Text>
         </GridItem>
 
         <GridItem
@@ -91,7 +97,15 @@ export default function Accesses ({ userInfo }) {
               overflow="hidden"
               top="9px"
             >
-              <Image width="100%" height="100%" src={userInfo?.picture ? userInfo?.picture :"https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}/>
+              <Image
+                width="100%"
+                height="100%"
+                src={
+                  userInfo?.picture
+                    ? userInfo?.picture
+                    : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+                }
+              />
             </Box>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
@@ -103,7 +117,9 @@ export default function Accesses ({ userInfo }) {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >{userInfo?.username}</Text>
+            >
+              {userInfo?.username}
+            </Text>
             <Text
               marginLeft={isMobileMod() ? "44px !important" : "60px !important"}
               color="#6F6F6F"
@@ -114,7 +130,9 @@ export default function Accesses ({ userInfo }) {
               letterSpacing="0.3px"
               height="27px"
               isTruncated
-            >{userInfo?.email}</Text>
+            >
+              {userInfo?.email}
+            </Text>
           </Stack>
         </GridItem>
 
@@ -133,10 +151,10 @@ export default function Accesses ({ userInfo }) {
             lineHeight="27px"
             letterSpacing="0.3px"
           >
-            {t('username.administrator')}
+            {t("username.administrator")}
           </Text>
         </GridItem>
       </Grid>
     </Stack>
-  )
+  );
 }

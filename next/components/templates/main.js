@@ -12,25 +12,19 @@ export function MainPageTemplate({
   locale,
   ...style
 }) {
-
   return (
-    <Box 
+    <Box
       backgroundColor={backgroundColor}
       minHeight="100vh"
       display="flex"
       flexDirection="column"
     >
       <SiteHead />
-      <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
-      <Box
-        paddingTop="70px"
-        paddingBottom="50px"
-        flex={1}
-        {...style}
-      >
+      <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate} />
+      <Box paddingTop="70px" paddingBottom="50px" flex={1} {...style}>
         {children}
       </Box>
-      <Footer template={footerTemplate} ocult={cleanTemplate || userTemplate}/>
+      <Footer template={footerTemplate} ocult={cleanTemplate || userTemplate} />
     </Box>
   );
 }

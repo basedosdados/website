@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const CircleIcon = createIcon({
   displayName: "circle",
@@ -8,7 +8,7 @@ const CircleIcon = createIcon({
       fill="current-color"
       d="M 100, 100 m -75, 0 a 75,75 0 1,0 150,0 a 75,75 0 1,0 -150,0"
     />
-  )
-})
+  ),
+});
 
-export default CircleIcon
+export default CircleIcon;
