@@ -41,7 +41,7 @@ export default function Accesses ({ userInfo }) {
 
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(userInfo?.id)
-  const maxSlots = parseInt(userInfo.proSubscriptionSlots, 10)
+  const maxSlots = parseInt(userInfo.proSubscriptionSlots, 10) - 1
 
   async function getMembers() {
     const res = await fetch(`/api/user/getMembers?p=${btoa(id)}`, {method: "GET"})
