@@ -1,3 +1,4 @@
+---
 title: Ferramenta traz mais acessibilidade aos dados de impulsionamento eleitoral nas redes
 description: >-
   Entrevista com Sérgio Spagnuolo sobre o Observatório de Impulsionamento Eleitoral
@@ -11,6 +12,8 @@ authors:
     social: https://www.linkedin.com/in/GiovaneCaruso/
     avatar: 
 
+---
+
 _Esta entrevista foi publicada na BDletter de Outubro. Assine gratuitamente para ficar pode dentro de análises e entrevistas sobre a BD e a comunidade de Dados Abertos no Brasil._
 
 Esse mês de eleições está recheado de novidades para quem gosta de analisar os dados de campanhas, finanças e resultados eleitorais. Só na BD, tivemos lançamento do [Siga o Dinheiro](https://www.sigaodinheiro.org/), painel interativo para acompanhar as receitas e despesas das eleições, uma [aula aberta](https://www.youtube.com/watch?v=FGboC_4szhc&t=584s) sobre como investigar dados de candidatos(as) e, é claro, a atualização dos dados do TSE já tratados e prontos para análise no maior datalake público do Brasil.
@@ -19,15 +22,15 @@ Nesta entrevista, vamos conhecer mais uma ferramenta que veio para trazer transp
 
 Pela aplicação, qualquer pessoa pode conferir quanto candidatos(as) gastam com impulsionamento de conteúdo nas redes sociais, além de aplicar filtros geográficos, por partido e cargo, e até por nome da rede social.
 
-<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_1.webp" caption="Mecanismo de filtros do Observatório de Impulsionamento Eleitoral"/>
+<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_1.webp.webp" caption="Mecanismo de filtros do Observatório de Impulsionamento Eleitoral"/>
 
 O resultado são visualizações e uma tabela com os dados, que são extraídos automaticamente do site do TSE. É ainda possível baixar os dados da plataforma em arquivos .csv ou .xls.
 
-<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_2.webp" caption="Exemplo de visualização do Observatório de Impulsionamento de Conteúdo."/>
+<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_2.webp.webp" caption="Exemplo de visualização do Observatório de Impulsionamento de Conteúdo."/>
 
 Sérgio é jornalista e diretor do Núcleo Jornalismo, iniciativa que analisa e noticia sobre o impacto da tecnologia digital na vida das pessoas, a fim de ajudar na construção de uma internet melhor. Em 2014, ele criou a agência de newstech Volt Data Lab, foi Knight Fellow no ICFJ e diretor na Abraji, além de ter colaborado com vários veículos nacionais e internacionais.
 
-<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_3.webp" caption="Foto de Sérgio Spagnuolo"/>
+<Image src="/blog/ferramenta-traz-mais-acessibilidade-aos-dados-de-impulsionamento-eleitoral-nas-redes/image_3.webp.webp" caption="Foto de Sérgio Spagnuolo"/>
 
 ## Entrevista
 
