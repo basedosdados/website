@@ -272,10 +272,10 @@ export default function PlansAndPayment ({ userData }) {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
 
-    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
+    const subscriptionActive = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
-    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
+    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subscriptionActive)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.success === false) {
