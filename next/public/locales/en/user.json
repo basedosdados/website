@@ -184,6 +184,8 @@
         "updatePicture": "Update picture",
         "removePicture": "Remove picture",
         "remove": "Remove",
+        "removeAllMembers": "Remove all members",
+        "removeAllMembersInfo": "By removing all members, all accesses will be removed and you will need to register again to access the platform.",
         "modalRemoveMember": "Are you sure you want to remove the user?",
         "invalidUsername": "Invalid username",
         "noSpacesInUsername": "Username cannot contain spaces",

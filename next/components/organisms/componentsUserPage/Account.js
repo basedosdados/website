@@ -187,7 +187,7 @@ export default function Account({ userInfo }) {
         propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText>{t('username.confirmAccountDeletion')}</TitleText>
+          <TitleText marginRight="20px">{t('username.confirmAccountDeletion')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"

@@ -191,6 +191,8 @@
         "updatePicture": "Atualizar foto",
         "removePicture": "Remover foto",
         "remove": "Remover",
+        "removeAllMembers": "Remover todos os membros",
+        "removeAllMembersInfo": "Ao remover todos os membros, todos os acessos serão removidos.",
         "modalRemoveMember": "Tem certeza que deseja remover o usuário?",
         "invalidUsername": "Nome de usuário inválido",
         "noSpacesInUsername": "O nome de usuário não pode conter espaços",
