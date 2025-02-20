@@ -1,76 +1,76 @@
 {
     "login": {
-        "title": "Log in",
+        "title": "Login",
         "emailLabel": "Email",
         "emailPlaceholder": "Enter your email",
         "emailError": "Please enter a valid email address.",
         "passwordLabel": "Password",
         "passwordPlaceholder": "Enter your password",
-        "passwordError": "Please enter the password.",
+        "passwordError": "Please enter your password.",
         "forgotPassword": "Forgot password?",
         "loginButton": "Sign in",
         "noAccount": "Don't have an account?",
         "signUp": "Sign up",
         "loginError": "Incorrect email or password.",
-        "serverError": "Unable to connect to the server. Please try again later."
+        "serverError": "Could not connect to server. Please try again later."
     },
     "signup": {
         "title": "Sign up",
-        "firstName": "Name",
+        "firstName": "First name",
         "lastName": "Last name",
         "email": "Email",
         "username": "Username",
         "password": "Password",
         "confirmPassword": "Confirm password",
-        "register": "Register",
+        "register": "Sign up",
         "alreadyHaveAccount": "Already have an account?",
         "login": "Login",
         "termsAgreement": {
-            "part1": "By clicking \"Sign up\" above, you confirm that you have read, understood and accepted the ",
+            "part1": "By clicking \"Sign up\" above, you confirm that you have read, understood and accept the ",
             "termsLink": "Terms of Service",
             "part2": " and ",
             "privacyLink": "Privacy Policy",
-            "part3": " of Data Basis."
+            "part3": " of Base dos Dados."
         },
         "placeholders": {
-            "firstName": "Enter your name",
+            "firstName": "Enter your first name",
             "lastName": "Enter your last name (optional)",
             "email": "Enter your email",
             "username": "Enter your username",
             "password": "Create a password",
-            "confirmPassword": "Enter the password again"
+            "confirmPassword": "Enter password again"
         },
         "errors": {
-            "firstName": "Please enter your name.",
+            "firstName": "Please enter your first name.",
             "username": {
                 "invalid": "Invalid username or an account with this username already exists.",
-                "noSpaces": "Username cannot have spaces.",
-                "exists": "Account with this username already exists."
+                "noSpaces": "Username cannot contain spaces.",
+                "exists": "An account with this username already exists."
             },
             "email": {
                 "invalid": "Invalid email address or an account with this email already exists.",
-                "exists": "Account with this email already exists."
+                "exists": "An account with this email already exists."
             },
             "password": {
-                "noSpaces": "Passwords entered cannot contain spaces.",
-                "requirements": "Ensure that the password has at least:",
+                "noSpaces": "Passwords cannot contain spaces.",
+                "requirements": "Make sure the password has at least:",
                 "chars": "8 characters",
-                "uppercase": "An uppercase letter",
-                "lowercase": "A lowercase letter",
-                "digit": "A number",
-                "special": "A special character, among ! @ # ? ! % & *"
+                "uppercase": "One uppercase letter",
+                "lowercase": "One lowercase letter",
+                "digit": "One number",
+                "special": "One special character from ! @ # ? ! % & *"
             },
             "confirmPassword": {
-                "required": "Confirming the password is required.",
+                "required": "Please enter your password.",
                 "mismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again."
             },
-            "register": "Error trying to register, try again later!",
-            "registerEmail": "Error while trying to register: the user already exists!",
-            "registerUsername": "Error while trying to register: the username already exists!"
+            "register": "Error while trying to register, please try again later!",
+            "registerEmail": "Error while trying to register: user already exists!",
+            "registerUsername": "Error while trying to register: username already exists!"
         }
     },
     "survey": {
-        "title": "Profile survey",
+        "title": "Profile Survey",
         "skip": "Skip",
         "continue": "Continue",
         "back": "Back",
@@ -79,10 +79,10 @@
         "serverError": "An internal server error occurred. Please try again later.",
         "questions": [
             {
-                "question": "In which area do you work?",
+                "question": "What field do you work in?",
                 "options": [
                     "Technology",
-                    "Health",
+                    "Healthcare",
                     "Finance",
                     "Education",
                     "Retail",
@@ -132,7 +132,7 @@
                 ]
             },
             {
-                "question": "What is your main goal with DB?",
+                "question": "What is your main goal with BD?",
                 "options": [
                     "Market analysis",
                     "Competition monitoring",
@@ -145,18 +145,18 @@
                 ]
             },
             {
-                "question": "How did you hear about DB?",
+                "question": "How did you hear about BD?",
                 "options": [
                     "Social media",
                     "Recommendation",
                     "Online search",
                     "Events",
                     "Advertising",
-                    "Other"
+                    "Others"
                 ]
             },
             {
-                "question": "We are always looking to improve the platform and consider it essential to listen to our community in this process. Can we contact you for future research?",
+                "question": "We are always looking to improve the platform and consider it essential to hear from our community in this process. Can we contact you for future surveys?",
                 "options": [
                     "Yes",
                     "No"
@@ -184,6 +184,8 @@
         "updatePicture": "Update picture",
         "removePicture": "Remove picture",
         "remove": "Remove",
+        "removeAllMembers": "Remove all members",
+        "removeAllMembersInfo": "By removing all members, all accesses will be removed and you will need to register again to access the platform.",
         "modalRemoveMember": "Are you sure you want to remove the user?",
         "invalidUsername": "Invalid username",
         "noSpacesInUsername": "Username cannot contain spaces",
@@ -192,7 +194,7 @@
         "back": "Back",
         "changeEmail": "Change email",
         "confirmEmail": "Confirm your email",
-        "emailSentTo": "We sent an email to:",
+        "emailSentTo": "We've sent an email to:",
         "checkInbox": "Check your inbox and follow the instructions sent in the email to complete the change.",
         "username": "Username",
         "enterUsername": "Enter your username",
@@ -202,15 +204,15 @@
         "enterNewPassword": "Enter your new password",
         "confirmNewPassword": "Confirm new password",
         "enterConfirmNewPassword": "Enter your new password again",
-        "forgotPassword": "Forgot your password?",
+        "forgotPassword": "Forgot password?",
         "createNewPassword": "Create a new password",
-        "enterPasswordAgain": "Enter the password again",
-        "passwordRequirements": "The password must contain:",
+        "enterPasswordAgain": "Enter password again",
+        "passwordRequirements": "Password must contain:",
         "minCharacters": "At least 8 characters",
-        "uppercaseLetter": "An uppercase letter",
-        "lowercaseLetter": "A lowercase letter",
-        "digit": "A number",
-        "specialCharacter": "A special character (!@#$%^&*)",
+        "uppercaseLetter": "One uppercase letter",
+        "lowercaseLetter": "One lowercase letter",
+        "digit": "One number",
+        "specialCharacter": "One special character (!@#$%^&*)",
         "updatePassword": "Update password",
         "currentPlan": "Current plan",
         "freePlan": "Free plan",
@@ -327,7 +329,7 @@
         "months": "months",
         "year": "year",
         "monthly": "(Monthly)",
-        "annually": "(Anual)",
+        "annually": "(Annual)",
         "validFor1Year": "(valid for 1 year)",
         "validFor1Month": "(valid for 1 month)",
         "validFor": "(valid for",
@@ -360,12 +362,12 @@
         "BQEmailDescription1": "Your email needs to be a ",
         "BQEmailDescription2": "Google account",
         "BQEmailDescription3": " to ensure exclusive access to the data via BigQuery. We've already filled in with the email you used to create your account on our platform. If you need to use another email to access BigQuery, just edit it below.",
-        "pleaseEnterValidEmail": "Please enter a valid email.",
         "BQEmailDescription4": "The data access has been granted to the email",
         "BQEmailDescription5": "If you need to change the access email, you can do so in the 'BigQuery' section of your account settings.",
         "BQEmailDescription6": "In case of doubt,",
         "BQEmailDescription7": "contact our support.",
-        "updateEmail": "Update email"
+        "updateEmail": "Update email",
+        "pleaseEnterValidEmail": "Please enter a valid email."
     },
     "activate": {
         "accountActive": "Active account",

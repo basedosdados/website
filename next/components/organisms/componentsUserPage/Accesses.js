@@ -31,6 +31,7 @@ export default function Accesses ({ userInfo }) {
   const [data, setData] = useState(null)
   const AddMemberModal = useDisclosure()
   const RemoveMemberModal = useDisclosure()
+  const RemoveAllMembersModal = useDisclosure()
   const [valueEmail, setValueEmail] = useState("")
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(true)
@@ -145,6 +146,25 @@ export default function Accesses ({ userInfo }) {
       setIsLoading(false)
     } finally {
       setValueEmail("")
+    }
+  }
+
+  const handleRemoveAllMembers = async () => {
+    setIsLoading(true)
+    setErrors({})
+
+    try {
+      const res = await fetch(`/api/user/removeAllMembersInSubscription?p=${btoa(id)}`)
+      const result = await res.json()
+
+      if (result.success) {
+        getMembers()
+      } else {
+        setIsLoading(false)
+      }
+    } catch (error) {
+      console.error(t("username.unexpectedError"))
+      setIsLoading(false)
     }
   }
 
@@ -382,6 +402,74 @@ export default function Accesses ({ userInfo }) {
         </Stack>
       </ModalGeneral>
 
+      <ModalGeneral
+        isOpen={RemoveAllMembersModal.isOpen}
+        onClose={RemoveAllMembersModal.onClose}
+        propsModalContent={{
+          width: "100%",
+          maxWidth: "300px",
+          margin: "24px"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">
+            {t("username.removeAllMembers")}
+          </TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm>
+            {t('username.removeAllMembersInfo')}
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          display="flex"
+          width="100%"
+          flexDirection={{base: "column-reverse", lg: "row"}}
+          alignItems="center"
+          justifyContent="end"
+          gap="16px"
+          spacing={0}
+        >
+          <Button
+            width={{base: "100%", lg: "auto"}}
+            justifyContent="center"
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
+            onClick={() => { RemoveAllMembersModal.onClose() }}
+          >
+            {t("username.cancel")}
+          </Button>
+
+          <Button
+            width={{base: "100%", lg: "auto"}}
+            justifyContent="center"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
+            onClick={() => {
+              RemoveAllMembersModal.onClose()
+              handleRemoveAllMembers()
+            }}
+          >
+            {t("username.remove")}
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
       {isLoading ?
         <Stack flex="1" justifyContent="center" marginTop="10vh">
           <Spinner
@@ -395,14 +483,30 @@ export default function Accesses ({ userInfo }) {
       <>
         <Stack
           display={userInfo?.proSubscriptionRole === "owner" ? "flex" : "none"}
+          flexDirection={{base: "column", lg: "row"}}
+          spacing={0}
+          gap="16px"
+          justifyContent="end"
           marginBottom="24px !important"
           position="relative"
         >
+          <Button
+            display={subscriptionMembers.length > 0 ? "flex" : "none"}
+            width={{base: "100%", lg: "auto"}}
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
+            onClick={() => RemoveAllMembersModal.onOpen()}
+          >
+            {t('username.removeAllMembers')}
+          </Button>
+
           {!isMaxMembersReached ?
-            <Button
-              marginLeft="auto"
-              onClick={() => AddMemberModal.onOpen()}
-            >
+            <Button onClick={() => AddMemberModal.onOpen()} width={{base: "100%", lg: "auto"}}>
               {t('username.addUser')}
             </Button>
           :
@@ -429,7 +533,6 @@ export default function Accesses ({ userInfo }) {
                 height="44px"
                 width="fit-content"
                 borderRadius="8px"
-                marginLeft="auto"
                 padding="8px 16px"
                 cursor="pointer"
                 fontFamily="Roboto"
