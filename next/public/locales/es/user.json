@@ -301,5 +301,16 @@
         "passwordNoSpaces": "Las contraseñas ingresadas no pueden contener espacios.",
         "passwordMismatch": "La contraseña ingresada no coincide con la contraseña creada en el campo anterior. Por favor, verifique si no hay errores de escritura e intente nuevamente.",
         "passwordRequired": "Por favor, ingrese la contraseña."
+    },
+    "dataAPI": {
+        "title": "Claves de la API de Datos",
+        "description": "Gerencie sus claves de la API de Datos y supervise su uso.",
+        "prefix": "Prefijo de la clave",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "balance": "Saldo",
+        "created": "Creado",
+        "expires": "Expira",
+        "never": "Nunca"
     }
 }

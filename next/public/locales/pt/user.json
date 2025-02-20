@@ -423,5 +423,16 @@
         "passwordNoSpaces": "As senhas inseridas não podem conter espaçamentos.",
         "passwordMismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente.",
         "passwordRequired": "Por favor, insira a senha."
+    },
+    "dataAPI": {
+        "title": "Chaves da API de Dados",
+        "description": "Gerencie suas chaves da API de Dados e monitore seu uso.",
+        "prefix": "Prefixo da chave",
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "balance": "Saldo",
+        "created": "Criado",
+        "expires": "Expira",
+        "never": "Nunca"
     }
 }

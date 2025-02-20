@@ -113,7 +113,8 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
     {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
     {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
     isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
-    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses", index: 5}
+    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses", index: 5},
+    userInfo?.keys?.edges?.length > 0 && {bar: "Data API", title: "Data API", value: "data_api", index: 6}
   ].filter(Boolean)
 
   useEffect(() => {
@@ -214,6 +215,7 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
           {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
           {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
           {sectionSelected === 5 && <Accesses userInfo={userInfo}/>}
+          {sectionSelected === 6 && <DataAPI userInfo={userInfo}/>}
         </Stack>
       </Stack>
     </MainPageTemplate>

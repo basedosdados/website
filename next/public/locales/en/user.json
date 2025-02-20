@@ -410,5 +410,16 @@
         "passwordNoSpaces": "Passwords entered cannot contain spaces.",
         "passwordMismatch": "The password entered does not match the password created in the field above. Please check for typing errors and try again.",
         "passwordRequired": "Please enter the password."
+    },
+    "dataAPI": {
+        "title": "Data API Keys",
+        "description": "Manage your Data API keys and monitor their usage.",
+        "prefix": "Key Prefix",
+        "active": "Active",
+        "inactive": "Inactive",
+        "balance": "Balance",
+        "created": "Created",
+        "expires": "Expires",
+        "never": "Never"
     }
 }
