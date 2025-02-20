@@ -468,5 +468,16 @@
                 ]
             }
         ]
+    },
+    "dataAPI": {
+        "title": "Claves de la API de Datos",
+        "description": "Gerencie sus claves de la API de Datos y supervise su uso.",
+        "prefix": "Prefijo de la clave",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "balance": "Saldo",
+        "created": "Creado",
+        "expires": "Expira",
+        "never": "Nunca"
     }
 }
