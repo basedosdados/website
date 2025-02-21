@@ -412,14 +412,24 @@
         "passwordRequired": "Please enter the password."
     },
     "dataAPI": {
-        "title": "Data API Keys",
+        "title": "Data API",
+        "keys": "Keys",
         "description": "Manage your Data API keys and monitor their usage.",
         "prefix": "Key Prefix",
         "active": "Active",
         "inactive": "Inactive",
+        "name": "Name",
         "balance": "Balance",
         "created": "Created",
         "expires": "Expires",
-        "never": "Never"
+        "never": "Never",
+        "credits": "credits",
+        "reais": "reais",
+        "addCredits": "Add credits",
+        "needMoreKeys": "Need more API keys?",
+        "contactUs": "Contact us",
+        "weWillHelpYou": "and we'll send you a new key as soon as possible.",
+        "earlyRelease": "Early Release",
+        "earlyReleaseDescription": "The Data API is currently in early release. Features and documentation may change as we continue to improve the service."
     }
 }

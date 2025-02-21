@@ -425,14 +425,24 @@
         "passwordRequired": "Por favor, insira a senha."
     },
     "dataAPI": {
-        "title": "Chaves da API de Dados",
+        "title": "API de Dados",
+        "keys": "Chaves",
         "description": "Gerencie suas chaves da API de Dados e monitore seu uso.",
         "prefix": "Prefixo da chave",
         "active": "Ativo",
         "inactive": "Inativo",
+        "name": "Nome",
         "balance": "Saldo",
         "created": "Criado",
         "expires": "Expira",
-        "never": "Nunca"
+        "never": "Nunca",
+        "credits": "créditos",
+        "reais": "reais",
+        "addCredits": "Adicionar créditos",
+        "needMoreKeys": "Precisa de mais chaves da API?",
+        "contactUs": "Nos contate",
+        "weWillHelpYou": "e te enviaremos uma nova chave assim que possível.",
+        "earlyRelease": "Lançamento em versão alfa",
+        "earlyReleaseDescription": "A API de Dados está atualmente em lançamento em versão alfa. As características e a documentação podem ser alteradas à medida que continuamos melhorando o serviço."
     }
 }

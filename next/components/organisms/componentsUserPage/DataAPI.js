@@ -5,7 +5,9 @@ import {
   GridItem,
   Badge,
   Tooltip,
-  useClipboard
+  useClipboard,
+  Link,
+  Button
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -37,14 +39,30 @@ export default function DataAPI({ userInfo }) {
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString();
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   };
 
   return (
     <Stack spacing={6}>
+        <Box
+          p={4}
+          mb={4}
+          bg="yellow.100"
+          borderRadius="md"
+          borderLeft="4px solid"
+          borderColor="yellow.400"
+        >
+          <BodyText typography="small" fontWeight="bold" marginBottom={2}>
+            {t('dataAPI.earlyRelease')} 🚧
+          </BodyText>
+          <BodyText typography="small">
+            {t('dataAPI.earlyReleaseDescription')}
+          </BodyText>
+        </Box>
       <Box>
         <TitleText typography="small" marginBottom={4}>
-          {t('dataAPI.title')}
+          {t('dataAPI.keys')}
         </TitleText>
         <BodyText typography="small" color="#464A51">
           {t('dataAPI.description')}
@@ -61,11 +79,21 @@ export default function DataAPI({ userInfo }) {
             borderRadius="8px"
           >
             <Stack spacing={4}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" alignItems="center">
                 <Stack direction="row" alignItems="center" spacing={2}>
                   <BodyText fontWeight="500">
                     {t('dataAPI.prefix')}: {key.prefix}
                   </BodyText>
+                  {key.name && (
+                    <>
+                      <BodyText fontWeight="500" color="#71757A">
+                        |
+                      </BodyText>
+                      <BodyText fontWeight="500">
+                        {t('dataAPI.name')}: {key.name}
+                      </BodyText>
+                    </>
+                  )}
                   <Box
                     cursor="pointer"
                     onClick={() => handleCopyClick(key.prefix, index)}
@@ -77,13 +105,31 @@ export default function DataAPI({ userInfo }) {
                     )}
                   </Box>
                 </Stack>
-                <Badge
-                  colorScheme={key.isActive ? "green" : "red"}
-                  borderRadius="4px"
-                  px={2}
-                >
-                  {key.isActive ? t('dataAPI.active') : t('dataAPI.inactive')}
-                </Badge>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Badge
+                    colorScheme={key.isActive ? "green" : "red"}
+                    borderRadius="4px"
+                    px={2}
+                  >
+                    {key.isActive ? t('dataAPI.active') : t('dataAPI.inactive')}
+                  </Badge>
+                  {key.isActive && (
+                    <Button
+                      size="sm"
+                      color="#2B8C4D"
+                      backgroundColor="#FFF"
+                      border="1px solid #2B8C4D"
+                      _hover={{
+                        backgroundColor: "#FFF",
+                        color: "#22703E",
+                        borderColor: "#22703E"
+                      }}
+                      onClick={() => window.open('', '_blank')}
+                    >
+                      {t('dataAPI.addCredits')}
+                    </Button>
+                  )}
+                </Stack>
               </Stack>
 
               <Grid templateColumns="repeat(3, 1fr)" gap={4}>
@@ -92,7 +138,7 @@ export default function DataAPI({ userInfo }) {
                     {t('dataAPI.balance')}
                   </BodyText>
                   <BodyText typography="small">
-                    {key.balance || 0} credits
+                    {key.balance || 0} {t('dataAPI.reais')}
                   </BodyText>
                 </Box>
                 <Box>
@@ -116,6 +162,24 @@ export default function DataAPI({ userInfo }) {
           </GridItem>
         ))}
       </Grid>
+
+      <Box borderTop="1px solid #DEDFE0" paddingTop={6}>
+        <BodyText typography="small" color="#464A51">
+          {t('dataAPI.needMoreKeys')} {' '}
+          <Link
+            display="inline"
+            fontWeight="500"
+            color="#0068C5"
+            _hover={{
+              color: "#0057A4",
+            }}
+            href="/contact"
+          >
+            {t('dataAPI.contactUs')}
+          </Link>
+          {' '}{t('dataAPI.weWillHelpYou')}
+        </BodyText>
+      </Box>
     </Stack>
   );
 } 
