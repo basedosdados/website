@@ -10,7 +10,7 @@ import Link from 'next/link';
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'dataAPI'])),
+      ...(await serverSideTranslations(locale, ['common', 'menu', 'dataAPI'])),
     },
     revalidate: 60,
   };
@@ -78,6 +78,15 @@ export default function DataAPIDocs() {
 
   return (
     <MainPageTemplate>
+      <Text
+        fontSize="4xl"
+        fontWeight="bold"
+        textAlign="center"
+        mb={8}
+        mt={4}
+      >
+        {t('title')}
+      </Text>
       <Grid
         templateColumns={{ base: "1fr", md: "250px 1fr" }}
         gap={8}
