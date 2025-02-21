@@ -39,7 +39,6 @@ export async function getServerSideProps(context) {
     }
   }
 
-  // Remove comment markers and restore token validation
   const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
   const validateToken = await validateTokenResponse.json()
 
@@ -63,7 +62,6 @@ export async function getServerSideProps(context) {
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(user.id)
 
-  // Replace getUser function call with direct fetch
   const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
   const getUser = await getUserResponse.json()
 
