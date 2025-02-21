@@ -18,7 +18,7 @@ async function addMemberInSubscription(idAdmin, id, token) {
             allAccount (id: "${idAdmin}") {
               edges {
                 node {
-                  internalSubscription (isActive: true) {
+                  internalSubscription (isActive: true, first: 1) {
                     edges {
                       node {
                         _id

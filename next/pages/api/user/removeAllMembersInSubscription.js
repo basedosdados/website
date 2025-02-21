@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function removeMemberInSubscription(idAdmin, id, token) {
+async function removeAllMembersInSubscription(idAdmin, token) {
   let subscriptionId = null
 
   try {
@@ -47,7 +47,7 @@ async function removeMemberInSubscription(idAdmin, id, token) {
       data: {
         query: `
           mutation {
-            updateStripeCustomerSubscription(accountId: "${id}", subscriptionId: "${subscriptionId}") {
+            deleteStripeCustomerAllMembers(subscriptionId: "${subscriptionId}") {
               ok
               errors
             }
@@ -56,7 +56,7 @@ async function removeMemberInSubscription(idAdmin, id, token) {
       }
     })
     return res.data
-  } catch(err) {
+  } catch (error) {
     return "err"
   }
 }
@@ -67,10 +67,10 @@ export default async function handler(req, res) {
     return req.cookies.token
   }
 
-  const result = await removeMemberInSubscription(atob(req.query.r), atob(req.query.p), token())
+  const result = await removeAllMembersInSubscription(atob(req.query.p), token())
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
 
-  res.status(200).json({success: true})
+  return res.status(200).json({success: true})
 }

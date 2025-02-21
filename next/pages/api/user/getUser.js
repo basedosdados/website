@@ -45,7 +45,7 @@ async function getUser(id, token) {
                       }
                     }
                   }
-                  internalSubscription (isActive: true) {
+                  internalSubscription (isActive: true, first: 1) {
                     edges {
                       node {
                         canceledAt

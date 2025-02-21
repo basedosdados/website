@@ -38,7 +38,7 @@ async function getMembers(id, token) {
                       }
                     }
                   }
-                  internalSubscription (isActive: true) {
+                  internalSubscription (isActive: true, first: 1) {
                     edges {
                       node {
                         subscribers {
