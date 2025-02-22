@@ -52,10 +52,7 @@ Não foram encontradas linhas duplicadas neste conjunto de dados. No entanto, a 
 Os dados são anonimizadas, não contendo CNPJs nem CPFs. Isso limita os cruzamentos com outros conjuntos, mas é possível usar colunas como `cnae` e `cep` para tal.
 
 # Download dos dados
-Os microdados somam mais de 350 GB. Para evitar sobrecarregar seu computador, recomendamos usar queries no BigQuery para processar os dados em nuvem antes de baixá-los. Filtre pelas colunas de partição (como ano e UF) e selecione apenas as colunas relevantes.
-
-# Instituição responsável
-Ministério do Trabalho e Emprego (MTE)
+Os microdados somam mais de 350 GB. Para evitar sobrecarregar seu computador, recomendamos usar queries no BigQuery para processar os dados em nuvem antes de baixá-los. Filtre pelas colunas de partição (como `ano` e `sigla_uf`) e selecione apenas as colunas relevantes.
 
 # Instrumento de coleta
 O instrumento de coleta atual é um formulário que deve ser preenchido pelos empregadores sobre seus empregados.
@@ -68,9 +65,6 @@ Os dados têm atualização parcial e completa. A atualização parcial ocorre e
 
 # Dados identificados
 Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados da RAIS, é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
-
-# Comparação com o dashboard do MTE
-Caso os dados do nosso sistema não coincidam com os apresentados no [dashboard](https://app.powerbi.com/view?r=eyJrIjoiYTJlODQ5MWYtYzgyMi00NDA3LWJjNjAtYjI2NTI1MzViYTdlIiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9) do MTE, é importante esclarecer que utilizamos a base diretamente do FTP do MTE. Por isso, ainda não conseguimos identificar quais agrupamentos ou cálculos foram aplicados às variáveis na construção do dashboard.
 
 # Tratamentos feitos pela BD
 Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, os [códigos de tratamento](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais) estão disponíveis no repositório do GitHub para consulta. 

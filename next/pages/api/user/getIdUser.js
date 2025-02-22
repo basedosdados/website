@@ -41,7 +41,7 @@ export default async function handler(req, res) {
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
-  if(result?.data?.allAccount?.edges.length === 0) return res.status(500).json({error: "err"})
+  if(result?.data?.allAccount?.edges.length === 0) return res.status(500).json({error: "err, user not found"})
 
   res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
 }

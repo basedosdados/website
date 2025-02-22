@@ -67,14 +67,14 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
@@ -203,7 +203,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
+function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan }) {
   const router = useRouter();
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
@@ -214,8 +214,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
     {name: t('password'), value: "new_password"},
     {name: t('plans_and_payment'), value: "plans_and_payment"},
     isUserPro && {name: t('bigquery'), value: "big_query"},
+    haveInterprisePlan && {name: t('access'), value: "accesses"},
   ]
-  // {name: "Acessos", value: "accesses"},
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -226,14 +226,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         )}
 
@@ -862,8 +862,14 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
+    if(user?.isSubscriber) return user?.isSubscriber
     return false
+  }
+
+  const haveInterprisePlan = () => {
+    let user
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    return user?.proSubscription === "bd_pro_empresas"
   }
 
   useEffect(() => {
@@ -900,7 +906,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           email: res.email,
           username: res.username,
           picture: res.picture || "",
-          plan: res?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
+          plan: res?.proSubscription
         })
       } catch (error) {
         console.error("Error parsing user data:", error)
@@ -1079,7 +1085,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               : "80px"
             }
             _hover={{opacity:"none"}}
-            href={router.pathname === "/" ? "/#home" : "/"}
+            href={"/search"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"
@@ -1127,6 +1133,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             isOpen={menuUserMobile.isOpen}
             onClose={menuUserMobile.onClose}
             isUserPro={isUserPro()}
+            haveInterprisePlan={haveInterprisePlan()}
           />
         </HStack>
       </Box>

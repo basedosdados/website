@@ -1,0 +1,47 @@
+{
+    "title": "Documentación de la API de Datos",
+    "overview": {
+        "title": "Visión General",
+        "welcome": "Bienvenidos a la documentación de la API de Datos de la Base de los Datos.",
+        "description": "Con la API, puedes acceder a nuestros datos de forma programática, sin depender de BigQuery.",
+        "descriptionPricing": "Cada endpoint tiene un diferente nivel de precio, dependiendo del número de solicitudes acumuladas en el mes.",
+        "baseURL": "URL Base",
+        "earlyRelease": "Versión Alpha",
+        "earlyReleaseDescription": "Esta es una versión preliminar de nuestra API de Datos. Estamos actualmente probando y mejorando nuestros servicios. Algunos recursos pueden ser inestables. Más endpoints, recursos y documentación detallada serán lanzados en el futuro."
+    },
+    "authentication": {
+      "title": "Autenticación",
+      "description": "Aprenda como autenticar con la API de Datos de la BD",
+      "apiKey": "Clave de API",
+      "getApiKeyBy": "Para acceder a la API, necesitará una clave. Para obtener una:",
+      "getApiKeyBy1": "Crea una cuenta en la BD.",
+      "getApiKeyBy2Contactus": "Contacta con nosotros para solicitar una clave",
+      "getApiKeyBy2ContactusLink": "aquí",
+      "weWillAnswerYou": "Nos pondremos en contacto con usted lo antes posible."
+    },
+    "endpoints": {
+        "title": "Endpoints",
+        "description": "Descripción",
+        "deprecated": "Este endpoint está obsoleto",
+        "inactive": "Este endpoint está inactivo",
+        "endpointURL": "URL del endpoint",
+        "parameters": "Parámetros",
+        "pricingTiers": "Faixas de Precios",
+        "lastUpdated": "Actualizado en",
+        "requests": "Solicitudes",
+        "request": "Solicitud"
+    },
+    "gettingStarted": {
+      "title": "Comenzando",
+      "description": "Aprenda como usar la API de Datos de la BD"
+    },
+    "pricing": {
+        "title": "Precificación",
+        "description": "Para usar la API de Datos, necesitará agregar créditos a su clave de API.",
+        "addCredits": "Para agregar créditos a su clave de API:",
+        "step1": "1. Navegue a su área de usuario en la sección de API de Datos.",
+        "step2": "2. Para su clave de API, haga clic en el botón 'Agregar Créditos'.",
+        "step3": "3. Seleccione la cantidad de créditos que desea agregar y complete el pago.",
+        "note": "Los créditos estarán disponibles inmediatamente después del pago exitoso."
+    }
+  }

@@ -17,18 +17,7 @@ async function getAlreadySubscribed(id, token) {
               edges {
                 node {
                   id
-                  internalSubscription {
-                    edges {
-                      node {
-                        canceledAt
-                        createdAt
-                        isActive
-                        stripeSubscription
-                        planInterval
-                        nextBillingCycle
-                      }
-                    }
-                  }
+                  isSubscriber
                 }
               }
             }
@@ -52,8 +41,8 @@ export default async function handler(req, res) {
 
   const result = await getAlreadySubscribed(atob(req.query.p), token())
 
-  if(result.errors) return res.status(500).json({error: result.errors})
-  if(result === "err") return res.status(500).json({error: "err"})
+  if(result.errors) return res.status(500).json(false)
+  if(result === "err") return res.status(500).json(false)
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.internalSubscription)
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.isSubscriber)
 }

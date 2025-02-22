@@ -28,7 +28,10 @@ export default function Account({ userInfo }) {
   const usernameModal = useDisclosure()
   const eraseModalAccount = useDisclosure()
   const sucessEraseModalAccount = useDisclosure()
+  const errorEraseModalAccount = useDisclosure()
   const [isLoading, setIsLoading] = useState(false)
+  const [hasCancelSubscription, setHasCancelSubscription] = useState(false)
+  const [hasMembers, setHasMembers] = useState(false)
 
   const [formData, setFormData] = useState({username: ""})
   const [errors, setErrors] = useState({})
@@ -45,7 +48,7 @@ export default function Account({ userInfo }) {
     if(formData.username === "") return setErrors({username: t('username.invalidUsername')})
     if(formData.username.includes(" ")) return setErrors({username: t('username.noSpacesInUsername')})
     setIsLoading(true)
-    
+
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
     const form = {id: id, username: formData.username}
@@ -67,18 +70,72 @@ export default function Account({ userInfo }) {
   }
 
   async function eraseAccount() {
-    setIsLoading(true)
-    const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userInfo.id)
+    try {
+      setIsLoading(true)
+      setHasCancelSubscription(false)
+      setHasMembers(false)
 
+      const reg = new RegExp("(?<=:).*")
+      const [ id ] = reg.exec(userInfo.id)
+
+      const canDeleteAccount = await validateAccountDeletion(id)
+
+      if (canDeleteAccount) {
+        await deleteUserAccount(id)
+      } else {
+        eraseModalAccount.onClose()
+        errorEraseModalAccount.onOpen()
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+      eraseModalAccount.onClose()
+    }
+  }
+
+  async function validateAccountDeletion(id) {
+    if (!userInfo?.isSubscriber || userInfo?.proSubscriptionRole === "member") {
+      return true
+    }
+
+    let hasMembersInSubscription = false
+    const hasActiveSubscription = userInfo?.internalSubscription?.edges?.[0]?.node?.canceledAt === null
+
+    if (hasActiveSubscription) {
+      setHasCancelSubscription(true)
+    }
+
+    if (userInfo?.proSubscription === "bd_pro_empresas") {
+      const res = await fetch(`/api/user/getMembers?p=${btoa(id)}`, {method: "GET"})
+      const membersData = await res.json()
+
+      if (membersData?.internalSubscription?.edges?.[0]?.node?.subscribers?.edges?.length > 0) {
+        setHasMembers(true)
+        hasMembersInSubscription = true
+      }
+    }
+
+    return !hasActiveSubscription && !hasMembersInSubscription
+  }
+
+  async function deleteUserAccount(id) {
     const result = await fetch(`/api/user/deleteAccount?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.ok === true) {
-      setIsLoading(false)
-      eraseModalAccount.onClose()
       sucessEraseModalAccount.onOpen()
+    } else {
+      errorEraseModalAccount.onOpen()
     }
+  }
+
+  function handleCloseSucessEraseAccount() {
+    setIsLoading(true)
+    cookies.remove('userBD', { path: '/' })
+    cookies.remove('token', { path: '/' })
+    sucessEraseModalAccount.onClose()
+    return window.open("/", "_self")
   }
 
   return (
@@ -130,7 +187,7 @@ export default function Account({ userInfo }) {
         propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText>{t('username.confirmAccountDeletion')}</TitleText>
+          <TitleText marginRight="20px">{t('username.confirmAccountDeletion')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -142,7 +199,7 @@ export default function Account({ userInfo }) {
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm>
-          {t('username.accountDeletionWarning')}
+            {t('username.accountDeletionWarning')}
           </ExtraInfoTextForm>
         </Stack>
 
@@ -182,13 +239,7 @@ export default function Account({ userInfo }) {
 
       <ModalGeneral
         isOpen={sucessEraseModalAccount.isOpen}
-        onClose={() => {
-          setIsLoading(true)
-          cookies.remove('userBD', { path: '/' })
-          cookies.remove('token', { path: '/' })
-          sucessEraseModalAccount.onClose()
-          return window.open("/", "_self")
-        }}
+        onClose={handleCloseSucessEraseAccount}
         propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
       >
         <Stack spacing={0} marginBottom="16px">
@@ -198,7 +249,6 @@ export default function Account({ userInfo }) {
             top="34px"
             right="26px"
             _hover={{backgroundColor: "transparent", opacity: 0.7}}
-            onClick={() => sucessEraseModalAccount.onClose() }
           />
         </Stack>
 
@@ -217,8 +267,50 @@ export default function Account({ userInfo }) {
             _hover={{
               backgroundColor: "#992A2A",
             }}
-            onClick={() => eraseModalAccount.onClose()}
+            onClick={handleCloseSucessEraseAccount}
             isLoading={isLoading}
+          >
+            {t('username.close')}
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={errorEraseModalAccount.isOpen}
+        onClose={errorEraseModalAccount.onClose}
+        propsModalContent={{minWidth: {base: "", lg: "620px !important"}}}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText>{t('username.errorEraseAccountTitle')}</TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+          />
+        </Stack>
+        <Stack spacing="4px" marginBottom="24px" flexDirection="column">
+          {hasCancelSubscription && (
+            <ExtraInfoTextForm>{t('username.errorEraseAccountText')}</ExtraInfoTextForm>
+          )}
+          {hasMembers && (
+            <ExtraInfoTextForm>{t('username.errorEraseAccountMembers')}</ExtraInfoTextForm>
+          )}
+        </Stack>
+
+        <Stack
+          spacing={0}
+          width={{base:"100%", lg: "fit-content"}}
+        >
+          <Button
+            whiteSpace="nowrap"
+            width="100%"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
+            isLoading={isLoading}
+            onClick={() => errorEraseModalAccount.onClose()}
           >
             {t('username.close')}
           </Button>
