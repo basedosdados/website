@@ -32,7 +32,7 @@ async function getDataAPIEndpoints(locale='pt') {
                       type {
                         name
                       }
-                      required
+                      isRequired
                     }
                   }
                 }
