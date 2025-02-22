@@ -319,7 +319,11 @@ export default function DataAPIDocs() {
                     </Text>
                     <VStack align="stretch" spacing={2} pl={4}>
                       <Text>1. {t('authentication.getApiKeyBy1')}</Text>
-                      <Text>2. {t('authentication.getApiKeyBy2Contactus')} <Link href="/contact" fontWeight="700">{t('authentication.getApiKeyBy2ContactusLink')}</Link>.</Text>
+                      <Text>2. {t('authentication.getApiKeyBy2Contactus')} <Link href="/contact">
+                        <Text as="span" fontWeight="700" cursor="pointer">
+                          {t('authentication.getApiKeyBy2ContactusLink')}
+                        </Text>
+                      </Link>.</Text>
                     </VStack>
                     <br></br>
                     <Text>
