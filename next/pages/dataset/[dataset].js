@@ -3,19 +3,20 @@ import {
   Grid,
   GridItem,
   Image,
-  Stack,
+  Stack
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { capitalize } from 'lodash';
+import { useTranslation } from "next-i18next";
+import { capitalize } from "lodash";
+import cookies from "js-cookie";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
-import Link from '../../components/atoms/Link';
+import Link from "../../components/atoms/Link";
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
@@ -37,6 +38,7 @@ export async function getStaticProps(context) {
   let dataset = null;
   let contentUserGuide = null;
   let userGuide = null;
+  let hiddenDataset = false;
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
@@ -46,6 +48,12 @@ export async function getStaticProps(context) {
 
   if(dataset?.usageGuide) {
     contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  }
+
+  const datasetStatus = dataset?.status?.slug || false
+
+  if(datasetStatus === "under_review" || datasetStatus === "excluded") {
+    hiddenDataset = true
   }
 
   try {
@@ -58,6 +66,7 @@ export async function getStaticProps(context) {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
     userGuide,
+    hiddenDataset
   };
   
   return {
@@ -77,13 +86,47 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, userGuide }) {
+export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
+  const [isBDSudo, setIsBDSudo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true)
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  async function checkBDSudo() {
+    try {
+      const userBD = cookies.get("userBD");
+
+      if (!userBD) return setIsBDSudo(false)
+
+      const user = JSON.parse(userBD);
+      if (!user.isAdmin) return setIsBDSudo(false)
+
+      const id = user.id.split(":").pop();
+      if (!id) return setIsBDSudo(false)
+
+      const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(cookies.get("token"))}`, { method: "GET" });
+      const userData = await response.json();
+      setIsBDSudo(!!userData?.isAdmin);
+    } catch {
+      setIsBDSudo(false);
+    }
+  }
+
+  useEffect(() => {
+    checkBDSudo();
+  }, [])
+
+  useEffect(() => {
+    if (isBDSudo === false && hiddenDataset) {
+      router.replace("/search", undefined, { shallow: true });
+    }
+    if(hiddenDataset === false) setIsLoading(false)
+    if(isBDSudo) setIsLoading(false)
+  }, [isBDSudo, hiddenDataset, router]);
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -104,20 +147,29 @@ export default function DatasetPage ({ dataset, userGuide }) {
     return 0
   }
 
-  const datasetTab = () => {
-    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .filter((elm) => elm?.slug !== "dicionario")
-      .filter((elm) => elm?.slug !== "dictionary")
-      .sort(sortElements) || []
+  async function datasetTab() {
+    let dataset_tables
+    let raw_data_sources
+    let information_request
 
-    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
-    
-    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
+    dataset_tables = dataset?.tables?.edges
+      ?.map((elm) => elm.node)
+        ?.filter(
+          (elm) =>
+            !["under_review", "excluded"].includes(elm?.status?.slug) &&
+            !["dicionario", "dictionary"].includes(elm?.slug)
+        )
+          ?.sort(sortElements) || [];
+
+    raw_data_sources = dataset?.rawDataSources?.edges
+      ?.map((elm) => elm.node)
+        ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+          ?.sort(sortElements) || [];
+  
+    information_request = dataset?.informationRequests?.edges
+      ?.map((elm) => elm.node)
+        ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+          ?.sort(sortElements) || [];
 
     if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
     if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
@@ -186,6 +238,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
       </Head>
 
       <VStack
+        display={isLoading ? "none" : "flex"}
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
@@ -341,6 +394,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
           {tabIndex === 0 &&
             <DatasetResource
               dataset={dataset}
+              isBDSudo={isBDSudo}
             />
           }
           {tabIndex === 1 &&

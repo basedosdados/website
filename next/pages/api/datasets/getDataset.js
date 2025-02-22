@@ -24,6 +24,9 @@ export default async function getDataset(id, locale = 'pt') {
                 temporalCoverage
                 spatialCoverage
                 spatialCoverageName${capitalize(locale)}
+                status {
+                  slug
+                }
                 themes {
                   edges {
                     node {
