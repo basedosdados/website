@@ -223,7 +223,7 @@ export default function DataAPIDocs() {
                         >
                           <Text fontWeight="semibold" color="blue.600">
                             {param[`name${capitalize(locale)}`] || param.name}
-                            {param.required && <Text as="span" color="red.500">*</Text>}
+                            {param.isRequired && <Text as="span" color="red.500">*</Text>}
                           </Text>
                           <Text fontSize="sm" color="gray.600" mb={2}>
                             {param.type?.name}
