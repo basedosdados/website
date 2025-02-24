@@ -36,7 +36,6 @@ import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
-  let contentUserGuide = null;
   let userGuide = null;
   let hiddenDataset = false;
 
@@ -46,14 +45,21 @@ export async function getStaticProps(context) {
     console.error("Fetch error:", error.message);
   }
 
-  if(dataset?.usageGuide) {
-    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  let contentUserGuide = dataset?.usageGuide ? await getUserGuide(dataset.usageGuide, locale || 'pt') : null;
+
+  function checkStatus() {
+    const statusesToCheck = ["under_review", "excluded"];
+    const edgesToCheck = ["tables", "rawDataSources", "informationRequests"];
+
+    if (dataset?.status?.slug && statusesToCheck.includes(dataset.status.slug)) return true;
+
+    return edgesToCheck.some(edge => 
+      dataset?.[edge]?.edges?.some(item => statusesToCheck.includes(item.node?.status?.slug))
+    );
   }
 
-  const datasetStatus = dataset?.status?.slug || false
-
-  if(datasetStatus === "under_review" || datasetStatus === "excluded") {
-    hiddenDataset = true
+  if (dataset?.status?.slug === "under_review" || dataset?.status?.slug === "excluded") {
+    hiddenDataset = true;
   }
 
   try {
@@ -66,7 +72,8 @@ export async function getStaticProps(context) {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
     dataset,
     userGuide,
-    hiddenDataset
+    hiddenDataset,
+    verifyBDSudo: checkStatus()
   };
   
   return {
@@ -86,47 +93,67 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
+export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verifyBDSudo }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
   const [isBDSudo, setIsBDSudo] = useState(null);
-  const [isLoading, setIsLoading] = useState(true)
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
   async function checkBDSudo() {
+    const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
+
     try {
-      const userBD = cookies.get("userBD");
+      const responsePermission = await fetch("/api/user/getPermissionSudo");
+      const hasPermission = await responsePermission.json();
 
-      if (!userBD) return setIsBDSudo(false)
+      if (hasPermission?.isAdmin === true) {
+        setIsBDSudo(true);
+        return;
+      }
 
-      const user = JSON.parse(userBD);
-      if (!user.isAdmin) return setIsBDSudo(false)
+      if (!hasPermission || hasPermission.email === "undefined" || (userBD && hasPermission.email === userBD.email)) {
+        setIsBDSudo(false);
+        return;
+      }
 
-      const id = user.id.split(":").pop();
-      if (!id) return setIsBDSudo(false)
+      let newPermission = { isAdmin: false, email: "undefined" };
 
-      const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(cookies.get("token"))}`, { method: "GET" });
-      const userData = await response.json();
-      setIsBDSudo(!!userData?.isAdmin);
-    } catch {
+      if (userBD?.isAdmin) {
+        const id = userBD.id.split(":").pop();
+        if (id) {
+          const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(cookies.get("token"))}`, { method: "GET" });
+          const userData = await response.json();
+          newPermission.isAdmin = !!userData?.isAdmin;
+          newPermission.email = userData?.email || "undefined";
+        }
+      }
+
+      await fetch(`/api/user/setPermissionSudo?p=${btoa(String(newPermission.isAdmin))}&q=${btoa(newPermission.email)}`);
+      setIsBDSudo(newPermission.isAdmin);
+    } catch (error) {
+      console.error("Erro ao verificar permissão sudo:", error);
       setIsBDSudo(false);
     }
   }
 
   useEffect(() => {
-    checkBDSudo();
-  }, [])
+    if (verifyBDSudo) checkBDSudo();
+  }, [verifyBDSudo])
 
   useEffect(() => {
-    if (isBDSudo === false && hiddenDataset) {
-      router.replace("/search", undefined, { shallow: true });
+    const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
+
+    if (!userBD && hiddenDataset) {
+      router.replace("/404", undefined, { shallow: true });
     }
-    if(hiddenDataset === false) setIsLoading(false)
-    if(isBDSudo) setIsLoading(false)
-  }, [isBDSudo, hiddenDataset, router]);
+
+    if (isBDSudo !== null && !isBDSudo && hiddenDataset) {
+      router.replace("/404", undefined, { shallow: true });
+    }
+  }, [isBDSudo, hiddenDataset]);
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -238,7 +265,6 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
       </Head>
 
       <VStack
-        display={isLoading ? "none" : "flex"}
         maxWidth="1440px"
         marginX="auto"
         boxSizing="content-box"
