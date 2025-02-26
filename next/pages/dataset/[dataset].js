@@ -22,7 +22,6 @@ import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
-import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
 
@@ -70,8 +69,8 @@ export async function getStaticProps(context) {
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-    dataset,
-    userGuide,
+    dataset: dataset || null,
+    userGuide: userGuide || null,
     hiddenDataset,
     verifyBDSudo: checkStatus()
   };
@@ -101,6 +100,12 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const [isBDSudo, setIsBDSudo] = useState(null);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  useEffect(() => {
+    if (isDatasetEmpty) {
+      router.replace('/404');
+    }
+  }, [isDatasetEmpty, router]);
 
   async function checkBDSudo() {
     const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
@@ -231,7 +236,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
     )
   }
 
-  if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
+  if(isDatasetEmpty) return null
 
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
