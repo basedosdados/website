@@ -31,7 +31,7 @@ import Link from "../../components/atoms/Link";
 import {
   getAllDocs,
   getDocsBySlug,
-  serializeDocs
+  serializeDoc
 } from "../api/docs";
 
 
@@ -68,10 +68,13 @@ export async function getStaticProps({ params, locale }) {
     };
   }
 
-  const serialize = await serializeDocs(content);
+  const allDocs = await getAllDocs();
+
+  const serialize = await serializeDoc(content);
 
   return {
     props: {
+      allDocs,
       slug,
       locale,
       ...serialize,
@@ -88,7 +91,7 @@ export async function getStaticPaths() {
   };
 }
 
-function Toc({ title, headings }) {
+function Toc({ allDocs, headings, slug }) {
   const [isOverflow, setIsOverflow] = useState({});
   const textRefs = useRef({});
   const [activeId, setActiveId] = useState(null);
@@ -133,74 +136,117 @@ function Toc({ title, headings }) {
     };
   }, [headings]);
 
+  const schemeCategories = ["Docs", "APIs", "Contribua"]
+
+  const groupedDocs = allDocs.reduce((acc, doc) => {
+    const category = doc.frontmatter.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(doc);
+    return acc;
+  }, {});
+
   if(headings.length === 0) return null
 
   return (
     <Box>
-      <LabelText
-        typography="small"
-        paddingLeft="15px"
-        marginBottom="8px"
-      >
-        {title}
-      </LabelText>
-
-      <Box>
-        {headings.map(({ id, title, level }, i) => (
-          <HStack
-            key={id}
-            spacing="4px"
-            cursor="pointer"
-            marginLeft={`${level * 5}%`}
-            pointerEvents={id === activeId ? "none" : "default"}
+    {schemeCategories.map((category, index) => {
+      const docsInCategory = groupedDocs[category] || [];
+      return (
+        <Box key={index}>
+          <LabelText
+            typography="small"
+            marginY="8px"
           >
-            <Box 
-              width="3px"
-              height="24px"
-              backgroundColor={id === activeId && "#2B8C4D"}
-              borderRadius="10px"
-            />
-            <Tooltip
-              label={title}
-              isDisabled={!isOverflow[i]}
-              hasArrow
-              padding="16px"
-              backgroundColor="#252A32"
-              boxSizing="border-box"
-              borderRadius="8px"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
-              textAlign="center"
-              color="#FFFFFF"
-              placement="top"
-              maxWidth="100%"
-            >
-              <LabelText
-                typography="small"
-                as="a"
-                href={`#${id}`}
-                ref={(el) => (textRefs.current[i] = el)}
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-                overflow="hidden"
+            {category}
+          </LabelText>
+
+          {docsInCategory.map((doc) => (
+            <Box key={doc.slug}>
+              <Link
                 width="100%"
-                color={id === activeId  ? "#2B8C4D" : "#71757A"}
-                backgroundColor={id === activeId  && "#F7F7F7"}
-                _hover={{
-                  backgroundColor: id === activeId  ? "#F7F7F7" :"#EEEEEE",
-                }}
-                borderRadius="8px"
-                padding="6px 8px"
+                href={`/docs/${doc.slug}`}
               >
-                {title}
-              </LabelText>
-            </Tooltip>
-          </HStack>
-        ))}
-      </Box>
-    </Box>
+                <LabelText
+                  display={slug === doc.slug ? "none" : "block"}
+                  cursor="pointer"
+                  typography="small"
+                  width="100%"
+                  borderRadius="8px"
+                  padding="6px 8px"
+                  marginLeft="8px"
+                  color="#71757A"
+                  _hover={{
+                    backgroundColor: "#EEEEEE",
+                  }}
+                >
+                  {doc.frontmatter.title}
+                </LabelText>
+              </Link>
+
+              <Box display={slug === doc.slug ? "block" : "none"}>
+                {headings.map(({ id, title, level }, i) => (
+                  <HStack
+                    key={id}
+                    spacing="4px"
+                    cursor="pointer"
+                    paddingLeft="14px"
+                    marginLeft={`${level * 5}%`}
+                    pointerEvents={id === activeId ? "none" : "default"}
+                  >
+                    <Box
+                      width="3px"
+                      height="24px"
+                      backgroundColor={id === activeId && "#2B8C4D"}
+                      borderRadius="10px"
+                    />
+                    <Tooltip
+                      label={title}
+                      isDisabled={!isOverflow[i]}
+                      hasArrow
+                      padding="16px"
+                      backgroundColor="#252A32"
+                      boxSizing="border-box"
+                      borderRadius="8px"
+                      fontFamily="Roboto"
+                      fontWeight="400"
+                      fontSize="14px"
+                      lineHeight="20px"
+                      textAlign="center"
+                      color="#FFFFFF"
+                      placement="top"
+                      maxWidth="100%"
+                    >
+                      <LabelText
+                        typography="small"
+                        as="a"
+                        href={`#${id}`}
+                        ref={(el) => (textRefs.current[i] = el)}
+                        textOverflow="ellipsis"
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        width="100%"
+                        color={id === activeId ? "#2B8C4D" : "#71757A"}
+                        backgroundColor={id === activeId && "#F7F7F7"}
+                        _hover={{
+                          backgroundColor: id === activeId ? "#F7F7F7" : "#EEEEEE",
+                        }}
+                        borderRadius="8px"
+                        padding="6px 8px"
+                      >
+                        {title}
+                      </LabelText>
+                    </Tooltip>
+                  </HStack>
+                ))}
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      );
+    })}
+  </Box>
   );
 }
 
@@ -396,7 +442,7 @@ export const mdxComponents = {
   },
 };
 
-export default function Docs({ slug, locale, mdxSource, headings }) {
+export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
   const { t } = useTranslation('docs')
   const { frontmatter } = mdxSource;
 
@@ -428,7 +474,7 @@ export default function Docs({ slug, locale, mdxSource, headings }) {
         paddingTop="70px"
         maxWidth="100%"
       >
-        {headings && headings.length > 0 &&
+        {allDocs && allDocs.length > 0 &&
           <Box
             as="aside"
             position="sticky"
@@ -438,9 +484,13 @@ export default function Docs({ slug, locale, mdxSource, headings }) {
             maxWidth="272px"
             minWidth="272px"
             boxSizing="content-box"
-            padding="4px 26px 0 0"
+            paddingRight="26px"
           >
-            <Toc headings={headings} />
+            <Toc
+              allDocs={allDocs}
+              slug={slug}
+              headings={headings}
+            />
           </Box>
         }
 
@@ -449,7 +499,6 @@ export default function Docs({ slug, locale, mdxSource, headings }) {
           width="100%"
           display="flex"
           flexDirection="column"
-          gap="24px"
         >
           <MDXRemote {...mdxSource} components={mdxComponents} />
         </Box>

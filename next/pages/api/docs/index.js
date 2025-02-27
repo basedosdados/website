@@ -40,14 +40,8 @@ export async function getAllDocs(locale = 'pt') {
     posts.sort((a, b) => {
       const orderA = a.frontmatter?.order ?? Number.MAX_SAFE_INTEGER;
       const orderB = b.frontmatter?.order ?? Number.MAX_SAFE_INTEGER;
-
-      if (orderA !== orderB) {
-        return orderA - orderB;
-      }
-
-      const dateA = new Date(a.frontmatter.date.created);
-      const dateB = new Date(b.frontmatter.date.created);
-      return dateB - dateA;
+    
+      return orderA - orderB;
     });
 
     return posts;
@@ -116,7 +110,7 @@ const rehypeExtractHeadings =
     );
   };
 
-export async function serializeDocs(content) {
+export async function serializeDoc(content) {
   const headings = [];
   const mdxSource = await serialize(content, {
     parseFrontmatter: true,

@@ -1,5 +1,6 @@
 ---
 title: Home
+category: Docs
 order: 0
 ---
 
