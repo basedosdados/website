@@ -56,7 +56,6 @@ const rehypeExtractHeadings =
         if (node?.properties?.id) {
           headings.push({
             title: toString(node),
-            level: Number(node.tagName.replace("h", "")) - 2,
             id: node.properties?.id?.toString() ?? null,
           });
         }

@@ -16,18 +16,79 @@ import {
   HStack,
   Divider,
 } from "@chakra-ui/react";
+import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
 import { useTranslation } from 'next-i18next';
-import Button from "../atoms/Button";
-import TitleText from "../atoms/Text/TitleText";
-import LabelText from "../atoms/Text/LabelText";
-import BodyText from "../atoms/Text/BodyText";
-import Link from "../atoms/Link";
-import InfoIcon from "../../public/img/icons/infoIcon";
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { MainPageTemplate } from "../../components/templates/main";
+import TitleText from "../../components/atoms/Text/TitleText";
+import LabelText from "../../components/atoms/Text/LabelText";
+import BodyText from "../../components/atoms/Text/BodyText";
+import Button from "../../components/atoms/Button";
+import Link from "../../components/atoms/Link";
 
-function Toc({ headings }) {
-  const { t } = useTranslation('dataset');
+import {
+  getAllDocs,
+  getDocsBySlug,
+  serializeDocs
+} from "../api/docs";
+
+
+import hljs from "highlight.js/lib/core";
+import sqlHighlight from "highlight.js/lib/languages/sql";
+import pythonHighlight from "highlight.js/lib/languages/python";
+import rHighlight from "highlight.js/lib/languages/r";
+import bashHighlight from "highlight.js/lib/languages/bash";
+import stataHighlight from "highlight.js/lib/languages/stata";
+import markdownHighlight from "highlight.js/lib/languages/markdown";
+
+import "highlight.js/styles/obsidian.css";
+
+hljs.registerLanguage("sql", sqlHighlight);
+hljs.registerLanguage("python", pythonHighlight);
+hljs.registerLanguage("r", rHighlight);
+hljs.registerLanguage("bash", bashHighlight);
+hljs.registerLanguage("sh", bashHighlight);
+hljs.registerLanguage("stata", stataHighlight);
+hljs.registerLanguage("markdown", markdownHighlight);
+hljs.registerLanguage("md", markdownHighlight);
+
+export async function getStaticProps({ params, locale }) {
+  const { slug } = params;
+
+  const content = await getDocsBySlug(slug || "home", locale);
+
+  if (!content) {
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
+  }
+
+  const serialize = await serializeDocs(content);
+
+  return {
+    props: {
+      slug,
+      locale,
+      ...serialize,
+      ...(await serverSideTranslations(locale, ['common', 'docs', 'menu'])),
+    },
+  };
+}
+
+export async function getStaticPaths() {
+  const allDocs = await getAllDocs();
+  return {
+    paths: allDocs.map(({ slug }) => ({ params: { slug } })),
+    fallback: "blocking"
+  };
+}
+
+function Toc({ title, headings }) {
   const [isOverflow, setIsOverflow] = useState({});
   const textRefs = useRef({});
   const [activeId, setActiveId] = useState(null);
@@ -81,15 +142,16 @@ function Toc({ headings }) {
         paddingLeft="15px"
         marginBottom="8px"
       >
-        {t("tableContents")}
+        {title}
       </LabelText>
 
       <Box>
-        {headings.map(({ id, title }, i) => (
+        {headings.map(({ id, title, level }, i) => (
           <HStack
             key={id}
             spacing="4px"
             cursor="pointer"
+            marginLeft={`${level * 5}%`}
             pointerEvents={id === activeId ? "none" : "default"}
           >
             <Box 
@@ -334,135 +396,64 @@ export const mdxComponents = {
   },
 };
 
-export default function DatasetUserGuide({ data, locale = "pt", slug }) {
-  const { t } = useTranslation('dataset');
-  const [mdxSource] = useState(data?.mdxSource || null)
-  const [hasGuide] = useState(!!data?.mdxSource?.frontmatter?.title)
-
-  const repository = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
-    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
-    if (baseUrl === "https://staging.basedosdados.org") return "staging"
-    if (baseUrl === "https://basedosdados.org") return "main" 
-    return null
-  }
+export default function Docs({ slug, locale, mdxSource, headings }) {
+  const { t } = useTranslation('docs')
+  const { frontmatter } = mdxSource;
 
   return (
-    <Stack
-      paddingTop="32px"
-      spacing={0}
-      flexDirection="row"
-      height="100%"
+    <MainPageTemplate
+      width="100%"
+      maxWidth="1440px"
+      margin="0 auto"
+      paddingX="24px"
     >
-      {data?.headings.length > 0 &&
-        <Box
-          display={{base: "none", md: "flex"}}
-          as="aside"
-          position="sticky"
-          height="100%"
-          top="80px"
-          overflowY="auto"
-          minWidth="272px"
-          maxWidth="272px"
-          boxSizing="content-box"
-          padding="4px 26px 0 0"
-        >
-          <Toc headings={data.headings} />
-        </Box>
-      }
+      <Head>
+        <title>{frontmatter.title} – {t("pageTitle")}</title>
+        <meta
+          property="og:title"
+          content={`${frontmatter.title} – ${t("pageTitle")}`}
+          key="ogtitle"
+        />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:url"
+          content={`https://basedosdados.org/docs/${slug}`}
+        />
+      </Head>
 
       <Box
-        as="section"
-        width="100%"
-        paddingLeft={{base: "0", md: data?.headings.length === 0 ? "0" : "24px"}}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        alignItems="start"
+        paddingTop="70px"
+        maxWidth="100%"
       >
-        {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
-
-        <Box display={hasGuide ? "flex" : "none"} justifyContent="center" id="hotjarSurveyGuiaDeUso" marginTop="40px"/>
+        {headings && headings.length > 0 &&
+          <Box
+            as="aside"
+            position="sticky"
+            height="100%"
+            top="80px"
+            overflowY="auto"
+            maxWidth="272px"
+            minWidth="272px"
+            boxSizing="content-box"
+            padding="4px 26px 0 0"
+          >
+            <Toc headings={headings} />
+          </Box>
+        }
 
         <Box
-          marginTop="40px"
-          borderRadius="16px"
-          border={hasGuide ? "1px solid #DEDFE0" : ""}
-          padding="40px 24px"
+          as="section"
+          width="100%"
+          display="flex"
+          flexDirection="column"
+          gap="24px"
         >
-          <TitleText textAlign="center">{hasGuide ? t("gotAnyQuestionsGuide") : t("notHaveUserGuide")}</TitleText>
-          <TitleText
-            typography="small"
-            textAlign="center"
-            color="#71757A"
-          >{t("contributeToTheUsageGuide")}</TitleText>
-
-          <Box
-            display="flex"
-            flexDirection={{base: "column", lg: "row"}}
-            alignItems="center"
-            justifyContent="center"
-            gap="16px"
-            marginTop="16px"
-          >
-            <Link
-              width={{base: "100%", lg: "fit-content"}}
-              href="/contact"
-              target="_self"
-            >
-              <Button
-                width={{base: "100%", lg: "fit-content"}}
-                justifyContent="center"
-              >
-                {t("sendQuestionUsageGuide")}
-              </Button>
-            </Link>
-
-            <Link
-              width={{base: "100%", lg: "fit-content"}}
-              href={`https://github.com/basedosdados/website/edit/${repository()}/next/content/userGuide/${locale}/${hasGuide ? slug : "README"}.md`}
-              target="_self"
-            >
-              <Button
-                width={{base: "100%", lg: "fit-content"}}
-                justifyContent="center"
-                color="#2B8C4D"
-                border="1px solid #2B8C4D"
-                backgroundColor="#FFFFFF"
-                _hover={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#22703E",
-                  boderColor: "#22703E"
-                }}
-              >
-                {t("makeSuggestionUsageGuide")}
-              </Button>
-            </Link>
-          </Box>
-
-          <BodyText
-            typography="small"
-            display={hasGuide ? "none" : "flex"}
-            marginTop="32px"
-            color="#71757A"
-            justifyContent="center"
-            textAlign="center"
-            flexWrap="wrap"
-          >
-            {t("haveAnyQuestions", { returnObjects: true }).replace(
-              "{{content}}",
-              ""
-            )}
-            <Link
-              href="/faq"
-              color="#0068C5"
-              fontWeight="400"
-              marginLeft="4px"
-              _hover={{
-                color: "#0057A4"
-              }}
-            >
-              {t("pageFaq")}
-            </Link>.
-          </BodyText>
+          <MDXRemote {...mdxSource} components={mdxComponents} />
         </Box>
       </Box>
-    </Stack>
+    </MainPageTemplate>
   )
 }
