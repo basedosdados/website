@@ -1,5 +1,3 @@
 import getAllLicenses from "./getAllLicenses";
 
-export {
-  getAllLicenses
-}
+export { getAllLicenses };

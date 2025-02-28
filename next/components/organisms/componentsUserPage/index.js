@@ -13,5 +13,5 @@ export {
   PlansAndPayment,
   BigQuery,
   Accesses,
-  DataAPI
-}
+  DataAPI,
+};

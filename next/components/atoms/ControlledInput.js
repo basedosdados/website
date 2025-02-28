@@ -3,7 +3,7 @@ import {
   InputGroup,
   InputRightAddon,
   InputRightElement,
-  InputLeftElement
+  InputLeftElement,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
@@ -36,20 +36,20 @@ export function ControlledInput({
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={checkForEnter}
         variant="outline"
-        padding={{base: "24px 48px 24px 20px", lg: "24px 64px 24px 32px"}}
-        height={{base: "50px", lg: "80px"}}
+        padding={{ base: "24px 48px 24px 20px", lg: "24px 64px 24px 32px" }}
+        height={{ base: "50px", lg: "80px" }}
         backgroundColor="#FFFFFF"
-        borderRadius={{base: "18px", lg: "25px"}}
+        borderRadius={{ base: "18px", lg: "25px" }}
         placeholder={placeholder}
         _placeholder={{
-          color: "#717571"
+          color: "#717571",
         }}
         boxShadow="0 1px 8px 1px rgba(64, 60, 67, 0.16) !important"
         border="0"
         fontFamily="Roboto"
         fontWeight="400"
-        fontSize={{base: "16px", lg: "20px"}}
-        lineHeight={{base: "24px", lg: "30px"}}
+        fontSize={{ base: "16px", lg: "20px" }}
+        lineHeight={{ base: "24px", lg: "30px" }}
         color="#252A32"
         {...inputStyle}
       />
@@ -76,16 +76,18 @@ export function DebouncedSimpleControlledInput({
   fill,
   ...props
 }) {
-  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true)
+  const [skipFirstDebounced, setSkipFirstDebounced] = useState(true);
   const [_value, _setValue] = useState(value);
   const [_timeout, _setTimeout] = useState(null);
 
   useEffect(() => {
     clearTimeout(_timeout);
-    _setTimeout(setTimeout(() => {
-      if(!skipFirstDebounced) onChange(_value)
-      setSkipFirstDebounced(false)
-    }, 1000));
+    _setTimeout(
+      setTimeout(() => {
+        if (!skipFirstDebounced) onChange(_value);
+        setSkipFirstDebounced(false);
+      }, 1000),
+    );
   }, [_value]);
 
   useEffect(() => {
@@ -118,11 +120,11 @@ export function DebouncedSimpleControlledInput({
         border="2px solid transparent !important"
         color="#464A51"
         _hover={{
-          border:"2px solid transparent !important",
-          backgroundColor:"#DEDFE0",
+          border: "2px solid transparent !important",
+          backgroundColor: "#DEDFE0",
         }}
         _focus={{
-          border:"2px solid #0068C5 !important",
+          border: "2px solid #0068C5 !important",
           backgroundColor: "#FFF",
         }}
         paddingLeft="52px !important"
@@ -134,7 +136,7 @@ export function DebouncedSimpleControlledInput({
         fontFamily="Roboto"
         fontWeight="400"
         borderRadius="14px"
-        _placeholder={{color: "#464A51", opacity: 1}}
+        _placeholder={{ color: "#464A51", opacity: 1 }}
         {...inputStyle}
       />
     </InputGroup>
@@ -191,11 +193,11 @@ export function ControlledInputSimple({
         border="2px solid transparent !important"
         color="#464A51"
         _hover={{
-          border:"2px solid transparent !important",
-          backgroundColor:"#DEDFE0",
+          border: "2px solid transparent !important",
+          backgroundColor: "#DEDFE0",
         }}
         _focus={{
-          border:"2px solid #0068C5 !important",
+          border: "2px solid #0068C5 !important",
           backgroundColor: "#FFF",
         }}
         paddingLeft="52px !important"
@@ -207,9 +209,9 @@ export function ControlledInputSimple({
         fontFamily="Roboto"
         fontWeight="400"
         borderRadius="14px"
-        _placeholder={{color: "#464A51", opacity: 1}}
+        _placeholder={{ color: "#464A51", opacity: 1 }}
         {...inputStyle}
       />
     </InputGroup>
-  )
+  );
 }

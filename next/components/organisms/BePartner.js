@@ -5,9 +5,9 @@ import {
   Text,
   Center,
   Image,
-  Avatar
+  Avatar,
 } from "@chakra-ui/react";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import TitleText from "../atoms/Text/TitleText";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -47,25 +47,14 @@ function Testimonial({ children, name, position, src }) {
 
       <HStack width="100%" spacing="10px" justifyContent="end">
         <VStack spacing={0} align="flex-end">
-          <LabelText
-            textAlign="right"
-            color="#464A51"
-          >
+          <LabelText textAlign="right" color="#464A51">
             {name}
           </LabelText>
-          <BodyText
-            textAlign="right"
-            color="#464A51"
-          >
+          <BodyText textAlign="right" color="#464A51">
             {position}
           </BodyText>
         </VStack>
-        <Avatar
-          name=""
-          backgroundColor="#FFF"
-          height="75px"
-          src={src} 
-        />
+        <Avatar name="" backgroundColor="#FFF" height="75px" src={src} />
       </HStack>
     </VStack>
   );
@@ -97,7 +86,7 @@ function PartnerBox({ src, ...props }) {
 }
 
 export function BePartner() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
 
   return (
     <VStack margin="auto" spacing="0">
@@ -115,7 +104,7 @@ export function BePartner() {
           textAlign="center"
           color="#71757A"
         >
-          {t('partners.partnershipsWith')}
+          {t("partners.partnershipsWith")}
         </LabelText>
 
         <Stack
@@ -128,21 +117,45 @@ export function BePartner() {
           justifyContent="center"
           flexWrap="wrap"
         >
-          <PartnerBox alt="tesouro nacional" src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png" />
-          <PartnerBox alt="ipea" src="https://storage.googleapis.com/basedosdados-website/logos/2022/ipea.png" />
-          <PartnerBox alt="alziras" src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png" />
-          <PartnerBox alt="fiquem sabendo" src="https://storage.googleapis.com/basedosdados-website/logos/2022/fiquem_sabendo.png" />
-          <PartnerBox alt="bg lemann" src="https://storage.googleapis.com/basedosdados-website/logos/2022/bg__lemann.png" />
-          <PartnerBox alt="rio" src="https://storage.googleapis.com/basedosdados-website/logos/2022/rio.png" />
-          <PartnerBox alt="governosp" src="https://storage.googleapis.com/basedosdados-website/logos/2022/governosp.png" />
-          <PartnerBox alt="aponte" src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png" />
+          <PartnerBox
+            alt="tesouro nacional"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
+          />
+          <PartnerBox
+            alt="ipea"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/ipea.png"
+          />
+          <PartnerBox
+            alt="alziras"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
+          />
+          <PartnerBox
+            alt="fiquem sabendo"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/fiquem_sabendo.png"
+          />
+          <PartnerBox
+            alt="bg lemann"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/bg__lemann.png"
+          />
+          <PartnerBox
+            alt="rio"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/rio.png"
+          />
+          <PartnerBox
+            alt="governosp"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/governosp.png"
+          />
+          <PartnerBox
+            alt="aponte"
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
+          />
         </Stack>
       </Stack>
 
       <Center
-        display={{base : "none", lg: "flex"}}
+        display={{ base: "none", lg: "flex" }}
         width="100%"
-        maxWidth="1440px" 
+        maxWidth="1440px"
       >
         <Carousel
           settings={{
@@ -150,32 +163,32 @@ export function BePartner() {
             autoplay: true,
             pagination: {
               clickable: true,
-            }
+            },
           }}
         >
-            <Testimonial
-              name={t('partners.testimonials.fernando.name')}
-              position={t('partners.testimonials.fernando.position')}
-              src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
-            >
-              {t('partners.testimonials.fernando.quote')}
-            </Testimonial>
+          <Testimonial
+            name={t("partners.testimonials.fernando.name")}
+            position={t("partners.testimonials.fernando.position")}
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"
+          >
+            {t("partners.testimonials.fernando.quote")}
+          </Testimonial>
 
-            <Testimonial
-              name={t('partners.testimonials.marina.name')}
-              position={t('partners.testimonials.marina.position')}
-              src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
-            >
-              {t('partners.testimonials.marina.quote')}
-            </Testimonial>
+          <Testimonial
+            name={t("partners.testimonials.marina.name")}
+            position={t("partners.testimonials.marina.position")}
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"
+          >
+            {t("partners.testimonials.marina.quote")}
+          </Testimonial>
 
-            <Testimonial
-              name={t('partners.testimonials.amanda.name')}
-              position={t('partners.testimonials.amanda.position')}
-              src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
-            >
-              {t('partners.testimonials.amanda.quote')}
-            </Testimonial>
+          <Testimonial
+            name={t("partners.testimonials.amanda.name")}
+            position={t("partners.testimonials.amanda.position")}
+            src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"
+          >
+            {t("partners.testimonials.amanda.quote")}
+          </Testimonial>
         </Carousel>
       </Center>
     </VStack>

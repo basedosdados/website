@@ -10,11 +10,12 @@ import { toString } from "hast-util-to-string";
 
 const root = process.cwd();
 
-export async function getAllPosts(locale = 'pt') {
-  const blogpostsDir = path.join(root, `blog/${locale}`)
+export async function getAllPosts(locale = "pt") {
+  const blogpostsDir = path.join(root, `blog/${locale}`);
   const isDevelopment =
-  process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === 'http://localhost:3000' ||
-  process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === 'https://development.basedosdados.org';
+    process.env.NEXT_PUBLIC_BASE_URL_FRONTEND === "http://localhost:3000" ||
+    process.env.NEXT_PUBLIC_BASE_URL_FRONTEND ===
+      "https://development.basedosdados.org";
 
   try {
     const postsDir = await fs.readdir(blogpostsDir, "utf-8");
@@ -33,9 +34,9 @@ export async function getAllPosts(locale = 'pt') {
             };
           }
           return null;
-        })
+        }),
       )
-    ).filter(Boolean); 
+    ).filter(Boolean);
 
     posts.sort((a, b) => {
       const orderA = a.frontmatter?.order ?? Number.MAX_SAFE_INTEGER;
@@ -53,13 +54,13 @@ export async function getAllPosts(locale = 'pt') {
     return posts;
   } catch (error) {
     console.error("Error reading posts:", error);
-    return []
+    return [];
   }
 }
 
-export async function getPostBySlug(slug, locale = 'pt') {
+export async function getPostBySlug(slug, locale = "pt") {
   try {
-    const blogpostsDir = path.join(root, `blog/${locale}`)
+    const blogpostsDir = path.join(root, `blog/${locale}`);
     const filepath = path.join(blogpostsDir, `${slug}.md`);
     return await fs.readFile(filepath, "utf-8");
   } catch (error) {

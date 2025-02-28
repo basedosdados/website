@@ -5,17 +5,17 @@ export function useCheckMobile() {
   if (typeof navigator === "undefined")
     return useMediaQuery("(max-width: 1024px)")[0];
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  )
+    navigator.userAgent,
+  );
 }
 
 export function isMobileMod() {
-  const [isMobileMod, setIsMobileMod] = useState(false)
-  const isMobile = useCheckMobile()
+  const [isMobileMod, setIsMobileMod] = useState(false);
+  const isMobile = useCheckMobile();
 
   useEffect(() => {
-    setIsMobileMod(isMobile)
-  }, [isMobile])
+    setIsMobileMod(isMobile);
+  }, [isMobile]);
 
-  return isMobileMod
+  return isMobileMod;
 }

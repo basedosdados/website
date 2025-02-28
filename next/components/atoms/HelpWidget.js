@@ -1,18 +1,18 @@
-import React from 'react';
+import React from "react";
 import {
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   MenuDivider,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
-import HelpIcon from "../../public/img/icons/helpIcon"
+import HelpIcon from "../../public/img/icons/helpIcon";
 
-export default function HelpWidget({options, tooltip}) {
+export default function HelpWidget({ options, tooltip }) {
   const optionsRender = (options) => {
     return options.map((option, i) => {
-      if(option.name){ 
+      if (option.name) {
         const menuItemProps = {
           key: i,
           letterSpacing: "0.1px",
@@ -23,8 +23,8 @@ export default function HelpWidget({options, tooltip}) {
           color: "#252A32",
           backgroundColor: "#FFF",
           padding: "0 16px 10px",
-          _focus: {backgroundColor: "transparent"},
-          _hover: {backgroundColor: "transparent", opacity: "0.7"},
+          _focus: { backgroundColor: "transparent" },
+          _hover: { backgroundColor: "transparent", opacity: "0.7" },
         };
 
         if (option.url) {
@@ -47,13 +47,13 @@ export default function HelpWidget({options, tooltip}) {
                   fontSize: "12px",
                   fontFamily: "Roboto",
                   color: "#252A32",
-                }
+                },
               })}
             </MenuItem>
           );
         }
-      } else { 
-        return <MenuDivider key={i} margin="0 0 14px"/>; 
+      } else {
+        return <MenuDivider key={i} margin="0 0 14px" />;
       }
     });
   };
@@ -62,7 +62,7 @@ export default function HelpWidget({options, tooltip}) {
     <Menu>
       {({ isOpen }) => (
         <>
-          <Tooltip 
+          <Tooltip
             backgroundColor="#FFF"
             borderRadius="8px"
             letterSpacing="0.1px"
@@ -97,7 +97,9 @@ export default function HelpWidget({options, tooltip}) {
           </Tooltip>
           <MenuList
             boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
-            _focus={{boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important"}}
+            _focus={{
+              boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important",
+            }}
             padding="16px 0 6px"
             borderRadius="8px"
             zIndex="11"
@@ -108,5 +110,5 @@ export default function HelpWidget({options, tooltip}) {
         </>
       )}
     </Menu>
-  )
+  );
 }

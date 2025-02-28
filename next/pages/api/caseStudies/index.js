@@ -9,38 +9,38 @@ import { visit } from "unist-util-visit";
 
 const root = process.cwd();
 
-export async function getAllCaseStudies(locale = 'pt') {
+export async function getAllCaseStudies(locale = "pt") {
   const caseStudiesDirRoot = path.join(root, `content/caseStudies/${locale}`);
   try {
     const caseStudiesDir = await fs.readdir(caseStudiesDirRoot, "utf-8");
-  
+
     const caseStudies = await Promise.all(
       caseStudiesDir.map(async (file) => {
         const fullpath = path.join(caseStudiesDirRoot, file);
         const content = await fs.readFile(fullpath, "utf-8");
-  
+
         const { data: metadata, content: caseStudiesContent } = matter(content);
-  
+
         return {
           ...metadata,
           content: caseStudiesContent,
         };
       }),
     );
-  
+
     return caseStudies;
   } catch (error) {
-    return []
+    return [];
   }
 }
 
-export async function getCaseStudiesById(id, locale = 'pt') {
+export async function getCaseStudiesById(id, locale = "pt") {
   try {
     const caseStudiesDirRoot = path.join(root, `content/caseStudies/${locale}`);
     const filepath = path.join(caseStudiesDirRoot, `${id}.md`);
     return await fs.readFile(filepath, "utf-8");
   } catch (error) {
-    return null
+    return null;
   }
 }
 

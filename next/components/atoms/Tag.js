@@ -1,6 +1,6 @@
 import { Tag, TagLabel, TagCloseButton } from "@chakra-ui/react";
 
-export function TagFilter({text, handleClick}) {
+export function TagFilter({ text, handleClick }) {
   return (
     <Tag
       minWidth="fit-content"
@@ -19,12 +19,12 @@ export function TagFilter({text, handleClick}) {
       <TagCloseButton
         opacity={1}
         _focus={{
-          outline: 'none',
-          boxShadow: '0 0 0 2px rgba(0, 0, 0, 0.2)'
+          outline: "none",
+          boxShadow: "0 0 0 2px rgba(0, 0, 0, 0.2)",
         }}
         color="#464A51"
         onClick={() => handleClick()}
       />
     </Tag>
-  )
+  );
 }

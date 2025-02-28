@@ -1,33 +1,27 @@
 import React, { useRef, useState } from "react";
-import {
-  Box,
-  Menu,
-  MenuButton,
-  MenuList,
-  Button
-} from "@chakra-ui/react"
-import ChevronIcon from "../../public/img/icons/chevronIcon"
+import { Box, Menu, MenuButton, MenuList, Button } from "@chakra-ui/react";
+import ChevronIcon from "../../public/img/icons/chevronIcon";
 
 export default function MenuDropdown({ title, children, ...style }) {
   const timerRef = useRef();
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   const btnMouseEnterEvent = () => {
-    setIsOpenMenu(true)
-  }
+    setIsOpenMenu(true);
+  };
   const btnMouseLeaveEvent = () => {
     timerRef.current = setTimeout(() => {
-      setIsOpenMenu(false)
-    }, 100)
-  }
+      setIsOpenMenu(false);
+    }, 100);
+  };
   const menuListMouseEnterEvent = () => {
-    clearTimeout(timerRef.current)
-    timerRef.current = undefined
-    setIsOpenMenu(true)
-  }
+    clearTimeout(timerRef.current);
+    timerRef.current = undefined;
+    setIsOpenMenu(true);
+  };
   const menuListMouseLeaveEvent = () => {
-    setIsOpenMenu(false)
-  }
+    setIsOpenMenu(false);
+  };
 
   return (
     <Menu isOpen={isOpenMenu}>
@@ -52,7 +46,7 @@ export default function MenuDropdown({ title, children, ...style }) {
             marginLeft="6px"
             transform={"rotate(90deg)"}
           />
-        </Box> 
+        </Box>
       </MenuButton>
 
       <MenuList
@@ -65,5 +59,5 @@ export default function MenuDropdown({ title, children, ...style }) {
         {children}
       </MenuList>
     </Menu>
-  )
+  );
 }

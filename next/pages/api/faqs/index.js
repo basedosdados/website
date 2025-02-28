@@ -4,7 +4,7 @@ import matter from "gray-matter";
 
 const root = process.cwd();
 
-export async function getAllFAQs(locale = 'pt') {
+export async function getAllFAQs(locale = "pt") {
   const faqsDirRoot = path.join(root, `content/FAQ/${locale}`);
   try {
     const faqsDir = await fs.readdir(faqsDirRoot, "utf-8");
@@ -25,6 +25,6 @@ export async function getAllFAQs(locale = 'pt') {
 
     return faqs;
   } catch (error) {
-    return []
+    return [];
   }
 }

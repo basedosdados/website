@@ -7,7 +7,7 @@ import {
   Tooltip,
   useClipboard,
   Link,
-  Button
+  Button,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -18,13 +18,13 @@ import { CopySolidIcon } from "../../../public/img/icons/copyIcon";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 
 export default function DataAPI({ userInfo }) {
-  const { t } = useTranslation('user');
+  const { t } = useTranslation("user");
   const [apiKeys, setApiKeys] = useState([]);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
   useEffect(() => {
     if (userInfo?.keys?.edges) {
-      setApiKeys(userInfo.keys.edges.map(edge => edge.node));
+      setApiKeys(userInfo.keys.edges.map((edge) => edge.node));
     }
   }, [userInfo]);
 
@@ -40,32 +40,32 @@ export default function DataAPI({ userInfo }) {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+    return date.toISOString().split("T")[0];
   };
 
   return (
     <Stack spacing={6}>
-        <Box
-          p={4}
-          mb={4}
-          bg="yellow.100"
-          borderRadius="md"
-          borderLeft="4px solid"
-          borderColor="yellow.400"
-        >
-          <BodyText typography="small" fontWeight="bold" marginBottom={2}>
-            {t('dataAPI.earlyRelease')} 🚧
-          </BodyText>
-          <BodyText typography="small">
-            {t('dataAPI.earlyReleaseDescription')}
-          </BodyText>
-        </Box>
+      <Box
+        p={4}
+        mb={4}
+        bg="yellow.100"
+        borderRadius="md"
+        borderLeft="4px solid"
+        borderColor="yellow.400"
+      >
+        <BodyText typography="small" fontWeight="bold" marginBottom={2}>
+          {t("dataAPI.earlyRelease")} 🚧
+        </BodyText>
+        <BodyText typography="small">
+          {t("dataAPI.earlyReleaseDescription")}
+        </BodyText>
+      </Box>
       <Box>
         <TitleText typography="small" marginBottom={4}>
-          {t('dataAPI.keys')}
+          {t("dataAPI.keys")}
         </TitleText>
         <BodyText typography="small" color="#464A51">
-          {t('dataAPI.description')}
+          {t("dataAPI.description")}
         </BodyText>
       </Box>
 
@@ -82,7 +82,7 @@ export default function DataAPI({ userInfo }) {
               <Stack direction="row" alignItems="center">
                 <Stack direction="row" alignItems="center" spacing={2}>
                   <BodyText fontWeight="500">
-                    {t('dataAPI.prefix')}: {key.prefix}
+                    {t("dataAPI.prefix")}: {key.prefix}
                   </BodyText>
                   {key.name && (
                     <>
@@ -90,7 +90,7 @@ export default function DataAPI({ userInfo }) {
                         |
                       </BodyText>
                       <BodyText fontWeight="500">
-                        {t('dataAPI.name')}: {key.name}
+                        {t("dataAPI.name")}: {key.name}
                       </BodyText>
                     </>
                   )}
@@ -111,7 +111,7 @@ export default function DataAPI({ userInfo }) {
                     borderRadius="4px"
                     px={2}
                   >
-                    {key.isActive ? t('dataAPI.active') : t('dataAPI.inactive')}
+                    {key.isActive ? t("dataAPI.active") : t("dataAPI.inactive")}
                   </Badge>
                   {key.isActive && (
                     <Button
@@ -122,11 +122,11 @@ export default function DataAPI({ userInfo }) {
                       _hover={{
                         backgroundColor: "#FFF",
                         color: "#22703E",
-                        borderColor: "#22703E"
+                        borderColor: "#22703E",
                       }}
-                      onClick={() => window.open('', '_blank')}
+                      onClick={() => window.open("", "_blank")}
                     >
-                      {t('dataAPI.addCredits')}
+                      {t("dataAPI.addCredits")}
                     </Button>
                   )}
                 </Stack>
@@ -135,15 +135,15 @@ export default function DataAPI({ userInfo }) {
               <Grid templateColumns="repeat(3, 1fr)" gap={4}>
                 <Box>
                   <BodyText color="#71757A" typography="small">
-                    {t('dataAPI.balance')}
+                    {t("dataAPI.balance")}
                   </BodyText>
                   <BodyText typography="small">
-                    {key.balance || 0} {t('dataAPI.reais')}
+                    {key.balance || 0} {t("dataAPI.reais")}
                   </BodyText>
                 </Box>
                 <Box>
                   <BodyText color="#71757A" typography="small">
-                    {t('dataAPI.created')}
+                    {t("dataAPI.created")}
                   </BodyText>
                   <BodyText typography="small">
                     {formatDate(key.createdAt)}
@@ -151,10 +151,12 @@ export default function DataAPI({ userInfo }) {
                 </Box>
                 <Box>
                   <BodyText color="#71757A" typography="small">
-                    {t('dataAPI.expires')}
+                    {t("dataAPI.expires")}
                   </BodyText>
                   <BodyText typography="small">
-                    {key.expiresAt ? formatDate(key.expiresAt) : t('dataAPI.never')}
+                    {key.expiresAt
+                      ? formatDate(key.expiresAt)
+                      : t("dataAPI.never")}
                   </BodyText>
                 </Box>
               </Grid>
@@ -165,7 +167,7 @@ export default function DataAPI({ userInfo }) {
 
       <Box borderTop="1px solid #DEDFE0" paddingTop={6}>
         <BodyText typography="small" color="#464A51">
-          {t('dataAPI.needMoreKeys')} {' '}
+          {t("dataAPI.needMoreKeys")}{" "}
           <Link
             display="inline"
             fontWeight="500"
@@ -175,11 +177,11 @@ export default function DataAPI({ userInfo }) {
             }}
             href="/contact"
           >
-            {t('dataAPI.contactUs')}
-          </Link>
-          {' '}{t('dataAPI.weWillHelpYou')}
+            {t("dataAPI.contactUs")}
+          </Link>{" "}
+          {t("dataAPI.weWillHelpYou")}
         </BodyText>
       </Box>
     </Stack>
   );
-} 
+}

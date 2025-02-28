@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 async function getUser(id, token) {
   try {
@@ -8,7 +8,7 @@ async function getUser(id, token) {
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       data: {
         query: `
@@ -74,27 +74,27 @@ async function getUser(id, token) {
               }
             }
           }
-        `
-      }
-    })
-    const data = res.data
-    return data
+        `,
+      },
+    });
+    const data = res.data;
+    return data;
   } catch (error) {
-    console.error(error)
-    return "err"
+    console.error(error);
+    return "err";
   }
 }
 
 export default async function handler(req, res) {
   const token = () => {
-    if(req.query.q) return atob(req.query.q)
-    return req.cookies.token
-  }
+    if (req.query.q) return atob(req.query.q);
+    return req.cookies.token;
+  };
 
-  const result = await getUser(atob(req.query.p), token())
+  const result = await getUser(atob(req.query.p), token());
 
-  if(result.errors) return res.status(500).json({error: result.errors})
-  if(result === "err") return res.status(500).json({error: "err"})
+  if (result.errors) return res.status(500).json({ error: result.errors });
+  if (result === "err") return res.status(500).json({ error: "err" });
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node);
 }

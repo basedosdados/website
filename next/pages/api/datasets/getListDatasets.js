@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 export async function getListDatasets() {
   try {
@@ -21,20 +21,25 @@ export async function getListDatasets() {
             }
           }
         }
-        `
+        `,
       },
-      variables: null
-    })
+      variables: null,
+    });
 
     const data = res?.data?.data?.allDataset?.edges
       .map((res) => res?.node)
-      .filter((node) => node && node.status?.slug !== "under_review" && node.status?.slug !== "excluded")
+      .filter(
+        (node) =>
+          node &&
+          node.status?.slug !== "under_review" &&
+          node.status?.slug !== "excluded",
+      )
       .map((node) => node._id);
 
-    return data
+    return data;
   } catch (error) {
-    console.error("Error fetching datasets:", error)
-    return []
+    console.error("Error fetching datasets:", error);
+    return [];
   }
 }
 

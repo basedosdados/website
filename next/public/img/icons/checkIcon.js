@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const CheckIcon = createIcon({
   displayName: "check",
@@ -8,7 +8,7 @@ const CheckIcon = createIcon({
       fill="current-color"
       d="M9.78989 17.341L5.01496 12.5661C4.72809 12.2792 4.72809 11.8141 5.01496 11.5272L6.05382 10.4883C6.34069 10.2014 6.80584 10.2014 7.09271 10.4883L10.3093 13.7049L17.199 6.81525C17.4859 6.52838 17.951 6.52838 18.2379 6.81525L19.2767 7.85414C19.5636 8.14101 19.5636 8.60613 19.2767 8.89303L10.8288 17.341C10.5419 17.6279 10.0768 17.6279 9.78989 17.341Z"
     />
-  )
-})
+  ),
+});
 
-export default CheckIcon
+export default CheckIcon;

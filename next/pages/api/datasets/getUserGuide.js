@@ -9,9 +9,9 @@ import { toString } from "hast-util-to-string";
 
 const root = process.cwd();
 
-export async function getUserGuide(slug, locale = 'pt') {
+export async function getUserGuide(slug, locale = "pt") {
   try {
-    const userGuideDir = path.join(root, `content/userGuide/${locale}`)
+    const userGuideDir = path.join(root, `content/userGuide/${locale}`);
     const filepath = path.join(userGuideDir, `${slug}.md`);
     return await fs.readFile(filepath, "utf-8");
   } catch (error) {
@@ -60,7 +60,7 @@ const rehypeExtractHeadings =
             id: node.properties?.id?.toString() ?? null,
           });
         }
-      }
+      },
     );
   };
 

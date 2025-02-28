@@ -12,7 +12,7 @@ import {
   Stack,
   useDisclosure,
   ModalCloseButton,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import hljs from "highlight.js/lib/core";
@@ -20,8 +20,8 @@ import sqlHighlight from "highlight.js/lib/languages/sql";
 import pythonHighlight from "highlight.js/lib/languages/python";
 import rHighlight from "highlight.js/lib/languages/r";
 import cookies from "js-cookie";
-import 'highlight.js/styles/obsidian.css'
-import { useTranslation } from 'next-i18next';
+import "highlight.js/styles/obsidian.css";
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 
 import TitleText from "../atoms/Text/TitleText";
@@ -33,13 +33,10 @@ import Toggle from "../atoms/Toggle";
 import TableColumns from "./TableColumns";
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
-import { AlertDiscalimerBox} from "./DisclaimerBox";
+import { AlertDiscalimerBox } from "./DisclaimerBox";
 import { triggerGAEvent, formatBytes } from "../../utils";
 
-import {
-  getBigTableQuery
-} from "../../pages/api/tables"
-
+import { getBigTableQuery } from "../../pages/api/tables";
 
 import { CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
@@ -49,32 +46,32 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 import Link from "../atoms/Link";
 
 export function CodeHighlight({ language, children }) {
-  const { t } = useTranslation('dataset');
-  const textRef = useRef(null)
-  const [isOverflowing, setIsOverflowing] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(true)
+  const { t } = useTranslation("dataset");
+  const textRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
-  const [highlightedCode, setHighlightedCode] = useState("")
-  const { hasCopied, onCopy } = useClipboard(children)
+  const [highlightedCode, setHighlightedCode] = useState("");
+  const { hasCopied, onCopy } = useClipboard(children);
 
   useEffect(() => {
-    if(language === "sql") hljs.registerLanguage("sql", sqlHighlight)
-    if(language === "python") hljs.registerLanguage("python", pythonHighlight)
-    if(language === "r") hljs.registerLanguage("r", rHighlight)
+    if (language === "sql") hljs.registerLanguage("sql", sqlHighlight);
+    if (language === "python") hljs.registerLanguage("python", pythonHighlight);
+    if (language === "r") hljs.registerLanguage("r", rHighlight);
 
-    const highlighted = hljs.highlight(children, { language:language }).value
-    setHighlightedCode(highlighted)
-  }, [children, language])
+    const highlighted = hljs.highlight(children, { language: language }).value;
+    setHighlightedCode(highlighted);
+  }, [children, language]);
 
   useEffect(() => {
     if (textRef.current) {
-      setIsOverflowing(false)
-      setIsExpanded(true)
-      const { clientHeight } = textRef.current
-      setIsOverflowing(clientHeight > 190)
-      if(clientHeight > 190) setIsExpanded(false)
+      setIsOverflowing(false);
+      setIsExpanded(true);
+      const { clientHeight } = textRef.current;
+      setIsOverflowing(clientHeight > 190);
+      if (clientHeight > 190) setIsExpanded(false);
     }
-  }, [highlightedCode])
+  }, [highlightedCode]);
 
   return (
     <Box
@@ -117,26 +114,26 @@ export function CodeHighlight({ language, children }) {
           color="#878A8E"
           fill="#878A8E"
           _hover={{
-            fill:"#9D9FA3",
-            color:"#9D9FA3",
+            fill: "#9D9FA3",
+            color: "#9D9FA3",
           }}
         >
-          {hasCopied ? t('table.copied') : t('table.copy')}
-          {hasCopied ? 
+          {hasCopied ? t("table.copied") : t("table.copy")}
+          {hasCopied ? (
             <CheckIcon
               alt="copied"
               width="24px"
               height="24px"
               marginLeft="5px"
             />
-          :
+          ) : (
             <CopySolidIcon
               alt="copy"
               width="24px"
               height="24px"
               marginLeft="5px"
             />
-          }
+          )}
         </Box>
       </Box>
 
@@ -154,8 +151,8 @@ export function CodeHighlight({ language, children }) {
           fill="#878A8E"
           color="#878A8E"
           _hover={{
-            fill:"#9D9FA3",
-            color:"#9D9FA3"
+            fill: "#9D9FA3",
+            color: "#9D9FA3",
           }}
         >
           <ChevronIcon
@@ -164,50 +161,49 @@ export function CodeHighlight({ language, children }) {
             height="24px"
             transform={isExpanded ? "rotate(-90deg)" : "rotate(90deg)"}
           />
-          <LabelText
-            typography="x-small"
-          >
-            {isExpanded ? t('table.collapse') : t('table.expand')}
+          <LabelText typography="x-small">
+            {isExpanded ? t("table.collapse") : t("table.expand")}
           </LabelText>
         </Box>
       )}
     </Box>
-  )
+  );
 }
 
 export default function DataInformationQuery({ resource }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
   const { locale } = useRouter();
-  const [tabAccessIndex, setTabAccessIndex] = useState(0)
-  const [tabIndex, setTabIndex] = useState(0)
-  const [downloadPermitted, setDownloadPermitted] = useState(false)
-  const [downloadWarning, setDownloadWarning] = useState("")
-  const [checkedColumns, setCheckedColumns] = useState([])
-  const [numberColumns, setNumberColumns] = useState(0)
-  const [sqlCode, setSqlCode] = useState("")
-  const [insufficientChecks, setInsufficientChecks] = useState(false)
-  const [includeTranslation, setIncludeTranslation] = useState(true)
-  const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
-  const [isLoadingCode, setIsLoadingCode] = useState(false)
-  const [isLoadingSpin, setIsLoadingSpin] = useState(false)
-  const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
-  const plansModal = useDisclosure()
+  const [tabAccessIndex, setTabAccessIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [downloadPermitted, setDownloadPermitted] = useState(false);
+  const [downloadWarning, setDownloadWarning] = useState("");
+  const [checkedColumns, setCheckedColumns] = useState([]);
+  const [numberColumns, setNumberColumns] = useState(0);
+  const [sqlCode, setSqlCode] = useState("");
+  const [insufficientChecks, setInsufficientChecks] = useState(false);
+  const [includeTranslation, setIncludeTranslation] = useState(true);
+  const [hasLoadingColumns, setHasLoadingColumns] = useState(true);
+  const [isLoadingCode, setIsLoadingCode] = useState(false);
+  const [isLoadingSpin, setIsLoadingSpin] = useState(false);
+  const [hasLoadingResponse, setHasLoadingResponse] = useState(false);
+  const plansModal = useDisclosure();
 
-  const [gcpProjectID, setGcpProjectID] = useState("")
-  const [gcpDatasetID, setGcpDatasetID] = useState("")
-  const [gcpTableId, setGcpTableId] = useState("")
+  const [gcpProjectID, setGcpProjectID] = useState("");
+  const [gcpDatasetID, setGcpDatasetID] = useState("");
+  const [gcpTableId, setGcpTableId] = useState("");
 
   const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    let user;
+    if (cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
-  }
+    if (user?.isSubscriber) return user?.isSubscriber;
+    return false;
+  };
 
   useEffect(() => {
-    if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
-  }, [resource.dataset])
+    if (resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd")
+      setIncludeTranslation(false);
+  }, [resource.dataset]);
 
   useEffect(() => {
     if (resource?.uncompressedFileSize) {
@@ -215,92 +211,99 @@ export default function DataInformationQuery({ resource }) {
       const limit1GB = 1 * 1024 * 1024 * 1024;
 
       if (resource?.uncompressedFileSize < limit100MB) {
-        setDownloadPermitted(true)
-        setDownloadWarning("free")
+        setDownloadPermitted(true);
+        setDownloadWarning("free");
       } else if (resource?.uncompressedFileSize < limit1GB) {
-        setDownloadPermitted(isUserPro())
-        setDownloadWarning("100mbBetween1gb")
+        setDownloadPermitted(isUserPro());
+        setDownloadWarning("100mbBetween1gb");
       } else {
-        setDownloadWarning("biggest1gb")
+        setDownloadWarning("biggest1gb");
       }
     }
 
     if (resource?.cloudTables?.[0]) {
-      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
-      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
-      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
+      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "");
+      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "");
+      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "");
     }
-  }, [resource.uncompressedFileSize, resource.cloudTables])
+  }, [resource.uncompressedFileSize, resource.cloudTables]);
 
   useEffect(() => {
-    if(resource._id === undefined) return
-    setIsLoadingCode(true)
-    setHasLoadingResponse(false)
-    setSqlCode("")
-    setInsufficientChecks(false)
-  }, [resource._id, checkedColumns, includeTranslation])
+    if (resource._id === undefined) return;
+    setIsLoadingCode(true);
+    setHasLoadingResponse(false);
+    setSqlCode("");
+    setInsufficientChecks(false);
+  }, [resource._id, checkedColumns, includeTranslation]);
 
   useEffect(() => {
-    if(hasLoadingResponse === true) {
-      setIsLoadingSpin(true)
-      SqlCodeString()
+    if (hasLoadingResponse === true) {
+      setIsLoadingSpin(true);
+      SqlCodeString();
     }
-  }, [hasLoadingResponse])
+  }, [hasLoadingResponse]);
 
   useEffect(() => {
-    if(sqlCode !== "") scrollFocus() 
-  }, [sqlCode])
+    if (sqlCode !== "") scrollFocus();
+  }, [sqlCode]);
 
   function scrollFocus() {
-    let idTab
+    let idTab;
 
-    if (tabIndex === 0) idTab = "SQL_section"
-    else if (tabIndex === 1) idTab = "python_section"
-    else if (tabIndex === 2) idTab = "r_section"
-    else return
-  
-    const targetElement = document.getElementById(idTab)
-  
+    if (tabIndex === 0) idTab = "SQL_section";
+    else if (tabIndex === 1) idTab = "python_section";
+    else if (tabIndex === 2) idTab = "r_section";
+    else return;
+
+    const targetElement = document.getElementById(idTab);
+
     if (targetElement) {
-      const { top } = targetElement.getBoundingClientRect()
-      const heightScreen = window.innerHeight
-      const positionTarget = top + window.pageYOffset
-  
+      const { top } = targetElement.getBoundingClientRect();
+      const heightScreen = window.innerHeight;
+      const positionTarget = top + window.pageYOffset;
+
       window.scrollTo({
-        top: positionTarget - (heightScreen / 2),
+        top: positionTarget - heightScreen / 2,
         behavior: "smooth",
-      })
+      });
     }
   }
 
   async function SqlCodeString() {
-    const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation)
-    if(result === null) return 
-    setSqlCode(result.trim())
-    setIsLoadingCode(false)
-    setIsLoadingSpin(false)
+    const result = await getBigTableQuery(
+      resource._id,
+      checkedColumns,
+      includeTranslation,
+    );
+    if (result === null) return;
+    setSqlCode(result.trim());
+    setIsLoadingCode(false);
+    setIsLoadingSpin(false);
   }
 
   const handleAccessIndexes = (index) => {
-    const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
-    setTabAccessIndex(index)
-    triggerGAEvent("category_click", categoryValues[index])
-  }
+    const categoryValues = [
+      t("table.bigQueryAndPackages"),
+      t("table.download"),
+    ];
+    setTabAccessIndex(index);
+    triggerGAEvent("category_click", categoryValues[index]);
+  };
 
   const handleCategoryIndexes = (index) => {
-    const categoryValues = ["SQL", "Python", "R"]
-    setTabIndex(index)
-    triggerGAEvent("category_click", categoryValues[index])
-  }
+    const categoryValues = ["SQL", "Python", "R"];
+    setTabIndex(index);
+    triggerGAEvent("category_click", categoryValues[index]);
+  };
 
   const queryLanguage = () => {
     const language = {
-      0 : "SQL",
-      1 : "Python",
-      2 : "R"
-    }
-    return language[tabIndex] ? language[tabIndex] : ""
-  }
+      0: "SQL",
+      1: "Python",
+      2: "R",
+    };
+    return language[tabIndex] ? language[tabIndex] : "";
+  };
 
   return (
     <VStack
@@ -313,26 +316,22 @@ export default function DataInformationQuery({ resource }) {
         isOpen={plansModal.isOpen}
         onClose={plansModal.onClose}
         propsModalContent={{
-          minWidth: "fit-content"
+          minWidth: "fit-content",
         }}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText
-            width="100%"
-            fontWeight="400"
-            textAlign="center"
-          >
-            {t('table.compareThePlans')}
+          <TitleText width="100%" fontWeight="400" textAlign="center">
+            {t("table.compareThePlans")}
           </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+            _hover={{ backgroundColor: "transparent", color: "#0B89E2" }}
           />
         </Stack>
 
-        <SectionPrice/>
+        <SectionPrice />
       </ModalGeneral>
 
       <Tabs
@@ -348,21 +347,12 @@ export default function DataInformationQuery({ resource }) {
           padding="8px 24px 0"
           borderBottom="1px solid #DEDFE0 !important"
         >
-          <GreenTab>{t('table.bigQueryAndPackages')}</GreenTab>
-          <GreenTab>{t('table.download')}</GreenTab>
+          <GreenTab>{t("table.bigQueryAndPackages")}</GreenTab>
+          <GreenTab>{t("table.download")}</GreenTab>
         </TabList>
 
-        <VStack
-          spacing={0}
-          padding="24px"
-          overflow="hidden"
-        >
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="16px"
-          >
+        <VStack spacing={0} padding="24px" overflow="hidden">
+          <Box display="flex" flexDirection="column" width="100%" gap="16px">
             <Skeleton
               startColor="#F0F0F0"
               endColor="#F3F3F3"
@@ -372,7 +362,9 @@ export default function DataInformationQuery({ resource }) {
               isLoaded={!hasLoadingColumns}
             >
               <BodyText typography="small">
-                {tabAccessIndex === 0 ? t('table.selectColumns') : t('table.checkColumns')}
+                {tabAccessIndex === 0
+                  ? t("table.selectColumns")
+                  : t("table.checkColumns")}
               </BodyText>
             </Skeleton>
 
@@ -387,7 +379,12 @@ export default function DataInformationQuery({ resource }) {
             />
 
             <Skeleton
-              display={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" && tabAccessIndex !== 1 ? "flex" : "none"}
+              display={
+                resource?.dataset?._id ===
+                  "e083c9a2-1cee-4342-bedc-535cbad6f3cd" && tabAccessIndex !== 1
+                  ? "flex"
+                  : "none"
+              }
               startColor="#F0F0F0"
               endColor="#F3F3F3"
               borderRadius="6px"
@@ -395,14 +392,46 @@ export default function DataInformationQuery({ resource }) {
               width="100%"
               isLoaded={!hasLoadingColumns}
             >
-              <AlertDiscalimerBox
-                type="info"
-              >
-                {t('table.infoTranslationNotAvailable', { returnObjects: true })[0]}
-                <Link href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Link>
-                {t('table.infoTranslationNotAvailable', { returnObjects: true })[2]}
-                <Link href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Link>
-                {t('table.infoTranslationNotAvailable', { returnObjects: true })[4]}
+              <AlertDiscalimerBox type="info">
+                {
+                  t("table.infoTranslationNotAvailable", {
+                    returnObjects: true,
+                  })[0]
+                }
+                <Link
+                  href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6"
+                  target="_blank"
+                  color="#0068C5"
+                  _hover={{ color: "#0057A4" }}
+                >
+                  {
+                    t("table.infoTranslationNotAvailable", {
+                      returnObjects: true,
+                    })[1]
+                  }
+                </Link>
+                {
+                  t("table.infoTranslationNotAvailable", {
+                    returnObjects: true,
+                  })[2]
+                }
+                <Link
+                  href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056"
+                  target="_blank"
+                  color="#0068C5"
+                  _hover={{ color: "#0057A4" }}
+                >
+                  {
+                    t("table.infoTranslationNotAvailable", {
+                      returnObjects: true,
+                    })[3]
+                  }
+                </Link>
+                {
+                  t("table.infoTranslationNotAvailable", {
+                    returnObjects: true,
+                  })[4]
+                }
               </AlertDiscalimerBox>
             </Skeleton>
 
@@ -428,16 +457,29 @@ export default function DataInformationQuery({ resource }) {
                   flexDirection="row"
                   alignItems="center"
                   gap="16px"
-                  pointerEvents={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? "none" : ""}
+                  pointerEvents={
+                    resource?.dataset?._id ===
+                    "e083c9a2-1cee-4342-bedc-535cbad6f3cd"
+                      ? "none"
+                      : ""
+                  }
                 >
                   <Toggle
-                    defaultChecked={resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd" ? false : true}
+                    defaultChecked={
+                      resource?.dataset?._id ===
+                      "e083c9a2-1cee-4342-bedc-535cbad6f3cd"
+                        ? false
+                        : true
+                    }
                     value={includeTranslation}
                     onChange={() => setIncludeTranslation(!includeTranslation)}
-                  /><Text as="span">{t('table.translateInstitutionalCodes')}</Text>
+                  />
+                  <Text as="span">
+                    {t("table.translateInstitutionalCodes")}
+                  </Text>
                 </BodyText>
                 <Tooltip
-                  label={t('table.translateTooltip')}
+                  label={t("table.translateTooltip")}
                   hasArrow
                   padding="16px"
                   backgroundColor="#252A32"
@@ -463,31 +505,43 @@ export default function DataInformationQuery({ resource }) {
               </Box>
             </Skeleton>
 
-            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="warning"
+            {checkedColumns.length > 0 &&
+              resource.uncompressedFileSize &&
+              resource.uncompressedFileSize / (1024 * 1024 * 1024) > 5 && (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
                 >
-                  {t('table.warningLargeTable', { returnObjects: true })[0]}
-                  <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text as="a" marginRight="4px" href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[3]}
-                  <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
-                </AlertDiscalimerBox>
-              </Skeleton>
-            }
+                  <AlertDiscalimerBox type="warning">
+                    {t("table.warningLargeTable", { returnObjects: true })[0]}
+                    <Text as="span" fontWeight="700">
+                      {formatBytes(resource.uncompressedFileSize)}
+                    </Text>
+                    {t("table.warningLargeTable", { returnObjects: true })[1]}
+                    <Text
+                      as="a"
+                      marginRight="4px"
+                      href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq"
+                      target="_blank"
+                      color="#0068C5"
+                      _hover={{ color: "#0057A4" }}
+                    >
+                      {t("table.warningLargeTable", { returnObjects: true })[2]}
+                    </Text>
+                    {t("table.warningLargeTable", { returnObjects: true })[3]}
+                    <Text as="br" display={{ base: "none", lg: "flex" }} />
+                    {numberColumns === checkedColumns.length &&
+                      t("table.warningLargeTableOptimize")}
+                  </AlertDiscalimerBox>
+                </Skeleton>
+              )}
 
-            {insufficientChecks &&
+            {insufficientChecks && (
               <Skeleton
                 display={tabAccessIndex === 1 ? "none" : ""}
                 startColor="#F0F0F0"
@@ -499,10 +553,10 @@ export default function DataInformationQuery({ resource }) {
               >
                 <AlertDiscalimerBox
                   type="error"
-                  text={t('table.errorInsufficientChecks')}
+                  text={t("table.errorInsufficientChecks")}
                 />
               </Skeleton>
-            }
+            )}
 
             <Skeleton
               display={tabAccessIndex !== 1 ? "flex" : "none"}
@@ -515,12 +569,18 @@ export default function DataInformationQuery({ resource }) {
             >
               <Button
                 onClick={() => {
-                  if(checkedColumns.length === 0) return setInsufficientChecks(true)
-                  triggerGAEvent("gerar_consulta_click", queryLanguage())
-                  setHasLoadingResponse(true)
+                  if (checkedColumns.length === 0)
+                    return setInsufficientChecks(true);
+                  triggerGAEvent("gerar_consulta_click", queryLanguage());
+                  setHasLoadingResponse(true);
                 }}
               >
-                {t('table.generateQuery')} <Spinner display={ isLoadingSpin ? "flex" : "none"} width="16px" height="16px"/>
+                {t("table.generateQuery")}{" "}
+                <Spinner
+                  display={isLoadingSpin ? "flex" : "none"}
+                  width="16px"
+                  height="16px"
+                />
               </Button>
             </Skeleton>
           </Box>
@@ -528,7 +588,7 @@ export default function DataInformationQuery({ resource }) {
           <VStack
             alignItems="flex-start"
             width="100%"
-            display={tabAccessIndex === 1 ? "flex" : "none" }
+            display={tabAccessIndex === 1 ? "flex" : "none"}
           >
             <Stack
               id="download_table"
@@ -539,76 +599,106 @@ export default function DataInformationQuery({ resource }) {
               marginTop="16px"
               padding={0}
             >
-              {isUserPro() === false && downloadWarning === "free" &&
+              {isUserPro() === false && downloadWarning === "free" && (
                 <AlertDiscalimerBox type="info">
-                  {t('table.infoDataAvailability', { returnObjects: true })[0]}
+                  {t("table.infoDataAvailability", { returnObjects: true })[0]}
                   <Link
                     display="inline"
                     target="_blank"
                     href={
-                      locale === "en" ? "https://basedosdados.github.io/sdk/en/colab_data/" :
-                      locale === "es" ? "https://basedosdados.github.io/sdk/es/colab_data/" :
-                      "https://basedosdados.github.io/sdk/colab_data/"
+                      locale === "en"
+                        ? "https://basedosdados.github.io/sdk/en/colab_data/"
+                        : locale === "es"
+                          ? "https://basedosdados.github.io/sdk/es/colab_data/"
+                          : "https://basedosdados.github.io/sdk/colab_data/"
                     }
                     fontWeight="400"
                     color="#0068C5"
-                    _hover={{color: "#0057A4"}}
+                    _hover={{ color: "#0057A4" }}
                   >
-                    {t('table.infoDataAvailability', { returnObjects: true })[1]}
-                  </Link>.
-                </AlertDiscalimerBox>
-              }
-              {isUserPro() === false && downloadWarning === "100mbBetween1gb" &&
-                <AlertDiscalimerBox
-                  type="warning"
-                >
-                  {t('table.warningPaidPlanRequired', { returnObjects: true })[0]}
-                  <Link
-                    display="inline"
-                    target="_blank"
-                    href="/prices"
-                    fontWeight="400"
-                    color="#0068C5"
-                    _hover={{color: "#0057A4"}}
-                  >
-                    {t('table.warningPaidPlanRequired', { returnObjects: true })[1]}
+                    {
+                      t("table.infoDataAvailability", {
+                        returnObjects: true,
+                      })[1]
+                    }
                   </Link>
-                  {t('table.warningPaidPlanRequired', { returnObjects: true })[2]}
+                  .
                 </AlertDiscalimerBox>
-              }
-              {downloadWarning === "biggest1gb" &&
+              )}
+              {isUserPro() === false &&
+                downloadWarning === "100mbBetween1gb" && (
+                  <AlertDiscalimerBox type="warning">
+                    {
+                      t("table.warningPaidPlanRequired", {
+                        returnObjects: true,
+                      })[0]
+                    }
+                    <Link
+                      display="inline"
+                      target="_blank"
+                      href="/prices"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{ color: "#0057A4" }}
+                    >
+                      {
+                        t("table.warningPaidPlanRequired", {
+                          returnObjects: true,
+                        })[1]
+                      }
+                    </Link>
+                    {
+                      t("table.warningPaidPlanRequired", {
+                        returnObjects: true,
+                      })[2]
+                    }
+                  </AlertDiscalimerBox>
+                )}
+              {downloadWarning === "biggest1gb" && (
                 <AlertDiscalimerBox
                   type="error"
-                  text={t('table.errorTableTooLarge')}
+                  text={t("table.errorTableTooLarge")}
                 />
-              }
+              )}
 
               <Button
                 onClick={() => {
-                  if(downloadWarning !== "free" && isUserPro() === false) return plansModal.onOpen()
-                  window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank")
-                  triggerGAEvent("download_da_tabela",`{
-                    gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
+                  if (downloadWarning !== "free" && isUserPro() === false)
+                    return plansModal.onOpen();
+                  window.open(
+                    `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`,
+                    "_blank",
+                  );
+                  triggerGAEvent(
+                    "download_da_tabela",
+                    `{
+                    gcp: ${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId},
                     tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
                     dataset: ${resource?.dataset?._id},
                     table: ${resource?._id},
-                  }`)
+                  }`,
+                  );
                 }}
-                backgroundColor={downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"}
-                cursor={downloadWarning !== "biggest1gb" ? "pointer" : "default"}
-                pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
+                backgroundColor={
+                  downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"
+                }
+                cursor={
+                  downloadWarning !== "biggest1gb" ? "pointer" : "default"
+                }
+                pointerEvents={
+                  downloadWarning !== "biggest1gb" ? "default" : "none"
+                }
               >
-                <DownloadIcon
-                  width="16px"
-                  height="16px"
-                />
-                  {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
+                <DownloadIcon width="16px" height="16px" />
+                {t("table.downloadTable")}{" "}
+                {downloadWarning !== "biggest1gb" &&
+                  `(${formatBytes(resource.uncompressedFileSize)})`}
               </Button>
             </Stack>
           </VStack>
 
           <VStack
-            display={tabAccessIndex === 0 && sqlCode !== "" ? "flex" : "none" }
+            display={tabAccessIndex === 0 && sqlCode !== "" ? "flex" : "none"}
             alignItems="flex-start"
             width="100%"
             border="1px solid #DEDFE0"
@@ -633,11 +723,7 @@ export default function DataInformationQuery({ resource }) {
                 <GreenTab>R</GreenTab>
               </TabList>
 
-              <VStack
-                spacing={0}
-                padding="24px"
-                overflow="hidden"
-              >
+              <VStack spacing={0} padding="24px" overflow="hidden">
                 <TabPanels>
                   <TabPanel
                     id="SQL_section"
@@ -655,7 +741,7 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <BodyText typography="small">
-                        {t('table.bigQueryInstructions')}
+                        {t("table.bigQueryInstructions")}
                       </BodyText>
                     </Skeleton>
 
@@ -668,21 +754,23 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <AlertDiscalimerBox type="info">
-                        {t('table.firstTimeBigQuery')}
+                        {t("table.firstTimeBigQuery")}
                         <Link
                           display="inline"
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_bq/#getting-started" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_bq/#pinitos" :
-                            "https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos"
+                            locale === "en"
+                              ? "https://basedosdados.github.io/sdk/en/access_data_bq/#getting-started"
+                              : locale === "es"
+                                ? "https://basedosdados.github.io/sdk/es/access_data_bq/#pinitos"
+                                : "https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos"
                           }
                           fontWeight="400"
                           color="#0068C5"
-                          _hover={{color: "#0057A4"}}
+                          _hover={{ color: "#0057A4" }}
                         >
-                          {t('table.followStepByStep')}
+                          {t("table.followStepByStep")}
                         </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
@@ -718,11 +806,11 @@ export default function DataInformationQuery({ resource }) {
                           cursor="pointer"
                           color="#2B8C4D"
                           _hover={{
-                            color:"#22703E"
+                            color: "#22703E",
                           }}
                         >
                           <BodyText typography="small">
-                            {t('table.accessBigQuery')}
+                            {t("table.accessBigQuery")}
                           </BodyText>
                         </Box>
                       </Box>
@@ -737,9 +825,7 @@ export default function DataInformationQuery({ resource }) {
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="sql">
-                        {sqlCode}
-                      </CodeHighlight>
+                      <CodeHighlight language="sql">{sqlCode}</CodeHighlight>
                     </Skeleton>
                   </TabPanel>
 
@@ -759,7 +845,7 @@ export default function DataInformationQuery({ resource }) {
                       isLoaded={!isLoadingCode}
                     >
                       <BodyText typography="small">
-                        {t('table.pythonInstructions')}
+                        {t("table.pythonInstructions")}
                       </BodyText>
                     </Skeleton>
 
@@ -771,22 +857,24 @@ export default function DataInformationQuery({ resource }) {
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <AlertDiscalimerBox type="info" >
-                        {t('table.firstTimePython')}
+                      <AlertDiscalimerBox type="info">
+                        {t("table.firstTimePython")}
                         <Link
                           display="inline"
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_python/" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_python/" :
-                            "https://basedosdados.github.io/sdk/api_reference_python/"
+                            locale === "en"
+                              ? "https://basedosdados.github.io/sdk/en/api_reference_python/"
+                              : locale === "es"
+                                ? "https://basedosdados.github.io/sdk/es/api_reference_python/"
+                                : "https://basedosdados.github.io/sdk/api_reference_python/"
                           }
                           fontWeight="400"
                           color="#0068C5"
-                          _hover={{color: "#0057A4"}}
+                          _hover={{ color: "#0057A4" }}
                         >
-                          {t('table.followStepByStep')}
+                          {t("table.followStepByStep")}
                         </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
@@ -800,7 +888,8 @@ export default function DataInformationQuery({ resource }) {
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="python">{`import basedosdados as bd
+                      <CodeHighlight language="python">
+                        {`import basedosdados as bd
 
 billing_id = <seu_billing_id>
 
@@ -829,9 +918,9 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       isLoaded={!isLoadingCode}
                     >
                       <BodyText typography="small">
-                        {t('table.rInstructions')}
+                        {t("table.rInstructions")}
                       </BodyText>
-                    </Skeleton> 
+                    </Skeleton>
 
                     <Skeleton
                       startColor="#F0F0F0"
@@ -841,22 +930,24 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <AlertDiscalimerBox type="info" >
-                        {t('table.firstTimeR')}
+                      <AlertDiscalimerBox type="info">
+                        {t("table.firstTimeR")}
                         <Link
                           display="inline"
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_r/" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_r/" :
-                            "https://basedosdados.github.io/sdk/api_reference_r/"
+                            locale === "en"
+                              ? "https://basedosdados.github.io/sdk/en/api_reference_r/"
+                              : locale === "es"
+                                ? "https://basedosdados.github.io/sdk/es/api_reference_r/"
+                                : "https://basedosdados.github.io/sdk/api_reference_r/"
                           }
                           fontWeight="400"
                           color="#0068C5"
-                          _hover={{color: "#0057A4"}}
+                          _hover={{ color: "#0057A4" }}
                         >
-                          {t('table.followStepByStep')}
+                          {t("table.followStepByStep")}
                         </Link>
                       </AlertDiscalimerBox>
                     </Skeleton>
@@ -870,7 +961,8 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="r">{`
+                      <CodeHighlight language="r">
+                        {`
 # Defina o seu projeto no Google Cloud
 set_billing_id("<YOUR_PROJECT_ID>")
 
@@ -891,5 +983,5 @@ read_sql(query, billing_project_id = get_billing_id())
         </VStack>
       </Tabs>
     </VStack>
-  )
+  );
 }

@@ -1,6 +1,4 @@
-import {
-  Center,
-} from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 import FourOFourImage from "../../public/img/fourOFour";
 
 export default function FourOFour({ children, ...props }) {
@@ -12,11 +10,8 @@ export default function FourOFour({ children, ...props }) {
       flexDirection="column"
       {...props}
     >
-      <FourOFourImage
-        widthImage="256px"
-        heightImage="256px"
-      />
+      <FourOFourImage widthImage="256px" heightImage="256px" />
       {children}
     </Center>
-  )
+  );
 }
