@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_OPTIONS='-r next-logger' next start"
+    "start": "NODE_OPTIONS='-r next-logger' next start",
+    "biome:format": "biome format . --write",
+    "biome:linter": "biome lint ."
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
