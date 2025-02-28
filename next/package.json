@@ -49,6 +49,7 @@
     "swiper": "^8.4.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "medium-2-md": "github:gautamdhameja/medium-2-md",
     "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.1",
