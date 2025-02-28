@@ -19,14 +19,14 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem
+  MenuItem,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/router"
-import { useTranslation } from 'next-i18next';
+import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
 import cookies from "js-cookie";
 import MenuDropdown from "./MenuDropdown";
-import { useCheckMobile } from "../../hooks/useCheckMobile.hook"
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
@@ -54,33 +54,33 @@ function useIsMobileMod() {
 }
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation("menu");
   const { locale } = useRouter();
   const router = useRouter();
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent padding="24px">
-        {locale === 'en' ? (
+        {locale === "en" ? (
           <DBLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push("/search")}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push("/search")}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
-            if(key === "Button") {
-              return elm.map(b => 
+            if (key === "Button") {
+              return elm.map((b) => (
                 <Button
                   key={b.name}
                   backgroundColor={b.color}
@@ -92,7 +92,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                 >
                   {b.name}
                 </Button>
-              )
+              ));
             }
             if (typeof elm === "object") {
               return (
@@ -100,7 +100,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   <AccordionItem borderWidth="0 !important">
                     <AccordionButton
                       padding={0}
-                      _hover={{background: "none"}}
+                      _hover={{ background: "none" }}
                       justifyContent="space-between"
                     >
                       <Text
@@ -114,32 +114,34 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                       </Text>
                       <AccordionIcon />
                     </AccordionButton>
-                  <AccordionPanel
-                    display="flex"
-                    flexDirection="column"
-                    gridGap="13px"
-                    padding="16px 0 2px"
-                  >
-                    {elm.map((c) => {
-                      if(c.name === undefined) return null
+                    <AccordionPanel
+                      display="flex"
+                      flexDirection="column"
+                      gridGap="13px"
+                      padding="16px 0 2px"
+                    >
+                      {elm.map((c) => {
+                        if (c.name === undefined) return null;
 
-                      return (
-                        <Link
-                          key={c.name}
-                          display="flex"
-                          gap="16px"
-                          fontSize="16px"
-                          fontFamily="Roboto"
-                          letterSpacing="0.1px"
-                          fontWeight="400"
-                          href={c.href}
-                        >{c.icon && c.icon} {c.name}</Link>
-                      )
-                    })}
-                  </AccordionPanel>
+                        return (
+                          <Link
+                            key={c.name}
+                            display="flex"
+                            gap="16px"
+                            fontSize="16px"
+                            fontFamily="Roboto"
+                            letterSpacing="0.1px"
+                            fontWeight="400"
+                            href={c.href}
+                          >
+                            {c.icon && c.icon} {c.name}
+                          </Link>
+                        );
+                      })}
+                    </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
-              )
+              );
             } else {
               return (
                 <Link
@@ -149,9 +151,10 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
-                >{key}
+                >
+                  {key}
                 </Link>
-              )
+              );
             }
           })}
         </VStack>
@@ -159,7 +162,11 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         {userData ? (
           <></>
         ) : (
-          <Stack display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
+          <Stack
+            display={{ base: "flex", lg: "none" }}
+            marginTop="auto"
+            gap="16px"
+          >
             <Link
               href="/user/login"
               display="flex"
@@ -171,12 +178,12 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               cursor="pointer"
               gap="8px"
               _hover={{
-                opacity: 0.7
+                opacity: 0.7,
               }}
             >
-              {t('enter', { ns: 'menu' })}
+              {t("enter", { ns: "menu" })}
             </Link>
-            
+
             <Link
               href="/user/register"
               display="flex"
@@ -191,10 +198,10 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
               fontWeight="400"
               gap="8px"
               _hover={{
-                backgroundColor: "#0B89E2"
+                backgroundColor: "#0B89E2",
               }}
             >
-              {t('register', { ns: 'menu' })}
+              {t("register", { ns: "menu" })}
             </Link>
           </Stack>
         )}
@@ -203,41 +210,53 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan }) {
+function MenuDrawerUser({
+  userData,
+  isOpen,
+  onClose,
+  isUserPro,
+  haveInterprisePlan,
+}) {
   const router = useRouter();
-  const { t } = useTranslation('menu');
+  const { t } = useTranslation("menu");
   const { locale } = useRouter();
 
   const links = [
-    {name: t('public_profile'), value: "profile"},
-    {name: t('account'), value: "account"},
-    {name: t('password'), value: "new_password"},
-    {name: t('plans_and_payment'), value: "plans_and_payment"},
-    isUserPro && {name: t('bigquery'), value: "big_query"},
-    haveInterprisePlan && {name: t('access'), value: "accesses"},
-  ]
+    { name: t("public_profile"), value: "profile" },
+    { name: t("account"), value: "account" },
+    { name: t("password"), value: "new_password" },
+    { name: t("plans_and_payment"), value: "plans_and_payment" },
+    isUserPro && { name: t("bigquery"), value: "big_query" },
+    haveInterprisePlan && { name: t("access"), value: "accesses" },
+  ];
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
-      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent padding="16px">
-        {locale === 'en' ? (
+        {locale === "en" ? (
           <DBLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push("/search")}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push("/search")}
           />
         )}
 
-        <Stack spacing={0} justifyContent="center" alignItems="center" padding="16px 0" marginBottom="24px">
+        <Stack
+          spacing={0}
+          justifyContent="center"
+          alignItems="center"
+          padding="16px 0"
+          marginBottom="24px"
+        >
           <Box
             width="48px"
             height="48px"
@@ -250,14 +269,17 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData?.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+              src={
+                userData?.picture
+                  ? userData?.picture
+                  : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+              }
             />
           </Box>
           <LabelText typography="x-small">{userData?.username || ""}</LabelText>
-          <LabelText
-            typography="x-small"
-            color="#71757A"
-          >{userData?.email || ""}</LabelText>
+          <LabelText typography="x-small" color="#71757A">
+            {userData?.email || ""}
+          </LabelText>
 
           <LabelText
             typography="x-small"
@@ -270,13 +292,12 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
             marginTop="10px !important"
           >
             {isUserPro
-              ? (userData?.plan === "bd_pro_empresas"
-                ? t('DBEnterprise')
+              ? userData?.plan === "bd_pro_empresas"
+                ? t("DBEnterprise")
                 : userData?.plan === "bd_pro"
-                  ? t('DBPro')
-                  : null)
-              : t('DBFree')
-            }
+                  ? t("DBPro")
+                  : null
+              : t("DBFree")}
           </LabelText>
         </Stack>
 
@@ -284,14 +305,17 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           <AccordionItem borderWidth="0 !important">
             <AccordionButton
               padding="14px 0"
-              _hover={{background: "none"}}
+              _hover={{ background: "none" }}
               justifyContent="space-between"
             >
-              <Stack spacing={0} flexDirection="row" alignItems="center" gap="8px">
-                <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
-                <BodyText typography="small">
-                  {t('settings')}
-                </BodyText>
+              <Stack
+                spacing={0}
+                flexDirection="row"
+                alignItems="center"
+                gap="8px"
+              >
+                <SettingsIcon fill="#D0D0D0" width="20px" height="20px" />
+                <BodyText typography="small">{t("settings")}</BodyText>
               </Stack>
               <AccordionIcon />
             </AccordionButton>
@@ -309,17 +333,22 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                     color="#71757A"
                     fontWeight="400"
                     onClick={() => {
-                      onClose()
-                      router.push({pathname: `/user/${userData.username}`, query: elm.value})}
-                    }
-                  >{elm.name}</Link>
-                )
+                      onClose();
+                      router.push({
+                        pathname: `/user/${userData.username}`,
+                        query: elm.value,
+                      });
+                    }}
+                  >
+                    {elm.name}
+                  </Link>
+                );
               })}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
 
-        <Divider margin="24px 0" borderColor="#DEDFE0"/>
+        <Divider margin="24px 0" borderColor="#DEDFE0" />
 
         <Stack
           display="flex"
@@ -331,52 +360,49 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           color="#252A32"
           fill="#D0D0D0"
           _hover={{
-            opacity: 0.7
+            opacity: 0.7,
           }}
           onClick={() => {
-            cookies.remove('userBD', { path: '/' })
-            cookies.remove('token', { path: '/' })
-            router.push('/')
+            cookies.remove("userBD", { path: "/" });
+            cookies.remove("token", { path: "/" });
+            router.push("/");
           }}
         >
-          <SignOutIcon width="20px" height="20px"/>
-          <BodyText
-            typography="small"
-            marginLeft="8px !important"
-          >
-            {t('exit')}
+          <SignOutIcon width="20px" height="20px" />
+          <BodyText typography="small" marginLeft="8px !important">
+            {t("exit")}
           </BodyText>
         </Stack>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
 
-function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
-  const timerRef = useRef()
-  const [isOpenMenu, setIsOpenMenu] = useState(false)
-  const { t } = useTranslation('menu');
+function MenuUser({ userData, onOpen, onClose, isUserPro }) {
+  const timerRef = useRef();
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const { t } = useTranslation("menu");
   const isMobile = useIsMobileMod();
   const router = useRouter();
 
   const btnMouseEnterEvent = () => {
-    setIsOpenMenu(true)
-  }
+    setIsOpenMenu(true);
+  };
   const btnMouseLeaveEvent = () => {
     timerRef.current = setTimeout(() => {
-      setIsOpenMenu(false)
-    }, 100)
-  }
+      setIsOpenMenu(false);
+    }, 100);
+  };
   const menuListMouseEnterEvent = () => {
-    clearTimeout(timerRef.current)
-    timerRef.current = undefined
-    setIsOpenMenu(true)
-  }
+    clearTimeout(timerRef.current);
+    timerRef.current = undefined;
+    setIsOpenMenu(true);
+  };
   const menuListMouseLeaveEvent = () => {
-    setIsOpenMenu(false)
-  }
+    setIsOpenMenu(false);
+  };
 
-  if(isMobile) {
+  if (isMobile) {
     return (
       <Box
         cursor="pointer"
@@ -392,32 +418,31 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
           alt=""
           width="100%"
           height="100%"
-          src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+          src={
+            userData?.picture
+              ? userData.picture
+              : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+          }
         />
       </Box>
-    )
+    );
   } else {
     return (
-      <Menu
-        isOpen={isOpenMenu}
-        autoSelect={false}
-        placement="bottom"
-      >
+      <Menu isOpen={isOpenMenu} autoSelect={false} placement="bottom">
         <MenuButton
           onClick={btnMouseEnterEvent}
           onMouseLeave={btnMouseLeaveEvent}
         >
-          <Box
-            height="40px"
-            width="40px"
-            borderRadius="50%"
-            overflow="hidden"
-          >
+          <Box height="40px" width="40px" borderRadius="50%" overflow="hidden">
             <Image
               alt=""
               width="100%"
               height="100%"
-              src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+              src={
+                userData?.picture
+                  ? userData.picture
+                  : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+              }
             />
           </Box>
         </MenuButton>
@@ -437,7 +462,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             textAlign="center"
             alignItems="center"
             padding="16px"
-            _hover={{ backgroundColor: "transparent"}}
+            _hover={{ backgroundColor: "transparent" }}
           >
             <Box
               height="48px"
@@ -451,16 +476,17 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
                 width="100%"
                 height="100%"
                 display={{ base: "none", lg: "flex" }}
-                src={userData?.picture ? userData.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+                src={
+                  userData?.picture
+                    ? userData.picture
+                    : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"
+                }
               />
             </Box>
             <LabelText typography="x-small">
               {userData?.username ? userData?.username : ""}
             </LabelText>
-            <LabelText
-              typography="x-small"
-              color="#71757A"
-            >
+            <LabelText typography="x-small" color="#71757A">
               {userData?.email ? userData?.email : ""}
             </LabelText>
 
@@ -475,13 +501,12 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               marginTop="10px"
             >
               {isUserPro
-                ? (userData?.plan === "bd_pro_empresas"
-                  ? t('DBEnterprise')
+                ? userData?.plan === "bd_pro_empresas"
+                  ? t("DBEnterprise")
                   : userData?.plan === "bd_pro"
-                    ? t('DBPro')
-                    : null)
-                : t('DBFree')
-              }
+                    ? t("DBPro")
+                    : null
+                : t("DBFree")}
             </LabelText>
           </MenuItem>
 
@@ -494,12 +519,10 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => router.push(`/user/${userData.username}`)}
           >
-            <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
-            <BodyText typography="small">
-              {t('settings')}
-            </BodyText>
+            <SettingsIcon fill="#D0D0D0" width="20px" height="20px" />
+            <BodyText typography="small">{t("settings")}</BodyText>
           </MenuItem>
-          <Divider borderColor="#DEDFE0"/>
+          <Divider borderColor="#DEDFE0" />
           <MenuItem
             display="flex"
             flexDirection="row"
@@ -508,115 +531,121 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={() => {
-              cookies.remove('userBD', { path: '/' })
-              cookies.remove('token', { path: '/' })
-              router.push('/')
+              cookies.remove("userBD", { path: "/" });
+              cookies.remove("token", { path: "/" });
+              router.push("/");
             }}
           >
-            <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
-            <BodyText typography="small">
-              {t('exit')}
-            </BodyText>
+            <SignOutIcon width="20px" height="20px" fill="#D0D0D0" />
+            <BodyText typography="small">{t("exit")}</BodyText>
           </MenuItem>
         </MenuList>
       </Menu>
-    )
+    );
   }
 }
 
-function SearchInputUser ({ user }) {
-  const { t } = useTranslation('menu');
-  const inputMobileRef = useRef(null)
-  const [search, setSearch] = useState("")
-  const [showInput, setShowInput] = useState(false)
-  const [inputFocus, setInputFocus] = useState(false)
+function SearchInputUser({ user }) {
+  const { t } = useTranslation("menu");
+  const inputMobileRef = useRef(null);
+  const [search, setSearch] = useState("");
+  const [showInput, setShowInput] = useState(false);
+  const [inputFocus, setInputFocus] = useState(false);
   const isMobile = useIsMobileMod();
   const router = useRouter();
 
   function openSearchLink() {
-    if(search.trim() === "") return
-    triggerGAEvent("search", search.trim())
-    triggerGAEvent("search_menu", search.trim())
+    if (search.trim() === "") return;
+    triggerGAEvent("search", search.trim());
+    triggerGAEvent("search_menu", search.trim());
     router.push(`/search?q=${search.trim()}`);
   }
 
   const handleClickOutside = (event) => {
-    if (inputMobileRef.current && !inputMobileRef.current.contains(event.target)) {
+    if (
+      inputMobileRef.current &&
+      !inputMobileRef.current.contains(event.target)
+    ) {
       setShowInput(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (showInput) {
-      document.addEventListener('click', handleClickOutside)
+      document.addEventListener("click", handleClickOutside);
     } else {
-      document.removeEventListener('click', handleClickOutside)
+      document.removeEventListener("click", handleClickOutside);
     }
-    
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [showInput])
 
-  if (isMobile) return (
-    <Stack spacing={0} width="100%" marginRight={user ? "60px !important" : "0"}>
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [showInput]);
+
+  if (isMobile)
+    return (
       <Stack
-        display={showInput ? "flex" :"none"}
-        position="absolute"
-        top="0"
-        left="0"
-        backgroundColor="#FFF"
-        width="100vw"
-        height="70px"
-        padding="16px 20px"
-        zIndex={99}
+        spacing={0}
+        width="100%"
+        marginRight={user ? "60px !important" : "0"}
       >
-        <ControlledInputSimple
-          width="100%"
-          value={search}
-          onChange={setSearch}
-          onEnterPress={openSearchLink}
-          refInput={inputMobileRef}
-          inputFocus={showInput}
-          changeInputFocus={setShowInput}
-          placeholder={t('search_data')}
+        <Stack
+          display={showInput ? "flex" : "none"}
+          position="absolute"
+          top="0"
+          left="0"
+          backgroundColor="#FFF"
+          width="100vw"
+          height="70px"
+          padding="16px 20px"
+          zIndex={99}
+        >
+          <ControlledInputSimple
+            width="100%"
+            value={search}
+            onChange={setSearch}
+            onEnterPress={openSearchLink}
+            refInput={inputMobileRef}
+            inputFocus={showInput}
+            changeInputFocus={setShowInput}
+            placeholder={t("search_data")}
+            fill="#464A51"
+            icon={
+              <Link
+                href={`/search?q=${search.trim()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  openSearchLink();
+                }}
+              >
+                <SearchIcon
+                  alt="pesquisar"
+                  width="16.8px"
+                  height="16.8px"
+                  cursor="pointer"
+                />
+              </Link>
+            }
+          />
+        </Stack>
+
+        <SearchIcon
+          display={showInput ? "none" : "flex"}
+          alt="pesquisar"
           fill="#464A51"
-          icon={
-            <Link
-              href={`/search?q=${search.trim()}`}
-              onClick={(e) => {
-                e.preventDefault();
-                openSearchLink();
-              }}
-            >
-              <SearchIcon
-                alt="pesquisar"
-                width="16.8px"
-                height="16.8px"
-                cursor="pointer"
-              />
-            </Link>
-          }
+          width="18px"
+          height="18px"
+          marginLeft="auto !important"
+          cursor="pointer"
+          onClick={() => {
+            setShowInput(true);
+            setTimeout(() => {
+              inputMobileRef.current.focus();
+            }, 0);
+          }}
         />
       </Stack>
-
-      <SearchIcon
-        display={showInput ? "none" : "flex"}
-        alt="pesquisar"
-        fill="#464A51"
-        width="18px"
-        height="18px"
-        marginLeft="auto !important"
-        cursor="pointer"
-        onClick={() => {
-          setShowInput(true)
-          setTimeout(() => {
-            inputMobileRef.current.focus()
-          }, 0)
-        }}
-      />
-    </Stack>
-  )
+    );
 
   return (
     <Stack spacing={0}>
@@ -626,7 +655,7 @@ function SearchInputUser ({ user }) {
         onEnterPress={openSearchLink}
         inputFocus={inputFocus}
         changeInputFocus={setInputFocus}
-        placeholder={t('search_data')}
+        placeholder={t("search_data")}
         fill="#464A51"
         icon={
           <Link
@@ -646,7 +675,7 @@ function SearchInputUser ({ user }) {
         }
       />
     </Stack>
-  )
+  );
 }
 
 function DesktopLinks({
@@ -655,22 +684,25 @@ function DesktopLinks({
   position = false,
   path,
   userTemplate = false,
-  isUserPro
+  isUserPro,
 }) {
   const isMobile = useIsMobileMod();
-  const { t } = useTranslation('common', 'menu');
+  const { t } = useTranslation("common", "menu");
   const { locale } = useRouter();
 
-  function LinkMenuDropDown ({ url, text, icon }) {
-    const [flag, setFlag] = useBoolean()
+  function LinkMenuDropDown({ url, text, icon }) {
+    const [flag, setFlag] = useBoolean();
 
-    if(url === undefined && text === undefined) return <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0"/>
+    if (url === undefined && text === undefined)
+      return (
+        <Divider marginBottom="10px" padding="10px 0 0" borderColor="#DEDFE0" />
+      );
 
     return (
       <Link
         flexDirection="colunm"
         _hover={{ opacity: "0.7" }}
-        target={url.slice(0,4) === "http" ? "_blank" : "_self"}
+        target={url.slice(0, 4) === "http" ? "_blank" : "_self"}
         color="#252A32"
         fontWeight="400"
         href={url}
@@ -678,12 +710,17 @@ function DesktopLinks({
         gap="16px"
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
-      > 
+      >
         {icon && icon}
         {text}
-        <RedirectIcon fill={flag && url.slice(0,4) === "http" ? "#A3A3A3" : "transparent"} marginLeft="auto" width="12px" height="12px"/>
+        <RedirectIcon
+          fill={flag && url.slice(0, 4) === "http" ? "#A3A3A3" : "transparent"}
+          marginLeft="auto"
+          width="12px"
+          height="12px"
+        />
       </Link>
-    )
+    );
   }
 
   return (
@@ -695,12 +732,19 @@ function DesktopLinks({
       gap="24px"
       transition="1s"
       marginLeft={
-        path === "/" ?
-        !position ? "0 !important" : "28px !important"
-        : "28px !important"
+        path === "/"
+          ? !position
+            ? "0 !important"
+            : "28px !important"
+          : "28px !important"
       }
     >
-      <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
+      <HStack
+        display={userTemplate ? "none" : "flex"}
+        width="100%"
+        flex="3"
+        spacing={7}
+      >
         {Object.entries(links).map(([k, v], i) => {
           if (k === "Button") {
             return v.map((b, j) => (
@@ -715,7 +759,7 @@ function DesktopLinks({
                   {b.name}
                 </Button>
               </a>
-            ))
+            ));
           }
 
           if (typeof v === "object") {
@@ -734,9 +778,9 @@ function DesktopLinks({
                 lineHeight="20px"
                 borderRadius="10px"
                 padding="32px"
-                _first={{ paddingTop: "10px"}}
-                _last={{ paddingBottom: "10px"}}
-                boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
+                _first={{ paddingTop: "10px" }}
+                _last={{ paddingBottom: "10px" }}
+                boxShadow="0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
                 {v.map((elm, j) => (
                   <LinkMenuDropDown
@@ -747,7 +791,7 @@ function DesktopLinks({
                   />
                 ))}
               </MenuDropdown>
-            )
+            );
           }
 
           return (
@@ -760,45 +804,79 @@ function DesktopLinks({
             >
               {k}
             </Link>
-          )
+          );
         })}
       </HStack>
 
-      {userTemplate && !isMobile &&
-        <SearchInputUser
-          user={userData !== null}
-        />
-      }
+      {userTemplate && !isMobile && (
+        <SearchInputUser user={userData !== null} />
+      )}
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/search" || path === "/dataset/[dataset]" || path === "/user/[username]") &&
+        {(path === "/search" ||
+          path === "/dataset/[dataset]" ||
+          path === "/user/[username]") && (
           <HelpWidget
-            tooltip={t('tooltip.helpAndResources')}
+            tooltip={t("tooltip.helpAndResources")}
             options={[
-              {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
-              {name: t('tooltip.documentation'), url: 
-                locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-                locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-                "https://basedosdados.github.io/sdk"
+              {
+                name: t("tooltip.faq"),
+                component: <Link href="/faq">{t("tooltip.faq")}</Link>,
               },
-              {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
-              {name: t('tooltip.installPackages'), url: 
-                locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_packages/" :
-                locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_packages/" :
-                "https://basedosdados.github.io/sdk/access_data_packages/"
+              {
+                name: t("tooltip.documentation"),
+                url:
+                  locale === "en"
+                    ? "https://basedosdados.github.io/sdk/en"
+                    : locale === "es"
+                      ? "https://basedosdados.github.io/sdk/es"
+                      : "https://basedosdados.github.io/sdk",
               },
-              {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
-              {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
+              {
+                name: t("tooltip.youtubeVideos"),
+                url: "https://www.youtube.com/c/BasedosDados/featured",
+              },
+              {
+                name: t("tooltip.installPackages"),
+                url:
+                  locale === "en"
+                    ? "https://basedosdados.github.io/sdk/en/access_data_packages/"
+                    : locale === "es"
+                      ? "https://basedosdados.github.io/sdk/es/access_data_packages/"
+                      : "https://basedosdados.github.io/sdk/access_data_packages/",
+              },
+              {
+                name: t("tooltip.howToCite"),
+                component: (
+                  <Link href="/faq#reference">{t("tooltip.howToCite")}</Link>
+                ),
+              },
+              {
+                name: t("tooltip.whatAreDirectories"),
+                component: (
+                  <Link href="/faq#directories">
+                    {t("tooltip.whatAreDirectories")}
+                  </Link>
+                ),
+              },
               {},
-              {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-              {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
+              {
+                name: t("tooltip.discordCommunity"),
+                url: "https://discord.gg/huKWpsVYx4",
+              },
+              {
+                name: t("tooltip.contactUs"),
+                component: (
+                  <Link href="/contact">{t("tooltip.contactUs")}</Link>
+                ),
+              },
             ]}
           />
-        }
+        )}
 
         {userData ? (
           <HStack spacing="20px">
-            <MenuUser userData={userData} isUserPro={isUserPro}/>
+            <MenuUser userData={userData} isUserPro={isUserPro} />
           </HStack>
         ) : (
           <>
@@ -812,12 +890,12 @@ function DesktopLinks({
               fontWeight="400"
               gap="8px"
               _hover={{
-                opacity: 0.7
+                opacity: 0.7,
               }}
             >
-              {t('enter', { ns: 'menu' })}
+              {t("enter", { ns: "menu" })}
             </Link>
-            
+
             <Link
               href="/user/register"
               height="40px"
@@ -829,186 +907,210 @@ function DesktopLinks({
               fontWeight="400"
               gap="8px"
               _hover={{
-                backgroundColor: "#0B89E2"
+                backgroundColor: "#0B89E2",
               }}
             >
-              {t('register', { ns: 'menu' })}
+              {t("register", { ns: "menu" })}
             </Link>
           </>
         )}
       </HStack>
     </HStack>
-  )
+  );
 }
 
-export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
-  const { t } = useTranslation('menu');
-  const router = useRouter()
-  const { locale } = router
-  const [userBD, setUserBD] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
+export default function MenuNav({
+  simpleTemplate = false,
+  userTemplate = false,
+}) {
+  const { t } = useTranslation("menu");
+  const router = useRouter();
+  const { locale } = router;
+  const [userBD, setUserBD] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobileMod();
 
-  const menuDisclosure = useDisclosure()
-  const menuUserMobile = useDisclosure()
-  const divRef = useRef()
-  const [isScrollDown, setIsScrollDown] = useState(false)
-  const [userData, setUserData] = useState(null)
+  const menuDisclosure = useDisclosure();
+  const menuUserMobile = useDisclosure();
+  const divRef = useRef();
+  const [isScrollDown, setIsScrollDown] = useState(false);
+  const [userData, setUserData] = useState(null);
 
-  const [lastScrollY, setLastScrollY] = useState(0)
-  const [menuVisible, setMenuVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [menuVisible, setMenuVisible] = useState(true);
 
   const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    let user;
+    if (cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
-  }
+    if (user?.isSubscriber) return user?.isSubscriber;
+    return false;
+  };
 
   const haveInterprisePlan = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
-    return user?.proSubscription === "bd_pro_empresas"
-  }
+    let user;
+    if (cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
+    return user?.proSubscription === "bd_pro_empresas";
+  };
 
   useEffect(() => {
-    const cookieUserBD = cookies.get("userBD")
-    setUserBD(cookieUserBD || null)
-    setIsLoading(false)
-  }, [])
+    const cookieUserBD = cookies.get("userBD");
+    setUserBD(cookieUserBD || null);
+    setIsLoading(false);
+  }, []);
 
   const handleScroll = () => {
-    const currentScrollY = window.scrollY
+    const currentScrollY = window.scrollY;
     if (currentScrollY > lastScrollY) {
-      setMenuVisible(false)
+      setMenuVisible(false);
     } else {
-      setMenuVisible(true)
+      setMenuVisible(true);
     }
-    setLastScrollY(currentScrollY)
-  }
+    setLastScrollY(currentScrollY);
+  };
 
   useEffect(() => {
-    if(router.pathname !== "/dataset/[dataset]") return
-    window.addEventListener('scroll', handleScroll)
+    if (router.pathname !== "/dataset/[dataset]") return;
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [lastScrollY, router.pathname])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollY, router.pathname]);
 
   useEffect(() => {
-    if(isLoading) return
-    if(userBD !== null && userBD !== "undefined") {
+    if (isLoading) return;
+    if (userBD !== null && userBD !== "undefined") {
       try {
-        const res = JSON.parse(userBD)
+        const res = JSON.parse(userBD);
 
         setUserData({
           email: res.email,
           username: res.username,
           picture: res.picture || "",
-          plan: res?.proSubscription
-        })
+          plan: res?.proSubscription,
+        });
       } catch (error) {
-        console.error("Error parsing user data:", error)
-        setUserData(null)
+        console.error("Error parsing user data:", error);
+        setUserData(null);
       }
     } else {
-      setUserData(null)
+      setUserData(null);
     }
-  }, [userBD, isLoading])
+  }, [userBD, isLoading]);
 
   let links;
 
   if (locale === "pt") {
     links = {
-      [t('data')]: `/search`,
-      [t('solutions')]: [
+      [t("data")]: `/search`,
+      [t("solutions")]: [
         {
-          icon: <BDLogoProImage widthImage="54px"/>,
-          name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/bd-pro"
+          icon: <BDLogoProImage widthImage="54px" />,
+          name: [t("exclusive_data")],
+          href: "https://info.basedosdados.org/bd-pro",
         },
         {
-          icon: <BDLogoEduImage widthImage="54px"/>,
-          name: [t('data_courses')],
-          href: "https://info.basedosdados.org/bd-edu-cursos"
+          icon: <BDLogoEduImage widthImage="54px" />,
+          name: [t("data_courses")],
+          href: "https://info.basedosdados.org/bd-edu-cursos",
         },
         {
-          icon: <BDLogoLabImage widthImage="54px"/>,
-          name: [t('services')],
-          href: "/services"
+          icon: <BDLogoLabImage widthImage="54px" />,
+          name: [t("services")],
+          href: "/services",
         },
       ],
-      [t('prices')]: "/prices",
-      [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk"},
-        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: "Blog", href: "/blog"},
-        {name: [t('faq')], href: "/faq"}
+      [t("prices")]: "/prices",
+      [t("resources")]: [
+        {
+          name: [t("documentation")],
+          href: "https://basedosdados.github.io/sdk",
+        },
+        {
+          name: [t("youtube_videos")],
+          href: "https://www.youtube.com/c/BasedosDados/featured",
+        },
+        { name: "Blog", href: "/blog" },
+        { name: [t("faq")], href: "/faq" },
       ],
-      [t('institutional')]: [
-        {name: [t('about_us')], href: "/about-us"},
-        {name: [t('transparency')], href: "/transparency"},
-        {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
-        {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
+      [t("institutional")]: [
+        { name: [t("about_us")], href: "/about-us" },
+        { name: [t("transparency")], href: "/transparency" },
+        {
+          name: [t("newsletter")],
+          href: "https://info.basedosdados.org/newsletter",
+        },
+        { name: [t("jobs")], href: "https://info.basedosdados.org/carreiras" },
       ],
-      [t('contact')]: "/contact",
-      Button: []
-    }
+      [t("contact")]: "/contact",
+      Button: [],
+    };
   } else if (locale === "en") {
     links = {
-      [t('data')]: `/search`,
-      [t('solutions')]: [
+      [t("data")]: `/search`,
+      [t("solutions")]: [
         {
-          icon: <DBLogoProImage widthImage="54px"/>,
-          name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/en/bd-pro"
-        }
+          icon: <DBLogoProImage widthImage="54px" />,
+          name: [t("exclusive_data")],
+          href: "https://info.basedosdados.org/en/bd-pro",
+        },
       ],
-      [t('prices')]: "/prices",
-      [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/en"},
-        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: "Blog", href: "/blog"},
-        {name: [t('faq')], href: "/faq"}
+      [t("prices")]: "/prices",
+      [t("resources")]: [
+        {
+          name: [t("documentation")],
+          href: "https://basedosdados.github.io/sdk/en",
+        },
+        {
+          name: [t("youtube_videos")],
+          href: "https://www.youtube.com/c/BasedosDados/featured",
+        },
+        { name: "Blog", href: "/blog" },
+        { name: [t("faq")], href: "/faq" },
       ],
-      [t('institutional')]: [
-        {name: [t('about_us')], href: "/about-us"},
-        {name: [t('transparency')], href: "/transparency"},
+      [t("institutional")]: [
+        { name: [t("about_us")], href: "/about-us" },
+        { name: [t("transparency")], href: "/transparency" },
       ],
-      [t('contact')]: "/contact",
-      Button: []
-    }
+      [t("contact")]: "/contact",
+      Button: [],
+    };
   } else if (locale === "es") {
     links = {
-      [t('data')]: `/search`,
-      [t('solutions')]: [
+      [t("data")]: `/search`,
+      [t("solutions")]: [
         {
-          icon: <BDLogoProImage widthImage="54px"/>,
-          name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/es/bd-pro"
-        }
+          icon: <BDLogoProImage widthImage="54px" />,
+          name: [t("exclusive_data")],
+          href: "https://info.basedosdados.org/es/bd-pro",
+        },
       ],
-      [t('prices')]: "/prices",
-      [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/es"},
-        {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
-        {name: "Blog", href: "/blog"},
-        {name: [t('faq')], href: "/faq"}
+      [t("prices")]: "/prices",
+      [t("resources")]: [
+        {
+          name: [t("documentation")],
+          href: "https://basedosdados.github.io/sdk/es",
+        },
+        {
+          name: [t("youtube_videos")],
+          href: "https://www.youtube.com/c/BasedosDados/featured",
+        },
+        { name: "Blog", href: "/blog" },
+        { name: [t("faq")], href: "/faq" },
       ],
-      [t('institutional')]: [
-        {name: [t('about_us')], href: "/about-us"},
-        {name: [t('transparency')], href: "/transparency"},
+      [t("institutional")]: [
+        { name: [t("about_us")], href: "/about-us" },
+        { name: [t("transparency")], href: "/transparency" },
       ],
-      [t('contact')]: "/contact",
-      Button: []
-    }
+      [t("contact")]: "/contact",
+      Button: [],
+    };
   }
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= 225) setIsScrollDown(true)
-      if (window.scrollY <= 225) setIsScrollDown(false)
+      if (window.scrollY >= 225) setIsScrollDown(true);
+      if (window.scrollY <= 225) setIsScrollDown(false);
 
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
@@ -1021,7 +1123,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
-  }, [])
+  }, []);
 
   if (isLoading) {
     return null;
@@ -1029,11 +1131,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   return (
     <>
-      <MenuDrawer
-        userData={userData}
-        links={links}
-        {...menuDisclosure}
-      />
+      <MenuDrawer userData={userData} links={links} {...menuDisclosure} />
 
       <Box
         ref={divRef}
@@ -1042,21 +1140,31 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         width="100%"
         left="0px"
         backgroundColor="#FFFFFF"
-        padding={{base: "15px 20px", lg: "15px 24px"}}
+        padding={{ base: "15px 20px", lg: "15px 24px" }}
         zIndex="99"
         transition="0.5s"
         as="nav"
-        transform={menuVisible ? 'translateY(0)' : 'translateY(-100%)'}
+        transform={menuVisible ? "translateY(0)" : "translateY(-100%)"}
       >
         <HStack
-          justifyContent={simpleTemplate || userTemplate ? "flex-start" : { base: "center", lg: "flex-start" }}
+          justifyContent={
+            simpleTemplate || userTemplate
+              ? "flex-start"
+              : { base: "center", lg: "flex-start" }
+          }
           width="100%"
           height="40px"
           maxWidth="1440px"
           margin="0 auto"
           spacing={6}
         >
-          <Box display={simpleTemplate || userTemplate ? "none" : { base: "flex", lg: "none" }}>
+          <Box
+            display={
+              simpleTemplate || userTemplate
+                ? "none"
+                : { base: "flex", lg: "none" }
+            }
+          >
             <FarBarsIcon
               alt="menu de navegação"
               position="absolute"
@@ -1075,35 +1183,27 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           <Link
             aria-label="Home"
             width={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
+              router.pathname === "/" ? (isScrollDown ? "80px" : "0") : "80px"
             }
             minWidth={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
+              router.pathname === "/" ? (isScrollDown ? "80px" : "0") : "80px"
             }
-            _hover={{opacity:"none"}}
+            _hover={{ opacity: "none" }}
             href={"/search"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"
           >
-            {locale === 'en' ? (
-              <DBLogoImage
-                widthImage="80px"
-              />
+            {locale === "en" ? (
+              <DBLogoImage widthImage="80px" />
             ) : (
-              <BDLogoImage
-                widthImage="80px"
-              />
+              <BDLogoImage widthImage="80px" />
             )}
           </Link>
 
-          {simpleTemplate ?
-            <></>  
-            :
+          {simpleTemplate ? (
+            <></>
+          ) : (
             <DesktopLinks
               userData={userData}
               links={links}
@@ -1112,23 +1212,21 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               userTemplate={userTemplate}
               isUserPro={isUserPro()}
             />
-          }
+          )}
 
-          {userTemplate && isMobile &&
-            <SearchInputUser
-              user={userData !== null}
-            />
-          }
+          {userTemplate && isMobile && (
+            <SearchInputUser user={userData !== null} />
+          )}
 
-          {isMobile && userData &&
+          {isMobile && userData && (
             <MenuUser
               userData={userData}
               onOpen={menuUserMobile.onOpen}
               onClose={menuUserMobile.onClose}
               isUserPro={isUserPro()}
             />
-          }
-          <MenuDrawerUser 
+          )}
+          <MenuDrawerUser
             userData={userData}
             isOpen={menuUserMobile.isOpen}
             onClose={menuUserMobile.onClose}
@@ -1138,5 +1236,5 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         </HStack>
       </Box>
     </>
-  )
+  );
 }

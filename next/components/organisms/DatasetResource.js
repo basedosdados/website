@@ -10,7 +10,7 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useBreakpointValue
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -25,85 +25,116 @@ import InformationRequestPage from "./InformationRequestPage";
 
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 
-export default function DatasetResource({
-  dataset,
-  isBDSudo
-}) {
-  const { t } = useTranslation('dataset');
-  const router = useRouter()
-  const { query, locale } = router
-  const [tables, setTables] = useState([])
-  const [rawDataSources, setRawDataSources] = useState([])
-  const [informationRequests, setInformationRequests] = useState([])
-  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
+export default function DatasetResource({ dataset, isBDSudo }) {
+  const { t } = useTranslation("dataset");
+  const router = useRouter();
+  const { query, locale } = router;
+  const [tables, setTables] = useState([]);
+  const [rawDataSources, setRawDataSources] = useState([]);
+  const [informationRequests, setInformationRequests] = useState([]);
+  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
 
   const pushQuery = (key, value) => {
-    router.replace({
-      pathname: `/dataset/${query.dataset}`,
-      query: { [key]: value }
-    },
-      undefined, { shallow: true }
-    )
-  }
+    router.replace(
+      {
+        pathname: `/dataset/${query.dataset}`,
+        query: { [key]: value },
+      },
+      undefined,
+      { shallow: true },
+    );
+  };
 
   function sortElements(a, b) {
     if (a.order < b.order) {
-      return -1
+      return -1;
     }
     if (a.order > b.order) {
-      return 1
+      return 1;
     }
-    return 0
+    return 0;
   }
 
   useEffect(() => {
-    let dataset_tables
-    let raw_data_sources
-    let information_request
+    let dataset_tables;
+    let raw_data_sources;
+    let information_request;
 
-    if(isBDSudo) {
-      dataset_tables = dataset?.tables?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
-      raw_data_sources = dataset?.rawDataSources?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
-      information_request = dataset?.informationRequests?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
+    if (isBDSudo) {
+      dataset_tables =
+        dataset?.tables?.edges?.map((elm) => elm.node)?.sort(sortElements) ||
+        [];
+      raw_data_sources =
+        dataset?.rawDataSources?.edges
+          ?.map((elm) => elm.node)
+          ?.sort(sortElements) || [];
+      information_request =
+        dataset?.informationRequests?.edges
+          ?.map((elm) => elm.node)
+          ?.sort(sortElements) || [];
     } else {
-      dataset_tables = dataset?.tables?.edges
-        ?.map((elm) => elm.node)
+      dataset_tables =
+        dataset?.tables?.edges
+          ?.map((elm) => elm.node)
           ?.filter(
             (elm) =>
               !["under_review", "excluded"].includes(elm?.status?.slug) &&
-              !["dicionario", "dictionary"].includes(elm?.slug)
+              !["dicionario", "dictionary"].includes(elm?.slug),
           )
-            ?.sort(sortElements) || [];
+          ?.sort(sortElements) || [];
 
-      raw_data_sources = dataset?.rawDataSources?.edges
-        ?.map((elm) => elm.node)
-          ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
-            ?.sort(sortElements) || [];
+      raw_data_sources =
+        dataset?.rawDataSources?.edges
+          ?.map((elm) => elm.node)
+          ?.filter(
+            (elm) => !["under_review", "excluded"].includes(elm?.status?.slug),
+          )
+          ?.sort(sortElements) || [];
 
-      information_request = dataset?.informationRequests?.edges
-        ?.map((elm) => elm.node)
-          ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
-            ?.sort(sortElements) || [];
+      information_request =
+        dataset?.informationRequests?.edges
+          ?.map((elm) => elm.node)
+          ?.filter(
+            (elm) => !["under_review", "excluded"].includes(elm?.status?.slug),
+          )
+          ?.sort(sortElements) || [];
     }
 
     setTables(dataset_tables);
     setRawDataSources(raw_data_sources);
     setInformationRequests(information_request);
 
-    const queryParams = new URLSearchParams(window.location.search)
+    const queryParams = new URLSearchParams(window.location.search);
 
-    if(queryParams.toString().length === 0) {
-      if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
-      if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
-      if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
+    if (queryParams.toString().length === 0) {
+      if (dataset_tables.length > 0)
+        return pushQuery("table", dataset_tables[0]?._id);
+      if (raw_data_sources.length > 0)
+        return pushQuery("raw_data_source", raw_data_sources[0]?._id);
+      if (information_request.length > 0)
+        return pushQuery("information_request", information_request[0]?._id);
     }
-  }, [dataset, isBDSudo === true])
+  }, [dataset, isBDSudo === true]);
 
-  function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
-    return null
+  function SwitchResource({ route }) {
+    if (route.hasOwnProperty("table"))
+      return <TablePage id={route.table} isBDSudo={isBDSudo} />;
+    if (route.hasOwnProperty("raw_data_source"))
+      return (
+        <RawDataSourcesPage
+          id={route.raw_data_source}
+          locale={locale}
+          isBDSudo={isBDSudo}
+        />
+      );
+    if (route.hasOwnProperty("information_request"))
+      return (
+        <InformationRequestPage
+          id={route.information_request}
+          isBDSudo={isBDSudo}
+        />
+      );
+    return null;
   }
 
   function ContentFilter({
@@ -111,24 +142,24 @@ export default function DatasetResource({
     choices,
     onChange,
     value,
-    hasDivider = true
+    hasDivider = true,
   }) {
-    const [isOverflow, setIsOverflow] = useState({})
-    const textRefs = useRef({})
+    const [isOverflow, setIsOverflow] = useState({});
+    const textRefs = useRef({});
 
-    if(choices.length === 0) return null
+    if (choices.length === 0) return null;
 
     useEffect(() => {
       choices.forEach((elm, i) => {
-        const textElement = textRefs.current[i]
+        const textElement = textRefs.current[i];
         if (textElement) {
           setIsOverflow((prev) => ({
             ...prev,
             [i]: textElement.scrollWidth > textElement.clientWidth,
-          }))
+          }));
         }
-      })
-    }, [choices])
+      });
+    }, [choices]);
 
     return (
       <Box width="272px">
@@ -138,11 +169,7 @@ export default function DatasetResource({
           borderColor="#DEDFE0"
         />
 
-        <LabelText
-          typography="small"
-          paddingLeft="15px"
-          marginBottom="8px"
-        >
+        <LabelText typography="small" paddingLeft="15px" marginBottom="8px">
           {fieldName}
         </LabelText>
 
@@ -154,14 +181,16 @@ export default function DatasetResource({
               cursor="pointer"
               pointerEvents={elm._id === value ? "none" : "default"}
             >
-              <Box 
+              <Box
                 width="3px"
                 height="24px"
                 backgroundColor={elm._id === value && "#2B8C4D"}
                 borderRadius="10px"
               />
               <Tooltip
-                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                label={
+                  elm[`name${capitalize(locale)}`] || elm.name || elm.number
+                }
                 isDisabled={!isOverflow[i]}
                 hasArrow
                 padding="16px"
@@ -187,7 +216,7 @@ export default function DatasetResource({
                   color={elm._id === value ? "#2B8C4D" : "#71757A"}
                   backgroundColor={elm._id === value && "#F7F7F7"}
                   _hover={{
-                    backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                    backgroundColor: elm._id === value ? "#F7F7F7" : "#EEEEEE",
                   }}
                   borderRadius="8px"
                   padding="6px 8px"
@@ -200,49 +229,50 @@ export default function DatasetResource({
           ))}
         </Box>
       </Box>
-    )
+    );
   }
 
-  function SelectResource ({ selectedResource }) {
-    const { t } = useTranslation('dataset');
+  function SelectResource({ selectedResource }) {
+    const { t } = useTranslation("dataset");
     const [widthScreen, setWidthScreen] = useState(0);
-    const [value, setValue] = useState("")
-    const {table, raw_data_source, information_request} = selectedResource;
+    const [value, setValue] = useState("");
+    const { table, raw_data_source, information_request } = selectedResource;
 
     const findResourceName = (source, id) => {
-      const resource = source.find(item => item._id === id);
-      return resource ? resource[`name${capitalize(locale)}`] || resource.name : "";
+      const resource = source.find((item) => item._id === id);
+      return resource
+        ? resource[`name${capitalize(locale)}`] || resource.name
+        : "";
     };
 
     useEffect(() => {
       setValue(
-        table ? findResourceName(tables, table) :
-        raw_data_source ? findResourceName(rawDataSources, raw_data_source) :
-        information_request ? findResourceName(informationRequests, information_request) : ""
+        table
+          ? findResourceName(tables, table)
+          : raw_data_source
+            ? findResourceName(rawDataSources, raw_data_source)
+            : information_request
+              ? findResourceName(informationRequests, information_request)
+              : "",
       );
 
       const updateWidthScreen = () => {
-        setWidthScreen(window.innerWidth - 48)
-      }
+        setWidthScreen(window.innerWidth - 48);
+      };
 
-      updateWidthScreen()
+      updateWidthScreen();
 
-      window.addEventListener('resize', updateWidthScreen)
+      window.addEventListener("resize", updateWidthScreen);
 
       return () => {
-        window.removeEventListener('resize', updateWidthScreen)
-      }
+        window.removeEventListener("resize", updateWidthScreen);
+      };
     }, [table, raw_data_source, information_request]);
 
     return (
       <Menu>
-        <LabelText
-          as="label"
-          display="flex"
-          flexDirection="column"
-          gap="8px"
-        >
-          {t('selectResource')}
+        <LabelText as="label" display="flex" flexDirection="column" gap="8px">
+          {t("selectResource")}
 
           <MenuButton
             width="100%"
@@ -260,10 +290,7 @@ export default function DatasetResource({
               alignItems="center"
             >
               {value}
-              <ChevronIcon
-                marginLeft="auto"
-                transform="rotate(90deg)"
-              />
+              <ChevronIcon marginLeft="auto" transform="rotate(90deg)" />
             </BodyText>
           </MenuButton>
         </LabelText>
@@ -278,7 +305,7 @@ export default function DatasetResource({
           zIndex={100}
           boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
         >
-          {tables.length > 0 &&
+          {tables.length > 0 && (
             <MenuOptionGroup
               title="Tabelas tratadas"
               fontFamily="Roboto"
@@ -289,35 +316,37 @@ export default function DatasetResource({
               margin="0"
               padding="24px 20px 8px"
             >
-              {tables.map((elm, i) => {return (
-                <MenuItem
-                  key={i}
-                  width="100%"
-                  whiteSpace="normal"
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                  wordBreak="break-all"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#252A32"
-                  padding="16px 20px"
-                  _hover={{ backgroundColor: "transparent"}}
-                  _focus={{ backgroundColor: "transparent"}}
-                  _active={{ backgroundColor: "transparent" }}
-                  _focusVisible={{ backgroundColor: "transparent" }}
-                  onClick={() => pushQuery("table", elm._id)}
+              {tables.map((elm, i) => {
+                return (
+                  <MenuItem
+                    key={i}
+                    width="100%"
+                    whiteSpace="normal"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    wordBreak="break-all"
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    fontSize="14px"
+                    lineHeight="20px"
+                    color="#252A32"
+                    padding="16px 20px"
+                    _hover={{ backgroundColor: "transparent" }}
+                    _focus={{ backgroundColor: "transparent" }}
+                    _active={{ backgroundColor: "transparent" }}
+                    _focusVisible={{ backgroundColor: "transparent" }}
+                    onClick={() => pushQuery("table", elm._id)}
                   >
-                  {elm.name || elm.number}
-                </MenuItem>
-              )})}
+                    {elm.name || elm.number}
+                  </MenuItem>
+                );
+              })}
             </MenuOptionGroup>
-          }
+          )}
 
-          {rawDataSources.length > 0 &&
+          {rawDataSources.length > 0 && (
             <>
-              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
+              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0" />
               <MenuOptionGroup
                 title="Fontes originais"
                 fontFamily="Roboto"
@@ -328,36 +357,38 @@ export default function DatasetResource({
                 margin="0"
                 padding="24px 20px 8px"
               >
-                {rawDataSources.map((elm, i) => {return (
-                  <MenuItem
-                    key={i}
-                    width="100%"
-                    whiteSpace="normal"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                    wordBreak="break-all"
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="14px"
-                    lineHeight="20px"
-                    color="#252A32"
-                    padding="16px 20px"
-                    _hover={{ backgroundColor: "transparent"}}
-                    _focus={{ backgroundColor: "transparent"}}
-                    _active={{ backgroundColor: "transparent" }}
-                    _focusVisible={{ backgroundColor: "transparent" }}
-                    onClick={() => pushQuery("raw_data_source", elm._id)}
-                  >
-                    {elm.name || elm.number}
-                  </MenuItem>
-                )})}
+                {rawDataSources.map((elm, i) => {
+                  return (
+                    <MenuItem
+                      key={i}
+                      width="100%"
+                      whiteSpace="normal"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      wordBreak="break-all"
+                      fontFamily="Roboto"
+                      fontWeight="500"
+                      fontSize="14px"
+                      lineHeight="20px"
+                      color="#252A32"
+                      padding="16px 20px"
+                      _hover={{ backgroundColor: "transparent" }}
+                      _focus={{ backgroundColor: "transparent" }}
+                      _active={{ backgroundColor: "transparent" }}
+                      _focusVisible={{ backgroundColor: "transparent" }}
+                      onClick={() => pushQuery("raw_data_source", elm._id)}
+                    >
+                      {elm.name || elm.number}
+                    </MenuItem>
+                  );
+                })}
               </MenuOptionGroup>
             </>
-          }
+          )}
 
-          {informationRequests.length > 0 &&
+          {informationRequests.length > 0 && (
             <>
-              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
+              <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0" />
               <MenuOptionGroup
                 title="Pedidos LAI"
                 fontFamily="Roboto"
@@ -368,35 +399,37 @@ export default function DatasetResource({
                 margin="0"
                 padding="24px 20px 8px"
               >
-                {informationRequests.map((elm, i) => {return (
-                  <MenuItem
-                    key={i}
-                    width="100%"
-                    whiteSpace="normal"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                    wordBreak="break-all"
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    fontSize="14px"
-                    lineHeight="20px"
-                    color="#252A32"
-                    padding="16px 20px"
-                    _hover={{ backgroundColor: "transparent"}}
-                    _focus={{ backgroundColor: "transparent"}}
-                    _active={{ backgroundColor: "transparent" }}
-                    _focusVisible={{ backgroundColor: "transparent" }}
-                    onClick={() => pushQuery("information_request", elm._id)}
-                  >
-                    {elm.name || elm.number}
-                  </MenuItem>
-                )})}
+                {informationRequests.map((elm, i) => {
+                  return (
+                    <MenuItem
+                      key={i}
+                      width="100%"
+                      whiteSpace="normal"
+                      overflow="hidden"
+                      textOverflow="ellipsis"
+                      wordBreak="break-all"
+                      fontFamily="Roboto"
+                      fontWeight="500"
+                      fontSize="14px"
+                      lineHeight="20px"
+                      color="#252A32"
+                      padding="16px 20px"
+                      _hover={{ backgroundColor: "transparent" }}
+                      _focus={{ backgroundColor: "transparent" }}
+                      _active={{ backgroundColor: "transparent" }}
+                      _focusVisible={{ backgroundColor: "transparent" }}
+                      onClick={() => pushQuery("information_request", elm._id)}
+                    >
+                      {elm.name || elm.number}
+                    </MenuItem>
+                  );
+                })}
               </MenuOptionGroup>
             </>
-          }
+          )}
         </MenuList>
       </Menu>
-    )
+    );
   }
 
   return (
@@ -407,50 +440,52 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
-      {displayScreen === "desktop" ? 
+      {displayScreen === "desktop" ? (
         <Stack
-          minWidth={{base: "100%", lg: "296px"}}
-          maxWidth={{base: "100%", lg: "296px"}}
+          minWidth={{ base: "100%", lg: "296px" }}
+          maxWidth={{ base: "100%", lg: "296px" }}
           spacing={0}
           position="sticky"
           height="100%"
           top="80px"
         >
           <ContentFilter
-            fieldName={t('tables')}
+            fieldName={t("tables")}
             choices={tables}
             value={query.table}
             onChange={(id) => {
-              pushQuery("table", id)
+              pushQuery("table", id);
             }}
             hasDivider={false}
           />
 
           <ContentFilter
-            fieldName={t('rawDataSources')}
+            fieldName={t("rawDataSources")}
             choices={rawDataSources}
             value={query.raw_data_source}
             onChange={(id) => {
-              pushQuery("raw_data_source", id)
+              pushQuery("raw_data_source", id);
             }}
             hasDivider={tables.length > 0 ? true : false}
           />
 
           <ContentFilter
-            fieldName={t('informationRequests')}
+            fieldName={t("informationRequests")}
             choices={informationRequests}
             value={query.information_request}
             onChange={(id) => {
-              pushQuery("information_request", id)
+              pushQuery("information_request", id);
             }}
-            hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
+            hasDivider={
+              tables.length > 0 || rawDataSources.length > 0 ? true : false
+            }
           />
         </Stack>
-        :
-        <SelectResource selectedResource={query}/>
-      }
+      ) : (
+        <SelectResource selectedResource={query} />
+      )}
 
-      <SwitchResource route={query}/>
+      <SwitchResource route={query} />
     </Stack>
-  )
+  );
 }

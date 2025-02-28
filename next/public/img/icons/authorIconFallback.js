@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const AuthorIconFallback = createIcon({
   displayName: "user author",
@@ -11,4 +11,4 @@ const AuthorIconFallback = createIcon({
   ),
 });
 
-export default AuthorIconFallback
+export default AuthorIconFallback;

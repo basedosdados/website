@@ -1,37 +1,26 @@
-
-import {
-  VStack,
-  Box,
-} from "@chakra-ui/react";
-import { useTranslation } from 'next-i18next';
+import { VStack, Box } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import TitleTextComponent from "../components/atoms/Text/TitleText";
 import BodyText from "../components/atoms/Text/BodyText";
 
 export default function TermsOfService() {
-  const { t } = useTranslation('terms');
+  const { t } = useTranslation("terms");
 
   const TitleText = ({ children, ...props }) => {
     return (
-      <TitleTextComponent
-        typography="small"
-        {...props}
-      >
+      <TitleTextComponent typography="small" {...props}>
         {children}
       </TitleTextComponent>
-    )
-  }
+    );
+  };
 
   const SecText = ({ children, ...props }) => {
     return (
-      <BodyText
-        typography="large"
-        color="#464A51"
-        {...props}
-      >
+      <BodyText typography="large" color="#464A51" {...props}>
         {children}
       </BodyText>
-    )
-  }
+    );
+  };
 
   return (
     <VStack
@@ -48,8 +37,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term1.title')}</TitleText>
-        <SecText>{t('ToS.term1.content')}</SecText>
+        <TitleText>{t("ToS.term1.title")}</TitleText>
+        <SecText>{t("ToS.term1.content")}</SecText>
       </VStack>
 
       <VStack
@@ -59,10 +48,10 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term2.title')}</TitleText>
-        <SecText>{t('ToS.term2.content')}</SecText>
+        <TitleText>{t("ToS.term2.title")}</TitleText>
+        <SecText>{t("ToS.term2.content")}</SecText>
       </VStack>
-    
+
       <VStack
         display="flex"
         flexDirection="column"
@@ -70,11 +59,11 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term3.title')}</TitleText>
+        <TitleText>{t("ToS.term3.title")}</TitleText>
         <Box>
-          <SecText>{t('ToS.term3.subContent1')}</SecText>
-          <SecText>{t('ToS.term3.subContent2')}</SecText>
-          <SecText>{t('ToS.term3.subContent3')}</SecText>
+          <SecText>{t("ToS.term3.subContent1")}</SecText>
+          <SecText>{t("ToS.term3.subContent2")}</SecText>
+          <SecText>{t("ToS.term3.subContent3")}</SecText>
         </Box>
       </VStack>
 
@@ -85,9 +74,9 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term4.title')}</TitleText>
-        <SecText>{t('ToS.term4.subContent1')}</SecText>
-        <SecText>{t('ToS.term4.subContent2')}</SecText>
+        <TitleText>{t("ToS.term4.title")}</TitleText>
+        <SecText>{t("ToS.term4.subContent1")}</SecText>
+        <SecText>{t("ToS.term4.subContent2")}</SecText>
       </VStack>
 
       <VStack
@@ -97,8 +86,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term5.title')}</TitleText>
-        <SecText>{t('ToS.term5.content')}</SecText>
+        <TitleText>{t("ToS.term5.title")}</TitleText>
+        <SecText>{t("ToS.term5.content")}</SecText>
       </VStack>
 
       <VStack
@@ -108,8 +97,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term6.title')}</TitleText>
-        <SecText>{t('ToS.term6.content')}</SecText>
+        <TitleText>{t("ToS.term6.title")}</TitleText>
+        <SecText>{t("ToS.term6.content")}</SecText>
       </VStack>
 
       <VStack
@@ -119,8 +108,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term7.title')}</TitleText>
-        <SecText>{t('ToS.term7.content')}</SecText>
+        <TitleText>{t("ToS.term7.title")}</TitleText>
+        <SecText>{t("ToS.term7.content")}</SecText>
       </VStack>
 
       <VStack
@@ -130,8 +119,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term8.title')}</TitleText>
-        <SecText>{t('ToS.term8.content')}</SecText>
+        <TitleText>{t("ToS.term8.title")}</TitleText>
+        <SecText>{t("ToS.term8.content")}</SecText>
       </VStack>
 
       <VStack
@@ -141,8 +130,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term9.title')}</TitleText>
-        <SecText>{t('ToS.term9.content')}</SecText>
+        <TitleText>{t("ToS.term9.title")}</TitleText>
+        <SecText>{t("ToS.term9.content")}</SecText>
       </VStack>
 
       <VStack
@@ -152,8 +141,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term10.title')}</TitleText>
-        <SecText>{t('ToS.term10.content')}</SecText>
+        <TitleText>{t("ToS.term10.title")}</TitleText>
+        <SecText>{t("ToS.term10.content")}</SecText>
       </VStack>
 
       <VStack
@@ -163,8 +152,8 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term11.title')}</TitleText>
-        <SecText>{t('ToS.term11.content')}</SecText>
+        <TitleText>{t("ToS.term11.title")}</TitleText>
+        <SecText>{t("ToS.term11.content")}</SecText>
       </VStack>
 
       <VStack
@@ -174,11 +163,11 @@ export default function TermsOfService() {
         alignItems="start"
         gap="8px"
       >
-        <TitleText>{t('ToS.term12.title')}</TitleText>
-        <SecText>{t('ToS.term12.content')}</SecText>
-      </VStack> 
+        <TitleText>{t("ToS.term12.title")}</TitleText>
+        <SecText>{t("ToS.term12.content")}</SecText>
+      </VStack>
 
-      <SecText>{t('ToS.finalNote')}</SecText>
+      <SecText>{t("ToS.finalNote")}</SecText>
     </VStack>
-  )
+  );
 }

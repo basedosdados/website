@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 async function getPlans() {
   try {
@@ -23,22 +23,26 @@ async function getPlans() {
             }
           }
         }
-        `
-      }
-    })
-    const data = res.data
-    return data
+        `,
+      },
+    });
+    const data = res.data;
+    return data;
   } catch (error) {
-    console.error(error)
-    return "err"
+    console.error(error);
+    return "err";
   }
 }
 
 export default async function handler(req, res) {
-  const result = await getPlans()
+  const result = await getPlans();
 
-  if(result.errors) return res.status(500).json({error: result.errors, success: false})
-  if(result === "err") return res.status(500).json({error: "err", success: false})
+  if (result.errors)
+    return res.status(500).json({ error: result.errors, success: false });
+  if (result === "err")
+    return res.status(500).json({ error: "err", success: false });
 
-  res.status(200).json({data: result?.data?.allStripePrice?.edges, success: true})
+  res
+    .status(200)
+    .json({ data: result?.data?.allStripePrice?.edges, success: true });
 }

@@ -8,9 +8,9 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { capitalize } from 'lodash';
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
+import { capitalize } from "lodash";
 import { formatBytes } from "../../utils";
 import Link from "../atoms/Link";
 import ReadMore from "../atoms/ReadMore";
@@ -31,42 +31,48 @@ import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
 export default function TablePage({ id, isBDSudo }) {
-  const { t } = useTranslation('dataset', 'prices');
+  const { t } = useTranslation("dataset", "prices");
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
-        const result = await response.json()
+        const response = await fetch(
+          `/api/tables/getTable?id=${id}&locale=${locale}`,
+          { method: "GET" },
+        );
+        const result = await response.json();
 
         if (result.success) {
-          const statusName = result?.resource?.status?.slug || ""
-          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+          const statusName = result?.resource?.status?.slug || "";
+          if (
+            statusName === "under_review" ||
+            (statusName === "excluded" && isBDSudo === false)
+          ) {
             setIsError(true);
           } else {
             setResource(result.resource);
             setIsError(false);
           }
         } else {
-          console.error(result.error)
-          setIsError(true)
+          console.error(result.error);
+          setIsError(true);
         }
       } catch (error) {
-        console.error("Fetch error: ", error)
-        setIsError(true)
+        console.error("Fetch error: ", error);
+        setIsError(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
     setIsLoading(true);
     fetchData();
-  }, [id, locale])
+  }, [id, locale]);
 
   const TooltipText = ({ text, info, ...props }) => {
     return (
@@ -107,55 +113,67 @@ export default function TablePage({ id, isBDSudo }) {
           </Tooltip>
         </TitleText>
       </Box>
-    )
-  }
+    );
+  };
 
   const keyIcons = (ref) => {
-    let href = ""
-    let alt = ""
+    let href = "";
+    let alt = "";
 
-    if(ref.github_user) {
-      const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
-      href = `https://github.com/${github}` 
-      alt = "github basedosdados"
+    if (ref.github_user) {
+      const github = ref.github_user.replace(
+        /(https:)\/\/(github.com)\//gim,
+        "",
+      );
+      href = `https://github.com/${github}`;
+      alt = "github basedosdados";
     }
-    if(ref.twitter_user) {
-      const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
-      href = `https://x.com/${twitter}`
-      alt = "twitter basedosdados"
+    if (ref.twitter_user) {
+      const twitter = ref.twitter_user.replace(
+        /(https:)\/\/(twitter.com)\//gim,
+        "",
+      );
+      href = `https://x.com/${twitter}`;
+      alt = "twitter basedosdados";
     }
-    if(ref.email) {
-      href = `mailto:${ref.email}`
-      alt= "email do contribuidor"
+    if (ref.email) {
+      href = `mailto:${ref.email}`;
+      alt = "email do contribuidor";
     }
-    if(ref.website) {
-      const website = ref.website.replace(/(https?:)\/\//gim, "")
-      href = `https://${website}`
-      alt = "website pessoal"
+    if (ref.website) {
+      const website = ref.website.replace(/(https?:)\/\//gim, "");
+      href = `https://${website}`;
+      alt = "website pessoal";
     }
 
     return {
       alt: alt,
       cursor: "pointer",
-      width:"20px",
-      height:"20px",
+      width: "20px",
+      height: "20px",
       fill: "#0068C5",
       _hover: {
-        fill: "#0057A4"
+        fill: "#0057A4",
       },
-      onClick: () => {router.push(href)}
-    }
-  }
+      onClick: () => {
+        router.push(href);
+      },
+    };
+  };
 
   const PublishedOrDataCleanedBy = ({ resource }) => {
-    if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
+    if (
+      !resource ||
+      typeof resource !== "object" ||
+      Object.keys(resource).length === 0
+    ) {
       return (
         <BodyText
           typography="small"
           marginRight="4px !important"
           color="#464A51"
         >
-          {t('table.notProvided')}
+          {t("table.notProvided")}
         </BodyText>
       );
     }
@@ -171,15 +189,22 @@ export default function TablePage({ id, isBDSudo }) {
               marginRight="4px !important"
               color="#464A51"
             >
-              {person?.firstName && person?.lastName 
+              {person?.firstName && person?.lastName
                 ? `${person.firstName} ${person.lastName}`
-                : t('table.notProvided')
-              }
+                : t("table.notProvided")}
             </BodyText>
-            {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
-            {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
-            {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
-            {person?.twitter && <XIcon {...keyIcons({twitter_user: person.twitter})}/>}
+            {person?.email && (
+              <EmailIcon {...keyIcons({ email: person.email })} />
+            )}
+            {person?.github && (
+              <GithubIcon {...keyIcons({ github_user: person.github })} />
+            )}
+            {person?.website && (
+              <WebIcon {...keyIcons({ website: person.website })} />
+            )}
+            {person?.twitter && (
+              <XIcon {...keyIcons({ twitter_user: person.twitter })} />
+            )}
           </HStack>
         ))}
       </Stack>
@@ -199,79 +224,77 @@ export default function TablePage({ id, isBDSudo }) {
       >
         {children}
       </Skeleton>
-    )
-  }
+    );
+  };
 
   const formatDate = (value) => {
     const date = new Date(value);
-    const formattedDate = date.getFullYear()+"-"+String(date.getMonth() + 1).padStart(2, "0")+"-"+String(date.getDate()).padStart(2, "0")
-    return formattedDate
-  }
+    const formattedDate =
+      date.getFullYear() +
+      "-" +
+      String(date.getMonth() + 1).padStart(2, "0") +
+      "-" +
+      String(date.getDate()).padStart(2, "0");
+    return formattedDate;
+  };
 
   const getUpdateFormat = (value, yearFrequency = false, frequency) => {
-    let formats
-    {yearFrequency ?
-      formats = {
-        "second":`${t('table.updateEvery')} ${frequency} ${t('table.seconds')}`,
-        "minute":`${t('table.updateEvery')} ${frequency} ${t('table.minutes')}`,
-        "hour":`${t('table.updateEvery')} ${frequency} ${t('table.hours')}`,
-        "day":`${t('table.updateEvery')} ${frequency} ${t('table.days')}`,
-        "week":`${t('table.updateEvery')} ${frequency} ${t('table.weeks')}`,
-        "month":`${t('table.updateEvery')} ${frequency} ${t('table.months')}`,
-        "bimester":`${t('table.updateEvery')} ${frequency} ${t('table.bimonths')}`,
-        "quarter":`${t('table.updateEvery')} ${frequency} ${t('table.quarters')}`,
-        "semester":`${t('table.updateEvery')} ${frequency} ${t('table.semesters')}`,
-        "year":`${t('table.updateEvery')} ${frequency} ${t('table.years')}`,
-      }
-      :
-      formats = {
-        "second":t('table.updatePerSecond'),
-        "minute":t('table.updatePerMinute'),
-        "hour":t('table.updatePerHour'),
-        "day":t('table.dailyUpdate'),
-        "week":t('table.weeklyUpdate'),
-        "month":t('table.monthlyUpdate'),
-        "bimester":t('table.bimonthlyUpdate'),
-        "quarter":t('table.quarterlyUpdate'),
-        "semester":t('table.semiannualUpdate'),
-        "year":t('table.annualUpdate'),
-      }
+    let formats;
+    {
+      yearFrequency
+        ? (formats = {
+            second: `${t("table.updateEvery")} ${frequency} ${t("table.seconds")}`,
+            minute: `${t("table.updateEvery")} ${frequency} ${t("table.minutes")}`,
+            hour: `${t("table.updateEvery")} ${frequency} ${t("table.hours")}`,
+            day: `${t("table.updateEvery")} ${frequency} ${t("table.days")}`,
+            week: `${t("table.updateEvery")} ${frequency} ${t("table.weeks")}`,
+            month: `${t("table.updateEvery")} ${frequency} ${t("table.months")}`,
+            bimester: `${t("table.updateEvery")} ${frequency} ${t("table.bimonths")}`,
+            quarter: `${t("table.updateEvery")} ${frequency} ${t("table.quarters")}`,
+            semester: `${t("table.updateEvery")} ${frequency} ${t("table.semesters")}`,
+            year: `${t("table.updateEvery")} ${frequency} ${t("table.years")}`,
+          })
+        : (formats = {
+            second: t("table.updatePerSecond"),
+            minute: t("table.updatePerMinute"),
+            hour: t("table.updatePerHour"),
+            day: t("table.dailyUpdate"),
+            week: t("table.weeklyUpdate"),
+            month: t("table.monthlyUpdate"),
+            bimester: t("table.bimonthlyUpdate"),
+            quarter: t("table.quarterlyUpdate"),
+            semester: t("table.semiannualUpdate"),
+            year: t("table.annualUpdate"),
+          });
     }
 
-    return formats[value] ? formats[value] : t('table.updateNotDefined')
-  }
+    return formats[value] ? formats[value] : t("table.updateNotDefined");
+  };
 
-  if (isError) return <FourOFour/>;
-  
+  if (isError) return <FourOFour />;
+
   return (
-    <Stack
-      flex={1}
-      overflow="hidden"
-      spacing={0}
-    >
+    <Stack flex={1} overflow="hidden" spacing={0}>
       <StackSkeleton
         display="flex"
         height="fit-content"
-        flexDirection={{base: "column", lg: "row"}}
-        alignItems={{base: "start", lg: "center"}}
+        flexDirection={{ base: "column", lg: "row" }}
+        alignItems={{ base: "start", lg: "center" }}
         gap="8px"
       >
         <TitleText
-          width={{base: "100%", lg:"fit-content"}}
+          width={{ base: "100%", lg: "fit-content" }}
           overflow="hidden"
           textOverflow="ellipsis"
-          whiteSpace={{base: "normal", lg:"nowrap"}}
+          whiteSpace={{ base: "normal", lg: "nowrap" }}
         >
           {resource?.[`name${capitalize(locale)}`] || resource?.name}
         </TitleText>
-        {resource?.uncompressedFileSize &&
-          <LabelText
-            typography="x-small"
-            color="#71757A"
-          >
+        {resource?.uncompressedFileSize && (
+          <LabelText typography="x-small" color="#71757A">
             {`(${formatBytes(resource.uncompressedFileSize)})`}
           </LabelText>
-        }
+        )}
       </StackSkeleton>
 
       <SkeletonText
@@ -288,14 +311,16 @@ export default function TablePage({ id, isBDSudo }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notProvided')}
+          {resource?.[`description${capitalize(locale)}`] ||
+            resource?.description ||
+            t("table.notProvided")}
         </ReadMore>
       </SkeletonText>
 
       <Stack spacing="8px" marginBottom="40px !important">
         <StackSkeleton width="300px" height="28px">
           <TitleText typography="small">
-            {t('table.temporalCoverage')}
+            {t("table.temporalCoverage")}
           </TitleText>
         </StackSkeleton>
 
@@ -303,54 +328,53 @@ export default function TablePage({ id, isBDSudo }) {
           width="100%"
           height={!isLoading ? "fit-content" : "65px"}
         >
-          <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
+          <TemporalCoverageBar value={resource?.fullTemporalCoverage} />
         </StackSkeleton>
       </Stack>
 
-      {locale !== 'pt' ?
-        <Stack spacing="8px"  marginBottom="40px !important">
+      {locale !== "pt" ? (
+        <Stack spacing="8px" marginBottom="40px !important">
           <StackSkeleton width="300px" height="28px">
             <TitleText typography="small">
-              {t('table.spatialCoverage')}
+              {t("table.spatialCoverage")}
             </TitleText>
           </StackSkeleton>
 
           <StackSkeleton
             height="20px"
-            width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
+            width={
+              resource?.[`spatialCoverageName${capitalize(locale)}`]
+                ? "100%"
+                : "200px"
+            }
           >
-            <BodyText
-              typography="small"
-              color="#464A51"
-            >
+            <BodyText typography="small" color="#464A51">
               {resource?.[`spatialCoverageName${capitalize(locale)}`]
-                ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
+                ? Object.values(
+                    resource[`spatialCoverageName${capitalize(locale)}`],
+                  )
                     .sort((a, b) => a.localeCompare(b, locale))
-                    .join(', ')
-                : t('table.notProvided')}
+                    .join(", ")
+                : t("table.notProvided")}
             </BodyText>
           </StackSkeleton>
         </Stack>
-        :
+      ) : (
         <></>
-      }
+      )}
 
       <Stack spacing="8px" marginBottom="40px !important">
         <StackSkeleton width="200px" height="28px">
-          <TitleText typography="small">
-            {t('table.dataAccess')}
-          </TitleText>
+          <TitleText typography="small">{t("table.dataAccess")}</TitleText>
         </StackSkeleton>
 
-        <DataInformationQuery
-          resource={resource}
-        />
+        <DataInformationQuery resource={resource} />
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
         <StackSkeleton width="380px" height="28px">
           <TitleText typography="small">
-            {t('table.dataUpdateFrequency')}
+            {t("table.dataUpdateFrequency")}
           </TitleText>
         </StackSkeleton>
 
@@ -366,8 +390,8 @@ export default function TablePage({ id, isBDSudo }) {
         >
           <Box
             display="flex"
-            marginBottom={{base: "24px", lg: "0"}}
-            flexDirection={{base: "column", lg: "row"}}
+            marginBottom={{ base: "24px", lg: "0" }}
+            flexDirection={{ base: "column", lg: "row" }}
             gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
@@ -375,12 +399,11 @@ export default function TablePage({ id, isBDSudo }) {
             lineHeight="22px"
             color="#464A51"
           >
-            {resource?.updates?.[0]?.latest ?
-              `${formatDate(resource.updates[0].latest)}`
-              :
-              t('table.notProvided')
-            }: {t('table.lastUpdateBD')}
-            {resource?.updates?.[0]?.frequency &&
+            {resource?.updates?.[0]?.latest
+              ? `${formatDate(resource.updates[0].latest)}`
+              : t("table.notProvided")}
+            : {t("table.lastUpdateBD")}
+            {resource?.updates?.[0]?.frequency && (
               <LabelText
                 typography="x-small"
                 width="fit-content"
@@ -388,14 +411,16 @@ export default function TablePage({ id, isBDSudo }) {
                 padding="2px 4px"
                 borderRadius="4px"
               >
-                {resource?.updates?.[0]?.frequency === 1 ?
-                  getUpdateFormat(resource.updates[0].entity.slug)
-                :
-                  getUpdateFormat(resource.updates[0].entity.slug, true, resource?.updates?.[0]?.frequency)
-                }
+                {resource?.updates?.[0]?.frequency === 1
+                  ? getUpdateFormat(resource.updates[0].entity.slug)
+                  : getUpdateFormat(
+                      resource.updates[0].entity.slug,
+                      true,
+                      resource?.updates?.[0]?.frequency,
+                    )}
               </LabelText>
-            }
-            {!resource?.updates?.[0]?.frequency &&
+            )}
+            {!resource?.updates?.[0]?.frequency && (
               <LabelText
                 typography="x-small"
                 width="fit-content"
@@ -403,14 +428,14 @@ export default function TablePage({ id, isBDSudo }) {
                 padding="2px 4px"
                 borderRadius="4px"
               >
-                {t('table.noUpdateScheduled')}
+                {t("table.noUpdateScheduled")}
               </LabelText>
-            }
+            )}
           </Box>
           <Box
             display="flex"
-            flexDirection={{base: "column", lg: "row"}}
-            marginBottom={{base: "24px", lg: "0"}}
+            flexDirection={{ base: "column", lg: "row" }}
+            marginBottom={{ base: "24px", lg: "0" }}
             gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
@@ -419,12 +444,11 @@ export default function TablePage({ id, isBDSudo }) {
             marginTop="4px"
             color="#464A51"
           >
-            {resource?.rawDataSource?.[0]?.updates?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].updates[0].latest)}`
-              :
-              t('table.notProvided')
-            }: {t('table.lastUpdateRawDataSource')}
-            {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ?
+            {resource?.rawDataSource?.[0]?.updates?.[0]?.latest
+              ? `${formatDate(resource.rawDataSource[0].updates[0].latest)}`
+              : t("table.notProvided")}
+            : {t("table.lastUpdateRawDataSource")}
+            {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency ? (
               <LabelText
                 typography="x-small"
                 width="fit-content"
@@ -432,14 +456,18 @@ export default function TablePage({ id, isBDSudo }) {
                 padding="2px 4px"
                 borderRadius="4px"
               >
-                {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency === 1 ?
-                  getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug)
-                :
-                  getUpdateFormat(resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug, true, resource?.rawDataSource?.[0]?.updates?.[0]?.frequency)
-                }
+                {resource?.rawDataSource?.[0]?.updates?.[0]?.frequency === 1
+                  ? getUpdateFormat(
+                      resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug,
+                    )
+                  : getUpdateFormat(
+                      resource?.rawDataSource?.[0]?.updates?.[0]?.entity?.slug,
+                      true,
+                      resource?.rawDataSource?.[0]?.updates?.[0]?.frequency,
+                    )}
               </LabelText>
-            :
-            !resource?.rawDataSource?.[0]?.updates?.[0] || !resource?.updates?.[0]?.frequency ?
+            ) : !resource?.rawDataSource?.[0]?.updates?.[0] ||
+              !resource?.updates?.[0]?.frequency ? (
               <LabelText
                 typography="x-small"
                 width="fit-content"
@@ -447,15 +475,15 @@ export default function TablePage({ id, isBDSudo }) {
                 padding="2px 4px"
                 borderRadius="4px"
               >
-                {t('table.noUpdateScheduled')}
+                {t("table.noUpdateScheduled")}
               </LabelText>
-              :
+            ) : (
               <></>
-            }
+            )}
           </Box>
           <Box
             display="flex"
-            flexDirection={{base: "column", lg: "row"}}
+            flexDirection={{ base: "column", lg: "row" }}
             gap="4px"
             fontFamily="Roboto"
             fontWeight="400"
@@ -464,20 +492,17 @@ export default function TablePage({ id, isBDSudo }) {
             marginTop="4px"
             color="#464A51"
           >
-            {resource?.rawDataSource?.[0]?.polls?.[0]?.latest ?
-              `${formatDate(resource.rawDataSource[0].polls[0].latest)}`
-              :
-              t('table.notProvided')
-            }: {t('table.lastCheckRawDataSource')}
+            {resource?.rawDataSource?.[0]?.polls?.[0]?.latest
+              ? `${formatDate(resource.rawDataSource[0].polls[0].latest)}`
+              : t("table.notProvided")}
+            : {t("table.lastCheckRawDataSource")}
           </Box>
         </SkeletonText>
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
         <StackSkeleton width="300px" height="28px">
-          <TitleText typography="small">
-            {t('table.bigQueryID')}
-          </TitleText>
+          <TitleText typography="small">{t("table.bigQueryID")}</TitleText>
         </StackSkeleton>
 
         <StackSkeleton
@@ -495,15 +520,17 @@ export default function TablePage({ id, isBDSudo }) {
             pointerEvents={resource?.cloudTables ? "default" : "none"}
             fill="#0068C5"
             _hover={{
-              color:"#0057A4",
-              fill:"#0057A4"
+              color: "#0057A4",
+              fill: "#0057A4",
             }}
           >
-            {!resource?.cloudTables ?
-              t('table.notProvided')
-              :
-              resource?.cloudTables?.[0]?.gcpProjectId+"."+resource?.cloudTables?.[0]?.gcpDatasetId+"."+resource?.cloudTables?.[0]?.gcpTableId
-            }
+            {!resource?.cloudTables
+              ? t("table.notProvided")
+              : resource?.cloudTables?.[0]?.gcpProjectId +
+                "." +
+                resource?.cloudTables?.[0]?.gcpDatasetId +
+                "." +
+                resource?.cloudTables?.[0]?.gcpTableId}
             <RedirectIcon
               display={resource?.cloudTables ? "flex" : "none"}
               width="12px"
@@ -512,7 +539,6 @@ export default function TablePage({ id, isBDSudo }) {
           </Link>
         </StackSkeleton>
       </Stack>
-
 
       <Stack spacing="8px" marginBottom="40px !important">
         <StackSkeleton width="260px" height="28px">
@@ -525,11 +551,10 @@ export default function TablePage({ id, isBDSudo }) {
           height="20px"
           width={resource?.partitions ? "100%" : "200px"}
         >
-          <BodyText
-            typography="small"
-            color="#464A51"
-          >
-            {resource?.partitions ? resource.partitions : t('table.notProvided')}
+          <BodyText typography="small" color="#464A51">
+            {resource?.partitions
+              ? resource.partitions
+              : t("table.notProvided")}
           </BodyText>
         </StackSkeleton>
       </Stack>
@@ -550,17 +575,15 @@ export default function TablePage({ id, isBDSudo }) {
           width="100%"
           isLoaded={!isLoading}
         >
-          {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
-            <ObservationLevel resource={resource}/>
-          :
-            <BodyText
-              typography="small"
-              color="#464A51"
-            >
-              {t('table.notProvided')}
+          {resource?.observationLevels &&
+          Object.keys(resource?.observationLevels).length > 0 ? (
+            <ObservationLevel resource={resource} />
+          ) : (
+            <BodyText typography="small" color="#464A51">
+              {t("table.notProvided")}
             </BodyText>
-          }
-        </Skeleton>       
+          )}
+        </Skeleton>
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
@@ -571,14 +594,11 @@ export default function TablePage({ id, isBDSudo }) {
           />
         </StackSkeleton>
         <StackSkeleton
-          width={resource?.auxiliaryFilesUrl ? "100%" :"178px"}
+          width={resource?.auxiliaryFilesUrl ? "100%" : "178px"}
           height="24px"
         >
-          <BodyText
-            typography="small"
-            color="#464A51"
-          >
-            {resource?.auxiliaryFilesUrl ?
+          <BodyText typography="small" color="#464A51">
+            {resource?.auxiliaryFilesUrl ? (
               <Link
                 gap="8px"
                 fontWeight="400"
@@ -586,20 +606,17 @@ export default function TablePage({ id, isBDSudo }) {
                 fill="#0068C5"
                 _hover={{
                   fill: "#0057A4",
-                  color: "#0057A4"
+                  color: "#0057A4",
                 }}
                 href={resource.auxiliaryFilesUrl}
               >
-                {t('table.downloadFiles')}
-                <DownloadIcon
-                  width="16px"
-                  height="16px"
-                />
+                {t("table.downloadFiles")}
+                <DownloadIcon width="16px" height="16px" />
               </Link>
-            :
-              t('table.notProvided')
-            }
-          </BodyText>  
+            ) : (
+              t("table.notProvided")
+            )}
+          </BodyText>
         </StackSkeleton>
       </Stack>
 
@@ -613,47 +630,42 @@ export default function TablePage({ id, isBDSudo }) {
 
         <StackSkeleton
           height="20px"
-          width={resource?.rawDataSource?.[0]?.name ? "100%" :"132px"}
+          width={resource?.rawDataSource?.[0]?.name ? "100%" : "132px"}
         >
-          <BodyText
-            typography="small"
-            color="#464A51"
-          >
-            {resource?.rawDataSource?.[0]?._id ?
-              Object.values(resource?.rawDataSource).map((elm, i) => {
-                return (
-                  <Link
-                    key={i}
-                    target="_blank"
-                    display="flex"
-                    flexDirection="row"
-                    gap="8px"
-                    alignItems="center"
-                    fontWeight="400"
-                    color="#0068C5"
-                    fill="#0068C5"
-                    _hover={{
-                      fill: "#0057A4",
-                      color: "#0057A4"
-                    }}
-                    href={`/dataset/${elm?.dataset?._id}?raw_data_source=${elm?._id}`}
-                  >
-                    {elm?.[`name${capitalize(locale)}`] || elm?.name}
-                  </Link>
-                )
-              }) 
-              :
-                t('table.notProvided')
-            }
+          <BodyText typography="small" color="#464A51">
+            {resource?.rawDataSource?.[0]?._id
+              ? Object.values(resource?.rawDataSource).map((elm, i) => {
+                  return (
+                    <Link
+                      key={i}
+                      target="_blank"
+                      display="flex"
+                      flexDirection="row"
+                      gap="8px"
+                      alignItems="center"
+                      fontWeight="400"
+                      color="#0068C5"
+                      fill="#0068C5"
+                      _hover={{
+                        fill: "#0057A4",
+                        color: "#0057A4",
+                      }}
+                      href={`/dataset/${elm?.dataset?._id}?raw_data_source=${elm?._id}`}
+                    >
+                      {elm?.[`name${capitalize(locale)}`] || elm?.name}
+                    </Link>
+                  );
+                })
+              : t("table.notProvided")}
           </BodyText>
-        </StackSkeleton> 
+        </StackSkeleton>
       </Stack>
 
-      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
+      <Divider marginY="40px !important" borderColor="#DEDFE0" />
 
       <StackSkeleton width="240px" height="28px" marginBottom="20px !important">
         <TitleText typography="small">
-          {t('table.additionalInformation')}
+          {t("table.additionalInformation")}
         </TitleText>
       </StackSkeleton>
 
@@ -661,7 +673,7 @@ export default function TablePage({ id, isBDSudo }) {
         startColor="#F0F0F0"
         endColor="#F3F3F3"
         borderRadius="6px"
-        width={resource?.publishedByInfo ? "100%" :"200px"}
+        width={resource?.publishedByInfo ? "100%" : "200px"}
         minHeight="40px"
         spacing="4px"
         skeletonHeight="16px"
@@ -669,9 +681,9 @@ export default function TablePage({ id, isBDSudo }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <LabelText typography="small">{t('table.publishedBy')}</LabelText>
+        <LabelText typography="small">{t("table.publishedBy")}</LabelText>
         <PublishedOrDataCleanedBy
-          resource={resource?.publishedByInfo || t('table.notProvided')}
+          resource={resource?.publishedByInfo || t("table.notProvided")}
         />
       </SkeletonText>
 
@@ -687,9 +699,9 @@ export default function TablePage({ id, isBDSudo }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <LabelText typography="small">{t('table.dataCleanedBy')}</LabelText>
+        <LabelText typography="small">{t("table.dataCleanedBy")}</LabelText>
         <PublishedOrDataCleanedBy
-          resource={resource?.dataCleanedByInfo || t('table.notProvided')}
+          resource={resource?.dataCleanedByInfo || t("table.notProvided")}
         />
       </SkeletonText>
 
@@ -705,12 +717,11 @@ export default function TablePage({ id, isBDSudo }) {
         marginBottom="24px !important"
         isLoaded={!isLoading}
       >
-        <LabelText typography="small">{t('table.version')}</LabelText>
-        <BodyText
-          typography="small"
-          color="#464A51"
-        >{resource?.version || t('table.notProvided')}</BodyText>
+        <LabelText typography="small">{t("table.version")}</LabelText>
+        <BodyText typography="small" color="#464A51">
+          {resource?.version || t("table.notProvided")}
+        </BodyText>
       </SkeletonText>
     </Stack>
-  )
+  );
 }

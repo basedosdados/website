@@ -1,4 +1,4 @@
-import { createIcon } from '@chakra-ui/icons';
+import { createIcon } from "@chakra-ui/icons";
 
 const FacebookIcon = createIcon({
   displayName: "facebook",
@@ -11,4 +11,4 @@ const FacebookIcon = createIcon({
   ),
 });
 
-export default FacebookIcon
+export default FacebookIcon;

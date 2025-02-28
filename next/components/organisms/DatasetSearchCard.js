@@ -1,15 +1,8 @@
-import {
-  HStack,
-  Image,
-  Stack,
-  VStack,
-  Text,
-  Box
-} from "@chakra-ui/react";
-import { useTranslation } from 'next-i18next';
+import { HStack, Image, Stack, VStack, Text, Box } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import { capitalize } from "lodash";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
-import Link from '../atoms/Link';
+import Link from "../atoms/Link";
 import TitleText from "../atoms/Text/TitleText";
 import BodyText from "../atoms/Text/BodyText";
 
@@ -27,13 +20,13 @@ export default function Dataset({
   rawDataSources,
   informationRequests,
   contains,
-  locale
+  locale,
 }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
 
   const Tables = () => {
-    let tablesNumber = tables.number
-    if(tables.number === undefined) tablesNumber = 0
+    let tablesNumber = tables.number;
+    if (tables.number === undefined) tablesNumber = 0;
 
     return (
       <Link
@@ -45,28 +38,23 @@ export default function Dataset({
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4"
+          fill: "#0057A4",
         }}
       >
-        <DataBaseSolidIcon
-          alt={t('tables')}
-          width="15px"
-          height="15px"
-        />
-        <Text
-          marginLeft="4px !important"
-          whiteSpace="nowrap"
-        >
+        <DataBaseSolidIcon alt={t("tables")} width="15px" height="15px" />
+        <Text marginLeft="4px !important" whiteSpace="nowrap">
           {tablesNumber}{" "}
-          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
+          {tablesNumber === 1
+            ? t("datasetCard.table")
+            : t("datasetCard.tables")}
         </Text>
       </Link>
-    )
-  }
+    );
+  };
 
   const RawDataSources = () => {
-    let rawDataSourcesNumber = rawDataSources.number
-    if(rawDataSources.number === undefined) rawDataSourcesNumber = 0
+    let rawDataSourcesNumber = rawDataSources.number;
+    if (rawDataSources.number === undefined) rawDataSourcesNumber = 0;
 
     return (
       <Link
@@ -77,29 +65,28 @@ export default function Dataset({
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4"
+          fill: "#0057A4",
         }}
-        href={rawDataSourcesNumber > 0 ? `/dataset/${id}?raw_data_source=${rawDataSources.id}` : "#"}
+        href={
+          rawDataSourcesNumber > 0
+            ? `/dataset/${id}?raw_data_source=${rawDataSources.id}`
+            : "#"
+        }
       >
-        <LinkIcon
-          alt={t('rawDataSources')}
-          width="15px"
-          height="15px"
-        />
-        <Text
-          marginLeft="4px !important"
-          whiteSpace="nowrap"
-        >
+        <LinkIcon alt={t("rawDataSources")} width="15px" height="15px" />
+        <Text marginLeft="4px !important" whiteSpace="nowrap">
           {rawDataSourcesNumber}{" "}
-          {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
+          {rawDataSourcesNumber === 1
+            ? t("datasetCard.rawDataSource")
+            : t("datasetCard.rawDataSources")}
         </Text>
       </Link>
-    )
-  }
+    );
+  };
 
   const InformationRequest = () => {
-    let informationRequestsNumber = informationRequests.number
-    if(informationRequests.number === undefined) informationRequestsNumber = 0
+    let informationRequestsNumber = informationRequests.number;
+    if (informationRequests.number === undefined) informationRequestsNumber = 0;
 
     return (
       <Link
@@ -110,25 +97,28 @@ export default function Dataset({
         fontWeight="400"
         _hover={{
           color: "#0057A4",
-          fill: "#0057A4"
+          fill: "#0057A4",
         }}
-        href={informationRequestsNumber > 0 ? `/dataset/${id}?information_request=${informationRequests.id}` : "#"}
+        href={
+          informationRequestsNumber > 0
+            ? `/dataset/${id}?information_request=${informationRequests.id}`
+            : "#"
+        }
       >
         <InfoArrowIcon
-          alt={t('informationRequests')}
+          alt={t("informationRequests")}
           width="15px"
           height="15px"
         />
-        <Text
-          marginLeft="4px !important"
-          whiteSpace="nowrap"
-        >
+        <Text marginLeft="4px !important" whiteSpace="nowrap">
           {informationRequestsNumber}{" "}
-          {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
+          {informationRequestsNumber === 1
+            ? t("datasetCard.informationRequest")
+            : t("datasetCard.informationRequests")}
         </Text>
       </Link>
-    )
-  }
+    );
+  };
 
   return (
     <VStack
@@ -144,10 +134,7 @@ export default function Dataset({
         height="100%"
         spacing={6}
       >
-        <Link
-          href={`/dataset/${id}`}
-          target="_self"
-        >
+        <Link href={`/dataset/${id}`} target="_self">
           <Box
             display="flex"
             justifyContent="center"
@@ -156,15 +143,21 @@ export default function Dataset({
             _hover={{ opacity: 0.9 }}
           >
             <Image
-              src={organizations[0]?.picture?.startsWith("https://") 
-                ? organizations[0]?.picture 
-                : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`}
-              alt={organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name || t('notProvided')}
+              src={
+                organizations[0]?.picture?.startsWith("https://")
+                  ? organizations[0]?.picture
+                  : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`
+              }
+              alt={
+                organizations[0]?.[`name${capitalize(locale)}`] ||
+                organizations[0]?.name ||
+                t("notProvided")
+              }
               borderRadius="16px"
               minWidth="222px"
               maxWidth="222px"
-              minHeight={locale !== 'pt' ? "165px" : "138px"}
-              maxHeight={locale !== 'pt' ? "165px" : "138px"}
+              minHeight={locale !== "pt" ? "165px" : "138px"}
+              maxHeight={locale !== "pt" ? "165px" : "138px"}
               objectFit="contain"
             />
           </Box>
@@ -184,17 +177,14 @@ export default function Dataset({
               alignItems="flex-start"
               pb={{ base: 2, lg: 0 }}
             >
-              <Link
-                href={`/dataset/${id}`}
-                width="100%"
-              >
+              <Link href={`/dataset/${id}`} width="100%">
                 <TitleText
                   typography="small"
                   width="100%"
                   noOfLines={2}
                   textOverflow="ellipsis"
                   _hover={{
-                    opacity: 0.7
+                    opacity: 0.7,
                   }}
                 >
                   {name}
@@ -208,88 +198,58 @@ export default function Dataset({
               marginBottom="4px !important"
               alignItems="flex-start"
             >
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('organization')}:
+              <Stack direction={{ base: "column", lg: "row" }} spacing={1}>
+                <BodyText typography="small" color="#464A51">
+                  {t("organization")}:
                 </BodyText>
-                <Link
-                  href={`/search?organization=${organizations[0]?.slug}`}
-                >
+                <Link href={`/search?organization=${organizations[0]?.slug}`}>
                   <BodyText
                     typography="small"
                     color="#71757A"
                     _hover={{
-                      color: "#464A51"
+                      color: "#464A51",
                     }}
                     textOverflow="ellipsis"
                   >
-                    {organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name}
+                    {organizations[0]?.[`name${capitalize(locale)}`] ||
+                      organizations[0]?.name}
                   </BodyText>
                 </Link>
               </Stack>
 
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('temporalCoverage')}:
+              <Stack direction={{ base: "column", lg: "row" }} spacing={1}>
+                <BodyText typography="small" color="#464A51">
+                  {t("temporalCoverage")}:
                 </BodyText>
-                <BodyText
-                  typography="small"
-                  color="#71757A"
-                >
-                  {temporalCoverageText ? temporalCoverageText : t('notProvided')}
+                <BodyText typography="small" color="#71757A">
+                  {temporalCoverageText
+                    ? temporalCoverageText
+                    : t("notProvided")}
                 </BodyText>
               </Stack>
 
-              {locale !== 'pt' ?
-                <Stack
-                  direction={{ base: "column", lg: "row" }}
-                  spacing={1}
-                >
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
-                    {t('spatialCoverage')}:
+              {locale !== "pt" ? (
+                <Stack direction={{ base: "column", lg: "row" }} spacing={1}>
+                  <BodyText typography="small" color="#464A51">
+                    {t("spatialCoverage")}:
                   </BodyText>
-                  <BodyText
-                    typography="small"
-                    color="#71757A"
-                  >
-                    {spatialCoverage ? spatialCoverage : t('notProvided')}
+                  <BodyText typography="small" color="#71757A">
+                    {spatialCoverage ? spatialCoverage : t("notProvided")}
                   </BodyText>
                 </Stack>
-                :
+              ) : (
                 <></>
-              }
+              )}
 
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('resources')}:
+              <Stack direction={{ base: "column", lg: "row" }} spacing={1}>
+                <BodyText typography="small" color="#464A51">
+                  {t("resources")}:
                 </BodyText>
-                <BodyText
-                  typography="small"
-                  color="#71757A"
-                >
-                  {contains.free && t('openData')} {contains.free && contains.pro && t('datasetCard.and')} {contains.pro && t('closedData')}
-                  {!contains.free && !contains.pro && t('none')}
+                <BodyText typography="small" color="#71757A">
+                  {contains.free && t("openData")}{" "}
+                  {contains.free && contains.pro && t("datasetCard.and")}{" "}
+                  {contains.pro && t("closedData")}
+                  {!contains.free && !contains.pro && t("none")}
                 </BodyText>
               </Stack>
             </VStack>
@@ -301,11 +261,13 @@ export default function Dataset({
             spacing={informationRequests?.number > 0 ? 0 : 10}
             width="100%"
             maxWidth="440px"
-            justifyContent={informationRequests?.number > 0 ? "space-between" : "flex-start"}
+            justifyContent={
+              informationRequests?.number > 0 ? "space-between" : "flex-start"
+            }
           >
-            <Tables/>
-            <RawDataSources/>
-            {informationRequests?.number > 0 && <InformationRequest/>}
+            <Tables />
+            <RawDataSources />
+            {informationRequests?.number > 0 && <InformationRequest />}
           </HStack>
         </VStack>
       </Stack>

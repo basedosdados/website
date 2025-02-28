@@ -7,10 +7,7 @@ const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 async function isKeyActive(id) {
   try {
     // Hash the API key
-    const hash = crypto
-      .createHash('sha256')
-      .update(id)
-      .digest('hex');
+    const hash = crypto.createHash("sha256").update(id).digest("hex");
 
     const res = await axios({
       url: API_URL,
@@ -30,19 +27,19 @@ async function isKeyActive(id) {
         }
         `,
         variables: {
-          hash: hash
-        }
-      }
+          hash: hash,
+        },
+      },
     });
     const data = res.data;
     return data;
   } catch (error) {
-    console.error('Error details:', {
+    console.error("Error details:", {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
       statusText: error.response?.statusText,
-      errors: error.response?.data?.errors?.map(e => e.message)
+      errors: error.response?.data?.errors?.map((e) => e.message),
     });
     return "err";
   }
@@ -52,13 +49,17 @@ export default async function handler(req, res) {
   const { id } = req.query;
   const result = await isKeyActive(id);
 
-  if (result.errors) return res.status(500).json({ error: result.errors, success: false });
-  if (result === "err") return res.status(500).json({ error: "err", success: false });
+  if (result.errors)
+    return res.status(500).json({ error: result.errors, success: false });
+  if (result === "err")
+    return res.status(500).json({ error: "err", success: false });
 
   const keyData = result?.data?.allDataapikey?.edges[0]?.node;
   if (!keyData) {
     return res.status(404).json({ error: "API key not found", success: false });
   }
 
-  return res.status(200).json({ resource: cleanGraphQLResponse(keyData), success: true });
+  return res
+    .status(200)
+    .json({ resource: cleanGraphQLResponse(keyData), success: true });
 }

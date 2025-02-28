@@ -20,7 +20,7 @@ import {
   Divider,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import hljs from "highlight.js/lib/core";
@@ -28,10 +28,7 @@ import Link from "../../atoms/Link";
 import Display from "../../atoms/Text/Display";
 import LabelText from "../../atoms/Text/LabelText";
 import BodyText from "../../atoms/Text/BodyText";
-import {
-  DatePost,
-  dateToLocatePt
-} from "./Home";
+import { DatePost, dateToLocatePt } from "./Home";
 
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import FacebookIcon from "../../../public/img/icons/facebookIcon";
@@ -150,7 +147,7 @@ function NativeShare({ url, title, description }) {
     <Box
       as="button"
       variant="unstyled"
-      _hover={{opacity: 0.8}}
+      _hover={{ opacity: 0.8 }}
       onClick={() => {
         if (nagivatorAvailable) {
           navigator
@@ -197,7 +194,7 @@ export function ShareButtons({ frontmatter }) {
     <Box display="flex" alignItems="center" gap="10px">
       <ChakraLink
         href={`https://x.com/share?text=${encodeURIComponent(text)}&url=${encodedUrl}`}
-        _hover={{opacity: 0.8}}
+        _hover={{ opacity: 0.8 }}
         target="_blank"
         isExternal
       >
@@ -205,7 +202,7 @@ export function ShareButtons({ frontmatter }) {
       </ChakraLink>
       <ChakraLink
         href={`https://www.facebook.com/sharer/sharer.php?t=${encodeURIComponent(text)}&u=${encodedUrl}`}
-        _hover={{opacity: 0.8}}
+        _hover={{ opacity: 0.8 }}
         target="_blank"
         isExternal
       >
@@ -213,13 +210,13 @@ export function ShareButtons({ frontmatter }) {
       </ChakraLink>
       <ChakraLink
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`}
-        _hover={{opacity: 0.8}}
+        _hover={{ opacity: 0.8 }}
         target="_blank"
         isExternal
       >
         <LinkedInIcon width="25px" height="25px" />
       </ChakraLink>
-      <NativeShare url={url} title={title} description={description}/>
+      <NativeShare url={url} title={title} description={description} />
     </Box>
   );
 }
@@ -263,13 +260,10 @@ function FigCaption(props) {
 export function Toc({ headings }) {
   return (
     <Box>
-      <LabelText
-        typography="large"
-        marginBottom="2px"
-      >
+      <LabelText typography="large" marginBottom="2px">
         Tabela de conteúdo
       </LabelText>
-      <Box as="hr" borderWidth="2px" borderColor="#DEDFE0" marginBottom="8px"/>
+      <Box as="hr" borderWidth="2px" borderColor="#DEDFE0" marginBottom="8px" />
       <UnorderedList margin="0">
         {headings.map(({ id, title, level }) => (
           <ListItem listStyleType="none" key={id} marginLeft={`${level * 5}%`}>
@@ -279,7 +273,7 @@ export function Toc({ headings }) {
               display="block"
               _hover={{
                 textDecoration: "none",
-                opacity: 0.8
+                opacity: 0.8,
               }}
               fontWeight="500"
               fontSize="14px"
@@ -298,65 +292,49 @@ export function Toc({ headings }) {
 }
 
 export function Header({ frontmatter, slug }) {
-  const { t } = useTranslation('blog')
+  const { t } = useTranslation("blog");
 
   return (
     <Box as="header" marginBottom="64px">
-      <Display as="h1">
-        {frontmatter.title}
-      </Display>
-      <BodyText
-        as="h2"
-        color="#71757A"
-        margin="8px 0 24px"
-      >
+      <Display as="h1">{frontmatter.title}</Display>
+      <BodyText as="h2" color="#71757A" margin="8px 0 24px">
         {frontmatter.description}
       </BodyText>
 
       <Stack
         width="100%"
-        flexDirection={{base: "column", lg: "row"}}
+        flexDirection={{ base: "column", lg: "row" }}
         spacing={0}
         gap="40px"
       >
         <Stack spacing={0} width="100%">
           {frontmatter.authors && (
             <BodyText>
-              {frontmatter.authors.map((elm) => elm.name).join(', ')}
+              {frontmatter.authors.map((elm) => elm.name).join(", ")}
             </BodyText>
           )}
 
-          {frontmatter?.date &&
+          {frontmatter?.date && (
             <Stack flexDirection="column" spacing="4px">
-              {frontmatter.date?.created &&
+              {frontmatter.date?.created && (
                 <>
                   <DatePost date={frontmatter.date.created} slug={slug} />
 
-                  {frontmatter.date?.updated && 
-                    <BodyText
-                      as="span"
-                      color="#71757A"
-                    >
+                  {frontmatter.date?.updated && (
+                    <BodyText as="span" color="#71757A">
                       {`${t("edited")} ${dateToLocatePt(frontmatter.date.updated)}`}
                     </BodyText>
-                  }
+                  )}
                 </>
-              }
+              )}
             </Stack>
-          }
+          )}
         </Stack>
 
-        <Stack
-          flexDirection="row"
-          alignItems="center"
-          gap="18px"
-          spacing={0}
-        >
-          <BodyText>
-            {t("share")}
-          </BodyText>
+        <Stack flexDirection="row" alignItems="center" gap="18px" spacing={0}>
+          <BodyText>{t("share")}</BodyText>
 
-          <ShareButtons frontmatter={frontmatter}/>
+          <ShareButtons frontmatter={frontmatter} />
         </Stack>
       </Stack>
     </Box>
@@ -380,14 +358,14 @@ export const mdxComponents = {
     />
   ),
   a: (props) => (
-  <BodyText
-    as="a"
-    color="#0068C5"
-    _hover={{
-      color: "#0057A4"
-    }}
-    {...props} 
-  />
+    <BodyText
+      as="a"
+      color="#0068C5"
+      _hover={{
+        color: "#0057A4",
+      }}
+      {...props}
+    />
   ),
   hr: (props) => (
     <Divider
@@ -398,9 +376,7 @@ export const mdxComponents = {
       {...props}
     />
   ),
-  p: (props) => (
-    <BodyText {...props}/>
-  ),
+  p: (props) => <BodyText {...props} />,
   // Inline code
   code: (props) => (
     <Text
@@ -418,12 +394,7 @@ export const mdxComponents = {
   ol: (props) => <OrderedList {...props} />,
   ul: (props) => <UnorderedList {...props} />,
   li: (props) => (
-    <ListItem
-      marginY="8px"
-      color="#252A32"
-      fontFamily="Roboto"
-      {...props}
-    />
+    <ListItem marginY="8px" color="#252A32" fontFamily="Roboto" {...props} />
   ),
   table: (props) => (
     <TableContainer>
@@ -487,13 +458,9 @@ export const mdxComponents = {
         >
           “
         </Text>
-        <BodyText marginTop="35px" {...body.props}/>
+        <BodyText marginTop="35px" {...body.props} />
         {figcaption ? (
-          <BodyText
-            marginTop="16px"
-            color="#71757A"
-            {...figcaption.props}
-          />
+          <BodyText marginTop="16px" color="#71757A" {...figcaption.props} />
         ) : null}
       </Box>
     );

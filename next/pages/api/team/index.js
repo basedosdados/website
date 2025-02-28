@@ -1,5 +1,3 @@
 import getAllTeams from "./getAllTeams";
 
-export {
-  getAllTeams
-}
+export { getAllTeams };

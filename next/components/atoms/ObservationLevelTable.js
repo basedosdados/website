@@ -7,16 +7,19 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { capitalize } from "lodash";
 
 export default function ObservationLevel({ resource }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
   const router = useRouter();
   const { locale } = router;
 
-  const headers = [t('observationLevelTable.entityHeader'), t('observationLevelTable.columnsHeader')];
+  const headers = [
+    t("observationLevelTable.entityHeader"),
+    t("observationLevelTable.columnsHeader"),
+  ];
 
   function sortElements(a, b) {
     if (a.order < b.order) {
@@ -30,31 +33,34 @@ export default function ObservationLevel({ resource }) {
 
   let array = [];
   const keys = Object.keys(resource?.observationLevels);
-  const sortedLevels = Object.values(resource?.observationLevels).sort(sortElements);
+  const sortedLevels = Object.values(resource?.observationLevels).sort(
+    sortElements,
+  );
 
   sortedLevels.forEach((value) => {
     const valueEntity = () => {
-      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`];
-      if(value.entity.name) return value.entity.name;
-      return t('observationLevelTable.notProvided');
-    }
+      if (value.entity[`name${capitalize(locale)}`])
+        return value.entity[`name${capitalize(locale)}`];
+      if (value.entity.name) return value.entity.name;
+      return t("observationLevelTable.notProvided");
+    };
 
     const valueColumns = () => {
-      let columns = []
+      let columns = [];
 
-      if(value?.columns[0]) {
+      if (value?.columns[0]) {
         Object.values(value.columns).map((column) => {
-          columns.push(column?.name)
-        })
+          columns.push(column?.name);
+        });
       } else {
-        columns = [t('observationLevelTable.notProvided')]
+        columns = [t("observationLevelTable.notProvided")];
       }
-      return columns.join(", ")
-    }
+      return columns.join(", ");
+    };
 
-    const newValue = [valueEntity(), valueColumns()]
-    array.push(newValue)
-  })
+    const newValue = [valueEntity(), valueColumns()];
+    array.push(newValue);
+  });
 
   return (
     <TableContainer
@@ -95,11 +101,7 @@ export default function ObservationLevel({ resource }) {
 
         <Tbody role="rowgroup" position="relative">
           {array.map((elm, i) => (
-            <Tr
-              key={i}
-              role="row"
-              borderBottom="1px solid #DEDFE0"
-            >
+            <Tr key={i} role="row" borderBottom="1px solid #DEDFE0">
               <Td
                 width="50%"
                 role="cell"
@@ -140,5 +142,5 @@ export default function ObservationLevel({ resource }) {
         </Tbody>
       </Table>
     </TableContainer>
-  )
+  );
 }

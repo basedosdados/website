@@ -10,4 +10,4 @@ export {
   getTableEdit,
   postTable,
   getBigTableQuery,
-}
+};

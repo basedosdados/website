@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
+const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 async function getAlreadySubscribed(id, token) {
   try {
@@ -8,7 +8,7 @@ async function getAlreadySubscribed(id, token) {
       url: API_URL,
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
       data: {
         query: `
@@ -22,27 +22,27 @@ async function getAlreadySubscribed(id, token) {
               }
             }
           }
-        `
-      }
-    })
-    const data = res.data
-    return data
+        `,
+      },
+    });
+    const data = res.data;
+    return data;
   } catch (error) {
-    console.error(error)
-    return "err"
+    console.error(error);
+    return "err";
   }
 }
 
 export default async function handler(req, res) {
   const token = () => {
-    if(req.query.q) return atob(req.query.q)
-    return req.cookies.token
-  }
+    if (req.query.q) return atob(req.query.q);
+    return req.cookies.token;
+  };
 
-  const result = await getAlreadySubscribed(atob(req.query.p), token())
+  const result = await getAlreadySubscribed(atob(req.query.p), token());
 
-  if(result.errors) return res.status(500).json(false)
-  if(result === "err") return res.status(500).json(false)
+  if (result.errors) return res.status(500).json(false);
+  if (result === "err") return res.status(500).json(false);
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.isSubscriber)
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.isSubscriber);
 }

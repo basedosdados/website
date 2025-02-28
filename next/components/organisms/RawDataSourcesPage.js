@@ -4,11 +4,11 @@ import {
   Skeleton,
   SkeletonText,
   Tooltip,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 import { capitalize } from "lodash";
 
 import Button from "../atoms/Button";
@@ -20,79 +20,84 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 import FourOFour from "../templates/404";
 
-import RedirectIcon from "../../public/img/icons/redirectIcon"
+import RedirectIcon from "../../public/img/icons/redirectIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
 export default function RawDataSourcesPage({ id, isBDSudo }) {
-  const { t } = useTranslation('dataset');
+  const { t } = useTranslation("dataset");
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchRawDataSources = async () => {
-      setIsLoading(true)
+      setIsLoading(true);
       try {
         const url = `/api/rawDataSources/getRawDataSource?id=${id}&locale=${locale}`;
-        const response = await fetch(url, { method: "GET" })
-        const result = await response.json()
+        const response = await fetch(url, { method: "GET" });
+        const result = await response.json();
 
         if (result.success) {
-          const statusName = result?.resource?.status?.slug || ""
-          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
-            setIsError(true)
+          const statusName = result?.resource?.status?.slug || "";
+          if (
+            statusName === "under_review" ||
+            (statusName === "excluded" && isBDSudo === false)
+          ) {
+            setIsError(true);
           } else {
-            setResource(result.resource)
-            setIsError(false)
+            setResource(result.resource);
+            setIsError(false);
           }
         } else {
-          console.error(result.error)
-          setIsError(true)
+          console.error(result.error);
+          setIsError(true);
         }
       } catch (error) {
-        console.error("Fetch error: ", error)
-        setIsError(true)
+        console.error("Fetch error: ", error);
+        setIsError(true);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    fetchRawDataSources()
-  }, [id, locale])
+    fetchRawDataSources();
+  }, [id, locale]);
 
   const ObjectValues = (value) => {
-    if(value === undefined || Object.keys(value).length === 0) return t('rawDataSource.notProvided')
+    if (value === undefined || Object.keys(value).length === 0)
+      return t("rawDataSource.notProvided");
 
-    const array = []
+    const array = [];
 
     Object.values(value).map((elm) => {
-      const translatedName = elm[`name${capitalize(locale)}`] || elm.name
-      array.push(translatedName)
-    })
+      const translatedName = elm[`name${capitalize(locale)}`] || elm.name;
+      array.push(translatedName);
+    });
 
-    if(array.length === 0) return t('rawDataSource.notProvided')
-    return array.join(", ").toString()
-  }
+    if (array.length === 0) return t("rawDataSource.notProvided");
+    return array.join(", ").toString();
+  };
 
   const TrueOrFalse = (value) => {
     switch (value) {
       case true:
-        return t('rawDataSource.yes')
+        return t("rawDataSource.yes");
         break;
       case false:
-        return t('rawDataSource.no')
+        return t("rawDataSource.no");
         break;
       default:
-        return t('rawDataSource.notProvided')
+        return t("rawDataSource.notProvided");
         break;
     }
-  }
+  };
 
   const UpdateFrequency = () => {
     const value = resource?.updates?.[0];
-    if (!value || Object.keys(value).length === 0) return t('rawDataSource.notProvided');
+    if (!value || Object.keys(value).length === 0)
+      return t("rawDataSource.notProvided");
 
     const localizedName = value.entity[`name${capitalize(locale)}`];
     const defaultName = value.entity.name;
@@ -104,8 +109,8 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
       return `${localizedName || defaultName}`;
     }
 
-    return t('rawDataSource.notProvided');
-  }
+    return t("rawDataSource.notProvided");
+  };
 
   const TooltipText = ({ text, info, ...props }) => {
     return (
@@ -145,8 +150,8 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
           </Tooltip>
         </TitleText>
       </Box>
-    )
-  }
+    );
+  };
 
   const StackSkeleton = ({ children, ...props }) => {
     return (
@@ -161,8 +166,8 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
       >
         {children}
       </Skeleton>
-    )
-  }
+    );
+  };
 
   const AddInfoTextBase = ({ title, text, ...props }) => {
     return (
@@ -180,21 +185,20 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
         {...props}
       >
         <LabelText typography="small">{title}</LabelText>
-        <BodyText
-          typography="small"
-          color="#464A51"
-        >{text || t('rawDataSource.notProvided')}</BodyText>
+        <BodyText typography="small" color="#464A51">
+          {text || t("rawDataSource.notProvided")}
+        </BodyText>
       </SkeletonText>
-    )
-  }
+    );
+  };
 
-  if(isError) return <FourOFour/>
+  if (isError) return <FourOFour />;
 
   return (
     <Stack
       flex={1}
       overflow="hidden"
-      paddingLeft={{base: "0", lg: "24px"}}
+      paddingLeft={{ base: "0", lg: "24px" }}
       spacing={0}
     >
       <StackSkeleton
@@ -219,7 +223,7 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
         marginTop="8px !important"
       >
         <AlertDiscalimerBox>
-          {t('rawDataSource.rawDataDisclaimer')}
+          {t("rawDataSource.rawDataDisclaimer")}
         </AlertDiscalimerBox>
       </StackSkeleton>
 
@@ -237,21 +241,18 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
           backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
           cursor={resource?.url ? "pointer" : "default"}
           _hover={{
-            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
+            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1",
           }}
         >
-          {t('rawDataSource.accessOriginalSource')}
-          <RedirectIcon
-            width="12px"
-            height="12px"
-          />
+          {t("rawDataSource.accessOriginalSource")}
+          <RedirectIcon width="12px" height="12px" />
         </Button>
       </StackSkeleton>
 
       <Stack spacing="8px">
         <StackSkeleton width="160px" height="28px">
           <TitleText typography="small">
-            {t('rawDataSource.description')}
+            {t("rawDataSource.description")}
           </TitleText>
         </StackSkeleton>
 
@@ -268,49 +269,51 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
           isLoaded={!isLoading}
         >
           <ReadMore id="readLessRawDescription">
-            {resource?.[`description${capitalize(locale)}`] || resource?.description || t('rawDataSource.notProvided')}
+            {resource?.[`description${capitalize(locale)}`] ||
+              resource?.description ||
+              t("rawDataSource.notProvided")}
           </ReadMore>
         </SkeletonText>
       </Stack>
 
-      <Divider marginY="40px !important" borderColor="#DEDFE0"/>
+      <Divider marginY="40px !important" borderColor="#DEDFE0" />
 
       <StackSkeleton width="190px" height="28px" marginBottom="20px !important">
         <TitleText typography="small">
-          {t('rawDataSource.additionalInfo')}
+          {t("rawDataSource.additionalInfo")}
         </TitleText>
       </StackSkeleton>
 
       <AddInfoTextBase
-        title={t('rawDataSource.language')}
+        title={t("rawDataSource.language")}
         text={ObjectValues(resource?.languages)}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.availability')}
+        title={t("rawDataSource.availability")}
         text={resource?.availability?.name}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.hasStructuredData')}
+        title={t("rawDataSource.hasStructuredData")}
         text={TrueOrFalse(resource?.containsStructuredData)}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.hasAPI')}
+        title={t("rawDataSource.hasAPI")}
         text={TrueOrFalse(resource?.containsApi)}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.updateFrequency')}
+        title={t("rawDataSource.updateFrequency")}
         text={UpdateFrequency()}
       />
 
       <Stack marginBottom="24px !important">
         <StackSkeleton width="190px" height="28px">
           <TooltipText
-            text={t('rawDataSource.observationLevel')}
-            info={t('rawDataSource.observationLevelTooltip')}
+            text={t("rawDataSource.observationLevel")}
+            info={t("rawDataSource.observationLevelTooltip")}
             fontSize="14px"
           />
         </StackSkeleton>
@@ -323,33 +326,31 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
           width="100%"
           isLoaded={!isLoading}
         >
-          {resource?.observationLevels && Object.keys(resource?.observationLevels).length > 0 ?
-            <ObservationLevel resource={resource}/>
-            :
-            <BodyText
-              typography="small"
-              color="#464A51"
-            >
-              {t('rawDataSource.notProvided')}
+          {resource?.observationLevels &&
+          Object.keys(resource?.observationLevels).length > 0 ? (
+            <ObservationLevel resource={resource} />
+          ) : (
+            <BodyText typography="small" color="#464A51">
+              {t("rawDataSource.notProvided")}
             </BodyText>
-          }
-        </Skeleton>       
+          )}
+        </Skeleton>
       </Stack>
 
       <AddInfoTextBase
-        title={t('rawDataSource.requiresRegistration')}
+        title={t("rawDataSource.requiresRegistration")}
         text={TrueOrFalse(resource?.requiresRegistration)}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.requiresIPFromCountry')}
+        title={t("rawDataSource.requiresIPFromCountry")}
         text={ObjectValues(resource?.areaIpAddressRequired)}
       />
 
       <AddInfoTextBase
-        title={t('rawDataSource.isFree')}
+        title={t("rawDataSource.isFree")}
         text={TrueOrFalse(resource?.isFree)}
       />
     </Stack>
-  )
+  );
 }

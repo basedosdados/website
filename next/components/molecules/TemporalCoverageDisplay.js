@@ -4,11 +4,11 @@ import {
   Box,
   Tooltip,
   useDisclosure,
-  ModalCloseButton
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
-import { useTranslation } from 'next-i18next';
+import { useTranslation } from "next-i18next";
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import TitleText from "../atoms/Text/TitleText";
@@ -16,52 +16,49 @@ import BodyText from "../atoms/Text/BodyText";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
-export function TemporalCoverageBar ({ value }) {
-  const { t } = useTranslation(['dataset', 'prices']);
-  const [values, setValues] = useState({})
-  const plansModal = useDisclosure()
+export function TemporalCoverageBar({ value }) {
+  const { t } = useTranslation(["dataset", "prices"]);
+  const [values, setValues] = useState({});
+  const plansModal = useDisclosure();
 
   const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    let user;
+    if (cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
-  }
+    if (user?.isSubscriber) return user?.isSubscriber;
+    return false;
+  };
 
   const TextData = ({ string, ...style }) => {
     return (
-      <BodyText
-        typography="small"
-        color="#464A51"
-        {...style}
-      >
+      <BodyText typography="small" color="#464A51" {...style}>
         {string}
       </BodyText>
-    )
-  }
+    );
+  };
 
   useEffect(() => {
-    if (value === null || value === undefined) return setValues(null)
+    if (value === null || value === undefined) return setValues(null);
 
-    let newValue = {}
+    let newValue = {};
 
-    if(value["2"]?.type === "closed")  newValue["3"] = value["2"].date
+    if (value["2"]?.type === "closed") newValue["3"] = value["2"].date;
 
-    if(value["0"]?.type === "open") newValue["0"] = value["0"].date
-    if(value["0"]?.type === "closed")  newValue["2"] = value["0"].date
+    if (value["0"]?.type === "open") newValue["0"] = value["0"].date;
+    if (value["0"]?.type === "closed") newValue["2"] = value["0"].date;
 
-    if(value["1"]?.type === "open") newValue["1"] = value["1"].date
-    if(value["1"]?.type === "closed")  newValue["3"] = value["1"].date
+    if (value["1"]?.type === "open") newValue["1"] = value["1"].date;
+    if (value["1"]?.type === "closed") newValue["3"] = value["1"].date;
 
-    setValues(newValue)
-  }, [value])
+    setValues(newValue);
+  }, [value]);
 
-  if(values === null) return <TextData string={t('temporalCoverageBar.notProvided')}/>
+  if (values === null)
+    return <TextData string={t("temporalCoverageBar.notProvided")} />;
 
   return (
-    <HStack 
-      position="relative"  
+    <HStack
+      position="relative"
       width="100%"
       maxWidth="325px"
       height="65px"
@@ -73,27 +70,23 @@ export function TemporalCoverageBar ({ value }) {
         onClose={plansModal.onClose}
         propsModalContent={{
           minWidth: "fit-content",
-          overflow: "auto"
+          overflow: "auto",
         }}
         isCentered={false}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText
-            width="100%"
-            fontWeight="400"
-            textAlign="center"
-          >
-            {t('temporalCoverageBar.comparePlans')}
+          <TitleText width="100%" fontWeight="400" textAlign="center">
+            {t("temporalCoverageBar.comparePlans")}
           </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+            _hover={{ backgroundColor: "transparent", color: "#0B89E2" }}
           />
         </Stack>
 
-        <SectionPrice/>
+        <SectionPrice />
       </ModalGeneral>
 
       <Tooltip
@@ -110,11 +103,13 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label={t('temporalCoverageBar.accessGranted')}
+        label={t("temporalCoverageBar.accessGranted")}
       >
         <Box
           flex={3}
-          marginRight={values?.["3"] ? "" : {base:"24px !important", lg: "0"}}
+          marginRight={
+            values?.["3"] ? "" : { base: "24px !important", lg: "0" }
+          }
           display={values?.["0"] ? "" : "none"}
         >
           <Box
@@ -134,7 +129,7 @@ export function TemporalCoverageBar ({ value }) {
             marginBottom="10px"
             padding="6px 16px"
           >
-            {t('temporalCoverageBar.free')}
+            {t("temporalCoverageBar.free")}
           </Box>
           <Box
             position="relative"
@@ -208,11 +203,16 @@ export function TemporalCoverageBar ({ value }) {
         color="#FFFFFF"
         placement="top"
         maxWidth="160px"
-        label={isUserPro() ? t('temporalCoverageBar.accessGranted') : t('temporalCoverageBar.upgradeRequired')}
+        label={
+          isUserPro()
+            ? t("temporalCoverageBar.accessGranted")
+            : t("temporalCoverageBar.upgradeRequired")
+        }
       >
         <Box
           flex={2}
-          marginRight={{base:"24px !important", lg: "0"}}  display={values?.["3"] ? "" : "none"}
+          marginRight={{ base: "24px !important", lg: "0" }}
+          display={values?.["3"] ? "" : "none"}
         >
           <Box
             as="a"
@@ -238,25 +238,19 @@ export function TemporalCoverageBar ({ value }) {
             _hover={{
               color: isUserPro() ? "#2B8C4D" : "#0057A4",
               fill: isUserPro() ? "#2B8C4D" : "#0057A4",
-              backgroundColor: isUserPro() ? "#D5E8DB" : "#E4F2FF"
+              backgroundColor: isUserPro() ? "#D5E8DB" : "#E4F2FF",
             }}
             onClick={() => {
-              if(isUserPro()) return
-              plansModal.onOpen()}
-            }
+              if (isUserPro()) return;
+              plansModal.onOpen();
+            }}
           >
-            {t('temporalCoverageBar.paid')}
-            {isUserPro() ?
-              <CheckIcon
-                width="20px"
-                height="20px"
-              />
-              :
-              <RedirectIcon
-                width="12px"
-                height="12px"
-              />
-            }
+            {t("temporalCoverageBar.paid")}
+            {isUserPro() ? (
+              <CheckIcon width="20px" height="20px" />
+            ) : (
+              <RedirectIcon width="12px" height="12px" />
+            )}
           </Box>
 
           <Box
@@ -266,7 +260,11 @@ export function TemporalCoverageBar ({ value }) {
             borderColor={isUserPro() ? "#22703E" : "#0068C5"}
             marginBottom="10px"
           >
-            <Box position="absolute" width="100%" display={values?.["2"] ? "" : "none"}>
+            <Box
+              position="absolute"
+              width="100%"
+              display={values?.["2"] ? "" : "none"}
+            >
               <Box
                 position="absolute"
                 display="flex"
@@ -317,5 +315,5 @@ export function TemporalCoverageBar ({ value }) {
         </Box>
       </Tooltip>
     </HStack>
-  )
+  );
 }

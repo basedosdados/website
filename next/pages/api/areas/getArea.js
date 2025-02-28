@@ -1,5 +1,5 @@
 import axios from "axios";
-import { capitalize } from 'lodash';
+import { capitalize } from "lodash";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
@@ -23,8 +23,8 @@ async function getArea(slug, locale) {
           }
         }
         `,
-        variables: null
-      }
+        variables: null,
+      },
     });
     const data = res?.data?.data?.allArea?.edges;
     return data;
@@ -35,11 +35,13 @@ async function getArea(slug, locale) {
 }
 
 export default async function handler(req, res) {
-  const { slug, locale = 'pt' } = req.query;
+  const { slug, locale = "pt" } = req.query;
   const result = await getArea(slug, locale);
 
-  if(result.errors) return res.status(500).json({error: result.errors, success: false})
-  if(result === "err") return res.status(500).json({error: "err", success: false})
+  if (result.errors)
+    return res.status(500).json({ error: result.errors, success: false });
+  if (result === "err")
+    return res.status(500).json({ error: "err", success: false });
 
-  return res.status(200).json({resource: result, success: true})
+  return res.status(200).json({ resource: result, success: true });
 }
