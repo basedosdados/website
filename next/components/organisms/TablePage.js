@@ -30,7 +30,7 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id }) {
+export default function TablePage({ id, isBDSudo }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
@@ -45,8 +45,13 @@ export default function TablePage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource);
-          setIsError(false);
+          const statusName = result?.resource?.status?.slug || ""
+          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+            setIsError(true);
+          } else {
+            setResource(result.resource);
+            setIsError(false);
+          }
         } else {
           console.error(result.error)
           setIsError(true)

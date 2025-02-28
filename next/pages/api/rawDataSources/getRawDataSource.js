@@ -35,6 +35,9 @@ async function getRawDataSource(id, locale = 'pt') {
                   name
                   name${capitalize(locale)}
                 }
+                status {
+                  slug
+                }
                 containsStructuredData
                 containsApi
                 updates {

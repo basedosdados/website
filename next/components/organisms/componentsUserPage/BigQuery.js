@@ -25,6 +25,11 @@ export default function BigQuery ({ userInfo }) {
   const [isLoading, setIsLoading] = useState(false)
 
   async function handleUpdateEmailGcp() {
+    if(emailGcp === userInfo?.gcpEmail) {
+      setErrors({emailGcp: t('username.errEmailGcp')})
+      return
+    }
+
     setErrors({})
     setIsLoading(true)
 
@@ -66,11 +71,12 @@ export default function BigQuery ({ userInfo }) {
           attempts++
           await delay(10000)
         }
+        window.location.reload()
       } else {
         setErrors({emailGcp: t('username.errEmailGcp')})
+        setIsLoading(false)
       }
     }
-    setIsLoading(false)
   }
 
   return (
@@ -105,6 +111,7 @@ export default function BigQuery ({ userInfo }) {
         width={{base: "100%", sm: "fit-content"}}
         onClick={() => handleUpdateEmailGcp()}
         isLoading={isLoading}
+        pointerEvents={isLoading ? "none" : "default"}
       >
         {t('username.bigquerySectionButton')}
       </Button>

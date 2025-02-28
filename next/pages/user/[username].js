@@ -17,7 +17,9 @@ import {
   Account,
   NewPassword,
   PlansAndPayment,
-  BigQuery
+  BigQuery,
+  Accesses,
+  DataAPI
 } from "../../components/organisms/componentsUserPage";
 
 export async function getServerSideProps(context) {
@@ -78,18 +80,20 @@ export async function getServerSideProps(context) {
   const userDataString = JSON.stringify(getUser)
   res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
-  const isUserPro = getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true;
+  const isUserPro = getUser?.isSubscriber;
+  const haveInterprisePlan = getUser?.proSubscription === "bd_pro_empresas"
 
   return {
     props: {
       ...(await serverSideTranslations(locale, ['menu', 'user', 'prices', 'common'])),
       getUser,
-      isUserPro
+      isUserPro,
+      haveInterprisePlan
     }
   }
 }
 
-export default function UserPage({ getUser, isUserPro }) {
+export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   const { t, ready } = useTranslation('user')
   const router = useRouter()
   const { query } = router
@@ -105,12 +109,16 @@ export default function UserPage({ getUser, isUserPro }) {
   }, [getUser])
 
   const choices = [
-    {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile", index: 0},
-    {bar: t('username.account'), title: t('username.account'), value: "account", index: 1},
-    {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
-    {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
-    isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
-  ].filter(Boolean)
+    {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile"},
+    {bar: t('username.account'), title: t('username.account'), value: "account"},
+    {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password"},
+    {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment"},
+    isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query"},
+    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses"},
+    userInfo?.keys?.edges?.length > 0 && {bar: t('dataAPI.title'), title: t('dataAPI.title'), value: "data_api"}
+  ]
+    .filter(Boolean)
+    .map((choice, index) => ({ ...choice, index }))
 
   useEffect(() => {
     const key = Object.keys(query)
@@ -204,11 +212,13 @@ export default function UserPage({ getUser, isUserPro }) {
           </TitleText>
           <Divider marginBottom="24px !important" borderColor="#DEDFE0"/>
 
-          {sectionSelected === 0 && <ProfileConfiguration userInfo={userInfo}/>}
-          {sectionSelected === 1 && <Account userInfo={userInfo}/>}
-          {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
-          {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
-          {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "profile" && <ProfileConfiguration userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "account" && <Account userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "new_password" && <NewPassword userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "plans_and_payment" && <PlansAndPayment userData={userInfo}/>}
+          {choices[sectionSelected].value === "big_query" && <BigQuery userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "accesses" && <Accesses userInfo={userInfo}/>}
+          {choices[sectionSelected].value === "data_api" && <DataAPI userInfo={userInfo}/>}
         </Stack>
       </Stack>
     </MainPageTemplate>

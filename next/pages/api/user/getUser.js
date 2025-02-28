@@ -32,7 +32,20 @@ async function getUser(id, token) {
                   linkedin
                   workDataTool
                   availableForResearch
-                  internalSubscription (isActive: true) {
+                  isSubscriber
+                  proSubscription
+                  proSubscriptionRole
+                  proSubscriptionSlots
+                  subscriptionSet (isActive: true) {
+                    edges {
+                      node {
+                        canceledAt
+                        createdAt
+                        planInterval
+                      }
+                    }
+                  }
+                  internalSubscription (isActive: true, first: 1) {
                     edges {
                       node {
                         canceledAt
@@ -41,6 +54,19 @@ async function getUser(id, token) {
                         stripeSubscription
                         planInterval
                         nextBillingCycle
+                      }
+                    }
+                  }
+                  keys {
+                    edges {
+                      node {
+                        name
+                        prefix
+                        hash
+                        isActive
+                        balance
+                        createdAt
+                        expiresAt
                       }
                     }
                   }
