@@ -16,7 +16,7 @@ recursos importantes de diversos conjuntos de dados públicos**, como:
 - **Dados originais**: Links com informações úteis para explorar mais
   sobre o conjunto de dados, como a fonte original e outros.
 
-!!! Info "Temos um time de Dados e voluntários(as) de todo o Brasil que ajudam a limpar e manter as tabelas tratadas BD. [Saiba como fazer parte](colab_data)"
+> Temos um time de Dados e voluntários(as) de todo o Brasil que ajudam a limpar e manter as tabelas tratadas BD. [Saiba como fazer parte](colab_data)
 
 ## Acessando tabelas tratadas BD
 
@@ -43,33 +43,28 @@ tratadas com:
 - Economia: Todo usuário possui *1 TB gratuito por mês para consulta
   aos dados*.
 
-<a
-href="access_data_bq"
-title="{{ lang.t('source.link.title')}}" className="md-button"
-hover="background-color: var(--md-primary-fg-color--dark)">
-    Aprenda
-    :material-arrow-right:
-</a>
+<Button
+  href="/docs/access_data_bq"
+  text="Aprenda"
+/>
 
 ### Pacotes
 
 Os pacotes da Base dos Dados permitem o acesso ao *data lake* público
 direto do seu computador ou ambiente de desenvolvimento.
+
 {/* Outra forma de acessar os recursos da BD é diretamente pelos endpoints, conforme
 documentado em [BD Open API](https://basedosdados.org/openapi). */}
 Os pacotes atualmente disponíveis são:
 
-- **:material-language-python: Python**
-- **:material-language-r: R**
+- **Python**
+- **R**
 - **Stata**
 
-<a
-href="access_data_packages"
-title="{{ lang.t('source.link.title')}}" className="md-button"
-hover="background-color: var(--md-primary-fg-color--dark)">
-    Aprenda
-    :material-arrow-right:
-</a>
+<Button
+  href="/docs/access_data_packages"
+  text="Aprenda"
+/>
 
 ## Dicas para melhor uso dos dados
 

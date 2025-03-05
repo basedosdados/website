@@ -15,6 +15,14 @@ import {
   Stack,
   HStack,
   Divider,
+  Image,
+  AspectRatio,
+  useClipboard,
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  AccordionItem,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
@@ -27,6 +35,9 @@ import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
 import Button from "../../components/atoms/Button";
 import Link from "../../components/atoms/Link";
+import InfoIcon from "../../public/img/icons/infoIcon";
+import WarningIcon from "../../public/img/icons/warningIcon";
+import { CopyIcon } from "../../public/img/icons/copyIcon";
 
 import {
   getAllDocs,
@@ -250,6 +261,103 @@ function Toc({ allDocs, headings, slug }) {
   );
 }
 
+const LANGS_SUPPORTED = [
+  "sql",
+  "python",
+  "r",
+  "bash",
+  "sh",
+  "stata",
+  "markdown",
+  "md",
+];
+
+function CodeBlock({ children }) {
+  const code = children.props.children;
+
+  const language = children.props.className?.replace("language-", "").trim();
+
+  const { hasCopied, onCopy } = useClipboard(code);
+
+  const highlighted = LANGS_SUPPORTED.includes(language)
+    ? hljs.highlight(code, {
+        language: language,
+      })
+    : { value: code };
+
+  return (
+    <Box marginY={"1rem"} borderRadius={"8px"} backgroundColor="#252A32">
+      <Box display={"flex"} alignItems={"center"} padding={"0 0.5rem"}>
+        {language ? (
+          <Text
+            as="span"
+            display="block"
+            paddingLeft="7px"
+            fontWeight="500"
+            fontSize="12px"
+            color="#878A8E"
+            textTransform="capitalize"
+            userSelect="none"
+            fontFamily="Roboto"
+          >
+            {["sh", "sql"].includes(language)
+              ? language.toUpperCase()
+              : language}
+          </Text>
+        ) : null}
+        <Button
+          variant="unstyled"
+          onClick={onCopy}
+          _groupActive={{ background: "transparent" }}
+          backgroundColor="transparent"
+          padding="0"
+          display="flex"
+          marginLeft="auto"
+          alignItems="center"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="12px"
+          color="#878A8E"
+          fill="#878A8E"
+          _hover={{
+            fill: "#9D9FA3",
+            color: "#9D9FA3",
+          }}
+          rightIcon={
+            hasCopied ? (
+              <CheckIcon alt="copiado conteúdo" width="24px" height="24px" />
+            ) : (
+              <CopyIcon alt="copiar conteúdo" width="24px" height="24px" />
+            )
+          }
+        >
+          {hasCopied ? "Copiado" : "Copiar"}
+        </Button>
+      </Box>
+      <Box
+        as="pre"
+        display="flex"
+        justifyContent="space-between"
+        width="100%"
+        maxHeight="70vh"
+        overflowX="auto"
+        overflowY="auto"
+        whiteSpace="pre"
+        borderBottomLeftRadius="8px"
+        borderBottomRightRadius="8px"
+      >
+        <Text
+          as="code"
+          paddingTop="0 !important"
+          width="100%"
+          className={`hljs ${language}`}
+          dangerouslySetInnerHTML={{ __html: highlighted.value }}
+        />
+      </Box>
+    </Box>
+  );
+}
+
 function HeadingWithAnchor(props) {
   return (
     <TitleText
@@ -279,11 +387,26 @@ function HeadingSimple(props) {
   );
 }
 
+function FigCaption(props) {
+  return props.children ? (
+    <Text
+      as="figcaption"
+      fontFamily="Roboto"
+      fontSize="14px"
+      color="#71757A"
+      textAlign="center"
+      marginY="8px"
+    >
+      {props.children}
+    </Text>
+  ) : null;
+}
+
 export const mdxComponents = {
   h1: (props) => <HeadingWithAnchor {...props} />,
-  h2: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
-  h3: (props) => <HeadingSimple as="h3" fontSize="18px" lineHeight="28px" {...props} />,
-  h4: (props) => <HeadingSimple as="h4" fontSize="18px" lineHeight="28px" {...props} />,
+  h2: (props) => <HeadingSimple as="h3" fontSize="20px" lineHeight="28px" {...props} />,
+  h3: (props) => <HeadingSimple as="h3" fontSize="16px" lineHeight="24px" {...props} />,
+  h4: (props) => <HeadingSimple as="h4" fontSize="16px" lineHeight="24px" {...props} />,
   h5: (props) => <HeadingSimple as="h5" fontSize="16px" lineHeight="24px" {...props} />,
   h6: (props) => <HeadingSimple as="h6" fontSize="15px" lineHeight="24px" {...props} />,
   blockquote: (props) => (
@@ -292,7 +415,7 @@ export const mdxComponents = {
       position="relative"
       display="flex"
       flexDirection="row"
-      marginBottom="16px"
+      margin="8px 0 16px"
     >
       <Box
         position="absolute"
@@ -321,6 +444,8 @@ export const mdxComponents = {
           fill="#0068C5"
         />
         <BodyText
+          position="relative"
+          top="2px"
           typography="small"
           as="span"
           {...props}
@@ -360,15 +485,16 @@ export const mdxComponents = {
   code: (props) => (
     <Text
       as="code"
-      fontFamily={"ui-monospace, monospace"}
-      backgroundColor={"#e7e7e7"}
+      fontFamily="ui-monospace, monospace"
+      backgroundColor="#e7e7e7"
       color="#3b3b3b"
-      fontSize={"90%"}
+      fontSize="90%"
       padding="2px 4px"
-      borderRadius={"3px"}
+      borderRadius="3px"
       {...props}
     />
   ),
+  pre: (props) => <CodeBlock {...props} />,
   ol: (props) => <OrderedList {...props} />,
   ul: (props) => <UnorderedList margin="8px 0 8px 20px" {...props} />,
   li: (props) => (
@@ -401,6 +527,160 @@ export const mdxComponents = {
     />
   ),
   th: (props) => <Th fontFamily={"Roboto"} {...props} />,
+  Button: (props) => (
+    <Button
+      margin="16px 0 8px"
+      onClick={() => window.open(props.href, "_blank")}
+    >
+      {props.text}
+    </Button>
+  ),
+  Warning: (props) => (
+    <Box
+      as="blockquote"
+      position="relative"
+      display="flex"
+      flexDirection="row"
+      margin="16px 0"
+    >
+      <Box
+        position="absolute"
+        left={0}
+        width="40px"
+        height="100%"
+        borderRadius="10px"
+        backgroundColor="#F9C50B"
+      />
+      <Stack
+        flexDirection="row"
+        alignItems="center"
+        spacing={0}
+        gap="16px"
+        width="100%"
+        padding="16px 24px"
+        marginLeft="4px"
+        borderRadius="8px"
+        backgroundColor="#FFF8DF"
+        zIndex="10"
+      >
+        <WarningIcon
+          width="20px"
+          height="20px"
+          padding="2px"
+          fill="#F9C50B"
+        />
+        <BodyText
+          position="relative"
+          top="2px"
+          typography="small"
+          as="span"
+          {...props}
+        />
+      </Stack>
+    </Box>
+  ),
+  Accordion: (props) => {
+    return (
+      <Accordion allowToggle width="100%" margin="16px 0">
+        <AccordionItem
+          border="1px solid #0068C5"
+          backgroundColor="#E4F2FF"
+        >
+          <AccordionButton
+            justifyContent="space-between"
+            padding="8px 16px"
+            _hover={{ cursor: "pointer", opacity: "0.7" }}
+          >
+            <BodyText typography="small">
+              {props.title}
+            </BodyText>
+            <AccordionIcon/>
+          </AccordionButton>
+
+          <AccordionPanel
+            backgroundColor="#FFF"
+            padding="8px 16px"
+            borderTop="1px solid #0068C5"
+          >
+            <BodyText typography="small" {...props}/>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    )
+  },
+  Image: (props) => (
+    <Box
+      as="figure"
+      marginY="16px"
+      boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+    >
+      <Image margin="0 auto" src={props.src} />
+      <FigCaption {...props} />
+    </Box>
+  ),
+  Video: (props) => (
+    <Box as="figure" marginY="16px">
+      <video width="100%" controls preload="metadata" src={props.src} />
+      <FigCaption {...props} />
+    </Box>
+  ),
+  Embed: ({ children }) => (
+    <Box marginY="16px">
+      <AspectRatio ratio={16 / 9}>{children}</AspectRatio>
+      <FigCaption {...children.props} />
+    </Box>
+  ),
+  Tip: ({ children }) => {
+    const withCaption = children.length > 1;
+    const tip = withCaption ? children[0] : children;
+    const body = withCaption ? children[1] : null;
+
+    return (
+      <Box
+        as="blockquote"
+        position="relative"
+        display="flex"
+        flexDirection="column"
+        margin="8px 0 16px"
+        borderRadius="10px"
+        border="1px solid #0068C6"
+      >
+        <Stack
+          flexDirection="row"
+          alignItems="center"
+          spacing={0}
+          gap="16px"
+          width="100%"
+          padding="16px 24px"
+          backgroundColor="#E4F2FF"
+          borderRadius={body ? "10px 10px 0 0" : "10px"}
+          zIndex="10"
+        >
+          <InfoIcon
+            width="20px"
+            height="20px"
+            padding="2px"
+            fill="#0068C5"
+          />
+          <BodyText
+            position="relative"
+            top="2px"
+            typography="small"
+            as="span"
+            {...tip.props}
+          />
+        </Stack>
+        {body &&
+          <BodyText
+            typography="small"
+            as="span"
+            padding="10px"
+            {...body.props}
+          />
+        }
+      </Box>
+    )
+  },
   Blockquote: ({ children }) => {
     const withCaption = children.length > 1;
 

@@ -65,7 +65,15 @@ const remarkPluginCaption = () => (tree) =>
   visit(
     tree,
     (node) =>
-      ["Image", "Video", "Embed", "Blockquote"].includes(node.name) &&
+      ["Image",
+        "Video",
+        "Embed",
+        "Blockquote",
+        "Button",
+        "Warning",
+        "Tip",
+        "Accordion"
+      ].includes(node.name) &&
       node.attributes.find(({ name }) => name === "caption"),
     (node) => {
       const caption = node.attributes.filter(({ name }) => name === "caption");
@@ -80,6 +88,8 @@ const remarkPluginCaption = () => (tree) =>
         // React does not support two children, should be nested childrens
         node.children[0].children = children;
       } else if (node.name === "Blockquote") {
+        node.children = [...children, ...node.children];
+      } else if (node.name === "Tip") {
         node.children = [...children, ...node.children];
       } else {
         node.children = children;
