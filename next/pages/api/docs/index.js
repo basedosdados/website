@@ -72,7 +72,8 @@ const remarkPluginCaption = () => (tree) =>
         "Button",
         "Warning",
         "Tip",
-        "Accordion"
+        "Accordion",
+        "PDF"
       ].includes(node.name) &&
       node.attributes.find(({ name }) => name === "caption"),
     (node) => {
@@ -87,10 +88,10 @@ const remarkPluginCaption = () => (tree) =>
         // Since Embed component has a children (`iframe`), set children as children of iframe
         // React does not support two children, should be nested childrens
         node.children[0].children = children;
-      } else if (node.name === "Blockquote") {
+      } else if (node.name === "Blockquote" || node.name === "Tip") {
         node.children = [...children, ...node.children];
-      } else if (node.name === "Tip") {
-        node.children = [...children, ...node.children];
+      } else if (node.name === "PDF") {
+        node.children = [{ type: "element", tagName: "figcaption", children }];
       } else {
         node.children = children;
       }

@@ -136,8 +136,12 @@ function Toc({ allDocs, headings, slug }) {
     const observer = new IntersectionObserver(observerCallback, observerOptions);
     observerRef.current = observer;
 
+    const sanitizeId = (id) => {
+      return id.replace(/^(\d)/, 'id-$1');
+    };
+
     const headingElements = document.querySelectorAll(
-      headings.map(({ id }) => `#${id}`).join(", ")
+      headings.map(({ id }) => `#${sanitizeId(id)}`).join(", ")
     );
     headingElements.forEach((element) => observer.observe(element));
 
@@ -376,6 +380,7 @@ function HeadingWithAnchor(props) {
 function HeadingSimple(props) {
   return (
     <Text
+      scrollMarginTop="100px"
       fontFamily="Roboto"
       fontWeight="500"
       color="#252A32"
@@ -630,6 +635,23 @@ export const mdxComponents = {
       <FigCaption {...children.props} />
     </Box>
   ),
+  PDF: (props) => (
+    <Box marginY="16px">
+      <object
+        data={props.url}
+        type="application/pdf"
+        width="100%"
+        height="700px"
+        aria-label="PDF Embedding"
+      >
+        <embed src={props.url} type="application/pdf" width="100%" height="700px" />
+        <p>
+          Your browser does not support PDF viewing. Please download the PDF to view it:{" "}
+          <a href={props.url} target="_blank" rel="noopener noreferrer">Download PDF</a>.
+        </p>
+      </object>
+    </Box>
+  ),
   Tip: ({ children }) => {
     const withCaption = children.length > 1;
     const tip = withCaption ? children[0] : children;
@@ -751,18 +773,21 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
         display="flex"
         flexDirection={{ base: "column", md: "row" }}
         alignItems="start"
-        paddingTop="70px"
+        paddingTop={{base: "40px", md: "70px"}}
+        gap={{base: "80px", md: "0"}}
+        height="100%"
         maxWidth="100%"
       >
         {allDocs && allDocs.length > 0 &&
           <Box
             as="aside"
-            position="sticky"
-            height="100%"
-            top="80px"
+            position={{base: "relative", md: "sticky"}}
+            top={{base: "0", md: "80px"}}
             overflowY="auto"
             maxWidth="272px"
             minWidth="272px"
+            maxHeight={{base: "100%", md: "calc(100vh - 6rem)"}}
+            height="100%"
             boxSizing="content-box"
             paddingRight="26px"
           >
@@ -779,6 +804,7 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
           width="100%"
           display="flex"
           flexDirection="column"
+          paddingLeft="16px"
         >
           <MDXRemote {...mdxSource} components={mdxComponents} />
         </Box>
