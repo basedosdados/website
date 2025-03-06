@@ -935,7 +935,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('prices')]: "/prices",
       [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk"},
+        {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
         {name: "Blog", href: "/blog"},
         {name: [t('faq')], href: "/faq"}
