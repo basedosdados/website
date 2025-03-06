@@ -515,7 +515,7 @@ export const mdxComponents = {
     />
   ),
   table: (props) => (
-    <TableContainer>
+    <TableContainer margin="16px 0">
       <Table variant="simple" border="1px solid #edf2f7" {...props} />
     </TableContainer>
   ),
@@ -773,7 +773,7 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
         display="flex"
         flexDirection={{ base: "column", md: "row" }}
         alignItems="start"
-        paddingTop={{base: "40px", md: "70px"}}
+        paddingTop={{base: "40px", md: "0"}}
         gap={{base: "80px", md: "0"}}
         height="100%"
         maxWidth="100%"
