@@ -250,7 +250,7 @@ function CardThemes ({ responsive, datasetsCards = [], loading, locale }) {
               <SkeletonWaitCard key={i}/>
             ))
           :
-          datasetsCards.length === 0 ?
+          datasetsCards === null || datasetsCards.length === 0 ?
             new Array(screenQuery).fill(0).map((elm, i) => (
               <SkeletonWaitCard key={i}/>
             ))
