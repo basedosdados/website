@@ -149,8 +149,8 @@ Já fez uma análise com os dados da BD? Conte para nós ou envie um email para 
 
 **Tutoriais e informações sobre os dados**
 
-- [Documentação da Base dos Dados](https://basedosdados.github.io/sdk/)
-- [Manual de Estilo da Base dos Dados](https://basedosdados.github.io/sdk/style_data/)
+- [Documentação da Base dos Dados](https://basedosdados.org/docs/home)
+- [Manual de Estilo da Base dos Dados](https://basedosdados.org/docs/style_data/)
 - [Tutorial de SQL da Base dos Dados](https://www.youtube.com/watch?v=fMo54j1GL6U&list=PLu5pyM8QY6hh283MYmLUnV2Fgs7NNC7Ww&index=2)
 - [Tutoriais do Portal da Câmara dos Deputados](https://dadosabertos.camara.leg.br/howtouse/central-tutoriais.html)
 - [Perguntas Frequêntes do Portal da Câmara dos Deputados](https://www2.camara.leg.br/transparencia/dados-abertos/perguntas-e-respostas)
