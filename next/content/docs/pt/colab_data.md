@@ -114,7 +114,7 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 
 #### Para o preenchimento de cada tabela do seu conjunto siga esse passo a passo:
 
-> A cada início e final de etapa consulte nosso [manual de estilo](style_data.md) para garantir que você está seguindo a padronização da BD
+<Tip caption="A cada início e final de etapa consulte nosso [manual de estilo](style_data.md) para garantir que você está seguindo a padronização da BD"/>
 
 1. Listar todas as variáveis dos dados na coluna `original_name`
     - Obs: Caso a base mude o nome das variáveis ao longo dos anos (como a RAIS), é necessário fazer a compatibilização entre anos para todas as variáveis preenchendo a coluna de `original_name_YYYY` para cada ano ou mês disponível
@@ -244,7 +244,7 @@ Os dados vão passar por 3 lugares no Google Cloud:
         - _replace_: substitui os dados existentes.
         - _pass_: não faz nada.
 
-    !!! Info "Se o projeto não existir no BigQuery, ele será automaticamente criado"
+> Se o projeto não existir no BigQuery, ele será automaticamente criado
 
   Consulte também nossa [API](../api_reference_cli) para mais detalhes de cada método.
 

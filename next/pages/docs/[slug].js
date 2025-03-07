@@ -79,7 +79,7 @@ export async function getStaticProps({ params, locale }) {
     };
   }
 
-  const allDocs = await getAllDocs();
+  const allDocs = await getAllDocs(locale);
 
   const serialize = await serializeDoc(content);
 
@@ -102,7 +102,7 @@ export async function getStaticPaths() {
   };
 }
 
-function Toc({ allDocs, headings, slug }) {
+function Toc({ allDocs, headings, slug, locale }) {
   const [isOverflow, setIsOverflow] = useState({});
   const textRefs = useRef({});
   const [activeId, setActiveId] = useState(null);
@@ -151,7 +151,13 @@ function Toc({ allDocs, headings, slug }) {
     };
   }, [headings]);
 
-  const schemeCategories = ["Docs", "APIs", "Contribua"]
+  const translations = {
+    en: "Contribute",
+    es: "Contribuir",
+    default: "Contribua"
+  };
+
+  const schemeCategories = ["Docs", "APIs", translations[locale] || translations.default];
 
   const groupedDocs = allDocs.reduce((acc, doc) => {
     const category = doc.frontmatter.category;
@@ -795,6 +801,7 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
               allDocs={allDocs}
               slug={slug}
               headings={headings}
+              locale={locale}
             />
           </Box>
         }
@@ -805,6 +812,7 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
           display="flex"
           flexDirection="column"
           paddingLeft="16px"
+          overflow="auto"
         >
           <MDXRemote {...mdxSource} components={mdxComponents} />
         </Box>

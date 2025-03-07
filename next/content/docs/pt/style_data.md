@@ -8,7 +8,7 @@ order: 1
 
 Nessa seção listamos todos os padrões do nosso manual de estilo e diretrizes de dados que usamos na Base dos Dados. Eles nos ajudam a manter os dados e metadados que publicamos com qualidade alta.
 
-!!! Tip "Você pode usar o menu esquerdo para navegar pelos diferentes tópicos dessa página."
+<Tip caption="Você pode usar o menu esquerdo para navegar pelos diferentes tópicos dessa página."/>
 {/* **Resumo**:
 
 - [Nomeação de bases e tabelas](#nomeação-de-bases-e-tabelas)
