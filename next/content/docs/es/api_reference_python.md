@@ -19,56 +19,16 @@ Esta API está compuesta por funciones con 2 tipos de funcionalidad:
 
 ## Módulos (Solicitud de datos)
 
-::: basedosdados.download.metadata
-    handler: python
-    rendering:
-            show_root_heading: no
-            heading_level: 3
-    selection:
-      docstring_style: google  # this is the default
-      docstring_options:
-        replace_admonitions: no
+<PythonCode id="basedosdados.download.metadata"/>
 
-::: basedosdados.download.download
-    handler: python
-    rendering:
-            show_root_heading: no
-            heading_level: 3
-    selection:
-      docstring_style: google  # this is the default
-      docstring_options:
-        replace_admonitions: no
+<PythonCode id="basedosdados.download.download"/>
 
 ## Clases (Gestión de datos)
 
-::: basedosdados.upload.storage
-    handler: python
-    rendering:
-            show_root_heading: no
-            heading_level: 3
-    selection:
-      docstring_style: google  # this is the default
-      docstring_options:
-        replace_admonitions: no
+<PythonCode id="basedosdados.upload.storage"/>
 
 ---
-::: basedosdados.upload.dataset
-    handler: python
-    rendering:
-            show_root_heading: no
-            heading_level: 3
-    selection:
-      docstring_style: google  # this is the default
-      docstring_options:
-        replace_admonitions: no
+<PythonCode id="basedosdados.upload.dataset"/>
 
 ---
-::: basedosdados.upload.table
-    handler: python
-    rendering:
-            show_root_heading: no
-            heading_level: 3
-    selection:
-      docstring_style: google  # this is the default
-      docstring_options:
-        replace_admonitions: no
+<PythonCode id="basedosdados.upload.table"/>
