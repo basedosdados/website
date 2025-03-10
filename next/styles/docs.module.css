@@ -2,6 +2,12 @@
   margin-bottom: 16px;
 }
 
+.python_code_docs :global(.doc) :global(.doc-children) {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
 .python_code_docs p {
   font-family: Roboto;
   font-weight: 400;
