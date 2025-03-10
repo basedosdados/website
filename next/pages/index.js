@@ -377,9 +377,9 @@ function Products() {
               <Link
                 width="fit-content"
                 href={
-                  locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-                  locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-                  "https://basedosdados.github.io/sdk"
+                  locale === "en" ? "/en/docs/home" :
+                  locale === "es" ? "/es/docs/home" :
+                  "/docs/home"
                 }
                 fontSize="18px"
                 lineHeight="26px"

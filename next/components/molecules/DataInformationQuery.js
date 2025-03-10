@@ -479,7 +479,7 @@ export default function DataInformationQuery({ resource }) {
                   {t('table.warningLargeTable', { returnObjects: true })[0]}
                   <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text as="a" marginRight="4px" href="https://basedosdados.github.io/sdk/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                  <Text as="a" marginRight="4px" href="https://basedosdados.org/docs/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
                   {t('table.warningLargeTable', { returnObjects: true })[3]}
                   <Text as="br" display={{base: "none", lg: "flex"}}/>
                   {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
@@ -546,9 +546,9 @@ export default function DataInformationQuery({ resource }) {
                     display="inline"
                     target="_blank"
                     href={
-                      locale === "en" ? "https://basedosdados.github.io/sdk/en/colab_data/" :
-                      locale === "es" ? "https://basedosdados.github.io/sdk/es/colab_data/" :
-                      "https://basedosdados.github.io/sdk/colab_data/"
+                      locale === "en" ? "https://basedosdados.org/en/docs/colab_data/" :
+                      locale === "es" ? "https://basedosdados.org/es/docs/colab_data/" :
+                      "https://basedosdados.org/docs/colab_data/"
                     }
                     fontWeight="400"
                     color="#0068C5"
@@ -674,9 +674,9 @@ export default function DataInformationQuery({ resource }) {
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_bq/#getting-started" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_bq/#pinitos" :
-                            "https://basedosdados.github.io/sdk/access_data_bq/#primeiros-passos"
+                            locale === "en" ? "https://basedosdados.org/en/docs/access_data_bq/#getting-started" :
+                            locale === "es" ? "https://basedosdados.org/es/docs/access_data_bq/#pinitos" :
+                            "https://basedosdados.org/docs/access_data_bq/#primeiros-passos"
                           }
                           fontWeight="400"
                           color="#0068C5"
@@ -778,9 +778,9 @@ export default function DataInformationQuery({ resource }) {
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_python/" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_python/" :
-                            "https://basedosdados.github.io/sdk/api_reference_python/"
+                            locale === "en" ? "https://basedosdados.org/en/docs/api_reference_python/" :
+                            locale === "es" ? "https://basedosdados.org/es/docs/api_reference_python/" :
+                            "https://basedosdados.org/docs/api_reference_python/"
                           }
                           fontWeight="400"
                           color="#0068C5"
@@ -848,9 +848,9 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.github.io/sdk/en/api_reference_r/" :
-                            locale === "es" ? "https://basedosdados.github.io/sdk/es/api_reference_r/" :
-                            "https://basedosdados.github.io/sdk/api_reference_r/"
+                            locale === "en" ? "https://basedosdados.org/en/docs/api_reference_r/" :
+                            locale === "es" ? "https://basedosdados.org/es/docs/api_reference_r/" :
+                            "https://basedosdados.org/docs/api_reference_r/"
                           }
                           fontWeight="400"
                           color="#0068C5"
