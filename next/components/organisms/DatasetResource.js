@@ -14,8 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useTranslation } from 'next-i18next';
-import { capitalize } from 'lodash';
+import { useTranslation } from "next-i18next";
+import { capitalize } from "lodash";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 
@@ -26,7 +26,8 @@ import InformationRequestPage from "./InformationRequestPage";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 
 export default function DatasetResource({
-  dataset
+  dataset,
+  isBDSudo
 }) {
   const { t } = useTranslation('dataset');
   const router = useRouter()
@@ -56,19 +57,34 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .filter((elm) => elm?.slug !== "dicionario")
-      .filter((elm) => elm?.slug !== "dictionary")
-      .sort(sortElements) || []
+    let dataset_tables
+    let raw_data_sources
+    let information_request
 
-    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
-    
-    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
+    if(isBDSudo) {
+      dataset_tables = dataset?.tables?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
+      raw_data_sources = dataset?.rawDataSources?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
+      information_request = dataset?.informationRequests?.edges?.map((elm) => elm.node)?.sort(sortElements) || [];
+    } else {
+      dataset_tables = dataset?.tables?.edges
+        ?.map((elm) => elm.node)
+          ?.filter(
+            (elm) =>
+              !["under_review", "excluded"].includes(elm?.status?.slug) &&
+              !["dicionario", "dictionary"].includes(elm?.slug)
+          )
+            ?.sort(sortElements) || [];
+
+      raw_data_sources = dataset?.rawDataSources?.edges
+        ?.map((elm) => elm.node)
+          ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+            ?.sort(sortElements) || [];
+
+      information_request = dataset?.informationRequests?.edges
+        ?.map((elm) => elm.node)
+          ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+            ?.sort(sortElements) || [];
+    }
 
     setTables(dataset_tables);
     setRawDataSources(raw_data_sources);
@@ -81,12 +97,12 @@ export default function DatasetResource({
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
-  }, [dataset])
+  }, [dataset, isBDSudo === true])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale}/>
-    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo}/>
+    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
+    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
     return null
   }
 

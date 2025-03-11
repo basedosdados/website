@@ -23,7 +23,7 @@ import FourOFour from "../templates/404";
 import RedirectIcon from "../../public/img/icons/redirectIcon"
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export default function RawDataSourcesPage({ id }) {
+export default function RawDataSourcesPage({ id, isBDSudo }) {
   const { t } = useTranslation('dataset');
   const router = useRouter();
   const { locale } = router;
@@ -40,8 +40,13 @@ export default function RawDataSourcesPage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          const statusName = result?.resource?.status?.slug || ""
+          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+            setIsError(true)
+          } else {
+            setResource(result.resource)
+            setIsError(false)
+          }
         } else {
           console.error(result.error)
           setIsError(true)

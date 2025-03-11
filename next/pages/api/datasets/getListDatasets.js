@@ -14,6 +14,9 @@ export async function getListDatasets() {
             edges {
               node {
                 _id
+                status {
+                  slug
+                }
               }
             }
           }
@@ -22,7 +25,12 @@ export async function getListDatasets() {
       },
       variables: null
     })
-    const data = res?.data?.data?.allDataset?.edges.map((res) => res?.node?._id)
+
+    const data = res?.data?.data?.allDataset?.edges
+      .map((res) => res?.node)
+      .filter((node) => node && node.status?.slug !== "under_review" && node.status?.slug !== "excluded")
+      .map((node) => node._id);
+
     return data
   } catch (error) {
     console.error("Error fetching datasets:", error)

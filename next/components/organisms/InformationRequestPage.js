@@ -18,7 +18,7 @@ import FourOFour from "../templates/404";
 
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function InformationRequestPage({ id }) {
+export default function InformationRequestPage({ id, isBDSudo }) {
   const { t } = useTranslation('dataset');
   const router = useRouter();
   const { locale } = router;
@@ -35,8 +35,13 @@ export default function InformationRequestPage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          const statusName = result?.resource?.status?.slug || ""
+          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+            setIsError(true)
+          } else {
+            setResource(result.resource)
+            setIsError(false)
+          }
         } else {
           console.error(result.error)
           setIsError(true)
