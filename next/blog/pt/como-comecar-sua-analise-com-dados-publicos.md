@@ -41,7 +41,7 @@ Clique [aqui](https://medium.com/basedosdados/como-funciona-o-sistema-de-inser%C
 
 Existem algumas maneiras diferentes de acessar os dados a BD, mas neste artigo vamos focar na mais simples: através de uma consulta SQL no datalake público.
 
-Se quiser aprender como acessar nossos dados com Python ou R, veja nossa documentação por [aqui](https://basedosdados.github.io/sdk/#acessando-tabelas-tratadas-bd).
+Se quiser aprender como acessar nossos dados com Python ou R, veja nossa documentação por [aqui](https://basedosdados.org/docs/home#acessando-tabelas-tratadas-bd).
 
 ## Por onde começar a sua análise?
 
@@ -167,7 +167,7 @@ Abaixo você encontra uma seção com diversos links úteis para seu trabalho e 
 
 ## Links úteis
 
-- [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.github.io/sdk/)
+- [Salve nossa documentação para consultar quando tiver dúvidas;](https://basedosdados.org/docs/home)
 - [Assine gratuitamente nossa BDleter para receber mensalmente nossas novidades;](https://info.basedosdados.org/newsletter)
 - [Conheçã nosso Curso de Análise de Dados com SQL para se aprofundar e dominar uma das linguagens mais utilizadas no mercado;](https://info.basedosdados.org/bd-edu-cursos)
 - [Se inscreva em nosso canal no YouTube](https://www.youtube.com/@BasedosDados) e siga a gente no [instagram](https://www.instagram.com/basedosdados/), [linkedin](https://www.linkedin.com/company/base-dos-dados/mycompany/) e [twitter](https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22).

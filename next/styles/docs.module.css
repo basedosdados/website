@@ -1,0 +1,118 @@
+.python_code_docs {
+  margin-bottom: 16px;
+}
+
+.python_code_docs :global(.doc) :global(.doc-children) {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.python_code_docs p {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #464A51;
+}
+
+.python_code_docs ul {
+  padding-left: 14px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #464A51;
+}
+
+.python_code_docs h3, .python_code_docs h4 {
+  margin: 16px 0;
+}
+
+.python_code_docs h3 code, .python_code_docs h4 code {
+  display: block;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.python_code_docs :global(.doc) :global(.doc-contents) {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-left: 1px solid #F2F2F2;
+  padding: 0 0 16px 24px;
+}
+
+.python_code_docs :global(.doc) :global(.doc-object) :global(.doc-method) {
+  padding-left: 24px;
+}
+
+.python_code_docs details {
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.87);
+  background-color: #FFFFFF;
+}
+
+.python_code_docs summary {
+  cursor: pointer;
+  background-color: #9e9e9e1a;
+  padding: 8px 16px;
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #252A32;
+}
+
+.python_code_docs details[open] summary{
+  border-bottom: 1px solid rgba(0, 0, 0, 0.87);
+}
+
+.python_code_docs code {
+  background-color: #f0f0f0;
+  color: #36464e;
+  padding: 2px;
+}
+
+.python_code_docs h3 code {
+  color: #FFF;
+}
+
+.python_code_docs :global(.highlight) code {
+  color: #FFF;
+}
+
+.python_code_docs h4 code {
+  color: #FFF;
+}
+
+.python_code_docs h4 span small code {
+  color: #36464e;
+  display: inherit;
+  padding: 2px;
+}
+
+.python_code_docs th {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #252A32;
+  border-bottom: 1px solid #DEDFE0;
+  box-sizing: content-box;
+  padding: 14px 22px;
+  background-color: #F7F7F7;
+  text-align: start;
+}
+
+.python_code_docs td {
+  font-family: Roboto;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #464A51;
+  padding: 14px 22px;
+  white-space: break-spaces;
+  border-bottom: 1px solid #DEDFE0;
+  background-color: #FFF;
+}

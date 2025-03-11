@@ -41,7 +41,7 @@ import basedosdados as bd
 
 > **Atenção!** É necessário criar um projeto no Google Cloud para fazer consulta aos dados do datalake. Caso você rode qualquer função do pacote pela primeira vez, as instruções irão aparecer e basta seguir o passo a passo. Utilize o **ID do projeto** que será gerado para rodar as funções mais a frente.
 
-Existem diversas funções no pacote, tanto para acesso quanto para publicação de dados no nosso ou em qualquer projeto do Google Cloud — você pode usar o pacote para construir seu próprio repositório de dados também. A lista completa dos módulos do pacote está na [nossa documentação](https://basedosdados.github.io/sdk/py_reference_api), e veja também como colaborar [subindo dados no repositório](https://basedosdados.github.io/sdk/colab_data/).
+Existem diversas funções no pacote, tanto para acesso quanto para publicação de dados no nosso ou em qualquer projeto do Google Cloud — você pode usar o pacote para construir seu próprio repositório de dados também. A lista completa dos módulos do pacote está na [nossa documentação](https://basedosdados.org/docs/api_reference_python), e veja também como colaborar [subindo dados no repositório](https://basedosdados.org/docs/colab_data).
 
 ## Explorando as funções do pacote
 

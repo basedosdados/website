@@ -67,14 +67,14 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
@@ -226,14 +226,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push('/search')}
           />
         )}
 
@@ -777,15 +777,15 @@ function DesktopLinks({
             options={[
               {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
               {name: t('tooltip.documentation'), url: 
-                locale === "en" ? "https://basedosdados.github.io/sdk/en" :
-                locale === "es" ? "https://basedosdados.github.io/sdk/es" :
-                "https://basedosdados.github.io/sdk"
+                locale === "en" ? "/en/docs/home" :
+                locale === "es" ? "/es/docs/home" :
+                "/docs/home"
               },
               {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
               {name: t('tooltip.installPackages'), url: 
-                locale === "en" ? "https://basedosdados.github.io/sdk/en/access_data_packages/" :
-                locale === "es" ? "https://basedosdados.github.io/sdk/es/access_data_packages/" :
-                "https://basedosdados.github.io/sdk/access_data_packages/"
+                locale === "en" ? "/en/docs/access_data_packages/" :
+                locale === "es" ? "/es/docs/access_data_packages/" :
+                "/docs/access_data_packages/"
               },
               {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
               {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
@@ -935,7 +935,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('prices')]: "/prices",
       [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk"},
+        {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
         {name: "Blog", href: "/blog"},
         {name: [t('faq')], href: "/faq"}
@@ -961,7 +961,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('prices')]: "/prices",
       [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/en"},
+        {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
         {name: "Blog", href: "/blog"},
         {name: [t('faq')], href: "/faq"}
@@ -985,7 +985,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('prices')]: "/prices",
       [t('resources')]: [
-        {name: [t('documentation')], href: "https://basedosdados.github.io/sdk/es"},
+        {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
         {name: "Blog", href: "/blog"},
         {name: [t('faq')], href: "/faq"}
@@ -1079,7 +1079,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               : "80px"
             }
             _hover={{opacity:"none"}}
-            href={router.pathname === "/" ? "/#home" : "/"}
+            href={"/search"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"

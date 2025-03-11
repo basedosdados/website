@@ -85,7 +85,7 @@ function Toc({ headings }) {
       </LabelText>
 
       <Box>
-        {headings.map(({ id, title, level }, i) => (
+        {headings.map(({ id, title }, i) => (
           <HStack
             key={id}
             spacing="4px"
