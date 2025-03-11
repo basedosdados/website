@@ -1,0 +1,47 @@
+{
+    "title": "API Documentation",
+    "overview": {
+        "title": "Overview",
+        "welcome": "Welcome to the Data API documentation.",
+        "description": "With the API, you can access our data in a programmatic way, without depending on BigQuery.",
+        "descriptionPricing": "Each endpoint has a different pricing tier, depending on the number of requests accumulated in the month.",
+        "baseURL": "Base URL",
+        "earlyRelease": "Alpha Version",
+        "earlyReleaseDescription": "This is an early release version of our Data API. We are currently testing and improving our services. Some of the features may be unstable. More endpoints, features, and detailed documentation will be released in the future."
+    },
+    "authentication": {
+      "title": "Authentication",
+      "description": "Learn how to authenticate with the Data API",
+      "apiKey": "API Key",
+      "getApiKeyBy": "To access the API, you'll need an API key. You can get one by:",
+      "getApiKeyBy1": "Creating an account on DB.",
+      "getApiKeyBy2Contactus": "Contacting us to request a key",
+      "getApiKeyBy2ContactusLink": "here",
+      "weWillAnswerYou": "We will answer you as soon as possible."
+    },
+    "endpoints": {
+        "title": "Endpoints",
+        "description": "Description",
+        "deprecated": "This endpoint is deprecated",
+        "inactive": "This endpoint is inactive",
+        "endpointURL": "Endpoint URL",
+        "parameters": "Parameters",
+        "pricingTiers": "Pricing Tiers",
+        "lastUpdated": "Last Updated",
+        "requests": "Requests",
+        "request": "Request"
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "description": "Learn how to use the Data API"
+    },
+    "pricing": {
+        "title": "Pricing",
+        "description": "To use the Data API, you'll need to add credits to your API key.",
+        "addCredits": "To add credits to your API key:",
+        "step1": "1. Visit our payment portal",
+        "step2": "2. Select the amount of credits you want to add",
+        "step3": "3. Complete the payment through our secure Stripe payment system",
+        "note": "Credits will be immediately available after successful payment."
+    }
+  }
