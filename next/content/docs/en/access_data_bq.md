@@ -32,9 +32,9 @@ To create a Google Cloud project, you just need an email registered with Google.
 3. **Click on `Create Project`**. Choose a nice name for the project.
 5. **Click on `Create`**
 
-<Accordion title="Why do I need to create a Google Cloud project?">
+<Tip caption="Why do I need to create a Google Cloud project?">
     Google provides 1 TB free per month of BigQuery usage for each project you own. A project is necessary to activate Google Cloud services, including BigQuery usage permission. Think of the project as the "account" where Google will track how much processing you've already used. **You don't need to add any card or payment method - BigQuery automatically starts in Sandbox mode, which allows you to use its resources without adding a payment method. [Read more here](https://cloud.google.com/bigquery/docs/sandbox/?hl=en).**
-</Accordion>
+</Tip>
 
 ### Accessing the `basedosdados` datalake
 
