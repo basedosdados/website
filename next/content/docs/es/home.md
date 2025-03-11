@@ -1,10 +1,10 @@
 ---
-title: Home
+title: Introducción
 category: Docs
 order: 0
 ---
 
-# Home
+# Introducción
 
 La misión de Base de los Datos es universalizar el uso de datos de calidad
 en Brasil y el mundo. Para ello, creamos una herramienta que te permite **acceder a

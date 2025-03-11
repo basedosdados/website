@@ -1,10 +1,10 @@
 ---
-title: Home
+title: Introdução
 category: Docs
 order: 0
 ---
 
-# Home
+# Introdução
 
 A missão da Base dos Dados é universalizar o uso de dados de qualidade
 no Brasil e no mundo. Para isso, criamos uma ferramenta que te permite **acessar

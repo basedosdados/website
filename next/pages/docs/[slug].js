@@ -645,35 +645,6 @@ export const mdxComponents = {
       </Stack>
     </Box>
   ),
-  Accordion: (props) => {
-    return (
-      <Accordion allowToggle width="100%" margin="16px 0">
-        <AccordionItem
-          border="1px solid #0068C5"
-          backgroundColor="#E4F2FF"
-        >
-          <AccordionButton
-            justifyContent="space-between"
-            padding="8px 16px"
-            _hover={{ cursor: "pointer", opacity: "0.7" }}
-          >
-            <BodyText typography="small">
-              {props.title}
-            </BodyText>
-            <AccordionIcon/>
-          </AccordionButton>
-
-          <AccordionPanel
-            backgroundColor="#FFF"
-            padding="8px 16px"
-            borderTop="1px solid #0068C5"
-          >
-            <BodyText typography="small" {...props}/>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    )
-  },
   Image: (props) => (
     <Box
       as="figure"
@@ -726,11 +697,17 @@ export const mdxComponents = {
         as="blockquote"
         position="relative"
         display="flex"
-        flexDirection="column"
+        flexDirection="row"
         margin="8px 0 16px"
-        borderRadius="10px"
-        border="1px solid #0068C6"
       >
+        <Box
+          position="absolute"
+          left={0}
+          width="40px"
+          height="100%"
+          borderRadius="10px"
+          backgroundColor="#0068C5"
+        />
         <Stack
           flexDirection="row"
           alignItems="center"
@@ -738,8 +715,9 @@ export const mdxComponents = {
           gap="16px"
           width="100%"
           padding="16px 24px"
+          marginLeft="4px"
+          borderRadius="8px"
           backgroundColor="#E4F2FF"
-          borderRadius={body ? "10px 10px 0 0" : "10px"}
           zIndex="10"
         >
           <InfoIcon
@@ -748,22 +726,25 @@ export const mdxComponents = {
             padding="2px"
             fill="#0068C5"
           />
-          <BodyText
-            position="relative"
-            top="2px"
-            typography="small"
-            as="span"
-            {...tip.props}
-          />
+          <Box display="flex" flexDirection="column" gap="8px"> 
+            <BodyText
+              position="relative"
+              top="2px"
+              typography="small"
+              as="span"
+              {...tip.props}
+            />
+            {body &&
+              <BodyText
+                position="relative"
+                top="2px"
+                typography="small"
+                as="span"
+                {...body.props}
+              />
+            }
+          </Box>
         </Stack>
-        {body &&
-          <BodyText
-            typography="small"
-            as="span"
-            padding="10px"
-            {...body.props}
-          />
-        }
       </Box>
     )
   },

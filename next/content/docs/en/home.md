@@ -1,10 +1,10 @@
 ---
-title: Home
+title: Introduction
 category: Docs
 order: 0
 ---
 
-# Home
+# Introduction
 
 Data Basis' mission is to universalize the use of quality data
 worldwide. For this, we created a tool that allows you to **access

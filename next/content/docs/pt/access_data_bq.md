@@ -36,14 +36,14 @@ fazer queries em nosso *datalake* público.
 3. **Clique em `Create Project/Criar Projeto`**. Escolha um nome bacana para o projeto.
 5. **Clique em `Create/Criar`**
 
-<Accordion title="Por que eu preciso criar um projeto no Google Cloud?">
+<Tip caption="Por que eu preciso criar um projeto no Google Cloud?">
     A Google fornece 1 TB gratuito por mês de uso do BigQuery para cada
     projeto que você possui. Um projeto é necessário para ativar os
     serviços do Google Cloud, incluindo a permissão de uso do BigQuery.
     Pense no projeto como a "conta" na qual a Google vai contabilizar o
     quanto de processamento você já utilizou. **Não é necessário adicionar
     nenhum cartão ou forma de pagamento - O BigQuery inicia automaticamente no modo Sandbox, que permite você utilizar seus recursos sem adicionar um modo de pagamento. [Leia mais aqui](https://cloud.google.com/bigquery/docs/sandbox/?hl=pt).**
-</Accordion>
+</Tip>
 
 ### Acessando o datalake da `basedosdados`
 
