@@ -276,7 +276,7 @@ export function SectionPrice() {
   async function alreadySubscribed(id) {
     const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
       .then(res => res.json())
-    setHasSubscribed(result)
+    setHasSubscribed(result?.edges.length > 0)
   } 
 
   useEffect(() => {
@@ -291,10 +291,7 @@ export function SectionPrice() {
       setHasSubscribed(false)
     }
 
-    const stripeSubscription = {
-      stripeSubscription: user?.proSubscription,
-      planInterval: user?.internalSubscription?.edges?.[0]?.node?.planInterval || user?.subscriptionSet?.edges?.[0]?.node?.planInterval
-    }
+    const stripeSubscription = user?.internalSubscription?.edges?.[0]?.node
 
     if(user != null) {
       setUsername(user?.username)

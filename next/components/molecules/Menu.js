@@ -203,7 +203,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan }) {
+function MenuDrawerUser({ userData, isOpen, onClose, isUserPro}) {
   const router = useRouter();
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
@@ -214,8 +214,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
     {name: t('password'), value: "new_password"},
     {name: t('plans_and_payment'), value: "plans_and_payment"},
     isUserPro && {name: t('bigquery'), value: "big_query"},
-    haveInterprisePlan && {name: t('access'), value: "accesses"},
   ]
+  // {name: "Acessos", value: "accesses"},
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -862,14 +862,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.isSubscriber) return user?.isSubscriber
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
     return false
-  }
-
-  const haveInterprisePlan = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
-    return user?.proSubscription === "bd_pro_empresas"
   }
 
   useEffect(() => {
@@ -906,7 +900,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           email: res.email,
           username: res.username,
           picture: res.picture || "",
-          plan: res?.proSubscription
+          plan: res?.internalSubscription?.edges?.[0]?.node?.stripeSubscription
         })
       } catch (error) {
         console.error("Error parsing user data:", error)
@@ -1133,7 +1127,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             isOpen={menuUserMobile.isOpen}
             onClose={menuUserMobile.onClose}
             isUserPro={isUserPro()}
-            haveInterprisePlan={haveInterprisePlan()}
           />
         </HStack>
       </Box>
