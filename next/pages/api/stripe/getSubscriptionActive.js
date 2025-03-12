@@ -16,7 +16,7 @@ async function getSubscriptionActive(id, token) {
             allAccount (id: "${id}"){
               edges {
                 node {
-                  internalSubscription (isActive: true, first: 1){
+                  internalSubscription (isActive: true){
                     edges {
                       node {
                         _id
@@ -45,5 +45,5 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.internalSubscription?.edges[0]?.node?._id)
+  res.status(200).json(result?.data?.allAccount?.edges[0]?.node?.internalSubscription?.edges)
 }

@@ -32,20 +32,7 @@ async function getUser(id, token) {
                   linkedin
                   workDataTool
                   availableForResearch
-                  isSubscriber
-                  proSubscription
-                  proSubscriptionRole
-                  proSubscriptionSlots
-                  subscriptionSet (isActive: true) {
-                    edges {
-                      node {
-                        canceledAt
-                        createdAt
-                        planInterval
-                      }
-                    }
-                  }
-                  internalSubscription (isActive: true, first: 1) {
+                  internalSubscription (isActive: true) {
                     edges {
                       node {
                         canceledAt

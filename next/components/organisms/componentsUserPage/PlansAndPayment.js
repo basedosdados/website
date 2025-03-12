@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
+import Display from "../../atoms/Text/Display";
 import TitleText from "../../atoms/Text/TitleText";
 import LabelText from "../../atoms/Text/LabelText";
 import BodyText from "../../atoms/Text/BodyText";
@@ -72,15 +73,12 @@ export default function PlansAndPayment ({ userData }) {
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
 
-  const subscriptionInfo = () => {
-    if(userData?.internalSubscription?.edges?.[0]?.node) return userData?.internalSubscription?.edges?.[0]?.node
-    if(userData?.subscriptionSet?.edges?.[0]?.node) return userData?.subscriptionSet?.edges?.[0]?.node
-  }
+  const subscriptionInfo = userData?.internalSubscription?.edges?.[0]?.node
 
   async function alreadySubscribed(id) {
     const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
       .then(res => res.json())
-    setHasSubscribed(result)
+    setHasSubscribed(result?.edges.length > 0)
   }
 
   useEffect(() => {
@@ -139,12 +137,12 @@ export default function PlansAndPayment ({ userData }) {
 
   useEffect(() => {
     if(query.i) {
-      if(userData?.isSubscriber) return AlertChangePlanModal.onOpen()
+      if(subscriptionInfo?.isActive === true) return AlertChangePlanModal.onOpen()
       setPlan(query.i)
     }
   }, [query])
 
-  const planActive = userData?.isSubscriber
+  const planActive = subscriptionInfo?.isActive === true
 
   const resources = {
     "BD Gratis" : {
@@ -172,9 +170,9 @@ export default function PlansAndPayment ({ userData }) {
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
-          borderColor: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          color: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          pointerEvents: subscriptionInfo()?.canceledAt ? "none" : "default",
+          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default",
           backgroundColor: "#FFF",
           border: "1px solid",
           _hover: {
@@ -196,9 +194,9 @@ export default function PlansAndPayment ({ userData }) {
         text: t('username.cancelPlan'),
         onClick: () => CancelModalPlan.onOpen(),
         props: {
-          borderColor: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          color: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          pointerEvents: subscriptionInfo()?.canceledAt ? "none" : "default",
+          borderColor: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: subscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: subscriptionInfo?.canceledAt ? "none" : "default",
           backgroundColor: "#FFF",
           border: "1px solid",
           _hover: {
@@ -215,8 +213,8 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   const defaultResource = resources["BD Gratis"]
-  const planResource = resources[userData?.proSubscription]
-  const planCanceled = subscriptionInfo()?.canceledAt
+  const planResource = resources[subscriptionInfo?.stripeSubscription]
+  const planCanceled = subscriptionInfo?.canceledAt
 
   const controlResource  = () => {
     return planActive ? planResource : defaultResource
@@ -272,10 +270,10 @@ export default function PlansAndPayment ({ userData }) {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
 
-    const subscriptionActive = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
+    const subs = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
 
-    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subscriptionActive)}`, {method: "GET"})
+    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subs[0]?.node._id)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.success === false) {
@@ -316,7 +314,6 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatTimeStamp (value) {
-    if(value === null || value === undefined) return t("username.noDate")
     const date = new Date(value)
     const options = { day: '2-digit', month: 'long', year: 'numeric' }
     const formattedDate = date.toLocaleDateString('pt-BR', options)
@@ -1026,7 +1023,7 @@ export default function PlansAndPayment ({ userData }) {
           padding: "32px 22px 26px 22px",
           borderRadius: {base: "0", lg: "20px"},
         }}
-        isCentered={false}
+        isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
           <TitleText
@@ -1130,13 +1127,13 @@ export default function PlansAndPayment ({ userData }) {
                 {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
               ]}
               button={{
-                text: `${userData?.proSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
+                onClick: subscriptionInfo?.stripeSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
                   EmailModal.onOpen()
                 },
-                isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
+                isCurrentPlan: subscriptionInfo?.stripeSubscription === "bd_pro" ? true : false,
               }}
             />
 
@@ -1151,13 +1148,13 @@ export default function PlansAndPayment ({ userData }) {
                 {name: t('username.prioritySupport')}
               ]}
               button={{
-                text: `${userData?.proSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
+                text: `${subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
+                onClick: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
                   PlansModal.onClose()
                   EmailModal.onOpen()
                 },
-                isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
+                isCurrentPlan: subscriptionInfo?.stripeSubscription === "bd_pro_empresas" ? true : false,
               }}
             />
           </Stack>
@@ -1299,28 +1296,27 @@ export default function PlansAndPayment ({ userData }) {
                 typography="x-small"
                 color="#71757A"
               >
-                {formattedPlanInterval(subscriptionInfo()?.planInterval)}
+                {formattedPlanInterval(subscriptionInfo?.planInterval)}
               </LabelText>
             </Box>
 
-            <Box display={subscriptionInfo() ? "flex" : "none"}>
+            <Box display={subscriptionInfo ? "flex" : "none"}>
               <BodyText
                 typography="small"
                 color="#71757A"
               >
-                {subscriptionInfo()?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}<Text
+                {subscriptionInfo?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}<Text
                   as="span"
                   fontWeight="500"
                   color="#464A51"
                 >
-                  {formatTimeStamp(subscriptionInfo()?.canceledAt ? subscriptionInfo()?.canceledAt : subscriptionInfo()?.nextBillingCycle)}
+                  {formatTimeStamp(subscriptionInfo?.canceledAt ? subscriptionInfo?.canceledAt : subscriptionInfo?.nextBillingCycle)}
                 </Text>
               </BodyText>
             </Box>
           </Stack>
 
           <Stack
-            display={userData?.proSubscription === "bd_pro_empresas" && userData?.proSubscriptionRole === "member" ? "none" : "flex"}
             spacing={0}
             gap="24px"
             flexDirection={{base: "column-reverse", lg: "row"}}
@@ -1350,12 +1346,12 @@ export default function PlansAndPayment ({ userData }) {
               if(elm === "") return
               return <ListFeature elm={elm} index={index} key={index}/>
             })}
-            {userData?.proSubscription === "bd_pro" && 
+            {subscriptionInfo?.stripeSubscription === "bd_pro" && 
               planResource.resources.map((elm, index) => {
                 return <ListFeature elm={elm} index={index} key={index}/>
               })
             }
-            {userData?.proSubscription === "bd_pro_empresas" &&
+            {subscriptionInfo?.stripeSubscription === "bd_pro_empresas" &&
               <>
                 {resources["bd_pro"].resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
@@ -1368,7 +1364,7 @@ export default function PlansAndPayment ({ userData }) {
           </Stack>
 
           <Stack spacing="8px">
-            {userData?.proSubscription !== "bd_pro_empresas" &&
+            {subscriptionInfo?.stripeSubscription !== "bd_pro_empresas" &&
               <BodyText
                 typography="small"
                 color="#464A51"
@@ -1386,13 +1382,13 @@ export default function PlansAndPayment ({ userData }) {
                 </>
               }
 
-              {userData?.proSubscription === "bd_pro" &&
+              {subscriptionInfo?.stripeSubscription === "bd_pro" &&
                 resources["bd_pro_empresas"].resources.map((elm, index) => {
                   return <ListFeature notIncludes elm={elm} index={index} key={index}/>
                 })
               }
 
-            {!userData?.isSubscriber &&
+            {!subscriptionInfo?.isActive &&
               <BodyText
                 typography="small"
                 as="button"

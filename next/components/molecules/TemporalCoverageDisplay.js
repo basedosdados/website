@@ -25,7 +25,7 @@ export function TemporalCoverageBar ({ value }) {
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.isSubscriber) return user?.isSubscriber
+    if(user?.internalSubscription?.edges?.[0]?.node?.isActive === true) return true
     return false
   }
 
