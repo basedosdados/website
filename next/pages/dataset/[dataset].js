@@ -3,25 +3,25 @@ import {
   Grid,
   GridItem,
   Image,
-  Stack,
+  Stack
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { capitalize } from 'lodash';
+import { useTranslation } from "next-i18next";
+import { capitalize } from "lodash";
+import cookies from "js-cookie";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
-import Link from '../../components/atoms/Link';
+import Link from "../../components/atoms/Link";
 import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
-import FourOFour from "../../components/templates/404";
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
 
@@ -35,8 +35,8 @@ import { getUserGuide, serializeUserGuide } from "../api/datasets/getUserGuide";
 export async function getStaticProps(context) {
   const { locale, params } = context;
   let dataset = null;
-  let contentUserGuide = null;
   let userGuide = null;
+  let hiddenDataset = false;
 
   try {
     dataset = await getDataset(params.dataset, locale || 'pt');
@@ -44,8 +44,21 @@ export async function getStaticProps(context) {
     console.error("Fetch error:", error.message);
   }
 
-  if(dataset?.usageGuide) {
-    contentUserGuide = await getUserGuide(dataset.usageGuide, locale || 'pt');
+  let contentUserGuide = dataset?.usageGuide ? await getUserGuide(dataset.usageGuide, locale || 'pt') : null;
+
+  function checkStatus() {
+    const statusesToCheck = ["under_review", "excluded"];
+    const edgesToCheck = ["tables", "rawDataSources", "informationRequests"];
+
+    if (dataset?.status?.slug && statusesToCheck.includes(dataset.status.slug)) return true;
+
+    return edgesToCheck.some(edge => 
+      dataset?.[edge]?.edges?.some(item => statusesToCheck.includes(item.node?.status?.slug))
+    );
+  }
+
+  if (dataset?.status?.slug === "under_review" || dataset?.status?.slug === "excluded") {
+    hiddenDataset = true;
   }
 
   try {
@@ -56,8 +69,10 @@ export async function getStaticProps(context) {
 
   const props = {
     ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
-    dataset,
-    userGuide,
+    dataset: dataset || null,
+    userGuide: userGuide || null,
+    hiddenDataset,
+    verifyBDSudo: checkStatus()
   };
   
   return {
@@ -77,13 +92,73 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, userGuide }) {
+export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verifyBDSudo }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter()
   const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
+  const [isBDSudo, setIsBDSudo] = useState(null);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  useEffect(() => {
+    if (isDatasetEmpty) {
+      router.replace('/404');
+    }
+  }, [isDatasetEmpty, router]);
+
+  async function checkBDSudo() {
+    const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
+
+    try {
+      const responsePermission = await fetch("/api/user/getPermissionSudo");
+      const hasPermission = await responsePermission.json();
+
+      if (hasPermission?.isAdmin === true) {
+        setIsBDSudo(true);
+        return;
+      }
+
+      if (!hasPermission || hasPermission.email === "undefined" || (userBD && hasPermission.email === userBD.email)) {
+        setIsBDSudo(false);
+        return;
+      }
+
+      let newPermission = { isAdmin: false, email: "undefined" };
+
+      if (userBD?.isAdmin) {
+        const id = userBD.id.split(":").pop();
+        if (id) {
+          const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(cookies.get("token"))}`, { method: "GET" });
+          const userData = await response.json();
+          newPermission.isAdmin = !!userData?.isAdmin;
+          newPermission.email = userData?.email || "undefined";
+        }
+      }
+
+      await fetch(`/api/user/setPermissionSudo?p=${btoa(String(newPermission.isAdmin))}&q=${btoa(newPermission.email)}`);
+      setIsBDSudo(newPermission.isAdmin);
+    } catch (error) {
+      console.error("Erro ao verificar permissão sudo:", error);
+      setIsBDSudo(false);
+    }
+  }
+
+  useEffect(() => {
+    if (verifyBDSudo) checkBDSudo();
+  }, [verifyBDSudo])
+
+  useEffect(() => {
+    const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
+
+    if (!userBD && hiddenDataset) {
+      router.replace("/404", undefined, { shallow: true });
+    }
+
+    if (isBDSudo !== null && !isBDSudo && hiddenDataset) {
+      router.replace("/404", undefined, { shallow: true });
+    }
+  }, [isBDSudo, hiddenDataset]);
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -104,20 +179,29 @@ export default function DatasetPage ({ dataset, userGuide }) {
     return 0
   }
 
-  const datasetTab = () => {
-    let dataset_tables = dataset?.tables?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .filter((elm) => elm?.slug !== "dicionario")
-      .filter((elm) => elm?.slug !== "dictionary")
-      .sort(sortElements) || []
+  async function datasetTab() {
+    let dataset_tables
+    let raw_data_sources
+    let information_request
 
-    let raw_data_sources = dataset?.rawDataSources?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
-    
-    let information_request = dataset?.informationRequests?.edges.map((elm) => elm.node)
-      .filter((elm) => elm?.status?.slug !== "under_review")
-      .sort(sortElements) || []
+    dataset_tables = dataset?.tables?.edges
+      ?.map((elm) => elm.node)
+        ?.filter(
+          (elm) =>
+            !["under_review", "excluded"].includes(elm?.status?.slug) &&
+            !["dicionario", "dictionary"].includes(elm?.slug)
+        )
+          ?.sort(sortElements) || [];
+
+    raw_data_sources = dataset?.rawDataSources?.edges
+      ?.map((elm) => elm.node)
+        ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+          ?.sort(sortElements) || [];
+  
+    information_request = dataset?.informationRequests?.edges
+      ?.map((elm) => elm.node)
+        ?.filter((elm) => !["under_review", "excluded"].includes(elm?.status?.slug))
+          ?.sort(sortElements) || [];
 
     if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
     if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
@@ -152,7 +236,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
     )
   }
 
-  if(isDatasetEmpty) return <MainPageTemplate userTemplate><FourOFour/></MainPageTemplate>
+  if(isDatasetEmpty) return null
 
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
@@ -341,6 +425,7 @@ export default function DatasetPage ({ dataset, userGuide }) {
           {tabIndex === 0 &&
             <DatasetResource
               dataset={dataset}
+              isBDSudo={isBDSudo}
             />
           }
           {tabIndex === 1 &&

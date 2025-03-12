@@ -23,7 +23,7 @@ Neste texto vamos explicar **como usar a biblioteca** `basedosdados` no R para e
 
 Organizamos no _datalake_ as principais bases de dados públicas já tratadas e prontas para análise. O _datalake_ é mantido no ambiente da Google (BigQuery) e o acesso às bases é gratuito, com um limite mensal de 1TB por mês — acredite, nem a gente chega a tanto.
 
-O pacote `basedosdados` te permite acessar esse banco através do R de um jeito rápido e fácil. Para isso, é necessário que você possua um projeto (gratuito) no Google Cloud — veja como criar seu projeto com estes [5 passos](https://basedosdados.github.io/sdk/access_data_bq/) ou siga as instruções na primeira vez que usar o pacote.
+O pacote `basedosdados` te permite acessar esse banco através do R de um jeito rápido e fácil. Para isso, é necessário que você possua um projeto (gratuito) no Google Cloud — veja como criar seu projeto com estes [5 passos](https://basedosdados.org/docs/access_data_bq/) ou siga as instruções na primeira vez que usar o pacote.
 
 ## Conhecendo a biblioteca `basedosdados`
 
