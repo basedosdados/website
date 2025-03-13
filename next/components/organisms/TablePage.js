@@ -21,6 +21,7 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
+import { AlertDiscalimerBox } from "../molecules/DisclaimerBox";
 
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
@@ -242,13 +243,20 @@ export default function TablePage({ id, isBDSudo }) {
   }
 
   if (isError) return <FourOFour/>;
-  
+
   return (
     <Stack
       flex={1}
       overflow="hidden"
       spacing={0}
     >
+      {resource?.isDeprecated ? (
+        <Box marginBottom={"1.5rem"}>
+          <AlertDiscalimerBox type="warning">
+            <BodyText typography="small">{t('table.deprecated')}</BodyText>
+          </AlertDiscalimerBox>
+        </Box>
+      ) : null}
       <StackSkeleton
         display="flex"
         height="fit-content"
