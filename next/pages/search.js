@@ -283,7 +283,9 @@ export default function SearchDatasetPage() {
           "raw_data_sources": t('rawDataSources'),
           "information_requests": t('informationRequests'),
           "open_data": t('openData'),
-          "closed_data": t('closedData')
+          "closed_data": t('closedData'),
+          "direct_download_free": t('downloadDirectFree'),
+          "direct_download_paid": t('downloadDirectPaid')
         };
         return containsMap[value] || value;
       }
@@ -544,6 +546,34 @@ export default function SearchDatasetPage() {
             </LabelText>
           </Box>
 
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={validateActiveFilterAccordin("theme")}
+            choices={aggregations?.themes}
+            valueField="key"
+            displayField="name"
+            fieldName={t('theme')}
+            valuesChecked={valuesCheckedFilter("theme")}
+            onChange={(value) => handleSelectFilter(["theme",`${value}`])}
+            isLoading={!isLoading}
+          />
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          <CheckboxFilterAccordion
+            canSearch={true}
+            isActive={validateActiveFilterAccordin("organization")}
+            choices={aggregations?.organizations}
+            valueField="key"
+            displayField="name"
+            fieldName={t('organization')}
+            valuesChecked={valuesCheckedFilter("organization")}
+            onChange={(value) => handleSelectFilter(["organization",`${value}`])}
+            isLoading={!isLoading}
+          />
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
           <Box
             display="flex"
             flexDirection="column"
@@ -555,7 +585,7 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              {t('datasetsWith')}
+              {t('resources')}
             </LabelText>
 
             <CheckboxFilterComponent
@@ -584,7 +614,7 @@ export default function SearchDatasetPage() {
               color="#464A51"
               marginBottom="4px"
             >
-              {t('resources')}
+              {t('temporalCoverage')}
             </LabelText>
 
             <CheckboxFilterComponent
@@ -602,31 +632,32 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={validateActiveFilterAccordin("theme")}
-            choices={aggregations?.themes}
-            valueField="key"
-            displayField="name"
-            fieldName={t('theme')}
-            valuesChecked={valuesCheckedFilter("theme")}
-            onChange={(value) => handleSelectFilter(["theme",`${value}`])}
-            isLoading={!isLoading}
-          />
+          <Box
+            display="flex"
+            flexDirection="column"
+            width="100%"
+            gap="14px"
+            alignItems="start"
+          >
+            <LabelText
+              color="#464A51"
+              marginBottom="4px"
+            >
+              {t('downloadDirect')}
+            </LabelText>
 
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+            <CheckboxFilterComponent
+              value="direct_download_free"
+              text={t('openData')}
+              count={aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
 
-          <CheckboxFilterAccordion
-            canSearch={true}
-            isActive={validateActiveFilterAccordin("organization")}
-            choices={aggregations?.organizations}
-            valueField="key"
-            displayField="name"
-            fieldName={t('organization')}
-            valuesChecked={valuesCheckedFilter("organization")}
-            onChange={(value) => handleSelectFilter(["organization",`${value}`])}
-            isLoading={!isLoading}
-          />
+            <CheckboxFilterComponent
+              value="direct_download_paid"
+              text={t('paid')}
+              count={aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+            />
+          </Box>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
