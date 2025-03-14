@@ -195,9 +195,9 @@ export default function Footer({ template, ocult = false }) {
                 {t('footer.products.searchEngine')}
               </FooterLink>
               <FooterLink href={
-                            locale === "en" ? "https://basedosdados.org/en/docs/home" :
-                            locale === "es" ? "https://basedosdados.org/es/docs/home" :
-                            "https://basedosdados.org/docs/home"
+                            locale === "en" ? "/en/docs/home" :
+                            locale === "es" ? "/es/docs/home" :
+                            "/docs/home"
                           }
               >
                 {t('footer.products.publicDatalake')}
@@ -233,9 +233,9 @@ export default function Footer({ template, ocult = false }) {
 
             <SectionCategories title={t('footer.resources.title')} marginBottom={isMobileMod() && "24px !important"}>
               <FooterLink href={
-                            locale === "en" ? "https://basedosdados.org/en/docs/home" :
-                            locale === "es" ? "https://basedosdados.org/es/docs/home" :
-                            "https://basedosdados.org/docs/home"
+                            locale === "en" ? "/en/docs/home" :
+                            locale === "es" ? "/es/docs/home" :
+                            "/docs/home"
                           }
               >
                 {t('footer.resources.documentation')}
