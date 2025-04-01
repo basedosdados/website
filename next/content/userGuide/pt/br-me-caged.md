@@ -36,8 +36,12 @@ Os dados são limitados a trabalhadores com vínculo empregatício formal, não 
 ## Coluna `salario_mensal`
 Foram identificados valores fora do esperado, como salários na faixa de milhões de reais para setores que geralmente não pagam quantias tão elevadas. Isso pode ser devido a erros de registro ou valores atípicos.
 
+## Municípios e Unidades da Federação não identificados
+Em todas as tabelas, existem casos onde o valor de preenchimento da coluna *uf* (sigla_uf, na BD) possui valor 99 e o preenchimento da variável *municipio* (id_muncipio, na BD) valores 99999.  
+
 ## Painel de empregos do CAGED
-Foram identificadas inconsistências entre os dados disponíveis e o painel do CAGED. Isso pode ser causado pela ausência da coluna de mês de referência para movimentações fora do prazo e excluídas. No entanto, parte dos arquivos fornecidos pelo Ministério do Trabalho encontra-se corrompida, o que impede a atualização. Estamos aguardando a resolução dessa situação para realizar os ajustes necessários.
+O painel de empregos do [CAGED](https://app.powerbi.com/view?r=eyJrIjoiNWI5NWI0ODEtYmZiYy00Mjg3LTkzNWUtY2UyYjIwMDE1YWI2IiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9&pageName=ReportSectionb52b07ec3b5f3ac6c749) é a referência de validação dos ajustes que devem ser realizados com as tabelas microdados_movimentacao_fora_prazo e microdados_movimentacao_excluida. 
+
 
 # Observações ao longo tempo
 Cada linha representa uma contratação ou demissão. Como os dados são desidentificados, não é possível acompanhar indivíduos ou empresas ao longo do tempo. O que é possível fazer é acompanhar o crescimento ou queda de funcionários com carteira em um determinado setor (`cnae`), função (`cbo`) ou outras combinações das colunas disponíveis. Além disso é importante se atentar que a metodologia do CAGED mudou no início de 2020 e por isso análises temporais devem ser feitas até 2019 ou a partir de 2020.
@@ -68,8 +72,49 @@ Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De m
 Os tratamentos realizados foram:
 * Renomeação das colunas para adequação ao manual de estilo;
 * Criação das colunas de `ano` e `mes`;
+* Criação das colunas ano_competencia_movimentacao e mes_competencia_movimentacao nas tabelas microdados_movimentacao_fora_prazo e microdados_movimentacao_excluida
+* Criação das colunas ano_declaracao_movimentacao e mes_declaracao_movimentacao na tabela microdados_movimentacao_excluida
 * Adequação das colunas de unidades federativas ao padrão de sigla UF;
-* Remoção das colunas: `valorsalariofixo`, `unidadesalariocodigo`, `competenciaexc`, `competenciadec`
+* Remoção das colunas: `valorsalariofixo`, `unidadesalariocodigo`
+
+# Ajustes dos dados
+*Movimentações podem ser excluídas ou feitas fora do prazo. Em função disso, é preciso ajustar os valores de saldo (saldo_movimentacao) da tabela microdados_movimentacao com os saldos das tabelas microdados_movimentacao_fora_prazo e microdados_movimentacao_excluida.
+
+A título de exemplo de como realizar o procedimento de ajuste, esta *query* pode ser utilizada:
+
+```sql
+with tabelas_unidas as (
+select *, 0 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao` 
+union all
+select * except (ano,mes), 0 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao_fora_prazo` 
+union all
+select * except (ano,mes, ano_declaracao_movimentacao, mes_declaracao_movimentacao, indicador_exclusao), 1 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao_excluida`),
+
+tabela_ajustada as (
+select *,
+case
+  when saldo_movimentacao = 1 then 'admissão'
+  when saldo_movimentacao = -1 then 'desligamento'
+end as admissao_desligamento,
+case 
+  when indicador_exclusao = 0 then saldo_movimentacao
+  when indicador_exclusao = 1 then -saldo_movimentacao 
+end as saldo_movimentacao_ajustado
+from tabelas_unidas)
+
+select 
+ano,
+mes,
+sum(if(admissao_desligamento = 'admissão', saldo_movimentacao_ajustado, 0)) as qte_admissoes,
+sum(if(admissao_desligamento = 'desligamento', saldo_movimentacao_ajustado, 0))as qte_desligamentos,
+sum(saldo_movimentacao_ajustado) as saldo,
+from tabela_ajustada
+where sigla_uf='SP'
+group by 1, 2
+order by ano, mes
+```
+
+
 
 # Materiais de apoio
 * [Reportagem do G1 sobre mudanças no CAGED](https://g1.globo.com/economia/noticia/2021/04/28/serie-historica-do-emprego-formal-nao-pode-ser-comparada-com-novo-caged-dizem-analistas.ghtml): Reportagem do G1 levantando considerações de especialistas sobre as mudanças do CAGED
