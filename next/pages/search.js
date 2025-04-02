@@ -27,7 +27,7 @@ import {
   getSearchDatasets
 } from "./api/datasets/index";
 
-import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
+import { CheckboxFilterAccordion, BaseFilterAccordion } from "../components/atoms/FilterAccordion";
 import Checkbox from "../components/atoms/Checkbox";
 import { TagFilter } from "../components/atoms/Tag";
 import DatasetSearchCard from "../components/organisms/DatasetSearchCard";
@@ -549,7 +549,6 @@ export default function SearchDatasetPage() {
           </Box>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("theme")}
             choices={aggregations?.themes}
             valueField="key"
@@ -563,7 +562,6 @@ export default function SearchDatasetPage() {
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("organization")}
             choices={aggregations?.organizations}
             valueField="key"
@@ -576,97 +574,96 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
+          <BaseFilterAccordion
+            fieldName={t("resources")}
+            tooltip={t("resourcesTooltip")}
+            isOpen={true}
           >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
             >
-              {t('resources')}
-            </LabelText>
+              <CheckboxFilterComponent
+                value="tables"
+                text={t('tables')}
+                count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
 
-            <CheckboxFilterComponent
-              value="tables"
-              text={t('tables')}
-              count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="raw_data_sources"
-              text={t('rawDataSources')}
-              count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
+              <CheckboxFilterComponent
+                value="raw_data_sources"
+                text={t('rawDataSources')}
+                count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
+          <BaseFilterAccordion
+            fieldName={t("temporalCoverage")}
+            tooltip={t("temporalCoverageTooltip")}
+            isOpen={true}
           >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
             >
-              {t('temporalCoverage')}
-            </LabelText>
+              <CheckboxFilterComponent
+                value="temporalcoverage_free"
+                text={t('temporalcoverageFree')}
+                count={aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
 
-            <CheckboxFilterComponent
-              value="temporalcoverage_free"
-              text={t('temporalcoverageFree')}
-              count={aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="temporalcoverage_paid"
-              text={t('temporalcoveragePaid')}
-              count={aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
+              <CheckboxFilterComponent
+                value="temporalcoverage_paid"
+                text={t('temporalcoveragePaid')}
+                count={aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
+          <BaseFilterAccordion
+            fieldName={t("downloadDirect")}
+            tooltip={t("downloadDirectTooltip")}
+            isOpen={true}
           >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
             >
-              {t('downloadDirect')}
-            </LabelText>
+              <CheckboxFilterComponent
+                value="direct_download_free"
+                text={t('openData')}
+                count={aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
 
-            <CheckboxFilterComponent
-              value="direct_download_free"
-              text={t('openData')}
-              count={aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="direct_download_paid"
-              text={t('paid')}
-              count={aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
+              <CheckboxFilterComponent
+                value="direct_download_paid"
+                text={t('paid')}
+                count={aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           {locale !== 'pt' ?
             <>
               <CheckboxFilterAccordion
-                canSearch={true}
                 isActive={validateActiveFilterAccordin("spatial_coverage")}
                 choices={aggregations?.spatial_coverages}
                 valueField="key"
@@ -683,7 +680,6 @@ export default function SearchDatasetPage() {
           }
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("tag")}
             choices={aggregations?.tags}
             valueField="key"
@@ -697,8 +693,8 @@ export default function SearchDatasetPage() {
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
+            tooltip={t("observationLevelTooltip")}
             choices={aggregations?.observation_levels}
             valueField="key"
             displayField="name"

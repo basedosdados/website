@@ -12,6 +12,7 @@ export function DatasetCardTag({ slug, name, locale, ...props }) {
     >
       <Link
         href={`/search?tag=${slug}`}
+        target="_blank"
         locale={locale}
         fontWeight="500"
         fontSize="12px"
