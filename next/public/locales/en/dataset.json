@@ -31,6 +31,8 @@
     "closedData": "Paid",
     "downloadDirectFree": "Free direct download",
     "downloadDirectPaid": "Paid direct download",
+    "temporalcoverageFree": "Completely free",
+    "temporalcoveragePaid": "Partially or fully paid",
     "paid": "Paid",
     "theme": "Theme",
     "tag": "Tag",

@@ -285,7 +285,9 @@ export default function SearchDatasetPage() {
           "open_data": t('openData'),
           "closed_data": t('closedData'),
           "direct_download_free": t('downloadDirectFree'),
-          "direct_download_paid": t('downloadDirectPaid')
+          "direct_download_paid": t('downloadDirectPaid'),
+          "temporalcoverage_free": t('temporalcoverageFree'),
+          "temporalcoverage_paid": t('temporalcoveragePaid'),
         };
         return containsMap[value] || value;
       }
@@ -618,15 +620,15 @@ export default function SearchDatasetPage() {
             </LabelText>
 
             <CheckboxFilterComponent
-              value="open_data"
-              text={t('openData')}
-              count={aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0}
+              value="temporalcoverage_free"
+              text={t('temporalcoverageFree')}
+              count={aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
 
             <CheckboxFilterComponent
-              value="closed_data"
-              text={t('closedData')}
-              count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
+              value="temporalcoverage_paid"
+              text={t('temporalcoveragePaid')}
+              count={aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
             />
           </Box>
 
