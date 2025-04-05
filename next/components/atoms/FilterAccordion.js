@@ -12,9 +12,12 @@ import {
   Tooltip
 } from "@chakra-ui/react";
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useRouter } from "next/router";
+import MoreFacetSearch from "../../pages/api/datasets/getMoreFacetSearchDatasets"
 import Checkbox from "../atoms/Checkbox";
 import { ControlledInputSimple } from "./ControlledInput";
+import LabelText from "./Text/LabelText";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 
@@ -108,29 +111,64 @@ export function CheckboxFilterAccordion({
   valueField = "id",
   displayField = "name",
   isActive = false,
-  canSearch = false,
   isLoading,
   tooltip = null,
-  isOpen = true
+  isOpen = true,
+  facet = ""
 }) {
   const { t } = useTranslation('search');
+  const { asPath } =  useRouter();
   const [options, setOptions] = useState([]);
+  const [allOptions, setAllOptions] = useState([]);
   const [search, setSearch] = useState("");
   const [inputFocus, setInputFocus] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     if (choices === null || choices.length === 0) return;
     setOptions(choices);
     setSearch("");
+    setShowAll(false);
   }, [choices]);
 
   useEffect(() => {
-    if (!search) return setOptions(choices);
-    const result = choices.filter((c) =>
+    if (!search) {
+      setOptions(showAll ? allOptions : choices);
+      return;
+    }
+    const result = options.filter((c) =>
       c[displayField].toLowerCase().includes(search.toLowerCase())
     );
     setOptions(result);
   }, [search]);
+
+  const MoreOptions = useCallback(async () => {
+    try {
+      const params = asPath.replace("/search?", "");
+      const res = await MoreFacetSearch(facet, params);
+      setAllOptions(res.values);
+      setOptions(res.values);
+      setShowAll(true);
+    } catch (error) {
+      console.error("Failed to load more options", error);
+    }
+  }, [asPath, facet]);
+
+  function toggleShowAll() {
+    if (showAll) {
+      setOptions(choices);
+      setShowAll(false);
+    } else {
+      MoreOptions();
+    }
+  }
+
+  const displayedOptions = useMemo(() => {
+    if (!search) return showAll ? options : options.slice(0, 5);
+    return options.filter((c) => 
+      String(c[displayField] || '').toLowerCase().includes(search.toLowerCase())
+    );
+  }, [search, showAll, options, displayField]);
 
   return (
     <BaseFilterAccordion
@@ -151,7 +189,7 @@ export function CheckboxFilterAccordion({
         isLoaded={isLoading}
       >
         <CheckboxGroup defaultValue={valuesChecked}>
-          {canSearch && (
+          {showAll && (
             <VStack padding="0 0 16px" width="100%" alignItems="center">
               <ControlledInputSimple
                 width="100%"
@@ -181,8 +219,8 @@ export function CheckboxFilterAccordion({
             spacing="14px"
             marginTop="0 !important"
           >
-            {options.length > 0 &&
-              options.map((c) => (
+            {displayedOptions.length > 0 &&
+              displayedOptions.map((c) => (
                 <Text
                   as="label"
                   key={c[valueField]}
@@ -225,6 +263,21 @@ export function CheckboxFilterAccordion({
                 </Text>
               ))}
           </VStack>
+
+          {options.length > 5 && (
+            <LabelText
+              typography="small"
+              cursor="pointer"
+              marginTop="8px"
+              onClick={toggleShowAll}
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >
+              {showAll ? t('see_less') : t('see_more')}
+            </LabelText>
+          )}
         </CheckboxGroup>
       </Skeleton>
     </BaseFilterAccordion>

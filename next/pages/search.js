@@ -557,6 +557,7 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
             isLoading={!isLoading}
+            facet="theme_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -570,6 +571,7 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
             isLoading={!isLoading}
+            facet="organization_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -672,6 +674,7 @@ export default function SearchDatasetPage() {
                 valuesChecked={valuesCheckedFilter("spatial_coverage")}
                 onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
                 isLoading={!isLoading}
+                facet="spatial_coverage"
               />
               <Divider marginY="16px !important" borderColor="#DEDFE0"/>
             </>
@@ -688,6 +691,7 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
             isLoading={!isLoading}
+            facet="tag_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
@@ -702,6 +706,7 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
             isLoading={!isLoading}
+            facet="entity_slug"
           />
         </VStack>
 
