@@ -27,7 +27,7 @@ import {
   getSearchDatasets
 } from "./api/datasets/index";
 
-import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
+import { CheckboxFilterAccordion, BaseFilterAccordion } from "../components/atoms/FilterAccordion";
 import Checkbox from "../components/atoms/Checkbox";
 import { TagFilter } from "../components/atoms/Tag";
 import DatasetSearchCard from "../components/organisms/DatasetSearchCard";
@@ -283,7 +283,11 @@ export default function SearchDatasetPage() {
           "raw_data_sources": t('rawDataSources'),
           "information_requests": t('informationRequests'),
           "open_data": t('openData'),
-          "closed_data": t('closedData')
+          "closed_data": t('closedData'),
+          "direct_download_free": t('downloadDirectFree'),
+          "direct_download_paid": t('downloadDirectPaid'),
+          "temporalcoverage_free": t('temporalcoverageFree'),
+          "temporalcoverage_paid": t('temporalcoveragePaid'),
         };
         return containsMap[value] || value;
       }
@@ -544,66 +548,7 @@ export default function SearchDatasetPage() {
             </LabelText>
           </Box>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
-          >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
-            >
-              {t('datasetsWith')}
-            </LabelText>
-
-            <CheckboxFilterComponent
-              value="tables"
-              text={t('tables')}
-              count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="raw_data_sources"
-              text={t('rawDataSources')}
-              count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
-
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
-          >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
-            >
-              {t('resources')}
-            </LabelText>
-
-            <CheckboxFilterComponent
-              value="open_data"
-              text={t('openData')}
-              count={aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="closed_data"
-              text={t('closedData')}
-              count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
-
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("theme")}
             choices={aggregations?.themes}
             valueField="key"
@@ -612,12 +557,12 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
             isLoading={!isLoading}
+            facet="theme_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("organization")}
             choices={aggregations?.organizations}
             valueField="key"
@@ -626,14 +571,101 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
             isLoading={!isLoading}
+            facet="organization_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {locale !== 'pt' ?
+          <BaseFilterAccordion
+            fieldName={t("resources")}
+            tooltip={t("resourcesTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="tables"
+                text={t('tables')}
+                count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+
+              <CheckboxFilterComponent
+                value="raw_data_sources"
+                text={t('rawDataSources')}
+                count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          <BaseFilterAccordion
+            fieldName={t("temporalCoverage")}
+            tooltip={t("temporalCoverageTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="temporalcoverage_free"
+                text={t('temporalcoverageFree')}
+                count={aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+
+              <CheckboxFilterComponent
+                value="temporalcoverage_paid"
+                text={t('temporalcoveragePaid')}
+                count={aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          <BaseFilterAccordion
+            fieldName={t("downloadDirect")}
+            tooltip={t("downloadDirectTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="direct_download_free"
+                text={t('openData')}
+                count={aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+
+              <CheckboxFilterComponent
+                value="direct_download_paid"
+                text={t('paid')}
+                count={aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          {/* {locale !== 'pt' ?
             <>
               <CheckboxFilterAccordion
-                canSearch={true}
                 isActive={validateActiveFilterAccordin("spatial_coverage")}
                 choices={aggregations?.spatial_coverages}
                 valueField="key"
@@ -642,15 +674,15 @@ export default function SearchDatasetPage() {
                 valuesChecked={valuesCheckedFilter("spatial_coverage")}
                 onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
                 isLoading={!isLoading}
+                facet="spatial_coverage"
               />
               <Divider marginY="16px !important" borderColor="#DEDFE0"/>
             </>
             :
             <></>
-          }
+          } */}
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("tag")}
             choices={aggregations?.tags}
             valueField="key"
@@ -659,13 +691,14 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
             isLoading={!isLoading}
+            facet="tag_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
+            tooltip={t("observationLevelTooltip")}
             choices={aggregations?.observation_levels}
             valueField="key"
             displayField="name"
@@ -673,6 +706,7 @@ export default function SearchDatasetPage() {
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
             isLoading={!isLoading}
+            facet="entity_slug"
           />
         </VStack>
 

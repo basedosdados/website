@@ -42,6 +42,7 @@ export default function Dataset({
         color={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={tablesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={tablesNumber === 0 && "none"}
+        target="_blank"
         fontWeight="400"
         _hover={{
           color: "#0057A4",
@@ -74,6 +75,7 @@ export default function Dataset({
         color={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={rawDataSourcesNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={rawDataSourcesNumber === 0 && "none"}
+        target="_blank"
         fontWeight="400"
         _hover={{
           color: "#0057A4",
@@ -107,6 +109,7 @@ export default function Dataset({
         color={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
         fill={informationRequestsNumber === 0 ? "#ACAEB1" : "#0068C5"}
         pointerEvents={informationRequestsNumber === 0 && "none"}
+        target="_blank"
         fontWeight="400"
         _hover={{
           color: "#0057A4",
@@ -146,7 +149,7 @@ export default function Dataset({
       >
         <Link
           href={`/dataset/${id}`}
-          target="_self"
+          target="_blank"
         >
           <Box
             display="flex"
@@ -186,6 +189,7 @@ export default function Dataset({
             >
               <Link
                 href={`/dataset/${id}`}
+                target="_blank"
                 width="100%"
               >
                 <TitleText
@@ -220,6 +224,7 @@ export default function Dataset({
                 </BodyText>
                 <Link
                   href={`/search?organization=${organizations[0]?.slug}`}
+                  target="_blank"
                 >
                   <BodyText
                     typography="small"
