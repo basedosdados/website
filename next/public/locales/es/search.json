@@ -2,5 +2,7 @@
     "min": "Mín",
     "max": "Máx",
     "too_old": "Demasiado antiguo!",
-    "search_placeholder": "Buscar"
+    "search_placeholder": "Buscar",
+    "see_more": "Ver más",
+    "see_less": "Ver menos"
 }

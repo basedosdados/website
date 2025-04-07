@@ -73,7 +73,7 @@ export default function DatasetCard({
       ]}
       spacing={0}
     >
-      <Link href={link}>
+      <Link href={link} target="_blank">
         <LabelText
           minHeight="48px"
           textOverflow="ellipsis"
@@ -83,7 +83,7 @@ export default function DatasetCard({
           {name}
         </LabelText>
       </Link>
-      <Link href={`/search?organization=${organizations?.[0]?.slug}`}>
+      <Link href={`/search?organization=${organizations?.[0]?.slug}`} target="_blank">
         <LabelText
           typography="x-small"
           noOfLines={2}
