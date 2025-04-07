@@ -136,7 +136,7 @@ export function CheckboxFilterAccordion({
       setOptions(showAll ? allOptions : choices);
       return;
     }
-    const result = options.filter((c) =>
+    const result = allOptions.filter((c) =>
       c[displayField].toLowerCase().includes(search.toLowerCase())
     );
     setOptions(result);
@@ -156,6 +156,7 @@ export function CheckboxFilterAccordion({
 
   function toggleShowAll() {
     if (showAll) {
+      setSearch("");
       setOptions(choices);
       setShowAll(false);
     } else {
