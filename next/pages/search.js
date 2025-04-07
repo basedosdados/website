@@ -663,7 +663,7 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {locale !== 'pt' ?
+          {/* {locale !== 'pt' ?
             <>
               <CheckboxFilterAccordion
                 isActive={validateActiveFilterAccordin("spatial_coverage")}
@@ -680,7 +680,7 @@ export default function SearchDatasetPage() {
             </>
             :
             <></>
-          }
+          } */}
 
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("tag")}
