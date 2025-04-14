@@ -13,9 +13,9 @@
       "title": "Authentication",
       "description": "Learn how to authenticate with the Data API",
       "apiKey": "API Key",
-      "getApiKeyBy": "To access the API, you'll need an API key. To get one:",
-      "getApiKeyBy1": "Create an account on DB.",
-      "getApiKeyBy2Contactus": "Contact us to request a key",
+      "getApiKeyBy": "To access the API, you'll need an API key. You can get one by:",
+      "getApiKeyBy1": "Creating an account on DB.",
+      "getApiKeyBy2Contactus": "Contacting us to request a key",
       "getApiKeyBy2ContactusLink": "here",
       "weWillAnswerYou": "We will answer you as soon as possible."
     },
@@ -39,9 +39,9 @@
         "title": "Pricing",
         "description": "To use the Data API, you'll need to add credits to your API key.",
         "addCredits": "To add credits to your API key:",
-        "step1": "1. Browse to your user area in the Data API section.",
-        "step2": "2. For your API key, click on the 'Add Credits' button.",
-        "step3": "3. Select the amount of credits you want to add and complete the payment.",
+        "step1": "1. Visit our payment portal",
+        "step2": "2. Select the amount of credits you want to add",
+        "step3": "3. Complete the payment through our secure Stripe payment system",
         "note": "Credits will be immediately available after successful payment."
     }
   }

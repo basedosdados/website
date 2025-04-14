@@ -13,9 +13,9 @@
       "title": "Autenticação",
       "description": "Aprenda como autenticar com a API de Dados da BD",
       "apiKey": "Chave de API",
-      "getApiKeyBy": "Para acessar a API, você precisará de uma chave. Para obtê-la:",
-      "getApiKeyBy1": "Crie uma conta na BD.",
-      "getApiKeyBy2Contactus": "Nos contate para solicitar uma chave",
+      "getApiKeyBy": "Para acessar a API, você precisará de uma chave. Você pode obtê-la:",
+      "getApiKeyBy1": "Criando uma conta na BD.",
+      "getApiKeyBy2Contactus": "Nos contatando para solicitar uma chave",
       "getApiKeyBy2ContactusLink": "aqui",
       "weWillAnswerYou": "Nós responderemos o mais breve possível."
     },
@@ -39,9 +39,9 @@
         "title": "Precificação",
         "description": "Para usar a API de Dados, você precisará adicionar créditos à sua chave de API.",
         "addCredits": "Para adicionar créditos à sua chave de API:",
-        "step1": "1. Visite a área de usuário na seção de API de Dados.",
-        "step2": "2. Para sua chave de API, clique no botão 'Adicionar Créditos'.",
-        "step3": "3. Selecione a quantidade de créditos que deseja adicionar e complete o pagamento.",
+        "step1": "1. Visite nosso portal de pagamento",
+        "step2": "2. Selecione a quantidade de créditos que deseja adicionar",
+        "step3": "3. Complete o pagamento através do nosso sistema seguro de pagamento Stripe",
         "note": "Os créditos estarão disponíveis imediatamente após o pagamento bem-sucedido."
     }
   }
