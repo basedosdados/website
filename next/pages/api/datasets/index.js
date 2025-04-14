@@ -4,6 +4,7 @@ import postDataset from "./postDataset";
 import getDatasetEdit from "./getDatasetEdit";
 import deleteDataset from "./deleteDataset";
 import getDataset from "./getDataset";
+import getMoreFacetSearchDatasets from "./getMoreFacetSearchDatasets";
 
 export {
   getSearchDatasets,
@@ -11,5 +12,6 @@ export {
   postDataset,
   getDatasetEdit,
   deleteDataset,
-  getDataset
+  getDataset,
+  getMoreFacetSearchDatasets
 }
