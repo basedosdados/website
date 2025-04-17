@@ -17,7 +17,8 @@ import {
   Account,
   NewPassword,
   PlansAndPayment,
-  BigQuery
+  BigQuery,
+  Accesses
 } from "../../components/organisms/componentsUserPage";
 
 export async function getServerSideProps(context) {
@@ -78,18 +79,20 @@ export async function getServerSideProps(context) {
   const userDataString = JSON.stringify(getUser)
   res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
-  const isUserPro = getUser?.internalSubscription?.edges?.[0]?.node?.isActive === true;
+  const isUserPro = getUser?.isSubscriber;
+  const haveInterprisePlan = getUser?.proSubscription === "bd_pro_empresas"
 
   return {
     props: {
       ...(await serverSideTranslations(locale, ['menu', 'user', 'prices', 'common'])),
       getUser,
-      isUserPro
+      isUserPro,
+      haveInterprisePlan
     }
   }
 }
 
-export default function UserPage({ getUser, isUserPro }) {
+export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   const { t, ready } = useTranslation('user')
   const router = useRouter()
   const { query } = router
@@ -110,6 +113,7 @@ export default function UserPage({ getUser, isUserPro }) {
     {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", index: 2},
     {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", index: 3},
     isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query", index: 4},
+    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses", index: 5}
   ].filter(Boolean)
 
   useEffect(() => {
@@ -209,6 +213,7 @@ export default function UserPage({ getUser, isUserPro }) {
           {sectionSelected === 2 && <NewPassword userInfo={userInfo}/>}
           {sectionSelected === 3 && <PlansAndPayment userData={userInfo}/>}
           {sectionSelected === 4 && <BigQuery userInfo={userInfo}/>}
+          {sectionSelected === 5 && <Accesses userInfo={userInfo}/>}
         </Stack>
       </Stack>
     </MainPageTemplate>
