@@ -16,6 +16,7 @@ import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { capitalize } from "lodash";
+import cookies from "js-cookie";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 
@@ -23,11 +24,15 @@ import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
 
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 
 export default function DatasetResource({
   dataset,
-  isBDSudo
+  isBDSudo,
+  tourBegin
 }) {
   const { t } = useTranslation('dataset');
   const router = useRouter()
@@ -36,6 +41,61 @@ export default function DatasetResource({
   const [rawDataSources, setRawDataSources] = useState([])
   const [informationRequests, setInformationRequests] = useState([])
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
+  const [tourBeginTable, setTourBeginTable] = useState(false)
+
+  const TourTable = () => {
+    const tour = introJs().setOptions({
+      steps: [
+        {
+          element: '#dataset_select_tables',
+          title: 'Escolha uma tabela tratada',
+          intro: 'Para começar, selecione uma das opções para acessar os dados desejados. As tabelas tratadas já contêm dados prontos para análise. O tratamento das tabelas envolve a padronização dos nomes das variáveis, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.',
+          position: 'right'
+        },
+        {
+          element: '#table_temporalcoverage',
+          title: 'Verifique a cobertura temporal da tabela',
+          intro: 'A cobertura temporal dos dados pode variar entre <strong>totalmente grátis</strong>, <strong>parcialmente grátis</strong> e <strong>totalmente pago</strong>. Os dados dentro do intervalo de anos gratuitos podem ser acessados sem custos, enquanto os dados nos anos pagos exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
+          position: 'right'
+        },
+        {
+          element: '#table_access_data',
+          title: 'Verifique a cobertura temporal da tabela',
+          intro: 'A cobertura temporal dos dados pode variar entre <strong>totalmente grátis</strong>, <strong>parcialmente grátis</strong> e <strong>totalmente pago</strong>. Os dados dentro do intervalo de anos gratuitos podem ser acessados sem custos, enquanto os dados nos anos pagos exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
+          position: 'right'
+        }
+      ],
+      nextLabel: 'Avançar',
+      prevLabel: 'Voltar',
+      exitOnOverlayClick: false,
+      showBullets: false
+    })
+
+    tour.onafterchange(() => {
+      document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+
+      document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
+    });
+
+    const onDoneClick = () => {
+      // cookies.set('tourBD', '{"state":"table"}', { expires: 30 })
+    };
+
+    const onSkipClick = () => {
+      console.log('Usuário pulou o tour');
+    };
+
+    tour.start()
+  }
+
+  useEffect(() => {
+    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD && tourBD.state === "begin" && displayScreen === "desktop" && tourBeginTable) {
+      TourTable()
+    }
+  }, [cookies.get("tourBD"), displayScreen, tourBegin, tourBeginTable])
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -100,13 +160,14 @@ export default function DatasetResource({
   }, [dataset, isBDSudo === true])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo} tourBegin={setTourBeginTable}/>
     if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
     return null
   }
 
   function ContentFilter({
+    id,
     fieldName,
     choices,
     onChange,
@@ -131,7 +192,7 @@ export default function DatasetResource({
     }, [choices])
 
     return (
-      <Box width="272px">
+      <Box width="272px" id={id}>
         <Divider
           display={hasDivider ? "flex" : "none"}
           marginY="24px"
@@ -417,6 +478,7 @@ export default function DatasetResource({
           top="80px"
         >
           <ContentFilter
+            id="dataset_select_tables"
             fieldName={t('tables')}
             choices={tables}
             value={query.table}

@@ -11,6 +11,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
+import cookies from "js-cookie";
 import { formatBytes } from "../../utils";
 import Link from "../atoms/Link";
 import ReadMore from "../atoms/ReadMore";
@@ -22,6 +23,8 @@ import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
+import introJs from 'intro.js';
+
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
@@ -30,7 +33,7 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id, isBDSudo }) {
+export default function TablePage({ id, isBDSudo, tourBegin }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
@@ -61,6 +64,7 @@ export default function TablePage({ id, isBDSudo }) {
         setIsError(true)
       } finally {
         setIsLoading(false)
+        tourBegin(true)
       }
     }
 
@@ -292,7 +296,12 @@ export default function TablePage({ id, isBDSudo }) {
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing="8px" marginBottom="40px !important">
+      <Stack
+        id="table_temporalcoverage"
+        width={{base: "100%", lg: "fit-content"}}
+        spacing="8px"
+        marginBottom="40px !important"
+      >
         <StackSkeleton width="300px" height="28px">
           <TitleText typography="small">
             {t('table.temporalCoverage')}
@@ -335,7 +344,11 @@ export default function TablePage({ id, isBDSudo }) {
         <></>
       }
 
-      <Stack spacing="8px" marginBottom="40px !important">
+      <Stack
+        spacing="8px"
+        marginBottom="40px !important"
+        backgroundColor="#FFFFFF"
+      >
         <StackSkeleton width="200px" height="28px">
           <TitleText typography="small">
             {t('table.dataAccess')}

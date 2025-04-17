@@ -22,6 +22,9 @@ import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
 
@@ -98,12 +101,72 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const { locale, query } = router
   const [tabIndex, setTabIndex] = useState(0)
   const [isBDSudo, setIsBDSudo] = useState(null);
+  const [tourBegin, setTourBegin] = useState(false)
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  const Tour = () => {
+    const tour = introJs().setOptions({
+      steps: [
+        {
+          element: '#tab_database_dataset',
+          title: 'Explore os dados do conjunto',
+          intro: 'Nesta tour, iremos guiar você na exploração das tabelas tratadas e das fontes originais deste conjunto de dados. Vamos começar?',
+          position: 'bottom'
+        }
+      ],
+      doneLabel: 'Começar',
+      exitOnOverlayClick: false,
+      showBullets: false
+    });
+
+    const buttonBar = document.querySelector('.introjs-tooltipbuttons');
+    if (buttonBar) {
+      const customSkip = document.createElement('a');
+      customSkip.className = 'introjs-button introjs-custom-skip';
+      customSkip.innerHTML = 'Pular';
+
+      customSkip.addEventListener('click', () => {
+        onSkipClick()
+        tour.exit();
+      });
+
+      buttonBar.insertBefore(customSkip, buttonBar.firstChild);
+    }
+
+    tour.onafterchange(() => {
+      document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+
+      document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
+    });
+
+    const onDoneClick = () => {
+      if(!!query.tab) {
+        datasetTab()
+        setTabIndex(0)
+      }
+
+      cookies.set('tourBD', '{"state":"begin"}', { expires: 30 })
+      setTourBegin(true)
+    };
+
+    const onSkipClick = () => {
+      console.log('Usuário pulou o tour');
+    };
+
+    tour.start()
+  }
 
   useEffect(() => {
     if (isDatasetEmpty) {
       router.replace('/404');
+    }
+
+    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD && tourBD.state === "explore") {
+      Tour()
     }
   }, [isDatasetEmpty, router]);
 
@@ -384,21 +447,23 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
 
         <Stack spacing={0} width="100%" height="100%">
           <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
-            <TabSelect
-              index={0}
-              onClick={() => {
-                setTabIndex(0)
-                datasetTab()
-              }}
-            >
-              <DataBaseIcon
-                alt={t('dataAlt')}
-                width="18px"
-                height="18px"
-                marginRight="6px"
-              />
-              {t('data')}
-            </TabSelect>
+            <Stack id="tab_database_dataset">
+              <TabSelect
+                index={0}
+                onClick={() => {
+                  setTabIndex(0)
+                  datasetTab()
+                }}
+              >
+                <DataBaseIcon
+                  alt={t('dataAlt')}
+                  width="18px"
+                  height="18px"
+                  marginRight="6px"
+                />
+                {t('data')}
+              </TabSelect>
+            </Stack>
 
             <TabSelect
               index={1}
@@ -426,6 +491,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
             <DatasetResource
               dataset={dataset}
               isBDSudo={isBDSudo}
+              tourBegin={tourBegin}
             />
           }
           {tabIndex === 1 &&
