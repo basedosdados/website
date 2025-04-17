@@ -42,6 +42,7 @@ export default function DatasetResource({
   const [informationRequests, setInformationRequests] = useState([])
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
   const [tourBeginTable, setTourBeginTable] = useState(false)
+  const [pinTablesSelect, setPinTablesSelect] = useState(false)
 
   const TourTable = () => {
     const tour = introJs().setOptions({
@@ -60,15 +61,34 @@ export default function DatasetResource({
         },
         {
           element: '#table_access_data',
-          title: 'Verifique a cobertura temporal da tabela',
-          intro: 'A cobertura temporal dos dados pode variar entre <strong>totalmente grátis</strong>, <strong>parcialmente grátis</strong> e <strong>totalmente pago</strong>. Os dados dentro do intervalo de anos gratuitos podem ser acessados sem custos, enquanto os dados nos anos pagos exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
+          title: 'Conheça as formas de acessar os dados',
+          intro: 'Você pode acessar os dados de duas formas: <br/> <ul><li><strong>BigQuery e Pacotes</strong>: Acesse os dados no BigQuery ou por meio de pacotes em Python e R.</li><li><strong>Download</strong>: Baixe o arquivo CSV diretamente na plataforma.</li></ul><br/> Nos próximos passos, vamos te mostrar primeiro como acessar pelo <strong>BigQuery e Pacotes</strong>. Em seguida, explicaremos como fazer o <strong>download</strong> dos dados.',
           position: 'right'
+        },
+        {
+          element: '#access_via_bigquery',
+          title: 'Acesso via BigQuery e Pacotes',
+          intro: 'Para continuar, <strong>selecione as colunas</strong> que deseja acessar. Como nossa missão é facilitar sua análise, a plataforma traduz automaticamente todas as colunas que contêm códigos institucionais, como município. Depois, basta clicar no botão para <strong>gerar a consulta</strong>.',
+          position: 'left'
+        },
+        {
+          element: '#access_query_language',
+          title: 'Escolha a linguagem de sua preferência',
+          intro: 'Agora, <strong>selecione a aba</strong> com a linguagem que você deseja acessar os dados: SQL, Python ou R.',
+          position: 'right'
+        },
+        {
+          element: '#access_generated_query',
+          title: 'Consulta gerada',
+          intro: 'A plataforma disponibiliza a consulta na linguagem escolhida, permitindo que você acesse os dados como preferir.',
+          position: 'left'
         }
       ],
       nextLabel: 'Avançar',
       prevLabel: 'Voltar',
       exitOnOverlayClick: false,
-      showBullets: false
+      showBullets: false,
+      showStepNumbers: true
     })
 
     tour.onafterchange(() => {
@@ -93,7 +113,10 @@ export default function DatasetResource({
   useEffect(() => {
     const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
     if(tourBD && tourBD.state === "begin" && displayScreen === "desktop" && tourBeginTable) {
-      TourTable()
+      setPinTablesSelect(true)
+      requestAnimationFrame(() => {
+        TourTable();
+      });
     }
   }, [cookies.get("tourBD"), displayScreen, tourBegin, tourBeginTable])
 
@@ -192,7 +215,7 @@ export default function DatasetResource({
     }, [choices])
 
     return (
-      <Box width="272px" id={id}>
+      <Box width="272px" id={id} backgroundColor="#FFFFFF">
         <Divider
           display={hasDivider ? "flex" : "none"}
           marginY="24px"
@@ -473,9 +496,9 @@ export default function DatasetResource({
           minWidth={{base: "100%", lg: "296px"}}
           maxWidth={{base: "100%", lg: "296px"}}
           spacing={0}
-          position="sticky"
+          position={pinTablesSelect ? "relative" : "sticky"}
           height="100%"
-          top="80px"
+          top={pinTablesSelect ? "0" : "80px"}
         >
           <ContentFilter
             id="dataset_select_tables"

@@ -344,10 +344,19 @@ export default function DataInformationQuery({ resource }) {
         overflow="hidden"
       >
         <TabList
+          position="relative"
           pointerEvents={hasLoadingColumns ? "none" : "default"}
           padding="8px 24px 0"
           borderBottom="1px solid #DEDFE0 !important"
         >
+          <Box
+            id="table_access_data"
+            position="absolute"
+            width="380px"
+            height="130px"
+            top="-55px"
+            left="-22px"
+          />
           <GreenTab>{t('table.bigQueryAndPackages')}</GreenTab>
           <GreenTab>{t('table.download')}</GreenTab>
         </TabList>
@@ -362,6 +371,7 @@ export default function DataInformationQuery({ resource }) {
             flexDirection="column"
             width="100%"
             gap="16px"
+            id="access_via_bigquery"
           >
             <Skeleton
               startColor="#F0F0F0"
@@ -624,6 +634,7 @@ export default function DataInformationQuery({ resource }) {
               overflow="hidden"
             >
               <TabList
+                id="access_query_language"
                 pointerEvents={hasLoadingColumns ? "none" : "default"}
                 padding="8px 24px 0"
                 borderBottom="1px solid #DEDFE0 !important"
@@ -634,6 +645,7 @@ export default function DataInformationQuery({ resource }) {
               </TabList>
 
               <VStack
+                id="access_generated_query"
                 spacing={0}
                 padding="24px"
                 overflow="hidden"
