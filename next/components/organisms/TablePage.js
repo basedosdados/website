@@ -46,7 +46,7 @@ export default function TablePage({ id, isBDSudo }) {
 
         if (result.success) {
           const statusName = result?.resource?.status?.slug || ""
-          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+          if((statusName === "under_review" || statusName === "excluded") && isBDSudo === false) {
             setIsError(true);
           } else {
             setResource(result.resource);
