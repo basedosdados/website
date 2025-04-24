@@ -283,6 +283,10 @@ export default function DataInformationQuery({ resource, changeTab }) {
     setSqlCode(result.trim())
     setIsLoadingCode(false)
     setIsLoadingSpin(false)
+    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    if(tourBD && tourBD.state === "begin") {
+      cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
+    }
   }
 
   const handleAccessIndexes = (index) => {
