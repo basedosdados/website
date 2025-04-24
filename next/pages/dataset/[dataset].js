@@ -148,12 +148,12 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
         setTabIndex(0)
       }
 
-      cookies.set('tourBD', '{"state":"begin"}', { expires: 30 })
+      cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
       setTourBegin(true)
     };
 
     const onSkipClick = () => {
-      console.log('Usuário pulou o tour');
+      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
     };
 
     tour.start()

@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
-import cookies from "js-cookie";
 import { formatBytes } from "../../utils";
 import Link from "../atoms/Link";
 import ReadMore from "../atoms/ReadMore";
@@ -23,8 +22,6 @@ import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
 
-import introJs from 'intro.js';
-
 import EmailIcon from "../../public/img/icons/emailIcon";
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
@@ -33,13 +30,13 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id, isBDSudo, tourBegin }) {
+export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -357,6 +354,7 @@ export default function TablePage({ id, isBDSudo, tourBegin }) {
 
         <DataInformationQuery
           resource={resource}
+          changeTab={changeTab}
         />
       </Stack>
 

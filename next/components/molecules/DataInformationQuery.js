@@ -175,7 +175,7 @@ export function CodeHighlight({ language, children }) {
   )
 }
 
-export default function DataInformationQuery({ resource }) {
+export default function DataInformationQuery({ resource, changeTab }) {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
@@ -204,6 +204,10 @@ export default function DataInformationQuery({ resource }) {
     if(user?.isSubscriber) return user?.isSubscriber
     return false
   }
+
+  useEffect(() => {
+    if(changeTab === true) setTabAccessIndex(1)
+  }, [changeTab])
 
   useEffect(() => {
     if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
@@ -733,9 +737,9 @@ export default function DataInformationQuery({ resource }) {
                             color:"#22703E"
                           }}
                         >
-                          <BodyText typography="small">
+                          <LabelText color="#2B8C4D" _hover={{color:"#22703E"}} typography="small">
                             {t('table.accessBigQuery')}
-                          </BodyText>
+                          </LabelText>
                         </Box>
                       </Box>
                     </Skeleton>

@@ -37,15 +37,26 @@ export default function DatasetResource({
   const { t } = useTranslation('dataset');
   const router = useRouter()
   const { query, locale } = router
-  const [tables, setTables] = useState([])
-  const [rawDataSources, setRawDataSources] = useState([])
-  const [informationRequests, setInformationRequests] = useState([])
-  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
-  const [tourBeginTable, setTourBeginTable] = useState(false)
-  const [pinTablesSelect, setPinTablesSelect] = useState(false)
+  const [tables, setTables] = useState([]);
+  const [rawDataSources, setRawDataSources] = useState([]);
+  const [informationRequests, setInformationRequests] = useState([]);
+  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
+  const [tourBeginTable, setTourBeginTable] = useState(false);
+  const [pinTablesSelect, setPinTablesSelect] = useState(false);
+  const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
 
-  const TourTable = () => {
-    const tour = introJs().setOptions({
+  const pushQuery = (key, value) => {
+    router.replace({
+      pathname: `/dataset/${query.dataset}`,
+      query: { [key]: value }
+    },
+      undefined, { shallow: true }
+    )
+  }
+
+  const startFirstTour = () => {
+    const tour = introJs();
+    tour.setOptions({
       steps: [
         {
           element: '#dataset_select_tables',
@@ -70,7 +81,32 @@ export default function DatasetResource({
           title: 'Acesso via BigQuery e Pacotes',
           intro: 'Para continuar, <strong>selecione as colunas</strong> que deseja acessar. Como nossa missão é facilitar sua análise, a plataforma traduz automaticamente todas as colunas que contêm códigos institucionais, como município. Depois, basta clicar no botão para <strong>gerar a consulta</strong>.',
           position: 'left'
-        },
+        }
+      ],
+      nextLabel: 'Avançar',
+      prevLabel: 'Voltar',
+      doneLabel: 'Avançar',
+      exitOnOverlayClick: false,
+      showBullets: false,
+      keyboardNavigation: false
+    })
+
+    tour.onafterchange(() => {
+      const doneButton = document.querySelector('.introjs-donebutton');
+      if (doneButton) {
+        doneButton.style.pointerEvents = 'none';
+        doneButton.style.opacity = '0.5';
+        doneButton.style.cursor = 'not-allowed';
+      }
+    });
+
+    tour.start();
+  }
+
+  const startSecondTour = () => {
+    const tour = introJs();
+    tour.setOptions({
+      steps: [
         {
           element: '#access_query_language',
           title: 'Escolha a linguagem de sua preferência',
@@ -82,52 +118,155 @@ export default function DatasetResource({
           title: 'Consulta gerada',
           intro: 'A plataforma disponibiliza a consulta na linguagem escolhida, permitindo que você acesse os dados como preferir.',
           position: 'left'
+        },
+        {
+          element: '#access_generated_query',
+          title: 'Copie a consulta e acesse os dados',
+          intro: 'Agora, <strong>copie a consulta gerada</strong> e:<br/><ul><li>Clique no botão para <strong>acessar o BigQuery</strong>. No editor de consultas do BigQuery, basta colar a consulta e executá-la;</li><li>No terminal do Python, basta colar a consulta e executá-la;</li><li>No terminal do R, basta colar a consulta e executá-la.</li></ul>',
+          position: 'left'
         }
       ],
       nextLabel: 'Avançar',
       prevLabel: 'Voltar',
+      doneLabel: 'Avançar',
       exitOnOverlayClick: false,
       showBullets: false,
-      showStepNumbers: true
+      keyboardNavigation: false
     })
 
     tour.onafterchange(() => {
       document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
-      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
 
       document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
-      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
     });
 
     const onDoneClick = () => {
-      // cookies.set('tourBD', '{"state":"table"}', { expires: 30 })
+      setChangeTabDataInformationQuery(true);
     };
 
-    const onSkipClick = () => {
-      console.log('Usuário pulou o tour');
-    };
+    tour.start();
+  }
 
-    tour.start()
+  const startThirdTour = () => {
+    const tour = introJs();
+    tour.setOptions({
+      steps: [
+        {
+          element: '#access_via_bigquery',
+          title: 'Acesso via Download',
+          intro: 'Clique no botão para baixar o arquivo <strong>CSV</strong> diretamente na plataforma. Lembre-se de que o download está disponível aoenas para tabelas de até <strong>1 GB</strong>. Tabelas até <strong>100 MB</strong> podem ser baixadas <strong>gratuitamente</strong>, enquanto tabelas entre <strong>100 MB</strong> e <strong>1 GB</strong> exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
+          position: 'left'
+        },
+        {
+          element: '#dataset_select_rawdatasource',
+          title: 'Escolha uma fonte original',
+          intro: 'Agora, <strong>selecione uma das opções</strong> para acessar a fonte dos dados desejados. As fontes originais são links para páginas externas à plataforma com informações úteis sobre os dados.',
+          position: 'right'
+        }
+      ],
+      doneLabel: 'Avançar',
+      exitOnOverlayClick: false,
+      showBullets: false,
+      keyboardNavigation: false
+    })
+
+    tour.onafterchange(() => {
+      const doneButton = document.querySelector('.introjs-donebutton');
+      if (doneButton) {
+        doneButton.style.pointerEvents = 'none';
+        doneButton.style.opacity = '0.5';
+        doneButton.style.cursor = 'not-allowed';
+      }
+    });
+
+    tour.start();
+  }
+
+  const startFourthTour = () => {
+    const tour = introJs();
+    tour.setOptions({
+      steps: [
+        {
+          element: '#dataset_rawdatasource_header',
+          title: 'Acesse a fonte original',
+          intro: 'Clique no botão para acessar a fonte original. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais.',
+          position: 'right'
+        }
+      ],
+      prevLabel: 'Voltar',
+      doneLabel: 'Avançar',
+      exitOnOverlayClick: false,
+      showBullets: false,
+      keyboardNavigation: false
+    })
+
+    tour.start();
   }
 
   useEffect(() => {
-    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
-    if(tourBD && tourBD.state === "begin" && displayScreen === "desktop" && tourBeginTable) {
-      setPinTablesSelect(true)
-      requestAnimationFrame(() => {
-        TourTable();
-      });
-    }
-  }, [cookies.get("tourBD"), displayScreen, tourBegin, tourBeginTable])
+    let activeTour = null;
 
-  const pushQuery = (key, value) => {
-    router.replace({
-      pathname: `/dataset/${query.dataset}`,
-      query: { [key]: value }
-    },
-      undefined, { shallow: true }
-    )
-  }
+    const checkTourState = () => {
+      try {
+        const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+        if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') {
+          return;
+        }
+
+        setPinTablesSelect(true);
+
+        if (activeTour && activeTour !== tourBD.state) {
+          introJs().exit();
+          activeTour = null;
+        }
+
+        if (activeTour === tourBD.state) {
+          return;
+        }
+
+        switch (tourBD.state) {
+          case 'begin':
+            requestAnimationFrame(() => {
+              startFirstTour();
+              activeTour = 'begin';
+            })
+            break;
+
+          case 'table':
+            requestAnimationFrame(() => {
+              startSecondTour();
+              activeTour = 'table';
+            })
+            break;
+
+          case 'download':
+            requestAnimationFrame(() => {
+              startThirdTour();
+              activeTour = 'download';
+            })
+            break;
+
+          case 'last':
+            requestAnimationFrame(() => {
+              startFourthTour();
+              activeTour = 'last';
+            })
+            break;
+        }
+      } catch (error) {
+        console.error('Erro no tour:', error);
+      }
+    };
+
+    checkTourState();
+
+    const cookieCheckInterval = setInterval(checkTourState, 500);
+
+    return () => {
+      clearInterval(cookieCheckInterval);
+      introJs().exit();
+    };
+  }, [cookies, displayScreen, tourBeginTable, tourBegin]);
 
   function sortElements(a, b) {
     if (a.order < b.order) {
@@ -183,7 +322,7 @@ export default function DatasetResource({
   }, [dataset, isBDSudo === true])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo} tourBegin={setTourBeginTable}/>
+    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo} tourBegin={setTourBeginTable} changeTab={changeTabDataInformationQuery}/>
     if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
     if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
     return null
@@ -215,74 +354,76 @@ export default function DatasetResource({
     }, [choices])
 
     return (
-      <Box width="272px" id={id} backgroundColor="#FFFFFF">
+      <Box width="272px">
         <Divider
           display={hasDivider ? "flex" : "none"}
           marginY="24px"
           borderColor="#DEDFE0"
         />
 
-        <LabelText
-          typography="small"
-          paddingLeft="15px"
-          marginBottom="8px"
-        >
-          {fieldName}
-        </LabelText>
+        <Stack spacing={0} id={id} backgroundColor="#FFFFFF">
+          <LabelText
+            typography="small"
+            paddingLeft="15px"
+            marginBottom="8px"
+          >
+            {fieldName}
+          </LabelText>
 
-        <Box>
-          {choices.map((elm, i) => (
-            <HStack
-              key={i}
-              spacing="4px"
-              cursor="pointer"
-              pointerEvents={elm._id === value ? "none" : "default"}
-            >
-              <Box 
-                width="3px"
-                height="24px"
-                backgroundColor={elm._id === value && "#2B8C4D"}
-                borderRadius="10px"
-              />
-              <Tooltip
-                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                isDisabled={!isOverflow[i]}
-                hasArrow
-                padding="16px"
-                backgroundColor="#252A32"
-                boxSizing="border-box"
-                borderRadius="8px"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                textAlign="center"
-                color="#FFFFFF"
-                placement="top"
-                maxWidth="100%"
+          <Box>
+            {choices.map((elm, i) => (
+              <HStack
+                key={i}
+                spacing="4px"
+                cursor="pointer"
+                pointerEvents={elm._id === value ? "none" : "default"}
               >
-                <LabelText
-                  typography="small"
-                  ref={(el) => (textRefs.current[i] = el)}
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  width="100%"
-                  color={elm._id === value ? "#2B8C4D" : "#71757A"}
-                  backgroundColor={elm._id === value && "#F7F7F7"}
-                  _hover={{
-                    backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
-                  }}
+                <Box 
+                  width="3px"
+                  height="24px"
+                  backgroundColor={elm._id === value && "#2B8C4D"}
+                  borderRadius="10px"
+                />
+                <Tooltip
+                  label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  isDisabled={!isOverflow[i]}
+                  hasArrow
+                  padding="16px"
+                  backgroundColor="#252A32"
+                  boxSizing="border-box"
                   borderRadius="8px"
-                  padding="6px 8px"
-                  onClick={() => onChange(elm._id)}
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  textAlign="center"
+                  color="#FFFFFF"
+                  placement="top"
+                  maxWidth="100%"
                 >
-                  {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                </LabelText>
-              </Tooltip>
-            </HStack>
-          ))}
-        </Box>
+                  <LabelText
+                    typography="small"
+                    ref={(el) => (textRefs.current[i] = el)}
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    width="100%"
+                    color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                    backgroundColor={elm._id === value && "#F7F7F7"}
+                    _hover={{
+                      backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                    }}
+                    borderRadius="8px"
+                    padding="6px 8px"
+                    onClick={() => onChange(elm._id)}
+                  >
+                    {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  </LabelText>
+                </Tooltip>
+              </HStack>
+            ))}
+          </Box>
+        </Stack>
       </Box>
     )
   }
@@ -512,11 +653,13 @@ export default function DatasetResource({
           />
 
           <ContentFilter
+            id="dataset_select_rawdatasource"
             fieldName={t('rawDataSources')}
             choices={rawDataSources}
             value={query.raw_data_source}
             onChange={(id) => {
               pushQuery("raw_data_source", id)
+              cookies.set('tourBD', '{"state":"last"}', { expires: 30 })
             }}
             hasDivider={tables.length > 0 ? true : false}
           />
