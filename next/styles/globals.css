@@ -289,7 +289,7 @@ body {
 .introjs-tooltipbuttons {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 12px;
   padding: 0 16px 20px !important;
   border-top: 0px !important;
