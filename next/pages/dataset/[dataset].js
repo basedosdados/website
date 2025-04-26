@@ -117,13 +117,15 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
       ],
       doneLabel: 'Começar',
       exitOnOverlayClick: false,
-      showBullets: false
+      showBullets: false,
+      buttonClass: "tour-dataset-buttons",
+      tooltipClass: "tour-dataset-tooltip"
     });
 
     const buttonBar = document.querySelector('.introjs-tooltipbuttons');
     if (buttonBar) {
       const customSkip = document.createElement('a');
-      customSkip.className = 'introjs-button introjs-custom-skip';
+      customSkip.className = 'introjs-custom-skip-dataset';
       customSkip.innerHTML = 'Pular';
 
       customSkip.addEventListener('click', () => {

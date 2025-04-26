@@ -73,7 +73,7 @@ export default function DatasetResource({
         {
           element: '#table_access_data',
           title: 'Conheça as formas de acessar os dados',
-          intro: 'Você pode acessar os dados de duas formas: <br/> <ul><li><strong>BigQuery e Pacotes</strong>: Acesse os dados no BigQuery ou por meio de pacotes em Python e R.</li><li><strong>Download</strong>: Baixe o arquivo CSV diretamente na plataforma.</li></ul><br/> Nos próximos passos, vamos te mostrar primeiro como acessar pelo <strong>BigQuery e Pacotes</strong>. Em seguida, explicaremos como fazer o <strong>download</strong> dos dados.',
+          intro: 'Você pode acessar os dados de duas formas: <br/> <ul><li><strong>BigQuery e Pacotes</strong>: Acesse os dados no BigQuery ou por meio de pacotes em Python e R.</li><li><strong>Download</strong>: Baixe o arquivo CSV diretamente na plataforma.</li></ul> Nos próximos passos, vamos te mostrar primeiro como acessar pelo <strong>BigQuery e Pacotes</strong>. Em seguida, explicaremos como fazer o <strong>download</strong> dos dados.',
           position: 'right'
         },
         {
@@ -84,21 +84,29 @@ export default function DatasetResource({
         }
       ],
       nextLabel: 'Avançar',
-      prevLabel: 'Voltar',
       doneLabel: 'Avançar',
       exitOnOverlayClick: false,
       showBullets: false,
-      keyboardNavigation: false
+      keyboardNavigation: false,
+      buttonClass: "tour-dataset-buttons",
+      tooltipClass: "tour-dataset-tooltip"
     })
 
     tour.onafterchange(() => {
       const doneButton = document.querySelector('.introjs-donebutton');
       if (doneButton) {
         doneButton.style.pointerEvents = 'none';
-        doneButton.style.opacity = '0.5';
+        doneButton.style.backgroundColor = '#ACAEB1';
         doneButton.style.cursor = 'not-allowed';
       }
+
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
     });
+
+    const onSkipClick = () => {
+      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    };
 
     tour.start();
   }
@@ -122,26 +130,33 @@ export default function DatasetResource({
         {
           element: '#access_generated_query',
           title: 'Copie a consulta e acesse os dados',
-          intro: 'Agora, <strong>copie a consulta gerada</strong> e:<br/><ul><li>Clique no botão para <strong>acessar o BigQuery</strong>. No editor de consultas do BigQuery, basta colar a consulta e executá-la;</li><li>No terminal do Python, basta colar a consulta e executá-la;</li><li>No terminal do R, basta colar a consulta e executá-la.</li></ul>',
+          intro: 'Agora, <strong>copie a consulta gerada</strong> e:<br/><ul><li>Clique no botão para <strong>acessar o BigQuery</strong>. No editor de consultas do BigQuery.</li><li>No terminal do Python.</li><li>No terminal do R.</li></ul>Basta colar a consulta e executá-la.',
           position: 'left'
         }
       ],
       nextLabel: 'Avançar',
-      prevLabel: 'Voltar',
       doneLabel: 'Avançar',
       exitOnOverlayClick: false,
       showBullets: false,
-      keyboardNavigation: false
+      keyboardNavigation: false,
+      buttonClass: "tour-dataset-buttons",
+      tooltipClass: "tour-dataset-tooltip"
     })
 
     tour.onafterchange(() => {
       document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
 
       document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
     });
 
     const onDoneClick = () => {
       setChangeTabDataInformationQuery(true);
+    };
+
+    const onSkipClick = () => {
+      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
     };
 
     tour.start();
@@ -164,20 +179,30 @@ export default function DatasetResource({
           position: 'right'
         }
       ],
+      nextLabel: 'Avançar',
       doneLabel: 'Avançar',
       exitOnOverlayClick: false,
       showBullets: false,
-      keyboardNavigation: false
+      keyboardNavigation: false,
+      buttonClass: "tour-dataset-buttons",
+      tooltipClass: "tour-dataset-tooltip"
     })
 
     tour.onafterchange(() => {
       const doneButton = document.querySelector('.introjs-donebutton');
       if (doneButton) {
         doneButton.style.pointerEvents = 'none';
-        doneButton.style.opacity = '0.5';
+        doneButton.style.backgroundColor = '#ACAEB1';
         doneButton.style.cursor = 'not-allowed';
       }
+
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
     });
+
+    const onSkipClick = () => {
+      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    };
 
     tour.start();
   }
@@ -193,18 +218,30 @@ export default function DatasetResource({
           position: 'right'
         }
       ],
-      prevLabel: 'Voltar',
       doneLabel: 'Avançar',
+      hidePrev: true,
       exitOnOverlayClick: false,
       showBullets: false,
-      keyboardNavigation: false
+      keyboardNavigation: false,
+      buttonClass: "tour-dataset-buttons",
+      tooltipClass: "tour-dataset-tooltip"
     })
+
+    tour.onafterchange(() => {
+      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
+    });
+
+    const onSkipClick = () => {
+      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    };
 
     tour.start();
   }
 
   useEffect(() => {
     let activeTour = null;
+    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
 
     const checkTourState = () => {
       try {
@@ -212,6 +249,8 @@ export default function DatasetResource({
         if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') {
           return;
         }
+
+        if(tourBD.state === "explore" || tourBD.state === "skip") return
 
         setPinTablesSelect(true);
 
@@ -264,6 +303,7 @@ export default function DatasetResource({
 
     return () => {
       clearInterval(cookieCheckInterval);
+      if(tourBD?.state === "explore" || tourBD?.state === "skip") return
       introJs().exit();
     };
   }, [cookies, displayScreen, tourBeginTable, tourBegin]);
@@ -659,7 +699,10 @@ export default function DatasetResource({
             value={query.raw_data_source}
             onChange={(id) => {
               pushQuery("raw_data_source", id)
-              cookies.set('tourBD', '{"state":"last"}', { expires: 30 })
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD && tourBD.state === 'download') {
+                cookies.set('tourBD', '{"state":"last"}', { expires: 360 })
+              }
             }}
             hasDivider={tables.length > 0 ? true : false}
           />

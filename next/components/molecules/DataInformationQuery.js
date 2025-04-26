@@ -284,7 +284,7 @@ export default function DataInformationQuery({ resource, changeTab }) {
     setIsLoadingCode(false)
     setIsLoadingSpin(false)
     const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
-    if(tourBD && tourBD.state === "begin") {
+    if(tourBD && tourBD.state === 'begin') {
       cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
     }
   }
