@@ -61,13 +61,20 @@ export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
         setIsError(true)
       } finally {
         setIsLoading(false)
-        tourBegin(true)
       }
     }
 
     setIsLoading(true);
     fetchData();
   }, [id, locale])
+
+  useEffect(() => {
+    if (!isLoading && !isError && resource && Object.keys(resource).length > 0) {
+      setTimeout(() => {
+        tourBegin(true);
+      }, 0);
+    }
+  }, [isLoading, isError, resource, tourBegin]);
 
   const TooltipText = ({ text, info, ...props }) => {
     return (

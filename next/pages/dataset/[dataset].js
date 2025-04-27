@@ -168,7 +168,18 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
 
     const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
     if(tourBD && tourBD.state === "explore") {
-      Tour()
+      const dataset_tables = dataset?.tables?.edges
+        ?.map((elm) => elm.node)
+          ?.filter(
+            (elm) =>
+              !["under_review", "excluded"].includes(elm?.status?.slug) &&
+              !["dicionario", "dictionary"].includes(elm?.slug)
+          )
+            ?.sort(sortElements) || [];
+      
+      if (dataset_tables.length > 0) {
+        Tour();
+      }
     }
   }, [isDatasetEmpty, router]);
 

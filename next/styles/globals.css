@@ -254,6 +254,16 @@ body {
   opacity: 0.8;
 }
 
+.tour-dataset-tooltip .introjs-tooltip-header .tour-step {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2B8C4D;
+  margin-bottom: 4px;
+}
+
 .tour-dataset-tooltip .introjs-tooltip-header .introjs-tooltip-title {
   font-family: 'Roboto';
   font-style: normal;

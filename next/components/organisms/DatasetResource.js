@@ -45,6 +45,28 @@ export default function DatasetResource({
   const [pinTablesSelect, setPinTablesSelect] = useState(false);
   const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
 
+  useEffect(() => {
+    if (tourBegin) {
+      const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+      if (tourBD && tourBD.state === "begin") {
+        if (!query.table) {
+          const dataset_tables = dataset?.tables?.edges
+            ?.map((elm) => elm.node)
+              ?.filter(
+                (elm) =>
+                  !["under_review", "excluded"].includes(elm?.status?.slug) &&
+                  !["dicionario", "dictionary"].includes(elm?.slug)
+              )
+                ?.sort(sortElements) || [];
+          
+          if (dataset_tables.length > 0) {
+            pushQuery("table", dataset_tables[0]?._id);
+          }
+        }
+      }
+    }
+  }, [tourBegin, query.table, dataset]);
+
   const pushQuery = (key, value) => {
     router.replace({
       pathname: `/dataset/${query.dataset}`,
@@ -60,25 +82,25 @@ export default function DatasetResource({
       steps: [
         {
           element: '#dataset_select_tables',
-          title: 'Escolha uma tabela tratada',
+          title: '<div class="tour-step">Passo 1 de 10</div>Escolha uma tabela tratada',
           intro: 'Para começar, selecione uma das opções para acessar os dados desejados. As tabelas tratadas já contêm dados prontos para análise. O tratamento das tabelas envolve a padronização dos nomes das variáveis, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.',
           position: 'right'
         },
         {
           element: '#table_temporalcoverage',
-          title: 'Verifique a cobertura temporal da tabela',
+          title: '<div class="tour-step">Passo 2 de 10</div>Verifique a cobertura temporal da tabela',
           intro: 'A cobertura temporal dos dados pode variar entre <strong>totalmente grátis</strong>, <strong>parcialmente grátis</strong> e <strong>totalmente pago</strong>. Os dados dentro do intervalo de anos gratuitos podem ser acessados sem custos, enquanto os dados nos anos pagos exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
           position: 'right'
         },
         {
           element: '#table_access_data',
-          title: 'Conheça as formas de acessar os dados',
+          title: '<div class="tour-step">Passo 3 de 10</div>Conheça as formas de acessar os dados',
           intro: 'Você pode acessar os dados de duas formas: <br/> <ul><li><strong>BigQuery e Pacotes</strong>: Acesse os dados no BigQuery ou por meio de pacotes em Python e R.</li><li><strong>Download</strong>: Baixe o arquivo CSV diretamente na plataforma.</li></ul> Nos próximos passos, vamos te mostrar primeiro como acessar pelo <strong>BigQuery e Pacotes</strong>. Em seguida, explicaremos como fazer o <strong>download</strong> dos dados.',
           position: 'right'
         },
         {
           element: '#access_via_bigquery',
-          title: 'Acesso via BigQuery e Pacotes',
+          title: '<div class="tour-step">Passo 4 de 10</div>Acesso via BigQuery e Pacotes',
           intro: 'Para continuar, <strong>selecione as colunas</strong> que deseja acessar. Como nossa missão é facilitar sua análise, a plataforma traduz automaticamente todas as colunas que contêm códigos institucionais, como município. Depois, basta clicar no botão para <strong>gerar a consulta</strong>.',
           position: 'left'
         }
@@ -88,6 +110,7 @@ export default function DatasetResource({
       exitOnOverlayClick: false,
       showBullets: false,
       keyboardNavigation: false,
+      exitOnEsc: false,
       buttonClass: "tour-dataset-buttons",
       tooltipClass: "tour-dataset-tooltip"
     })
@@ -117,19 +140,19 @@ export default function DatasetResource({
       steps: [
         {
           element: '#access_query_language',
-          title: 'Escolha a linguagem de sua preferência',
+          title: '<div class="tour-step">Passo 5 de 10</div>Escolha a linguagem de sua preferência',
           intro: 'Agora, <strong>selecione a aba</strong> com a linguagem que você deseja acessar os dados: SQL, Python ou R.',
           position: 'right'
         },
         {
           element: '#access_generated_query',
-          title: 'Consulta gerada',
+          title: '<div class="tour-step">Passo 6 de 10</div>Consulta gerada',
           intro: 'A plataforma disponibiliza a consulta na linguagem escolhida, permitindo que você acesse os dados como preferir.',
           position: 'left'
         },
         {
           element: '#access_generated_query',
-          title: 'Copie a consulta e acesse os dados',
+          title: '<div class="tour-step">Passo 7 de 10</div>Copie a consulta e acesse os dados',
           intro: 'Agora, <strong>copie a consulta gerada</strong> e:<br/><ul><li>Clique no botão para <strong>acessar o BigQuery</strong>. No editor de consultas do BigQuery.</li><li>No terminal do Python.</li><li>No terminal do R.</li></ul>Basta colar a consulta e executá-la.',
           position: 'left'
         }
@@ -139,6 +162,7 @@ export default function DatasetResource({
       exitOnOverlayClick: false,
       showBullets: false,
       keyboardNavigation: false,
+      exitOnEsc: false,
       buttonClass: "tour-dataset-buttons",
       tooltipClass: "tour-dataset-tooltip"
     })
@@ -168,13 +192,13 @@ export default function DatasetResource({
       steps: [
         {
           element: '#access_via_bigquery',
-          title: 'Acesso via Download',
+          title: '<div class="tour-step">Passo 8 de 10</div>Acesso via Download',
           intro: 'Clique no botão para baixar o arquivo <strong>CSV</strong> diretamente na plataforma. Lembre-se de que o download está disponível aoenas para tabelas de até <strong>1 GB</strong>. Tabelas até <strong>100 MB</strong> podem ser baixadas <strong>gratuitamente</strong>, enquanto tabelas entre <strong>100 MB</strong> e <strong>1 GB</strong> exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
           position: 'left'
         },
         {
           element: '#dataset_select_rawdatasource',
-          title: 'Escolha uma fonte original',
+          title: '<div class="tour-step">Passo 9 de 10</div>Escolha uma fonte original',
           intro: 'Agora, <strong>selecione uma das opções</strong> para acessar a fonte dos dados desejados. As fontes originais são links para páginas externas à plataforma com informações úteis sobre os dados.',
           position: 'right'
         }
@@ -184,6 +208,7 @@ export default function DatasetResource({
       exitOnOverlayClick: false,
       showBullets: false,
       keyboardNavigation: false,
+      exitOnEsc: false,
       buttonClass: "tour-dataset-buttons",
       tooltipClass: "tour-dataset-tooltip"
     })
@@ -213,7 +238,7 @@ export default function DatasetResource({
       steps: [
         {
           element: '#dataset_rawdatasource_header',
-          title: 'Acesse a fonte original',
+          title: '<div class="tour-step">Passo 10 de 10</div>Acesse a fonte original',
           intro: 'Clique no botão para acessar a fonte original. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais.',
           position: 'right'
         }
@@ -223,6 +248,7 @@ export default function DatasetResource({
       exitOnOverlayClick: false,
       showBullets: false,
       keyboardNavigation: false,
+      exitOnEsc: false,
       buttonClass: "tour-dataset-buttons",
       tooltipClass: "tour-dataset-tooltip"
     })
@@ -241,6 +267,7 @@ export default function DatasetResource({
 
   useEffect(() => {
     let activeTour = null;
+    let isTourRunning = false;
     const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
 
     const checkTourState = () => {
@@ -251,6 +278,10 @@ export default function DatasetResource({
         }
 
         if(tourBD.state === "explore" || tourBD.state === "skip") return
+
+        if (isTourRunning) {
+          return;
+        }
 
         setPinTablesSelect(true);
 
@@ -263,41 +294,60 @@ export default function DatasetResource({
           return;
         }
 
+        isTourRunning = true;
+
         switch (tourBD.state) {
           case 'begin':
-            requestAnimationFrame(() => {
-              startFirstTour();
-              activeTour = 'begin';
-            })
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startFirstTour();
+                activeTour = 'begin';
+                isTourRunning = false;
+              });
+            }, 500);
             break;
 
           case 'table':
-            requestAnimationFrame(() => {
-              startSecondTour();
-              activeTour = 'table';
-            })
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startSecondTour();
+                activeTour = 'table';
+                isTourRunning = false;
+              });
+            }, 500);
             break;
 
           case 'download':
-            requestAnimationFrame(() => {
-              startThirdTour();
-              activeTour = 'download';
-            })
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startThirdTour();
+                activeTour = 'download';
+                isTourRunning = false;
+              });
+            }, 500);
             break;
 
           case 'last':
-            requestAnimationFrame(() => {
-              startFourthTour();
-              activeTour = 'last';
-            })
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startFourthTour();
+                activeTour = 'last';
+                isTourRunning = false;
+              });
+            }, 500);
             break;
         }
       } catch (error) {
         console.error('Erro no tour:', error);
+        isTourRunning = false;
       }
     };
 
-    checkTourState();
+    if (tourBeginTable) {
+      setTimeout(() => {
+        checkTourState();
+      }, 500);
+    }
 
     const cookieCheckInterval = setInterval(checkTourState, 500);
 
@@ -306,7 +356,7 @@ export default function DatasetResource({
       if(tourBD?.state === "explore" || tourBD?.state === "skip") return
       introJs().exit();
     };
-  }, [cookies, displayScreen, tourBeginTable, tourBegin]);
+  }, [cookies, displayScreen, tourBeginTable]);
 
   function sortElements(a, b) {
     if (a.order < b.order) {
@@ -362,10 +412,37 @@ export default function DatasetResource({
   }, [dataset, isBDSudo === true])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo} tourBegin={setTourBeginTable} changeTab={changeTabDataInformationQuery}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
-    return null
+    switch(true) {
+      case route.hasOwnProperty("table"):
+        return (
+          <TablePage
+            id={route.table}
+            isBDSudo={isBDSudo}
+            tourBegin={setTourBeginTable}
+            changeTab={changeTabDataInformationQuery}
+          />
+        );
+
+      case route.hasOwnProperty("raw_data_source"):
+        return (
+          <RawDataSourcesPage
+            id={route.raw_data_source}
+            locale={locale}
+            isBDSudo={isBDSudo}
+          />
+        );
+
+      case route.hasOwnProperty("information_request"):
+        return (
+          <InformationRequestPage
+            id={route.information_request}
+            isBDSudo={isBDSudo}
+          />
+        );
+
+      default:
+        return null;
+    }
   }
 
   function ContentFilter({
