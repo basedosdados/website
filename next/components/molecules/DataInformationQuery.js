@@ -175,7 +175,11 @@ export function CodeHighlight({ language, children }) {
   )
 }
 
-export default function DataInformationQuery({ resource, changeTab }) {
+export default function DataInformationQuery({
+  resource,
+  changeTab,
+  onColumnsLoaded
+}) {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
@@ -254,6 +258,12 @@ export default function DataInformationQuery({ resource, changeTab }) {
   useEffect(() => {
     if(sqlCode !== "") scrollFocus() 
   }, [sqlCode])
+
+  useEffect(() => {
+    if (hasLoadingColumns === false && onColumnsLoaded) {
+      onColumnsLoaded(true);
+    }
+  }, [hasLoadingColumns, onColumnsLoaded]);
 
   function scrollFocus() {
     let idTab

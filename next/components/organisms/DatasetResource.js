@@ -253,14 +253,9 @@ export default function DatasetResource({
       tooltipClass: "tour-dataset-tooltip"
     })
 
-    tour.onafterchange(() => {
-      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
-      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
-    });
-
-    const onSkipClick = () => {
+    tour.onexit(() => {
       cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
-    };
+    });
 
     tour.start();
   }
