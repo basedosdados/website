@@ -10,32 +10,71 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useBreakpointValue
+  useBreakpointValue,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { capitalize } from "lodash";
+import cookies from "js-cookie";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
+import {
+  startFirstTour,
+  startSecondTour,
+  startThirdTour,
+  startFourthTour,
+  ModalFinishTour
+} from "../molecules/Tour";
 
 import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
 
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 
 export default function DatasetResource({
   dataset,
-  isBDSudo
+  isBDSudo,
+  tourBegin
 }) {
   const { t } = useTranslation('dataset');
   const router = useRouter()
   const { query, locale } = router
-  const [tables, setTables] = useState([])
-  const [rawDataSources, setRawDataSources] = useState([])
-  const [informationRequests, setInformationRequests] = useState([])
-  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
+  const [tables, setTables] = useState([]);
+  const [rawDataSources, setRawDataSources] = useState([]);
+  const [informationRequests, setInformationRequests] = useState([]);
+  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
+  const [tourBeginTable, setTourBeginTable] = useState(false);
+  const [pinTablesSelect, setPinTablesSelect] = useState(false);
+  const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
+  const modalTourFinish = useDisclosure();
+
+  useEffect(() => {
+    if (tourBegin) {
+      const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+      if (tourBD && tourBD.state === "begin") {
+        if (!query.table) {
+          const dataset_tables = dataset?.tables?.edges
+            ?.map((elm) => elm.node)
+              ?.filter(
+                (elm) =>
+                  !["under_review", "excluded"].includes(elm?.status?.slug) &&
+                  !["dicionario", "dictionary"].includes(elm?.slug)
+              )
+                ?.sort(sortElements) || [];
+          
+          if (dataset_tables.length > 0) {
+            pushQuery("table", dataset_tables[0]?._id);
+          }
+        }
+      }
+    }
+  }, [tourBegin, query.table, dataset]);
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -45,6 +84,99 @@ export default function DatasetResource({
       undefined, { shallow: true }
     )
   }
+
+  useEffect(() => {
+    let activeTour = null;
+    let isTourRunning = false;
+    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+
+    const checkTourState = () => {
+      try {
+        const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+        if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') {
+          return;
+        }
+
+        if(tourBD.state === "explore" || tourBD.state === "skip") return
+
+        if (isTourRunning) {
+          return;
+        }
+
+        setPinTablesSelect(true);
+
+        if (activeTour && activeTour !== tourBD.state) {
+          introJs().exit();
+          activeTour = null;
+        }
+
+        if (activeTour === tourBD.state) {
+          return;
+        }
+
+        isTourRunning = true;
+
+        switch (tourBD.state) {
+          case 'begin':
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startFirstTour();
+                activeTour = 'begin';
+                isTourRunning = false;
+              });
+            }, 500);
+            break;
+
+          case 'table':
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startSecondTour(setChangeTabDataInformationQuery);
+                activeTour = 'table';
+                isTourRunning = false;
+              });
+            }, 500);
+            break;
+
+          case 'download':
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startThirdTour();
+                activeTour = 'download';
+                isTourRunning = false;
+              });
+            }, 500);
+            break;
+
+          case 'last':
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                startFourthTour(modalTourFinish.onOpen);
+                activeTour = 'last';
+                isTourRunning = false;
+              });
+            }, 500);
+            break;
+        }
+      } catch (error) {
+        console.error('Erro no tour:', error);
+        isTourRunning = false;
+      }
+    };
+
+    if (tourBeginTable) {
+      setTimeout(() => {
+        checkTourState();
+      }, 500);
+    }
+
+    const cookieCheckInterval = setInterval(checkTourState, 500);
+
+    return () => {
+      clearInterval(cookieCheckInterval);
+      if(tourBD?.state === "explore" || tourBD?.state === "skip") return
+      introJs().exit();
+    };
+  }, [cookies, displayScreen, tourBeginTable]);
 
   function sortElements(a, b) {
     if (a.order < b.order) {
@@ -100,13 +232,41 @@ export default function DatasetResource({
   }, [dataset, isBDSudo === true])
 
   function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
-    return null
+    switch(true) {
+      case route.hasOwnProperty("table"):
+        return (
+          <TablePage
+            id={route.table}
+            isBDSudo={isBDSudo}
+            tourBegin={setTourBeginTable}
+            changeTab={changeTabDataInformationQuery}
+          />
+        );
+
+      case route.hasOwnProperty("raw_data_source"):
+        return (
+          <RawDataSourcesPage
+            id={route.raw_data_source}
+            locale={locale}
+            isBDSudo={isBDSudo}
+          />
+        );
+
+      case route.hasOwnProperty("information_request"):
+        return (
+          <InformationRequestPage
+            id={route.information_request}
+            isBDSudo={isBDSudo}
+          />
+        );
+
+      default:
+        return null;
+    }
   }
 
   function ContentFilter({
+    id,
     fieldName,
     choices,
     onChange,
@@ -138,67 +298,69 @@ export default function DatasetResource({
           borderColor="#DEDFE0"
         />
 
-        <LabelText
-          typography="small"
-          paddingLeft="15px"
-          marginBottom="8px"
-        >
-          {fieldName}
-        </LabelText>
+        <Stack spacing={0} id={id} backgroundColor="#FFFFFF">
+          <LabelText
+            typography="small"
+            paddingLeft="15px"
+            marginBottom="8px"
+          >
+            {fieldName}
+          </LabelText>
 
-        <Box>
-          {choices.map((elm, i) => (
-            <HStack
-              key={i}
-              spacing="4px"
-              cursor="pointer"
-              pointerEvents={elm._id === value ? "none" : "default"}
-            >
-              <Box 
-                width="3px"
-                height="24px"
-                backgroundColor={elm._id === value && "#2B8C4D"}
-                borderRadius="10px"
-              />
-              <Tooltip
-                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                isDisabled={!isOverflow[i]}
-                hasArrow
-                padding="16px"
-                backgroundColor="#252A32"
-                boxSizing="border-box"
-                borderRadius="8px"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                textAlign="center"
-                color="#FFFFFF"
-                placement="top"
-                maxWidth="100%"
+          <Box>
+            {choices.map((elm, i) => (
+              <HStack
+                key={i}
+                spacing="4px"
+                cursor="pointer"
+                pointerEvents={elm._id === value ? "none" : "default"}
               >
-                <LabelText
-                  typography="small"
-                  ref={(el) => (textRefs.current[i] = el)}
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  width="100%"
-                  color={elm._id === value ? "#2B8C4D" : "#71757A"}
-                  backgroundColor={elm._id === value && "#F7F7F7"}
-                  _hover={{
-                    backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
-                  }}
+                <Box 
+                  width="3px"
+                  height="24px"
+                  backgroundColor={elm._id === value && "#2B8C4D"}
+                  borderRadius="10px"
+                />
+                <Tooltip
+                  label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  isDisabled={!isOverflow[i]}
+                  hasArrow
+                  padding="16px"
+                  backgroundColor="#252A32"
+                  boxSizing="border-box"
                   borderRadius="8px"
-                  padding="6px 8px"
-                  onClick={() => onChange(elm._id)}
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  textAlign="center"
+                  color="#FFFFFF"
+                  placement="top"
+                  maxWidth="100%"
                 >
-                  {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                </LabelText>
-              </Tooltip>
-            </HStack>
-          ))}
-        </Box>
+                  <LabelText
+                    typography="small"
+                    ref={(el) => (textRefs.current[i] = el)}
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    width="100%"
+                    color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                    backgroundColor={elm._id === value && "#F7F7F7"}
+                    _hover={{
+                      backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                    }}
+                    borderRadius="8px"
+                    padding="6px 8px"
+                    onClick={() => onChange(elm._id)}
+                  >
+                    {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  </LabelText>
+                </Tooltip>
+              </HStack>
+            ))}
+          </Box>
+        </Stack>
       </Box>
     )
   }
@@ -407,16 +569,21 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
+      <ModalFinishTour
+        isOpen={modalTourFinish.isOpen}
+        onClose={modalTourFinish.onClose}
+      />
       {displayScreen === "desktop" ? 
         <Stack
           minWidth={{base: "100%", lg: "296px"}}
           maxWidth={{base: "100%", lg: "296px"}}
           spacing={0}
-          position="sticky"
+          position={pinTablesSelect ? "relative" : "sticky"}
           height="100%"
-          top="80px"
+          top={pinTablesSelect ? "0" : "80px"}
         >
           <ContentFilter
+            id="dataset_select_tables"
             fieldName={t('tables')}
             choices={tables}
             value={query.table}
@@ -427,11 +594,16 @@ export default function DatasetResource({
           />
 
           <ContentFilter
+            id="dataset_select_rawdatasource"
             fieldName={t('rawDataSources')}
             choices={rawDataSources}
             value={query.raw_data_source}
             onChange={(id) => {
               pushQuery("raw_data_source", id)
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD && tourBD.state === 'download') {
+                cookies.set('tourBD', '{"state":"last"}', { expires: 360 })
+              }
             }}
             hasDivider={tables.length > 0 ? true : false}
           />
