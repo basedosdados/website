@@ -3,7 +3,8 @@ import {
   Grid,
   GridItem,
   Image,
-  Stack
+  Stack,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -21,9 +22,7 @@ import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
-
-import introJs from 'intro.js';
-import 'intro.js/introjs.css';
+import { ModalInitialTour, ModalFinishTour, exploreTour } from "../../components/molecules/Tour";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -97,69 +96,15 @@ export async function getStaticPaths(context) {
 
 export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verifyBDSudo }) {
   const { t } = useTranslation('dataset', 'common');
-  const router = useRouter()
-  const { locale, query } = router
-  const [tabIndex, setTabIndex] = useState(0)
+  const router = useRouter();
+  const { locale, query } = router;
+  const [tabIndex, setTabIndex] = useState(0);
   const [isBDSudo, setIsBDSudo] = useState(null);
-  const [tourBegin, setTourBegin] = useState(false)
+  const [tourBegin, setTourBegin] = useState(false);
+  const [exploreTourBegin, setExploreTourBegin] = useState(false);
+  const modalTourInitial = useDisclosure();
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
-
-  const Tour = () => {
-    const tour = introJs().setOptions({
-      steps: [
-        {
-          element: '#tab_database_dataset',
-          title: 'Explore os dados do conjunto',
-          intro: 'Nesta tour, iremos guiar você na exploração das tabelas tratadas e das fontes originais deste conjunto de dados. Vamos começar?',
-          position: 'bottom'
-        }
-      ],
-      doneLabel: 'Começar',
-      exitOnOverlayClick: false,
-      showBullets: false,
-      buttonClass: "tour-dataset-buttons",
-      tooltipClass: "tour-dataset-tooltip"
-    });
-
-    const buttonBar = document.querySelector('.introjs-tooltipbuttons');
-    if (buttonBar) {
-      const customSkip = document.createElement('a');
-      customSkip.className = 'introjs-custom-skip-dataset';
-      customSkip.innerHTML = 'Pular';
-
-      customSkip.addEventListener('click', () => {
-        onSkipClick()
-        tour.exit();
-      });
-
-      buttonBar.insertBefore(customSkip, buttonBar.firstChild);
-    }
-
-    tour.onafterchange(() => {
-      document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
-      document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
-
-      document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
-      document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
-    });
-
-    const onDoneClick = () => {
-      if(!!query.tab) {
-        datasetTab()
-        setTabIndex(0)
-      }
-
-      cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
-      setTourBegin(true)
-    };
-
-    const onSkipClick = () => {
-      cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
-    };
-
-    tour.start()
-  }
 
   useEffect(() => {
     if (isDatasetEmpty) {
@@ -167,6 +112,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
     }
 
     const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD === null) modalTourInitial.onOpen()
+
     if(tourBD && tourBD.state === "explore") {
       const dataset_tables = dataset?.tables?.edges
         ?.map((elm) => elm.node)
@@ -178,10 +125,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
             ?.sort(sortElements) || [];
       
       if (dataset_tables.length > 0) {
-        Tour();
+        exploreTour(datasetTab, setTabIndex, setTourBegin, query);
       }
     }
-  }, [isDatasetEmpty, router]);
+  }, [isDatasetEmpty, router, exploreTourBegin]);
 
   async function checkBDSudo() {
     const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
@@ -353,6 +300,12 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
         height="100%"
         spacing={0}
       >
+        <ModalInitialTour
+          isOpen={modalTourInitial.isOpen}
+          onClose={modalTourInitial.onClose}
+          begin={setExploreTourBegin}
+        />
+
         <Grid
           templateColumns={{ base: "1fr", lg: "295px 1fr" }}
           width="100%"

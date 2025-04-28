@@ -515,22 +515,27 @@ export default function DataInformationQuery({
               </Skeleton>
             }
 
-            {insufficientChecks &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="error"
-                  text={t('table.errorInsufficientChecks')}
-                />
-              </Skeleton>
-            }
+            {insufficientChecks && (() => {
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD?.state === "begin") return null;
+              
+              return (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
+                >
+                  <AlertDiscalimerBox
+                    type="error"
+                    text={t('table.errorInsufficientChecks')}
+                  />
+                </Skeleton>
+              );
+            })()}
 
             <Skeleton
               display={tabAccessIndex !== 1 ? "flex" : "none"}
