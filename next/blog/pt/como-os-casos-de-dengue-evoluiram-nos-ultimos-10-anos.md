@@ -3,7 +3,7 @@ title: Como os casos de dengue evoluíram nos últimos 10 anos?
 description: >-
   Um olhar sobre os registros anuais de dengue, explorando padrões locais e variações entre municípios
 date:
-  created: "2024-04-30T18:18:06.419Z"
+  created: "2025-04-30T18:18:06.419Z"
 thumbnail: 
 categories: [analise]
 authors:
