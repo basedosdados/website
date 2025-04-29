@@ -30,13 +30,14 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id, isBDSudo }) {
+export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
+  const [columnsLoaded, setColumnsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -67,6 +68,14 @@ export default function TablePage({ id, isBDSudo }) {
     setIsLoading(true);
     fetchData();
   }, [id, locale])
+
+  useEffect(() => {
+    if (!isLoading && !isError && resource && Object.keys(resource).length > 0 && columnsLoaded) {
+      setTimeout(() => {
+        tourBegin(true);
+      }, 0);
+    }
+  }, [isLoading, isError, resource, tourBegin, columnsLoaded]);
 
   const TooltipText = ({ text, info, ...props }) => {
     return (
@@ -292,7 +301,12 @@ export default function TablePage({ id, isBDSudo }) {
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing="8px" marginBottom="40px !important">
+      <Stack
+        id="table_temporalcoverage"
+        width={{base: "100%", lg: "fit-content"}}
+        spacing="8px"
+        marginBottom="40px !important"
+      >
         <StackSkeleton width="300px" height="28px">
           <TitleText typography="small">
             {t('table.temporalCoverage')}
@@ -335,7 +349,11 @@ export default function TablePage({ id, isBDSudo }) {
         <></>
       }
 
-      <Stack spacing="8px" marginBottom="40px !important">
+      <Stack
+        spacing="8px"
+        marginBottom="40px !important"
+        backgroundColor="#FFFFFF"
+      >
         <StackSkeleton width="200px" height="28px">
           <TitleText typography="small">
             {t('table.dataAccess')}
@@ -344,6 +362,8 @@ export default function TablePage({ id, isBDSudo }) {
 
         <DataInformationQuery
           resource={resource}
+          changeTab={changeTab}
+          onColumnsLoaded={setColumnsLoaded}
         />
       </Stack>
 

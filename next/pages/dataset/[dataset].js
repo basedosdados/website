@@ -3,7 +3,8 @@ import {
   Grid,
   GridItem,
   Image,
-  Stack
+  Stack,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
@@ -21,6 +22,7 @@ import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
+import { ModalInitialTour, ModalFinishTour, exploreTour } from "../../components/molecules/Tour";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -94,10 +96,13 @@ export async function getStaticPaths(context) {
 
 export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verifyBDSudo }) {
   const { t } = useTranslation('dataset', 'common');
-  const router = useRouter()
-  const { locale, query } = router
-  const [tabIndex, setTabIndex] = useState(0)
+  const router = useRouter();
+  const { locale, query } = router;
+  const [tabIndex, setTabIndex] = useState(0);
   const [isBDSudo, setIsBDSudo] = useState(null);
+  const [tourBegin, setTourBegin] = useState(false);
+  const [exploreTourBegin, setExploreTourBegin] = useState(false);
+  const modalTourInitial = useDisclosure();
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
@@ -105,7 +110,25 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
     if (isDatasetEmpty) {
       router.replace('/404');
     }
-  }, [isDatasetEmpty, router]);
+
+    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD === null) modalTourInitial.onOpen()
+
+    if(tourBD && tourBD.state === "explore") {
+      const dataset_tables = dataset?.tables?.edges
+        ?.map((elm) => elm.node)
+          ?.filter(
+            (elm) =>
+              !["under_review", "excluded"].includes(elm?.status?.slug) &&
+              !["dicionario", "dictionary"].includes(elm?.slug)
+          )
+            ?.sort(sortElements) || [];
+      
+      if (dataset_tables.length > 0) {
+        exploreTour(datasetTab, setTabIndex, setTourBegin, query);
+      }
+    }
+  }, [isDatasetEmpty, router, exploreTourBegin]);
 
   async function checkBDSudo() {
     const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
@@ -277,6 +300,12 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
         height="100%"
         spacing={0}
       >
+        <ModalInitialTour
+          isOpen={modalTourInitial.isOpen}
+          onClose={modalTourInitial.onClose}
+          begin={setExploreTourBegin}
+        />
+
         <Grid
           templateColumns={{ base: "1fr", lg: "295px 1fr" }}
           width="100%"
@@ -384,21 +413,23 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
 
         <Stack spacing={0} width="100%" height="100%">
           <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
-            <TabSelect
-              index={0}
-              onClick={() => {
-                setTabIndex(0)
-                datasetTab()
-              }}
-            >
-              <DataBaseIcon
-                alt={t('dataAlt')}
-                width="18px"
-                height="18px"
-                marginRight="6px"
-              />
-              {t('data')}
-            </TabSelect>
+            <Stack id="tab_database_dataset">
+              <TabSelect
+                index={0}
+                onClick={() => {
+                  setTabIndex(0)
+                  datasetTab()
+                }}
+              >
+                <DataBaseIcon
+                  alt={t('dataAlt')}
+                  width="18px"
+                  height="18px"
+                  marginRight="6px"
+                />
+                {t('data')}
+              </TabSelect>
+            </Stack>
 
             <TabSelect
               index={1}
@@ -426,6 +457,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
             <DatasetResource
               dataset={dataset}
               isBDSudo={isBDSudo}
+              tourBegin={tourBegin}
             />
           }
           {tabIndex === 1 &&

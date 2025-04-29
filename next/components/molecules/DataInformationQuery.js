@@ -175,7 +175,11 @@ export function CodeHighlight({ language, children }) {
   )
 }
 
-export default function DataInformationQuery({ resource }) {
+export default function DataInformationQuery({
+  resource,
+  changeTab,
+  onColumnsLoaded
+}) {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
@@ -204,6 +208,10 @@ export default function DataInformationQuery({ resource }) {
     if(user?.isSubscriber) return user?.isSubscriber
     return false
   }
+
+  useEffect(() => {
+    if(changeTab === true) setTabAccessIndex(1)
+  }, [changeTab])
 
   useEffect(() => {
     if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
@@ -251,6 +259,12 @@ export default function DataInformationQuery({ resource }) {
     if(sqlCode !== "") scrollFocus() 
   }, [sqlCode])
 
+  useEffect(() => {
+    if (hasLoadingColumns === false && onColumnsLoaded) {
+      onColumnsLoaded(true);
+    }
+  }, [hasLoadingColumns, onColumnsLoaded]);
+
   function scrollFocus() {
     let idTab
 
@@ -279,6 +293,10 @@ export default function DataInformationQuery({ resource }) {
     setSqlCode(result.trim())
     setIsLoadingCode(false)
     setIsLoadingSpin(false)
+    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    if(tourBD && tourBD.state === 'begin') {
+      cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
+    }
   }
 
   const handleAccessIndexes = (index) => {
@@ -344,10 +362,19 @@ export default function DataInformationQuery({ resource }) {
         overflow="hidden"
       >
         <TabList
+          position="relative"
           pointerEvents={hasLoadingColumns ? "none" : "default"}
           padding="8px 24px 0"
           borderBottom="1px solid #DEDFE0 !important"
         >
+          <Box
+            id="table_access_data"
+            position="absolute"
+            width="380px"
+            height="130px"
+            top="-55px"
+            left="-22px"
+          />
           <GreenTab>{t('table.bigQueryAndPackages')}</GreenTab>
           <GreenTab>{t('table.download')}</GreenTab>
         </TabList>
@@ -362,6 +389,7 @@ export default function DataInformationQuery({ resource }) {
             flexDirection="column"
             width="100%"
             gap="16px"
+            id="access_via_bigquery"
           >
             <Skeleton
               startColor="#F0F0F0"
@@ -487,22 +515,27 @@ export default function DataInformationQuery({ resource }) {
               </Skeleton>
             }
 
-            {insufficientChecks &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="error"
-                  text={t('table.errorInsufficientChecks')}
-                />
-              </Skeleton>
-            }
+            {insufficientChecks && (() => {
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD?.state === "begin") return null;
+              
+              return (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
+                >
+                  <AlertDiscalimerBox
+                    type="error"
+                    text={t('table.errorInsufficientChecks')}
+                  />
+                </Skeleton>
+              );
+            })()}
 
             <Skeleton
               display={tabAccessIndex !== 1 ? "flex" : "none"}
@@ -624,6 +657,7 @@ export default function DataInformationQuery({ resource }) {
               overflow="hidden"
             >
               <TabList
+                id="access_query_language"
                 pointerEvents={hasLoadingColumns ? "none" : "default"}
                 padding="8px 24px 0"
                 borderBottom="1px solid #DEDFE0 !important"
@@ -634,6 +668,7 @@ export default function DataInformationQuery({ resource }) {
               </TabList>
 
               <VStack
+                id="access_generated_query"
                 spacing={0}
                 padding="24px"
                 overflow="hidden"
@@ -721,9 +756,9 @@ export default function DataInformationQuery({ resource }) {
                             color:"#22703E"
                           }}
                         >
-                          <BodyText typography="small">
+                          <LabelText color="#2B8C4D" _hover={{color:"#22703E"}} typography="small">
                             {t('table.accessBigQuery')}
-                          </BodyText>
+                          </LabelText>
                         </Box>
                       </Box>
                     </Skeleton>
