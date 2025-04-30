@@ -8,12 +8,15 @@ import {
   Flex,
   Box,
   Spinner,
+  useDisclosure
 } from "@chakra-ui/react";
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useTranslation } from 'next-i18next';
+import cookies from "js-cookie";
+import { ModalInitialTour } from "../components/molecules/Tour";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
@@ -39,7 +42,7 @@ import NotFoundImage from "../public/img/notFoundImage";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu', 'search'])),
+      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu', 'search', 'tour'])),
     },
   };
 }
@@ -58,6 +61,7 @@ export default function SearchDatasetPage() {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
+  const modalTourInitial = useDisclosure();
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
@@ -71,6 +75,9 @@ export default function SearchDatasetPage() {
   }
 
   useEffect(() => {
+    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD == null) modalTourInitial.onOpen()
+
     if(fetchApi) clearTimeout(fetchApi)
     setIsLoading(true)
     setCount(0)
@@ -525,6 +532,11 @@ export default function SearchDatasetPage() {
         flexDirection={{ base: "column", lg: "row" }}
         spacing={{base: 10, lg: 0}}
       >
+        <ModalInitialTour
+          isOpen={modalTourInitial.isOpen}
+          onClose={modalTourInitial.onClose}
+        />
+
         <VStack
           justifyContent="flex-start"
           alignItems="flex-start"

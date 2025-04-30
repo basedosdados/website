@@ -384,7 +384,10 @@
         "BQEmailDescription6": "Em caso de dúvida,",
         "BQEmailDescription7": "entre em contato com nosso suporte.",
         "updateEmail": "Atualizar e-mail",
-        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido."
+        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido.",
+        "tourTitle": "Reiniciar Tour",
+        "tourContext": "Este botão permite reiniciar o tour guiado na plataforma. Todas as explicações serão mostradas novamente desde o início.",
+        "resetTour": "Reiniciar"
     },
     "activate": {
         "accountActive": "Conta ativa",
@@ -429,5 +432,26 @@
         "passwordNoSpaces": "As senhas inseridas não podem conter espaçamentos.",
         "passwordMismatch": "A senha inserida não coincide com a senha criada no campo acima. Por favor, verifique se não há erros de digitação e tente novamente.",
         "passwordRequired": "Por favor, insira a senha."
+    },
+    "dataAPI": {
+        "title": "API de Dados",
+        "keys": "Chaves",
+        "description": "Gerencie suas chaves da API de Dados e monitore seu uso.",
+        "prefix": "Prefixo da chave",
+        "active": "Ativo",
+        "inactive": "Inativo",
+        "name": "Nome",
+        "balance": "Saldo",
+        "created": "Criado",
+        "expires": "Expira",
+        "never": "Nunca",
+        "credits": "créditos",
+        "reais": "reais",
+        "addCredits": "Adicionar créditos",
+        "needMoreKeys": "Precisa de mais chaves da API?",
+        "contactUs": "Nos contate",
+        "weWillHelpYou": "e te enviaremos uma nova chave assim que possível.",
+        "earlyRelease": "Lançamento em versão alfa",
+        "earlyReleaseDescription": "A API de Dados está atualmente em lançamento em versão alfa. As características e a documentação podem ser alteradas à medida que continuamos melhorando o serviço."
     }
 }

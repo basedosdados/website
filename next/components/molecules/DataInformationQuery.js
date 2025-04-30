@@ -40,7 +40,6 @@ import {
   getBigTableQuery
 } from "../../pages/api/tables"
 
-
 import { CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
@@ -175,7 +174,11 @@ export function CodeHighlight({ language, children }) {
   )
 }
 
-export default function DataInformationQuery({ resource }) {
+export default function DataInformationQuery({
+  resource,
+  changeTab,
+  onColumnsLoaded
+}) {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0)
@@ -204,6 +207,10 @@ export default function DataInformationQuery({ resource }) {
     if(user?.isSubscriber) return user?.isSubscriber
     return false
   }
+
+  useEffect(() => {
+    if(changeTab === true) setTabAccessIndex(1)
+  }, [changeTab])
 
   useEffect(() => {
     if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
@@ -251,6 +258,12 @@ export default function DataInformationQuery({ resource }) {
     if(sqlCode !== "") scrollFocus() 
   }, [sqlCode])
 
+  useEffect(() => {
+    if (hasLoadingColumns === false && onColumnsLoaded) {
+      onColumnsLoaded(true);
+    }
+  }, [hasLoadingColumns, onColumnsLoaded]);
+
   function scrollFocus() {
     let idTab
 
@@ -279,6 +292,10 @@ export default function DataInformationQuery({ resource }) {
     setSqlCode(result.trim())
     setIsLoadingCode(false)
     setIsLoadingSpin(false)
+    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    if(tourBD && tourBD.state === 'begin') {
+      cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
+    }
   }
 
   const handleAccessIndexes = (index) => {
@@ -344,15 +361,25 @@ export default function DataInformationQuery({ resource }) {
         overflow="hidden"
       >
         <TabList
+          position="relative"
           pointerEvents={hasLoadingColumns ? "none" : "default"}
           padding="8px 24px 0"
           borderBottom="1px solid #DEDFE0 !important"
         >
+          <Box
+            id="table_access_data"
+            position="absolute"
+            width="380px"
+            height="130px"
+            top="-55px"
+            left="-22px"
+          />
           <GreenTab>{t('table.bigQueryAndPackages')}</GreenTab>
           <GreenTab>{t('table.download')}</GreenTab>
         </TabList>
 
         <VStack
+          id="access_content_table"
           spacing={0}
           padding="24px"
           overflow="hidden"
@@ -362,6 +389,7 @@ export default function DataInformationQuery({ resource }) {
             flexDirection="column"
             width="100%"
             gap="16px"
+            id="access_via_bigquery"
           >
             <Skeleton
               startColor="#F0F0F0"
@@ -463,46 +491,56 @@ export default function DataInformationQuery({ resource }) {
               </Box>
             </Skeleton>
 
-            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="warning"
-                >
-                  {t('table.warningLargeTable', { returnObjects: true })[0]}
-                  <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text as="a" marginRight="4px" href="https://basedosdados.org/docs/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[3]}
-                  <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
-                </AlertDiscalimerBox>
-              </Skeleton>
-            }
+            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 && (() => {
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD?.state === "begin") return null;
 
-            {insufficientChecks &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="error"
-                  text={t('table.errorInsufficientChecks')}
-                />
-              </Skeleton>
-            }
+              return (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
+                >
+                  <AlertDiscalimerBox
+                    type="warning"
+                  >
+                    {t('table.warningLargeTable', { returnObjects: true })[0]}
+                    <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
+                    {t('table.warningLargeTable', { returnObjects: true })[1]}
+                    <Text as="a" marginRight="4px" href="https://basedosdados.org/docs/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                    {t('table.warningLargeTable', { returnObjects: true })[3]}
+                    <Text as="br" display={{base: "none", lg: "flex"}}/>
+                    {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
+                  </AlertDiscalimerBox>
+                </Skeleton>
+              )
+            })()}
+
+            {insufficientChecks && (() => {
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD?.state === "begin") return null;
+
+              return (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
+                >
+                  <AlertDiscalimerBox
+                    type="error"
+                    text={t('table.errorInsufficientChecks')}
+                  />
+                </Skeleton>
+              );
+            })()}
 
             <Skeleton
               display={tabAccessIndex !== 1 ? "flex" : "none"}
@@ -624,6 +662,7 @@ export default function DataInformationQuery({ resource }) {
               overflow="hidden"
             >
               <TabList
+                id="access_query_language"
                 pointerEvents={hasLoadingColumns ? "none" : "default"}
                 padding="8px 24px 0"
                 borderBottom="1px solid #DEDFE0 !important"
@@ -634,6 +673,7 @@ export default function DataInformationQuery({ resource }) {
               </TabList>
 
               <VStack
+                id="access_generated_query"
                 spacing={0}
                 padding="24px"
                 overflow="hidden"
@@ -721,9 +761,9 @@ export default function DataInformationQuery({ resource }) {
                             color:"#22703E"
                           }}
                         >
-                          <BodyText typography="small">
+                          <LabelText color="#2B8C4D" _hover={{color:"#22703E"}} typography="small">
                             {t('table.accessBigQuery')}
-                          </BodyText>
+                          </LabelText>
                         </Box>
                       </Box>
                     </Skeleton>
