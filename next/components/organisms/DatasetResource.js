@@ -120,7 +120,7 @@ export default function DatasetResource({
           case 'begin':
             setTimeout(() => {
               requestAnimationFrame(() => {
-                startFirstTour();
+                startFirstTour(locale);
                 activeTour = 'begin';
                 isTourRunning = false;
               });
@@ -130,7 +130,7 @@ export default function DatasetResource({
           case 'table':
             setTimeout(() => {
               requestAnimationFrame(() => {
-                startSecondTour(setChangeTabDataInformationQuery);
+                startSecondTour(setChangeTabDataInformationQuery, locale);
                 activeTour = 'table';
                 isTourRunning = false;
               });
@@ -140,7 +140,7 @@ export default function DatasetResource({
           case 'download':
             setTimeout(() => {
               requestAnimationFrame(() => {
-                startThirdTour();
+                startThirdTour(locale);
                 activeTour = 'download';
                 isTourRunning = false;
               });
@@ -150,7 +150,7 @@ export default function DatasetResource({
           case 'last':
             setTimeout(() => {
               requestAnimationFrame(() => {
-                startFourthTour(modalTourFinish.onOpen);
+                startFourthTour(modalTourFinish.onOpen, locale);
                 activeTour = 'last';
                 isTourRunning = false;
               });

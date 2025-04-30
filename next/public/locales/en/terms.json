@@ -94,6 +94,11 @@
                     "name": "token",
                     "retention": "7 days",
                     "purpose": "When logging into our site, this special cookie is created to store your access token. This token not only allows you to remain logged in, but also acts as a guardian to ensure the integrity of your settings and personal information."
+                },
+                "row3": {
+                    "name": "tourBD",
+                    "retention": "360 days",
+                    "purpose": "When accessing the search page or a dataset, this cookie is created to track the tour progress on the site. It stores the current navigation status—such as 'exploration', 'started', 'downloads', 'last', or 'skipped'—acting as a reference for the function that manages the guided experience."
                 }
             },
             "subContent4": "3.4. By continuing to use our site, you agree to the use of these cookies. If you prefer not to use them, we recommend adjusting your browser settings. However, this will affect your ability to log in and access restricted areas.",
