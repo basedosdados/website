@@ -40,7 +40,6 @@ import {
   getBigTableQuery
 } from "../../pages/api/tables"
 
-
 import { CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
@@ -380,6 +379,7 @@ export default function DataInformationQuery({
         </TabList>
 
         <VStack
+          id="access_content_table"
           spacing={0}
           padding="24px"
           overflow="hidden"
@@ -491,34 +491,39 @@ export default function DataInformationQuery({
               </Box>
             </Skeleton>
 
-            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 &&
-              <Skeleton
-                display={tabAccessIndex === 1 ? "none" : ""}
-                startColor="#F0F0F0"
-                endColor="#F3F3F3"
-                borderRadius="6px"
-                height="100%"
-                width="100%"
-                isLoaded={!hasLoadingColumns}
-              >
-                <AlertDiscalimerBox
-                  type="warning"
+            {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 && (() => {
+              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              if(tourBD?.state === "begin") return null;
+
+              return (
+                <Skeleton
+                  display={tabAccessIndex === 1 ? "none" : ""}
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                  height="100%"
+                  width="100%"
+                  isLoaded={!hasLoadingColumns}
                 >
-                  {t('table.warningLargeTable', { returnObjects: true })[0]}
-                  <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[1]}
-                  <Text as="a" marginRight="4px" href="https://basedosdados.org/docs/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
-                  {t('table.warningLargeTable', { returnObjects: true })[3]}
-                  <Text as="br" display={{base: "none", lg: "flex"}}/>
-                  {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
-                </AlertDiscalimerBox>
-              </Skeleton>
-            }
+                  <AlertDiscalimerBox
+                    type="warning"
+                  >
+                    {t('table.warningLargeTable', { returnObjects: true })[0]}
+                    <Text as="span" fontWeight="700">{formatBytes(resource.uncompressedFileSize)}</Text>
+                    {t('table.warningLargeTable', { returnObjects: true })[1]}
+                    <Text as="a" marginRight="4px" href="https://basedosdados.org/docs/access_data_bq/#entenda-o-uso-gratuito-do-big-query-bq" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.warningLargeTable', { returnObjects: true })[2]}</Text>
+                    {t('table.warningLargeTable', { returnObjects: true })[3]}
+                    <Text as="br" display={{base: "none", lg: "flex"}}/>
+                    {numberColumns === checkedColumns.length && t('table.warningLargeTableOptimize')}
+                  </AlertDiscalimerBox>
+                </Skeleton>
+              )
+            })()}
 
             {insufficientChecks && (() => {
               const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
               if(tourBD?.state === "begin") return null;
-              
+
               return (
                 <Skeleton
                   display={tabAccessIndex === 1 ? "none" : ""}

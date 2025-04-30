@@ -22,7 +22,7 @@ import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
-import { ModalInitialTour, ModalFinishTour, exploreTour } from "../../components/molecules/Tour";
+import { ModalInitialTour, exploreTour } from "../../components/molecules/Tour";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -70,7 +70,7 @@ export async function getStaticProps(context) {
   }
 
   const props = {
-    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices'])),
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices', 'tour'])),
     dataset: dataset || null,
     userGuide: userGuide || null,
     hiddenDataset,
@@ -125,7 +125,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
             ?.sort(sortElements) || [];
       
       if (dataset_tables.length > 0) {
-        exploreTour(datasetTab, setTabIndex, setTourBegin, query);
+        exploreTour(datasetTab, setTabIndex, setTourBegin, query, locale);
       }
     }
   }, [isDatasetEmpty, router, exploreTourBegin]);

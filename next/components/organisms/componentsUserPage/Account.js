@@ -334,6 +334,22 @@ export default function Account({ userInfo }) {
       </Box>
 
       <Box>
+        <TitleTextForm>{t('username.tourTitle')}</TitleTextForm>
+        <ExtraInfoTextForm>{t('username.tourContext')}</ExtraInfoTextForm>
+        <Button
+          color="#2B8C4D"
+          backgroundColor="#FFF"
+          border="1px solid #2B8C4D"
+          _hover={{
+            backgroundColor: "#FFF",
+            color: "#22703E",
+            borderColor: "#22703E"
+          }}
+          onClick={() => cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })}
+        >{t('username.resetTour')}</Button>
+      </Box>
+
+      <Box>
         <TitleTextForm>{t('username.exportAccountData')}</TitleTextForm>
         <ExtraInfoTextForm>
           {t('username.dataStorageInfo', { returnObjects: true })[0]}
