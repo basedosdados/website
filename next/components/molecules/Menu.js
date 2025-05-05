@@ -770,7 +770,7 @@ function DesktopLinks({
         />
       }
 
-      <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
+      <HStack spacing="21px" display={{ base: "none", lg: "flex" }} id="widget_help_and_resources">
         {(path === "/search" || path === "/dataset/[dataset]" || path === "/user/[username]") &&
           <HelpWidget
             tooltip={t('tooltip.helpAndResources')}
@@ -789,6 +789,7 @@ function DesktopLinks({
               },
               {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
               {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
+              {name: t('tooltip.howResetTour'), component: <Link href="/faq#reset-tour">{t('tooltip.howResetTour')}</Link>},
               {},
               {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
               {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
