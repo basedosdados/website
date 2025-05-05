@@ -380,7 +380,7 @@ export const startThirdTour = (locale) => {
           '<div class="tour-step">Paso 8 de 10</div>Acceso mediante Descarga'
         ),
         intro: translateText(locale,
-          'Clique no botão para baixar o arquivo <strong>CSV</strong> diretamente na plataforma. Lembre-se de que o download está disponível aoenas para tabelas de até <strong>1 GB</strong>. Tabelas até <strong>100 MB</strong> podem ser baixadas <strong>gratuitamente</strong>, enquanto tabelas entre <strong>100 MB</strong> e <strong>1 GB</strong> exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
+          'Clique no botão para baixar o arquivo <strong>CSV</strong> diretamente na plataforma. Lembre-se de que o download está disponível apenas para tabelas de até <strong>1 GB</strong>. Tabelas até <strong>100 MB</strong> podem ser baixadas <strong>gratuitamente</strong>, enquanto tabelas entre <strong>100 MB</strong> e <strong>1 GB</strong> exigem uma assinatura do plano <strong>Pro</strong> ou <strong>Empresas</strong>.',
           'Click the button to download the <strong>CSV</strong> file directly from the platform. Please note downloads are only available for tables up to <strong>1 GB</strong>. Tables up to <strong>100 MB</strong> can be downloaded <strong>for free</strong>, while tables between <strong>100 MB</strong> and <strong>1 GB</strong> require a <strong>Pro</strong> or <strong>Enterprise</strong> plan subscription.',
           'Haga clic en el botón para descargar el archivo <strong>CSV</strong> directamente en la plataforma. Tenga en cuenta que la descarga solo está disponible para tablas de hasta <strong>1 GB</strong>. Las tablas de hasta <strong>100 MB</strong> se pueden descargar <strong>gratuitamente</strong>, mientras que las tablas entre <strong>100 MB</strong> y <strong>1 GB</strong> requieren una suscripción al plan <strong>Pro</strong> o <strong>Empresas</strong>.'
         ),
@@ -455,8 +455,27 @@ export const startFourthTour = (modalOpen, locale) => {
           'Haga clic en el botón para acceder a la fuente original. Siempre intentamos proporcionar el acceso más directo para descargar los datos originales.'
         ),
         position: 'right'
+      },
+      {
+        element: '#widget_help_and_resources',
+        title: translateText(locale,
+          'Formas de reiniciar o tour',
+          'Ways to restart the tour',
+          'Formas de reiniciar el recorrido'
+        ),
+        intro: translateText(locale,
+          'As formas disponibilizadas para reiniciar o tour são através da área do usuário, na seção \'Conta\', e na FAQ, disponível aqui no \'Ajuda e recursos\', com um atalho para chegar lá mais rapidamente.',
+          'The available ways to restart the tour are through the user area in the \'Account\' section and in the FAQ, available here in \'Help and resources\', with a shortcut to get there faster.',
+          'Las formas disponibles para reiniciar el tour son a través del área de usuario en la sección \'Cuenta\' y en las FAQ, disponibles aquí en \'Ayuda y recursos\', con un atajo para llegar más rápido.'
+        ),
+        position: 'left'
       }
     ],
+    nextLabel: translateText(locale,
+      'Avançar',
+      'Next',
+      'Adelante'
+    ),
     doneLabel: translateText(locale,
       'Avançar',
       'Next',

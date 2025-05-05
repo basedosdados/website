@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
+import cookies from "js-cookie";
 import Display from "../components/atoms/Text/Display";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
@@ -114,16 +115,43 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
-  const [allQuestions, setAllQuestions] = useState([])
-  const [questions, setQuestions] = useState([])
-  const [categorySelected, setCategorySelected] = useState("")
-  const [searchFilter, setSearchFilter] = useState("")
-  const [closeQuestion, setCloseQuestion] = useState(false)
+  const router = useRouter();
+  const [allQuestions, setAllQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [categorySelected, setCategorySelected] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
+  const [closeQuestion, setCloseQuestion] = useState(false);
 
   useEffect(() => {
     setAllQuestions(faqs)
     setQuestions(faqs)
   },[faqs])
+
+  function resetTour() {
+    cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
+  }
+
+  useEffect(() => {
+    if (window.location.hash === '#action-reset-tour') {
+      resetTour();
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+
+    const handleHashChange = (url) => {
+      if (window.location.hash === '#action-reset-tour') {
+        resetTour();
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    router.events.on('hashChangeComplete', handleHashChange);
+
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+      router.events.off('hashChangeComplete', handleHashChange);
+    };
+  }, [router]);
 
   const searcher = new FuzzySearch(
     categorySelected ? questions : allQuestions,

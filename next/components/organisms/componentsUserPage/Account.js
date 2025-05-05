@@ -4,6 +4,7 @@ import {
   FormControl,
   useDisclosure,
   ModalCloseButton,
+  Spinner
 } from "@chakra-ui/react";
 import { useState } from "react";
 import cookies from 'js-cookie';
@@ -25,16 +26,17 @@ import {
 export default function Account({ userInfo }) {
   const { t } = useTranslation('user');
   const router = useRouter();
-  const usernameModal = useDisclosure()
-  const eraseModalAccount = useDisclosure()
-  const sucessEraseModalAccount = useDisclosure()
-  const errorEraseModalAccount = useDisclosure()
-  const [isLoading, setIsLoading] = useState(false)
-  const [hasCancelSubscription, setHasCancelSubscription] = useState(false)
-  const [hasMembers, setHasMembers] = useState(false)
+  const usernameModal = useDisclosure();
+  const eraseModalAccount = useDisclosure();
+  const sucessEraseModalAccount = useDisclosure();
+  const errorEraseModalAccount = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingReset, setIsLoadingReset] = useState(false);
+  const [hasCancelSubscription, setHasCancelSubscription] = useState(false);
+  const [hasMembers, setHasMembers] = useState(false);
 
-  const [formData, setFormData] = useState({username: ""})
-  const [errors, setErrors] = useState({})
+  const [formData, setFormData] = useState({username: ""});
+  const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
     setFormData((prevState) => ({
@@ -345,8 +347,12 @@ export default function Account({ userInfo }) {
             color: "#22703E",
             borderColor: "#22703E"
           }}
-          onClick={() => cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })}
-        >{t('username.resetTour')}</Button>
+          onClick={() => {
+            setIsLoadingReset(true)
+            cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
+            setTimeout(() => setIsLoadingReset(false), 1000)
+          }}
+        >{isLoadingReset ? <Spinner width="16px" height="16px"/> : t('username.resetTour')}</Button>
       </Box>
 
       <Box>
