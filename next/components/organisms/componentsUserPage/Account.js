@@ -3,8 +3,7 @@ import {
   Box,
   FormControl,
   useDisclosure,
-  ModalCloseButton,
-  Spinner
+  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState } from "react";
 import cookies from 'js-cookie';
@@ -31,7 +30,6 @@ export default function Account({ userInfo }) {
   const sucessEraseModalAccount = useDisclosure();
   const errorEraseModalAccount = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingReset, setIsLoadingReset] = useState(false);
   const [hasCancelSubscription, setHasCancelSubscription] = useState(false);
   const [hasMembers, setHasMembers] = useState(false);
 
@@ -333,26 +331,6 @@ export default function Account({ userInfo }) {
           }}
           onClick={() => usernameModal.onOpen()}
         >{t('username.changeUsername')}</Button>
-      </Box>
-
-      <Box>
-        <TitleTextForm>{t('username.tourTitle')}</TitleTextForm>
-        <ExtraInfoTextForm>{t('username.tourContext')}</ExtraInfoTextForm>
-        <Button
-          color="#2B8C4D"
-          backgroundColor="#FFF"
-          border="1px solid #2B8C4D"
-          _hover={{
-            backgroundColor: "#FFF",
-            color: "#22703E",
-            borderColor: "#22703E"
-          }}
-          onClick={() => {
-            setIsLoadingReset(true)
-            cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
-            setTimeout(() => setIsLoadingReset(false), 1000)
-          }}
-        >{isLoadingReset ? <Spinner width="16px" height="16px"/> : t('username.resetTour')}</Button>
       </Box>
 
       <Box>

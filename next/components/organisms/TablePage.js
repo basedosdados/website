@@ -30,14 +30,13 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
+export default function TablePage({ id, isBDSudo, changeTab }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
   const [isLoading, setIsLoading] = useState(true);
   const [resource, setResource] = useState({});
   const [isError, setIsError] = useState(false);
-  const [columnsLoaded, setColumnsLoaded] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,14 +67,6 @@ export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
     setIsLoading(true);
     fetchData();
   }, [id, locale])
-
-  useEffect(() => {
-    if (!isLoading && !isError && resource && Object.keys(resource).length > 0 && columnsLoaded) {
-      setTimeout(() => {
-        tourBegin(true);
-      }, 0);
-    }
-  }, [isLoading, isError, resource, tourBegin, columnsLoaded]);
 
   const TooltipText = ({ text, info, ...props }) => {
     return (
@@ -363,7 +354,6 @@ export default function TablePage({ id, isBDSudo, tourBegin, changeTab }) {
         <DataInformationQuery
           resource={resource}
           changeTab={changeTab}
-          onColumnsLoaded={setColumnsLoaded}
         />
       </Stack>
 
