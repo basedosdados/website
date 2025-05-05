@@ -123,7 +123,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
               !["dicionario", "dictionary"].includes(elm?.slug)
           )
             ?.sort(sortElements) || [];
-      
+
       if (dataset_tables.length > 0) {
         exploreTour(datasetTab, setTabIndex, setTourBegin, query, locale);
       }

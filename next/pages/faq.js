@@ -115,7 +115,6 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
-  const router = useRouter();
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
   const [categorySelected, setCategorySelected] = useState("");
@@ -126,32 +125,6 @@ export default function FAQ({ faqs }) {
     setAllQuestions(faqs)
     setQuestions(faqs)
   },[faqs])
-
-  function resetTour() {
-    cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
-  }
-
-  useEffect(() => {
-    if (window.location.hash === '#action-reset-tour') {
-      resetTour();
-      window.history.replaceState({}, '', window.location.pathname);
-    }
-
-    const handleHashChange = (url) => {
-      if (window.location.hash === '#action-reset-tour') {
-        resetTour();
-        window.history.replaceState({}, '', window.location.pathname);
-      }
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    router.events.on('hashChangeComplete', handleHashChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-      router.events.off('hashChangeComplete', handleHashChange);
-    };
-  }, [router]);
 
   const searcher = new FuzzySearch(
     categorySelected ? questions : allQuestions,

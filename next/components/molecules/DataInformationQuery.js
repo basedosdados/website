@@ -176,8 +176,7 @@ export function CodeHighlight({ language, children }) {
 
 export default function DataInformationQuery({
   resource,
-  changeTab,
-  onColumnsLoaded
+  changeTab
 }) {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
@@ -209,7 +208,10 @@ export default function DataInformationQuery({
   }
 
   useEffect(() => {
-    if(changeTab === true) setTabAccessIndex(1)
+    if(changeTab === true) {
+      setTabAccessIndex(1)
+      cookies.set('tourBD', '{"state":"download"}', { expires: 360 })
+    }
   }, [changeTab])
 
   useEffect(() => {
@@ -259,10 +261,10 @@ export default function DataInformationQuery({
   }, [sqlCode])
 
   useEffect(() => {
-    if (hasLoadingColumns === false && onColumnsLoaded) {
-      onColumnsLoaded(true);
+    if (hasLoadingColumns === false) {
+      window.dispatchEvent(new CustomEvent('tablePageLoaded'));
     }
-  }, [hasLoadingColumns, onColumnsLoaded]);
+  }, [hasLoadingColumns]);
 
   function scrollFocus() {
     let idTab

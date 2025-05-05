@@ -37,6 +37,44 @@ import 'intro.js/introjs.css';
 
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 
+function SwitchResource ({
+  route,
+  isBDSudo,
+  changeTabDataInformationQuery,
+  locale,
+}) {
+  switch(true) {
+    case route.hasOwnProperty("table"):
+      return (
+        <TablePage
+          id={route.table}
+          isBDSudo={isBDSudo}
+          changeTab={changeTabDataInformationQuery}
+        />
+      );
+
+    case route.hasOwnProperty("raw_data_source"):
+      return (
+        <RawDataSourcesPage
+          id={route.raw_data_source}
+          locale={locale}
+          isBDSudo={isBDSudo}
+        />
+      );
+
+    case route.hasOwnProperty("information_request"):
+      return (
+        <InformationRequestPage
+          id={route.information_request}
+          isBDSudo={isBDSudo}
+        />
+      );
+
+    default:
+      return null;
+  }
+}
+
 export default function DatasetResource({
   dataset,
   isBDSudo,
@@ -67,7 +105,7 @@ export default function DatasetResource({
                   !["dicionario", "dictionary"].includes(elm?.slug)
               )
                 ?.sort(sortElements) || [];
-          
+
           if (dataset_tables.length > 0) {
             pushQuery("table", dataset_tables[0]?._id);
           }
@@ -86,94 +124,94 @@ export default function DatasetResource({
   }
 
   useEffect(() => {
-    let activeTour = null;
-    let isTourRunning = false;
+    const handleTablePageLoaded = (e) => {
+      setTourBeginTable(true);
+    };
+
+    window.addEventListener('tablePageLoaded', handleTablePageLoaded);
+
+    return () => {
+      window.removeEventListener('tablePageLoaded', handleTablePageLoaded);
+    }
+  }, [])
+
+  const tourStateRef = useRef({
+    activeTour: null,
+    isTourRunning: false
+  });
+
+  useEffect(() => {
     const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    if(tourBD?.state === "explore" || tourBD?.state === "skip") return
 
     const checkTourState = () => {
       try {
         const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
-        if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') {
-          return;
-        }
-
-        if(tourBD.state === "explore" || tourBD.state === "skip") return
-
-        if (isTourRunning) {
-          return;
-        }
+        if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') return;
+        if (tourBD.state === "explore" || tourBD.state === "skip") return;
+        if (tourStateRef.current.isTourRunning) return;
 
         setPinTablesSelect(true);
 
-        if (activeTour && activeTour !== tourBD.state) {
+        if (tourStateRef.current.activeTour && tourStateRef.current.activeTour !== tourBD.state) {
           introJs().exit();
-          activeTour = null;
+          tourStateRef.current.activeTour = null;
         }
 
-        if (activeTour === tourBD.state) {
-          return;
-        }
+        if (tourStateRef.current.activeTour === tourBD.state) return;
 
-        isTourRunning = true;
+        tourStateRef.current.isTourRunning = true;
+
+        const startTourWithDelay = (callback) => {
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              callback();
+              tourStateRef.current.isTourRunning = false;
+            });
+          }, 500);
+        };
 
         switch (tourBD.state) {
           case 'begin':
-            setTimeout(() => {
-              requestAnimationFrame(() => {
-                startFirstTour(locale);
-                activeTour = 'begin';
-                isTourRunning = false;
-              });
-            }, 500);
+            console.log("tour")
+            startTourWithDelay(() => {
+              startFirstTour(locale);
+              tourStateRef.current.activeTour = 'begin';
+            });
             break;
 
           case 'table':
-            setTimeout(() => {
-              requestAnimationFrame(() => {
-                startSecondTour(setChangeTabDataInformationQuery, locale);
-                activeTour = 'table';
-                isTourRunning = false;
-              });
-            }, 500);
+            startTourWithDelay(() => {
+              startSecondTour(setChangeTabDataInformationQuery, locale);
+              tourStateRef.current.activeTour = 'table';
+            });
             break;
 
           case 'download':
-            setTimeout(() => {
-              requestAnimationFrame(() => {
-                startThirdTour(locale);
-                activeTour = 'download';
-                isTourRunning = false;
-              });
-            }, 500);
+            startTourWithDelay(() => {
+              console.log("tour_download")
+              startThirdTour(locale);
+              tourStateRef.current.activeTour = 'download';
+            });
             break;
 
           case 'last':
-            setTimeout(() => {
-              requestAnimationFrame(() => {
-                startFourthTour(modalTourFinish.onOpen, locale);
-                activeTour = 'last';
-                isTourRunning = false;
-              });
-            }, 500);
+            startTourWithDelay(() => {
+              startFourthTour(modalTourFinish.onOpen, locale);
+              tourStateRef.current.activeTour = 'last';
+            });
             break;
         }
       } catch (error) {
         console.error('Erro no tour:', error);
-        isTourRunning = false;
+        tourStateRef.current.isTourRunning = false;
       }
     };
 
-    if (tourBeginTable) {
-      setTimeout(() => {
-        checkTourState();
-      }, 500);
-    }
-
-    const cookieCheckInterval = setInterval(checkTourState, 500);
+    const interval = setInterval(checkTourState, 500);
 
     return () => {
-      clearInterval(cookieCheckInterval);
-      if(tourBD?.state === "explore" || tourBD?.state === "skip") return
+      clearInterval(interval);
       introJs().exit();
     };
   }, [cookies, displayScreen, tourBeginTable]);
@@ -230,40 +268,6 @@ export default function DatasetResource({
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
     }
   }, [dataset, isBDSudo === true])
-
-  function SwitchResource ({route}) {
-    switch(true) {
-      case route.hasOwnProperty("table"):
-        return (
-          <TablePage
-            id={route.table}
-            isBDSudo={isBDSudo}
-            tourBegin={setTourBeginTable}
-            changeTab={changeTabDataInformationQuery}
-          />
-        );
-
-      case route.hasOwnProperty("raw_data_source"):
-        return (
-          <RawDataSourcesPage
-            id={route.raw_data_source}
-            locale={locale}
-            isBDSudo={isBDSudo}
-          />
-        );
-
-      case route.hasOwnProperty("information_request"):
-        return (
-          <InformationRequestPage
-            id={route.information_request}
-            isBDSudo={isBDSudo}
-          />
-        );
-
-      default:
-        return null;
-    }
-  }
 
   function ContentFilter({
     id,
@@ -622,7 +626,12 @@ export default function DatasetResource({
         <SelectResource selectedResource={query}/>
       }
 
-      <SwitchResource route={query}/>
+      <SwitchResource 
+        route={query}
+        isBDSudo={isBDSudo}
+        changeTabDataInformationQuery={changeTabDataInformationQuery}
+        locale={locale}
+      />
     </Stack>
   )
 }

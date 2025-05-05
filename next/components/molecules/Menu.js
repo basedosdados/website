@@ -770,31 +770,34 @@ function DesktopLinks({
         />
       }
 
-      <HStack spacing="21px" display={{ base: "none", lg: "flex" }} id="widget_help_and_resources">
+      <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
         {(path === "/search" || path === "/dataset/[dataset]" || path === "/user/[username]") &&
-          <HelpWidget
-            tooltip={t('tooltip.helpAndResources')}
-            options={[
-              {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
-              {name: t('tooltip.documentation'), url: 
-                locale === "en" ? "/en/docs/home" :
-                locale === "es" ? "/es/docs/home" :
-                "/docs/home"
-              },
-              {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
-              {name: t('tooltip.installPackages'), url: 
-                locale === "en" ? "/en/docs/access_data_packages/" :
-                locale === "es" ? "/es/docs/access_data_packages/" :
-                "/docs/access_data_packages/"
-              },
-              {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
-              {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
-              {name: t('tooltip.howResetTour'), component: <Link href="/faq#reset-tour">{t('tooltip.howResetTour')}</Link>},
-              {},
-              {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-              {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
-            ]}
-          />
+          <Box id="widget_help_and_resources">
+            <HelpWidget
+              tooltip={t('tooltip.helpAndResources')}
+              options={[
+                {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
+                {name: t('tooltip.documentation'), url: 
+                  locale === "en" ? "/en/docs/home" :
+                  locale === "es" ? "/es/docs/home" :
+                  "/docs/home"
+                },
+                {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
+                {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
+                {},
+                {name: t('tooltip.installPackages'), url: 
+                  locale === "en" ? "/en/docs/access_data_packages/" :
+                  locale === "es" ? "/es/docs/access_data_packages/" :
+                  "/docs/access_data_packages/"
+                },
+                {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
+                {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
+                {},
+                {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
+                {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
+              ]}
+            />
+          </Box>
         }
 
         {userData ? (

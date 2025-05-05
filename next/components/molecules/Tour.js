@@ -26,7 +26,8 @@ export const ModalInitialTour = ({ isOpen, onClose, begin }) => {
       propsModalContent={{
         minWidth: "328px",
         maxWidth: "328px",
-        padding: "16px"
+        padding: "16px",
+        borderRadius: "8px"
       }}
     >
       <Stack spacing={0} marginBottom="16px">
@@ -72,7 +73,8 @@ export const ModalFinishTour = ({ isOpen, onClose }) => {
       propsModalContent={{
         minWidth: "328px",
         maxWidth: "328px",
-        padding: "16px"
+        padding: "16px",
+        borderRadius: "8px"
       }}
     >
       <Stack spacing={0} marginBottom="16px">
@@ -129,7 +131,7 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
           'Explora el conjunto de datos'
         ),
         intro: translateText(locale,
-          'Nesta tour, iremos guiar você na exploração das tabelas tratadas e das fontes originais deste conjunto de dados. Vamos começar?',
+          'Neste tour, iremos guiar você na exploração das tabelas tratadas e das fontes originais deste conjunto de dados. Vamos começar?',
           'In this tour, we will guide you through exploring the processed tables and original sources of this dataset. Shall we begin?',
           'En este recorrido, te guiaremos en la exploración de las tablas procesadas y las fuentes originales de este conjunto de datos. ¿Comenzamos?'
         ),
@@ -198,9 +200,9 @@ export const startFirstTour = (locale) => {
           '<div class="tour-step">Paso 1 de 10</div>Seleccione una tabla procesada'
         ),
         intro: translateText(locale,
-          'Para começar, selecione uma das opções para acessar os dados desejados. As tabelas tratadas já contêm dados prontos para análise. O tratamento das tabelas envolve a padronização dos nomes das variáveis, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.',
-          'To get started, select one of the options to access the desired data. The processed tables already contain data ready for analysis. The table processing involves standardizing variable names, which makes cross-referencing tables from different institutions and topics as simple as any other query.',
-          'Para comenzar, seleccione una de las opciones para acceder a los datos deseados. Las tablas procesadas ya contienen datos listos para análisis. El procesamiento de las tablas implica la estandarización de los nombres de las variables, lo que permite que el cruce de tablas de diferentes instituciones y temas sea tan sencillo como cualquier otra consulta.'
+          'Para começar, <strong>selecione uma das opções</strong> para acessar os dados desejados. As tabelas tratadas já contêm dados <strong>prontos para análise</strong>. O tratamento das tabelas envolve a padronização dos nomes das variáveis, o que permite que o cruzamento de tabelas de diferentes instituições e temas seja tão simples quanto qualquer outra consulta.',
+          'To get started, <strong>select one of the options</strong> to access the desired data. The processed tables already contain data <strong>ready for analysis</strong>. The table processing involves standardizing variable names, which makes cross-referencing tables from different institutions and topics as simple as any other query.',
+          'Para comenzar, <strong>seleccione una de las opciones</strong> para acceder a los datos deseados. Las tablas procesadas ya contienen datos <strong>listos para análisis</strong>. El procesamiento de las tablas implica la estandarización de los nombres de las variables, lo que permite que el cruce de tablas de diferentes instituciones y temas sea tan sencillo como cualquier otra consulta.'
         ),
         position: 'right'
       },
