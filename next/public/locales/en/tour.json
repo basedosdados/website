@@ -3,10 +3,5 @@
     "title": "Welcome to our platform!",
     "content": "Before you begin, please note that the data here is provided in <strong>raw format</strong>. To filter by categories such as region or time period, you'll need to process it using <strong>external tools</strong> like Excel, BigQuery, Python, or R. Don't worry! We have tutorials to help you.",
     "button": "I understand"
-  },
-  "lastTour": {
-    "title": "Congratulations, you've completed the tour!",
-    "content": "You now know how to explore the platform's main features. If you need help at any time, our team is available.",
-    "button": "Finish"
   }
 }

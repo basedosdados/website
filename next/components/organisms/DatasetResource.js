@@ -10,8 +10,8 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useBreakpointValue,
-  useDisclosure
+  Spinner,
+  useBreakpointValue
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -24,8 +24,7 @@ import {
   startFirstTour,
   startSecondTour,
   startThirdTour,
-  startFourthTour,
-  ModalFinishTour
+  startFourthTour
 } from "../molecules/Tour";
 
 import TablePage from "./TablePage";
@@ -86,11 +85,11 @@ export default function DatasetResource({
   const [tables, setTables] = useState([]);
   const [rawDataSources, setRawDataSources] = useState([]);
   const [informationRequests, setInformationRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
   const [tourBeginTable, setTourBeginTable] = useState(false);
   const [pinTablesSelect, setPinTablesSelect] = useState(false);
   const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
-  const modalTourFinish = useDisclosure();
 
   useEffect(() => {
     if (tourBegin) {
@@ -114,6 +113,15 @@ export default function DatasetResource({
     }
   }, [tourBegin, query.table, dataset]);
 
+  useEffect(() => {
+    document.body.style.overflow = isLoading ? "hidden" : "auto";
+    document.body.style.pointerEvents = isLoading ? "none" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+      document.body.style.pointerEvents = "auto";
+    };
+  }, [isLoading]);
+
   const pushQuery = (key, value) => {
     router.replace({
       pathname: `/dataset/${query.dataset}`,
@@ -132,6 +140,18 @@ export default function DatasetResource({
 
     return () => {
       window.removeEventListener('tablePageLoaded', handleTablePageLoaded);
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleLoadingTourBegin = (e) => {
+      setIsLoading(true);
+    };
+
+    window.addEventListener('loadingTourBegin', handleLoadingTourBegin);
+
+    return () => {
+      window.removeEventListener('loadingTourBegin', handleLoadingTourBegin);
     }
   }, [])
 
@@ -161,6 +181,7 @@ export default function DatasetResource({
         if (tourStateRef.current.activeTour === tourBD.state) return;
 
         tourStateRef.current.isTourRunning = true;
+        setIsLoading(false);
 
         const startTourWithDelay = (callback) => {
           setTimeout(() => {
@@ -173,7 +194,6 @@ export default function DatasetResource({
 
         switch (tourBD.state) {
           case 'begin':
-            console.log("tour")
             startTourWithDelay(() => {
               startFirstTour(locale);
               tourStateRef.current.activeTour = 'begin';
@@ -189,7 +209,6 @@ export default function DatasetResource({
 
           case 'download':
             startTourWithDelay(() => {
-              console.log("tour_download")
               startThirdTour(locale);
               tourStateRef.current.activeTour = 'download';
             });
@@ -197,7 +216,7 @@ export default function DatasetResource({
 
           case 'last':
             startTourWithDelay(() => {
-              startFourthTour(modalTourFinish.onOpen, locale);
+              startFourthTour(locale);
               tourStateRef.current.activeTour = 'last';
             });
             break;
@@ -573,10 +592,25 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
-      <ModalFinishTour
-        isOpen={modalTourFinish.isOpen}
-        onClose={modalTourFinish.onClose}
-      />
+      <Stack
+        display={isLoading ? "flex" : "none"}
+        position="fixed"
+        top="0"
+        left="0"
+        zIndex="99999999"
+        width="100%"
+        height="100vh"
+        justifyContent="center"
+        backgroundColor="#00000025"
+      >
+        <Spinner
+          margin="0 auto"
+          width="200px"
+          height="200px"
+          color="#2B8C4D"
+        />
+      </Stack>
+
       {displayScreen === "desktop" ? 
         <Stack
           minWidth={{base: "100%", lg: "296px"}}

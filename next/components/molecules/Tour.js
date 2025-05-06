@@ -63,53 +63,6 @@ export const ModalInitialTour = ({ isOpen, onClose, begin }) => {
   )
 }
 
-export const ModalFinishTour = ({ isOpen, onClose }) => {
-  const { t } = useTranslation('tour');
-
-  return (
-    <ModalGeneral
-      isOpen={isOpen}
-      onClose={onClose}
-      propsModalContent={{
-        minWidth: "328px",
-        maxWidth: "328px",
-        padding: "16px",
-        borderRadius: "8px"
-      }}
-    >
-      <Stack spacing={0} marginBottom="16px">
-        <TitleText
-          width="100%"
-          typography="small"
-        >
-          {t('lastTour.title')}
-        </TitleText>
-        <ModalCloseButton
-          fontSize="14px"
-          top="14px"
-          right="16px"
-          _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
-        />
-      </Stack>
-
-      <Stack spacing={0}>
-        <LabelText typography="small" fontWeight="400">
-          {t('lastTour.content')}
-        </LabelText>
-      </Stack>
-
-      <Stack spacing={0} marginTop="10px">
-        <Button
-          width={{base: "100%", lg: "fit-content"}}
-          onClick={() => onClose()}
-        >
-          {t('lastTour.button')}
-        </Button>
-      </Stack>
-    </ModalGeneral>
-  )
-}
-
 function translateText(locale, pt, en, es = pt) {
   const translations = {
     en: en,
@@ -178,6 +131,7 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
     }
 
     cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })
+    window.dispatchEvent(new CustomEvent('loadingTourBegin'));
     setTourBegin(true)
   };
 
@@ -326,9 +280,9 @@ export const startSecondTour = (doneFunction, locale) => {
           '<div class="tour-step">Paso 7 de 10</div>Copie la consulta y acceda a los datos'
         ),
         intro: translateText(locale,
-          'Agora, <strong>copie a consulta gerada</strong> e:<br/><ul><li>Clique no botão para <strong>acessar o BigQuery</strong>. No editor de consultas do BigQuery.</li><li>No terminal do Python.</li><li>No terminal do R.</li></ul>Basta colar a consulta e executá-la.',
-          'Now, <strong>copy the generated query</strong> and: <ul><li>Click the button to <strong>access BigQuery</strong>. In the BigQuery query editor.</li><li>In your Python terminal.</li><li>In your R terminal.</li></ul>Just paste the query and execute it.',
-          'Ahora, <strong>copie la consulta generada</strong> y: <ul><li>Haga clic en el botón para <strong>acceder a BigQuery</strong>. En el editor de consultas de BigQuery.</li><li>En la terminal de Python.</li><li>En la terminal de R.</li></ul>Solo debe pegar la consulta y ejecutarla.'
+          'Agora, <strong>copie a consulta gerada</strong> e execute-a no ambiente correspondente à linguagem escolhida. Se você estiver usando o BigQuery, pode clicar no botão para abrir diretamente o editor e colar a consulta.',
+          'Now, <strong>copy the generated query</strong> and run it in the environment corresponding to the chosen language. If you are using BigQuery, you can click the button to directly open the editor and paste the query.',
+          'Ahora, <strong>copie la consulta generada</strong> y ejecutarlo en el entorno correspondiente al idioma elegido. Si está utilizando BigQuery, puede hacer clic en el botón para abrir directamente el editor y pegar la consulta.'
         ),
         position: 'left'
       }
@@ -396,9 +350,9 @@ export const startThirdTour = (locale) => {
           '<div class="tour-step">Paso 9 de 10</div>Seleccione una fuente original'
         ),
         intro: translateText(locale,
-          'Agora, <strong>selecione uma das opções</strong> para acessar a fonte dos dados desejados. As fontes originais são links para páginas externas à plataforma com informações úteis sobre os dados.',
-          'Now, <strong>select one of the options</strong> to access your desired data source. The original sources are external links containing useful information about the data.',
-          'Ahora, <strong>seleccione una de las opciones</strong> para acceder a la fuente de datos deseada. Las fuentes originales son enlaces externos a la plataforma con información útil sobre los datos.'
+          'Você também pode <strong>selecionar uma das opções</strong> para acessar a fonte dos dados desejados. As fontes originais são links para páginas externas à plataforma com informações úteis sobre os dados.',
+          'You can also <strong>select one of the options</strong> to access the source of the desired data. The original sources are links to pages external to the platform with useful information about the data.',
+          'También puede <strong>seleccionar una de las opciones</strong> para acceder a la fuente de los datos deseados. Las fuentes originales son enlaces a páginas externas a la plataforma con información útil sobre los datos.'
         ),
         position: 'right'
       }
@@ -440,7 +394,7 @@ export const startThirdTour = (locale) => {
   tour.start();
 }
 
-export const startFourthTour = (modalOpen, locale) => {
+export const startFourthTour = (locale) => {
   const tour = introJs();
   tour.setOptions({
     steps: [
@@ -452,23 +406,23 @@ export const startFourthTour = (modalOpen, locale) => {
           '<div class="tour-step">Paso 10 de 10</div>Acceda a la fuente original'
         ),
         intro: translateText(locale,
-          'Clique no botão para acessar a fonte original. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais.',
-          'Click the button to access the original source. We always try to provide the most direct path to download the raw data.',
-          'Haga clic en el botón para acceder a la fuente original. Siempre intentamos proporcionar el acceso más directo para descargar los datos originales.'
+          'Se quiser, você pode clicar no botão para acessar a fonte original. Tentamos sempre fornecer o caminho mais próximo possível à fonte para baixar os dados originais.',
+          'If you wish, you can click the button to access the original source. We always try to provide the closest possible path to the source to download the original data.',
+          'Si lo deseas puedes hacer clic en el botón para acceder a la fuente original. Siempre intentamos proporcionar la ruta más cercana posible a la fuente para descargar los datos originales.'
         ),
-        position: 'right'
+        position: 'bottom'
       },
       {
         element: '#widget_help_and_resources',
         title: translateText(locale,
-          'Formas de reiniciar o tour',
-          'Ways to restart the tour',
-          'Formas de reiniciar el recorrido'
+          'Parabéns, você completou o tour!',
+          'Congratulations, you have completed the tour!',
+          '¡Felicitaciones, has completado el recorrido!'
         ),
         intro: translateText(locale,
-          'As formas disponibilizadas para reiniciar o tour são através da área do usuário, na seção \'Conta\', e na FAQ, disponível aqui no \'Ajuda e recursos\', com um atalho para chegar lá mais rapidamente.',
-          'The available ways to restart the tour are through the user area in the \'Account\' section and in the FAQ, available here in \'Help and resources\', with a shortcut to get there faster.',
-          'Las formas disponibles para reiniciar el tour son a través del área de usuario en la sección \'Cuenta\' y en las FAQ, disponibles aquí en \'Ayuda y recursos\', con un atajo para llegar más rápido.'
+          'Agora, você já sabe explorar as principais funcionalidades da plataforma. Lembre-se de que pode contar com o <strong>botão de ajuda no canto da tela</strong> sempre que precisar. Por lá, você encontra tutoriais, documentação, respostas às perguntas mais frequentes e pode até reiniciar este tour.',
+          'Now you know how to explore the platform\'s main features. Remember that you can always use the <strong>help button in the corner of the screen</strong>. There, you can find tutorials, documentation, answers to frequently asked questions, and you can even restart this tour.',
+          'Ahora ya sabes cómo explorar las principales características de la plataforma. Recuerda que puedes contar con el <strong>botón de ayuda en la esquina de la pantalla</strong> siempre que lo necesites. Allí encontrarás tutoriales, documentación, respuestas a preguntas frecuentes e incluso podrás reiniciar este recorrido.'
         ),
         position: 'left'
       }
@@ -479,9 +433,9 @@ export const startFourthTour = (modalOpen, locale) => {
       'Adelante'
     ),
     doneLabel: translateText(locale,
-      'Avançar',
-      'Next',
-      'Adelante'
+      'Concluir',
+      'Conclude',
+      'Concluir'
     ),
     hidePrev: true,
     exitOnOverlayClick: false,
@@ -494,7 +448,6 @@ export const startFourthTour = (modalOpen, locale) => {
 
   tour.onexit(() => {
     cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
-    modalOpen()
   });
 
   tour.start();
