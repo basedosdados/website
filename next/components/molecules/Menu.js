@@ -783,7 +783,7 @@ function DesktopLinks({
                   "/docs/home"
                 },
                 {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
-                {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"begin"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
+                {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"explore"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
                 {},
                 {name: t('tooltip.installPackages'), url: 
                   locale === "en" ? "/en/docs/access_data_packages/" :

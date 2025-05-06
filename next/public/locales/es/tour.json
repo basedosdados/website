@@ -3,10 +3,5 @@
     "title": "¡Bienvenido/a a nuestra plataforma!",
     "content": "Antes de comenzar, ten en cuenta que los datos aquí se proporcionan en <strong>formato crudo</strong>. Para filtrar por categorías como región o período, necesitarás procesarlos con <strong>herramientas externas</strong> como Excel, BigQuery, Python o R. ¡No te preocupes! Tenemos tutoriales para ayudarte.",
     "button": "Entendido"
-  },
-  "lastTour": {
-    "title": "¡Felicidades, has completado el recorrido!",
-    "content": "Ahora ya sabes cómo explorar las principales funcionalidades de la plataforma. Si necesitas ayuda en cualquier momento, nuestro equipo está disponible.",
-    "button": "Finalizar"
   }
 }
