@@ -210,7 +210,10 @@ export default function DataInformationQuery({
   useEffect(() => {
     if(changeTab === true) {
       setTabAccessIndex(1)
-      cookies.set('tourBD', '{"state":"download"}', { expires: 360 })
+      const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+      if(tourBD && tourBD.state === 'table') {
+        cookies.set('tourBD', '{"state":"download"}', { expires: 360 })
+      }
     }
   }, [changeTab])
 
