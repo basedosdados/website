@@ -91,9 +91,18 @@ export default function DatasetResource({
   const [pinTablesSelect, setPinTablesSelect] = useState(false);
   const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
 
+  const getTourBD = () => {
+    try {
+      return cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    } catch (error) {
+      console.error('Error parsing tourBD:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (tourBegin) {
-      const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+      const tourBD = getTourBD();
       if (tourBD && tourBD.state === "begin") {
         if (!query.table) {
           const dataset_tables = dataset?.tables?.edges
@@ -161,15 +170,68 @@ export default function DatasetResource({
   });
 
   useEffect(() => {
-    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
-    if(tourBD?.state === "explore" || tourBD?.state === "skip") return
+    const TOUR_STATES = {
+      EXPLORE: 'explore',
+      SKIP: 'skip',
+      BEGIN: 'begin',
+      TABLE: 'table',
+      DOWNLOAD: 'download',
+      LAST: 'last'
+    };
+
+    const shouldRunTour = (tourBD) => {
+      return tourBD?.state && 
+            tourBD.state !== TOUR_STATES.EXPLORE && 
+            tourBD.state !== TOUR_STATES.SKIP &&
+            tourBeginTable &&
+            displayScreen === 'desktop' &&
+            !tourStateRef.current.isTourRunning;
+    };
+
+    const startTour = (state) => {
+      const startTourWithDelay = (callback) => {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            callback();
+            tourStateRef.current.isTourRunning = false;
+          });
+        }, 500);
+      };
+
+      switch (state) {
+        case TOUR_STATES.BEGIN:
+          startTourWithDelay(() => {
+            startFirstTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.BEGIN;
+          });
+          break;
+        case TOUR_STATES.TABLE:
+          startTourWithDelay(() => {
+            startSecondTour(setChangeTabDataInformationQuery, locale);
+            tourStateRef.current.activeTour = TOUR_STATES.TABLE;
+          });
+          break;
+        case TOUR_STATES.DOWNLOAD:
+          startTourWithDelay(() => {
+            startThirdTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.DOWNLOAD;
+          });
+          break;
+        case TOUR_STATES.LAST:
+          startTourWithDelay(() => {
+            startFourthTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.LAST;
+          });
+          break;
+        default:
+          break;
+      }
+    };
 
     const checkTourState = () => {
       try {
-        const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
-        if (!tourBD || !tourBeginTable || displayScreen !== 'desktop') return;
-        if (tourBD.state === "explore" || tourBD.state === "skip") return;
-        if (tourStateRef.current.isTourRunning) return;
+        const tourBD = getTourBD();
+        if (!shouldRunTour(tourBD)) return;
 
         setPinTablesSelect(true);
 
@@ -182,52 +244,19 @@ export default function DatasetResource({
 
         tourStateRef.current.isTourRunning = true;
         setIsLoading(false);
-
-        const startTourWithDelay = (callback) => {
-          setTimeout(() => {
-            requestAnimationFrame(() => {
-              callback();
-              tourStateRef.current.isTourRunning = false;
-            });
-          }, 500);
-        };
-
-        switch (tourBD.state) {
-          case 'begin':
-            startTourWithDelay(() => {
-              startFirstTour(locale);
-              tourStateRef.current.activeTour = 'begin';
-            });
-            break;
-
-          case 'table':
-            startTourWithDelay(() => {
-              startSecondTour(setChangeTabDataInformationQuery, locale);
-              tourStateRef.current.activeTour = 'table';
-            });
-            break;
-
-          case 'download':
-            startTourWithDelay(() => {
-              startThirdTour(locale);
-              tourStateRef.current.activeTour = 'download';
-            });
-            break;
-
-          case 'last':
-            startTourWithDelay(() => {
-              startFourthTour(locale);
-              tourStateRef.current.activeTour = 'last';
-            });
-            break;
-        }
+        startTour(tourBD.state);
       } catch (error) {
-        console.error('Erro no tour:', error);
+        console.error('Tour error:', error);
         tourStateRef.current.isTourRunning = false;
       }
     };
 
-    const interval = setInterval(checkTourState, 500);
+    const tourBD = getTourBD();
+    if (tourBD?.state === TOUR_STATES.EXPLORE || tourBD?.state === TOUR_STATES.SKIP) {
+      return;
+    }
+
+    const interval = setInterval(checkTourState, 1000);
 
     return () => {
       clearInterval(interval);
@@ -638,7 +667,7 @@ export default function DatasetResource({
             value={query.raw_data_source}
             onChange={(id) => {
               pushQuery("raw_data_source", id)
-              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              const tourBD = getTourBD()
               if(tourBD && tourBD.state === 'download') {
                 cookies.set('tourBD', '{"state":"last"}', { expires: 360 })
               }

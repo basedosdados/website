@@ -207,10 +207,19 @@ export default function DataInformationQuery({
     return false
   }
 
+  const getTourBD = () => {
+    try {
+      return cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    } catch (error) {
+      console.error('Error parsing tourBD:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     if(changeTab === true) {
       setTabAccessIndex(1)
-      const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+      const tourBD = getTourBD()
       if(tourBD && tourBD.state === 'table') {
         cookies.set('tourBD', '{"state":"download"}', { expires: 360 })
       }
@@ -297,7 +306,7 @@ export default function DataInformationQuery({
     setSqlCode(result.trim())
     setIsLoadingCode(false)
     setIsLoadingSpin(false)
-    const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    const tourBD = getTourBD()
     if(tourBD && tourBD.state === 'begin') {
       cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
     }
@@ -497,7 +506,7 @@ export default function DataInformationQuery({
             </Skeleton>
 
             {checkedColumns.length > 0 && resource.uncompressedFileSize && resource.uncompressedFileSize/(1024 * 1024 * 1024) > 5 && (() => {
-              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              const tourBD = getTourBD()
               if(tourBD?.state === "begin") return null;
 
               return (
@@ -526,7 +535,7 @@ export default function DataInformationQuery({
             })()}
 
             {insufficientChecks && (() => {
-              const tourBD = cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+              const tourBD = getTourBD()
               if(tourBD?.state === "begin") return null;
 
               return (
