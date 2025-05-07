@@ -75,6 +75,10 @@ export default function SearchDatasetPage() {
   }
 
   useEffect(() => {
+    if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+  }, [])
+
+  useEffect(() => {
     const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
     if(tourBD == null) modalTourInitial.onOpen()
 
