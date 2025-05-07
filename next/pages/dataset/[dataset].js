@@ -13,6 +13,7 @@ import { useTranslation } from "next-i18next";
 import { capitalize } from "lodash";
 import cookies from "js-cookie";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
@@ -105,6 +106,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const modalTourInitial = useDisclosure();
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  useEffect(() => {
+    if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+  }, [])
 
   useEffect(() => {
     if (isDatasetEmpty) {

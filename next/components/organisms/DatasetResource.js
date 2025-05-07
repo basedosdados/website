@@ -233,7 +233,7 @@ export default function DatasetResource({
       clearInterval(interval);
       introJs().exit();
     };
-  }, [cookies, displayScreen, tourBeginTable]);
+  }, [cookies, displayScreen, tourBeginTable, isLoading]);
 
   function sortElements(a, b) {
     if (a.order < b.order) {
