@@ -183,7 +183,7 @@ export default function DatasetResource({
       return tourBD?.state && 
             tourBD.state !== TOUR_STATES.EXPLORE && 
             tourBD.state !== TOUR_STATES.SKIP &&
-            tourBeginTable &&
+            (tourBD.state === TOUR_STATES.LAST || tourBeginTable) && 
             displayScreen === 'desktop' &&
             !tourStateRef.current.isTourRunning;
     };
