@@ -6,6 +6,7 @@ import cookies from "js-cookie";
 import introJs from 'intro.js';
 import { useTranslation } from "next-i18next";
 import { ModalGeneral, Button } from "./uiUserPage";
+import { triggerGAEvent } from "../../utils";
 import TitleText from "../atoms/Text/TitleText";
 import LabelText from "../atoms/Text/LabelText";
 import 'intro.js/introjs.css';
@@ -62,6 +63,33 @@ export const ModalInitialTour = ({ isOpen, onClose, begin }) => {
     </ModalGeneral>
   )
 }
+
+export const ModalSurveyTour = ({ isOpen, onClose }) => {
+  return (
+    <ModalGeneral
+      isOpen={isOpen}
+      onClose={onClose}
+      propsModalContent={{
+        minWidth: "328px",
+        maxWidth: "328px",
+        padding: "16px",
+        borderRadius: "8px"
+      }}
+    >
+      <Stack spacing={0} marginBottom="16px">
+        <ModalCloseButton
+          fontSize="14px"
+          top="14px"
+          right="16px"
+          _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
+        />
+      </Stack>
+
+      <Stack spacing={0} id="dataset_tour_survey"/>
+    </ModalGeneral>
+  )
+}
+
 
 function translateText(locale, pt, en, es = pt) {
   const translations = {
@@ -136,7 +164,9 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
   };
 
   const onSkipClick = () => {
-    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
+    triggerGAEvent('tour_dataset', "skip in step 0");
+    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   };
 
   tour.start()
@@ -233,8 +263,15 @@ export const startFirstTour = (locale) => {
     document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
   });
 
+  let currentStep = 0
+  tour.onchange(() => {
+    currentStep = tour.currentStep() + 1
+  })
+
   const onSkipClick = () => {
-    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
+    triggerGAEvent('tour_dataset', `skip in step ${currentStep}`);
+    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   };
 
   tour.start();
@@ -317,8 +354,15 @@ export const startSecondTour = (doneFunction, locale) => {
     doneFunction(true)
   };
 
+  let currentStep = 0
+  tour.onchange(() => {
+    currentStep = tour.currentStep() + 5
+  })
+
   const onSkipClick = () => {
-    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
+    triggerGAEvent('tour_dataset', `skip in step ${currentStep}`);
+    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   };
 
   tour.start();
@@ -387,8 +431,15 @@ export const startThirdTour = (locale) => {
     document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
   });
 
+  let currentStep = 0
+  tour.onchange(() => {
+    currentStep = tour.currentStep() + 8
+  })
+
   const onSkipClick = () => {
-    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
+    triggerGAEvent('tour_dataset', `skip in step ${currentStep}`);
+    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   };
 
   tour.start();
@@ -447,7 +498,9 @@ export const startFourthTour = (locale) => {
   })
 
   tour.onexit(() => {
-    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
+    triggerGAEvent('tour_dataset', `tour conclusion`);
+    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   });
 
   tour.start();

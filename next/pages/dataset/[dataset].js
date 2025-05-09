@@ -23,7 +23,7 @@ import ReadMore from "../../components/atoms/ReadMore";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
-import { ModalInitialTour, exploreTour } from "../../components/molecules/Tour";
+import { ModalInitialTour, ModalSurveyTour, exploreTour } from "../../components/molecules/Tour";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -104,8 +104,21 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const [tourBegin, setTourBegin] = useState(false);
   const [exploreTourBegin, setExploreTourBegin] = useState(false);
   const modalTourInitial = useDisclosure();
+  const modalSurveyTour = useDisclosure();
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  useEffect(() => {
+    const handleLoadingTourBegin = (e) => {
+      modalSurveyTour.onOpen();
+    };
+
+    window.addEventListener('datasetSurveyTour', handleLoadingTourBegin);
+
+    return () => {
+      window.removeEventListener('datasetSurveyTour', handleLoadingTourBegin);
+    }
+  }, [])
 
   useEffect(() => {
     if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
@@ -309,6 +322,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
           isOpen={modalTourInitial.isOpen}
           onClose={modalTourInitial.onClose}
           begin={setExploreTourBegin}
+        />
+        <ModalSurveyTour
+          isOpen={modalSurveyTour.isOpen}
+          onClose={modalSurveyTour.onClose}
         />
 
         <Grid
