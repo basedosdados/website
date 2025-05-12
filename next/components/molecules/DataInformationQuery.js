@@ -674,9 +674,9 @@ export default function DataInformationQuery({ resource }) {
                           marginLeft="4px"
                           target="_blank"
                           href={
-                            locale === "en" ? "https://basedosdados.org/en/docs/access_data_bq/#getting-started" :
-                            locale === "es" ? "https://basedosdados.org/es/docs/access_data_bq/#pinitos" :
-                            "https://basedosdados.org/docs/access_data_bq/#primeiros-passos"
+                            locale === "en" ? "/en/docs/access_data_bq/#getting-started" :
+                            locale === "es" ? "/es/docs/access_data_bq/#pinitos" :
+                            "/docs/access_data_bq/#primeiros-passos"
                           }
                           fontWeight="400"
                           color="#0068C5"
