@@ -14,7 +14,7 @@ published: true
 order: 2
 ---
 
->_Este é um texto publicado por um voluntário da BD. Quer publicar sua análise em nosso blog? Entre em contato via email contato@basedosdados.org_
+>_Este é um texto publicado por um voluntário da BD. Quer publicar sua análise em nosso blog? Entre em contato via email [contato@basedosdados.org](mailto:contato@basedosdados.org)
 
 A universalização do acesso à água e saneamento básico integra os Objetivos de Desenvolvimento Sustentável (ODS) da Organização das Nações Unidas (ONU). O ODS 6, em específico, dispões diversas metas para a garantia do acesso equitativo e manejo sustentável da água, até 2030.
 
