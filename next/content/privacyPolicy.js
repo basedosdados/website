@@ -123,6 +123,8 @@ export default function PrivacyPolicy() {
                   t('PP.term3.subContent3.row1.name'), t('PP.term3.subContent3.row1.retention'), t('PP.term3.subContent3.row1.purpose')
                 ],[
                   t('PP.term3.subContent3.row2.name'), t('PP.term3.subContent3.row2.retention'), t('PP.term3.subContent3.row2.purpose')
+                ],[
+                  t('PP.term3.subContent3.row3.name'), t('PP.term3.subContent3.row3.retention'), t('PP.term3.subContent3.row3.purpose')
                 ]]}
               />
             </Stack>
