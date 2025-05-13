@@ -10,32 +10,126 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
+  Spinner,
   useBreakpointValue
 } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { capitalize } from "lodash";
+import cookies from "js-cookie";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
+import {
+  startFirstTour,
+  startSecondTour,
+  startThirdTour,
+  startFourthTour
+} from "../molecules/Tour";
 
 import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
 
+import introJs from 'intro.js';
+import 'intro.js/introjs.css';
+
 import ChevronIcon from "../../public/img/icons/chevronIcon";
+
+function SwitchResource ({
+  route,
+  isBDSudo,
+  changeTabDataInformationQuery,
+  locale,
+}) {
+  switch(true) {
+    case route.hasOwnProperty("table"):
+      return (
+        <TablePage
+          id={route.table}
+          isBDSudo={isBDSudo}
+          changeTab={changeTabDataInformationQuery}
+        />
+      );
+
+    case route.hasOwnProperty("raw_data_source"):
+      return (
+        <RawDataSourcesPage
+          id={route.raw_data_source}
+          locale={locale}
+          isBDSudo={isBDSudo}
+        />
+      );
+
+    case route.hasOwnProperty("information_request"):
+      return (
+        <InformationRequestPage
+          id={route.information_request}
+          isBDSudo={isBDSudo}
+        />
+      );
+
+    default:
+      return null;
+  }
+}
 
 export default function DatasetResource({
   dataset,
-  isBDSudo
+  isBDSudo,
+  tourBegin
 }) {
   const { t } = useTranslation('dataset');
   const router = useRouter()
   const { query, locale } = router
-  const [tables, setTables] = useState([])
-  const [rawDataSources, setRawDataSources] = useState([])
-  const [informationRequests, setInformationRequests] = useState([])
-  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" })
+  const [tables, setTables] = useState([]);
+  const [rawDataSources, setRawDataSources] = useState([]);
+  const [informationRequests, setInformationRequests] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
+  const [tourBeginTable, setTourBeginTable] = useState(false);
+  const [pinTablesSelect, setPinTablesSelect] = useState(false);
+  const [changeTabDataInformationQuery, setChangeTabDataInformationQuery] = useState(false);
+
+  const getTourBD = () => {
+    try {
+      return cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
+    } catch (error) {
+      console.error('Error parsing tourBD:', error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    if (tourBegin) {
+      const tourBD = getTourBD();
+      if (tourBD && tourBD.state === "begin") {
+        if (!query.table) {
+          const dataset_tables = dataset?.tables?.edges
+            ?.map((elm) => elm.node)
+              ?.filter(
+                (elm) =>
+                  !["under_review", "excluded"].includes(elm?.status?.slug) &&
+                  !["dicionario", "dictionary"].includes(elm?.slug)
+              )
+                ?.sort(sortElements) || [];
+
+          if (dataset_tables.length > 0) {
+            pushQuery("table", dataset_tables[0]?._id);
+          }
+        }
+      }
+    }
+  }, [tourBegin, query.table, dataset]);
+
+  useEffect(() => {
+    document.body.style.overflow = isLoading ? "hidden" : "auto";
+    document.body.style.pointerEvents = isLoading ? "none" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+      document.body.style.pointerEvents = "auto";
+    };
+  }, [isLoading]);
 
   const pushQuery = (key, value) => {
     router.replace({
@@ -45,6 +139,130 @@ export default function DatasetResource({
       undefined, { shallow: true }
     )
   }
+
+  useEffect(() => {
+    const handleTablePageLoaded = (e) => {
+      setTourBeginTable(true);
+    };
+
+    window.addEventListener('tablePageLoaded', handleTablePageLoaded);
+
+    return () => {
+      window.removeEventListener('tablePageLoaded', handleTablePageLoaded);
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleLoadingTourBegin = (e) => {
+      setIsLoading(true);
+    };
+
+    window.addEventListener('loadingTourBegin', handleLoadingTourBegin);
+
+    return () => {
+      window.removeEventListener('loadingTourBegin', handleLoadingTourBegin);
+    }
+  }, [])
+
+  const tourStateRef = useRef({
+    activeTour: null,
+    isTourRunning: false
+  });
+
+  useEffect(() => {
+    const TOUR_STATES = {
+      EXPLORE: 'explore',
+      SKIP: 'skip',
+      BEGIN: 'begin',
+      TABLE: 'table',
+      DOWNLOAD: 'download',
+      LAST: 'last'
+    };
+
+    const shouldRunTour = (tourBD) => {
+      return tourBD?.state && 
+            tourBD.state !== TOUR_STATES.EXPLORE && 
+            tourBD.state !== TOUR_STATES.SKIP &&
+            (tourBD.state === TOUR_STATES.LAST || tourBeginTable) && 
+            displayScreen === 'desktop' &&
+            !tourStateRef.current.isTourRunning;
+    };
+
+    const startTour = (state) => {
+      const startTourWithDelay = (callback) => {
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            callback();
+            tourStateRef.current.isTourRunning = false;
+          });
+        }, 500);
+      };
+
+      switch (state) {
+        case TOUR_STATES.BEGIN:
+          startTourWithDelay(() => {
+            startFirstTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.BEGIN;
+          });
+          break;
+        case TOUR_STATES.TABLE:
+          startTourWithDelay(() => {
+            startSecondTour(setChangeTabDataInformationQuery, locale);
+            tourStateRef.current.activeTour = TOUR_STATES.TABLE;
+          });
+          break;
+        case TOUR_STATES.DOWNLOAD:
+          startTourWithDelay(() => {
+            startThirdTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.DOWNLOAD;
+          });
+          break;
+        case TOUR_STATES.LAST:
+          startTourWithDelay(() => {
+            startFourthTour(locale);
+            tourStateRef.current.activeTour = TOUR_STATES.LAST;
+          });
+          break;
+        default:
+          break;
+      }
+    };
+
+    const checkTourState = () => {
+      try {
+        const tourBD = getTourBD();
+        if (!shouldRunTour(tourBD)) return;
+
+        setPinTablesSelect(true);
+
+        if (tourStateRef.current.activeTour && tourStateRef.current.activeTour !== tourBD.state) {
+          introJs().exit();
+          tourStateRef.current.activeTour = null;
+        }
+
+        if (tourStateRef.current.activeTour === tourBD.state) return;
+
+        tourStateRef.current.isTourRunning = true;
+        setIsLoading(false);
+        startTour(tourBD.state);
+      } catch (error) {
+        console.error('Tour error:', error);
+        tourStateRef.current.isTourRunning = false;
+      }
+    };
+
+    const tourBD = getTourBD();
+    if (tourBD?.state === TOUR_STATES.EXPLORE || tourBD?.state === TOUR_STATES.SKIP) {
+      return;
+    }
+
+    const interval = setInterval(checkTourState, 1000);
+
+    return () => {
+      clearInterval(interval);
+      introJs().exit();
+    };
+  }, [cookies, displayScreen, tourBeginTable, isLoading]);
 
   function sortElements(a, b) {
     if (a.order < b.order) {
@@ -99,14 +317,8 @@ export default function DatasetResource({
     }
   }, [dataset, isBDSudo === true])
 
-  function SwitchResource ({route}) {
-    if (route.hasOwnProperty("table")) return <TablePage id={route.table} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("raw_data_source")) return <RawDataSourcesPage id={route.raw_data_source} locale={locale} isBDSudo={isBDSudo}/>
-    if (route.hasOwnProperty("information_request")) return <InformationRequestPage id={route.information_request} isBDSudo={isBDSudo}/>
-    return null
-  }
-
   function ContentFilter({
+    id,
     fieldName,
     choices,
     onChange,
@@ -138,67 +350,69 @@ export default function DatasetResource({
           borderColor="#DEDFE0"
         />
 
-        <LabelText
-          typography="small"
-          paddingLeft="15px"
-          marginBottom="8px"
-        >
-          {fieldName}
-        </LabelText>
+        <Stack spacing={0} id={id} backgroundColor="#FFFFFF">
+          <LabelText
+            typography="small"
+            paddingLeft="15px"
+            marginBottom="8px"
+          >
+            {fieldName}
+          </LabelText>
 
-        <Box>
-          {choices.map((elm, i) => (
-            <HStack
-              key={i}
-              spacing="4px"
-              cursor="pointer"
-              pointerEvents={elm._id === value ? "none" : "default"}
-            >
-              <Box 
-                width="3px"
-                height="24px"
-                backgroundColor={elm._id === value && "#2B8C4D"}
-                borderRadius="10px"
-              />
-              <Tooltip
-                label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                isDisabled={!isOverflow[i]}
-                hasArrow
-                padding="16px"
-                backgroundColor="#252A32"
-                boxSizing="border-box"
-                borderRadius="8px"
-                fontFamily="Roboto"
-                fontWeight="400"
-                fontSize="14px"
-                lineHeight="20px"
-                textAlign="center"
-                color="#FFFFFF"
-                placement="top"
-                maxWidth="100%"
+          <Box>
+            {choices.map((elm, i) => (
+              <HStack
+                key={i}
+                spacing="4px"
+                cursor="pointer"
+                pointerEvents={elm._id === value ? "none" : "default"}
               >
-                <LabelText
-                  typography="small"
-                  ref={(el) => (textRefs.current[i] = el)}
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  overflow="hidden"
-                  width="100%"
-                  color={elm._id === value ? "#2B8C4D" : "#71757A"}
-                  backgroundColor={elm._id === value && "#F7F7F7"}
-                  _hover={{
-                    backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
-                  }}
+                <Box 
+                  width="3px"
+                  height="24px"
+                  backgroundColor={elm._id === value && "#2B8C4D"}
+                  borderRadius="10px"
+                />
+                <Tooltip
+                  label={elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  isDisabled={!isOverflow[i]}
+                  hasArrow
+                  padding="16px"
+                  backgroundColor="#252A32"
+                  boxSizing="border-box"
                   borderRadius="8px"
-                  padding="6px 8px"
-                  onClick={() => onChange(elm._id)}
+                  fontFamily="Roboto"
+                  fontWeight="400"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  textAlign="center"
+                  color="#FFFFFF"
+                  placement="top"
+                  maxWidth="100%"
                 >
-                  {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
-                </LabelText>
-              </Tooltip>
-            </HStack>
-          ))}
-        </Box>
+                  <LabelText
+                    typography="small"
+                    ref={(el) => (textRefs.current[i] = el)}
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    width="100%"
+                    color={elm._id === value ? "#2B8C4D" : "#71757A"}
+                    backgroundColor={elm._id === value && "#F7F7F7"}
+                    _hover={{
+                      backgroundColor:elm._id === value ? "#F7F7F7" :"#EEEEEE",
+                    }}
+                    borderRadius="8px"
+                    padding="6px 8px"
+                    onClick={() => onChange(elm._id)}
+                  >
+                    {elm[`name${capitalize(locale)}`] || elm.name || elm.number}
+                  </LabelText>
+                </Tooltip>
+              </HStack>
+            ))}
+          </Box>
+        </Stack>
       </Box>
     )
   }
@@ -407,16 +621,36 @@ export default function DatasetResource({
       spacing={0}
       height="100%"
     >
+      <Stack
+        display={isLoading ? "flex" : "none"}
+        position="fixed"
+        top="0"
+        left="0"
+        zIndex="99999999"
+        width="100%"
+        height="100vh"
+        justifyContent="center"
+        backgroundColor="#00000025"
+      >
+        <Spinner
+          margin="0 auto"
+          width="200px"
+          height="200px"
+          color="#2B8C4D"
+        />
+      </Stack>
+
       {displayScreen === "desktop" ? 
         <Stack
           minWidth={{base: "100%", lg: "296px"}}
           maxWidth={{base: "100%", lg: "296px"}}
           spacing={0}
-          position="sticky"
+          position={pinTablesSelect ? "relative" : "sticky"}
           height="100%"
-          top="80px"
+          top={pinTablesSelect ? "0" : "80px"}
         >
           <ContentFilter
+            id="dataset_select_tables"
             fieldName={t('tables')}
             choices={tables}
             value={query.table}
@@ -427,11 +661,16 @@ export default function DatasetResource({
           />
 
           <ContentFilter
+            id="dataset_select_rawdatasource"
             fieldName={t('rawDataSources')}
             choices={rawDataSources}
             value={query.raw_data_source}
             onChange={(id) => {
               pushQuery("raw_data_source", id)
+              const tourBD = getTourBD()
+              if(tourBD && tourBD.state === 'download') {
+                cookies.set('tourBD', '{"state":"last"}', { expires: 360 })
+              }
             }}
             hasDivider={tables.length > 0 ? true : false}
           />
@@ -450,7 +689,12 @@ export default function DatasetResource({
         <SelectResource selectedResource={query}/>
       }
 
-      <SwitchResource route={query}/>
+      <SwitchResource 
+        route={query}
+        isBDSudo={isBDSudo}
+        changeTabDataInformationQuery={changeTabDataInformationQuery}
+        locale={locale}
+      />
     </Stack>
   )
 }
