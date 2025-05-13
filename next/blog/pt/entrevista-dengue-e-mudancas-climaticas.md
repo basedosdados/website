@@ -1,5 +1,5 @@
 ---
-title: Entrevista: Dengue e Mudanças Climáticas
+title: "Entrevista: Dengue e Mudanças Climáticas"
 description: >-
   Pesquisador comenta sobre como variáveis climáticas influenciam o espalhamento de doenças 
 date:
