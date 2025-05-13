@@ -367,7 +367,10 @@
         "BQEmailDescription6": "In case of doubt,",
         "BQEmailDescription7": "contact our support.",
         "updateEmail": "Update email",
-        "pleaseEnterValidEmail": "Please enter a valid email."
+        "pleaseEnterValidEmail": "Please enter a valid email.",
+        "tourTitle": "Restart Tour", 
+        "tourContext": "This button restarts the platform's guided tour. All explanations will be shown again from the beginning.",
+        "resetTour": "Restart"
     },
     "activate": {
         "accountActive": "Active account",

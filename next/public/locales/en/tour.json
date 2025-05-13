@@ -1,0 +1,7 @@
+{
+  "initialTour": {
+    "title": "Welcome to our platform!",
+    "content": "Before you begin, please note that the data here is provided in <strong>raw format</strong>. To filter by categories such as region or time period, you'll need to process it using <strong>external tools</strong> like Excel, BigQuery, Python, or R. Don't worry! We have tutorials to help you.",
+    "button": "I understand"
+  }
+}

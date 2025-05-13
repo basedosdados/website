@@ -45,13 +45,13 @@ export default function TermsAndPolicies() {
     let targetElement = ""
 
     if(id === "terms") {
-      targetElement = document.getElementById("Terms Of Service")
-      setSectionSelected("Terms Of Service")
+      targetElement = document.getElementById("termsOfService")
+      setSectionSelected("termsOfService")
       movedScroll(useCheckMobile() ? 210 : 120)
     }
     if(id === "privacy") {
-      targetElement = document.getElementById("Privacy Policy")
-      setSectionSelected("Privacy Policy")
+      targetElement = document.getElementById("privacyPolicy")
+      setSectionSelected("privacyPolicy")
       movedScroll(targetElement?.offsetTop+120)
     }
   },[query?.section])
@@ -136,8 +136,8 @@ export default function TermsAndPolicies() {
             position={{base: "relative", lg: "sticky"}}
             top={{base: "0", lg: "120px"}}
           >
-            <SectionText section="Terms Of Service"/>
-            <SectionText section="Privacy Policy"/>
+            <SectionText section="termsOfService"/>
+            <SectionText section="privacyPolicy"/>
           </Box>
 
           <Stack
@@ -145,7 +145,7 @@ export default function TermsAndPolicies() {
             spacing="80px"
           >
             <VStack
-              id="Terms Of Service"
+              id="termsOfService"
               name="terms"
               width="100%"
               spacing={8}
@@ -156,7 +156,7 @@ export default function TermsAndPolicies() {
             </VStack>
 
             <VStack
-              id="Privacy Policy"
+              id="privacyPolicy"
               name="privacy"
               width="100%"
               spacing={8}
