@@ -1,11 +1,12 @@
 import {
   HStack,
-  Image,
   Stack,
   VStack,
   Text,
   Box
 } from "@chakra-ui/react";
+import Image from "next/image";
+import { memo } from 'react';
 import { useTranslation } from 'next-i18next';
 import { capitalize } from "lodash";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
@@ -17,7 +18,22 @@ import LinkIcon from "../../public/img/icons/linkIcon";
 import InfoArrowIcon from "../../public/img/icons/infoArrowIcon";
 import { DataBaseSolidIcon } from "../../public/img/icons/databaseIcon";
 
-export default function Dataset({
+const MetadataRow = ({ label, children }) => (
+  <Stack direction={{ base: "column", lg: "row" }} spacing={1}>
+    <BodyText typography="small" color="#464A51">
+      {label}:
+    </BodyText>
+    {typeof children === 'string' ? (
+      <BodyText typography="small" color="#71757A">
+        {children}
+      </BodyText>
+    ) : (
+      children
+    )}
+  </Stack>
+);
+
+const DatasetSearchCard= ({
   id,
   name,
   organizations,
@@ -28,8 +44,19 @@ export default function Dataset({
   informationRequests,
   contains,
   locale
-}) {
+}) => {
   const { t } = useTranslation('dataset');
+  const isMobile = useCheckMobile();
+
+  const organizationName = organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name;
+  const imageSrc = organizations[0]?.picture?.startsWith("https://") 
+    ? organizations[0].picture 
+    : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`;
+  
+  const hasInformationRequests = informationRequests?.number > 0;
+  const resourcesText = contains.free 
+    ? `${t('openData')}${contains.pro ? ` ${t('datasetCard.and')} ${t('closedData')}` : ''}`
+    : contains.pro ? t('closedData') : t('none');
 
   const Tables = () => {
     let tablesNumber = tables.number
@@ -58,8 +85,7 @@ export default function Dataset({
           marginLeft="4px !important"
           whiteSpace="nowrap"
         >
-          {tablesNumber}{" "}
-          {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
+          {tablesNumber} {tablesNumber === 1 ? t('datasetCard.table') : t('datasetCard.tables')}
         </Text>
       </Link>
     )
@@ -92,8 +118,7 @@ export default function Dataset({
           marginLeft="4px !important"
           whiteSpace="nowrap"
         >
-          {rawDataSourcesNumber}{" "}
-          {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
+          {rawDataSourcesNumber} {rawDataSourcesNumber === 1 ? t('datasetCard.rawDataSource') : t('datasetCard.rawDataSources')}
         </Text>
       </Link>
     )
@@ -126,8 +151,7 @@ export default function Dataset({
           marginLeft="4px !important"
           whiteSpace="nowrap"
         >
-          {informationRequestsNumber}{" "}
-          {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
+          {informationRequestsNumber} {informationRequestsNumber === 1 ? t('datasetCard.informationRequest') : t('datasetCard.informationRequests')}
         </Text>
       </Link>
     )
@@ -152,23 +176,23 @@ export default function Dataset({
           target="_blank"
         >
           <Box
+            className="img_dataset_serach_card"
             display="flex"
             justifyContent="center"
             border="1px solid #DEDFE0"
             borderRadius="16px"
+            overflow="hidden"
+            width="222px"
+            height={locale !== 'pt' ? "165px" : "138px"}
+            position="relative"
             _hover={{ opacity: 0.9 }}
           >
             <Image
-              src={organizations[0]?.picture?.startsWith("https://") 
-                ? organizations[0]?.picture 
-                : `https://basedosdados.org/uploads/group/${organizations[0]?.name}`}
-              alt={organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name || t('notProvided')}
-              borderRadius="16px"
-              minWidth="222px"
-              maxWidth="222px"
-              minHeight={locale !== 'pt' ? "165px" : "138px"}
-              maxHeight={locale !== 'pt' ? "165px" : "138px"}
-              objectFit="contain"
+              src={imageSrc}
+              alt={organizationName || t('notProvided')}
+              layout="fill"
+              quality={75}
+              priority
             />
           </Box>
         </Link>
@@ -185,7 +209,7 @@ export default function Dataset({
               direction={{ base: "column", lg: "row" }}
               width="100%"
               alignItems="flex-start"
-              pb={{ base: 2, lg: 0 }}
+              paddingBottom={{ base: 2, lg: 0 }}
             >
               <Link
                 href={`/dataset/${id}`}
@@ -212,16 +236,7 @@ export default function Dataset({
               marginBottom="4px !important"
               alignItems="flex-start"
             >
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('organization')}:
-                </BodyText>
+              <MetadataRow label={t('organization')}>
                 <Link
                   href={`/search?organization=${organizations[0]?.slug}`}
                   target="_blank"
@@ -234,86 +249,45 @@ export default function Dataset({
                     }}
                     textOverflow="ellipsis"
                   >
-                    {organizations[0]?.[`name${capitalize(locale)}`] || organizations[0]?.name}
+                    {organizationName}
                   </BodyText>
                 </Link>
-              </Stack>
+              </MetadataRow>
 
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('temporalCoverage')}:
-                </BodyText>
-                <BodyText
-                  typography="small"
-                  color="#71757A"
-                >
-                  {temporalCoverageText ? temporalCoverageText : t('notProvided')}
-                </BodyText>
-              </Stack>
+              <MetadataRow label={t('temporalCoverage')}>
+                {temporalCoverageText || t('notProvided')}
+              </MetadataRow>
 
-              {locale !== 'pt' ?
-                <Stack
-                  direction={{ base: "column", lg: "row" }}
-                  spacing={1}
-                >
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
-                    {t('spatialCoverage')}:
-                  </BodyText>
-                  <BodyText
-                    typography="small"
-                    color="#71757A"
-                  >
-                    {spatialCoverage ? spatialCoverage : t('notProvided')}
-                  </BodyText>
-                </Stack>
-                :
-                <></>
-              }
+              {locale !== 'pt' && (
+                <MetadataRow label={t('spatialCoverage')}>
+                  {spatialCoverage || t('notProvided')}
+                </MetadataRow>
+              )}
 
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                spacing={1}
-              >
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {t('resources')}:
-                </BodyText>
-                <BodyText
-                  typography="small"
-                  color="#71757A"
-                >
-                  {contains.free && t('openData')} {contains.free && contains.pro && t('datasetCard.and')} {contains.pro && t('closedData')}
-                  {!contains.free && !contains.pro && t('none')}
-                </BodyText>
-              </Stack>
-            </VStack>
+              <MetadataRow label={t('resources')}>
+                {resourcesText}
+              </MetadataRow>
+              </VStack>
           </VStack>
 
           <HStack
-            flexDirection={useCheckMobile() && "column"}
-            alignItems={useCheckMobile() && "flex-start"}
-            spacing={informationRequests?.number > 0 ? 0 : 10}
+            flexDirection={isMobile ? "column" : "row"}
+            alignItems={isMobile ? "flex-start" : "center"}
+            spacing={hasInformationRequests ? 0 : 10}
             width="100%"
             maxWidth="440px"
-            justifyContent={informationRequests?.number > 0 ? "space-between" : "flex-start"}
+            justifyContent={hasInformationRequests ? "space-between" : "flex-start"}
           >
             <Tables/>
             <RawDataSources/>
-            {informationRequests?.number > 0 && <InformationRequest/>}
+            {hasInformationRequests && (
+              <InformationRequest id={id} informationRequests={informationRequests} t={t} />
+            )}
           </HStack>
         </VStack>
       </Stack>
     </VStack>
   );
 }
+
+export default memo(DatasetSearchCard);
