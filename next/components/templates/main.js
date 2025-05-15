@@ -1,5 +1,4 @@
 import { Box } from "@chakra-ui/react";
-import SiteHead from "../atoms/SiteHead";
 import Footer from "../molecules/Footer";
 import Menu from "../molecules/Menu";
 
@@ -20,7 +19,6 @@ export function MainPageTemplate({
       display="flex"
       flexDirection="column"
     >
-      <SiteHead />
       <Menu simpleTemplate={cleanTemplate} userTemplate={userTemplate}/>
       <Box
         paddingTop="70px"

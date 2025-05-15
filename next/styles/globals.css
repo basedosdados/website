@@ -166,6 +166,10 @@ body {
   color: white;
 }
 
+.img_dataset_serach_card img {
+  object-fit: contain;
+}
+
 .swiper {
   min-width: 100%;
   padding: 0 32px !important;
