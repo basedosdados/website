@@ -10,7 +10,7 @@ authors:
   - name: Giovane Caruso
     role: Edição e Design
 categories: [analise]
-thumbnail: 
+thumbnail: /website/next/public/blog/qual-e-a-relacao-entre-a-dengue-e-as-mudancas-climaticas/grafico_goiania.png
 medum_slug: https://medium.com/@basedosdados/nota-sobre-divulga%C3%A7%C3%A3o-dos-dados-do-inep-9168291dbca0
 published: true
 order: 1
@@ -37,13 +37,13 @@ A dinâmica esperada para a distribuição de casos é: elevação no início do
 
 Podemos notar que em Goiânia esse padrão é bastante preciso ao longo dos anos. Veja na imagem abaixo.
 
-<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/grafico_goiania.png"/>
+<Image src="/website/next/public/blog/qual-e-a-relacao-entre-a-dengue-e-as-mudancas-climaticas/grafico_goiania.png"/>
 
 Para a capital de Goiás, os casos estão concentrados em algumas semanas dos picos de precipitação e temperatura. Quando essas duas variáveis começam a ter valores menores, notamos que o número de casos também cai. 
 
 Mas a mesma dinâmica não é tão evidente na cidade de Manaus, por exemplo.
 
-<Image src="/blog/de-olho-na-camara-como-analisar-os-dados-abertos-da-camara-dos-deputados/grafico_manaus.png"/>
+<Image src="/website/next/public/blog/qual-e-a-relacao-entre-a-dengue-e-as-mudancas-climaticas/grafico_manaus.png"/>
 
 Na capital amazonense, a relação com a precipitação ainda pode ser notada, ainda que não da mesma forma que o exemplo de Goiânia. Mas a relação com a temperatura já não parece ser tão direta. A explicação para este fenômeno pode estar no fato de que a variação de temperatura média está no intervalo de 26ºC a 32ºC, temperaturas já consideradas altas e sempre agradáveis para a proliferação do mosquito. 
 
