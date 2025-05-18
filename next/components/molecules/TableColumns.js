@@ -12,7 +12,7 @@ import {
   Text,
   Skeleton,
 } from '@chakra-ui/react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useRouter } from 'next/router';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
@@ -30,39 +30,45 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import 'katex/dist/katex.min.css';
 
-function SearchColumn({ isLoaded, resource, columns }) {
+const SearchColumn = memo(({ isLoaded, resource, columns }) => {
   const { t } = useTranslation('dataset');
-  const [inputFocus, setInputFocus] = useState(false)
-  const [search, setSearch] = useState("")
-  const [value, setValue] = useState("")
-  const [_timeout, _setTimeout] = useState(null)
+  const [inputFocus, setInputFocus] = useState(false);
+  const [search, setSearch] = useState("");
+  const [value, setValue] = useState("");
+  const [_timeout, _setTimeout] = useState(null);
 
-  useEffect(() => {
-    clearTimeout(_timeout)
-    isLoaded(true)
-    if(value.trim() === "") {
-      isLoaded(false)
-      return columns(resource)
+  const searcherColumn = useMemo(() => 
+    new FuzzySearch(resource, ["node.name", "node.description"], {sort: true}),
+    [resource]
+  );
+
+  const handleSearch = useCallback((searchValue) => {
+    clearTimeout(_timeout);
+    isLoaded(true);
+    
+    if(searchValue.trim() === "") {
+      isLoaded(false);
+      return columns(resource);
     }
 
     _setTimeout(setTimeout(() => {
-      const result = searcherColumn.search(search.trim())
+      const result = searcherColumn.search(searchValue.trim());
       if(result.length > 0) {
-        columns(result)
+        columns(result);
       } else {
-        columns(resource)
+        columns(resource);
       }
-      isLoaded(false)
-    }, 500))
-  }, [value])
+      isLoaded(false);
+    }, 500));
+  }, [_timeout, isLoaded, columns, resource, searcherColumn]);
 
   useEffect(() => {
-    setValue(search)
-  }, [search])
+    handleSearch(value);
+  }, [value, handleSearch]);
 
-  const searcherColumn = new FuzzySearch (
-    resource, ["node.name", "node.description"], {sort: true}
-  )
+  useEffect(() => {
+    setValue(search);
+  }, [search]);
 
   return (
     <ControlledInputSimple
@@ -83,8 +89,106 @@ function SearchColumn({ isLoaded, resource, columns }) {
         />
       }
     />
-  )
-}
+  );
+});
+
+const TableHeader = memo(({ header, ...props }) => {
+  const { t } = useTranslation('dataset');
+
+  return (
+    <Th
+      role="row"
+      position="sticky"
+      top="0"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#252A32"
+      backgroundColor="#F7F7F7"
+      border="none !important"
+      padding="0 !important"
+      textTransform="none"
+      letterSpacing="inherit"
+      boxSizing="content-box"
+      zIndex={1}
+      {...props}
+    >
+      <Box
+        display="flex"
+        gridGap="8px"
+        alignItems="center"
+        role="columnheader"
+        padding="14px 22px"
+      >
+        {header.pt}
+        <Tooltip
+          label={header.tooltip}
+          hasArrow
+          padding="16px"
+          backgroundColor="#252A32"
+          boxSizing="border-box"
+          borderRadius="8px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          textAlign="center"
+          color="#FFFFFF"
+          placement="top"
+          maxWidth="300px"
+          {...props}
+        >
+          <InfoIcon
+            alt="tip"
+            cursor="pointer"
+            fill="#878A8E"
+            width="16px"
+            height="16px"
+          />
+        </Tooltip>
+      </Box>
+      <Box
+        display={header.pt === t('column.name') ? {base: "none", lg: "flex"} : "none"}
+        position="absolute"
+        right="0"
+        top="0"
+        height="100%"
+        width="1px"
+        backgroundColor="#DEDFE0"
+      />
+      <Box
+        position="absolute"
+        bottom="0"
+        height="1px"
+        width="100%"
+        backgroundColor="#DEDFE0"
+      />
+    </Th>
+  );
+});
+
+const TableValue = memo(({children, ...props}) => {
+  return (
+    <Td
+      role="cell"
+      position="relative"
+      padding="14px 22px"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#464A51"
+      backgroundColor="#FFF"
+      borderColor="#DEDFE0"
+      textTransform="none"
+      letterSpacing="inherit"
+      {...props}
+    >
+      {children}
+    </Td>
+  );
+});
 
 export default function TableColumns({
   tableId,
@@ -95,83 +199,60 @@ export default function TableColumns({
   numberColumns,
   template,
 }) {
-  const router = useRouter()
-  const { query, locale } = router
-  const [resource, setResource] = useState({})
-  const [columns, setColumns] = useState({})
-  const [isError, setIsError] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSearchLoading, setIsSearchLoading] = useState(true)
+  const router = useRouter();
+  const { query, locale } = router;
+  const [resource, setResource] = useState({});
+  const [columns, setColumns] = useState({});
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSearchLoading, setIsSearchLoading] = useState(true);
   const { t } = useTranslation('dataset');
 
-  const isChecked = (columnSlug) => checkedColumns.includes(columnSlug)
+  useEffect(() => {
+    const handleTableColumnsLoaded = (e) => {
+      setHasLoading(true);
+      setIsSearchLoading(true);
+      setIsLoading(true);
+    };
 
-  const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    window.addEventListener('loadingColumnsEvent', handleTableColumnsLoaded);
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
-  }
+    return () => {
+      window.removeEventListener('loadingColumnsEvent', handleTableColumnsLoaded);
+    };
+  }, []);
 
-  const handleCheckboxChange = (columnSlug) => {
+  const isChecked = useCallback((columnSlug) => 
+    checkedColumns.includes(columnSlug),
+    [checkedColumns]
+  );
+
+  const isUserPro = useCallback(() => {
+    let user;
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
+    return user?.isSubscriber || false;
+  }, []);
+
+  const handleCheckboxChange = useCallback((columnSlug) => {
     if (isChecked(columnSlug)) {
-      onChangeCheckedColumns(checkedColumns.filter(slug => slug !== columnSlug))
+      onChangeCheckedColumns(checkedColumns.filter(slug => slug !== columnSlug));
     } else {
-      onChangeCheckedColumns([...checkedColumns, columnSlug])
+      onChangeCheckedColumns([...checkedColumns, columnSlug]);
     }
-  }
+  }, [isChecked, checkedColumns, onChangeCheckedColumns]);
 
-  const handleMasterCheckboxChange = () => {
-    if(checkedColumns.length > 0) return onChangeCheckedColumns([])
-    const allColumnSlugs = resource.map(column => column.node.name)
+  const handleMasterCheckboxChange = useCallback(() => {
+    if(checkedColumns.length > 0) return onChangeCheckedColumns([]);
+    const allColumnSlugs = resource.map(column => column.node.name);
 
     if (checkedColumns.length === allColumnSlugs.length) {
-      onChangeCheckedColumns([])
+      onChangeCheckedColumns([]);
     } else {
-      onChangeCheckedColumns(allColumnSlugs)
+      onChangeCheckedColumns(allColumnSlugs);
     }
-  }
+  }, [checkedColumns, resource, onChangeCheckedColumns]);
 
-  useEffect(() => {
-    if(tableId === undefined) return
-
-    const featchColumns = async () => {
-      setHasLoading(true)
-
-      try {
-        const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
-        const response = await fetch(url, { method: "GET" })
-        const result = await response.json()
-
-        if(result.success) {
-          setResource(result.resource.sort(sortElements))
-          numberColumns(result.resource.length)
-          setColumns(result.resource.sort(sortElements))
-          setHasLoading(false)
-          setIsSearchLoading(false)
-          setIsError(false)
-        } else {
-          console.error(result.error)
-          setIsError(true)
-        }
-
-      } catch (error) {
-        console.error(error)
-        setIsError(true)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    featchColumns()
-  },[tableId, locale])
-
-  useEffect(() => {
-    setIsLoading(hasLoading)
-  }, [hasLoading])
-
-  const headers = [
+  const headers = useMemo(() => [
     {
       pt: t('column.name'),
       tooltip: t('column.nameTooltip')
@@ -204,17 +285,52 @@ export default function TableColumns({
       pt: t('column.observations'),
       tooltip: t('column.observationsTooltip')
     }
-  ]
+  ], [t, template]);
 
-  function sortElements(a, b) {
-    if (a.node.order < b.node.order) {
-      return -1
+  const fetchColumns = useCallback(async () => {
+    if(tableId === undefined) return;
+
+    setHasLoading(true);
+    setIsSearchLoading(true);
+
+    try {
+      const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
+      const response = await fetch(url, { method: "GET" });
+      const result = await response.json();
+
+      if(result.success) {
+        const sortedResource = result.resource.sort(sortElements);
+        setResource(sortedResource);
+        numberColumns(result.resource.length);
+        setColumns(sortedResource);
+        setHasLoading(false);
+        setIsSearchLoading(false);
+        setIsError(false);
+      } else {
+        console.error(result.error);
+        setIsError(true);
+      }
+    } catch (error) {
+      console.error(error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
-    if (a.node.order > b.node.order) {
-      return 1
-    }
-    return 0
-  }
+  }, [tableId, locale, setHasLoading, numberColumns]);
+
+  useEffect(() => {
+    fetchColumns();
+  }, [fetchColumns]);
+
+  useEffect(() => {
+    setIsLoading(hasLoading);
+  }, [hasLoading]);
+
+  const sortElements = useCallback((a, b) => {
+    if (a.node.order < b.node.order) return -1;
+    if (a.node.order > b.node.order) return 1;
+    return 0;
+  }, []);
 
   function HasDownloadPermitted(value) {
     let downloadPermitted = false
@@ -372,102 +488,6 @@ export default function TableColumns({
 
     return (
       <Latex>{`$${translated(splitValue).join("")}$`}</Latex>
-    )
-  }
-
-  function TableHeader({ header, ...props }) {
-    return (
-      <Th
-        role="row"
-        position="sticky"
-        top="0"
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#252A32"
-        backgroundColor="#F7F7F7"
-        border="none !important"
-        padding="0 !important"
-        textTransform="none"
-        letterSpacing="inherit"
-        boxSizing="content-box"
-        zIndex={1}
-        {...props}
-      >
-        <Box
-          display="flex"
-          gridGap="8px"
-          alignItems="center"
-          role="columnheader"
-          padding="14px 22px"
-        >
-          {header.pt}
-          <Tooltip
-            label={header.tooltip}
-            hasArrow
-            padding="16px"
-            backgroundColor="#252A32"
-            boxSizing="border-box"
-            borderRadius="8px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            textAlign="center"
-            color="#FFFFFF"
-            placement="top"
-            maxWidth="300px"
-            {...props}
-          >
-            <InfoIcon
-              alt="tip"
-              cursor="pointer"
-              fill="#878A8E"
-              width="16px"
-              height="16px"
-            />
-          </Tooltip>
-        </Box>
-        <Box
-          display={header.pt === t('column.name') ? {base: "none", lg: "flex"} : "none"}
-          position="absolute"
-          right="0"
-          top="0"
-          height="100%"
-          width="1px"
-          backgroundColor="#DEDFE0"
-        />
-        <Box
-          position="absolute"
-          bottom="0"
-          height="1px"
-          width="100%"
-          backgroundColor="#DEDFE0"
-        />
-      </Th>
-    )
-  }
-
-  function TableValue({children, ...props}) {
-    return (
-      <Td
-        role="cell"
-        position="relative"
-        padding="14px 22px"
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#464A51"
-        backgroundColor="#FFF"
-        borderColor="#DEDFE0"
-        textTransform="none"
-        letterSpacing="inherit"
-        {...props}
-      >
-        {children}
-      </Td>
     )
   }
 

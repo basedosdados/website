@@ -10,6 +10,7 @@ const NotFoundImage = ({widthImage = "256px", heightImage="187px", ...style}) =>
   >
     <Icon
       alt="não encontrado"
+      aria-hidden="true" 
       viewBox="0 0 256 187"
       width={widthImage}
       height={heightImage}

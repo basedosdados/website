@@ -67,7 +67,6 @@ function Hero({ dataThemeCatalog, locale }) {
   const { t } = useTranslation('common');
   const router = useRouter();
   const [search, setSearch] = useState("");
-  const [mediumQuery] = useMediaQuery("(max-width: 1366px)")
 
   function openSearchLink() {
     if(search.trim() !== "") {
@@ -105,7 +104,7 @@ function Hero({ dataThemeCatalog, locale }) {
             direction="column"
             marginTop={{
               base: "64px",
-              lg: mediumQuery ? "16px" : "80px"
+              lg: "80px"
             }}
           >
             {locale === 'en' ? (

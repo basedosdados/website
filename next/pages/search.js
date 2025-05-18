@@ -13,7 +13,7 @@ import {
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import { useTranslation } from 'next-i18next';
 import cookies from "js-cookie";
 import { ModalInitialTour } from "../components/molecules/Tour";
@@ -47,6 +47,135 @@ export async function getStaticProps({ locale }) {
   };
 }
 
+const SkeletonWaitCard = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="row"
+      gap="24px"
+      width="100%"
+      borderRadius="12px"
+      backgroundColor="#FFF"
+    >
+      <Skeleton
+        minWidth="222px"
+        minHeight="138px"
+        borderRadius="16px"
+        startColor="#F0F0F0"
+        endColor="#F0F0F0"
+      />
+
+      <Box display="flex" width="100%" flexDirection="column" gap="8px">
+        <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="400px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="300px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="200px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="460px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+    </Box>
+  )
+}
+
+const SkeletonWaitCardMobile = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      gap="24px"
+      width="100%"
+      height="100%"
+      paddingY="16px"
+      borderRadius="12px"
+      backgroundColor="#FFF"
+    >
+      <Skeleton
+        width="222px"
+        height="138px"
+        borderRadius="16px"
+        startColor="#F0F0F0"
+        endColor="#F0F0F0"
+      />
+      <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+      <Box display="flex" width="100%" flexDirection="column" gap="8px">
+        <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="160px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+    </Box>
+  )
+}
+
+function DatasetCard({ data, locale }) {
+  return (
+    <DatasetSearchCard
+      id={data.id}
+      themes={data?.themes}
+      name={data?.name || t('noName')}
+      temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
+      spatialCoverage={data?.spatial_coverage
+        ?.map(coverage => coverage.name)
+        .sort((a, b) => a.localeCompare(b, locale))
+        .join(', ')}
+      organizations={data.organizations}
+      tables={{
+        id: data?.first_table_id,
+        number: data?.n_tables
+      }}
+      rawDataSources={{
+        id: data?.first_raw_data_source_id,
+        number: data?.n_raw_data_sources
+      }}
+      informationRequests={{
+        id: data?.first_information_request_id,
+        number: data?.n_information_requests
+      }}
+      contains={{
+        free: data?.contains_open_data,
+        pro: data?.contains_closed_data
+      }}
+      locale={locale}
+    />
+  )
+}
+
+const Pagination = memo(({ pageInfo, query, router, isLoading }) => {
+  const { t } = useTranslation('dataset');
+  const isMobile = useCheckMobile();
+
+  return (
+    <ReactPaginate
+      previousLabel={t('previous')}
+      nextLabel={t('next')}
+      breakLabel={"..."}
+      breakClassName={"break-me"}
+      forcePage={pageInfo.page - 1 || 0}
+      pageCount={Math.ceil(pageInfo.count / 10) || 1}
+      marginPagesDisplayed={isMobile ? 0 : 1}
+      pageRangeDisplayed={isMobile ? 0 : 2}
+      onPageChange={(newPage) => {
+        router.push({
+          pathname: router.pathname,
+          query: {...query, page: newPage.selected + 1 || 1}
+        })
+      }}
+      containerClassName={"pagination"}
+      activeClassName={"active"}
+      pageClassName={isLoading ? "disabled" : ""}
+      previousClassName={isLoading ? "disabled" : "previous-page"}
+      nextClassName={isLoading ? "disabled" : "next-page"}
+    />
+  )
+});
+
 export default function SearchDatasetPage() {
   const { t } = useTranslation('dataset')
   const { locale } = useRouter()
@@ -62,6 +191,26 @@ export default function SearchDatasetPage() {
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
   const modalTourInitial = useDisclosure();
+
+  const memoizedFilters = useMemo(() => {
+    return {
+      themes: aggregations?.themes || [],
+      organizations: aggregations?.organizations || [],
+      tags: aggregations?.tags || [],
+      observationLevels: aggregations?.observation_levels || []
+    }
+  }, [aggregations]);
+
+  const memoizedContainsCounts = useMemo(() => {
+    return {
+      tables: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0,
+      rawDataSources: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0,
+      temporalcoverageFree: aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0,
+      temporalcoveragePaid: aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0,
+      directDownloadFree: aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0,
+      directDownloadPaid: aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0
+    }
+  }, [aggregations]);
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
@@ -252,39 +401,6 @@ export default function SearchDatasetPage() {
     )
   }
 
-  function DatasetCard({ data }) {
-    return (
-      <DatasetSearchCard
-        id={data.id}
-        themes={data?.themes}
-        name={data?.name || t('noName')}
-        temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-        spatialCoverage={data?.spatial_coverage
-          ?.map(coverage => coverage.name)
-          .sort((a, b) => a.localeCompare(b, locale))
-          .join(', ')}
-        organizations={data.organizations}
-        tables={{
-          id: data?.first_table_id,
-          number: data?.n_tables
-        }}
-        rawDataSources={{
-          id: data?.first_raw_data_source_id,
-          number: data?.n_raw_data_sources
-        }}
-        informationRequests={{
-          id: data?.first_information_request_id,
-          number: data?.n_information_requests
-        }}
-        contains={{
-          free: data?.contains_open_data,
-          pro: data?.contains_closed_data
-        }}
-        locale={locale}
-      />
-    )
-  }
-
   function FilterTags() {
     function getLocalizedName(key, value) {
       // Handle special case for contains filters
@@ -449,73 +565,6 @@ export default function SearchDatasetPage() {
     )
   }
 
-  const SkeletonWaitCard = () => {
-    return (
-      <Box
-        display="flex"
-        flexDirection="row"
-        gap="24px"
-        width="100%"
-        borderRadius="12px"
-        backgroundColor="#FFF"
-      >
-        <Skeleton
-          minWidth="222px"
-          minHeight="138px"
-          borderRadius="16px"
-          startColor="#F0F0F0"
-          endColor="#F0F0F0"
-        />
-
-        <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="400px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="300px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="200px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="460px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
-      </Box>
-    )
-  }
-
-  const SkeletonWaitCardMobile = () => {
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap="24px"
-        width="100%"
-        height="100%"
-        paddingY="16px"
-        borderRadius="12px"
-        backgroundColor="#FFF"
-      >
-        <Skeleton
-          width="222px"
-          height="138px"
-          borderRadius="16px"
-          startColor="#F0F0F0"
-          endColor="#F0F0F0"
-        />
-        <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-
-        <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="160px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
-      </Box>
-    )
-  }
-
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
@@ -566,7 +615,7 @@ export default function SearchDatasetPage() {
 
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("theme")}
-            choices={aggregations?.themes}
+            choices={memoizedFilters.themes}
             valueField="key"
             displayField="name"
             fieldName={t('theme')}
@@ -580,7 +629,7 @@ export default function SearchDatasetPage() {
 
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("organization")}
-            choices={aggregations?.organizations}
+            choices={memoizedFilters.organizations}
             valueField="key"
             displayField="name"
             fieldName={t('organization')}
@@ -608,13 +657,13 @@ export default function SearchDatasetPage() {
               <CheckboxFilterComponent
                 value="tables"
                 text={t('tables')}
-                count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.tables}
               />
 
               <CheckboxFilterComponent
                 value="raw_data_sources"
                 text={t('rawDataSources')}
-                count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.rawDataSources}
               />
             </Box>
           </BaseFilterAccordion>
@@ -637,13 +686,13 @@ export default function SearchDatasetPage() {
               <CheckboxFilterComponent
                 value="temporalcoverage_free"
                 text={t('temporalcoverageFree')}
-                count={aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.temporalcoverageFree}
               />
 
               <CheckboxFilterComponent
                 value="temporalcoverage_paid"
                 text={t('temporalcoveragePaid')}
-                count={aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.temporalcoveragePaid}
               />
             </Box>
           </BaseFilterAccordion>
@@ -666,41 +715,22 @@ export default function SearchDatasetPage() {
               <CheckboxFilterComponent
                 value="direct_download_free"
                 text={t('openData')}
-                count={aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.directDownloadFree}
               />
 
               <CheckboxFilterComponent
                 value="direct_download_paid"
                 text={t('paid')}
-                count={aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0}
+                count={memoizedContainsCounts.directDownloadPaid}
               />
             </Box>
           </BaseFilterAccordion>
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {/* {locale !== 'pt' ?
-            <>
-              <CheckboxFilterAccordion
-                isActive={validateActiveFilterAccordin("spatial_coverage")}
-                choices={aggregations?.spatial_coverages}
-                valueField="key"
-                displayField="name"
-                fieldName={t('spatialCoverage')}
-                valuesChecked={valuesCheckedFilter("spatial_coverage")}
-                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
-                isLoading={!isLoading}
-                facet="spatial_coverage"
-              />
-              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-            </>
-            :
-            <></>
-          } */}
-
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("tag")}
-            choices={aggregations?.tags}
+            choices={memoizedFilters.tags}
             valueField="key"
             displayField="name"
             fieldName={t('tag')}
@@ -715,7 +745,7 @@ export default function SearchDatasetPage() {
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("observation_level")}
             tooltip={t("observationLevelTooltip")}
-            choices={aggregations?.observation_levels}
+            choices={memoizedFilters.observationLevels}
             valueField="key"
             displayField="name"
             fieldName={t('observationLevel')}
@@ -791,7 +821,7 @@ export default function SearchDatasetPage() {
               ))
               :
               (resource || []).map((res, i) => (
-                <DatasetCard data={res} key={i}/>
+                <DatasetCard data={res} locale={locale} key={i}/>
               ))
             }
 
@@ -810,26 +840,11 @@ export default function SearchDatasetPage() {
             }
 
             {!showEmptyState &&
-              <ReactPaginate
-                previousLabel={t('previous')}
-                nextLabel={t('next')}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                forcePage={pageInfo.page - 1 || 0}
-                pageCount={Math.ceil(pageInfo.count / 10) || 1}
-                marginPagesDisplayed={useCheckMobile() ? 0 : 1}
-                pageRangeDisplayed={useCheckMobile() ? 0 : 2}
-                onPageChange={(newPage) => {
-                  router.push({
-                    pathname: router.pathname,
-                    query: {...query, page: newPage.selected + 1 || 1}
-                  })
-                }}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-                pageClassName={isLoading ? "disabled" : ""}
-                previousClassName={isLoading ? "disabled" : "previous-page"}
-                nextClassName={isLoading ? "disabled" : "next-page"}
+              <Pagination 
+                pageInfo={pageInfo}
+                query={query}
+                router={router}
+                isLoading={isLoading}
               />
             }
           </VStack>
