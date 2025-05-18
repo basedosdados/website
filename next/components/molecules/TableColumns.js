@@ -12,7 +12,7 @@ import {
   Text,
   Skeleton,
 } from '@chakra-ui/react';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, memo } from 'react';
 import { useRouter } from 'next/router';
 import FuzzySearch from 'fuzzy-search';
 import Latex from 'react-latex-next';
@@ -30,7 +30,7 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import 'katex/dist/katex.min.css';
 
-const SearchColumn = ({ isLoaded, resource, columns }) => {
+const SearchColumn = memo(({ isLoaded, resource, columns }) => {
   const { t } = useTranslation('dataset');
   const [inputFocus, setInputFocus] = useState(false);
   const [search, setSearch] = useState("");
@@ -42,16 +42,17 @@ const SearchColumn = ({ isLoaded, resource, columns }) => {
     [resource]
   );
 
-  useEffect(() => {
+  const handleSearch = useCallback((searchValue) => {
     clearTimeout(_timeout);
     isLoaded(true);
-    if(value.trim() === "") {
+    
+    if(searchValue.trim() === "") {
       isLoaded(false);
       return columns(resource);
     }
 
     _setTimeout(setTimeout(() => {
-      const result = searcherColumn.search(search.trim());
+      const result = searcherColumn.search(searchValue.trim());
       if(result.length > 0) {
         columns(result);
       } else {
@@ -59,7 +60,11 @@ const SearchColumn = ({ isLoaded, resource, columns }) => {
       }
       isLoaded(false);
     }, 500));
-  }, [value, search, searcherColumn, columns, resource, isLoaded]);
+  }, [_timeout, isLoaded, columns, resource, searcherColumn]);
+
+  useEffect(() => {
+    handleSearch(value);
+  }, [value, handleSearch]);
 
   useEffect(() => {
     setValue(search);
@@ -85,9 +90,9 @@ const SearchColumn = ({ isLoaded, resource, columns }) => {
       }
     />
   );
-};
+});
 
-const TableHeader = ({ header, ...props }) => {
+const TableHeader = memo(({ header, ...props }) => {
   const { t } = useTranslation('dataset');
 
   return (
@@ -161,9 +166,9 @@ const TableHeader = ({ header, ...props }) => {
       />
     </Th>
   );
-};
+});
 
-const TableValue = ({children, ...props}) => {
+const TableValue = memo(({children, ...props}) => {
   return (
     <Td
       role="cell"
@@ -183,7 +188,7 @@ const TableValue = ({children, ...props}) => {
       {children}
     </Td>
   );
-};
+});
 
 export default function TableColumns({
   tableId,
@@ -268,53 +273,50 @@ export default function TableColumns({
     }
   ], [t, template]);
 
-  useEffect(() => {
+  const fetchColumns = useCallback(async () => {
     if(tableId === undefined) return;
 
-    const fetchColumns = async () => {
-      setHasLoading(true);
+    setHasLoading(true);
+    setIsSearchLoading(true);
 
-      try {
-        const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
-        const response = await fetch(url, { method: "GET" });
-        const result = await response.json();
+    try {
+      const url = `/api/tables/getTableColumns?id=${tableId}&locale=${locale}`;
+      const response = await fetch(url, { method: "GET" });
+      const result = await response.json();
 
-        if(result.success) {
-          const sortedResource = result.resource.sort(sortElements);
-          setResource(sortedResource);
-          numberColumns(result.resource.length);
-          setColumns(sortedResource);
-          setHasLoading(false);
-          setIsSearchLoading(false);
-          setIsError(false);
-        } else {
-          console.error(result.error);
-          setIsError(true);
-        }
-      } catch (error) {
-        console.error(error);
+      if(result.success) {
+        const sortedResource = result.resource.sort(sortElements);
+        setResource(sortedResource);
+        numberColumns(result.resource.length);
+        setColumns(sortedResource);
+        setHasLoading(false);
+        setIsSearchLoading(false);
+        setIsError(false);
+      } else {
+        console.error(result.error);
         setIsError(true);
-      } finally {
-        setIsLoading(false);
       }
-    };
-
-    fetchColumns();
+    } catch (error) {
+      console.error(error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
+    }
   }, [tableId, locale, setHasLoading, numberColumns]);
+
+  useEffect(() => {
+    fetchColumns();
+  }, [fetchColumns]);
 
   useEffect(() => {
     setIsLoading(hasLoading);
   }, [hasLoading]);
 
-  function sortElements(a, b) {
-    if (a.node.order < b.node.order) {
-      return -1
-    }
-    if (a.node.order > b.node.order) {
-      return 1
-    }
-    return 0
-  }
+  const sortElements = useCallback((a, b) => {
+    if (a.node.order < b.node.order) return -1;
+    if (a.node.order > b.node.order) return 1;
+    return 0;
+  }, []);
 
   function HasDownloadPermitted(value) {
     let downloadPermitted = false
