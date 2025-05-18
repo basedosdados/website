@@ -208,6 +208,20 @@ export default function TableColumns({
   const [isSearchLoading, setIsSearchLoading] = useState(true);
   const { t } = useTranslation('dataset');
 
+  useEffect(() => {
+    const handleTableColumnsLoaded = (e) => {
+      setHasLoading(true);
+      setIsSearchLoading(true);
+      setIsLoading(true);
+    };
+
+    window.addEventListener('loadingColumnsEvent', handleTableColumnsLoaded);
+
+    return () => {
+      window.removeEventListener('loadingColumnsEvent', handleTableColumnsLoaded);
+    };
+  }, []);
+
   const isChecked = useCallback((columnSlug) => 
     checkedColumns.includes(columnSlug),
     [checkedColumns]

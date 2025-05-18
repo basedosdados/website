@@ -672,6 +672,7 @@ export default function DatasetResource({
             value={query.table}
             onChange={(id) => {
               pushQuery("table", id);
+              window.dispatchEvent(new CustomEvent('loadingColumnsEvent'));
             }}
             hasDivider={false}
           />
