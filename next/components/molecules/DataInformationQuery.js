@@ -14,7 +14,7 @@ import {
   ModalCloseButton,
   Spinner
 } from "@chakra-ui/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
 import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";
 import pythonHighlight from "highlight.js/lib/languages/python";
@@ -47,33 +47,36 @@ import ChevronIcon from "../../public/img/icons/chevronIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 import Link from "../atoms/Link";
 
-export function CodeHighlight({ language, children }) {
+const CodeHighlight = memo(({ language, children }) => {
   const { t } = useTranslation('dataset');
-  const textRef = useRef(null)
-  const [isOverflowing, setIsOverflowing] = useState(false)
-  const [isExpanded, setIsExpanded] = useState(true)
-
-  const [highlightedCode, setHighlightedCode] = useState("")
-  const { hasCopied, onCopy } = useClipboard(children)
+  const textRef = useRef(null);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [highlightedCode, setHighlightedCode] = useState("");
+  const { hasCopied, onCopy } = useClipboard(children);
 
   useEffect(() => {
-    if(language === "sql") hljs.registerLanguage("sql", sqlHighlight)
-    if(language === "python") hljs.registerLanguage("python", pythonHighlight)
-    if(language === "r") hljs.registerLanguage("r", rHighlight)
+    if(language === "sql") hljs.registerLanguage("sql", sqlHighlight);
+    if(language === "python") hljs.registerLanguage("python", pythonHighlight);
+    if(language === "r") hljs.registerLanguage("r", rHighlight);
 
-    const highlighted = hljs.highlight(children, { language:language }).value
-    setHighlightedCode(highlighted)
-  }, [children, language])
+    const highlighted = hljs.highlight(children, { language:language }).value;
+    setHighlightedCode(highlighted);
+  }, [children, language]);
 
   useEffect(() => {
     if (textRef.current) {
-      setIsOverflowing(false)
-      setIsExpanded(true)
-      const { clientHeight } = textRef.current
-      setIsOverflowing(clientHeight > 190)
-      if(clientHeight > 190) setIsExpanded(false)
+      setIsOverflowing(false);
+      setIsExpanded(true);
+      const { clientHeight } = textRef.current;
+      setIsOverflowing(clientHeight > 190);
+      if(clientHeight > 190) setIsExpanded(false);
     }
-  }, [highlightedCode])
+  }, [highlightedCode]);
+
+  const handleExpandClick = useCallback(() => {
+    setIsExpanded(!isExpanded);
+  }, [isExpanded]);
 
   return (
     <Box
@@ -149,7 +152,7 @@ export function CodeHighlight({ language, children }) {
           width="100%"
           padding="12px 16px"
           borderTop="1px solid #464A51"
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={handleExpandClick}
           fill="#878A8E"
           color="#878A8E"
           _hover={{
@@ -171,64 +174,139 @@ export function CodeHighlight({ language, children }) {
         </Box>
       )}
     </Box>
-  )
-}
+  );
+});
 
-export default function DataInformationQuery({
-  resource,
-  changeTab
-}) {
+const DataInformationQuery = memo(({ resource, changeTab }) => {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
-  const [tabAccessIndex, setTabAccessIndex] = useState(0)
-  const [tabIndex, setTabIndex] = useState(0)
-  const [downloadPermitted, setDownloadPermitted] = useState(false)
-  const [downloadWarning, setDownloadWarning] = useState("")
-  const [checkedColumns, setCheckedColumns] = useState([])
-  const [numberColumns, setNumberColumns] = useState(0)
-  const [sqlCode, setSqlCode] = useState("")
-  const [insufficientChecks, setInsufficientChecks] = useState(false)
-  const [includeTranslation, setIncludeTranslation] = useState(true)
-  const [hasLoadingColumns, setHasLoadingColumns] = useState(true)
-  const [isLoadingCode, setIsLoadingCode] = useState(false)
-  const [isLoadingSpin, setIsLoadingSpin] = useState(false)
-  const [hasLoadingResponse, setHasLoadingResponse] = useState(false)
-  const plansModal = useDisclosure()
+  const [tabAccessIndex, setTabAccessIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [downloadPermitted, setDownloadPermitted] = useState(false);
+  const [downloadWarning, setDownloadWarning] = useState("");
+  const [checkedColumns, setCheckedColumns] = useState([]);
+  const [numberColumns, setNumberColumns] = useState(0);
+  const [sqlCode, setSqlCode] = useState("");
+  const [insufficientChecks, setInsufficientChecks] = useState(false);
+  const [includeTranslation, setIncludeTranslation] = useState(true);
+  const [hasLoadingColumns, setHasLoadingColumns] = useState(true);
+  const [isLoadingCode, setIsLoadingCode] = useState(false);
+  const [isLoadingSpin, setIsLoadingSpin] = useState(false);
+  const [hasLoadingResponse, setHasLoadingResponse] = useState(false);
+  const plansModal = useDisclosure();
 
-  const [gcpProjectID, setGcpProjectID] = useState("")
-  const [gcpDatasetID, setGcpDatasetID] = useState("")
-  const [gcpTableId, setGcpTableId] = useState("")
+  const [gcpProjectID, setGcpProjectID] = useState("");
+  const [gcpDatasetID, setGcpDatasetID] = useState("");
+  const [gcpTableId, setGcpTableId] = useState("");
 
-  const isUserPro = () => {
-    let user
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+  const isUserPro = useCallback(() => {
+    let user;
+    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
+    return user?.isSubscriber || false;
+  }, []);
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
-  }
-
-  const getTourBD = () => {
+  const getTourBD = useCallback(() => {
     try {
       return cookies.get('tourBD') ? JSON.parse(cookies.get('tourBD')) : null;
     } catch (error) {
       console.error('Error parsing tourBD:', error);
       return null;
     }
-  };
+  }, []);
+
+  const scrollFocus = useCallback(() => {
+    let idTab;
+
+    if (tabIndex === 0) idTab = "SQL_section";
+    else if (tabIndex === 1) idTab = "python_section";
+    else if (tabIndex === 2) idTab = "r_section";
+    else return;
+  
+    const targetElement = document.getElementById(idTab);
+  
+    if (targetElement) {
+      const { top } = targetElement.getBoundingClientRect();
+      const heightScreen = window.innerHeight;
+      const positionTarget = top + window.pageYOffset;
+  
+      window.scrollTo({
+        top: positionTarget - (heightScreen / 2),
+        behavior: "smooth",
+      });
+    }
+  }, [tabIndex]);
+
+  const SqlCodeString = useCallback(async () => {
+    const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation);
+    if(result === null) return;
+    setSqlCode(result.trim());
+    setIsLoadingCode(false);
+    setIsLoadingSpin(false);
+    const tourBD = getTourBD();
+    if(tourBD && tourBD.state === 'begin') {
+      cookies.set('tourBD', '{"state":"table"}', { expires: 360 });
+    }
+  }, [resource._id, checkedColumns, includeTranslation, getTourBD]);
+
+  const handleAccessIndexes = useCallback((index) => {
+    const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
+    setTabAccessIndex(index);
+    triggerGAEvent("category_click", categoryValues[index]);
+  }, [t]);
+
+  const handleCategoryIndexes = useCallback((index) => {
+    const categoryValues = ["SQL", "Python", "R"];
+    setTabIndex(index);
+    triggerGAEvent("category_click", categoryValues[index]);
+  }, []);
+
+  const queryLanguage = useCallback(() => {
+    const language = {
+      0 : "SQL",
+      1 : "Python",
+      2 : "R"
+    };
+    return language[tabIndex] || "";
+  }, [tabIndex]);
+
+  const handleGenerateQuery = useCallback(() => {
+    if(checkedColumns.length === 0) {
+      setInsufficientChecks(true);
+      return;
+    }
+    triggerGAEvent("gerar_consulta_click", queryLanguage());
+    setHasLoadingResponse(true);
+  }, [checkedColumns.length, queryLanguage]);
+
+  const handleDownload = useCallback(() => {
+    if(downloadWarning !== "free" && isUserPro() === false) {
+      plansModal.onOpen();
+      return;
+    }
+    window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
+    triggerGAEvent("download_da_tabela",`{
+      gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
+      tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
+      dataset: ${resource?.dataset?._id},
+      table: ${resource?._id},
+    }`);
+  }, [downloadWarning, isUserPro, gcpDatasetID, gcpTableId, downloadPermitted, gcpProjectID, resource]);
 
   useEffect(() => {
     if(changeTab === true) {
-      setTabAccessIndex(1)
-      const tourBD = getTourBD()
+      setTabAccessIndex(1);
+      const tourBD = getTourBD();
       if(tourBD && tourBD.state === 'table') {
-        cookies.set('tourBD', '{"state":"download"}', { expires: 360 })
+        cookies.set('tourBD', '{"state":"download"}', { expires: 360 });
       }
     }
-  }, [changeTab])
+  }, [changeTab, getTourBD]);
 
   useEffect(() => {
-    if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") setIncludeTranslation(false)
-  }, [resource.dataset])
+    if(resource?.dataset?._id === "e083c9a2-1cee-4342-bedc-535cbad6f3cd") {
+      setIncludeTranslation(false);
+    }
+  }, [resource?.dataset?._id]);
 
   useEffect(() => {
     if (resource?.uncompressedFileSize) {
@@ -236,102 +314,82 @@ export default function DataInformationQuery({
       const limit1GB = 1 * 1024 * 1024 * 1024;
 
       if (resource?.uncompressedFileSize < limit100MB) {
-        setDownloadPermitted(true)
-        setDownloadWarning("free")
+        setDownloadPermitted(true);
+        setDownloadWarning("free");
       } else if (resource?.uncompressedFileSize < limit1GB) {
-        setDownloadPermitted(isUserPro())
-        setDownloadWarning("100mbBetween1gb")
+        setDownloadPermitted(isUserPro());
+        setDownloadWarning("100mbBetween1gb");
       } else {
-        setDownloadWarning("biggest1gb")
+        setDownloadWarning("biggest1gb");
       }
     }
 
     if (resource?.cloudTables?.[0]) {
-      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "")
-      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "")
-      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "")
+      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "");
+      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "");
+      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "");
     }
-  }, [resource.uncompressedFileSize, resource.cloudTables])
+  }, [resource?.uncompressedFileSize, resource?.cloudTables, isUserPro]);
 
   useEffect(() => {
-    if(resource._id === undefined) return
-    setIsLoadingCode(true)
-    setHasLoadingResponse(false)
-    setSqlCode("")
-    setInsufficientChecks(false)
-  }, [resource._id, checkedColumns, includeTranslation])
+    if(resource._id === undefined) return;
+    setIsLoadingCode(true);
+    setHasLoadingResponse(false);
+    setSqlCode("");
+    setInsufficientChecks(false);
+  }, [resource._id, checkedColumns, includeTranslation]);
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
-      setIsLoadingSpin(true)
-      SqlCodeString()
+      setIsLoadingSpin(true);
+      SqlCodeString();
     }
-  }, [hasLoadingResponse])
+  }, [hasLoadingResponse, SqlCodeString]);
 
   useEffect(() => {
-    if(sqlCode !== "") scrollFocus() 
-  }, [sqlCode])
+    if(sqlCode !== "") scrollFocus();
+  }, [sqlCode, scrollFocus]);
 
   useEffect(() => {
     if (hasLoadingColumns === false) {
-      window.dispatchEvent(new CustomEvent('tablePageLoaded'));
+      const tourBD = getTourBD();
+      if (tourBD && tourBD.state !== 'skip') {
+        window.dispatchEvent(new CustomEvent('tablePageLoaded'));
+      }
     }
-  }, [hasLoadingColumns]);
+  }, [hasLoadingColumns, getTourBD]);
 
-  function scrollFocus() {
-    let idTab
-
-    if (tabIndex === 0) idTab = "SQL_section"
-    else if (tabIndex === 1) idTab = "python_section"
-    else if (tabIndex === 2) idTab = "r_section"
-    else return
-  
-    const targetElement = document.getElementById(idTab)
-  
-    if (targetElement) {
-      const { top } = targetElement.getBoundingClientRect()
-      const heightScreen = window.innerHeight
-      const positionTarget = top + window.pageYOffset
-  
-      window.scrollTo({
-        top: positionTarget - (heightScreen / 2),
-        behavior: "smooth",
-      })
+  useEffect(() => {
+    if (resource?._id) {
+      setCheckedColumns([]);
+      setInsufficientChecks(false);
+      setSqlCode("");
+      setHasLoadingResponse(false);
+      setIsLoadingCode(false);
+      setIsLoadingSpin(false);
     }
-  }
+  }, [resource?._id]);
 
-  async function SqlCodeString() {
-    const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation)
-    if(result === null) return 
-    setSqlCode(result.trim())
-    setIsLoadingCode(false)
-    setIsLoadingSpin(false)
-    const tourBD = getTourBD()
-    if(tourBD && tourBD.state === 'begin') {
-      cookies.set('tourBD', '{"state":"table"}', { expires: 360 })
-    }
-  }
+  const pythonCode = useMemo(() => `import basedosdados as bd
 
-  const handleAccessIndexes = (index) => {
-    const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
-    setTabAccessIndex(index)
-    triggerGAEvent("category_click", categoryValues[index])
-  }
+billing_id = <seu_billing_id>
 
-  const handleCategoryIndexes = (index) => {
-    const categoryValues = ["SQL", "Python", "R"]
-    setTabIndex(index)
-    triggerGAEvent("category_click", categoryValues[index])
-  }
+query = """
+  ${sqlCode}
+"""
 
-  const queryLanguage = () => {
-    const language = {
-      0 : "SQL",
-      1 : "Python",
-      2 : "R"
-    }
-    return language[tabIndex] ? language[tabIndex] : ""
-  }
+bd.read_sql(query = query, billing_project_id = billing_id)`, [sqlCode]);
+
+  const rCode = useMemo(() => `
+# Defina o seu projeto no Google Cloud
+set_billing_id("<YOUR_PROJECT_ID>")
+
+# Para carregar o dado direto no R
+query <- "
+${sqlCode}
+"
+
+read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
 
   return (
     <VStack
@@ -566,13 +624,9 @@ export default function DataInformationQuery({
               isLoaded={!hasLoadingColumns}
             >
               <Button
-                onClick={() => {
-                  if(checkedColumns.length === 0) return setInsufficientChecks(true)
-                  triggerGAEvent("gerar_consulta_click", queryLanguage())
-                  setHasLoadingResponse(true)
-                }}
+                onClick={handleGenerateQuery}
               >
-                {t('table.generateQuery')} <Spinner display={ isLoadingSpin ? "flex" : "none"} width="16px" height="16px"/>
+                {t('table.generateQuery')} <Spinner display={isLoadingSpin ? "flex" : "none"} width="16px" height="16px"/>
               </Button>
             </Skeleton>
           </Box>
@@ -636,16 +690,7 @@ export default function DataInformationQuery({
               }
 
               <Button
-                onClick={() => {
-                  if(downloadWarning !== "free" && isUserPro() === false) return plansModal.onOpen()
-                  window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank")
-                  triggerGAEvent("download_da_tabela",`{
-                    gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
-                    tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
-                    dataset: ${resource?.dataset?._id},
-                    table: ${resource?._id},
-                  }`)
-                }}
+                onClick={handleDownload}
                 backgroundColor={downloadWarning !== "biggest1gb" ? "#2B8C4D" : "#ACAEB1"}
                 cursor={downloadWarning !== "biggest1gb" ? "pointer" : "default"}
                 pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
@@ -854,16 +899,7 @@ export default function DataInformationQuery({
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="python">{`import basedosdados as bd
-
-billing_id = <seu_billing_id>
-
-query = """
-  ${sqlCode}
-"""
-
-bd.read_sql(query = query, billing_project_id = billing_id)`}
-                      </CodeHighlight>
+                      <CodeHighlight language="python">{pythonCode}</CodeHighlight>
                     </Skeleton>
                   </TabPanel>
 
@@ -924,18 +960,7 @@ bd.read_sql(query = query, billing_project_id = billing_id)`}
                       width="100%"
                       isLoaded={!isLoadingCode}
                     >
-                      <CodeHighlight language="r">{`
-# Defina o seu projeto no Google Cloud
-set_billing_id("<YOUR_PROJECT_ID>")
-
-# Para carregar o dado direto no R
-query <- "
-${sqlCode}
-"
-
-read_sql(query, billing_project_id = get_billing_id())
-`}
-                      </CodeHighlight>
+                      <CodeHighlight language="r">{rCode}</CodeHighlight>
                     </Skeleton>
                   </TabPanel>
                 </TabPanels>
@@ -945,5 +970,7 @@ read_sql(query, billing_project_id = get_billing_id())
         </VStack>
       </Tabs>
     </VStack>
-  )
-}
+  );
+});
+
+export default DataInformationQuery;

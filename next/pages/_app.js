@@ -4,18 +4,50 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import "../styles/globals.css";
-import { useTranslation } from 'next-i18next';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutos
+      cacheTime: 15 * 60 * 1000, // 15 minutos
+    },
+  },
+});
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { locale } = router;
-  const { t } = useTranslation('app');
-
-  const queryClient = new QueryClient({
-    cacheTime: 0,
-  });
 
   const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+
+  const metaData = {
+    en: {
+      title: 'Data Basis',
+      description: 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.',
+      icon: '/favicon_en.ico',
+      siteName: 'Data Basis',
+      ogTitle: 'Data Basis - Open Datasets',
+      ogDescription: 'Explore hundreds of open datasets ready for analysis'
+    },
+    es: {
+      title: 'Base de los Datos',
+      description: 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.',
+      icon: '/favicon_default.ico',
+      siteName: 'Base de los Datos',
+      ogTitle: 'Base de los Datos - Conjuntos de datos abiertos',
+      ogDescription: 'Explora cientos de conjuntos de datos listos para análisis'
+    },
+    pt: {
+      title: 'Base dos Dados',
+      description: 'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.',
+      icon: '/favicon_default.ico',
+      siteName: 'Base dos Dados',
+      ogTitle: 'Base dos Dados - Conjuntos de dados abertos',
+      ogDescription: 'Explore centenas de conjuntos de dados prontos para análise'
+    }
+  };
+
+  const currentMeta = metaData[locale] || metaData.pt;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -25,57 +57,30 @@ function MyApp({ Component, pageProps }) {
           <meta name="robots" content="noindex" />
         )}
         {/* <meta/> para não noindex ambientes de development e staging */}
-        {locale === 'en' ?
-          <link rel="icon" type="image/ico" href="/favicon_en.ico"/>
-          :
-          <link rel="icon" type="image/ico" href="/favicon_default.ico"/>
-        }
+
         <link
           rel="image_src"
           href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
         />
 
-        <title>{locale === 'en' ? 'Data Basis' : locale === 'es' ? 'Base de los Datos' : 'Base dos Dados'}</title>
-        <meta
-          property="description"
-          content={
-            locale === 'en' ? 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.' : 
-            locale === 'es' ? 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.' : 
-            'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.'
-          }
-        />
-        <script
-          defer
-          src="https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll.min.js"
-        ></script>
+        <title>{currentMeta.title}</title>
+        <meta name="description" content={currentMeta.description} />
+        <link rel="icon" href={currentMeta.icon} />
 
         {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@basedosdados" />
-        <meta name="twitter:creator" content="@basedosdados" />
-        <meta
-          name="twitter:image"
-          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
-          key="twimage"
-        />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={local} />
+        <meta property="twitter:title" content={currentMeta.ogTitle} />
+        <meta property="twitter:description" content={currentMeta.ogDescription} />
+        <meta property="twitter:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
 
         {/* Open Graph */}
-        <meta
-          property="og:image"
-          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
-          key="ogimage"
-        />
-        <meta
-          property="og:site_name"
-          content={t('siteName')}
-          key="ogsitename"
-        />
-        <meta property="og:title" content={t('title')} key="ogtitle" />
-        <meta
-          property="og:description"
-          content={t('description')}
-          key="ogdesc"
-        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={local} />
+        <meta property="og:title" content={currentMeta.ogTitle} />
+        <meta property="og:description" content={currentMeta.ogDescription} />
+        <meta property="og:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        <meta property="og:site_name" content={currentMeta.siteName} />
 
         {/* <!-- Google Tag Manager --> */}
         {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (
