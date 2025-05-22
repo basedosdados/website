@@ -1,5 +1,5 @@
 ---
-title: Como os casos de dengue evoluíram nos últimos 10 anos?
+title: Como os casos de dengue evoluíram nos últimos 10 anos? - BDletter 39 
 description: >-
   Um olhar sobre os registros anuais de dengue, explorando padrões locais e variações entre municípios
 date:
