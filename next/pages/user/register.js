@@ -177,6 +177,7 @@ export default function Register() {
         marginX="27px"
       >
         <Display
+          as="h1"
           textAlign="center"
           marginBottom="40px"
         >
@@ -264,14 +265,14 @@ export default function Register() {
                 }}
                 icon={showPassword ?
                   <EyeOffIcon
-                    alt="esconder senha"
+                    alt="exibir senhar"
                     width="20px"
                     height="20px"
                     fill="#464A51"
                   />
                 :
                   <EyeIcon
-                    alt="exibir senhar"
+                    alt="esconder senhar"
                     width="20px"
                     height="20px"
                     fill="#464A51"
@@ -359,14 +360,14 @@ export default function Register() {
                 }}
                 icon={showConfirmPassword ?
                   <EyeOffIcon
-                    alt="esconder senha"
+                    alt="exibir senhar"
                     width="20px"
                     height="20px"
                     fill="#464A51"
                   />
                 :
                   <EyeIcon
-                    alt="exibir senhar"
+                    alt="esconder senhar"
                     width="20px"
                     height="20px"
                     fill="#464A51"

@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_OPTIONS='-r next-logger' next start"
+    "start": "NODE_OPTIONS='-r next-logger' next start",
+    "crypress": "npx cypress open"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",

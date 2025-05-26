@@ -24,3 +24,28 @@ Cypress.Commands.add('mockAuthApi', (
     cy.intercept('POST', '**/account/account_activate/**', activationResponse).as('activationApi');
   }
 });
+
+Cypress.Commands.add('fillRegisterForm', (userData) => {
+  if (userData.firstName) {
+    cy.get('input[name="firstName"]').type(userData.firstName);
+  }
+  if (userData.lastName) {
+    cy.get('input[name="lastName"]').type(userData.lastName);
+  }
+  if (userData.email) {
+    cy.get('input[name="username"]').clear().type(userData.email);
+  }
+  if (userData.username) {
+    cy.get('input[name="user"]').type(userData.username);
+  }
+  if (userData.password) {
+    cy.get('input[id="password"]').type(userData.password);
+  }
+  if (userData.confirmPassword) {
+    cy.get('input[id="confirmPassword"]').type(userData.confirmPassword);
+  }
+});
+
+Cypress.Commands.add('mockRegisterApi', (response) => {
+  cy.intercept('GET', '/api/user/registerAccount*', response).as('registerApi');
+});
