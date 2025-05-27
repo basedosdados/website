@@ -23,7 +23,7 @@ import FourOFour from "../templates/404";
 import RedirectIcon from "../../public/img/icons/redirectIcon"
 import InfoIcon from "../../public/img/icons/infoIcon";
 
-export default function RawDataSourcesPage({ id }) {
+export default function RawDataSourcesPage({ id, isBDSudo }) {
   const { t } = useTranslation('dataset');
   const router = useRouter();
   const { locale } = router;
@@ -40,8 +40,13 @@ export default function RawDataSourcesPage({ id }) {
         const result = await response.json()
 
         if (result.success) {
-          setResource(result.resource)
-          setIsError(false)
+          const statusName = result?.resource?.status?.slug || ""
+          if(statusName === "under_review" || statusName === "excluded" && isBDSudo === false) {
+            setIsError(true)
+          } else {
+            setResource(result.resource)
+            setIsError(false)
+          }
         } else {
           console.error(result.error)
           setIsError(true)
@@ -192,56 +197,57 @@ export default function RawDataSourcesPage({ id }) {
       paddingLeft={{base: "0", lg: "24px"}}
       spacing={0}
     >
-      <StackSkeleton
-        display="flex"
-        flexDirection="row"
-        alignItems="center"
-        gap="8px"
-      >
-        <TitleText
+      <Stack spacing={0} id="dataset_rawdatasource_header" marginBottom="40px !important">
+        <StackSkeleton
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="8px"
+        >
+          <TitleText
+            width="fit-content"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace="nowrap"
+          >
+            {resource?.[`name${capitalize(locale)}`] || resource?.name}
+          </TitleText>
+        </StackSkeleton>
+
+        <StackSkeleton
+          minHeight="56px"
+          height="fit-content"
+          marginTop="8px !important"
+        >
+          <AlertDiscalimerBox>
+            {t('rawDataSource.rawDataDisclaimer')}
+          </AlertDiscalimerBox>
+        </StackSkeleton>
+
+        <StackSkeleton
           width="fit-content"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
+          height="40px"
+          marginTop="8px !important"
         >
-          {resource?.[`name${capitalize(locale)}`] || resource?.name}
-        </TitleText>
-      </StackSkeleton>
-
-      <StackSkeleton
-        minHeight="56px"
-        height="fit-content"
-        marginTop="8px !important"
-      >
-        <AlertDiscalimerBox>
-          {t('rawDataSource.rawDataDisclaimer')}
-        </AlertDiscalimerBox>
-      </StackSkeleton>
-
-      <StackSkeleton
-        width="fit-content"
-        height="40px"
-        marginTop="8px !important"
-        marginBottom="40px !important"
-      >
-        <Button
-          as="a"
-          href={resource?.url}
-          target="_blank"
-          onClick={() => {}}
-          backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
-          cursor={resource?.url ? "pointer" : "default"}
-          _hover={{
-            backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
-          }}
-        >
-          {t('rawDataSource.accessOriginalSource')}
-          <RedirectIcon
-            width="12px"
-            height="12px"
-          />
-        </Button>
-      </StackSkeleton>
+          <Button
+            as="a"
+            href={resource?.url}
+            target="_blank"
+            onClick={() => {}}
+            backgroundColor={resource?.url ? "#2B8C4D" : "#ACAEB1"}
+            cursor={resource?.url ? "pointer" : "default"}
+            _hover={{
+              backgroundColor: resource?.url ? "#22703E" : "#ACAEB1"
+            }}
+          >
+            {t('rawDataSource.accessOriginalSource')}
+            <RedirectIcon
+              width="12px"
+              height="12px"
+            />
+          </Button>
+        </StackSkeleton>
+      </Stack>
 
       <Stack spacing="8px">
         <StackSkeleton width="160px" height="28px">

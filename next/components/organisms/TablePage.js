@@ -7,7 +7,7 @@ import {
   Divider,
   Tooltip,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
@@ -30,214 +30,225 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 
-export default function TablePage({ id }) {
+const createKeyIcons = (router) => (ref) => {
+  let href = "";
+  let alt = "";
+
+  if(ref.github_user) {
+    const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "");
+    href = `https://github.com/${github}`;
+    alt = "github basedosdados";
+  }
+  if(ref.twitter_user) {
+    const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "");
+    href = `https://x.com/${twitter}`;
+    alt = "twitter basedosdados";
+  }
+  if(ref.email) {
+    href = `mailto:${ref.email}`;
+    alt = "email do contribuidor";
+  }
+  if(ref.website) {
+    const website = ref.website.replace(/(https?:)\/\//gim, "");
+    href = `https://${website}`;
+    alt = "website pessoal";
+  }
+
+  return {
+    alt,
+    cursor: "pointer",
+    width: "20px",
+    height: "20px",
+    fill: "#0068C5",
+    _hover: {
+      fill: "#0057A4"
+    },
+    onClick: () => {router.push(href)}
+  };
+};
+
+const TooltipText = memo(({ text, info, ...props }) => {
+  return (
+    <Box>
+      <TitleText
+        typography="small"
+        display="flex"
+        flexDirection="row"
+        alignItems="center"
+        gap="8px"
+        {...props}
+      >
+        {text}
+        <Tooltip
+          label={info}
+          hasArrow
+          padding="16px"
+          backgroundColor="#252A32"
+          boxSizing="border-box"
+          borderRadius="8px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="14px"
+          lineHeight="20px"
+          textAlign="center"
+          color="#FFFFFF"
+          placement="top"
+          maxWidth="300px"
+          {...props}
+        >
+          <InfoIcon
+            alt="tip"
+            cursor="pointer"
+            fill="#878A8E"
+            width="16px"
+            height="16px"
+          />
+        </Tooltip>
+      </TitleText>
+    </Box>
+  );
+});
+
+const StackSkeleton = memo(({ children, ...props }) => {
+  return (
+    <Skeleton
+      startColor="#F0F0F0"
+      endColor="#F3F3F3"
+      borderRadius="6px"
+      height="36px"
+      width="100%"
+      isLoaded={!props.isLoading}
+      {...props}
+    >
+      {children}
+    </Skeleton>
+  );
+});
+
+const PublishedOrDataCleanedBy = memo(({ resource, t, router }) => {
+  const keyIcons = useMemo(() => createKeyIcons(router), [router]);
+
+  if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
+    return (
+      <BodyText
+        typography="small"
+        marginRight="4px !important"
+        color="#464A51"
+      >
+        {t('table.notProvided')}
+      </BodyText>
+    );
+  }
+
+  const people = Object.values(resource);
+
+  return (
+    <Stack spacing="8px">
+      {people.map((person, index) => (
+        <HStack key={index} spacing="4px">
+          <BodyText
+            typography="small"
+            marginRight="4px !important"
+            color="#464A51"
+          >
+            {person?.firstName && person?.lastName 
+              ? `${person.firstName} ${person.lastName}`
+              : t('table.notProvided')
+            }
+          </BodyText>
+          {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
+          {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
+          {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
+          {person?.twitter && <XIcon {...keyIcons({twitter_user: person.twitter})}/>}
+        </HStack>
+      ))}
+    </Stack>
+  );
+});
+
+export default function TablePage({ id, isBDSudo, changeTab }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
-  const [isLoading, setIsLoading] = useState(true)
-  const [resource, setResource] = useState({})
-  const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [resource, setResource] = useState({});
+  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" })
-        const result = await response.json()
+  const fetchData = useCallback(async () => {
+    try {
+      const response = await fetch(`/api/tables/getTable?id=${id}&locale=${locale}`, { method: "GET" });
+      const result = await response.json();
 
-        if (result.success) {
+      if (result.success) {
+        const statusName = result?.resource?.status?.slug || "";
+        if((statusName === "under_review" || statusName === "excluded") && isBDSudo === false) {
+          setIsError(true);
+        } else {
           setResource(result.resource);
           setIsError(false);
-        } else {
-          console.error(result.error)
-          setIsError(true)
         }
-      } catch (error) {
-        console.error("Fetch error: ", error)
-        setIsError(true)
-      } finally {
-        setIsLoading(false)
+      } else {
+        console.error(result.error);
+        setIsError(true);
       }
+    } catch (error) {
+      console.error("Fetch error: ", error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
+  }, [id, locale, isBDSudo]);
 
+  useEffect(() => {
     setIsLoading(true);
     fetchData();
-  }, [id, locale])
+  }, [fetchData]);
 
-  const TooltipText = ({ text, info, ...props }) => {
-    return (
-      <Box>
-        <TitleText
-          typography="small"
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          gap="8px"
-          {...props}
-        >
-          {text}
-          <Tooltip
-            label={info}
-            hasArrow
-            padding="16px"
-            backgroundColor="#252A32"
-            boxSizing="border-box"
-            borderRadius="8px"
-            fontFamily="Roboto"
-            fontWeight="400"
-            fontSize="14px"
-            lineHeight="20px"
-            textAlign="center"
-            color="#FFFFFF"
-            placement="top"
-            maxWidth="300px"
-            {...props}
-          >
-            <InfoIcon
-              alt="tip"
-              cursor="pointer"
-              fill="#878A8E"
-              width="16px"
-              height="16px"
-            />
-          </Tooltip>
-        </TitleText>
-      </Box>
-    )
-  }
-
-  const keyIcons = (ref) => {
-    let href = ""
-    let alt = ""
-
-    if(ref.github_user) {
-      const github = ref.github_user.replace(/(https:)\/\/(github.com)\//gim, "")
-      href = `https://github.com/${github}` 
-      alt = "github basedosdados"
-    }
-    if(ref.twitter_user) {
-      const twitter = ref.twitter_user.replace(/(https:)\/\/(twitter.com)\//gim, "")
-      href = `https://x.com/${twitter}`
-      alt = "twitter basedosdados"
-    }
-    if(ref.email) {
-      href = `mailto:${ref.email}`
-      alt= "email do contribuidor"
-    }
-    if(ref.website) {
-      const website = ref.website.replace(/(https?:)\/\//gim, "")
-      href = `https://${website}`
-      alt = "website pessoal"
-    }
-
-    return {
-      alt: alt,
-      cursor: "pointer",
-      width:"20px",
-      height:"20px",
-      fill: "#0068C5",
-      _hover: {
-        fill: "#0057A4"
-      },
-      onClick: () => {router.push(href)}
-    }
-  }
-
-  const PublishedOrDataCleanedBy = ({ resource }) => {
-    if (!resource || typeof resource !== 'object' || Object.keys(resource).length === 0) {
-      return (
-        <BodyText
-          typography="small"
-          marginRight="4px !important"
-          color="#464A51"
-        >
-          {t('table.notProvided')}
-        </BodyText>
-      );
-    }
-
-    const people = Object.values(resource);
-
-    return (
-      <Stack spacing="8px">
-        {people.map((person, index) => (
-          <HStack key={index} spacing="4px">
-            <BodyText
-              typography="small"
-              marginRight="4px !important"
-              color="#464A51"
-            >
-              {person?.firstName && person?.lastName 
-                ? `${person.firstName} ${person.lastName}`
-                : t('table.notProvided')
-              }
-            </BodyText>
-            {person?.email && <EmailIcon {...keyIcons({email: person.email})}/>}
-            {person?.github && <GithubIcon {...keyIcons({github_user: person.github})}/>}
-            {person?.website && <WebIcon {...keyIcons({website: person.website})}/>}
-            {person?.twitter && <XIcon {...keyIcons({twitter_user: person.twitter})}/>}
-          </HStack>
-        ))}
-      </Stack>
-    );
-  };
-
-  const StackSkeleton = ({ children, ...props }) => {
-    return (
-      <Skeleton
-        startColor="#F0F0F0"
-        endColor="#F3F3F3"
-        borderRadius="6px"
-        height="36px"
-        width="100%"
-        isLoaded={!isLoading}
-        {...props}
-      >
-        {children}
-      </Skeleton>
-    )
-  }
-
-  const formatDate = (value) => {
+  const formatDate = useCallback((value) => {
     const date = new Date(value);
-    const formattedDate = date.getFullYear()+"-"+String(date.getMonth() + 1).padStart(2, "0")+"-"+String(date.getDate()).padStart(2, "0")
-    return formattedDate
-  }
+    return date.getFullYear()+"-"+String(date.getMonth() + 1).padStart(2, "0")+"-"+String(date.getDate()).padStart(2, "0");
+  }, []);
 
-  const getUpdateFormat = (value, yearFrequency = false, frequency) => {
-    let formats
-    {yearFrequency ?
-      formats = {
-        "second":`${t('table.updateEvery')} ${frequency} ${t('table.seconds')}`,
-        "minute":`${t('table.updateEvery')} ${frequency} ${t('table.minutes')}`,
-        "hour":`${t('table.updateEvery')} ${frequency} ${t('table.hours')}`,
-        "day":`${t('table.updateEvery')} ${frequency} ${t('table.days')}`,
-        "week":`${t('table.updateEvery')} ${frequency} ${t('table.weeks')}`,
-        "month":`${t('table.updateEvery')} ${frequency} ${t('table.months')}`,
-        "bimester":`${t('table.updateEvery')} ${frequency} ${t('table.bimonths')}`,
-        "quarter":`${t('table.updateEvery')} ${frequency} ${t('table.quarters')}`,
-        "semester":`${t('table.updateEvery')} ${frequency} ${t('table.semesters')}`,
-        "year":`${t('table.updateEvery')} ${frequency} ${t('table.years')}`,
-      }
-      :
-      formats = {
-        "second":t('table.updatePerSecond'),
-        "minute":t('table.updatePerMinute'),
-        "hour":t('table.updatePerHour'),
-        "day":t('table.dailyUpdate'),
-        "week":t('table.weeklyUpdate'),
-        "month":t('table.monthlyUpdate'),
-        "bimester":t('table.bimonthlyUpdate'),
-        "quarter":t('table.quarterlyUpdate'),
-        "semester":t('table.semiannualUpdate'),
-        "year":t('table.annualUpdate'),
-      }
-    }
+  const getUpdateFormat = useCallback((value, yearFrequency = false, frequency) => {
+    const formats = yearFrequency ? {
+      "second": `${t('table.updateEvery')} ${frequency} ${t('table.seconds')}`,
+      "minute": `${t('table.updateEvery')} ${frequency} ${t('table.minutes')}`,
+      "hour": `${t('table.updateEvery')} ${frequency} ${t('table.hours')}`,
+      "day": `${t('table.updateEvery')} ${frequency} ${t('table.days')}`,
+      "week": `${t('table.updateEvery')} ${frequency} ${t('table.weeks')}`,
+      "month": `${t('table.updateEvery')} ${frequency} ${t('table.months')}`,
+      "bimester": `${t('table.updateEvery')} ${frequency} ${t('table.bimonths')}`,
+      "quarter": `${t('table.updateEvery')} ${frequency} ${t('table.quarters')}`,
+      "semester": `${t('table.updateEvery')} ${frequency} ${t('table.semesters')}`,
+      "year": `${t('table.updateEvery')} ${frequency} ${t('table.years')}`,
+    } : {
+      "second": t('table.updatePerSecond'),
+      "minute": t('table.updatePerMinute'),
+      "hour": t('table.updatePerHour'),
+      "day": t('table.dailyUpdate'),
+      "week": t('table.weeklyUpdate'),
+      "month": t('table.monthlyUpdate'),
+      "bimester": t('table.bimonthlyUpdate'),
+      "quarter": t('table.quarterlyUpdate'),
+      "semester": t('table.semiannualUpdate'),
+      "year": t('table.annualUpdate'),
+    };
 
-    return formats[value] ? formats[value] : t('table.updateNotDefined')
-  }
+    return formats[value] ? formats[value] : t('table.updateNotDefined');
+  }, [t]);
+
+  const tableName = useMemo(() => 
+    resource?.[`name${capitalize(locale)}`] || resource?.name,
+    [resource, locale]
+  );
+
+  const tableDescription = useMemo(() => 
+    resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notProvided'),
+    [resource, locale, t]
+  );
 
   if (isError) return <FourOFour/>;
-  
+
   return (
     <Stack
       flex={1}
@@ -250,6 +261,7 @@ export default function TablePage({ id }) {
         flexDirection={{base: "column", lg: "row"}}
         alignItems={{base: "start", lg: "center"}}
         gap="8px"
+        isLoading={isLoading}
       >
         <TitleText
           width={{base: "100%", lg:"fit-content"}}
@@ -257,7 +269,7 @@ export default function TablePage({ id }) {
           textOverflow="ellipsis"
           whiteSpace={{base: "normal", lg:"nowrap"}}
         >
-          {resource?.[`name${capitalize(locale)}`] || resource?.name}
+          {tableName}
         </TitleText>
         {resource?.uncompressedFileSize &&
           <LabelText
@@ -283,12 +295,17 @@ export default function TablePage({ id }) {
         isLoaded={!isLoading}
       >
         <ReadMore id="readLessTable">
-          {resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notProvided')}
+          {tableDescription}
         </ReadMore>
       </SkeletonText>
 
-      <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="300px" height="28px">
+      <Stack
+        id="table_temporalcoverage"
+        width={{base: "100%", lg: "fit-content"}}
+        spacing="8px"
+        marginBottom="40px !important"
+      >
+        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
           <TitleText typography="small">
             {t('table.temporalCoverage')}
           </TitleText>
@@ -297,6 +314,7 @@ export default function TablePage({ id }) {
         <StackSkeleton
           width="100%"
           height={!isLoading ? "fit-content" : "65px"}
+          isLoading={isLoading}
         >
           <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
         </StackSkeleton>
@@ -304,7 +322,7 @@ export default function TablePage({ id }) {
 
       {locale !== 'pt' ?
         <Stack spacing="8px"  marginBottom="40px !important">
-          <StackSkeleton width="300px" height="28px">
+          <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
             <TitleText typography="small">
               {t('table.spatialCoverage')}
             </TitleText>
@@ -313,6 +331,7 @@ export default function TablePage({ id }) {
           <StackSkeleton
             height="20px"
             width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
+            isLoading={isLoading}
           >
             <BodyText
               typography="small"
@@ -330,8 +349,12 @@ export default function TablePage({ id }) {
         <></>
       }
 
-      <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="200px" height="28px">
+      <Stack
+        spacing="8px"
+        marginBottom="40px !important"
+        backgroundColor="#FFFFFF"
+      >
+        <StackSkeleton width="200px" height="28px" isLoading={isLoading}>
           <TitleText typography="small">
             {t('table.dataAccess')}
           </TitleText>
@@ -339,11 +362,12 @@ export default function TablePage({ id }) {
 
         <DataInformationQuery
           resource={resource}
+          changeTab={changeTab}
         />
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="380px" height="28px">
+        <StackSkeleton width="380px" height="28px" isLoading={isLoading}>
           <TitleText typography="small">
             {t('table.dataUpdateFrequency')}
           </TitleText>
@@ -469,7 +493,7 @@ export default function TablePage({ id }) {
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="300px" height="28px">
+        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
           <TitleText typography="small">
             {t('table.bigQueryID')}
           </TitleText>
@@ -478,6 +502,7 @@ export default function TablePage({ id }) {
         <StackSkeleton
           height="20px"
           width={resource?.cloudTables ? "fit-content" : "500px"}
+          isLoading={isLoading}
         >
           <Link
             id="acessar_o_bigquery_section"
@@ -510,7 +535,7 @@ export default function TablePage({ id }) {
 
 
       <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="260px" height="28px">
+        <StackSkeleton width="260px" height="28px" isLoading={isLoading}>
           <TooltipText
             text={t("table.partitionsInBigQuery")}
             info={t("table.partitionsTooltip")}
@@ -519,6 +544,7 @@ export default function TablePage({ id }) {
         <StackSkeleton
           height="20px"
           width={resource?.partitions ? "100%" : "200px"}
+          isLoading={isLoading}
         >
           <BodyText
             typography="small"
@@ -530,7 +556,7 @@ export default function TablePage({ id }) {
       </Stack>
 
       <Stack marginBottom="40px !important">
-        <StackSkeleton width="300px" height="28px">
+        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
           <TooltipText
             text={t("table.observationLevel")}
             info={t("table.observationLevelTooltip")}
@@ -559,7 +585,7 @@ export default function TablePage({ id }) {
       </Stack>
 
       <Stack spacing="8px" marginBottom="40px !important">
-        <StackSkeleton width="240px" height="28px">
+        <StackSkeleton width="240px" height="28px" isLoading={isLoading}>
           <TooltipText
             text={t("table.auxiliaryFiles")}
             info={t("table.auxiliaryFilesTooltip")}
@@ -568,6 +594,7 @@ export default function TablePage({ id }) {
         <StackSkeleton
           width={resource?.auxiliaryFilesUrl ? "100%" :"178px"}
           height="24px"
+          isLoading={isLoading}
         >
           <BodyText
             typography="small"
@@ -599,7 +626,7 @@ export default function TablePage({ id }) {
       </Stack>
 
       <Stack spacing="8px">
-        <StackSkeleton width="240px" height="28px">
+        <StackSkeleton width="240px" height="28px" isLoading={isLoading}>
           <TooltipText
             text={t("table.rawDataSources")}
             info={t("table.rawDataSourcesTooltip")}
@@ -609,6 +636,7 @@ export default function TablePage({ id }) {
         <StackSkeleton
           height="20px"
           width={resource?.rawDataSource?.[0]?.name ? "100%" :"132px"}
+          isLoading={isLoading}
         >
           <BodyText
             typography="small"
@@ -646,7 +674,7 @@ export default function TablePage({ id }) {
 
       <Divider marginY="40px !important" borderColor="#DEDFE0"/>
 
-      <StackSkeleton width="240px" height="28px" marginBottom="20px !important">
+      <StackSkeleton width="240px" height="28px" marginBottom="20px !important" isLoading={isLoading}>
         <TitleText typography="small">
           {t('table.additionalInformation')}
         </TitleText>
@@ -667,6 +695,8 @@ export default function TablePage({ id }) {
         <LabelText typography="small">{t('table.publishedBy')}</LabelText>
         <PublishedOrDataCleanedBy
           resource={resource?.publishedByInfo || t('table.notProvided')}
+          t={t}
+          router={router}
         />
       </SkeletonText>
 
@@ -685,6 +715,8 @@ export default function TablePage({ id }) {
         <LabelText typography="small">{t('table.dataCleanedBy')}</LabelText>
         <PublishedOrDataCleanedBy
           resource={resource?.dataCleanedByInfo || t('table.notProvided')}
+          t={t}
+          router={router}
         />
       </SkeletonText>
 

@@ -1,0 +1,7 @@
+{
+  "initialTour": {
+    "title": "Boas-vindas à nossa plataforma!",
+    "content": "Antes de começar, saiba que os dados aqui são disponibilizados em <strong>formato bruto</strong>. Para filtrar por categorias, como região ou período, você precisará manipulá-los em <strong>ferramentas externas</strong>, como Excel, BigQuery, Python ou R. Não se preocupe! Temos tutoriais para ajudar você.",
+    "button": "Entendi"
+  }
+}

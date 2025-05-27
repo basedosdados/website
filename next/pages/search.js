@@ -8,12 +8,15 @@ import {
   Flex,
   Box,
   Spinner,
+  useDisclosure
 } from "@chakra-ui/react";
 import Head from "next/head";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, memo } from "react";
 import { useTranslation } from 'next-i18next';
+import cookies from "js-cookie";
+import { ModalInitialTour } from "../components/molecules/Tour";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { triggerGAEvent } from "../utils";
@@ -27,7 +30,7 @@ import {
   getSearchDatasets
 } from "./api/datasets/index";
 
-import { CheckboxFilterAccordion } from "../components/atoms/FilterAccordion";
+import { CheckboxFilterAccordion, BaseFilterAccordion } from "../components/atoms/FilterAccordion";
 import Checkbox from "../components/atoms/Checkbox";
 import { TagFilter } from "../components/atoms/Tag";
 import DatasetSearchCard from "../components/organisms/DatasetSearchCard";
@@ -39,10 +42,139 @@ import NotFoundImage from "../public/img/notFoundImage";
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu', 'search'])),
+      ...(await serverSideTranslations(locale, ['common', 'dataset', 'menu', 'search', 'tour'])),
     },
   };
 }
+
+const SkeletonWaitCard = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="row"
+      gap="24px"
+      width="100%"
+      borderRadius="12px"
+      backgroundColor="#FFF"
+    >
+      <Skeleton
+        minWidth="222px"
+        minHeight="138px"
+        borderRadius="16px"
+        startColor="#F0F0F0"
+        endColor="#F0F0F0"
+      />
+
+      <Box display="flex" width="100%" flexDirection="column" gap="8px">
+        <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="400px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="300px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="200px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="460px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+    </Box>
+  )
+}
+
+const SkeletonWaitCardMobile = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      gap="24px"
+      width="100%"
+      height="100%"
+      paddingY="16px"
+      borderRadius="12px"
+      backgroundColor="#FFF"
+    >
+      <Skeleton
+        width="222px"
+        height="138px"
+        borderRadius="16px"
+        startColor="#F0F0F0"
+        endColor="#F0F0F0"
+      />
+      <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+      <Box display="flex" width="100%" flexDirection="column" gap="8px">
+        <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="160px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+        <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
+      </Box>
+    </Box>
+  )
+}
+
+function DatasetCard({ data, locale }) {
+  return (
+    <DatasetSearchCard
+      id={data.id}
+      themes={data?.themes}
+      name={data?.name || t('noName')}
+      temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
+      spatialCoverage={data?.spatial_coverage
+        ?.map(coverage => coverage.name)
+        .sort((a, b) => a.localeCompare(b, locale))
+        .join(', ')}
+      organizations={data.organizations}
+      tables={{
+        id: data?.first_table_id,
+        number: data?.n_tables
+      }}
+      rawDataSources={{
+        id: data?.first_raw_data_source_id,
+        number: data?.n_raw_data_sources
+      }}
+      informationRequests={{
+        id: data?.first_information_request_id,
+        number: data?.n_information_requests
+      }}
+      contains={{
+        free: data?.contains_open_data,
+        pro: data?.contains_closed_data
+      }}
+      locale={locale}
+    />
+  )
+}
+
+const Pagination = memo(({ pageInfo, query, router, isLoading }) => {
+  const { t } = useTranslation('dataset');
+  const isMobile = useCheckMobile();
+
+  return (
+    <ReactPaginate
+      previousLabel={t('previous')}
+      nextLabel={t('next')}
+      breakLabel={"..."}
+      breakClassName={"break-me"}
+      forcePage={pageInfo.page - 1 || 0}
+      pageCount={Math.ceil(pageInfo.count / 10) || 1}
+      marginPagesDisplayed={isMobile ? 0 : 1}
+      pageRangeDisplayed={isMobile ? 0 : 2}
+      onPageChange={(newPage) => {
+        router.push({
+          pathname: router.pathname,
+          query: {...query, page: newPage.selected + 1 || 1}
+        })
+      }}
+      containerClassName={"pagination"}
+      activeClassName={"active"}
+      pageClassName={isLoading ? "disabled" : ""}
+      previousClassName={isLoading ? "disabled" : "previous-page"}
+      nextClassName={isLoading ? "disabled" : "next-page"}
+    />
+  )
+});
 
 export default function SearchDatasetPage() {
   const { t } = useTranslation('dataset')
@@ -58,6 +190,27 @@ export default function SearchDatasetPage() {
   const [count, setCount] = useState(0)
   const [pageInfo, setPageInfo] = useState({page: 0, count: 0})
   const [isLoading, setIsLoading] = useState(true)
+  const modalTourInitial = useDisclosure();
+
+  const memoizedFilters = useMemo(() => {
+    return {
+      themes: aggregations?.themes || [],
+      organizations: aggregations?.organizations || [],
+      tags: aggregations?.tags || [],
+      observationLevels: aggregations?.observation_levels || []
+    }
+  }, [aggregations]);
+
+  const memoizedContainsCounts = useMemo(() => {
+    return {
+      tables: aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0,
+      rawDataSources: aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0,
+      temporalcoverageFree: aggregations?.contains_temporalcoverage_free?.filter(elm => elm.key === 1)[0]?.count || 0,
+      temporalcoveragePaid: aggregations?.contains_temporalcoverage_paid?.filter(elm => elm.key === 1)[0]?.count || 0,
+      directDownloadFree: aggregations?.contains_direct_download_free?.filter(elm => elm.key === 1)[0]?.count || 0,
+      directDownloadPaid: aggregations?.contains_direct_download_paid?.filter(elm => elm.key === 1)[0]?.count || 0
+    }
+  }, [aggregations]);
 
   async function getDatasets({q, filters, page}) {
     const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
@@ -71,6 +224,13 @@ export default function SearchDatasetPage() {
   }
 
   useEffect(() => {
+    if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+  }, [])
+
+  useEffect(() => {
+    const tourBD = cookies.get("tourBD") ? JSON.parse(cookies.get("tourBD")) : null;
+    if(tourBD == null) modalTourInitial.onOpen()
+
     if(fetchApi) clearTimeout(fetchApi)
     setIsLoading(true)
     setCount(0)
@@ -241,39 +401,6 @@ export default function SearchDatasetPage() {
     )
   }
 
-  function DatasetCard({ data }) {
-    return (
-      <DatasetSearchCard
-        id={data.id}
-        themes={data?.themes}
-        name={data?.name || t('noName')}
-        temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-        spatialCoverage={data?.spatial_coverage
-          ?.map(coverage => coverage.name)
-          .sort((a, b) => a.localeCompare(b, locale))
-          .join(', ')}
-        organizations={data.organizations}
-        tables={{
-          id: data?.first_table_id,
-          number: data?.n_tables
-        }}
-        rawDataSources={{
-          id: data?.first_raw_data_source_id,
-          number: data?.n_raw_data_sources
-        }}
-        informationRequests={{
-          id: data?.first_information_request_id,
-          number: data?.n_information_requests
-        }}
-        contains={{
-          free: data?.contains_open_data,
-          pro: data?.contains_closed_data
-        }}
-        locale={locale}
-      />
-    )
-  }
-
   function FilterTags() {
     function getLocalizedName(key, value) {
       // Handle special case for contains filters
@@ -283,7 +410,11 @@ export default function SearchDatasetPage() {
           "raw_data_sources": t('rawDataSources'),
           "information_requests": t('informationRequests'),
           "open_data": t('openData'),
-          "closed_data": t('closedData')
+          "closed_data": t('closedData'),
+          "direct_download_free": t('downloadDirectFree'),
+          "direct_download_paid": t('downloadDirectPaid'),
+          "temporalcoverage_free": t('temporalcoverageFree'),
+          "temporalcoverage_paid": t('temporalcoveragePaid'),
         };
         return containsMap[value] || value;
       }
@@ -434,73 +565,6 @@ export default function SearchDatasetPage() {
     )
   }
 
-  const SkeletonWaitCard = () => {
-    return (
-      <Box
-        display="flex"
-        flexDirection="row"
-        gap="24px"
-        width="100%"
-        borderRadius="12px"
-        backgroundColor="#FFF"
-      >
-        <Skeleton
-          minWidth="222px"
-          minHeight="138px"
-          borderRadius="16px"
-          startColor="#F0F0F0"
-          endColor="#F0F0F0"
-        />
-
-        <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="400px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="300px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="200px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="460px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
-      </Box>
-    )
-  }
-
-  const SkeletonWaitCardMobile = () => {
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap="24px"
-        width="100%"
-        height="100%"
-        paddingY="16px"
-        borderRadius="12px"
-        backgroundColor="#FFF"
-      >
-        <Skeleton
-          width="222px"
-          height="138px"
-          borderRadius="16px"
-          startColor="#F0F0F0"
-          endColor="#F0F0F0"
-        />
-        <Skeleton height="28px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-
-        <Box display="flex" width="100%" flexDirection="column" gap="8px">
-          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="18px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="160px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100px" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-          <Skeleton height="20px" width="100%" startColor="#F0F0F0" endColor="#F0F0F0"/>
-        </Box>
-      </Box>
-    )
-  }
-
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
@@ -521,6 +585,11 @@ export default function SearchDatasetPage() {
         flexDirection={{ base: "column", lg: "row" }}
         spacing={{base: 10, lg: 0}}
       >
+        <ModalInitialTour
+          isOpen={modalTourInitial.isOpen}
+          onClose={modalTourInitial.onClose}
+        />
+
         <VStack
           justifyContent="flex-start"
           alignItems="flex-start"
@@ -544,135 +613,146 @@ export default function SearchDatasetPage() {
             </LabelText>
           </Box>
 
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
-          >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
-            >
-              {t('datasetsWith')}
-            </LabelText>
-
-            <CheckboxFilterComponent
-              value="tables"
-              text={t('tables')}
-              count={aggregations?.contains_tables?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="raw_data_sources"
-              text={t('rawDataSources')}
-              count={aggregations?.contains_raw_data_sources?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
-
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-
-          <Box
-            display="flex"
-            flexDirection="column"
-            width="100%"
-            gap="14px"
-            alignItems="start"
-          >
-            <LabelText
-              color="#464A51"
-              marginBottom="4px"
-            >
-              {t('resources')}
-            </LabelText>
-
-            <CheckboxFilterComponent
-              value="open_data"
-              text={t('openData')}
-              count={aggregations?.contains_open_data?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-
-            <CheckboxFilterComponent
-              value="closed_data"
-              text={t('closedData')}
-              count={aggregations?.contains_closed_data?.filter(elm => elm.key === 1)[0]?.count || 0}
-            />
-          </Box>
-
-          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("theme")}
-            choices={aggregations?.themes}
+            choices={memoizedFilters.themes}
             valueField="key"
             displayField="name"
             fieldName={t('theme')}
             valuesChecked={valuesCheckedFilter("theme")}
             onChange={(value) => handleSelectFilter(["theme",`${value}`])}
             isLoading={!isLoading}
+            facet="theme_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("organization")}
-            choices={aggregations?.organizations}
+            choices={memoizedFilters.organizations}
             valueField="key"
             displayField="name"
             fieldName={t('organization')}
             valuesChecked={valuesCheckedFilter("organization")}
             onChange={(value) => handleSelectFilter(["organization",`${value}`])}
             isLoading={!isLoading}
+            facet="organization_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {locale !== 'pt' ?
-            <>
-              <CheckboxFilterAccordion
-                canSearch={true}
-                isActive={validateActiveFilterAccordin("spatial_coverage")}
-                choices={aggregations?.spatial_coverages}
-                valueField="key"
-                displayField="name"
-                fieldName={t('spatialCoverage')}
-                valuesChecked={valuesCheckedFilter("spatial_coverage")}
-                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
-                isLoading={!isLoading}
+          <BaseFilterAccordion
+            fieldName={t("resources")}
+            tooltip={t("resourcesTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="tables"
+                text={t('tables')}
+                count={memoizedContainsCounts.tables}
               />
-              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-            </>
-            :
-            <></>
-          }
+
+              <CheckboxFilterComponent
+                value="raw_data_sources"
+                text={t('rawDataSources')}
+                count={memoizedContainsCounts.rawDataSources}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          <BaseFilterAccordion
+            fieldName={t("temporalCoverage")}
+            tooltip={t("temporalCoverageTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="temporalcoverage_free"
+                text={t('temporalcoverageFree')}
+                count={memoizedContainsCounts.temporalcoverageFree}
+              />
+
+              <CheckboxFilterComponent
+                value="temporalcoverage_paid"
+                text={t('temporalcoveragePaid')}
+                count={memoizedContainsCounts.temporalcoveragePaid}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          <BaseFilterAccordion
+            fieldName={t("downloadDirect")}
+            tooltip={t("downloadDirectTooltip")}
+            isOpen={true}
+          >
+            <Box
+              display="flex"
+              flexDirection="column"
+              width="100%"
+              marginTop="14px"
+              gap="14px"
+              alignItems="start"
+            >
+              <CheckboxFilterComponent
+                value="direct_download_free"
+                text={t('openData')}
+                count={memoizedContainsCounts.directDownloadFree}
+              />
+
+              <CheckboxFilterComponent
+                value="direct_download_paid"
+                text={t('paid')}
+                count={memoizedContainsCounts.directDownloadPaid}
+              />
+            </Box>
+          </BaseFilterAccordion>
+
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("tag")}
-            choices={aggregations?.tags}
+            choices={memoizedFilters.tags}
             valueField="key"
             displayField="name"
             fieldName={t('tag')}
             valuesChecked={valuesCheckedFilter("tag")}
             onChange={(value) => handleSelectFilter(["tag",`${value}`])}
             isLoading={!isLoading}
+            facet="tag_slug"
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
-            canSearch={true}
             isActive={validateActiveFilterAccordin("observation_level")}
-            choices={aggregations?.observation_levels}
+            tooltip={t("observationLevelTooltip")}
+            choices={memoizedFilters.observationLevels}
             valueField="key"
             displayField="name"
             fieldName={t('observationLevel')}
             valuesChecked={valuesCheckedFilter("observation_level")}
             onChange={(value) => handleSelectFilter(["observation_level",`${value}`])}
             isLoading={!isLoading}
+            facet="entity_slug"
           />
         </VStack>
 
@@ -741,7 +821,7 @@ export default function SearchDatasetPage() {
               ))
               :
               (resource || []).map((res, i) => (
-                <DatasetCard data={res} key={i}/>
+                <DatasetCard data={res} locale={locale} key={i}/>
               ))
             }
 
@@ -760,26 +840,11 @@ export default function SearchDatasetPage() {
             }
 
             {!showEmptyState &&
-              <ReactPaginate
-                previousLabel={t('previous')}
-                nextLabel={t('next')}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                forcePage={pageInfo.page - 1 || 0}
-                pageCount={Math.ceil(pageInfo.count / 10) || 1}
-                marginPagesDisplayed={useCheckMobile() ? 0 : 1}
-                pageRangeDisplayed={useCheckMobile() ? 0 : 2}
-                onPageChange={(newPage) => {
-                  router.push({
-                    pathname: router.pathname,
-                    query: {...query, page: newPage.selected + 1 || 1}
-                  })
-                }}
-                containerClassName={"pagination"}
-                activeClassName={"active"}
-                pageClassName={isLoading ? "disabled" : ""}
-                previousClassName={isLoading ? "disabled" : "previous-page"}
-                nextClassName={isLoading ? "disabled" : "next-page"}
+              <Pagination 
+                pageInfo={pageInfo}
+                query={query}
+                router={router}
+                isLoading={isLoading}
               />
             }
           </VStack>

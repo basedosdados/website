@@ -276,12 +276,15 @@
         "BQEmailDescription1": "Su correo electrónico debe ser una ",
         "BQEmailDescription2": "Cuenta Google",
         "BQEmailDescription3": " para garantizar el acceso exclusivo a los datos a través de BigQuery. Ya hemos completado con el correo electrónico que usó para crear su cuenta en nuestra plataforma. Si necesita usar otro correo electrónico para acceder a BigQuery, simplemente edite lo siguiente.",
-        "pleaseEnterValidEmail": "Por favor, ingrese un correo electrónico válido.",
         "BQEmailDescription4": "El acceso a los datos ha sido concedido al correo electrónico",
         "BQEmailDescription5": "Si necesita cambiar el correo electrónico de acceso, puede hacerlo en la sección 'BigQuery' de sus configuraciones de cuenta.",
         "BQEmailDescription6": "En caso de duda,",
         "BQEmailDescription7": "contacte con nuestro soporte.",
-        "updateEmail": "Actualizar correo electrónico"
+        "updateEmail": "Actualizar correo electrónico",
+        "pleaseEnterValidEmail": "Por favor, ingrese un correo electrónico válido.",
+        "tourTitle": "Reiniciar Tour",
+        "tourContext": "Este botón reinicia el tour guiado de la plataforma. Todas las explicaciones se mostrarán nuevamente desde el inicio.",
+        "resetTour": "Reiniciar"
     },
     "activate": {
         "accountActive": "Cuenta activa",
@@ -442,5 +445,6 @@
         "weWillHelpYou": "y te enviaremos una nueva clave tan pronto como sea posible.",
         "earlyRelease": "Lanzamiento en versión alfa",
         "earlyReleaseDescription": "La API de Datos está actualmente en lanzamiento en versión alfa. Las características y la documentación pueden cambiar a medida que continuamos mejorando el servicio."
+
     }
 }
