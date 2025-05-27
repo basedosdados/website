@@ -448,6 +448,8 @@
         "credits": "créditos",
         "reais": "reais",
         "addCredits": "Adicionar créditos",
+        "selectAmount": "Selecione qual valor deseja adicionar",
+        "confirm": "Confirmar",
         "needMoreKeys": "Precisa de mais chaves da API?",
         "contactUs": "Nos contate",
         "weWillHelpYou": "e te enviaremos uma nova chave assim que possível.",

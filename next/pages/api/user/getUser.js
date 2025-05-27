@@ -57,6 +57,20 @@ async function getUser(id, token) {
                       }
                     }
                   }
+                  keys {
+                    edges {
+                      node {
+                        id
+                        hash
+                        prefix
+                        isActive
+                        balance
+                        expiresAt
+                        createdAt
+                        updatedAt
+                      }
+                    }
+                  }
                 }
               }
             }
