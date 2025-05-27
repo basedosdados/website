@@ -11,6 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/router";
+import AddCreditsModal from "../../molecules/AddCreditsModal";
 
 import TitleText from "../../atoms/Text/TitleText";
 import BodyText from "../../atoms/Text/BodyText";
@@ -19,8 +21,11 @@ import CheckIcon from "../../../public/img/icons/checkIcon";
 
 export default function DataAPI({ userInfo }) {
   const { t } = useTranslation('user');
+  const router = useRouter();
   const [apiKeys, setApiKeys] = useState([]);
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [isAddCreditsOpen, setIsAddCreditsOpen] = useState(false);
+  const [selectedApiKey, setSelectedApiKey] = useState(null);
 
   useEffect(() => {
     if (userInfo?.keys?.edges) {
@@ -41,6 +46,22 @@ export default function DataAPI({ userInfo }) {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
+  };
+
+  const handleAddCredits = (key) => {
+    setSelectedApiKey(key);
+    setIsAddCreditsOpen(true);
+  };
+
+  const handleAddCreditsSuccess = () => {
+    setIsAddCreditsOpen(false);
+    // Refresh only the current page
+    router.replace(router.asPath);
+  };
+
+  const handleAddCreditsError = () => {
+    // Handle error - could add toast notification here
+    setIsAddCreditsOpen(false);
   };
 
   return (
@@ -124,7 +145,7 @@ export default function DataAPI({ userInfo }) {
                         color: "#22703E",
                         borderColor: "#22703E"
                       }}
-                      onClick={() => window.open('', '_blank')}
+                      onClick={() => handleAddCredits(key)}
                     >
                       {t('dataAPI.addCredits')}
                     </Button>
@@ -180,6 +201,14 @@ export default function DataAPI({ userInfo }) {
           {' '}{t('dataAPI.weWillHelpYou')}
         </BodyText>
       </Box>
+
+      <AddCreditsModal
+        isOpen={isAddCreditsOpen}
+        onClose={() => setIsAddCreditsOpen(false)}
+        apiKey={selectedApiKey}
+        onSuccess={handleAddCreditsSuccess}
+        onError={handleAddCreditsError}
+      />
     </Stack>
   );
 } 

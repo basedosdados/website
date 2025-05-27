@@ -119,7 +119,7 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   const router = useRouter()
   const { query } = router
   const [userInfo, setUserInfo] = useState({})
-  const [sectionSelected, setSectionSelected] = useState(0)
+  const [sectionSelected, setSectionSelected] = useState("profile")
 
   if (!ready) return null
 
@@ -130,16 +130,14 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   }, [getUser])
 
   const choices = [
-    {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile"},
-    {bar: t('username.account'), title: t('username.account'), value: "account"},
-    {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password"},
-    {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment"},
-    isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query"},
-    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses"},
-    userInfo?.keys?.edges?.length > 0 && {bar: t('dataAPI.title'), title: t('dataAPI.title'), value: "data_api"}
-  ]
-    .filter(Boolean)
-    .map((choice, index) => ({ ...choice, index }))
+    {bar: t('username.publicProfile'), title: t('username.publicProfile'), value: "profile", id: "profile"},
+    {bar: t('username.account'), title: t('username.account'), value: "account", id: "account"},
+    {bar: t('username.changePassword'), title: t('username.changePassword'), value: "new_password", id: "password"},
+    {bar: t('username.plansAndPayment'), title: t('username.plansAndPayment'), value: "plans_and_payment", id: "plans"},
+    isUserPro && {bar: "BigQuery", title: "BigQuery", value: "big_query", id: "bigquery"},
+    haveInterprisePlan && {bar: t('username.access'), title: t('username.access'), value: "accesses", id: "accesses"},
+    userInfo?.keys?.edges?.length > 0 && {bar: t('dataAPI.title'), title: t('dataAPI.title'), value: "data_api", id: "dataapi"}
+  ].filter(Boolean)
 
   useEffect(() => {
     const key = Object.keys(query)
@@ -150,7 +148,7 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
 
     for (const elements of choices) {
       if (elements && elements.value === key[0]) {
-        setSectionSelected(elements.index)
+        setSectionSelected(elements.id)
       }
     }
   }, [query])
@@ -182,30 +180,30 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
           </TitleText>
 
           <Stack width="267px" spacing={0}>
-            {choices.map((section, index) => (
+            {choices.map((section) => (
               <Stack
-                key={index}
+                key={section.id}
                 flexDirection="row"
                 alignItems="center"
                 paddingRight="5px"
                 spacing={0}
                 gap="4px"
                 cursor="pointer"
-                pointerEvents={sectionSelected === index ? "none" : "default"}
+                pointerEvents={sectionSelected === section.id ? "none" : "default"}
               >
                 <Box 
                   width="3px"
                   height="24px"
-                  backgroundColor={sectionSelected === index && "#2B8C4D"}
+                  backgroundColor={sectionSelected === section.id && "#2B8C4D"}
                   borderRadius="10px"
                 />
                 <LabelText
                   typography="small"
                   width="100%"
-                  color={sectionSelected === index ? "#2B8C4D" : "#71757A"}
-                  backgroundColor={sectionSelected === index && "#F7F7F7"}
+                  color={sectionSelected === section.id ? "#2B8C4D" : "#71757A"}
+                  backgroundColor={sectionSelected === section.id && "#F7F7F7"}
                   _hover={{
-                    backgroundColor:sectionSelected === index ? "#F7F7F7" :"#EEEEEE",
+                    backgroundColor:sectionSelected === section.id ? "#F7F7F7" :"#EEEEEE",
                   }}
                   borderRadius="8px"
                   padding="6px 8px"
@@ -229,17 +227,17 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
           spacing={0}
         >
           <TitleText marginBottom="8px">
-            {choices[sectionSelected].title}
+            {choices.find(choice => choice.id === sectionSelected)?.title}
           </TitleText>
           <Divider marginBottom="24px !important" borderColor="#DEDFE0"/>
 
-          {choices[sectionSelected].value === "profile" && <ProfileConfiguration userInfo={userInfo}/>}
-          {choices[sectionSelected].value === "account" && <Account userInfo={userInfo}/>}
-          {choices[sectionSelected].value === "new_password" && <NewPassword userInfo={userInfo}/>}
-          {choices[sectionSelected].value === "plans_and_payment" && <PlansAndPayment userData={userInfo}/>}
-          {choices[sectionSelected].value === "big_query" && <BigQuery userInfo={userInfo}/>}
-          {choices[sectionSelected].value === "accesses" && <Accesses userInfo={userInfo}/>}
-          {choices[sectionSelected].value === "data_api" && <DataAPI userInfo={userInfo}/>}
+          {sectionSelected === "profile" && <ProfileConfiguration userInfo={userInfo}/>}
+          {sectionSelected === "account" && <Account userInfo={userInfo}/>}
+          {sectionSelected === "password" && <NewPassword userInfo={userInfo}/>}
+          {sectionSelected === "plans" && <PlansAndPayment userData={userInfo}/>}
+          {sectionSelected === "bigquery" && <BigQuery userInfo={userInfo}/>}
+          {sectionSelected === "accesses" && <Accesses userInfo={userInfo}/>}
+          {sectionSelected === "dataapi" && <DataAPI userInfo={userInfo}/>}
         </Stack>
       </Stack>
     </MainPageTemplate>

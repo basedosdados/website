@@ -62,13 +62,15 @@ async function getUser(id, token) {
                   keys {
                     edges {
                       node {
+                        id
                         name
-                        prefix
                         hash
+                        prefix
                         isActive
                         balance
-                        createdAt
                         expiresAt
+                        createdAt
+                        updatedAt
                       }
                     }
                   }
