@@ -7,6 +7,12 @@ module.exports = defineConfig({
       return config
     },
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL_FRONTEND,
-    video: false
+    video: false,
+    viewportWidth: 1920,
+    viewportHeight: 1080,
   },
+  env: {
+    CRYPRESS_AUTH_EMAIL: process.env.CRYPRESS_AUTH_EMAIL,
+    CRYPRESS_AUTH_PASSWORD: process.env.CRYPRESS_AUTH_PASSWORD
+  }
 });

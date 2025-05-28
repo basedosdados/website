@@ -49,3 +49,28 @@ Cypress.Commands.add('fillRegisterForm', (userData) => {
 Cypress.Commands.add('mockRegisterApi', (response) => {
   cy.intercept('GET', '/api/user/registerAccount*', response).as('registerApi');
 });
+
+Cypress.Commands.add('loginAndSetCookies', () => {
+  const email = Cypress.env('CRYPRESS_AUTH_EMAIL');
+  const password = Cypress.env('CRYPRESS_AUTH_PASSWORD');
+
+  if (!email || !password) {
+    throw new Error('Email e senha de autenticação não configurados no Cypress.env');
+  }
+
+  return cy.request({
+    method: 'POST',
+    url: `/api/user/getUserTestCypress?a=${btoa(email)}&q=${btoa(password)}`,
+    failOnStatusCode: false
+  }).then((response) => {
+    const { authToken, user } = response.body;
+
+    cy.setCookie('token', authToken);
+    cy.setCookie('userBD', user);
+    
+    return cy.wrap({
+      token: authToken,
+      user: user
+    });
+  });
+});
