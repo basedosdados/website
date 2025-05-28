@@ -94,6 +94,11 @@
                     "name": "token",
                     "retention": "7 dias",
                     "purpose": "Ao realizar o login em nosso site, esse cookie especial é criado para armazenar seu token de acesso. Este token não apenas permite que você permaneça logado, mas também atua como um guardião para garantir a integridade de suas configurações e informações pessoais."
+                },
+                "row3": {
+                    "name": "tourBD",
+                    "retention": "360 dias",
+                    "purpose": "Ao acessar a página de pesquisa ou um dataset, esse cookie é gerado para controlar o progresso do tour no site. Ele armazena o status atual da navegação—como 'exploração', 'iniciado', 'downloads', 'último' ou 'skipado'—servindo como referência para a função responsável por gerenciar a experiência guiada."
                 }
             },
             "subContent4": "3.4. Ao continuar a usar nosso site, você concorda com o uso desses cookies. Se preferir não usá-los, recomendamos que ajuste as configurações do seu navegador. No entanto, isso afetará sua capacidade de fazer login e acessar áreas restritas.",

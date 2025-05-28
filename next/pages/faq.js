@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
+import cookies from "js-cookie";
 import Display from "../components/atoms/Text/Display";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
@@ -114,11 +115,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
 
 export default function FAQ({ faqs }) {
   const { t } = useTranslation('faq');
-  const [allQuestions, setAllQuestions] = useState([])
-  const [questions, setQuestions] = useState([])
-  const [categorySelected, setCategorySelected] = useState("")
-  const [searchFilter, setSearchFilter] = useState("")
-  const [closeQuestion, setCloseQuestion] = useState(false)
+  const [allQuestions, setAllQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [categorySelected, setCategorySelected] = useState("");
+  const [searchFilter, setSearchFilter] = useState("");
+  const [closeQuestion, setCloseQuestion] = useState(false);
 
   useEffect(() => {
     setAllQuestions(faqs)

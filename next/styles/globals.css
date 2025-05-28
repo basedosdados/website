@@ -166,6 +166,10 @@ body {
   color: white;
 }
 
+.img_dataset_serach_card img {
+  object-fit: contain;
+}
+
 .swiper {
   min-width: 100%;
   padding: 0 32px !important;
@@ -228,4 +232,138 @@ body {
 
 .token.operator {
   color: #ace158 !important;
+}
+
+.introjs-helperLayer {
+  box-shadow: transparent 0px 0px 1px 2px, rgba(33, 33, 33, 0.5) 0px 0px 0px 5000px !important;
+  border-radius: 8px !important;
+}
+
+.tour-dataset-buttons.introjs-prevbutton {
+  display: none;
+}
+
+.tour-dataset-tooltip {
+  max-width: 400px !important;
+  min-width: 400px !important;
+  border-radius: 8px !important;
+}
+
+.tour-dataset-tooltip .introjs-tooltip-header {
+  padding: 16px 16px 0 16px !important;
+}
+
+.tour-dataset-tooltip .introjs-tooltip-header .introjs-skipbutton {
+  font-family: 'Roboto';
+  font-size: 36px !important;
+  font-weight: 300 !important;
+  color: #252A32 !important;
+}
+
+.tour-dataset-tooltip .introjs-tooltip-header .introjs-skipbutton:hover {
+  opacity: 0.8;
+}
+
+.tour-dataset-tooltip .introjs-tooltip-header .tour-step {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2B8C4D;
+  margin-bottom: 4px;
+}
+
+.tour-dataset-tooltip .introjs-tooltip-header .introjs-tooltip-title {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 28px;
+  color: #252A32;
+}
+
+.tour-dataset-tooltip .introjs-tooltiptext {
+  padding: 10px 16px 12px !important;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #252A32;
+}
+
+.tour-dataset-tooltip .introjs-tooltiptext ul {
+  padding: 10px 0 10px 12px !important;
+}
+
+.tour-dataset-tooltip .introjs-tooltiptext li {
+  font-family: 'Roboto';
+}
+
+.tour-dataset-tooltip .introjs-tooltiptext strong {
+  font-family: 'Roboto';
+  font-weight: 500;
+}
+
+.introjs-tooltipbuttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 16px 20px !important;
+  border-top: 0px !important;
+}
+
+.introjs-tooltipbuttons::after {
+  display: none !important;
+}
+
+.introjs-custom-skip-dataset {
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  min-width: 93px;
+  height: 40px;
+  background: #FFFFFF;
+  border: 1px solid #2B8C4D;
+  border-radius: 8px;
+  font-family: 'Roboto' !important;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #2B8C4D;
+}
+
+.introjs-custom-skip-dataset:hover {
+  border-color: #22703E;
+  color: #22703E;
+}
+
+.introjs-tooltipbuttons .tour-dataset-buttons.introjs-donebutton, .tour-dataset-buttons.introjs-nextbutton {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  min-width: 93px;
+  height: 40px;
+  background: #2B8C4D;
+  border-radius: 8px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #FFFFFF;
+}
+
+.introjs-tooltipbuttons .tour-dataset-buttons.introjs-donebutton:hover, .tour-dataset-buttons.introjs-nextbutton:hover {
+  background: #22703E;
 }

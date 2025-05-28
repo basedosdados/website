@@ -384,7 +384,10 @@
         "BQEmailDescription6": "Em caso de dúvida,",
         "BQEmailDescription7": "entre em contato com nosso suporte.",
         "updateEmail": "Atualizar e-mail",
-        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido."
+        "pleaseEnterValidEmail": "Por favor, insira um e-mail válido.",
+        "tourTitle": "Reiniciar Tour",
+        "tourContext": "Este botão permite reiniciar o tour guiado na plataforma. Todas as explicações serão mostradas novamente desde o início.",
+        "resetTour": "Reiniciar"
     },
     "activate": {
         "accountActive": "Conta ativa",
@@ -445,6 +448,8 @@
         "credits": "créditos",
         "reais": "reais",
         "addCredits": "Adicionar créditos",
+        "selectAmount": "Selecione qual valor deseja adicionar",
+        "confirm": "Confirmar",
         "needMoreKeys": "Precisa de mais chaves da API?",
         "contactUs": "Nos contate",
         "weWillHelpYou": "e te enviaremos uma nova chave assim que possível.",
