@@ -297,6 +297,9 @@ export default function DataAPIDocs() {
                   <Text>
                     {t('overview.descriptionPricing')}
                   </Text>
+                  <Text>
+                    {t('overview.needForKeys')}
+                  </Text>
                   <Box>
                     <Text fontWeight="bold" mb={2}>{t('overview.baseURL')}</Text>
                     <Code p={4} borderRadius="md" display="block">
@@ -309,11 +312,7 @@ export default function DataAPIDocs() {
                   <Text fontSize="2xl" fontWeight="bold">
                     {t('authentication.title')}
                   </Text>
-                  <Text>
-                    {t('authentication.description')}
-                  </Text>
                   <Box>
-                    <Text fontWeight="bold" mb={2}>{t('authentication.apiKey')}</Text>
                     <Text mb={4}>
                       {t('authentication.getApiKeyBy')}
                     </Text>
@@ -348,7 +347,8 @@ export default function DataAPIDocs() {
                       <Text>{t('pricing.step2')}</Text>
                       <Text>{t('pricing.step3')}</Text>
                     </VStack>
-                    <Text mt={4} fontStyle="italic">
+                    <br></br>
+                    <Text>
                       {t('pricing.note')}
                     </Text>
                   </Box>

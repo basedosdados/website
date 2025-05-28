@@ -3,16 +3,15 @@
     "overview": {
         "title": "Overview",
         "welcome": "Welcome to the Data API documentation.",
-        "description": "With the API, you can access our data in a programmatic way, without depending on BigQuery.",
+        "description": "With the API, you can access our data in a programmatic way via endpoints, without depending on BigQuery.",
         "descriptionPricing": "Each endpoint has a different pricing tier, depending on the number of requests accumulated in the month.",
+        "needForKeys": "To use the API, you'll need an API key. The instructions on how to get one are available in the authentication section.",
         "baseURL": "Base URL",
         "earlyRelease": "Alpha Version",
         "earlyReleaseDescription": "This is an early release version of our Data API. We are currently testing and improving our services. Some of the features may be unstable. More endpoints, features, and detailed documentation will be released in the future."
     },
     "authentication": {
       "title": "Authentication",
-      "description": "Learn how to authenticate with the Data API",
-      "apiKey": "API Key",
       "getApiKeyBy": "To access the API, you'll need an API key. To get one:",
       "getApiKeyBy1": "Create an account on DB.",
       "getApiKeyBy2Contactus": "Contact us to request a key",
