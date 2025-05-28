@@ -340,6 +340,7 @@ export default function PlansAndPayment ({ userData }) {
     setCoupon("")
     setValueCoupon("")
     setPlan(value._id)
+    setErrCoupon(false)
     setToggleAnual(!toggleAnual)
   }
 
@@ -447,6 +448,7 @@ export default function PlansAndPayment ({ userData }) {
 
       {/* stripe */}
       <ModalGeneral
+        propsModal={{id:"modal-stripe-checkout"}}
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={() => {
@@ -514,6 +516,7 @@ export default function PlansAndPayment ({ userData }) {
                   onClick={() => {
                     PaymentModal.onClose()
                     setToggleAnual(true)
+                    setErrCoupon(false)
                     setCoupon("")
                     setValueCoupon("")
                     PlansModal.onOpen()
@@ -535,12 +538,14 @@ export default function PlansAndPayment ({ userData }) {
                 >
                   {toggleAnual ?  
                       <Toggle
+                        id="toggle-prices-modal-checkout"
                         defaultChecked
                         value={toggleAnual}
                         onChange={() => changeIntervalPlanCheckout()}
                       />
                     : 
                       <Toggle
+                        id="toggle-prices-modal-checkout"
                         value={toggleAnual}
                         onChange={() => changeIntervalPlanCheckout()}
                       />
@@ -739,6 +744,7 @@ export default function PlansAndPayment ({ userData }) {
 
       {/* email gcp */}
       <ModalGeneral
+        propsModal={{id:"modal-email-gcp"}}
         isOpen={EmailModal.isOpen}
         onClose={() => {
           setEmailGCP(userData?.gcpEmail || userData?.email)
@@ -1057,6 +1063,7 @@ export default function PlansAndPayment ({ userData }) {
             gap="8px"
           >
             <Toggle
+              id="toggle-prices"
               defaultChecked
               className="toggle_variant"
               value={toggleAnual}
@@ -1130,6 +1137,7 @@ export default function PlansAndPayment ({ userData }) {
                 {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
               ]}
               button={{
+                id: "bd_pro_button_sub_btn",
                 text: `${userData?.proSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
                 onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
                   setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
@@ -1151,6 +1159,7 @@ export default function PlansAndPayment ({ userData }) {
                 {name: t('username.prioritySupport')}
               ]}
               button={{
+                id: "bd_pro_empresas_button_sub_btn",
                 text: `${userData?.proSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
                 onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
                   setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)

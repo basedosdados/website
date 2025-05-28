@@ -60,13 +60,23 @@ Cypress.Commands.add('loginAndSetCookies', () => {
 
   return cy.request({
     method: 'POST',
-    url: `/api/user/getUserTestCypress?a=${btoa(email)}&q=${btoa(password)}`,
+    url: `/api/user/getUserTestCypress?a=${btoa(email)}&p=${btoa(password)}`,
     failOnStatusCode: false
   }).then((response) => {
+    if (response.status !== 200 || !response.body?.authToken) {
+      throw new Error(`Falha na autenticação: ${response.body?.error || `Status ${response.status}`}`);
+    }
+
     const { authToken, user } = response.body;
 
+    if (typeof authToken !== 'string') {
+      throw new Error('Token de autenticação inválido');
+    }
+
+    const userString = typeof user === 'string' ? user : JSON.stringify(user);
+
     cy.setCookie('token', authToken);
-    cy.setCookie('userBD', user);
+    cy.setCookie('userBD', userString);
     
     return cy.wrap({
       token: authToken,
