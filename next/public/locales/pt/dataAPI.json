@@ -5,14 +5,13 @@
         "earlyReleaseDescription": "Esta é uma versão preliminar da API de Dados da BD. Estamos atualmente testando e melhorando nosso serviço. Alguns recursos podem ficar instáveis. Mais endpoints, recursos e documentação detalhada serão lançados no futuro.",
         "title": "Visão Geral",
         "welcome": "Bem-vindos à documentação da API de Dados da Base dos Dados.",
-        "description": "Com a API é possível acessar os nossos dados de forma programática, sem depender do BigQuery.",
+        "description": "Com a API é possível acessar os nossos dados de forma programática via endpoints, sem depender do BigQuery.",
         "descriptionPricing": "Cada endpoint tem uma faixa de preço diferente, conforme o número de requisições acumuladas no mês.",
+        "needForKeys": "Para usar a API, você precisará de uma chave de API. As instruções de como obter uma estão disponíveis na seção de autenticação.",
         "baseURL": "URL Base"
     },
     "authentication": {
       "title": "Autenticação",
-      "description": "Aprenda como autenticar com a API de Dados da BD",
-      "apiKey": "Chave de API",
       "getApiKeyBy": "Para acessar a API, você precisará de uma chave. Para obtê-la:",
       "getApiKeyBy1": "Crie uma conta na BD.",
       "getApiKeyBy2Contactus": "Nos contate para solicitar uma chave",
@@ -37,7 +36,7 @@
     },
     "pricing": {
         "title": "Precificação",
-        "description": "Para usar a API de Dados, você precisará adicionar créditos à sua chave de API.",
+        "description": "Para usar a API de Dados, você precisará adicionar créditos à cada chave de API.",
         "addCredits": "Para adicionar créditos à sua chave de API:",
         "step1": "1. Visite a área de usuário na seção de API de Dados.",
         "step2": "2. Para sua chave de API, clique no botão 'Adicionar Créditos'.",
