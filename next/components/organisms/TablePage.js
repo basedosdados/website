@@ -320,7 +320,7 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
         </StackSkeleton>
       </Stack>
 
-      {locale !== 'pt' ?
+      {/* {locale !== 'pt' ?
         <Stack spacing="8px"  marginBottom="40px !important">
           <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
             <TitleText typography="small">
@@ -347,7 +347,7 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
         </Stack>
         :
         <></>
-      }
+      } */}
 
       <Stack
         spacing="8px"

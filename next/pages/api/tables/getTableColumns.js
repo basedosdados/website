@@ -56,8 +56,6 @@ async function getTableColumns(id, locale = 'pt') {
                         name
                       }
                       temporalCoverage
-                      spatialCoverage
-                      spatialCoverageName${capitalize(locale)}
                       measurementUnit
                       containsSensitiveData
                       observations
