@@ -407,7 +407,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
                 </BodyText>
               </GridItem>
 
-              {locale !== 'pt' ?
+              {/* {locale !== 'pt' ?
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <LabelText
                     typography="large"
@@ -428,7 +428,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
                 </GridItem>
                 :
                 <></>
-              }
+              } */}
             </Grid>
           </GridItem>
         </Grid>

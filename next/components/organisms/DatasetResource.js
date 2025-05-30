@@ -49,6 +49,10 @@ const ContentFilter = memo(({ id, fieldName, choices, onChange, value, hasDivide
     [choices, locale]
   );
 
+  const handleClick = useCallback((id) => {
+    onChange(id);
+  }, [onChange]);
+
   useEffect(() => {
     choicesWithNames.forEach((elm, i) => {
       const textElement = textRefs.current[i];
@@ -62,10 +66,6 @@ const ContentFilter = memo(({ id, fieldName, choices, onChange, value, hasDivide
   }, [choicesWithNames]);
 
   if(choices.length === 0) return null;
-
-  const handleClick = useCallback((id) => {
-    onChange(id);
-  }, [onChange]);
 
   return (
     <Box width="272px">

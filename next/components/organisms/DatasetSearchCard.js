@@ -38,7 +38,6 @@ const DatasetSearchCard= ({
   name,
   organizations,
   temporalCoverageText,
-  spatialCoverage,
   tables,
   rawDataSources,
   informationRequests,
@@ -258,11 +257,11 @@ const DatasetSearchCard= ({
                 {temporalCoverageText || t('notProvided')}
               </MetadataRow>
 
-              {locale !== 'pt' && (
+              {/* {locale !== 'pt' && (
                 <MetadataRow label={t('spatialCoverage')}>
                   {spatialCoverage || t('notProvided')}
                 </MetadataRow>
-              )}
+              )} */}
 
               <MetadataRow label={t('resources')}>
                 {resourcesText}
