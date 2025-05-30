@@ -84,3 +84,33 @@ Cypress.Commands.add('loginAndSetCookies', () => {
     });
   });
 });
+
+Cypress.Commands.add('arrivingAtCheckout', (button) => {
+  cy.get(button, { timeout: 10000 })
+    .should('be.visible')  
+    .click();
+
+  cy.get('#chakra-modal-modal-email-gcp', { timeout: 15000 })
+    .should('be.visible')
+    .and('have.css', 'opacity', '1')
+    .as('plansModal')
+    .within(() => {
+      cy.contains('E-mail de acesso ao BigQuery', { timeout: 15000 })
+        .should('be.visible');
+
+      cy.contains('button', 'Próximo')
+        .should('be.visible')
+        .click();
+    });
+
+    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
+      .should('be.visible')
+      .and('have.css', 'opacity', '1')
+      .as('checkoutModal');
+
+    cy.get('@checkoutModal').should(($modal) => {
+      expect($modal.height()).to.be.greaterThan(0);
+      expect($modal.width()).to.be.greaterThan(0);
+      expect($modal.find('*').length).to.be.greaterThan(0);
+    });
+});

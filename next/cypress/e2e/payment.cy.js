@@ -8,7 +8,13 @@ describe('Área do Usuário', () => {
       cy.getCookie('token').should('exist');
       cy.getCookie('userBD').should('exist');
     });
+
+    cy.intercept('GET', '/api/user/getAlreadySubscribed?p=MTE=').as('getSubscribed');
+    cy.intercept('GET', '/api/stripe/getPlans').as('getPlans');
+
     cy.visit(`/user/${username}?plans_and_payment`);
+
+    cy.wait(['@getSubscribed', '@getPlans'], { timeout: 15000 });
   });
 
   it('Não deve acessar sem autenticação', () => {
@@ -61,52 +67,91 @@ describe('Área do Usuário', () => {
         .should('not.exist');
   });
 
-  it('Deve chegar no checkout e validar preços', () => {
+  it('Deve chegar no checkout', () => {
     cy.contains('button', 'Comparar planos')
       .should('be.visible')
       .click();
 
-    cy.get('#bd_pro_button_sub_btn', { timeout: 10000 })
-      .should('be.visible')  
-      .click();
+    cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
 
-    cy.get('#chakra-modal-modal-email-gcp', { timeout: 10000 })
-      .should('be.visible')
-      .as('plansModal')
-      .within(() => {
-        cy.contains('E-mail de acesso ao BigQuery', { timeout: 10000 })
-          .should('be.visible');
-    
-        cy.contains('button', 'Próximo')
-          .should('be.visible')
-          .click();
-      });
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Pagamento', { timeout: 20000 })
+        .should('be.visible');
 
-    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
-      .should('be.visible')
-      .as('checkoutModal')
-      .within(() => {
-        cy.contains('Pagamento', { timeout: 15000 })
-          .should('be.visible');
-        
-        cy.contains('BD Pro', { timeout: 20000 })
+      cy.contains('BD Pro', { timeout: 25000 })
         .should(($el) => {
           expect($el).to.be.visible;
-          expect($el[0].getBoundingClientRect().top).to.be.greaterThan(0);
-          expect($el[0].getBoundingClientRect().bottom).to.be.lessThan(Cypress.config('viewportHeight'));
+          const rect = $el[0].getBoundingClientRect();
+          expect(rect.top).to.be.greaterThan(0);
+          expect(rect.bottom).to.be.lessThan(Cypress.config('viewportHeight'));
+          expect($el.text().trim()).to.not.be.empty;
+        });
+    });
+  });
+
+  it('Verificar preços e trocar o plano no modal', () => {
+    cy.contains('button', 'Comparar planos')
+      .should('be.visible')
+      .click();
+
+    cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Pagamento', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.contains('BD Pro', { timeout: 25000 })
+        .should(($el) => {
+          expect($el).to.be.visible;
+          const rect = $el[0].getBoundingClientRect();
+          expect(rect.top).to.be.greaterThan(0);
+          expect(rect.bottom).to.be.lessThan(Cypress.config('viewportHeight'));
+          expect($el.text().trim()).to.not.be.empty;
         });
 
-        cy.contains('R$ 444,00/ano')
+      cy.contains('R$ 444,00/ano')
+        .should('be.visible');
+
+      cy.get('#toggle-prices-modal-checkout')
+        .should('exist')
+        .and('have.attr', 'type', 'checkbox')
+        .and('be.checked')
+        .click({ force: true });
+
+      cy.contains('R$ 47,00/mês', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.contains('Trocar plano')
+        .should('be.visible')
+        .click();
+    });
+
+    cy.arrivingAtCheckout('#bd_pro_empresas_button_sub_btn');
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Pagamento', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.contains('BD Empresas', { timeout: 25000 })
+        .should(($el) => {
+          expect($el).to.be.visible;
+          const rect = $el[0].getBoundingClientRect();
+          expect(rect.top).to.be.greaterThan(0);
+          expect(rect.bottom).to.be.lessThan(Cypress.config('viewportHeight'));
+          expect($el.text().trim()).to.not.be.empty;
+        });
+
+        cy.contains('R$ 3.360,00/ano')
           .should('be.visible');
-    
+
         cy.get('#toggle-prices-modal-checkout')
           .should('exist')
           .and('have.attr', 'type', 'checkbox')
           .and('be.checked')
           .click({ force: true });
-    
-        cy.contains('R$ 47,00/mês', { timeout: 1000000 })
+
+        cy.contains('R$ 350,00/mês', { timeout: 20000 })
           .should('be.visible');
-      });
+    });
   });
 });

@@ -160,7 +160,9 @@ export default function PaymentSystem({
   useEffect(() => {
     setClientSecret("")
     isLoading(true)
-    customerCreatPost(plan, coupon)
+    if(plan) {
+      customerCreatPost(plan, coupon)
+    }
   }, [plan, coupon])
 
   const SkeletonBox = ({ type, ...props }) => {
