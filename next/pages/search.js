@@ -121,10 +121,10 @@ function DatasetCard({ data, locale }) {
       themes={data?.themes}
       name={data?.name || t('noName')}
       temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-      spatialCoverage={data?.spatial_coverage
-        ?.map(coverage => coverage.name)
-        .sort((a, b) => a.localeCompare(b, locale))
-        .join(', ')}
+      // spatialCoverage={data?.spatial_coverage
+      //   ?.map(coverage => coverage.name)
+      //   .sort((a, b) => a.localeCompare(b, locale))
+      //   .join(', ')}
       organizations={data.organizations}
       tables={{
         id: data?.first_table_id,
