@@ -10,6 +10,7 @@ module.exports = defineConfig({
     video: false,
     viewportWidth: 1920,
     viewportHeight: 1080,
+    chromeWebSecurity: false
   },
   env: {
     CRYPRESS_AUTH_EMAIL: process.env.CRYPRESS_AUTH_EMAIL,

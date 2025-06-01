@@ -874,6 +874,7 @@ export default function PlansAndPayment ({ userData }) {
 
       {/* success */}
       <ModalGeneral
+        propsModal={{id:"modal-stripe-payment_intent-succeeded"}}
         isOpen={SucessPaymentModal.isOpen}
         propsModalContent={{
           width: "100%",

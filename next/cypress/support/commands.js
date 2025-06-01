@@ -114,3 +114,29 @@ Cypress.Commands.add('arrivingAtCheckout', (button) => {
       expect($modal.find('*').length).to.be.greaterThan(0);
     });
 });
+
+Cypress.Commands.add('verifyElement', (text) => {
+  cy.contains(text, { timeout: 20000 })
+    .should(($el) => {
+      expect($el).to.be.visible;
+      const rect = $el[0].getBoundingClientRect();
+      expect(rect.top).to.be.greaterThan(0);
+      expect(rect.bottom).to.be.lessThan(Cypress.config('viewportHeight'));
+      expect($el.text().trim()).to.not.be.empty;
+    });
+})
+
+Cypress.Commands.add('fillStripeInput', (fieldName, value) => {
+  const selectors = {
+    cardNumber: 'input[id="Field-numberInput"]',
+    cardExpiry: 'input[id="Field-expiryInput"]',
+    cardCvc: 'input[id="Field-cvcInput"]'
+  };
+
+  cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 15000 })
+    .its('0.contentDocument.body')
+    .should('not.be.empty')
+    .then(cy.wrap)
+    .find(selectors[fieldName])
+    .type(value, { force: true, delay: 30 });
+});

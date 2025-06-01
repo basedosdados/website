@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "cypress": "^14.4.0",
+    "cypress-plugin-stripe-elements": "^1.0.2",
     "medium-2-md": "github:gautamdhameja/medium-2-md",
     "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.1",
