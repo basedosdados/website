@@ -237,7 +237,7 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
   }, [tabIndex]);
 
   const SqlCodeString = useCallback(async () => {
-    const result = await getBigTableQuery(resource._id, checkedColumns, includeTranslation);
+    const result = await getBigTableQuery(resource?._id, checkedColumns, includeTranslation);
     if(result === null) return;
     setSqlCode(result.trim());
     setIsLoadingCode(false);
@@ -246,7 +246,7 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
     if(tourBD && tourBD.state === 'begin') {
       cookies.set('tourBD', '{"state":"table"}', { expires: 360 });
     }
-  }, [resource._id, checkedColumns, includeTranslation, getTourBD]);
+  }, [resource?._id, checkedColumns, includeTranslation, getTourBD]);
 
   const handleAccessIndexes = useCallback((index) => {
     const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
@@ -286,7 +286,7 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
     window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
     triggerGAEvent("download_da_tabela",`{
       gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
-      tamanho: ${formatBytes(resource.uncompressedFileSize) || ""},
+      tamanho: ${formatBytes(resource?.uncompressedFileSize) || ""},
       dataset: ${resource?.dataset?._id},
       table: ${resource?._id},
     }`);
@@ -325,19 +325,19 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
     }
 
     if (resource?.cloudTables?.[0]) {
-      setGcpProjectID(resource.cloudTables[0]?.gcpProjectId || "");
-      setGcpDatasetID(resource.cloudTables[0]?.gcpDatasetId || "");
-      setGcpTableId(resource.cloudTables[0]?.gcpTableId || "");
+      setGcpProjectID(resource?.cloudTables[0]?.gcpProjectId || "");
+      setGcpDatasetID(resource?.cloudTables[0]?.gcpDatasetId || "");
+      setGcpTableId(resource?.cloudTables[0]?.gcpTableId || "");
     }
   }, [resource?.uncompressedFileSize, resource?.cloudTables, isUserPro]);
 
   useEffect(() => {
-    if(resource._id === undefined) return;
+    if(resource?._id === undefined) return;
     setIsLoadingCode(true);
     setHasLoadingResponse(false);
     setSqlCode("");
     setInsufficientChecks(false);
-  }, [resource._id, checkedColumns, includeTranslation]);
+  }, [resource?._id, checkedColumns, includeTranslation]);
 
   useEffect(() => {
     if(hasLoadingResponse === true) {
@@ -477,7 +477,7 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
             </Skeleton>
 
             <TableColumns
-              tableId={resource._id}
+              tableId={resource?._id}
               checkedColumns={checkedColumns}
               onChangeCheckedColumns={setCheckedColumns}
               numberColumns={setNumberColumns}
@@ -699,7 +699,7 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
                   width="16px"
                   height="16px"
                 />
-                  {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource.uncompressedFileSize)})`}
+                  {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource?.uncompressedFileSize)})`}
               </Button>
             </Stack>
           </VStack>
