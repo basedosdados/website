@@ -140,3 +140,16 @@ Cypress.Commands.add('fillStripeInput', (fieldName, value) => {
     .find(selectors[fieldName])
     .type(value, { force: true, delay: 30 });
 });
+
+Cypress.Commands.add('applyCoupon', (coupon, text) => {
+  cy.get('input[placeholder="Digite o cupom"]', { timeout: 15000 })
+    .clear()
+    .type(coupon);
+
+  cy.contains('button', 'Aplicar', { timeout: 15000 })
+    .should('be.visible')
+    .click({ force: true });
+
+  cy.contains(text, { timeout: 15000 })
+    .should('be.visible')
+})
