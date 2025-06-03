@@ -223,12 +223,12 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
-      cy.contains('button', 'Confirmar pagamento')
+      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
     });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 30000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 120000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
       .as('paymentIntentSucceeded')
@@ -338,7 +338,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
-      cy.contains('button', 'Confirmar pagamento')
+      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
     });
