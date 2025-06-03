@@ -1219,6 +1219,7 @@ export default function PlansAndPayment ({ userData }) {
 
       {/* cancel */}
       <ModalGeneral
+        propsModal={{id:"modal-cancel-sub"}}
         isOpen={CancelModalPlan.isOpen}
         onClose={CancelModalPlan.onClose}
         propsModalContent={{maxWidth: "fit-content"}}

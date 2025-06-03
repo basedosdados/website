@@ -1,6 +1,23 @@
 describe('Área do Usuário e Sistema de pagamento', () => {
   const username = 'cypress_test';
 
+  function getSafeUserBdCookie() {
+    return cy.getCookie('userBD').then(cookie => {
+      if (!cookie?.value) throw new Error('Cookie userBD não encontrado');
+      
+      try {
+        const decoded = decodeURIComponent(cookie.value);
+        return JSON.parse(decoded);
+      } catch (e1) {
+        try {
+          return JSON.parse(cookie.value);
+        } catch (e2) {
+          throw new Error(`Falha ao parsear cookie: ${e2.message}`);
+        }
+      }
+    });
+  }
+
   beforeEach(() => {
     cy.session('userSession', () => {
       cy.loginAndSetCookies();
@@ -140,7 +157,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
-  it('Fazer fluxo de assinatura', () => {
+  it('Fazer fluxo de assinatura BDPro', () => {
     cy.contains('button', 'Comparar planos')
       .should('be.visible')
       .click();
@@ -195,6 +212,73 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('not.be.visible');
+  });
+
+  it('Verificar se BDPro está ativo e cancelar', () => {
+    cy.contains('Ativo')
+      .should('be.visible');
+
+    cy.contains('p', 'BD Pro')
+      .should('be.visible');
+
+    cy.contains('(Mensal)')
+      .should('be.visible');
+
+    cy.contains('Próxima data de renovação automática:')
+      .should('be.visible');
+
+    cy.contains('button', 'Cancelar plano')
+      .should('be.visible')
+      .click();
+
+    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
+      .should('be.visible')
+      .and('have.css', 'opacity', '1')
+      .as('cancelSub')
+      .within(() => {
+        cy.contains('button','Cancelar plano')
+          .should('be.visible')
+          .click();
+      });
+
+    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
+      .should('not.exist');
+
+    cy.contains('Cancelado')
+      .should('be.visible');
+
+    cy.contains('Acesso ao plano disponível até:')
+      .should('be.visible');
+
+    getSafeUserBdCookie().then(userData => {
+      const userId = userData.id.split(':')[1];
+
+      cy.request({
+        method: 'GET',
+        url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      }).then((subscriptionResponse) => {
+        const subscriptionId = subscriptionResponse.body;
+
+        cy.request({
+          method: 'GET',
+          url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((response) => {
+          expect(response.status).to.eq(200);
+          expect(response.body).to.have.property('success', true);
+
+          cy.visit(`/user/${username}?plans_and_payment`);
+
+          cy.contains('p', 'BD Grátis', { timeout: 10000 })
+            .should('be.visible');
+        });
+      });
+    });
   });
 });
 
