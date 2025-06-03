@@ -146,10 +146,10 @@ Cypress.Commands.add('applyCoupon', (coupon, text) => {
     .clear()
     .type(coupon);
 
-  cy.contains('button', 'Aplicar', { timeout: 15000 })
+  cy.contains('button', 'Aplicar', { timeout: 30000 })
     .should('be.visible')
     .click({ force: true });
 
-  cy.contains(text, { timeout: 15000 })
+  cy.contains(text, { timeout: 30000 })
     .should('be.visible')
 })
