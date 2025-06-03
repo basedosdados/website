@@ -126,6 +126,7 @@ export default function Login() {
         spacing={0}
       >
         <Display
+          as="h1"
           textAlign="center"
           marginBottom="40px"
         >
@@ -183,14 +184,14 @@ export default function Login() {
               }}
               icon={showPassword ?
                 <EyeOffIcon
-                  alt={t('login.hidePassword')}
+                  alt={t('username.showPassword')}
                   width="20px"
                   height="20px"
                   fill="#464A51"
                 />
               :
                 <EyeIcon
-                  alt={t('login.showPassword')}
+                  alt={t('username.hidePassword')}
                   width="20px"
                   height="20px"
                   fill="#464A51"

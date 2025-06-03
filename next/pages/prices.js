@@ -207,6 +207,7 @@ export const CardPrice = ({
               style={{ textDecoration: 'none' }}
             >
               <Box
+                id={button?.id}
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
@@ -358,6 +359,7 @@ export function SectionPrice() {
         gap="8px"
       >
         <Toggle
+          id="toggle-prices"
           defaultChecked
           className="toggle_variant"
           value={toggleAnual}

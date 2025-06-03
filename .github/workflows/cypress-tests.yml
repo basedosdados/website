@@ -1,0 +1,45 @@
+name: Cypress Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "next/**/*"
+      - "cypress/**/*"
+      - ".github/workflows/cypress-tests.yaml"
+
+jobs:
+  cypress-run:
+    name: Cypress E2E Tests
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME }}
+      NEXT_PUBLIC_KEY_STRIPE: ${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}
+      NEXT_PUBLIC_BASE_URL_FRONTEND: ${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+      NODE_ENV: ${{ vars.NODE_ENV }}
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:staging
+      CRYPRESS_AUTH_EMAIL: ${{ secrets.CRYPRESS_AUTH_EMAIL }}
+      CRYPRESS_AUTH_PASSWORD: ${{ secrets.CRYPRESS_AUTH_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests against Staging
+        uses: cypress-io/github-action@v5
+        with:
+          browser: edge
+          headless: true
+          config-file: cypress.config.js
+          config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}

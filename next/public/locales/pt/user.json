@@ -219,7 +219,7 @@
         "uppercaseLetter": "Uma letra maiúscula",
         "lowercaseLetter": "Uma letra minúscula",
         "digit": "Um número",
-        "specialCharacter": "um caractere especial, dentre ! @ # ? ! % & *",
+        "specialCharacter": "Um caractere especial, dentre ! @ # ? ! % & *",
         "updatePassword": "Atualizar senha",
         "currentPlan": "Plano atual",
         "freePlan": "Plano gratuito",
