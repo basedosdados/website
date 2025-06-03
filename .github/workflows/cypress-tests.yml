@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - "next/**/*"
-      - "cypress/**/*"
       - ".github/workflows/cypress-tests.yaml"
 
 jobs:
@@ -39,9 +38,9 @@ jobs:
         run: npm ci
 
       - name: Run Cypress tests against Staging
-        working-directory: ./next 
         uses: cypress-io/github-action@v5
         with:
+          working-directory: ./next 
           browser: edge
           headless: true
           config-file: cypress.config.js
