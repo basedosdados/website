@@ -133,7 +133,7 @@ Cypress.Commands.add('fillStripeInput', (fieldName, value) => {
     cardCvc: 'input[id="Field-cvcInput"]'
   };
 
-  cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 15000 })
+  cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
     .its('0.contentDocument.body')
     .should('not.be.empty')
     .then(cy.wrap)

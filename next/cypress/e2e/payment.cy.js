@@ -226,9 +226,10 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
+
+      cy.wait(60000);
     });
 
-    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
@@ -305,6 +306,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           expect(response.status).to.eq(200);
           expect(response.body).to.have.property('success', true);
           cy.wait(60000);
+
           cy.visit(`/user/${username}?plans_and_payment`);
 
           cy.contains('p', 'BD Grátis', { timeout: 10000 })
@@ -343,9 +345,10 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
+
+      cy.wait(60000);
     });
 
-    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
@@ -422,6 +425,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           expect(response.status).to.eq(200);
           expect(response.body).to.have.property('success', true);
           cy.wait(60000);
+
           cy.visit(`/user/${username}?plans_and_payment`);
 
           cy.contains('p', 'BD Grátis', { timeout: 10000 })
