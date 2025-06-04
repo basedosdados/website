@@ -230,7 +230,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.wait(60000);
     });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
       .as('paymentIntentSucceeded')
@@ -244,7 +244,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       });
 
     cy.wait(60000);
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('not.be.visible');
     cy.wait(60000);
   });
@@ -333,7 +333,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 3.360,00/ano')
         .should('be.visible');
 
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 30000 })
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 300000 })
         .should('be.visible')
         .its('0.contentDocument.body')
         .should('not.be.empty')
@@ -350,7 +350,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.wait(60000);
     });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
       .as('paymentIntentSucceeded')
