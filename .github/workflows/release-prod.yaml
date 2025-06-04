@@ -7,8 +7,6 @@ on:
     paths:
       - ".github/workflows/release-prod.yaml"
       - "next/**/*"
-    paths-ignore:
-      - "next/cypress/**/*"
   workflow_dispatch:
 
 jobs:
