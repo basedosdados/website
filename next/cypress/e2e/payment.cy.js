@@ -243,6 +243,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click();
       });
 
+    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('not.be.visible');
     cy.wait(60000);
@@ -362,6 +363,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click();
       });
 
+    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('not.be.visible');
     cy.wait(60000);
