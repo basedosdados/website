@@ -166,7 +166,6 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
   const onSkipClick = () => {
     cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
     triggerGAEvent('tour_dataset', "skip in step 0");
-    window.dispatchEvent(new CustomEvent('datasetSurveyTour'));
   };
 
   tour.start()
