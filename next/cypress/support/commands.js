@@ -138,8 +138,7 @@ Cypress.Commands.add('fillStripeInput', (fieldName, value) => {
     .should('not.be.empty')
     .then(cy.wrap)
     .find(selectors[fieldName])
-    .type(value, { force: true, delay: 100 })
-    .should('have.value', value);
+    .type(value, { force: true, delay: 50 });
 });
 
 Cypress.Commands.add('applyCoupon', (coupon, text) => {

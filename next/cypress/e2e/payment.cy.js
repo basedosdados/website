@@ -227,7 +227,13 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         .should('be.visible')
         .click();
 
-      cy.wait(60000);
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
+      cy.wait('@stripeConfirmation').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        expect(interception.response.body.status).to.eq('succeeded');
+      });
     });
 
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
@@ -243,10 +249,10 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click();
       });
 
-    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('not.be.visible');
-    cy.wait(60000);
+
+    cy.wait(30000);
   });
 
   it('Verificar se BDPro está ativo e cancelar', () => {
@@ -347,7 +353,13 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         .should('be.visible')
         .click();
 
-      cy.wait(60000);
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
+      cy.wait('@stripeConfirmation').then((interception) => {
+        expect(interception.response.statusCode).to.eq(200);
+        expect(interception.response.body.status).to.eq('succeeded');
+      });
     });
 
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
@@ -363,10 +375,10 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click();
       });
 
-    cy.wait(60000);
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('not.be.visible');
-    cy.wait(60000);
+
+    cy.wait(30000);
   });
 
   it('Verificar se BDEmpresas está ativo e cancelar', () => {
