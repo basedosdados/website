@@ -42,7 +42,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./next 
-          browser: edge
+          browser: chrome
           headless: true
           config-file: cypress.config.js
           config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
