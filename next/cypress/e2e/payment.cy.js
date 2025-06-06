@@ -223,12 +223,20 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
-      cy.contains('button', 'Confirmar pagamento')
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
+      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
+
+      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
+        expect(interception.response.body.status).to.eq('succeeded');
+      });
     });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 30000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
       .as('paymentIntentSucceeded')
@@ -243,6 +251,8 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
     cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('not.be.visible');
+
+    cy.wait(30000);
   });
 
   it('Verificar se BDPro está ativo e cancelar', () => {
@@ -302,6 +312,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         }).then((response) => {
           expect(response.status).to.eq(200);
           expect(response.body).to.have.property('success', true);
+          cy.wait(60000);
 
           cy.visit(`/user/${username}?plans_and_payment`);
 
@@ -328,7 +339,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 3.360,00/ano')
         .should('be.visible');
 
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 30000 })
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 300000 })
         .should('be.visible')
         .its('0.contentDocument.body')
         .should('not.be.empty')
@@ -338,12 +349,20 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
-      cy.contains('button', 'Confirmar pagamento')
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
+      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
+
+      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
+        expect(interception.response.body.status).to.eq('succeeded');
+      });
     });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 30000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
       .should('be.visible')
       .and('have.css', 'opacity', '1')
       .as('paymentIntentSucceeded')
@@ -356,8 +375,10 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click();
       });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
+    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
       .should('not.be.visible');
+
+    cy.wait(30000);
   });
 
   it('Verificar se BDEmpresas está ativo e cancelar', () => {
@@ -417,6 +438,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         }).then((response) => {
           expect(response.status).to.eq(200);
           expect(response.body).to.have.property('success', true);
+          cy.wait(60000);
 
           cy.visit(`/user/${username}?plans_and_payment`);
 

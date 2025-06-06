@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - "next/**/*"
-      - "cypress/**/*"
       - ".github/workflows/cypress-tests.yaml"
 
 jobs:
@@ -32,14 +31,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'npm'
+          cache-dependency-path: 'next/package-lock.json'
 
       - name: Install dependencies
+        working-directory: ./next
         run: npm ci
 
       - name: Run Cypress tests against Staging
         uses: cypress-io/github-action@v5
         with:
-          browser: edge
+          working-directory: ./next 
+          browser: chrome
           headless: true
           config-file: cypress.config.js
           config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}

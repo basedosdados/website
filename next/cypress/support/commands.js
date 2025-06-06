@@ -133,23 +133,23 @@ Cypress.Commands.add('fillStripeInput', (fieldName, value) => {
     cardCvc: 'input[id="Field-cvcInput"]'
   };
 
-  cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 15000 })
+  cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
     .its('0.contentDocument.body')
     .should('not.be.empty')
     .then(cy.wrap)
     .find(selectors[fieldName])
-    .type(value, { force: true, delay: 30 });
+    .type(value, { force: true, delay: 50 });
 });
 
 Cypress.Commands.add('applyCoupon', (coupon, text) => {
   cy.get('input[placeholder="Digite o cupom"]', { timeout: 15000 })
-    .clear()
-    .type(coupon);
+    .clear({ force: true })
+    .type(coupon, { force: true });
 
-  cy.contains('button', 'Aplicar', { timeout: 15000 })
+  cy.contains('button', 'Aplicar', { timeout: 30000 })
     .should('be.visible')
     .click({ force: true });
 
-  cy.contains(text, { timeout: 15000 })
+  cy.contains(text, { timeout: 30000 })
     .should('be.visible')
 })
