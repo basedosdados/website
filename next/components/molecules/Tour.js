@@ -90,7 +90,6 @@ export const ModalSurveyTour = ({ isOpen, onClose }) => {
   )
 }
 
-
 function translateText(locale, pt, en, es = pt) {
   const translations = {
     en: en,
@@ -130,28 +129,6 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
     tooltipClass: "tour-dataset-tooltip"
   });
 
-  const buttonBar = document.querySelector('.introjs-tooltipbuttons');
-  if (buttonBar) {
-    const customSkip = document.createElement('a');
-    customSkip.className = 'introjs-custom-skip-dataset';
-    customSkip.innerHTML = translateText(locale, 'Pular', 'Skip', 'Saltar');
-
-    customSkip.addEventListener('click', () => {
-      onSkipClick()
-      tour.exit();
-    });
-
-    buttonBar.insertBefore(customSkip, buttonBar.firstChild);
-  }
-
-  tour.onafterchange(() => {
-    document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
-    document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
-
-    document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
-    document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
-  });
-
   const onDoneClick = () => {
     if(!!query.tab) {
       datasetTab()
@@ -167,6 +144,34 @@ export const exploreTour = (datasetTab, setTabIndex, setTourBegin, query, locale
     cookies.set('tourBD', '{"state":"skip"}', { expires: 360 });
     triggerGAEvent('tour_dataset', "skip in step 0");
   };
+
+  tour.onbeforechange(() => {
+    setTimeout(() => {
+      const buttonBar = document.querySelector('.introjs-tooltipbuttons');
+      if (buttonBar) {
+        const existingSkips = buttonBar.querySelectorAll('.introjs-custom-skip-dataset');
+        existingSkips.forEach(el => el.remove());
+        
+        const customSkip = document.createElement('a');
+        customSkip.className = 'introjs-custom-skip-dataset';
+        customSkip.innerHTML = translateText(locale, 'Pular', 'Skip', 'Saltar');
+        customSkip.addEventListener('click', () => {
+          onSkipClick();
+          tour.exit();
+        });
+
+        buttonBar.insertBefore(customSkip, buttonBar.firstChild);
+      }
+    }, 50);
+  });
+
+  tour.onafterchange(() => {
+    document.querySelector('.introjs-donebutton')?.removeEventListener('click', onDoneClick);
+    document.querySelector('.introjs-skipbutton')?.removeEventListener('click', onSkipClick);
+
+    document.querySelector('.introjs-donebutton')?.addEventListener('click', onDoneClick);
+    document.querySelector('.introjs-skipbutton')?.addEventListener('click', onSkipClick);
+  });
 
   tour.start()
 }
