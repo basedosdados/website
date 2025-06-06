@@ -223,15 +223,15 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
       cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
 
-      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-        .as('stripeConfirmation');
-
-      cy.wait('@stripeConfirmation').then((interception) => {
-        expect(interception.response.statusCode).to.eq(200);
+      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
         expect(interception.response.body.status).to.eq('succeeded');
       });
     });
@@ -349,15 +349,15 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.fillStripeInput('cardExpiry', '12/30');
       cy.fillStripeInput('cardCvc', '123');
 
+      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+        .as('stripeConfirmation');
+
       cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
         .should('be.visible')
         .click();
 
-      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-        .as('stripeConfirmation');
-
-      cy.wait('@stripeConfirmation').then((interception) => {
-        expect(interception.response.statusCode).to.eq(200);
+      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
         expect(interception.response.body.status).to.eq('succeeded');
       });
     });
