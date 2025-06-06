@@ -177,14 +177,14 @@ export default function NewPassword({ userInfo }) {
             }}
             icon={showPassword ?
               <EyeOffIcon
-                alt={t('username.hidePassword')}
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"
               />
             :
               <EyeIcon
-                alt={t('username.showPassword')}
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"
@@ -220,14 +220,14 @@ export default function NewPassword({ userInfo }) {
             }}
             icon={showNewPassword ?
               <EyeOffIcon
-                alt={t('username.hidePassword')}
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"
               />
             :
               <EyeIcon
-                alt={t('username.showPassword')}
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"
@@ -315,14 +315,14 @@ export default function NewPassword({ userInfo }) {
             }}
             icon={showConfirmPassword ?
               <EyeOffIcon
-                alt={t('username.hidePassword')}
+                alt={t('username.showPassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"
               />
             :
               <EyeIcon
-                alt={t('username.showPassword')}
+                alt={t('username.hidePassword')}
                 width="20px"
                 height="20px"
                 fill="#464A51"

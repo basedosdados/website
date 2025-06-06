@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_OPTIONS='-r next-logger' next start"
+    "start": "NODE_OPTIONS='-r next-logger' next start",
+    "cypress": "npx cypress open"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -39,7 +40,7 @@
     "react-dom": "^17.0.2",
     "react-i18next": "^15.0.3",
     "react-image-crop": "^11.0.4",
-    "react-latex-next": "^2.2.0",
+    "react-latex-next": "^3.0.0",
     "react-markdown": "^8.0.7",
     "react-paginate": "^8.2.0",
     "react-query": "^3.39.2",
@@ -48,6 +49,8 @@
     "swiper": "^8.4.5"
   },
   "devDependencies": {
+    "cypress": "^14.4.0",
+    "cypress-plugin-stripe-elements": "^1.0.2",
     "medium-2-md": "github:gautamdhameja/medium-2-md",
     "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.1",
