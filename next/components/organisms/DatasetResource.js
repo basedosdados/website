@@ -562,10 +562,9 @@ export default function DatasetResource({
           tourStateRef.current.activeTour = null;
         }
 
-        if (tourStateRef.current.activeTour === tourBD.state) return;
-
-        tourStateRef.current.isTourRunning = true;
         setIsLoading(false);
+        if (tourStateRef.current.activeTour === tourBD.state) return;
+        tourStateRef.current.isTourRunning = true;
         startTour(tourBD.state);
       } catch (error) {
         console.error('Tour error:', error);
