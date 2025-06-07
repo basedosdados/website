@@ -109,14 +109,15 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
   useEffect(() => {
-    const handleLoadingTourBegin = (e) => {
-      modalSurveyTour.onOpen();
+    const handleLoadingTourSurvey = (e) => {
+      const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+      if(local === "https://basedosdados.org") modalSurveyTour.onOpen();
     };
 
-    window.addEventListener('datasetSurveyTour', handleLoadingTourBegin);
+    window.addEventListener('datasetSurveyTour', handleLoadingTourSurvey);
 
     return () => {
-      window.removeEventListener('datasetSurveyTour', handleLoadingTourBegin);
+      window.removeEventListener('datasetSurveyTour', handleLoadingTourSurvey);
     }
   }, [])
 
