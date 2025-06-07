@@ -352,12 +352,9 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
 
   useEffect(() => {
     if (hasLoadingColumns === false) {
-      const tourBD = getTourBD();
-      if (tourBD && tourBD.state !== 'skip') {
-        window.dispatchEvent(new CustomEvent('tablePageLoaded'));
-      }
+      window.dispatchEvent(new CustomEvent('tablePageLoaded'));
     }
-  }, [hasLoadingColumns, getTourBD]);
+  }, [hasLoadingColumns]);
 
   useEffect(() => {
     if (resource?._id) {
