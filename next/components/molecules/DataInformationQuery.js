@@ -649,9 +649,9 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
                     display="inline"
                     target="_blank"
                     href={
-                      locale === "en" ? "https://basedosdados.org/en/docs/colab_data/" :
-                      locale === "es" ? "https://basedosdados.org/es/docs/colab_data/" :
-                      "https://basedosdados.org/docs/colab_data/"
+                      locale === "en" ? "/en/docs/colab_data/" :
+                      locale === "es" ? "/es/docs/colab_data/" :
+                      "/docs/colab_data/"
                     }
                     fontWeight="400"
                     color="#0068C5"
