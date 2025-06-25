@@ -422,14 +422,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
               <Button
                 width={{base: "100%", lg: "fit-content"}}
                 justifyContent="center"
-                color="#2B8C4D"
-                border="1px solid #2B8C4D"
-                backgroundColor="#FFFFFF"
-                _hover={{
-                  backgroundColor: "#FFFFFF",
-                  color: "#22703E",
-                  boderColor: "#22703E"
-                }}
+                isVariant
               >
                 {t("makeSuggestionUsageGuide")}
               </Button>

@@ -85,13 +85,13 @@ function Slogan () {
           height="56px"
           width="fit-content"
           borderRadius="8px"
-          backgroundColor="#0D99FC"
+          backgroundColor="#2B8C4D"
           padding="10px 16px"
           cursor="pointer"
           color="#FFF"
           marginTop="24px !important"
           _hover={{
-            backgroundColor: "#0B89E2"
+            backgroundColor: "#22703E"
           }}
         >
           {t('slogan.cta')}
@@ -623,14 +623,10 @@ export default function Services({ caseStudiesContent }) {
         >
           <Button
             height="56px"
-            backgroundColor="#0D99FC"
             padding="10px 16px"
             fontSize="20px"
             lineHeight="30px"
             marginTop="24px !important"
-            _hover={{
-              backgroundColor: "#0B89E2"
-            }}
           >
             {t('slogan.cta')}
           </Button>
