@@ -246,9 +246,9 @@ export const CardPrice = ({
                 marginLeft="4px"
                 target="_blank"
                 alignItems="center"
-                color="#0D99FC"
+                color="#0068C5"
                 _hover={{
-                  color: "#0B89E2"
+                  color: "#0057A4"
                 }}
               >
                 {t('termsOfService')}
