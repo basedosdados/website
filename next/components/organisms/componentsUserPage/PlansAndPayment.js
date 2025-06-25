@@ -618,14 +618,7 @@ export default function PlansAndPayment ({ userData }) {
                 </Stack>
 
                 <Button
-                  color="#2B8C4D"
-                  backgroundColor="#FFF"
-                  border="1px solid #2B8C4D"
-                  _hover={{
-                    backgroundColor: "#FFF",
-                    color: "#22703E",
-                    borderColor: "#22703E"
-                  }}
+                  isVariant
                   width={{base: "100%", lg: "fit-content"}}
                   onClick={() => validateStripeCoupon()}
                 >
@@ -695,14 +688,7 @@ export default function PlansAndPayment ({ userData }) {
             <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
               <Button
                 marginTop="24px"
-                color="#2B8C4D"
-                backgroundColor="#FFF"
-                border="1px solid #2B8C4D"
-                _hover={{
-                  backgroundColor: "#FFF",
-                  color: "#22703E",
-                  borderColor: "#22703E"
-                }}
+                isVariant
                 width={{base: "100%", lg: "fit-content"}}
                 onClick={() => {
                   PaymentModal.onClose()
@@ -844,14 +830,7 @@ export default function PlansAndPayment ({ userData }) {
           flexDirection={{base: "column-reverse", lg:"row"}}
         >
           <Button
-            color="#2B8C4D"
-            backgroundColor="#FFF"
-            border="1px solid #2B8C4D"
-            _hover={{
-              backgroundColor: "#FFF",
-              color: "#22703E",
-              borderColor: "#22703E"
-            }}
+            isVariant
             width={{base: "100%", lg:"fit-content"}}
             onClick={() => {
               setEmailGCP(userData?.gcpEmail || userData?.email)
@@ -926,14 +905,7 @@ export default function PlansAndPayment ({ userData }) {
           width="100%"
         >
           <Button
-            color="#2B8C4D"
-            backgroundColor="#FFF"
-            border="1px solid #2B8C4D"
-            _hover={{
-              backgroundColor: "#FFF",
-              color: "#22703E",
-              borderColor: "#22703E"
-            }}
+            isVariant
             width={{base:"100%", lg: "50%"}}
             onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
             isLoading={isLoading}
@@ -1066,7 +1038,6 @@ export default function PlansAndPayment ({ userData }) {
             <Toggle
               id="toggle-prices"
               defaultChecked
-              className="toggle_variant"
               value={toggleAnual}
               onChange={() => setToggleAnual(!toggleAnual)}
             />

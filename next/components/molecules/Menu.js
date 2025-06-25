@@ -41,8 +41,6 @@ import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import DBLogoImage from "../../public/img/logos/db_logo";
 import DBLogoProImage from "../../public/img/logos/db_logo_pro";
-import DBLogoEduImage from "../../public/img/logos/db_logo_edu";
-import DBLogoLabImage from "../../public/img/logos/db_logo_lab";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -159,42 +157,17 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         {userData ? (
           <></>
         ) : (
-          <Stack display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
-            <Link
-              href="/user/login"
-              display="flex"
-              alignItems="center"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              padding="8px 4px"
-              cursor="pointer"
-              gap="8px"
-              _hover={{
-                opacity: 0.7
-              }}
-            >
-              {t('enter', { ns: 'menu' })}
+          <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
+            <Link href="/user/login" width="100%">
+              <Button width="100%">
+                {t('enter', { ns: 'menu' })}
+              </Button>
             </Link>
-            
-            <Link
-              href="/user/register"
-              display="flex"
-              alignItems="center"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              backgroundColor="#0D99FC"
-              padding="8px 16px"
-              cursor="pointer"
-              color="#FFF"
-              fontWeight="400"
-              gap="8px"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-            >
-              {t('register', { ns: 'menu' })}
+
+            <Link href="/user/register" width="100%">
+              <Button isVariant  width="100%">
+                {t('register', { ns: 'menu' })}
+              </Button>
             </Link>
           </Stack>
         )}
@@ -821,22 +794,11 @@ function DesktopLinks({
             >
               {t('enter', { ns: 'menu' })}
             </Link>
-            
-            <Link
-              href="/user/register"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              backgroundColor="#0D99FC"
-              padding="8px 16px"
-              color="#FFF"
-              fontWeight="400"
-              gap="8px"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-            >
-              {t('register', { ns: 'menu' })}
+
+            <Link href="/user/register">
+              <Button isVariant>
+                {t('register', { ns: 'menu' })}
+              </Button>
             </Link>
           </>
         )}

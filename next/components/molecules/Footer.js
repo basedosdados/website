@@ -27,7 +27,7 @@ function SectionCategories({ title, children, ...props }) {
     <VStack spacing={0} alignItems="flex-start" {...props}>
       <BodyText
         typography="small"
-        color="#FFF"
+        color="#464A51"
         paddingBottom={{base: "24px", lg: "16px"}}
       >
         {title}
@@ -42,12 +42,12 @@ function SectionCategories({ title, children, ...props }) {
 const IconKey = {
   width: "24px",
   height: "24px",
-  fill: "#FFF"
+  fill: "#464A51"
 }
 
 function SocialLink({ href, icon }) {
   return (
-    <Link href={href} target="_blank">
+    <Link href={href} target="_blank" _hover={{ opacity: 0.8 }}>
       {icon}
     </Link>
   )
@@ -59,9 +59,10 @@ function FooterLink(props) {
       fontWeight="500"
       fontSize="16px"
       lineHeight="24px"
-      color="#FFF"
+      color="#464A51"
       target="_blank"
       href={props.href}
+      _hover={{ opacity: 0.8 }}
       {...props}
     />
   )
@@ -155,7 +156,7 @@ export default function Footer({ template, ocult = false }) {
     >
       <VStack 
         width="100%"
-        backgroundColor="#34A15A"
+        backgroundColor="#EEEEEE"
         padding="80px 24px 40px"
         spacing={10}
       >
@@ -172,14 +173,13 @@ export default function Footer({ template, ocult = false }) {
             typography="small"
             minWidth="260px"
             fontWeight="400"
-            color="#FFF"
-            paddingBottom="40px"
+            color="#464A51"
+            paddingBottom={{ base: "40px", md: "" }}
           >
             {t('footer.title')}
           </Display>
 
           <Stack
-            paddingBottom="40px"
             display={{base: "grid", lg: "flex"}}
             flexDirection="row"
             gridTemplateColumns={{base:"1fr 1fr", lg: ""}}
@@ -279,7 +279,7 @@ export default function Footer({ template, ocult = false }) {
                 fontWeight="500"
                 fontSize="16px"
                 lineHeight="24px"
-                color="#FFF"
+                color="#464A51"
               >
                 {t('footer.institutional.supportProject')}
               </Link>
@@ -291,7 +291,7 @@ export default function Footer({ template, ocult = false }) {
       <HStack
         width="100%"
         height={{base: "100%", lg: "96px"}}
-        backgroundColor="#2B8C4D"
+        backgroundColor="#EEEEEE"
         padding="30px"
       >
         <HStack
@@ -307,16 +307,24 @@ export default function Footer({ template, ocult = false }) {
           <HStack
             spacing={0}
             textAlign="center"
+            width="100%"
             maxWidth="1440px"
             flexDirection={{base: "column", lg: "row"}}
             alignItems="flex-start"
             marginTop={{base: "16px", lg: "0"}}
           >
-            <HStack spacing="30px">
+            <HStack
+              display={{base: "grid", md: "flex"}}
+              gridTemplateColumns="1fr 1fr"
+              width="100%"
+              gap={{base: "20px", md: "30px"}}
+              spacing={0}
+            >
               <LabelText
                 typography="x-small"
                 fontWeight="400"
-                color="#FFFFFF"
+                color="#464A51"
+                textAlign="start"
               >
                 {t('footer.copyright', { year: new Date().getFullYear() })}
               </LabelText>
@@ -325,8 +333,9 @@ export default function Footer({ template, ocult = false }) {
                 fontWeight="400"
                 fontSize="12px"
                 lineHeight="18px"
-                color="#FFFFFF"
+                color="#464A51"
                 href="/terms?section=terms"
+                textAlign="start"
               >
                 {t('footer.termsOfUse')}
               </Link>
@@ -334,17 +343,18 @@ export default function Footer({ template, ocult = false }) {
                 fontWeight="400"
                 fontSize="12px"
                 lineHeight="18px"
-                color="#FFFFFF"
+                color="#464A51"
                 href="/terms?section=privacy"
+                textAlign="start"
               >
                 {t('footer.privacyPolicy')}
               </Link>
 
-              <LanguageSelector theme="dark" />
+              <LanguageSelector />
             </HStack>
           </HStack>
 
-          <HStack spacing={3}>
+          <HStack spacing={{base: "20px", md: "12px"}} paddingBottom={{base: "24px", md: "0"}}>
             <SocialLink title="X" href={
               locale === 'en' ? "https://x.com/data__basis" :
               locale === 'es' ? "https://x.com/basedelosdatos" :
