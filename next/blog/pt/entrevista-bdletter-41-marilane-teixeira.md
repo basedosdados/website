@@ -10,7 +10,7 @@ authors:
   - name: Giovane Caruso
     role: Edição  
 categories: [analise]
-thumbnail: 
+thumbnail: /blog/entrevista-bdletter-41-marilane-teixeira/marilene-teixeira.png
 medum_slug: https://medium.com/@basedosdados/nota-sobre-divulga%C3%A7%C3%A3o-dos-dados-do-inep-9168291dbca0
 published: true
 order: 1
