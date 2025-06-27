@@ -1,7 +1,12 @@
 {
   "pageTitle": "Serviços – Base dos Dados",
   "metaTitle": "Serviços – Base dos Dados",
-  "section-1-title": "Transforme dados em impacto real",
-  "section-1-subtitle": "Oferecemos serviços de engenharia, análise e capacitação de dados para potencializar as suas decisões",
-  "section-1-button": "Solicitar uma proposta"
+  "hero-title": "Transforme dados em impacto real",
+  "hero-subtitle": "Oferecemos serviços de engenharia, análise e capacitação de dados para potencializar as suas decisões",
+  "hero-button": "Solicitar uma proposta",
+  "data-team-support-title": "Potencialize suas decisões com dados",
+  "data-team-support-content": "Conte com nossa equipe para construir soluções especializadas de dados,",
+  "data-team-support-content_1": "feitas para ajudar sua equipe a trabalhar melhor e tomar decisões com confiança.",
+  "data-team-support-button": "Solicite uma proposta",
+  "chatbot-warning-msg": "* No serviço de chatbot, seus dados estarão sujeitos as politicas de segurança e privacidade dos provedores de LLM e infraestrutura. "
 }
