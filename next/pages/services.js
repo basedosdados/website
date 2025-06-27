@@ -1,8 +1,6 @@
 import {
   Stack,
   VStack,
-  Box,
-  Skeleton,
   Grid,
   GridItem
 } from "@chakra-ui/react";
@@ -23,8 +21,13 @@ import BodyText from "../components/atoms/Text/BodyText";
 
 const ImageSection = "/img/image-diagnostico-de-maturidade-de-dados.png";
 const ImageCard = "/img/fact-check.png";
-import CheckIcon from "../public/img/icons/checkIcon";
 import PointsIcon from "../public/img/icons/pointsIcon";
+import SpeedIcon from "../public/img/icons/speedIcon";
+import DnsIcon from "../public/img/icons/dnsIcon";
+import FlowsheetIcon from "../public/img/icons/flowsheetIcon";
+import TableChartViewIcon from "../public/img/icons/tableChartViewIcon";
+import RobotIcon from "../public/img/icons/robotIcon";
+import SchoolIcon from "../public/img/icons/schoolIcon";
 
 
 export async function getStaticProps({ locale }) {
@@ -77,115 +80,113 @@ const Section = ({
 }) => {
 
   return (
-    <Stack
+    <VStack
       id={id}
+      display="flex"
       paddingTop="40px"
       scrollMarginTop="20px"
       spacing={0}
     >
       <Stack
-        padding="40px 24px"
+        padding={{base: "40px 24px 24px", md: "40px 24px"}}
         boxSizing="content-box"
         spacing="16px"
         maxWidth="1440px"
         margin="0 auto"
       >
-        <Display>
-          {title}
-        </Display>
-        <TitleText typography="large" color="#71757A">
+        {!isMobileMod() ?
+          <Display>
+            {title}
+          </Display>
+        :
+          <TitleText typography="large">
+            {title}
+          </TitleText>
+        }
+        <TitleText
+          typography={isMobileMod() ? "small" : "large"}
+          color="#71757A"
+        >
           {subtitle}
         </TitleText>
       </Stack>
 
       {content[0] && (
         <Stack
-          width={{base: "inherit",md: "100%"}}
-          maxWidth="1440px"
-          alignItems="center"
-          margin="0 auto !important"
-          padding="80px 24px"
-          boxSizing="content-box"
-          flexDirection={{base: "column-reverse", md: "row"}}
-          justifyContent="space-between"
-          spacing={0}
-          gap="40px"
-        >
-          <TitleText typography="large" maxWidth="675px">
-            {content[0].text || ""}
-          </TitleText>
-          {content[0].img.id && 
-            <Image
-              src={content[0].img.id}
-              alt={content[0].img.alt || ""}
-              width={content[0].img.width || 600}
-              height={content[0].img.height || 300}
-              style={{ objectFit: "contain" }}
-            />
-          }
-        </Stack>
-      )}
-
-      {content[1] && (
-        <Stack
           width="100%"
-          backgroundColor="#252A32"
+          alignItems="center"
+          padding={{base: "0 24px 24px", md: "80px 24px"}}
           spacing={0}
         >
           <Stack
             width="100%"
             maxWidth="1440px"
-            padding="80px 24px"
-            boxSizing="content-box"
-            flexDirection={{base: "column", md: "row"}}
+            flexDirection={{base: "column-reverse", md: "row"}}
             justifyContent="space-between"
-            alignItems="center"
+            margin="0 auto !important"
+            gap="24px"
+            spacing={0}
+          >
+            <TitleText
+              display="flex"
+              alignItems="center"
+              typography={isMobileMod() ? "small" : "large"}
+              maxWidth="675px"
+            >
+              {content[0].text || ""}
+            </TitleText>
+            {content[0].img.id && 
+              <Image
+                src={content[0].img.id}
+                alt={content[0].img.alt || ""}
+                width={content[0].img.width || 600}
+                height={content[0].img.height || 300}
+              />
+            }
+          </Stack>
+        </Stack>
+      )}
+
+      {content[1]?.mention && (
+        <Stack
+          width="100%"
+          backgroundColor="#252A32"
+          padding={{base: "40px 24px", md: "80px 24px"}}
+          spacing={0}
+        >
+          <Stack
+            width="100%"
+            maxWidth="1440px"
+            flexDirection="column"
             margin="0 auto !important"
             spacing={0}
-            gap="40px"
+            gap="24px"
           >
-            {(content[1]?.text || content[1]?.subText) && (
-              <Stack
-                flex={1}
-                spacing={0}
+            <PointsIcon fill="#2B8C4D" width="25px" height="22px"/>
+            {!isMobileMod() ?
+              <Display
+                typography="small"
+                color="#FFF"
+                maxWidth="1200px"
               >
-                {content[1].text && (
-                  <Display typography="large" color="#FFF">
-                    {content[1].text}
-                  </Display>
-                )}
-                {content[1].subText && (
-                  <TitleText typography="large" color="#EEEEEE">
-                    {content[1].subText}
-                  </TitleText>
-                )}
-              </Stack>
-            )}
-            {content[1]?.mention &&
-              <Stack
-                flex={1}
-                spacing="24px"
+                {content[1].mention?.content || ""}
+              </Display>
+            :
+              <TitleText
+                typography="small"
+                color="#FFF"
               >
-                <PointsIcon fill="#2B8C4D" widthImage="25px" heightImage="22px"/>
-                {(content[1]?.text || content[1]?.subText) ? 
-                  <TitleText typography="large" color="#FFF" maxWidth="1200px">
-                    {content[1]?.mention?.content}
-                  </TitleText>
-                :
-                  <Display typography="small" color="#FFF" maxWidth="1200px">
-                    {content[1]?.mention?.content}
-                  </Display>
-                }
-                <Stack spacing={0}>
-                  <BodyText typography="large" color="#FFF">
-                    {content[1]?.mention?.author}
-                  </BodyText>
-                  <BodyText typography="large" color="#EEEEEE">
-                    {content[1]?.mention?.position}
-                  </BodyText>
-                </Stack>
-              </Stack>
+                {content[1].mention?.content || ""}
+              </TitleText>
             }
+            <Stack spacing={0}>
+              <BodyText typography="large" color="#FFF">
+                {content[1].mention?.author || ""}
+              </BodyText>
+              <BodyText typography="large" color="#EEEEEE">
+                {content[1].mention?.position || ""}
+              </BodyText>
+            </Stack>
           </Stack>
         </Stack>
       )}
@@ -193,7 +194,7 @@ const Section = ({
         <Grid
           maxWidth="1440px"
           margin="0 auto !important"
-          padding="80px 24px"
+          padding={{base:"40px 24px", md:"80px 24px"}}
           boxSizing="content-box"
           templateColumns={{base: "1fr", md: "1fr 1fr"}}
           gap="24px"
@@ -207,13 +208,19 @@ const Section = ({
               backgroundColor="#E4F2FF"
             >
               <Image src={elm.icon} width={80} height={80}/>
-              <TitleText marginTop="8px">{elm.title}</TitleText>
-              <TitleText color="#71757A">{elm.content}</TitleText>
+              <TitleText
+                typography={isMobileMod() ? "small" : "medium"}
+                marginTop="8px"
+              >{elm.title}</TitleText>
+              <TitleText
+                typography={isMobileMod() ? "small" : "medium"}
+                color="#71757A"
+              >{elm.content}</TitleText>
             </GridItem>
           ))}
         </Grid>
       }
-    </Stack>
+    </VStack>
   )
 }
 
@@ -221,12 +228,12 @@ export default function Services() {
   const { t } = useTranslation('services');
 
   const sectionsNav = [
-    {icon: <CheckIcon/>, text: "Diagnóstico de Maturidade de Dados", anchoring: "diagnostico-de-maturidade-de-dados"},
-    {icon: <CheckIcon/>, text: "Arquitetura de Dados", anchoring: "arquitetura-de-dados"},
-    {icon: <CheckIcon/>, text: "Portal de Dados", anchoring: "portal-de-dados"},
-    {icon: <CheckIcon/>, text: "Painel Gerencial", anchoring: "painel-gerencial"},
-    {icon: <CheckIcon/>, text: "Chatbot", anchoring: "chatbot"},
-    {icon: <CheckIcon/>, text: "Formação", anchoring: "formacao"}
+    {icon: <SpeedIcon width="40px" height="40px"/>, text: "Diagnóstico de Maturidade de Dados", anchoring: "diagnostico-de-maturidade-de-dados"},
+    {icon: <DnsIcon width="40px" height="40px"/>, text: "Arquitetura de Dados", anchoring: "arquitetura-de-dados"},
+    {icon: <FlowsheetIcon width="40px" height="40px"/>, text: "Portal de Dados", anchoring: "portal-de-dados"},
+    {icon: <TableChartViewIcon width="40px" height="40px"/>, text: "Painel Gerencial", anchoring: "painel-gerencial"},
+    {icon: <RobotIcon width="40px" height="40px"/>, text: "Chatbot", anchoring: "chatbot"},
+    {icon: <SchoolIcon width="40px" height="40px"/>, text: "Formação", anchoring: "formacao"}
   ]
 
   return (
@@ -252,7 +259,7 @@ export default function Services() {
           typography={isMobileMod() ? "small" : "large"}
           paddingBottom="16px"
         >
-          {t("section-1-title")}
+          {t("hero-title")}
         </Display>
         <TitleText
           as="h2"
@@ -260,10 +267,10 @@ export default function Services() {
           color="#71757A"
           paddingBottom="32px"
         >
-          {t("section-1-subtitle")}
+          {t("hero-subtitle")}
         </TitleText>
         <Link
-          href=""
+          href="/contact-consulting"
           target="_blank"
           width={isMobileMod() ? "100%" : "fit-content"}
         >
@@ -273,7 +280,7 @@ export default function Services() {
             justifyContent="center"
           >
             <LabelText typography="x-large" color="currentColor">
-              {t("section-1-button")}
+              {t("hero-button")}
             </LabelText>
           </Button>
         </Link>
@@ -319,8 +326,6 @@ export default function Services() {
             }
           },
           {
-            text: "5x métrica",
-            subText: "texto complementar para a métrica",
             mention: {
               content: "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
               author: "Nome",
@@ -377,6 +382,72 @@ export default function Services() {
           }
         ]}
       />
+
+      <Stack
+        padding="24px 24px 0"
+        spacing={0}
+      >
+        <Stack
+          width="100%"
+          maxWidth="1440px"
+          spacing={0}
+          boxSizing="border-box"
+          padding="80px 40px"
+          margin="0 auto"
+          backgroundColor="#252A32"
+          borderRadius="32px"
+        >
+          <Display
+            typography={isMobileMod() ? "small" : "large"}
+            color="#FFF"
+            paddingBottom="16px"
+          >
+            {t("data-team-support-title")}
+          </Display>
+          <TitleText
+            typography={isMobileMod() ? "small" : "medium"}
+            color="#FFF"
+            maxWidth="875px"
+          >
+            {t("data-team-support-content")}
+          </TitleText>
+          <TitleText
+            typography={isMobileMod() ? "small" : "medium"}
+            color="#FFF"
+            paddingBottom="24px"
+            maxWidth="875px"
+          >
+            {t("data-team-support-content_1")}
+          </TitleText>
+          <Link
+            href="/contact-consulting"
+            target="_blank"
+            padding="8px 0"
+            width={isMobileMod() ? "100%" : "fit-content"}
+          >
+            <Button
+              height="54px"
+              width="100%"
+              justifyContent="center"
+            >
+              <LabelText typography="x-large" color="currentColor">
+                {t("data-team-support-button")}
+              </LabelText>
+            </Button>
+          </Link>
+        </Stack>
+
+        <BodyText
+          width="100%"
+          maxWidth="1440px"
+          margin="0 auto !important"
+          typography="large"
+          color="#464A51"
+          padding="80px 24px"
+        >
+          {t("chatbot-warning-msg")}
+        </BodyText>
+      </Stack>
     </MainPageTemplate>
   )
 }
