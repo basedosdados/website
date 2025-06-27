@@ -265,14 +265,14 @@ export default function Survey() {
               borderRadius="16px"
               cursor="pointer"
               border={selectedValueStage(elm[1], index) ? "2px solid #2B8C4D" : "1px solid #DEDFE0"}
-              backgroundColor={selectedValueStage(elm[1], index) ? "#55A371" : "#FFF"}
+              backgroundColor={selectedValueStage(elm[1], index) ? "#D5E8DB" : "#FFF"}
               width="fit-content"
               padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="18px"
               lineHeight="28px"
-              color="#464A51"
+              color={selectedValueStage(elm[1], index) ? "#2B8C4D" : "#464A51"}
             >
               {elm[0]}
             </Box>
@@ -293,6 +293,11 @@ export default function Survey() {
             borderRadius="100px"
             backgroundColor="#DEDFE0"
             value={progressValue()}
+            css={{
+              '& > div': {
+                background: '#2B8C4D',
+              }
+            }}
           />
 
           <Stack

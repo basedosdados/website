@@ -159,13 +159,13 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         ) : (
           <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
             <Link href="/user/login" width="100%">
-              <Button width="100%">
+              <Button width="100%" justifyContent="center">
                 {t('enter', { ns: 'menu' })}
               </Button>
             </Link>
 
             <Link href="/user/register" width="100%">
-              <Button isVariant  width="100%">
+              <Button isVariant  width="100%" justifyContent="center">
                 {t('register', { ns: 'menu' })}
               </Button>
             </Link>
@@ -625,7 +625,6 @@ function SearchInputUser ({ user }) {
 function DesktopLinks({
   userData,
   links,
-  position = false,
   path,
   userTemplate = false,
   isUserPro
@@ -667,11 +666,7 @@ function DesktopLinks({
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
       transition="1s"
-      marginLeft={
-        path === "/" ?
-        !position ? "0 !important" : "28px !important"
-        : "28px !important"
-      }
+      marginLeft="28px !important"
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v], i) => {
@@ -818,7 +813,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
   const divRef = useRef()
-  const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
 
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -973,9 +967,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= 225) setIsScrollDown(true)
-      if (window.scrollY <= 225) setIsScrollDown(false)
-
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
@@ -1040,16 +1031,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
           <Link
             aria-label="Home"
-            width={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
-            }
-            minWidth={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
-            }
+            width="80px"
+            minWidth="80px"
             _hover={{opacity:"none"}}
             href={"/search"}
             marginLeft="0 !important"
@@ -1073,7 +1056,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             <DesktopLinks
               userData={userData}
               links={links}
-              position={isScrollDown}
               path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}

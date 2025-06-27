@@ -72,6 +72,7 @@ function Hero() {
             <Display as="span" typography={isMobileMod() ? "small" : "large"}>{t("reliable_analysis")}</Display>
           </Text>
           <TitleText
+            maxWidth="1120px"
             color="#71757A"
             paddingTop="16px"
             typography={isMobileMod() ? "small" : "medium"}
@@ -85,18 +86,21 @@ function Hero() {
             spacing={0}
           >
             <Link
-              href=""
-              target="_blank"
+              href="/search"
+              target="_self"
             >
-              <Button height="54px" width={isMobileMod() ? "100%" : "fit-content"}>
+              <Button
+                height="54px"
+                width={isMobileMod() ? "100%" : "fit-content"}
+              >
                 <LabelText typography="x-large" color="currentColor">
                   {t("organized_data_first_button")}
                 </LabelText>
               </Button>
             </Link>
             <Link
-              href=""
-              target="_blank"
+              href="/services"
+              target="_self"
             >
               <Button
                 height="54px"
