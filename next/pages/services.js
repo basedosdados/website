@@ -1,24 +1,18 @@
 import {
   Stack,
   VStack,
-  Image,
   Box,
   Skeleton,
   Grid,
   GridItem
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import ImageNext from "next/image";
+import Image from "next/image";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useCheckMobile } from "../hooks/useCheckMobile.hook";
+import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
-
-import {
-  getAllCaseStudies
-} from "./api/caseStudies"
 
 import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
@@ -27,317 +21,213 @@ import TitleText from "../components/atoms/Text/TitleText";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
 
-import BDLogoLabImage from "../public/img/logos/bd_logo_lab"
+const ImageSection = "/img/image-diagnostico-de-maturidade-de-dados.png";
+const ImageCard = "/img/fact-check.png";
 import CheckIcon from "../public/img/icons/checkIcon";
+import PointsIcon from "../public/img/icons/pointsIcon";
 
 
 export async function getStaticProps({ locale }) {
-  const caseStudiesContent = await getAllCaseStudies(locale)
-
   return {
     props: {
-      caseStudiesContent,
       ...(await serverSideTranslations(locale, ['common', 'services', 'menu'])),
       ...(await withPages()),
     },
   };
 }
 
-function Slogan () {
-  const { t } = useTranslation('services');
-
+const SectionSelector = ({ icon, text, anchoring }) => {
   return (
-    <Stack
-      width="100%"
-      maxWidth="950px"
-      paddingTop="80px"
-      spacing={0}
-      margin={{base: "0 auto 60px", lg: "0 auto 100px"}}
+    <GridItem
+      as="a"
+      href={`#${anchoring}`}
+      display="flex"
+      flexDirection="row"
+      gap="16px"
+      justifyContent="flex-start"
       alignItems="center"
-    >
-      <BDLogoLabImage
-        widthImage={{base: "120px", lg: "240px"}}
-        heightImage={{base: "30px", lg: "60px"}}
-        marginBottom={{base: "24px", lg: "40px"}}
-      />
-      <Display
-        typography="large"
-        textAlign="center"
-        margin="0 0 24px !important"
-      > 
-        {t('slogan.title')}
-      </Display>
-      <TitleText
-        typography="large"
-        color="#71757A"
-        textAlign="center"
-      >
-        {t('slogan.description')}
-      </TitleText>
-      <Link
-        href="/contact-consulting"
-        target="_self"
-      >
-        <LabelText
-          typography="x-large"
-          display="flex"
-          alignItems="center"
-          height="56px"
-          width="fit-content"
-          borderRadius="8px"
-          backgroundColor="#2B8C4D"
-          padding="10px 16px"
-          cursor="pointer"
-          color="#FFF"
-          marginTop="24px !important"
-          _hover={{
-            backgroundColor: "#22703E"
-          }}
-        >
-          {t('slogan.cta')}
-        </LabelText>
-      </Link>
-    </Stack>
-  )
-}
-
-function BoxBenefits ({ benefits, children }) {
-  return (
-    <Stack
-      flexDirection={benefits ? {base: "column", lg: "row"} : "row"}
-      spacing={0}
-      alignItems="center"
-      gap="10px"
-    >
-      <Box
-        display="flex"
-        flexDirection="row"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CheckIcon 
-          width="28px"
-          height="28px"
-          fill="#2B8C4D"
-        />
-        {benefits &&
-          <BodyText
-            typography="large"
-            fontWeight="500"
-            color="#464A51"
-          >
-            {benefits}:
-          </BodyText>}
-      </Box>
-      <BodyText
-        typography="large"
-        color="#464A51"
-      >{children}</BodyText>
-    </Stack>
-  )
-}
-
-function BorderBox({ title, children }) {
-  return (
-    <VStack
-      textAlign="center"
-      borderRadius="18px"
-      padding="25px"
-      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
-      width="350px"
-      height="100%"
-      spacing={4}
-    >
-      <TitleText typography="small">
-        {title}
-      </TitleText>
-      <BodyText
-        typography="large"
-        color="#464A51"
-        textAlign="center"
-      >
-        {children}
-      </BodyText>
-    </VStack>
-  )
-}
-
-function WorkflowBox({ order, title, subtitle, children}) {
-  const hasLeftSpacing = (order % 2 == 0) ? false : true
-
-  return (
-    <VStack
-      maxWidth="620px"
-      textAlign="center"
-      borderRadius="18px"
-      padding="25px"
-      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
-      margin={{
-        base: "40px 0 0 0 !important",
-        lg: hasLeftSpacing ?
-          "40px auto 0 250px !important"
-        : 
-          "40px 250px 0 auto !important"
+      cursor="pointer"
+      maxWidth={{base: "100%", md: "480px"}}
+      maxHeight="110px"
+      padding="35px 24px"
+      boxSizing="content-box"
+      borderTop="1px solid #DEDFE0"
+      borderLeft="1px solid #DEDFE0"
+      fill="#878A8E"
+      _hover={{
+        color: "#2B8C4D",
+        backgroundColor: "#D5E8DB",
+        fill: "#2B8C4D",
       }}
-      spacing={0}
     >
-      <TitleText
-        typography="small"
-        textAlign="center"
-      >
-          {title}
-      </TitleText>
-      <LabelText
-        typography="large"
-        color="#71757A"
-        textAlign="center"
-        paddingBottom="16px"
-      >
-          {subtitle}
+      {icon}
+      <LabelText typography="large" color="current-color">
+        {text}
       </LabelText>
-      <BodyText
-        color="#464A51"
-        textAlign="center"
-      >
-        {children}
-      </BodyText>
-    </VStack>
+    </GridItem>
   )
 }
 
-function CaseStudies ({ data }) {
-  const { t } = useTranslation('services');
-  const [CaseStudiesPages, setCaseStudiesPages] = useState([])
-
-  useEffect(() => {
-    setCaseStudiesPages(data)
-  },[data])
+const Section = ({
+  id = "",
+  title,
+  subtitle,
+  content = [],
+  cards = []
+}) => {
 
   return (
     <Stack
-      display={CaseStudiesPages.length === 0 ? "none" : "flex"}
-      id="case-studies"
-      width="100%"
-      maxWidth="1440px"
-      paddingTop="100px"
-      margin="0 auto !important"
+      id={id}
+      paddingTop="40px"
+      scrollMarginTop="20px"
       spacing={0}
     >
-      <Display
-        typography="small"
-        textAlign="center"
-        paddingBottom="16px"
-      >
-        {t('caseStudies.title')}
-      </Display>
-      <TitleText
-        color="#71757A"
-        textAlign="center"
-        paddingBottom="40px"
-      >
-        {t('caseStudies.subtitle')}
-      </TitleText>
-
       <Stack
-        flexWrap="wrap"
-        flexDirection="row"
-        gap="32px"
-        spacing={0}
-        justifyContent={{base: "center", lg: "start"}}
+        padding="40px 24px"
+        boxSizing="content-box"
+        spacing="16px"
+        maxWidth="1440px"
+        margin="0 auto"
       >
-        {CaseStudiesPages.length > 0 && 
-        CaseStudiesPages.map(elm => 
-          <Stack
-            key={elm.id}
-            width="400px"
-            spacing={0}
-          >
-            {/* Imagem banner */}
-            <Box
-              position="relative"
-              width={{base: "100%", lg: "400px"}}
-              height="145px"
-              overflow="hidden"
-              borderRadius="16px"
-              marginBottom="24px"
-            >
-              {elm?.img ?
-                <ImageNext
-                  alt={elm.displayTitle}
-                  src={elm.img}
-                  layout="fill"
-                  objectFit="cover"
-                />
-                :
-                <Skeleton width="100%" height="100%"/>
-              }
-            </Box>
-
-            {/* Imagem logo */}
-            <Box
-              position="relative"
-              width="100%"
-              height="45px"
-              overflow="hidden"
-              marginBottom="16px !important"
-            >
-              {elm?.logo?.img ?
-                <ImageNext
-                  alt={elm.displayTitle}
-                  src={elm.logo.img}
-                  width={elm.logo.width/2}
-                  height={elm.logo.height/2}
-                />
-                :
-                <Skeleton width="120px" height="100%"/>
-              }
-            </Box>
-
-            <BodyText
-              typography="large"
-              marginBottom="8px !important"
-              minHeight="110px"
-              maxHeight="110px"
-              textAlign="justify"
-              overflow="hidden"
-              color="#464A51"
-            >
-              {elm?.summary && elm?.summary.slice(0,useCheckMobile() ? 160 :178)+"..."}
-            </BodyText>
-
-            <Link
-              target="_self"
-              href={`/case-studies/${elm.id}`}
-              color="#0068C5"
-              _hover={{color: "#0057A4"}}
-              fontSize="18px"
-              lineHeight="26px"
-              fontWeight="400"
-              marginBottom="40px !important"
-            >
-              {t('caseStudies.readMore')}
-            </Link>
-          </Stack>
-        )}
+        <Display>
+          {title}
+        </Display>
+        <TitleText typography="large" color="#71757A">
+          {subtitle}
+        </TitleText>
       </Stack>
+
+      {content[0] && (
+        <Stack
+          width={{base: "inherit",md: "100%"}}
+          maxWidth="1440px"
+          alignItems="center"
+          margin="0 auto !important"
+          padding="80px 24px"
+          boxSizing="content-box"
+          flexDirection={{base: "column-reverse", md: "row"}}
+          justifyContent="space-between"
+          spacing={0}
+          gap="40px"
+        >
+          <TitleText typography="large" maxWidth="675px">
+            {content[0].text || ""}
+          </TitleText>
+          {content[0].img.id && 
+            <Image
+              src={content[0].img.id}
+              alt={content[0].img.alt || ""}
+              width={content[0].img.width || 600}
+              height={content[0].img.height || 300}
+              style={{ objectFit: "contain" }}
+            />
+          }
+        </Stack>
+      )}
+
+      {content[1] && (
+        <Stack
+          width="100%"
+          backgroundColor="#252A32"
+          spacing={0}
+        >
+          <Stack
+            width="100%"
+            maxWidth="1440px"
+            padding="80px 24px"
+            boxSizing="content-box"
+            flexDirection={{base: "column", md: "row"}}
+            justifyContent="space-between"
+            alignItems="center"
+            margin="0 auto !important"
+            spacing={0}
+            gap="40px"
+          >
+            {(content[1]?.text || content[1]?.subText) && (
+              <Stack
+                flex={1}
+                spacing={0}
+              >
+                {content[1].text && (
+                  <Display typography="large" color="#FFF">
+                    {content[1].text}
+                  </Display>
+                )}
+                {content[1].subText && (
+                  <TitleText typography="large" color="#EEEEEE">
+                    {content[1].subText}
+                  </TitleText>
+                )}
+              </Stack>
+            )}
+            {content[1]?.mention &&
+              <Stack
+                flex={1}
+                spacing="24px"
+              >
+                <PointsIcon fill="#2B8C4D" widthImage="25px" heightImage="22px"/>
+                {(content[1]?.text || content[1]?.subText) ? 
+                  <TitleText typography="large" color="#FFF" maxWidth="1200px">
+                    {content[1]?.mention?.content}
+                  </TitleText>
+                :
+                  <Display typography="small" color="#FFF" maxWidth="1200px">
+                    {content[1]?.mention?.content}
+                  </Display>
+                }
+                <Stack spacing={0}>
+                  <BodyText typography="large" color="#FFF">
+                    {content[1]?.mention?.author}
+                  </BodyText>
+                  <BodyText typography="large" color="#EEEEEE">
+                    {content[1]?.mention?.position}
+                  </BodyText>
+                </Stack>
+              </Stack>
+            }
+          </Stack>
+        </Stack>
+      )}
+      {cards &&
+        <Grid
+          maxWidth="1440px"
+          margin="0 auto !important"
+          padding="80px 24px"
+          boxSizing="content-box"
+          templateColumns={{base: "1fr", md: "1fr 1fr"}}
+          gap="24px"
+        >
+          {cards.map((elm, index) => (
+            <GridItem
+              key={index}
+              boxSizing="content-box"
+              padding="32px"
+              borderRadius="32px"
+              backgroundColor="#E4F2FF"
+            >
+              <Image src={elm.icon} width={80} height={80}/>
+              <TitleText marginTop="8px">{elm.title}</TitleText>
+              <TitleText color="#71757A">{elm.content}</TitleText>
+            </GridItem>
+          ))}
+        </Grid>
+      }
     </Stack>
   )
 }
 
-export default function Services({ caseStudiesContent }) {
+export default function Services() {
   const { t } = useTranslation('services');
 
-  const services = {
-    [t('services.dataCapture')]: "https://storage.googleapis.com/basedosdados-website/images/cloud.png",
-    [t('services.dataAnalysis')]: "https://storage.googleapis.com/basedosdados-website/images/bar.png",
-    [t('services.dataConsulting')]: "https://storage.googleapis.com/basedosdados-website/images/lightbulb.png",
-  }
-
-  const service_ids = {
-    [t('services.dataCapture')]: "data-capture",
-    [t('services.dataAnalysis')]: "analytics",
-    [t('services.dataConsulting')]: "consulting",
-  }
+  const sectionsNav = [
+    {icon: <CheckIcon/>, text: "Diagnóstico de Maturidade de Dados", anchoring: "diagnostico-de-maturidade-de-dados"},
+    {icon: <CheckIcon/>, text: "Arquitetura de Dados", anchoring: "arquitetura-de-dados"},
+    {icon: <CheckIcon/>, text: "Portal de Dados", anchoring: "portal-de-dados"},
+    {icon: <CheckIcon/>, text: "Painel Gerencial", anchoring: "painel-gerencial"},
+    {icon: <CheckIcon/>, text: "Chatbot", anchoring: "chatbot"},
+    {icon: <CheckIcon/>, text: "Formação", anchoring: "formacao"}
+  ]
 
   return (
     <MainPageTemplate>
@@ -352,286 +242,141 @@ export default function Services({ caseStudiesContent }) {
 
       <Stack
         spacing={0}
-        paddingX="24px"
+        padding={{base: "40px 24px 8px", md: "40px 24px 40px"}}
+        maxWidth="1440px"
         margin="0 auto"
-        alignItems="center"
+        boxSizing="content-box"
       >
-        <Slogan/>
-
-        <Stack
-          justifyContent="center"
-          width="100%"
-          maxWidth="1440px"
-          margin="0 auto !important"
-          alignItems="center"
-          direction={{ base: "column", lg: "row" }}
-          gap="120px"
+        <Display
+          as="h1"
+          typography={isMobileMod() ? "small" : "large"}
+          paddingBottom="16px"
         >
-          {Object.entries(services).map(([k, v]) => (
-            <Link href={`#${service_ids[k]}`} key={v}>
-              <VStack justify="flex-end">
-                <Image alt="" marginBottom="15px" height="100px" src={v} />
-                <LabelText typography="x-large">
-                  {k}
-                </LabelText>
-              </VStack>
-            </Link>
-          ))}
-        </Stack>
-
-        <CaseStudies data={caseStudiesContent}/>
-
-        <VStack
-          id="data-capture"
-          width="100%"
-          maxWidth="1440px"
-          padding="100px 0 40px"
-          margin="auto"
-          textAlign="center"
-          spacing={0}
+          {t("section-1-title")}
+        </Display>
+        <TitleText
+          as="h2"
+          typography={isMobileMod() ? "small" : "medium"}
+          color="#71757A"
+          paddingBottom="32px"
         >
-          <Display
-            textAlign="center"
-            paddingBottom="8px"
-          >
-            {t('dataCapture.title')}
-          </Display>
-
-          <TitleText paddingBottom="24px">
-            {t('dataCapture.description')}
-          </TitleText>
-          <BodyText
-            typography="large"
-            maxWidth="800px"
-            color="#464A51"
-          >
-            {t('dataCapture.longDescription')}
-          </BodyText>
-
-          <Stack paddingTop="40px">
-            <LabelText typography="large">
-              {t('dataCapture.advantages.title')}
-            </LabelText>
-
-            <BoxBenefits benefits={t('dataCapture.advantages.speed')}>
-              {t('dataCapture.advantages.speedDescription')}
-            </BoxBenefits>
-            <BoxBenefits benefits={t('dataCapture.advantages.scale')}>
-              {t('dataCapture.advantages.scaleDescription')}
-            </BoxBenefits>
-            <BoxBenefits benefits={t('dataCapture.advantages.cost')}>
-              {t('dataCapture.advantages.costDescription')}
-            </BoxBenefits>
-          </Stack>
-
-          <Stack paddingTop="40px" spacing="40px">
-            <LabelText typography="large">
-              {t('dataCapture.work.title')}
-            </LabelText>
-
-            <Stack
-              justifyContent="space-between"
-              width="100%"
-              direction={{ base: "column", lg: "row" }}
-              align="center"
-            >
-              <Grid templateColumns={{base: "1fr", lg: "repeat(3, 1fr)"}} gap="8px">
-                <GridItem>
-                  <BorderBox title={t('dataCapture.work.technology.title')}>
-                    {t('dataCapture.work.technology.description')}
-                  </BorderBox>
-                </GridItem>
-                <GridItem>
-                  <BorderBox title={t('dataCapture.work.flexibility.title')}>
-                    {t('dataCapture.work.flexibility.description')}
-                  </BorderBox>
-                </GridItem>
-                <GridItem>
-                  <BorderBox title={t('dataCapture.work.frameworks.title')}>
-                    {t('dataCapture.work.frameworks.description')}
-                  </BorderBox>
-                </GridItem>
-              </Grid>
-            </Stack>
-          </Stack>
-        </VStack>
-
-        <VStack
-          id="analytics"
-          width="100%"
-          maxWidth="1440px"
-          padding="100px 0 40px"
-          margin="auto"
-          textAlign="center"
-          spacing={0}
-        >
-          <Display
-            textAlign="center"
-            paddingBottom="8px"
-          >
-            {t('dataAnalysis.title')}
-          </Display>
-
-          <TitleText paddingBottom="24px">
-            {t('dataAnalysis.description')}
-          </TitleText>
-          <BodyText
-            typography="large"
-            maxWidth="800px"
-            color="#464A51"
-          >
-            {t('dataAnalysis.longDescription')}
-          </BodyText>
-
-          <Stack paddingTop="40px">
-            <LabelText typography="large">
-              {t('dataAnalysis.examples.title')}
-            </LabelText>
-
-            <BoxBenefits>
-              {t('dataAnalysis.examples.example1')}
-            </BoxBenefits>
-            <BoxBenefits>
-              {t('dataAnalysis.examples.example2')}
-            </BoxBenefits>
-            <BoxBenefits>
-              {t('dataAnalysis.examples.example3')}
-            </BoxBenefits>
-          </Stack>
-        </VStack>
-
-        <VStack
-          id="consulting"
-          width="100%"
-          maxWidth="1440px"
-          padding="100px 0 40px"
-          margin="auto"
-          textAlign="center"
-          spacing={0}
-        >
-          <Display
-            textAlign="center"
-            paddingBottom="8px"
-          >
-            {t('dataConsulting.title')}
-          </Display>
-
-          <TitleText paddingBottom="24px">
-            {t('dataConsulting.description')}
-          </TitleText>
-          <BodyText
-            typography="large"
-            maxWidth="800px"
-            color="#464A51"
-          >
-            {t('dataConsulting.longDescription')}
-          </BodyText>
-
-          <Stack paddingTop="40px">
-            <LabelText typography="large">
-              {t('dataConsulting.advantages.title')}
-            </LabelText>
-
-            <BoxBenefits>
-              {t('dataConsulting.advantages.advantage1')}
-            </BoxBenefits>
-            <BoxBenefits>
-              {t('dataConsulting.advantages.advantage2')}
-            </BoxBenefits>
-            <BoxBenefits>
-              {t('dataConsulting.advantages.advantage3')}
-            </BoxBenefits>
-          </Stack>
-
-          <Stack paddingTop="40px" spacing="40px">
-            <LabelText typography="large">
-              {t('dataConsulting.areas.title')}
-            </LabelText>
-
-            <Stack
-              justifyContent="space-between"
-              width="100%"
-              direction={{ base: "column", lg: "row" }}
-              align="center"
-            >
-              <Grid templateColumns={{base: "1fr", lg: "repeat(3, 1fr)"}} gap="8px">
-                <GridItem>
-                  <BorderBox title={t('dataConsulting.areas.infrastructure.title')}>
-                    {t('dataConsulting.areas.infrastructure.description')}
-                  </BorderBox>
-                </GridItem>
-                <GridItem>
-                  <BorderBox title={t('dataConsulting.areas.analysis.title')}>
-                    {t('dataConsulting.areas.analysis.description')}
-                  </BorderBox>
-                </GridItem>
-                <GridItem>
-                  <BorderBox title={t('dataConsulting.areas.programming.title')}>
-                    {t('dataConsulting.areas.programming.description')}
-                  </BorderBox>
-                </GridItem>
-              </Grid>
-            </Stack>
-          </Stack>
-        </VStack>
-
-        <VStack
-          width="100%"
-          maxWidth="1440px"
-          margin="auto"
-          padding="100px 0 40px"
-          textAlign="center"
-          spacing={0}
-        >
-          <Display
-            typography="small"
-            textAlign="center"
-            paddingBottom="24px"
-          >
-            {t('workflow.title')}
-          </Display>
-          <TitleText
-            maxWidth="800px"
-            color="#71757A"
-            textAlign="center"
-          >
-            {t('workflow.description')}
-          </TitleText>
-
-          <Stack spacing={0} width="100%" alignItems="center">
-            <WorkflowBox order={1} title={t('workflow.steps.demand.title')} subtitle={t('workflow.steps.demand.subtitle')}>
-              {t('workflow.steps.demand.description')}
-            </WorkflowBox>
-
-            <WorkflowBox order={2} title={t('workflow.steps.planning.title')} subtitle={t('workflow.steps.planning.subtitle')}>
-              {t('workflow.steps.planning.description')}
-            </WorkflowBox>
-
-            <WorkflowBox order={3} title={t('workflow.steps.budget.title')} subtitle={t('workflow.steps.budget.subtitle')}>
-              {t('workflow.steps.budget.description')}
-            </WorkflowBox>
-
-            <WorkflowBox order={4} title={t('workflow.steps.execution.title')} subtitle={t('workflow.steps.execution.subtitle')}>
-              {t('workflow.steps.execution.description')}
-            </WorkflowBox>
-          </Stack>
-        </VStack>
-
+          {t("section-1-subtitle")}
+        </TitleText>
         <Link
-          href="/contact-consulting"
-          target="_self"
+          href=""
+          target="_blank"
+          width={isMobileMod() ? "100%" : "fit-content"}
         >
           <Button
-            height="56px"
-            padding="10px 16px"
-            fontSize="20px"
-            lineHeight="30px"
-            marginTop="24px !important"
+            height="54px"
+            width="100%"
+            justifyContent="center"
           >
-            {t('slogan.cta')}
+            <LabelText typography="x-large" color="currentColor">
+              {t("section-1-button")}
+            </LabelText>
           </Button>
         </Link>
       </Stack>
+
+      <Stack
+        spacing={0}
+        width="100%"
+        backgroundColor="#F7F7F7"
+        margin="24px 0 40px"
+      >
+        <Grid
+          width="100%"
+          maxWidth="1440px"
+          templateColumns={{base: "1fr", md: "1fr 1fr 1fr"}}
+          margin="0 auto"
+          borderBottom="1px solid #DEDFE0"
+          borderRight="1px solid #DEDFE0"
+        >
+          {sectionsNav.map((elm, index) => (
+            <SectionSelector
+              key={`${elm.text}_${index}`}
+              icon={elm.icon}
+              text={elm.text}
+              anchoring={elm.anchoring}
+            />
+          ))}
+        </Grid>
+      </Stack>
+
+      <Section
+        id="diagnostico-de-maturidade-de-dados"
+        title="Diagnóstico de Maturidade de Dados"
+        subtitle="Entregamos uma análise técnica e independente, com diagnóstico detalhado e um plano de ação claro para fortalecer sua gestão de dados com eficiência e estratégia."
+        content={[
+          {
+            text: "Avaliamos o estágio de maturidade da sua organização em múltiplos eixos, como governança, cultura, competências, processos e tecnologia. O diagnóstico acompanha um plano de ação concreto para o curto, médio e longo prazo.",
+            img: {
+              id: ImageSection,
+              alt: "diagnostico-de-maturidade-de-dados",
+              width: 600,
+              height: 300,
+            }
+          },
+          {
+            text: "5x métrica",
+            subText: "texto complementar para a métrica",
+            mention: {
+              content: "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
+              author: "Nome",
+              position: "Cargo"
+            }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: "Diagnóstico completo e plano de ação aplicável.",
+            content: "Mapeamos práticas, fluxos e ferramentas de dados para identificar gargalos e oportunidades, oferecendo recomendações realistas e adaptadas ao seu contexto."
+          },
+          {
+            icon: ImageCard,
+            title: "Base para decisões mais estratégicas.",
+            content: "Recomendamos perfis profissionais, melhorias organizacionais e opções tecnológicas para orientar investimentos e fortalecer a gestão de dados da sua organização."
+          }
+        ]}
+      />
+
+      <Section
+        id="arquitetura-de-dados"
+        title="Arquitetura de Dados"
+        subtitle="Configuramos toda a infraestrutura necessária para a ingestão, modelagem, tratamento e consumo dos seus dados — com eficiência, segurança e privacidade — para gerar valor em qualquer análise ou produto digital."
+        content={[
+          {
+            text: "Estruturamos ambientes em nuvem, desenhamos a modelagem dos dados e implementamos pipelines e APIs para ingestão, tratamento e integração entre dados públicos e privados.",
+            img: {
+              id: ImageSection,
+              alt: "arquitetura-de-dados",
+              width: 600,
+              height: 300,
+            }
+          },
+          {
+            mention: {
+              content: "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
+              author: "Nome",
+              position: "Cargo"
+            }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: "Diagnóstico completo e plano de ação aplicável.",
+            content: "Mapeamos práticas, fluxos e ferramentas de dados para identificar gargalos e oportunidades, oferecendo recomendações realistas e adaptadas ao seu contexto."
+          },
+          {
+            icon: ImageCard,
+            title: "Base para decisões mais estratégicas.",
+            content: "Recomendamos perfis profissionais, melhorias organizacionais e opções tecnológicas para orientar investimentos e fortalecer a gestão de dados da sua organização."
+          }
+        ]}
+      />
     </MainPageTemplate>
   )
 }
