@@ -16,7 +16,7 @@ recursos importantes de diversos conjuntos de datos públicos**, como:
 - **Datos originales**: Enlaces con información útil para explorar más
   sobre el conjunto de datos, como la fuente original y otros.
 
-> Tenemos un equipo de Datos y voluntarios(as) de todo Brasil que ayudan a limpiar y mantener las tablas procesadas. [Aprende cómo formar parte](colab_data.md)
+> Tenemos un equipo de Datos y voluntarios(as) de todo Brasil que ayudan a limpiar y mantener las tablas procesadas. [Aprende cómo formar parte](colab_data)
 
 ## Accediendo a tablas procesadas BD+
 
@@ -72,5 +72,5 @@ estándares y metodologías** para facilitar el proceso de análisis de datos.
 Hemos separado algunos materiales útiles para que entiendas mejor lo que hacemos
 y cómo sacar el mejor provecho de los datos:
 
-- [Cruzar datos de diferentes organizaciones de forma rápida](tutorial_join_tables.md)
-- [Entender patrones de tablas, conjuntos y variables](style_data.md)
+- [Cruzar datos de diferentes organizaciones de forma rápida](tutorial_join_tables)
+- [Entender patrones de tablas, conjuntos y variables](style_data)
