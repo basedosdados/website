@@ -443,7 +443,7 @@ export default function Services() {
           margin="0 auto !important"
           typography="large"
           color="#464A51"
-          padding="80px 24px"
+          padding="80px 0"
         >
           {t("chatbot-warning-msg")}
         </BodyText>
