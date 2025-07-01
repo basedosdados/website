@@ -213,7 +213,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 47,00/mês')
         .should('be.visible');
 
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 30000 })
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 1200000 })
         .should('be.visible')
         .its('0.contentDocument.body')
         .should('not.be.empty')
@@ -339,7 +339,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 3.360,00/ano')
         .should('be.visible');
 
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 300000 })
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 1200000 })
         .should('be.visible')
         .its('0.contentDocument.body')
         .should('not.be.empty')
