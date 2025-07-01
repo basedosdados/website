@@ -14,7 +14,7 @@ authors:
   - name: José Felix 
     role: Design    
 categories: [analise]
-thumbnail: 
+thumbnail: /blog/bdletter-41-o-fim-da-escala-6-x-1-afetaria-quantas-pessoas/grafico-1.png
 medum_slug: https://medium.com/@basedosdados/nota-sobre-divulga%C3%A7%C3%A3o-dos-dados-do-inep-9168291dbca0
 published: true
 order: 1
@@ -30,13 +30,13 @@ A Relação Anual de Informações Sociais (RAIS) é um registro administrativo 
 
 O gráfico 1 apresenta a distribuição de trabalhadores por faixas de quantidade de horas contratadas em 2023. Consideramos somente os vínculos CLT ativos em 31/12 de 2023. Os vínculos CLT podem variar conforme a natureza da contratação (urbana/rural), o tipo de empregador (pessoa física/pessoa jurídica), e se o contrato é determinado ou indeterminado. O mais frequente são trabalhadores urbanos, empregados por pessoa jurídica e sem delimitação de tempo contratual. 
 
-<Image src="/blog/bdletter-41-o-fim-da-escala-6-x-1-afetaria-quantas-pessoas/grafico_1.png"/>
+<Image src="/blog/bdletter-41-o-fim-da-escala-6-x-1-afetaria-quantas-pessoas/grafico-1.png"/>
 
 A maior parte dos trabalhadores com vínculos formais opera em escalas de 44h semanais ou mais, com 32,0 mi de trabalhadores, ou cerca de 77% do total. Vale destacar que isso não quer dizer que todos estão sob a escala 6x1. Existe grande variedade de escalas de trabalho em vigência nos mais diversos setores econômicos. Dessa forma, uma pessoa com contrato de 40h ou 30h semanais pode se enquadrar na escala 6x1 a depender da distribuição da jornada ao longo da semana. Também é comum haver contratos de 44h semanais na escala 5x2, em que horas de trabalho podem ser adicionadas diariamente para compensar os dois dias de descanso na semana ([Teixeira et al., 2025](https://transformaeconomia.org/wp-content/uploads/2025/04/NT13-PT.pdf)).
 
 Utilizando o recorte da PEC 8/25, que propõe a redução da carga horária semanal máxima para 36 horas, cerca de 38 milhões de trabalhadores com carteira assinada – ou 89% do total em 2023 – teriam sua rotina transformada. A maioria deles atua hoje sob o regime de 44 horas semanais, conforme apontado. O gráfico 2 mostra a evolução no tempo das diferentes faixas de horas contratadas.
 
-<Image src="/blog/bdletter-41-o-fim-da-escala-6-x-1-afetaria-quantas-pessoas/grafico_2.png"/>
+<Image src="/blog/bdletter-41-o-fim-da-escala-6-x-1-afetaria-quantas-pessoas/grafico-2.png"/>
 
 Em todo o período, os vínculos com jornadas de 44 horas ou mais lideram com folga, representando mais de 70% dos contratos a cada ano. As faixas intermediárias seguem praticamente estáveis. A exceção são as faixas de até 20h e de 20 a 40h, que aumentaram entre 2019 e 2021. No geral, a distribuição mudou pouco na última década, o que mostra como a carga horária padrão adotada pelas empresas permanece praticamente a mesma.
 

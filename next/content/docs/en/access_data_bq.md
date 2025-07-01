@@ -196,7 +196,7 @@ To understand more about the BigQuery interface and how to explore the data, we 
 ### Understand the data
 
 BigQuery has a search mechanism that allows you to search by *datasets* (sets), *tables* (tables), or *labels* (groups).
-We created simple naming rules and practices to facilitate your search - [see more](style_data.md).
+We created simple naming rules and practices to facilitate your search - [see more](style_data).
 
 ### Understand the use of BigQuery (BQ) for free
 
