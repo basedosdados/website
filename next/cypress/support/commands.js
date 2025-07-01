@@ -153,25 +153,3 @@ Cypress.Commands.add('applyCoupon', (coupon, text) => {
   cy.contains(text, { timeout: 30000 })
     .should('be.visible')
 })
-
-Cypress.Commands.add('forceStripeFrame', () => {
-  if (Cypress.env('CI')) {
-    cy.window().then(win => {
-      win.localStorage.setItem('__privateStripeMetrics', 'true');
-    });
-
-    cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 45000 })
-      .should('have.length.at.least', 1)
-      .its('0.contentDocument.body')
-      .should('not.be.empty')
-      .as('stripeBody');
-
-    Cypress.on('fail', (error) => {
-      if (error.message.includes('Stripe')) {
-        cy.log('Retry devido a falha no Stripe');
-        return false;
-      }
-      throw error;
-    });
-  }
-});
