@@ -138,7 +138,6 @@ function Hero() {
                 console.error('Erro ao carregar o vídeo', e);
               }}
             >
-              <source src="/video/platform-presentation.webm" type="video/webm" />
               <source src="/video/platform-presentation.mp4" type="video/mp4" />
             </video>
           </Box>

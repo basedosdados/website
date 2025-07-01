@@ -2,13 +2,15 @@ import {
   Stack,
   VStack,
   Grid,
-  GridItem
+  GridItem,
+  Box
 } from "@chakra-ui/react";
+import React, { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import Head from "next/head";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
 
@@ -28,6 +30,7 @@ import FlowsheetIcon from "../public/img/icons/flowsheetIcon";
 import TableChartViewIcon from "../public/img/icons/tableChartViewIcon";
 import RobotIcon from "../public/img/icons/robotIcon";
 import SchoolIcon from "../public/img/icons/schoolIcon";
+import ChevronIcon from "../public/img/icons/chevronIcon";
 
 
 export async function getStaticProps({ locale }) {
@@ -39,32 +42,44 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-const SectionSelector = ({ icon, text, anchoring }) => {
+const SectionSelector = ({ icon, text, anchoring, variant = false, active = false }) => {
   return (
     <GridItem
       as="a"
       href={`#${anchoring}`}
       display="flex"
+      cursor="pointer"
       flexDirection="row"
-      gap="16px"
       justifyContent="flex-start"
       alignItems="center"
-      cursor="pointer"
+      padding={variant ? "12px 24px" : "35px 24px"}
+      height={variant ? "24px" : "auto"}
+      gap={variant ? "4px" : "16px"}
+      borderBottom={(variant && active) ? "3px solid #2B8C4D" : "none"}
       maxWidth={{base: "100%", md: "480px"}}
       maxHeight="110px"
-      padding="35px 24px"
       boxSizing="content-box"
-      borderTop="1px solid #DEDFE0"
-      borderLeft="1px solid #DEDFE0"
-      fill="#878A8E"
+      borderTop={variant ? "none" : "1px solid #DEDFE0"}
+      borderLeft={variant ? "none" : "1px solid #DEDFE0"}
+      fill={active ? "#2B8C4D" : "#878A8E"}
+      backgroundColor={active && !variant ? "#D5E8DB" : "transparent"}
+      color={active ? "#2B8C4D" : "inherit"}
       _hover={{
         color: "#2B8C4D",
-        backgroundColor: "#D5E8DB",
+        backgroundColor: variant ? "transparent" : "#D5E8DB",
         fill: "#2B8C4D",
       }}
+      transition="background 0.2s, color 0.2s"
     >
       {icon}
-      <LabelText typography="large" color="current-color">
+      <LabelText 
+        width="fit-content"
+        typography={variant ? "small" : "large"} 
+        color="current-color"
+        overflow="hidden"
+        textOverflow="ellipsis"
+        whiteSpace="nowrap"
+      >
         {text}
       </LabelText>
     </GridItem>
@@ -226,6 +241,11 @@ const Section = ({
 
 export default function Services() {
   const { t } = useTranslation('services');
+  const [isSticky, setIsSticky] = useState(false);
+  const navRef = useRef(null);
+  const [selectedSection, setSelectedSection] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
 
   const sectionsNav = [
     {icon: <SpeedIcon width="40px" height="40px"/>, text: "Diagnóstico de Maturidade de Dados", anchoring: "diagnostico-de-maturidade-de-dados"},
@@ -235,6 +255,85 @@ export default function Services() {
     {icon: <RobotIcon width="40px" height="40px"/>, text: "Chatbot", anchoring: "chatbot"},
     {icon: <SchoolIcon width="40px" height="40px"/>, text: "Formação", anchoring: "formacao"}
   ]
+
+  useEffect(() => {
+    const observer = new window.IntersectionObserver(
+      ([entry]) => {
+        setIsSticky(!entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: "-40px 0px 0px 0px" }
+    );
+    if (navRef.current) {
+      observer.observe(navRef.current);
+    }
+    return () => {
+      if (navRef.current) observer.unobserve(navRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    const sectionIds = sectionsNav.map(s => s.anchoring);
+    
+    const handleIntersect = (entries) => {
+      if (isScrolling) return;
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setSelectedSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new window.IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.1
+    });
+
+    sectionIds.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => {
+      sectionIds.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          observer.unobserve(element);
+        }
+      });
+    };
+  }, [isScrolling]);
+
+  useEffect(() => {
+    if (!isScrolling) return;
+    let timeout = null;
+    const handleScroll = () => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        setIsScrolling(false);
+      }, 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isScrolling]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isDropdownOpen && !event.target.closest('[data-dropdown]')) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
 
   return (
     <MainPageTemplate>
@@ -287,15 +386,18 @@ export default function Services() {
       </Stack>
 
       <Stack
+        ref={navRef}
         spacing={0}
         width="100%"
         backgroundColor="#F7F7F7"
         margin="24px 0 40px"
       >
         <Grid
+          display={{base: "flex", md: "grid"}}
+          flexDirection="column"
           width="100%"
           maxWidth="1440px"
-          templateColumns={{base: "1fr", md: "1fr 1fr 1fr"}}
+          templateColumns="1fr 1fr 1fr"
           margin="0 auto"
           borderBottom="1px solid #DEDFE0"
           borderRight="1px solid #DEDFE0"
@@ -310,6 +412,142 @@ export default function Services() {
           ))}
         </Grid>
       </Stack>
+
+      {isSticky && (
+        useCheckMobile() ?
+          <Stack
+            position="fixed"
+            top="0"
+            left="0"
+            width="100vw"
+            zIndex="1000"
+            backgroundColor="#FFF"
+            boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+          >
+            <Box position="relative" width="100%" data-dropdown>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                padding="24px"
+                fontFamily="Roboto"
+                fontWeight="500"
+                fontSize="18px"
+                lineHeight="28px"
+                color="#252A32"
+                cursor="pointer"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                _hover={{ backgroundColor: "#F7F7F7" }}
+              >
+                <LabelText
+                  typography="large"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  flex="1"
+                >
+                  {selectedSection ? sectionsNav.find(s => s.anchoring === selectedSection)?.text || "Selecione uma seção" : "Selecione uma seção"}
+                </LabelText>
+                <ChevronIcon
+                  width="20px"
+                  height="20px"
+                  transform={isDropdownOpen ? "rotate(270deg)" : "rotate(90deg)"}
+                  transition="transform 0.2s"
+                />
+              </Box>
+              
+              {isDropdownOpen && (
+                <Box
+                  position="absolute"
+                  top="100%"
+                  left="0"
+                  right="0"
+                  backgroundColor="#FFF"
+                  border="1px solid #DEDFE0"
+                  borderRadius="0 0 8px 8px"
+                  boxShadow="0 4px 12px rgba(0, 0, 0, 0.15)"
+                  zIndex="1001"
+                  overflowY="auto"
+                >
+                  {sectionsNav.map((elm, index) => (
+                    <Box
+                      key={`mobile_${elm.text}_${index}`}
+                      padding="12px 24px"
+                      cursor="pointer"
+                      _hover={{ backgroundColor: "#F7F7F7" }}
+                      onClick={() => {
+                        setIsScrolling(true);
+                        setSelectedSection(elm.anchoring);
+                        setIsDropdownOpen(false);
+                        const el = document.getElementById(elm.anchoring);
+                        if (el) {
+                          el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      }}
+                    >
+                      <LabelText
+                        typography="large"
+                        color="#252A32"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
+                        whiteSpace="nowrap"
+                      >
+                        {elm.text}
+                      </LabelText>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          </Stack>
+        :
+        <Stack
+          position="fixed"
+          top="0"
+          left="0"
+          width="100%"
+          zIndex="1000"
+          backgroundColor="#FFF"
+          padding="12px 24px"
+          boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+        >
+          <Stack
+            direction="row"
+            width="100%"
+            maxWidth="1440px"
+            margin="0 auto"
+            alignItems="center"
+            overflowX="auto"
+            whiteSpace="nowrap"
+            spacing={0}
+          >
+            {sectionsNav.map((elm, index) => (
+              <SectionSelector
+                key={`sticky_${elm.text}_${index}`}
+                icon={elm.icon}
+                text={elm.text}
+                anchoring={elm.anchoring}
+                variant
+                active={selectedSection === elm.anchoring}
+                minWidth="180px"
+                flexShrink={0}
+              />
+            ))}
+            <Button
+              css={{
+                '@media (max-width: 1500px)': {
+                  display: 'none !important',
+                },
+              }}
+              marginLeft="auto !important"
+            >
+              <LabelText typography="small" color="#FFF">
+                Solicite uma proposta
+              </LabelText>
+            </Button>
+          </Stack>
+        </Stack>
+      )}
 
       <Section
         id="diagnostico-de-maturidade-de-dados"
@@ -384,7 +622,7 @@ export default function Services() {
       />
 
       <Stack
-        padding="24px 24px 0"
+        padding={{base: "24px 0 0", md: "24px 24px 0"}}
         spacing={0}
       >
         <Stack
@@ -392,10 +630,10 @@ export default function Services() {
           maxWidth="1440px"
           spacing={0}
           boxSizing="border-box"
-          padding="80px 40px"
+          padding={{base: "56px 24px", md: "80px 40px"}}
           margin="0 auto"
           backgroundColor="#252A32"
-          borderRadius="32px"
+          borderRadius={{base: "0", md: "32px"}}
         >
           <Display
             typography={isMobileMod() ? "small" : "large"}
@@ -436,18 +674,17 @@ export default function Services() {
             </Button>
           </Link>
         </Stack>
-
-        <BodyText
-          width="100%"
-          maxWidth="1440px"
-          margin="0 auto !important"
-          typography="large"
-          color="#464A51"
-          padding="80px 0"
-        >
-          {t("chatbot-warning-msg")}
-        </BodyText>
       </Stack>
+      <BodyText
+        boxSizing="content-box"
+        maxWidth="1440px"
+        margin="0 auto !important"
+        typography="large"
+        color="#464A51"
+        padding={{base: "80px 24px", md: "80px 24px"}}
+      >
+        {t("chatbot-warning-msg")}
+      </BodyText>
     </MainPageTemplate>
   )
 }
