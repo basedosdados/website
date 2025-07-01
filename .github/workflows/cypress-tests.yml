@@ -43,6 +43,5 @@ jobs:
         with:
           working-directory: ./next 
           browser: chrome
-          headless: true
           config-file: cypress.config.js
           config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
