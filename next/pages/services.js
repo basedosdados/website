@@ -31,6 +31,7 @@ import TableChartViewIcon from "../public/img/icons/tableChartViewIcon";
 import RobotIcon from "../public/img/icons/robotIcon";
 import SchoolIcon from "../public/img/icons/schoolIcon";
 import ChevronIcon from "../public/img/icons/chevronIcon";
+import ReturnIcon from "../public/img/icons/returnIcon";
 
 
 export async function getStaticProps({ locale }) {
@@ -71,7 +72,7 @@ const SectionSelector = ({ icon, text, anchoring, variant = false, active = fals
       }}
       transition="background 0.2s, color 0.2s"
     >
-      {icon}
+      {!variant && icon}
       <LabelText 
         width="fit-content"
         typography={variant ? "small" : "large"} 
@@ -248,12 +249,12 @@ export default function Services() {
   const [isScrolling, setIsScrolling] = useState(false);
 
   const sectionsNav = [
-    {icon: <SpeedIcon width="40px" height="40px"/>, text: "Diagnóstico de Maturidade de Dados", anchoring: "diagnostico-de-maturidade-de-dados"},
-    {icon: <DnsIcon width="40px" height="40px"/>, text: "Arquitetura de Dados", anchoring: "arquitetura-de-dados"},
-    {icon: <FlowsheetIcon width="40px" height="40px"/>, text: "Portal de Dados", anchoring: "portal-de-dados"},
-    {icon: <TableChartViewIcon width="40px" height="40px"/>, text: "Painel Gerencial", anchoring: "painel-gerencial"},
-    {icon: <RobotIcon width="40px" height="40px"/>, text: "Chatbot", anchoring: "chatbot"},
-    {icon: <SchoolIcon width="40px" height="40px"/>, text: "Formação", anchoring: "formacao"}
+    {icon: <SpeedIcon width="40px" height="40px"/>, text: t("diagnostico-title"), anchoring: "diagnostico-de-maturidade"},
+    {icon: <DnsIcon width="40px" height="40px"/>, text: t("arquitetura-title"), anchoring: "arquitetura-de-dados"},
+    {icon: <FlowsheetIcon width="40px" height="40px"/>, text: t("portal-title"), anchoring: "portal-de-dados"},
+    {icon: <TableChartViewIcon width="40px" height="40px"/>, text: t("painel-title"), anchoring: "painel-gerencial"},
+    {icon: <RobotIcon width="40px" height="40px"/>, text: t("chatbot-title"), anchoring: "chatbot"},
+    {icon: <SchoolIcon width="40px" height="40px"/>, text: t("formacao-title"), anchoring: "formacao"}
   ]
 
   useEffect(() => {
@@ -335,6 +336,16 @@ export default function Services() {
     };
   }, [isDropdownOpen]);
 
+  const handleScrollToSection = (sectionId) => {
+    setIsScrolling(true);
+    setSelectedSection(sectionId);
+    setIsDropdownOpen(false);
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
   return (
     <MainPageTemplate>
       <Head>
@@ -379,7 +390,7 @@ export default function Services() {
             justifyContent="center"
           >
             <LabelText typography="x-large" color="currentColor">
-              {t("hero-button")}
+              {t("request-a-quote-button")}
             </LabelText>
           </Button>
         </Link>
@@ -446,7 +457,7 @@ export default function Services() {
                   whiteSpace="nowrap"
                   flex="1"
                 >
-                  {selectedSection ? sectionsNav.find(s => s.anchoring === selectedSection)?.text || "Selecione uma seção" : "Selecione uma seção"}
+                  {selectedSection ? sectionsNav.find(s => s.anchoring === selectedSection)?.text : ""}
                 </LabelText>
                 <ChevronIcon
                   width="20px"
@@ -475,15 +486,7 @@ export default function Services() {
                       padding="12px 24px"
                       cursor="pointer"
                       _hover={{ backgroundColor: "#F7F7F7" }}
-                      onClick={() => {
-                        setIsScrolling(true);
-                        setSelectedSection(elm.anchoring);
-                        setIsDropdownOpen(false);
-                        const el = document.getElementById(elm.anchoring);
-                        if (el) {
-                          el.scrollIntoView({ behavior: "smooth", block: "start" });
-                        }
-                      }}
+                      onClick={() => handleScrollToSection(elm.anchoring)}
                     >
                       <LabelText
                         typography="large"
@@ -533,90 +536,236 @@ export default function Services() {
                 flexShrink={0}
               />
             ))}
-            <Button
-              css={{
-                '@media (max-width: 1500px)': {
-                  display: 'none !important',
-                },
-              }}
+            <Link
+              href="/contact-consulting"
+              target="_blank"
               marginLeft="auto !important"
             >
-              <LabelText typography="small" color="#FFF">
-                Solicite uma proposta
-              </LabelText>
-            </Button>
+              <Button
+                width="100%"
+                justifyContent="center"
+              >
+                <LabelText typography="small" color="currentColor">
+                  {t("request-a-quote-button")}
+                </LabelText>
+              </Button>
+            </Link>
           </Stack>
         </Stack>
       )}
 
+      {(isSticky && useCheckMobile()) && (
+        <Stack
+          position="fixed"
+          bottom="0"
+          left="0"
+          width="100vw"
+          zIndex="1000"
+          padding="16px 24px"
+          backgroundColor="#FFF"
+          boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+        >
+          <Link
+            href="/contact-consulting"
+            target="_blank"
+          >
+            <Button
+              height="54px"
+              width="100%"
+              justifyContent="center"
+            >
+              <LabelText typography="x-large" color="currentColor">
+                {t("request-a-quote-button")}
+              </LabelText>
+            </Button>
+          </Link>
+        </Stack>
+      )}
+
       <Section
-        id="diagnostico-de-maturidade-de-dados"
-        title="Diagnóstico de Maturidade de Dados"
-        subtitle="Entregamos uma análise técnica e independente, com diagnóstico detalhado e um plano de ação claro para fortalecer sua gestão de dados com eficiência e estratégia."
+        id="diagnostico-de-maturidade"
+        title={t("diagnostico-title")}
+        subtitle={t("diagnostico-subtitle")}
         content={[
           {
-            text: "Avaliamos o estágio de maturidade da sua organização em múltiplos eixos, como governança, cultura, competências, processos e tecnologia. O diagnóstico acompanha um plano de ação concreto para o curto, médio e longo prazo.",
+            text: t("diagnostico-content"),
             img: {
               id: ImageSection,
-              alt: "diagnostico-de-maturidade-de-dados",
+              alt: "diagnostico-de-maturidade",
               width: 600,
               height: 300,
-            }
-          },
-          {
-            mention: {
-              content: "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
-              author: "Nome",
-              position: "Cargo"
             }
           }
         ]}
         cards={[
           {
             icon: ImageCard,
-            title: "Diagnóstico completo e plano de ação aplicável.",
-            content: "Mapeamos práticas, fluxos e ferramentas de dados para identificar gargalos e oportunidades, oferecendo recomendações realistas e adaptadas ao seu contexto."
+            title: t("diagnostico-card-1-title"),
+            content: t("diagnostico-card-1-content")
           },
           {
             icon: ImageCard,
-            title: "Base para decisões mais estratégicas.",
-            content: "Recomendamos perfis profissionais, melhorias organizacionais e opções tecnológicas para orientar investimentos e fortalecer a gestão de dados da sua organização."
+            title: t("diagnostico-card-2-title"),
+            content: t("diagnostico-card-2-content")
           }
         ]}
       />
 
       <Section
         id="arquitetura-de-dados"
-        title="Arquitetura de Dados"
-        subtitle="Configuramos toda a infraestrutura necessária para a ingestão, modelagem, tratamento e consumo dos seus dados — com eficiência, segurança e privacidade — para gerar valor em qualquer análise ou produto digital."
+        title={t("arquitetura-title")}
+        subtitle={t("arquitetura-subtitle")}
         content={[
           {
-            text: "Estruturamos ambientes em nuvem, desenhamos a modelagem dos dados e implementamos pipelines e APIs para ingestão, tratamento e integração entre dados públicos e privados.",
+            text: t("arquitetura-content"),
             img: {
               id: ImageSection,
               alt: "arquitetura-de-dados",
               width: 600,
               height: 300,
             }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: t("arquitetura-card-1-title"),
+            content: t("arquitetura-card-1-content")
           },
           {
-            mention: {
-              content: "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
-              author: "Nome",
-              position: "Cargo"
+            icon: ImageCard,
+            title: t("arquitetura-card-2-title"),
+            content: t("arquitetura-card-2-content")
+          }
+        ]}
+      />
+
+      <Section
+        id="portal-de-dados"
+        title={t("portal-title")}
+        subtitle={t("portal-subtitle")}
+        content={[
+          {
+            text: t("portal-content"),
+            img: {
+              id: ImageSection,
+              alt: "portal-de-dados",
+              width: 600,
+              height: 300,
             }
           }
         ]}
         cards={[
           {
             icon: ImageCard,
-            title: "Diagnóstico completo e plano de ação aplicável.",
-            content: "Mapeamos práticas, fluxos e ferramentas de dados para identificar gargalos e oportunidades, oferecendo recomendações realistas e adaptadas ao seu contexto."
+            title: t("portal-card-1-title"),
+            content: t("portal-card-1-content")
           },
           {
             icon: ImageCard,
-            title: "Base para decisões mais estratégicas.",
-            content: "Recomendamos perfis profissionais, melhorias organizacionais e opções tecnológicas para orientar investimentos e fortalecer a gestão de dados da sua organização."
+            title: t("portal-card-2-title"),
+            content: t("portal-card-2-content")
+          }
+        ]}
+      />
+
+      <Section
+        id="painel-gerencial"
+        title={t("painel-title")}
+        subtitle={t("painel-subtitle")}
+        content={[
+          {
+            text: t("painel-content"),
+            img: {
+              id: ImageSection,
+              alt: "painel-gerencial",
+              width: 600,
+              height: 300,
+            }
+          },
+          {
+            mention: {
+              content: t("painel-mention-content"),
+              author: t("painel-mention-author"),
+              position: t("painel-mention-position")
+            }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: t("painel-card-1-title"),
+            content: t("painel-card-1-content")
+          },
+          {
+            icon: ImageCard,
+            title: t("painel-card-2-title"),
+            content: t("painel-card-2-content")
+          }
+        ]}
+      />
+
+      <Section
+        id="chatbot"
+        title={t("chatbot-title")}
+        subtitle={t("chatbot-subtitle")}
+        content={[
+          {
+            text: t("chatbot-content"),
+            img: {
+              id: ImageSection,
+              alt: "chatbot",
+              width: 600,
+              height: 300,
+            }
+          },
+          {
+            mention: {
+              content: t("chatbot-mention-content"),
+              author: t("chatbot-mention-author"),
+              position: t("chatbot-mention-position")
+            }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: t("chatbot-card-1-title"),
+            content: t("chatbot-card-1-content")
+          },
+          {
+            icon: ImageCard,
+            title: t("chatbot-card-2-title"),
+            content: t("chatbot-card-2-content")
+          }
+        ]}
+      />
+
+      <Section
+        id="formacao"
+        title={t("formacao-title")}
+        subtitle={t("formacao-subtitle")}
+        content={[
+          {
+            text: t("formacao-content"),
+            img: {
+              id: ImageSection,
+              alt: "formacao",
+              width: 600,
+              height: 300,
+            }
+          }
+        ]}
+        cards={[
+          {
+            icon: ImageCard,
+            title: t("formacao-card-1-title"),
+            content: t("formacao-card-1-content")
+          },
+          {
+            icon: ImageCard,
+            title: t("formacao-card-2-title"),
+            content: t("formacao-card-2-content")
           }
         ]}
       />
@@ -669,7 +818,7 @@ export default function Services() {
               justifyContent="center"
             >
               <LabelText typography="x-large" color="currentColor">
-                {t("data-team-support-button")}
+                {t("request-a-quote-button")}
               </LabelText>
             </Button>
           </Link>
@@ -677,6 +826,8 @@ export default function Services() {
       </Stack>
       <BodyText
         boxSizing="content-box"
+        display="flex"
+        alignItems={{base: "flex-end", md: "center"}}
         maxWidth="1440px"
         margin="0 auto !important"
         typography="large"
@@ -684,6 +835,19 @@ export default function Services() {
         padding={{base: "80px 24px", md: "80px 24px"}}
       >
         {t("chatbot-warning-msg")}
+        <ReturnIcon
+          cursor="pointer"
+          fill="#0068C5"
+          _hover={{fill: "#0057A4"}}
+          width="24px"
+          height="24px"
+          onClick={() => handleScrollToSection("chatbot")}
+          style={{
+            display: 'inline-flex',
+            verticalAlign: 'middle',
+            marginLeft: '4px'
+          }}
+        />
       </BodyText>
     </MainPageTemplate>
   )
