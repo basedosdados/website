@@ -3,16 +3,24 @@ import {
   VStack,
   Grid,
   GridItem,
-  Box
+  Box,
+  Collapse,
+  Divider
 } from "@chakra-ui/react";
 import React, { useRef, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import Head from "next/head";
+import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
+
+import {
+  getAllFAQs,
+} from "./api/faqs";
 
 import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
@@ -21,8 +29,6 @@ import TitleText from "../components/atoms/Text/TitleText";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
 
-const ImageSection = "/img/image-diagnostico-de-maturidade-de-dados.png";
-const ImageCard = "/img/fact-check.png";
 import PointsIcon from "../public/img/icons/pointsIcon";
 import SpeedIcon from "../public/img/icons/speedIcon";
 import DnsIcon from "../public/img/icons/dnsIcon";
@@ -32,14 +38,19 @@ import RobotIcon from "../public/img/icons/robotIcon";
 import SchoolIcon from "../public/img/icons/schoolIcon";
 import ChevronIcon from "../public/img/icons/chevronIcon";
 import ReturnIcon from "../public/img/icons/returnIcon";
-
+import CrossIcon from "../public/img/icons/crossIcon";
+import styles from "../styles/faq.module.css";
 
 export async function getStaticProps({ locale }) {
+  const faqs = await getAllFAQs(locale, "services/FAQ")
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'services', 'menu'])),
       ...(await withPages()),
+      faqs
     },
+    revalidate: 30
   };
 }
 
@@ -240,13 +251,137 @@ const Section = ({
   )
 }
 
-export default function Services() {
+const QuestionsBox = ({ question, answer, id, active }) => {
+  const [isActive, setIsActive] = useState(false)
+  const router = useRouter()
+
+  const scrollFocus = (idElement) => {
+    const targetElement = document.getElementById(idElement).getBoundingClientRect()
+    const heightScreen = window.innerHeight
+    const positionTarget = targetElement.top
+
+    window.scrollTo(0, positionTarget - (heightScreen/2))
+  }
+
+  useEffect(() => {
+    setIsActive(false)
+  },[active])
+
+  useEffect(() => {
+    if(router.asPath === `/services#${id}`) return setIsActive(true)
+  },[id])
+
+  useEffect(() => {
+    if(router.asPath === `/services#${id}`) return scrollFocus(id)
+  },[isActive])
+
+  const OpenCloseQuestion = () => {
+    setIsActive(!isActive)
+  }
+
+  return (
+    <Stack
+      spacing={0}
+      className={styles.questionContainer}
+    >
+      <Box
+        display="flex"
+        cursor="pointer"
+        marginBottom="24px"
+        justifyContent="space-between"
+        onClick={() => OpenCloseQuestion()}
+      >
+        <LabelText typography="x-large">
+          {question}
+        </LabelText>
+        <CrossIcon
+          alt={isActive ? "fecha pergunta" : "abrir pergunta"}
+          color="#252A32"
+          transform={!isActive && "rotate(45deg)"}
+          width="20px"
+          height="20px"
+        />
+      </Box>
+      <Collapse in={isActive} animateOpacity>
+        <Box
+          id={id}
+          as="div"
+          height={isActive ? "100%" : "0"}
+          marginBottom={isActive && "32px !important"}
+          overflow="hidden"
+          transition="all 1s ease"
+          fontFamily="Roboto"
+          color="#464A51"
+          fontSize="18px"
+          lineHeight="28px"
+          fontWeight="400"
+        >
+          <ReactMarkdown>{answer}</ReactMarkdown>
+        </Box>
+      </Collapse>
+      <Divider borderColor="#DEDFE0"/>
+    </Stack>
+  )
+}
+
+export default function Services({ faqs }) {
   const { t } = useTranslation('services');
   const [isSticky, setIsSticky] = useState(false);
   const navRef = useRef(null);
   const [selectedSection, setSelectedSection] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [allQuestions, setAllQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]);
+  const [categorySelected, setCategorySelected] = useState("");
+  const [closeQuestion, setCloseQuestion] = useState(false);
+
+  useEffect(() => {
+    setAllQuestions(faqs)
+    setQuestions(faqs)
+  },[faqs])
+
+  const filterByCategory = (category) => {
+    return allQuestions.filter((elm) =>
+      elm.categories.includes(category)
+    );
+  }
+
+  useEffect(() => {
+    if (categorySelected) {
+      const filteredQuestions = filterByCategory(categorySelected);
+      setQuestions(filteredQuestions);
+    } else {
+      setQuestions(allQuestions);
+    }
+  }, [categorySelected, allQuestions]);
+
+  const CategoryText = ({ category }) => {
+    function handlerClick() {
+      if(category === categorySelected) {
+        setCategorySelected("")
+        setQuestions(allQuestions)
+      } else {
+        setCategorySelected(category)
+      }
+
+      setCloseQuestion(!closeQuestion)
+    }
+
+    return (
+      <LabelText
+        color={categorySelected === category ? "#2B8C4D" :"#71757A"}
+        width="max-content"
+        cursor="pointer"
+        _hover={{
+          color: "#2B8C4D"
+        }}
+        onClick={handlerClick}
+      >
+        {category}
+      </LabelText>
+    )
+  }
 
   const sectionsNav = [
     {icon: <SpeedIcon width="40px" height="40px"/>, text: t("diagnostico-title"), anchoring: "diagnostico-de-maturidade"},
@@ -345,6 +480,8 @@ export default function Services() {
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
+
+  const prefixImgUrl = (id) => { return `https://storage.googleapis.com/basedosdados-website/services/${id}`}
 
   return (
     <MainPageTemplate>
@@ -590,7 +727,7 @@ export default function Services() {
           {
             text: t("diagnostico-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-diagnostico-de-maturidade-de-dados.svg"),
               alt: "diagnostico-de-maturidade",
               width: 600,
               height: 300,
@@ -599,12 +736,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("strategy.svg"),
             title: t("diagnostico-card-1-title"),
             content: t("diagnostico-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("fact-check.svg"),
             title: t("diagnostico-card-2-title"),
             content: t("diagnostico-card-2-content")
           }
@@ -619,7 +756,7 @@ export default function Services() {
           {
             text: t("arquitetura-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-arquitetura-de-dados.svg"),
               alt: "arquitetura-de-dados",
               width: 600,
               height: 300,
@@ -628,12 +765,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("cloud-done.svg"),
             title: t("arquitetura-card-1-title"),
             content: t("arquitetura-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("schema.svg"),
             title: t("arquitetura-card-2-title"),
             content: t("arquitetura-card-2-content")
           }
@@ -648,7 +785,7 @@ export default function Services() {
           {
             text: t("portal-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-portal-de-dados.svg"),
               alt: "portal-de-dados",
               width: 600,
               height: 300,
@@ -657,12 +794,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("organized-consistent.svg"),
             title: t("portal-card-1-title"),
             content: t("portal-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("secure-access.svg"),
             title: t("portal-card-2-title"),
             content: t("portal-card-2-content")
           }
@@ -677,7 +814,7 @@ export default function Services() {
           {
             text: t("painel-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-painel-gerencial.svg"),
               alt: "painel-gerencial",
               width: 600,
               height: 300,
@@ -693,12 +830,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("efficient-communication.svg"),
             title: t("painel-card-1-title"),
             content: t("painel-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("accessible-place.svg"),
             title: t("painel-card-2-title"),
             content: t("painel-card-2-content")
           }
@@ -713,7 +850,7 @@ export default function Services() {
           {
             text: t("chatbot-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-chatbot.svg"),
               alt: "chatbot",
               width: 600,
               height: 300,
@@ -729,12 +866,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("flexible-consultations.svg"),
             title: t("chatbot-card-1-title"),
             content: t("chatbot-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("inclusion-democratization.svg"),
             title: t("chatbot-card-2-title"),
             content: t("chatbot-card-2-content")
           }
@@ -749,7 +886,7 @@ export default function Services() {
           {
             text: t("formacao-content"),
             img: {
-              id: ImageSection,
+              id: prefixImgUrl("image-formacao.svg"),
               alt: "formacao",
               width: 600,
               height: 300,
@@ -758,12 +895,12 @@ export default function Services() {
         ]}
         cards={[
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("practical-content.svg"),
             title: t("formacao-card-1-title"),
             content: t("formacao-card-1-content")
           },
           {
-            icon: ImageCard,
+            icon: prefixImgUrl("continuous-learning.svg"),
             title: t("formacao-card-2-title"),
             content: t("formacao-card-2-content")
           }
@@ -849,6 +986,54 @@ export default function Services() {
           }}
         />
       </BodyText>
+
+      <VStack
+        boxSizing="content-box"
+        maxWidth="1440px"
+        padding="0 24px"
+        margin="0 auto"
+        spacing={0}
+      >
+        <Stack
+          width="100%"
+          position="relative"
+          gap={{base: "64px", lg: "160px"}}
+          spacing={0}
+          flexDirection={{base: "column", lg: "row"} }
+          paddingBottom="32px"
+        >
+          <Box
+            display="flex"
+            height="100%"
+            flexDirection="column"
+            gap="16px"
+            position={{base: "relative", lg: "sticky"}}
+            top={{base: "0", lg: "120px"}}
+          >
+            <CategoryText category="Serviços de Infraestrutura de Dados"/>
+            <CategoryText category="Painéis Estratégicos"/>
+            <CategoryText category="Portais interativos de visualização de dados"/>
+            <CategoryText category="Plataforma de Publicação de dados"/>
+            <CategoryText category="Cursos de formação B2B"/>
+            <CategoryText category="Chatbots"/>
+          </Box>
+
+          <Stack
+            width="100%"
+            spacing={8}
+          >
+            {questions && questions.map((elm, i) => 
+              <QuestionsBox
+                key={i}
+                question={elm.question}
+                answer={elm.content}
+                id={elm.id && elm.id}
+                active={closeQuestion}
+              />
+            )}
+          </Stack>
+        </Stack>
+      </VStack>
     </MainPageTemplate>
   )
 }
