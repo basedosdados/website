@@ -12,7 +12,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
-import cookies from "js-cookie";
 import Display from "../components/atoms/Text/Display";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
@@ -137,10 +136,6 @@ export default function FAQ({ faqs }) {
       elm.categories.includes(category)
     );
   }
-
-  useEffect(() => {
-    if(categorySelected) return setQuestions(filterByCategory(categorySelected))
-  },[categorySelected])
 
   useEffect(() => {
     if (categorySelected) {

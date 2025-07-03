@@ -116,11 +116,13 @@ function Hero() {
         </Stack>
 
         <Stack
+          width="100%"
           padding="40px 0"
           spacing={0}
         >
           <Box
             width="100%"
+            height="780px"
             display="flex"
             alignItems="center"
             backgroundColor="#FFFFFF"
@@ -138,7 +140,7 @@ function Hero() {
                 console.error('Erro ao carregar o vídeo', e);
               }}
             >
-              <source src="/video/platform-presentation.mp4" type="video/mp4" />
+              <source src="https://storage.googleapis.com/basedosdados-website/video/platform-presentation.mp4" type="video/mp4" />
             </video>
           </Box>
         </Stack>
