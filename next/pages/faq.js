@@ -76,6 +76,7 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         display="flex"
         cursor="pointer"
         marginBottom="24px"
+        gap="20px"
         justifyContent="space-between"
         onClick={() => OpenCloseQuestion()}
       >

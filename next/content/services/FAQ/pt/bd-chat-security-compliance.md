@@ -1,6 +1,6 @@
 ---
 question: O chat é seguro? Onde ele vai guardar os meus dados?
-categories: [Chatbots]
+categories: [Chatbot]
 id: bd-chat-security-compliance
 order: 46
 ---

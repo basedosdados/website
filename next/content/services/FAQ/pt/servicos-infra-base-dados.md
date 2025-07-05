@@ -1,6 +1,6 @@
 ---
 question: O que exatamente está incluído nos serviços de infraestrutura de dados da Base dos Dados?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: servicos-infra-base-dados
 order: 1
 ---

@@ -1,6 +1,6 @@
 ---
 question: Além da construção de infraestrutura, vocês também prestam serviço de construção de produtos-fim ou core (aplicações, sites, dashboards, chatbots)?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-end-product-development
 order: 6
 ---

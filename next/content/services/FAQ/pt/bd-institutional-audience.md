@@ -1,6 +1,6 @@
 ---
 question: Pra que tipo de instituição esses serviços foram pensados?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-institutional-audience
 order: 27
 ---

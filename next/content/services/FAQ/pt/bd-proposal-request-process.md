@@ -1,6 +1,6 @@
 ---
 question: Como faço para contratar ou solicitar uma proposta?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-proposal-request-process
 order: 43
 ---

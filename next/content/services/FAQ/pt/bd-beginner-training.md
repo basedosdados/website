@@ -1,6 +1,6 @@
 ---
 question: Minha equipe não tem experiência técnica. Vocês oferecem cursos para iniciantes?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-beginner-training
 order: 35
 ---

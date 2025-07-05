@@ -1,6 +1,6 @@
 ---
 question: O que exatamente está incluído nos serviços de construção de Painéis Estratégicos da Base dos Dados?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-strategic-dashboards
 order: 10
 ---

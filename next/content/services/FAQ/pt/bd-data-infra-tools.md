@@ -1,6 +1,6 @@
 ---
 question: Quais tecnologias a BD costuma usar para esse tipo de projeto?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-data-infra-tools
 order: 12
 ---

@@ -1,6 +1,6 @@
 ---
 question: O curso serve apenas como treinamento para projetos da Base dos Dados?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-training-scope
 order: 40
 ---

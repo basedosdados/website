@@ -1,6 +1,6 @@
 ---
 question: O serviço inclui alguma manutenção posterior da infraestrutura?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-post-deployment-maintenance
 order: 4
 ---

@@ -1,6 +1,6 @@
 ---
 question: O serviço inclui alguma manutenção posterior?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-post-deployment-support
 order: 29
 ---

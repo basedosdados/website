@@ -1,6 +1,6 @@
 ---
 question: Além da construção de Plataformas de Disponibilização de Dados, vocês também constroem a infraestrutura necessária para alimentá-la?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-end-to-end-data-infrastructure
 order: 31
 ---

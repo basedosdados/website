@@ -1,6 +1,6 @@
 ---
 question: Quem são os instrutores dos cursos?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-instructor-profiles
 order: 39
 ---

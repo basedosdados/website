@@ -1,6 +1,6 @@
 ---
 question: Para que tipo de instituição esses serviços foram pensados?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-target-institutions
 order: 11
 ---

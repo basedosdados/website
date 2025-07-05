@@ -1,6 +1,6 @@
 ---
 question: Como funciona a precificação do chat?
-categories: [Chatbots]
+categories: [Chatbot]
 id: bd-chat-pricing-model
 order: 45
 ---

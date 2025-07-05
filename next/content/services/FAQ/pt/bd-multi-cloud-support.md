@@ -1,6 +1,6 @@
 ---
 question: Sei que vocês preferem usar GCP, mas preciso usar outra Cloud, posso contar com os serviços de vocês?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-multi-cloud-support
 order: 9
 ---

@@ -1,6 +1,7 @@
 import {
   Stack,
   VStack,
+  HStack,
   Grid,
   GridItem,
   Box,
@@ -119,6 +120,7 @@ const Section = ({
         boxSizing="content-box"
         spacing="16px"
         maxWidth="1440px"
+        width={{base: "auto", md: "100%"}}
         margin="0 auto"
       >
         {!isMobileMod() ?
@@ -132,6 +134,7 @@ const Section = ({
         }
         <TitleText
           typography={isMobileMod() ? "small" : "large"}
+          maxWidth="1120px"
           color="#71757A"
         >
           {subtitle}
@@ -288,6 +291,7 @@ const QuestionsBox = ({ question, answer, id, active }) => {
         display="flex"
         cursor="pointer"
         marginBottom="24px"
+        gap="20px"
         justifyContent="space-between"
         onClick={() => OpenCloseQuestion()}
       >
@@ -333,8 +337,9 @@ export default function Services({ faqs }) {
   const [isScrolling, setIsScrolling] = useState(false);
   const [allQuestions, setAllQuestions] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [categorySelected, setCategorySelected] = useState("");
+  const [categorySelected, setCategorySelected] = useState("Arquitetura de Dados");
   const [closeQuestion, setCloseQuestion] = useState(false);
+  const prevScrollY = useRef(0);
 
   useEffect(() => {
     setAllQuestions(faqs)
@@ -348,38 +353,43 @@ export default function Services({ faqs }) {
   }
 
   useEffect(() => {
-    if (categorySelected) {
-      const filteredQuestions = filterByCategory(categorySelected);
-      setQuestions(filteredQuestions);
-    } else {
-      setQuestions(allQuestions);
-    }
+    const filteredQuestions = filterByCategory(categorySelected);
+    setQuestions(filteredQuestions);
   }, [categorySelected, allQuestions]);
 
   const CategoryText = ({ category }) => {
     function handlerClick() {
-      if(category === categorySelected) {
-        setCategorySelected("")
-        setQuestions(allQuestions)
-      } else {
-        setCategorySelected(category)
-      }
-
+      setCategorySelected(category)
       setCloseQuestion(!closeQuestion)
     }
 
     return (
-      <LabelText
-        color={categorySelected === category ? "#2B8C4D" :"#71757A"}
-        width="max-content"
+      <HStack
+        spacing="4px"
         cursor="pointer"
-        _hover={{
-          color: "#2B8C4D"
-        }}
-        onClick={handlerClick}
+        pointerEvents={categorySelected === category ? "none" : "default"}
       >
-        {category}
-      </LabelText>
+        <Box 
+          width="3px"
+          height="24px"
+          backgroundColor={categorySelected === category && "#2B8C4D"}
+          borderRadius="10px"
+        />
+        <LabelText
+          typography="small"
+          onClick={handlerClick}
+          width="100%"
+          color={categorySelected === category  ? "#2B8C4D" : "#71757A"}
+          backgroundColor={categorySelected === category  && "#F7F7F7"}
+          _hover={{
+            backgroundColor: categorySelected === category  ? "#F7F7F7" :"#EEEEEE",
+          }}
+          borderRadius="8px"
+          padding="6px 8px"
+        >
+          {category}
+        </LabelText>
+      </HStack>
     )
   }
 
@@ -415,8 +425,13 @@ export default function Services({ faqs }) {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           setSelectedSection(entry.target.id);
+        } else if (entry.target.id === 'formacao') {
+          if (window.scrollY > prevScrollY.current) {
+            setSelectedSection("");
+          }
         }
       });
+      prevScrollY.current = window.scrollY;
     };
 
     const observer = new window.IntersectionObserver(handleIntersect, {
@@ -563,83 +578,85 @@ export default function Services({ faqs }) {
 
       {isSticky && (
         useCheckMobile() ?
-          <Stack
-            position="fixed"
-            top="0"
-            left="0"
-            width="100vw"
-            zIndex="1000"
-            backgroundColor="#FFF"
-            boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
-          >
-            <Box position="relative" width="100%" data-dropdown>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-                padding="24px"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="18px"
-                lineHeight="28px"
-                color="#252A32"
-                cursor="pointer"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                _hover={{ backgroundColor: "#F7F7F7" }}
-              >
-                <LabelText
-                  typography="large"
-                  overflow="hidden"
-                  textOverflow="ellipsis"
-                  whiteSpace="nowrap"
-                  flex="1"
-                >
-                  {selectedSection ? sectionsNav.find(s => s.anchoring === selectedSection)?.text : ""}
-                </LabelText>
-                <ChevronIcon
-                  width="20px"
-                  height="20px"
-                  transform={isDropdownOpen ? "rotate(270deg)" : "rotate(90deg)"}
-                  transition="transform 0.2s"
-                />
-              </Box>
-              
-              {isDropdownOpen && (
+          selectedSection && (
+            <Stack
+              position="fixed"
+              top="0"
+              left="0"
+              width="100vw"
+              zIndex="1000"
+              backgroundColor="#FFF"
+              boxShadow="0 1.6px 16px 0 rgba(100, 96, 103, 0.16)"
+            >
+              <Box position="relative" width="100%" data-dropdown>
                 <Box
-                  position="absolute"
-                  top="100%"
-                  left="0"
-                  right="0"
-                  backgroundColor="#FFF"
-                  border="1px solid #DEDFE0"
-                  borderRadius="0 0 8px 8px"
-                  boxShadow="0 4px 12px rgba(0, 0, 0, 0.15)"
-                  zIndex="1001"
-                  overflowY="auto"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  padding="24px"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="18px"
+                  lineHeight="28px"
+                  color="#252A32"
+                  cursor="pointer"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  _hover={{ backgroundColor: "#F7F7F7" }}
                 >
-                  {sectionsNav.map((elm, index) => (
-                    <Box
-                      key={`mobile_${elm.text}_${index}`}
-                      padding="12px 24px"
-                      cursor="pointer"
-                      _hover={{ backgroundColor: "#F7F7F7" }}
-                      onClick={() => handleScrollToSection(elm.anchoring)}
-                    >
-                      <LabelText
-                        typography="large"
-                        color="#252A32"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        whiteSpace="nowrap"
-                      >
-                        {elm.text}
-                      </LabelText>
-                    </Box>
-                  ))}
+                  <LabelText
+                    typography="large"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    whiteSpace="nowrap"
+                    flex="1"
+                  >
+                    {selectedSection ? sectionsNav.find(s => s.anchoring === selectedSection)?.text : ""}
+                  </LabelText>
+                  <ChevronIcon
+                    width="20px"
+                    height="20px"
+                    transform={isDropdownOpen ? "rotate(270deg)" : "rotate(90deg)"}
+                    transition="transform 0.2s"
+                  />
                 </Box>
-              )}
-            </Box>
-          </Stack>
+                
+                {isDropdownOpen && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left="0"
+                    right="0"
+                    backgroundColor="#FFF"
+                    border="1px solid #DEDFE0"
+                    borderRadius="0 0 8px 8px"
+                    boxShadow="0 4px 12px rgba(0, 0, 0, 0.15)"
+                    zIndex="1001"
+                    overflowY="auto"
+                  >
+                    {sectionsNav.map((elm, index) => (
+                      <Box
+                        key={`mobile_${elm.text}_${index}`}
+                        padding="12px 24px"
+                        cursor="pointer"
+                        _hover={{ backgroundColor: "#F7F7F7" }}
+                        onClick={() => handleScrollToSection(elm.anchoring)}
+                      >
+                        <LabelText
+                          typography="large"
+                          color="#252A32"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                          whiteSpace="nowrap"
+                        >
+                          {elm.text}
+                        </LabelText>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+            </Stack>
+          )
         :
         <Stack
           position="fixed"
@@ -1005,17 +1022,17 @@ export default function Services({ faqs }) {
           <Box
             display="flex"
             height="100%"
+            width={{base: "100%", md: "250px"}}
             flexDirection="column"
             gap="16px"
             position={{base: "relative", lg: "sticky"}}
             top={{base: "0", lg: "120px"}}
           >
-            <CategoryText category="Serviços de Infraestrutura de Dados"/>
-            <CategoryText category="Painéis Estratégicos"/>
-            <CategoryText category="Portais interativos de visualização de dados"/>
-            <CategoryText category="Plataforma de Publicação de dados"/>
-            <CategoryText category="Cursos de formação B2B"/>
-            <CategoryText category="Chatbots"/>
+            <CategoryText category="Arquitetura de Dados"/>
+            <CategoryText category="Portal de Dados"/>
+            <CategoryText category="Painel Gerencial"/>
+            <CategoryText category="Chatbot"/>
+            <CategoryText category="Formação"/>
           </Box>
 
           <Stack

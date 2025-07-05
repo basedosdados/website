@@ -1,6 +1,6 @@
 ---
 question: Minha instituição já tem um Painel Estratégico. Vocês conseguem trabalhar nele?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-legacy-dashboard-integration
 order: 14
 ---
