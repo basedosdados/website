@@ -1,6 +1,6 @@
 ---
 question: Além da construção de painéis estratégicos, vocês também constroem a infraestrutura necessária para que ele funcione bem?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-end-to-end-dashboard-solutions
 order: 15
 ---

@@ -1,6 +1,6 @@
 ---
 question: Quais tecnologias a BD costuma usar para esse tipo de projeto?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-tech-stack
 order: 3
 ---

@@ -1,6 +1,6 @@
 ---
 question: As aulas são ao vivo ou gravadas?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-training-format
 order: 36
 ---

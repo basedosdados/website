@@ -1,6 +1,6 @@
 ---
 question: Em quanto tempo, em média, um Painel fica pronto?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-dashboard-deployment-timeline
 order: 17
 ---

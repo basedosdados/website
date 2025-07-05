@@ -1,6 +1,6 @@
 ---
 question: Em quanto tempo, em média, a infraestrutura fica pronta?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-infrastructure-deployment-timeline
 order: 8
 ---

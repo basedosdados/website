@@ -1,6 +1,6 @@
 ---
 question: Quais tecnologias a BD costuma usar para esse tipo de projeto? 
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-platform-tech-stack
 order: 28
 ---

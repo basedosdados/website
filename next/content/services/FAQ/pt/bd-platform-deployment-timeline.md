@@ -1,6 +1,6 @@
 ---
 question: Em quanto tempo, em média, uma Plataforma fica pronta?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-platform-deployment-timeline
 order: 33
 ---

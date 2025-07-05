@@ -1,6 +1,6 @@
 ---
 question: Minha instituição já tem alguma infraestrutura. Vocês conseguem trabalhar com ela?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-existing-infra-integration
 order: 5
 ---

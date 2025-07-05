@@ -1,6 +1,6 @@
 ---
 question: Vocês ajudam na capacitação da equipe interna para operar os Painéis?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-dashboard-training
 order: 32
 ---

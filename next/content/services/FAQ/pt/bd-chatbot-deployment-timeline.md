@@ -1,6 +1,6 @@
 ---
 question: Em quanto tempo eu teria o chatbot rodando?
-categories: [Chatbots]
+categories: [Chatbot]
 id: bd-chatbot-deployment-timeline
 order: 47
 ---

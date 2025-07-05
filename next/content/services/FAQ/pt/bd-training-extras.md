@@ -1,6 +1,6 @@
 ---
 question: O que está incluído além das aulas?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-training-extras
 order: 38
 ---

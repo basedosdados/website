@@ -1,6 +1,6 @@
 ---
 question: Vocês ajudam na capacitação da equipe interna para operar os Painéis?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-dashboard-training-program
 order: 16
 ---

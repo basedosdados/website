@@ -1,6 +1,6 @@
 ---
 question: Os cursos são padronizados ou realmente personalizados para minha equipe?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-training-customization
 order: 34
 ---

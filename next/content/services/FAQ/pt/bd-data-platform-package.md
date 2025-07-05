@@ -1,6 +1,6 @@
 ---
 question: O que exatamente está incluído nos serviços de construção de Plataformas de Disponibilização de Dados da Base dos Dados?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-data-platform-package
 order: 26
 ---

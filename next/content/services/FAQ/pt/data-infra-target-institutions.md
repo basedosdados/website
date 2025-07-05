@@ -1,6 +1,6 @@
 ---
 question: Para que tipo de instituição esses serviços foram pensados?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: data-infra-target-institutions
 order: 2
 ---

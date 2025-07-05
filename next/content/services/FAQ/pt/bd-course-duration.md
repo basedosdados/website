@@ -1,6 +1,6 @@
 ---
 question: Qual a duração dos cursos?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-course-duration
 order: 41
 ---

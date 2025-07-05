@@ -1,6 +1,6 @@
 ---
 question: Quais são os pré-requisitos técnicos para implementar o chatbot?
-categories: [Chatbots]
+categories: [Chatbot]
 id: bd-chatbot-prerequisites
 order: 44
 ---

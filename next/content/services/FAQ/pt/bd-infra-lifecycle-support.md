@@ -1,6 +1,6 @@
 ---
 question: O serviço inclui alguma manutenção posterior da infraestrutura?
-categories: [Painéis Estratégicos]
+categories: [Painel Gerencial]
 id: bd-infra-lifecycle-support
 order: 13
 ---

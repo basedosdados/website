@@ -1,6 +1,6 @@
 ---
 question: Vocês ajudam na capacitação da equipe interna para operar a infraestrutura?
-categories: [Serviços de Infraestrutura de Dados]
+categories: [Arquitetura de Dados]
 id: bd-internal-team-training
 order: 7
 ---

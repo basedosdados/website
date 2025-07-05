@@ -1,6 +1,6 @@
 ---
 question: Minha instituição já tem uma Plataforma de Divulgação de Dados. Vocês conseguem trabalhar nela?
-categories: [Plataforma de Publicação de dados]
+categories: [Portal de Dados]
 id: bd-legacy-platform-integration
 order: 30
 ---

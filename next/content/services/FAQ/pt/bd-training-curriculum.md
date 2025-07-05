@@ -1,6 +1,6 @@
 ---
 question: Que tipos de conteúdos vocês ensinam?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-training-curriculum
 order: 37
 ---

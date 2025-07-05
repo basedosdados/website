@@ -1,6 +1,6 @@
 ---
 question: Quantas pessoas podem participar do curso?
-categories: [Cursos de formação B2B]
+categories: [Formação]
 id: bd-course-capacity
 order: 42
 ---
