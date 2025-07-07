@@ -217,7 +217,7 @@ datos de [RAIS - Ministerio de Economía](https://dev.to/basedosdados/bigquery-1
 BigQuery tiene un mecanismo de búsqueda que permite buscar por nombres
 de *datasets* (conjuntos), *tables* (tablas) o *labels* (grupos).
 Construimos reglas de nomenclatura simples y prácticas para facilitar tu
-búsqueda - [ver más](style_data.md).
+búsqueda - [ver más](style_data).
 
 ### Conectando con PowerBI
 

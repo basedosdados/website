@@ -111,19 +111,19 @@ Las tablas de arquitectura de RAIS [pueden ser consultadas aquí](https://docs.g
 
 #### Para completar cada tabla de tu conjunto sigue este paso a paso:
 
-<Tip caption="Al inicio y final de cada etapa consulta nuestro [manual de estilo](style_data.md) para garantizar que estás siguiendo la estandarización de BD"/>
+<Tip caption="Al inicio y final de cada etapa consulta nuestro [manual de estilo](style_data) para garantizar que estás siguiendo la estandarización de BD"/>
 
 1. Listar todas las variables de los datos en la columna `original_name`
     - Obs: Si la base cambia el nombre de las variables a lo largo de los años (como RAIS), es necesario hacer la compatibilización entre años para todas las variables completando la columna de `original_name_YYYY` para cada año o mes disponible
-2. Renombrar las variables según nuestro [manual](style_data.md) en la columna `name`
+2. Renombrar las variables según nuestro [manual](style_data) en la columna `name`
 3. Entender el tipo de variable y completar la columna `bigquery_type`
-4. Completar la descripción en `description` según el [manual](style_data.md)
+4. Completar la descripción en `description` según el [manual](style_data)
 5. A partir de la compatibilización entre años y/o consultas a los datos brutos, completar la cobertura temporal en `temporal_coverage` de cada variable
     - Obs: Si las variables tienen la misma cobertura temporal que la tabla completar solo con '(1)'
 6. Indicar con 'yes' o 'no' si hay diccionario para las variables en `covered_by_dictionary`
 7. Verificar si las variables representan alguna entidad presente en los [directorios](https://basedosdados.org/dataset?q=diret%C3%B3rio&datasets_with=open_tables&organization=bd&page=1) para completar el `directory_column`
 8. Para las variables del tipo `int64` o `float64` verificar si es necesario incluir una [unidad de medida](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
-9. Reordenar las variables según el [manual](style_data.md)
+9. Reordenar las variables según el [manual](style_data)
 
 <Tip caption="Cuando termines de completar las tablas de arquitectura, contacta con el equipo de Base de los Datos para validar todo. Es necesario que esté claro el formato final que los datos deben tener _antes_ de empezar a escribir el código. Así evitamos el retrabajo."/>
 
@@ -150,7 +150,7 @@ La tabla `microdados_vinculos` de RAIS, por ejemplo, es una tabla muy grande (+2
 - Las rutas de archivos deben ser atajos _relativos_ a la carpeta raíz
   (`<dataset_id>`), es decir, no deben depender de las rutas de tu
   computadora.
-- La limpieza debe seguir nuestro [manual de estilo](style_data.md) y las [mejores prácticas de programación](https://en.wikipedia.org/wiki/Best_coding_practices).
+- La limpieza debe seguir nuestro [manual de estilo](style_data) y las [mejores prácticas de programación](https://en.wikipedia.org/wiki/Best_coding_practices).
 
 #### Ejemplo: PNAD Continua - Código de limpieza
 
