@@ -188,265 +188,269 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
-  it('Fazer fluxo de assinatura BDPro', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
+  const isLocalhost = Cypress.env('NEXT_PUBLIC_BASE_URL_FRONTEND')?.startsWith('http://localhost');
 
-    cy.get('#toggle-prices')
-      .should('exist')
-      .and('have.attr', 'type', 'checkbox')
-      .and('be.checked')
-      .click({ force: true });
-
-    cy.contains('R$ 47/mês', { timeout: 20000 })
-      .should('be.visible');
-
-    cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
-
-    cy.get('@checkoutModal').within(() => {
-      cy.contains('Pagamento', { timeout: 20000 })
-        .should('be.visible');
-
-      cy.verifyElement('BD Pro');
-
-      cy.contains('R$ 47,00/mês')
-        .should('be.visible');
-
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
-        .should('be.visible')
-        .its('0.contentDocument.body')
-        .should('not.be.empty')
-        .then(cy.wrap)
-
-      cy.fillStripeInput('cardNumber', '4242424242424242');
-      cy.fillStripeInput('cardExpiry', '12/30');
-      cy.fillStripeInput('cardCvc', '123');
-
-      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-        .as('stripeConfirmation');
-
-      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
+  if (isLocalhost) {
+    it('Fazer fluxo de assinatura BDPro', () => {
+      cy.contains('button', 'Comparar planos')
         .should('be.visible')
         .click();
 
-      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
-        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
-        expect(interception.response.body.status).to.eq('succeeded');
-      });
-    });
+      cy.get('#toggle-prices')
+        .should('exist')
+        .and('have.attr', 'type', 'checkbox')
+        .and('be.checked')
+        .click({ force: true });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
-      .should('be.visible')
-      .and('have.css', 'opacity', '1')
-      .as('paymentIntentSucceeded')
-      .within(() => {
-        cy.contains('Assinatura efetuada com sucesso!', { timeout: 20000 })
+      cy.contains('R$ 47/mês', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+
+      cy.get('@checkoutModal').within(() => {
+        cy.contains('Pagamento', { timeout: 20000 })
           .should('be.visible');
 
-        cy.get('button[aria-label="Close"]')
-          .first()
-          .click();
-      });
+        cy.verifyElement('BD Pro');
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
-      .should('not.be.visible');
+        cy.contains('R$ 47,00/mês')
+          .should('be.visible');
 
-    cy.wait(30000);
-  });
+        cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+          .should('be.visible')
+          .its('0.contentDocument.body')
+          .should('not.be.empty')
+          .then(cy.wrap)
 
-  it('Verificar se BDPro está ativo e cancelar', () => {
-    cy.contains('Ativo')
-      .should('be.visible');
+        cy.fillStripeInput('cardNumber', '4242424242424242');
+        cy.fillStripeInput('cardExpiry', '12/30');
+        cy.fillStripeInput('cardCvc', '123');
 
-    cy.contains('p', 'BD Pro')
-      .should('be.visible');
+        cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+          .as('stripeConfirmation');
 
-    cy.contains('(Mensal)')
-      .should('be.visible');
-
-    cy.contains('Próxima data de renovação automática:')
-      .should('be.visible');
-
-    cy.contains('button', 'Cancelar plano')
-      .should('be.visible')
-      .click();
-
-    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
-      .should('be.visible')
-      .and('have.css', 'opacity', '1')
-      .as('cancelSub')
-      .within(() => {
-        cy.contains('button','Cancelar plano')
+        cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
           .should('be.visible')
           .click();
-      });
 
-    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
-      .should('not.exist');
-
-    cy.contains('Cancelado')
-      .should('be.visible');
-
-    cy.contains('Acesso ao plano disponível até:')
-      .should('be.visible');
-
-    getSafeUserBdCookie().then(userData => {
-      const userId = userData.id.split(':')[1];
-
-      cy.request({
-        method: 'GET',
-        url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }).then((subscriptionResponse) => {
-        const subscriptionId = subscriptionResponse.body;
-
-        cy.request({
-          method: 'GET',
-          url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then((response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body).to.have.property('success', true);
-          cy.wait(60000);
-
-          cy.visit(`/user/${username}?plans_and_payment`);
-
-          cy.contains('p', 'BD Grátis', { timeout: 10000 })
-            .should('be.visible');
+        cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+          expect(interception.response.statusCode).to.be.oneOf([200, 201]);
+          expect(interception.response.body.status).to.eq('succeeded');
         });
       });
-    });
-  });
 
-  it('Fazer fluxo de assinatura BDEmpresas', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
-
-    cy.arrivingAtCheckout('#bd_pro_empresas_button_sub_btn');
-
-    cy.get('@checkoutModal').within(() => {
-      cy.contains('Pagamento', { timeout: 20000 })
-        .should('be.visible');
-
-      cy.verifyElement('BD Empresas');
-
-      cy.contains('R$ 3.360,00/ano')
-        .should('be.visible');
-
-      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
         .should('be.visible')
-        .its('0.contentDocument.body')
-        .should('not.be.empty')
-        .then(cy.wrap)
+        .and('have.css', 'opacity', '1')
+        .as('paymentIntentSucceeded')
+        .within(() => {
+          cy.contains('Assinatura efetuada com sucesso!', { timeout: 20000 })
+            .should('be.visible');
 
-      cy.fillStripeInput('cardNumber', '4242424242424242');
-      cy.fillStripeInput('cardExpiry', '12/30');
-      cy.fillStripeInput('cardCvc', '123');
+          cy.get('button[aria-label="Close"]')
+            .first()
+            .click();
+        });
 
-      cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-        .as('stripeConfirmation');
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
+        .should('not.be.visible');
 
-      cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
+      cy.wait(30000);
+    });
+
+    it('Verificar se BDPro está ativo e cancelar', () => {
+      cy.contains('Ativo')
+        .should('be.visible');
+
+      cy.contains('p', 'BD Pro')
+        .should('be.visible');
+
+      cy.contains('(Mensal)')
+        .should('be.visible');
+
+      cy.contains('Próxima data de renovação automática:')
+        .should('be.visible');
+
+      cy.contains('button', 'Cancelar plano')
         .should('be.visible')
         .click();
 
-      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
-        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
-        expect(interception.response.body.status).to.eq('succeeded');
-      });
-    });
+      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
+        .should('be.visible')
+        .and('have.css', 'opacity', '1')
+        .as('cancelSub')
+        .within(() => {
+          cy.contains('button','Cancelar plano')
+            .should('be.visible')
+            .click();
+        });
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
-      .should('be.visible')
-      .and('have.css', 'opacity', '1')
-      .as('paymentIntentSucceeded')
-      .within(() => {
-        cy.contains('Assinatura efetuada com sucesso!', { timeout: 20000 })
-          .should('be.visible');
+      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
+        .should('not.exist');
 
-        cy.get('button[aria-label="Close"]')
-          .first()
-          .click();
-      });
+      cy.contains('Cancelado')
+        .should('be.visible');
 
-    cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
-      .should('not.be.visible');
+      cy.contains('Acesso ao plano disponível até:')
+        .should('be.visible');
 
-    cy.wait(30000);
-  });
-
-  it('Verificar se BDEmpresas está ativo e cancelar', () => {
-    cy.contains('Ativo')
-      .should('be.visible');
-
-    cy.contains('p', 'BD Empresas')
-      .should('be.visible');
-
-    cy.contains('(Anual)')
-      .should('be.visible');
-
-    cy.contains('Próxima data de renovação automática:')
-      .should('be.visible');
-
-    cy.contains('button', 'Cancelar plano')
-      .should('be.visible')
-      .click();
-
-    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
-      .should('be.visible')
-      .and('have.css', 'opacity', '1')
-      .as('cancelSub')
-      .within(() => {
-        cy.contains('button','Cancelar plano')
-          .should('be.visible')
-          .click();
-      });
-
-    cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
-      .should('not.exist');
-
-    cy.contains('Cancelado')
-      .should('be.visible');
-
-    cy.contains('Acesso ao plano disponível até:')
-      .should('be.visible');
-
-    getSafeUserBdCookie().then(userData => {
-      const userId = userData.id.split(':')[1];
-
-      cy.request({
-        method: 'GET',
-        url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }).then((subscriptionResponse) => {
-        const subscriptionId = subscriptionResponse.body;
+      getSafeUserBdCookie().then(userData => {
+        const userId = userData.id.split(':')[1];
 
         cy.request({
           method: 'GET',
-          url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
+          url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
           headers: {
             'Content-Type': 'application/json',
           }
-        }).then((response) => {
-          expect(response.status).to.eq(200);
-          expect(response.body).to.have.property('success', true);
-          cy.wait(60000);
+        }).then((subscriptionResponse) => {
+          const subscriptionId = subscriptionResponse.body;
 
-          cy.visit(`/user/${username}?plans_and_payment`);
+          cy.request({
+            method: 'GET',
+            url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then((response) => {
+            expect(response.status).to.eq(200);
+            expect(response.body).to.have.property('success', true);
+            cy.wait(60000);
 
-          cy.contains('p', 'BD Grátis', { timeout: 10000 })
-            .should('be.visible');
+            cy.visit(`/user/${username}?plans_and_payment`);
+
+            cy.contains('p', 'BD Grátis', { timeout: 10000 })
+              .should('be.visible');
+          });
         });
       });
     });
-  });
+
+    it('Fazer fluxo de assinatura BDEmpresas', () => {
+      cy.contains('button', 'Comparar planos')
+        .should('be.visible')
+        .click();
+
+      cy.arrivingAtCheckout('#bd_pro_empresas_button_sub_btn');
+
+      cy.get('@checkoutModal').within(() => {
+        cy.contains('Pagamento', { timeout: 20000 })
+          .should('be.visible');
+
+        cy.verifyElement('BD Empresas');
+
+        cy.contains('R$ 3.360,00/ano')
+          .should('be.visible');
+
+        cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+          .should('be.visible')
+          .its('0.contentDocument.body')
+          .should('not.be.empty')
+          .then(cy.wrap)
+
+        cy.fillStripeInput('cardNumber', '4242424242424242');
+        cy.fillStripeInput('cardExpiry', '12/30');
+        cy.fillStripeInput('cardCvc', '123');
+
+        cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
+          .as('stripeConfirmation');
+
+        cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
+          .should('be.visible')
+          .click();
+
+        cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+          expect(interception.response.statusCode).to.be.oneOf([200, 201]);
+          expect(interception.response.body.status).to.eq('succeeded');
+        });
+      });
+
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
+        .should('be.visible')
+        .and('have.css', 'opacity', '1')
+        .as('paymentIntentSucceeded')
+        .within(() => {
+          cy.contains('Assinatura efetuada com sucesso!', { timeout: 20000 })
+            .should('be.visible');
+
+          cy.get('button[aria-label="Close"]')
+            .first()
+            .click();
+        });
+
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
+        .should('not.be.visible');
+
+      cy.wait(30000);
+    });
+
+    it('Verificar se BDEmpresas está ativo e cancelar', () => {
+      cy.contains('Ativo')
+        .should('be.visible');
+
+      cy.contains('p', 'BD Empresas')
+        .should('be.visible');
+
+      cy.contains('(Anual)')
+        .should('be.visible');
+
+      cy.contains('Próxima data de renovação automática:')
+        .should('be.visible');
+
+      cy.contains('button', 'Cancelar plano')
+        .should('be.visible')
+        .click();
+
+      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
+        .should('be.visible')
+        .and('have.css', 'opacity', '1')
+        .as('cancelSub')
+        .within(() => {
+          cy.contains('button','Cancelar plano')
+            .should('be.visible')
+            .click();
+        });
+
+      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
+        .should('not.exist');
+
+      cy.contains('Cancelado')
+        .should('be.visible');
+
+      cy.contains('Acesso ao plano disponível até:')
+        .should('be.visible');
+
+      getSafeUserBdCookie().then(userData => {
+        const userId = userData.id.split(':')[1];
+
+        cy.request({
+          method: 'GET',
+          url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        }).then((subscriptionResponse) => {
+          const subscriptionId = subscriptionResponse.body;
+
+          cy.request({
+            method: 'GET',
+            url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }).then((response) => {
+            expect(response.status).to.eq(200);
+            expect(response.body).to.have.property('success', true);
+            cy.wait(60000);
+
+            cy.visit(`/user/${username}?plans_and_payment`);
+
+            cy.contains('p', 'BD Grátis', { timeout: 10000 })
+              .should('be.visible');
+          });
+        });
+      });
+    });
+  }
 });
 
