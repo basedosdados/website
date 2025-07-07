@@ -11,6 +11,7 @@ on:
 jobs:
   cypress-run:
     name: Cypress E2E Tests
+    if: github.base_ref == 'main' && github.head_ref == 'staging'
     runs-on: ubuntu-latest
     environment: staging
     env:
@@ -43,6 +44,5 @@ jobs:
         with:
           working-directory: ./next 
           browser: chrome
-          headless: true
           config-file: cypress.config.js
           config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
