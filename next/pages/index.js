@@ -122,7 +122,7 @@ function Hero() {
         >
           <Box
             width="100%"
-            height="780px"
+            height={{base: "100%", md: "780px"}}
             display="flex"
             alignItems="center"
             backgroundColor="#FFFFFF"
