@@ -92,6 +92,7 @@ function Hero() {
               <Button
                 height="54px"
                 width={isMobileMod() ? "100%" : "fit-content"}
+                justifyContent={{base: "center", md: "flex-start"}}
               >
                 <LabelText typography="x-large" color="currentColor">
                   {t("organized_data_first_button")}
@@ -105,6 +106,7 @@ function Hero() {
               <Button
                 height="54px"
                 width={isMobileMod() ? "100%" : "fit-content"}
+                justifyContent={{base: "center", md: "flex-start"}}
                 isVariant
               >
                 <LabelText typography="x-large" color="currentColor">
