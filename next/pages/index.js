@@ -94,7 +94,7 @@ function Hero({ locale }) {
                 width={isMobileMod() ? "100%" : "fit-content"}
                 justifyContent={{base: "center", md: "flex-start"}}
               >
-                <LabelText typography="x-large" color="currentColor">
+                <LabelText typography={isMobileMod() ? "medium" : "x-large"} color="currentColor">
                   {t("organized_data_first_button")}
                 </LabelText>
               </Button>
@@ -109,7 +109,7 @@ function Hero({ locale }) {
                 justifyContent={{base: "center", md: "flex-start"}}
                 isVariant
               >
-                <LabelText typography="x-large" color="currentColor">
+                <LabelText typography={isMobileMod() ? "medium" : "x-large"} color="currentColor">
                   {t("organized_data_second_button")}
                 </LabelText>
               </Button>
