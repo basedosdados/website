@@ -41,7 +41,7 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-function Hero() {
+function Hero({ locale }) {
   const { t } = useTranslation('home');
 
   return (
@@ -142,7 +142,7 @@ function Hero() {
                 console.error('Erro ao carregar o vídeo', e);
               }}
             >
-              <source src="https://storage.googleapis.com/basedosdados-website/video/platform-presentation.mp4" type="video/mp4" />
+              <source src={`https://storage.googleapis.com/basedosdados-website/video/platform-presentation-${locale}.mp4`} type="video/mp4" />
             </video>
           </Box>
         </Stack>
@@ -151,9 +151,8 @@ function Hero() {
   );
 }
 
-function Products() {
+function Products({ locale }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
   
   return (
     <VStack
@@ -165,6 +164,7 @@ function Products() {
       <VStack spacing={0} width="100%">
         <Display
           display={{base: "block", md:"flex"}}
+          typography={isMobileMod() ? "small" : "large"}
           flexDirection="column"
           position="relative"
           zIndex="1"
@@ -172,10 +172,12 @@ function Products() {
           textAlign="center"
           margin="104px 0 112px"
         >
-          {t('products.facilitation_text')}
+          {t('products.facilitation_text')} {" "}
           <Text as="span">
-            {t('products.analysis_distance')}
-            <Text as="span" color="#2B8C4D">{t('products.good_question')}</Text>.
+            {t('products.analysis_distance')} {" "}
+            <Text as="span" color="#2B8C4D">
+              {t('products.good_question')}
+            </Text>.
           </Text>
         </Display>
 
@@ -439,9 +441,8 @@ export function StepText ({index, text}) {
   )
 }
 
-function Support() {
+function Support({ locale }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
   const { hasCopied, onCopy } = useClipboard("42494318000116");
 
   return (
@@ -453,6 +454,7 @@ function Support() {
     >
       <VStack id="support" position="relative" width="100%" spacing={0}>
         <Display
+          typography={isMobileMod() ? "small" : "large"}
           display={{base: "block", md:"flex"}}
           flexDirection="column"
           fontFamily="Roboto"
@@ -462,8 +464,13 @@ function Support() {
           textAlign="center"
           margin="104px 0px 40px"
         >
-          <Text as="span">{t('support.existence_through_effort')}</Text>
-          <Text as="span">{t('support.those_who_believe_in_quality_open_data')}</Text>
+          <Text as="span">
+            {t('support.existence_through_effort')}
+          </Text>
+          {" "}
+          <Text as="span">
+            {t('support.those_who_believe_in_quality_open_data')}
+          </Text>
         </Display>
 
         {locale === 'pt' && (
@@ -747,6 +754,7 @@ function BDEdu () {
         marginBottom="24px"
       />
       <Display
+        typography={isMobileMod() ? "small" : "large"}
         display={{base: "block", md:"flex"}}
         flexDirection="column"
         textAlign="center"
@@ -778,14 +786,14 @@ function BDEdu () {
   )
 }
 
-export default function Home() {
+export default function Home({ locale }) {
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero />
+      <Hero locale={locale}/>
       {/* <BDEdu /> */}
       <BePartner />
-      <Products />
-      <Support />
+      <Products locale={locale}/>
+      <Support locale={locale}/>
     </MainPageTemplate>
   );
 }

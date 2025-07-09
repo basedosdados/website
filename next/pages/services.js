@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import Head from "next/head";
 import ReactMarkdown from "react-markdown";
-import { useTranslation } from 'next-i18next';
+import { useTranslation, Trans } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
@@ -83,6 +83,7 @@ const SectionSelector = ({ icon, text, anchoring, variant = false, active = fals
         fill: "#2B8C4D",
       }}
       transition="background 0.2s, color 0.2s"
+      overflow="hidden"
     >
       {!variant && icon}
       <LabelText 
@@ -111,41 +112,47 @@ const Section = ({
     <VStack
       id={id}
       display="flex"
-      paddingTop="40px"
-      scrollMarginTop="20px"
+      paddingTop={{base: "0", md: "40px"}}
+      scrollMarginTop={{base: "60px", md: "20px"}}
       spacing={0}
     >
       <Stack
+        width="100%"
+        alignItems="center"
         padding={{base: "40px 24px 24px", md: "40px 24px"}}
-        boxSizing="content-box"
-        spacing="16px"
-        maxWidth="1440px"
-        width={{base: "auto", md: "100%"}}
-        margin="0 auto"
+        spacing={0}
       >
-        {!isMobileMod() ?
-          <Display>
-            {title}
-          </Display>
-        :
-          <TitleText typography="large">
-            {title}
-          </TitleText>
-        }
-        <TitleText
-          typography={isMobileMod() ? "small" : "large"}
-          maxWidth="1120px"
-          color="#71757A"
+        <Stack
+          boxSizing="border-box"
+          width="100%"
+          maxWidth="1440px"
+          margin="0 auto"
+          spacing="16px"
         >
-          {subtitle}
-        </TitleText>
+          {!isMobileMod() ?
+            <Display>
+              {title}
+            </Display>
+          :
+            <TitleText typography="large">
+              {title}
+            </TitleText>
+          }
+          <TitleText
+            typography={isMobileMod() ? "small" : "medium"}
+            maxWidth="752px"
+            color="#71757A"
+          >
+            {subtitle}
+          </TitleText>
+        </Stack>
       </Stack>
 
       {content[0] && (
         <Stack
           width="100%"
           alignItems="center"
-          padding={{base: "0 24px 24px", md: "80px 24px"}}
+          padding={{base: "0 24px 24px", md: "40px 24px 0"}}
           spacing={0}
         >
           <Stack
@@ -153,25 +160,48 @@ const Section = ({
             maxWidth="1440px"
             flexDirection={{base: "column-reverse", md: "row"}}
             justifyContent="space-between"
+            alignItems="center"
             margin="0 auto !important"
-            gap="24px"
+            gap={{base:"24px", md: "10%"}}
             spacing={0}
           >
             <TitleText
-              display="flex"
+              display="inline"
               alignItems="center"
-              typography={isMobileMod() ? "small" : "large"}
-              maxWidth="675px"
+              width={{base: "100%", md: "40%"}}
+              typography={isMobileMod() ? "small" : "medium"}
+              maxWidth="580px"
             >
-              {content[0].text || ""}
+              <Trans
+                i18nKey={content[0].text || ""}
+                components={{
+                  1:
+                    <Box
+                      as="span"
+                      cursor="pointer"
+                      onClick={() => {
+                        const el = document.getElementById("chatbot-warning-msg");
+                          if (el) {
+                            el.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }
+                      }}
+                    />
+                }}
+              />
             </TitleText>
-            {content[0].img.id && 
+            {content[0].img.id &&
+            <Stack
+              spacing={0}
+              position="relative"
+              minHeight={{base: "fit-content", md: "300px"}}
+            >
               <Image
                 src={content[0].img.id}
                 alt={content[0].img.alt || ""}
                 width={content[0].img.width || 600}
                 height={content[0].img.height || 300}
               />
+            </Stack>
             }
           </Stack>
         </Stack>
@@ -181,6 +211,7 @@ const Section = ({
         <Stack
           width="100%"
           backgroundColor="#252A32"
+          marginTop="80px !important"
           padding={{base: "40px 24px", md: "80px 24px"}}
           spacing={0}
         >
@@ -193,22 +224,13 @@ const Section = ({
             gap="24px"
           >
             <PointsIcon fill="#2B8C4D" width="25px" height="22px"/>
-            {!isMobileMod() ?
-              <Display
-                typography="small"
-                color="#FFF"
-                maxWidth="1200px"
-              >
-                {content[1].mention?.content || ""}
-              </Display>
-            :
-              <TitleText
-                typography="small"
-                color="#FFF"
-              >
-                {content[1].mention?.content || ""}
-              </TitleText>
-            }
+            <TitleText
+              maxWidth="900px"
+              typography={isMobileMod() ? "small" : "large"}
+              color="#FFF"
+            >
+              {content[1].mention?.content || ""}
+            </TitleText>
             <Stack spacing={0}>
               <BodyText typography="large" color="#FFF">
                 {content[1].mention?.author || ""}
@@ -224,7 +246,7 @@ const Section = ({
         <Grid
           maxWidth="1440px"
           margin="0 auto !important"
-          padding={{base:"40px 24px", md:"80px 24px"}}
+          padding={{base:"24px 24px 0", md:"80px 24px"}}
           boxSizing="content-box"
           templateColumns={{base: "1fr", md: "1fr 1fr"}}
           gap="24px"
@@ -237,15 +259,18 @@ const Section = ({
               borderRadius="32px"
               backgroundColor="#E4F2FF"
             >
-              <Image src={elm.icon} width={80} height={80}/>
-              <TitleText
-                typography={isMobileMod() ? "small" : "medium"}
-                marginTop="8px"
-              >{elm.title}</TitleText>
-              <TitleText
-                typography={isMobileMod() ? "small" : "medium"}
-                color="#71757A"
-              >{elm.content}</TitleText>
+              <Stack spacing="8px">
+                <Box>
+                  <Image src={elm.icon} width={80} height={80}/>
+                </Box>
+                <TitleText
+                  display="inline"
+                  alignItems="center"
+                  typography="small"
+                >
+                  {elm.title} {""} <Box display="inline" color="#71757A">{elm.content}</Box>
+                </TitleText>
+              </Stack>
             </GridItem>
           ))}
         </Grid>
@@ -903,7 +928,7 @@ export default function Services({ faqs }) {
           {
             text: t("formacao-content"),
             img: {
-              id: prefixImgUrl("image-formacao.svg"),
+              id: prefixImgUrl("image-formacao-personalizada.svg"),
               alt: "formacao",
               width: 600,
               height: 300,
@@ -979,10 +1004,12 @@ export default function Services({ faqs }) {
         </Stack>
       </Stack>
       <BodyText
+        id="chatbot-warning-msg"
         boxSizing="content-box"
         display="flex"
         alignItems={{base: "flex-end", md: "center"}}
         maxWidth="1440px"
+        minHeight="24px"
         margin="0 auto !important"
         typography="large"
         color="#464A51"
@@ -1005,6 +1032,7 @@ export default function Services({ faqs }) {
       </BodyText>
 
       <VStack
+        display="none"
         boxSizing="content-box"
         maxWidth="1440px"
         padding="0 24px"
