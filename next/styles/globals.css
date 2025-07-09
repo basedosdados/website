@@ -367,3 +367,9 @@ body {
 .introjs-tooltipbuttons .tour-dataset-buttons.introjs-donebutton:hover, .tour-dataset-buttons.introjs-nextbutton:hover {
   background: #22703E;
 }
+
+@media (max-width: 330px) {
+  .footer_grid_links {
+    grid-template-columns: 1fr !important;
+  }
+}

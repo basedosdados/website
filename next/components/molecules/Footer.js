@@ -171,7 +171,7 @@ export default function Footer({ template, ocult = false }) {
         >
           <Display
             typography="small"
-            minWidth="260px"
+            minWidth={{base: "100%", md: "260px"}}
             fontWeight="400"
             color="#464A51"
             paddingBottom={{ base: "40px", md: "" }}
@@ -180,6 +180,7 @@ export default function Footer({ template, ocult = false }) {
           </Display>
 
           <Stack
+            className="footer_grid_links"
             display={{base: "grid", lg: "flex"}}
             flexDirection="row"
             gridTemplateColumns={{base:"1fr 1fr", lg: ""}}
@@ -354,7 +355,12 @@ export default function Footer({ template, ocult = false }) {
             </HStack>
           </HStack>
 
-          <HStack spacing={{base: "20px", md: "12px"}} paddingBottom={{base: "24px", md: "0"}}>
+          <HStack
+            spacing={0}
+            flexWrap={{base: "wrap", md: "inherit"}}
+            gap={{base: "20px 12px", md: "12px"}}
+            paddingBottom={{base: "24px", md: "0"}}
+          >
             <SocialLink title="X" href={
               locale === 'en' ? "https://x.com/data__basis" :
               locale === 'es' ? "https://x.com/basedelosdatos" :
