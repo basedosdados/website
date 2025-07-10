@@ -30,19 +30,17 @@ import SearchIcon from '../../public/img/icons/searchIcon';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 import 'katex/dist/katex.min.css';
 
-const SearchColumn = memo(({ isLoaded, resource, columns }) => {
+function SearchColumn({ isLoaded, resource, columns }) {
   const { t } = useTranslation('dataset');
   const [inputFocus, setInputFocus] = useState(false);
   const [search, setSearch] = useState("");
-  const [value, setValue] = useState("");
   const [_timeout, _setTimeout] = useState(null);
 
-  const searcherColumn = useMemo(() => 
-    new FuzzySearch(resource, ["node.name", "node.description"], {sort: true}),
-    [resource]
-  );
+  function getSearcherColumn() {
+    return new FuzzySearch(resource, ["node.name", "node.description"], {sort: true});
+  }
 
-  const handleSearch = useCallback((searchValue) => {
+  function handleSearch(searchValue) {
     clearTimeout(_timeout);
     isLoaded(true);
     
@@ -52,7 +50,7 @@ const SearchColumn = memo(({ isLoaded, resource, columns }) => {
     }
 
     _setTimeout(setTimeout(() => {
-      const result = searcherColumn.search(searchValue.trim());
+      const result = getSearcherColumn().search(searchValue.trim());
       if(result.length > 0) {
         columns(result);
       } else {
@@ -60,15 +58,11 @@ const SearchColumn = memo(({ isLoaded, resource, columns }) => {
       }
       isLoaded(false);
     }, 500));
-  }, [_timeout, isLoaded, columns, resource, searcherColumn]);
+  }
 
   useEffect(() => {
-    handleSearch(value);
-  }, [value, handleSearch]);
-
-  useEffect(() => {
-    setValue(search);
-  }, [search]);
+    handleSearch(search);
+  }, [search, resource]);
 
   return (
     <ControlledInputSimple
@@ -90,7 +84,7 @@ const SearchColumn = memo(({ isLoaded, resource, columns }) => {
       }
     />
   );
-});
+}
 
 const TableHeader = memo(({ header, ...props }) => {
   const { t } = useTranslation('dataset');
@@ -190,6 +184,12 @@ const TableValue = memo(({children, ...props}) => {
   );
 });
 
+function sortElements(a, b) {
+  if (a.node.order < b.node.order) return -1;
+  if (a.node.order > b.node.order) return 1;
+  return 0;
+}
+
 export default function TableColumns({
   tableId,
   checkedColumns,
@@ -201,8 +201,8 @@ export default function TableColumns({
 }) {
   const router = useRouter();
   const { query, locale } = router;
-  const [resource, setResource] = useState({});
-  const [columns, setColumns] = useState({});
+  const [resource, setResource] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSearchLoading, setIsSearchLoading] = useState(true);
@@ -287,7 +287,7 @@ export default function TableColumns({
     }
   ], [t, template]);
 
-  const fetchColumns = useCallback(async () => {
+  const fetchColumns = async () => {
     if(tableId === undefined) return;
 
     setHasLoading(true);
@@ -316,21 +316,15 @@ export default function TableColumns({
     } finally {
       setIsLoading(false);
     }
-  }, [tableId, locale, setHasLoading, numberColumns]);
+  };
 
   useEffect(() => {
     fetchColumns();
-  }, [fetchColumns]);
+  }, [tableId, locale]);
 
   useEffect(() => {
     setIsLoading(hasLoading);
   }, [hasLoading]);
-
-  const sortElements = useCallback((a, b) => {
-    if (a.node.order < b.node.order) return -1;
-    if (a.node.order > b.node.order) return 1;
-    return 0;
-  }, []);
 
   function HasDownloadPermitted(value) {
     let downloadPermitted = false
