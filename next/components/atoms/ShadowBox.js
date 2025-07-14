@@ -14,7 +14,7 @@ export function ShadowBox({
   return (
     <VStack
       width="300px"
-      minWidth="300px"
+      minWidth={{base: "auto", md: "300px"}}
       height="100%"
       spacing={0}
       borderRadius="16px"

@@ -41,8 +41,6 @@ import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import DBLogoImage from "../../public/img/logos/db_logo";
 import DBLogoProImage from "../../public/img/logos/db_logo_pro";
-import DBLogoEduImage from "../../public/img/logos/db_logo_edu";
-import DBLogoLabImage from "../../public/img/logos/db_logo_lab";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -51,6 +49,15 @@ import SignOutIcon from "../../public/img/icons/signOutIcon";
 
 function useIsMobileMod() {
   return useCheckMobile();
+}
+
+function handleMenuLinkClick(href) {
+  if (href === "/services") {
+    triggerGAEvent("navigating_to_services", "menu");
+  }
+  if (href === "/search") {
+    triggerGAEvent("navigating_to_data", "menu");
+  }
 }
 
 function MenuDrawer({ userData, isOpen, onClose, links }) {
@@ -133,6 +140,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                           letterSpacing="0.1px"
                           fontWeight="400"
                           href={c.href}
+                          onClick={() => handleMenuLinkClick(c.href)}
                         >{c.icon && c.icon} {c.name}</Link>
                       )
                     })}
@@ -149,6 +157,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
+                  onClick={() => handleMenuLinkClick(elm)}
                 >{key}
                 </Link>
               )
@@ -159,42 +168,17 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
         {userData ? (
           <></>
         ) : (
-          <Stack display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
-            <Link
-              href="/user/login"
-              display="flex"
-              alignItems="center"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              padding="8px 4px"
-              cursor="pointer"
-              gap="8px"
-              _hover={{
-                opacity: 0.7
-              }}
-            >
-              {t('enter', { ns: 'menu' })}
+          <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
+            <Link href="/user/login" width="100%">
+              <Button width="100%" justifyContent="center">
+                {t('enter', { ns: 'menu' })}
+              </Button>
             </Link>
-            
-            <Link
-              href="/user/register"
-              display="flex"
-              alignItems="center"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              backgroundColor="#0D99FC"
-              padding="8px 16px"
-              cursor="pointer"
-              color="#FFF"
-              fontWeight="400"
-              gap="8px"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-            >
-              {t('register', { ns: 'menu' })}
+
+            <Link href="/user/register" width="100%">
+              <Button isVariant  width="100%" justifyContent="center">
+                {t('register', { ns: 'menu' })}
+              </Button>
             </Link>
           </Stack>
         )}
@@ -652,7 +636,6 @@ function SearchInputUser ({ user }) {
 function DesktopLinks({
   userData,
   links,
-  position = false,
   path,
   userTemplate = false,
   isUserPro
@@ -676,6 +659,7 @@ function DesktopLinks({
         href={url}
         padding="10px 0"
         gap="16px"
+        onClick={() => handleMenuLinkClick(url)}
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
       > 
@@ -694,11 +678,7 @@ function DesktopLinks({
       position={{ base: "relative", lg: "initial" }}
       gap="24px"
       transition="1s"
-      marginLeft={
-        path === "/" ?
-        !position ? "0 !important" : "28px !important"
-        : "28px !important"
-      }
+      marginLeft="28px !important"
     >
       <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
         {Object.entries(links).map(([k, v], i) => {
@@ -757,6 +737,7 @@ function DesktopLinks({
               fontWeight="400"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
+              onClick={() => handleMenuLinkClick(v)}
             >
               {k}
             </Link>
@@ -821,22 +802,11 @@ function DesktopLinks({
             >
               {t('enter', { ns: 'menu' })}
             </Link>
-            
-            <Link
-              href="/user/register"
-              height="40px"
-              width="fit-content"
-              borderRadius="8px"
-              backgroundColor="#0D99FC"
-              padding="8px 16px"
-              color="#FFF"
-              fontWeight="400"
-              gap="8px"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-            >
-              {t('register', { ns: 'menu' })}
+
+            <Link href="/user/register">
+              <Button isVariant>
+                {t('register', { ns: 'menu' })}
+              </Button>
             </Link>
           </>
         )}
@@ -856,7 +826,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
   const menuDisclosure = useDisclosure()
   const menuUserMobile = useDisclosure()
   const divRef = useRef()
-  const [isScrollDown, setIsScrollDown] = useState(false)
   const [userData, setUserData] = useState(null)
 
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -1011,9 +980,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY >= 225) setIsScrollDown(true)
-      if (window.scrollY <= 225) setIsScrollDown(false)
-
       if (!divRef.current || !divRef.current.style) return;
       if (window.scrollY <= 30) divRef.current.style.boxShadow = "none";
       else
@@ -1078,16 +1044,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
           <Link
             aria-label="Home"
-            width={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
-            }
-            minWidth={
-              router.pathname === "/" ?
-              isScrollDown ? "80px" : "0"
-              : "80px"
-            }
+            width="80px"
+            minWidth="80px"
             _hover={{opacity:"none"}}
             href={"/search"}
             marginLeft="0 !important"
@@ -1111,7 +1069,6 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             <DesktopLinks
               userData={userData}
               links={links}
-              position={isScrollDown}
               path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}

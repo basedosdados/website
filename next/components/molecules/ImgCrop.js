@@ -199,14 +199,7 @@ export default function CropImage ({
           >
             <Button
               width={{base: "100%", lg: "auto"}}
-              color="#2B8C4D"
-              backgroundColor="#FFF"
-              border="1px solid #2B8C4D"
-              _hover={{
-                backgroundColor: "#FFF",
-                color: "#22703E",
-                borderColor: "#22703E"
-              }}
+              isVariant
               onClick={onClose}
               isDisabled={isLoading}
             >

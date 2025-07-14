@@ -385,14 +385,8 @@ export default function SearchDatasetPage() {
           </Button>
 
           <Button
+            isVariant
             onClick={() => window.open("https://github.com/orgs/basedosdados/projects/17", "_blank")}
-            backgroundColor="#FFF"
-            border="1px solid #2B8C4D"
-            color="#2B8C4D"
-            _hover={{
-              color: "#22703E",
-              backgroundColor: "#FFF"
-            }}
           >
             {t('viewDataRoadmap')}
           </Button>

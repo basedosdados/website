@@ -321,14 +321,7 @@ export default function Account({ userInfo }) {
         <TitleTextForm>{t('username.username')}</TitleTextForm>
         <ExtraInfoTextForm>{userInfo.username}</ExtraInfoTextForm>
         <Button
-          color="#2B8C4D"
-          backgroundColor="#FFF"
-          border="1px solid #2B8C4D"
-          _hover={{
-            backgroundColor: "#FFF",
-            color: "#22703E",
-            borderColor: "#22703E"
-          }}
+          isVariant
           onClick={() => usernameModal.onOpen()}
         >{t('username.changeUsername')}</Button>
       </Box>
@@ -363,14 +356,7 @@ export default function Account({ userInfo }) {
           {t('username.dataStorageInfo', { returnObjects: true })[4]}
         </ExtraInfoTextForm>
         <Button
-          color="#2B8C4D"
-          backgroundColor="#FFF"
-          border="1px solid #2B8C4D"
-          _hover={{
-            backgroundColor: "#FFF",
-            color: "#22703E",
-            borderColor: "#22703E"
-          }}
+          isVariant
           onClick={() => router.push('/contact')}
         >{t('username.contactUs')}</Button>
       </Box>
