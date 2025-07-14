@@ -89,10 +89,12 @@
         },
         "services": {
             "title": "SERVIÇOS",
-            "dataCapture": "Captura de dados",
-            "dataAnalytics": "Análise de dados",
-            "dataConsulting": "Consultoria de dados",
-            "caseStudies": "Estudos de caso"
+            "diagnosticoDeMaturidade": "Diagnóstico de Maturidade",
+            "arquiteturaDeDados": "Arquitetura de Dados",
+            "portalDeDados": "Portal de Dados",
+            "painelGerencial": "Painel Gerencial",
+            "chatbot": "Chatbot",
+            "formacao": "Formação"
         },
         "resources": {
             "title": "RECURSOS",

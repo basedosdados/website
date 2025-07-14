@@ -51,6 +51,15 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
+function handleMenuLinkClick(href) {
+  if (href === "/services") {
+    triggerGAEvent("navigating_to_services", "menu");
+  }
+  if (href === "/search") {
+    triggerGAEvent("navigating_to_data", "menu");
+  }
+}
+
 function MenuDrawer({ userData, isOpen, onClose, links }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
@@ -131,6 +140,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                           letterSpacing="0.1px"
                           fontWeight="400"
                           href={c.href}
+                          onClick={() => handleMenuLinkClick(c.href)}
                         >{c.icon && c.icon} {c.name}</Link>
                       )
                     })}
@@ -147,6 +157,7 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
                   letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
+                  onClick={() => handleMenuLinkClick(elm)}
                 >{key}
                 </Link>
               )
@@ -648,6 +659,7 @@ function DesktopLinks({
         href={url}
         padding="10px 0"
         gap="16px"
+        onClick={() => handleMenuLinkClick(url)}
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
       > 
@@ -725,6 +737,7 @@ function DesktopLinks({
               fontWeight="400"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
+              onClick={() => handleMenuLinkClick(v)}
             >
               {k}
             </Link>

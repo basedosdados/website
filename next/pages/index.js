@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
+import { triggerGAEvent } from "../utils";
 import Link from "../components/atoms/Link";
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
@@ -88,6 +88,7 @@ function Hero({ locale }) {
             <Link
               href="/search"
               target="_self"
+              onClick={() => triggerGAEvent("navigating_to_data", "hero-home")}
             >
               <Button
                 height="54px"
@@ -102,6 +103,7 @@ function Hero({ locale }) {
             <Link
               href="/services"
               target="_self"
+              onClick={() => triggerGAEvent("navigating_to_services", "hero-home")}
             >
               <Button
                 height="54px"
