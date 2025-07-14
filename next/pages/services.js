@@ -997,7 +997,7 @@ export default function Services({ faqs }) {
               justifyContent="center"
             >
               <LabelText typography="x-large" color="currentColor">
-                {t("request-a-quote-button-variant")}
+                {t("request-a-quote-button")}
               </LabelText>
             </Button>
           </Link>

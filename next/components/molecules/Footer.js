@@ -8,6 +8,7 @@ import Link from "../atoms/Link";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { triggerGAEvent } from "../../utils";
 import Display from "../atoms/Text/Display";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -84,6 +85,10 @@ function TextFooterSimple({children, ...props}) {
 export default function Footer({ template, ocult = false }) {
   const { t } = useTranslation('common');
   const { locale } = useRouter();
+
+  function handlerTriggerEvent(event, value) {
+    triggerGAEvent(event, value)
+  }
 
   if(template === "simple") return (
     <VStack
@@ -192,7 +197,11 @@ export default function Footer({ template, ocult = false }) {
             marginLeft="auto"
           >
             <SectionCategories title={t('footer.products.title')}>
-              <FooterLink target="_self" href="/search">
+              <FooterLink
+                target="_self"
+                href="/search"
+                onClick={() => handlerTriggerEvent("navigating_to_data", "footer")}
+              >
                 {t('footer.products.searchEngine')}
               </FooterLink>
               <FooterLink href={
@@ -217,17 +226,47 @@ export default function Footer({ template, ocult = false }) {
             
             {locale === 'pt' && (
               <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-                <FooterLink target="_self" href="/services#data-capture">
-                  {t('footer.services.dataCapture')}
+                <FooterLink 
+                  target="_self"
+                  href="/services#diagnostico-de-maturidade"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.diagnosticoDeMaturidade')}
                 </FooterLink>
-                <FooterLink href="/services#analytics">
-                  {t('footer.services.dataAnalytics')}
+                <FooterLink 
+                  target="_self"
+                  href="/services#arquitetura-de-dados"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.arquiteturaDeDados')}
                 </FooterLink>
-                <FooterLink href="/services#consulting">
-                  {t('footer.services.dataConsulting')}
+                <FooterLink 
+                  target="_self"
+                  href="/services#portal-de-dados"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.portalDeDados')}
                 </FooterLink>
-                <FooterLink href="/services#case-studies">
-                  {t('footer.services.caseStudies')}
+                <FooterLink 
+                  target="_self"
+                  href="/services#painel-gerencial"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.painelGerencial')}
+                </FooterLink>
+                <FooterLink 
+                  target="_self"
+                  href="/services#chatbot"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.chatbot')}
+                </FooterLink>
+                <FooterLink 
+                  target="_self"
+                  href="/services#formacao"
+                  onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
+                >
+                  {t('footer.services.formacao')}
                 </FooterLink>
               </SectionCategories>
             )}
