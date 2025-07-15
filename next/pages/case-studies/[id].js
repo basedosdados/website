@@ -246,14 +246,7 @@ export default function CaseStudies ({ serialize }) {
               {t('contactText')}
             </BodyText>
 
-            <Button
-              color="#FFFFFF"
-              backgroundColor="#0D99FC"
-              _hover={{
-                backgroundColor: "#0B89E2"
-              }}
-              onClick={() => router.push('/contact')}
-            >
+            <Button onClick={() => router.push('/contact')}>
               {t('contactButton')}
             </Button>
           </VStack>

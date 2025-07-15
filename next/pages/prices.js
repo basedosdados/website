@@ -213,7 +213,7 @@ export const CardPrice = ({
                 justifyContent="center"
                 width="100%"
                 borderRadius="8px"
-                backgroundColor="#0D99FC"
+                backgroundColor="#2B8C4D"
                 padding="12px 16px"
                 cursor="pointer"
                 color="#FFF"
@@ -223,7 +223,7 @@ export const CardPrice = ({
                 lineHeight="36px"
                 onClick={button.onClick}
                 _hover={{
-                  backgroundColor: "#0B89E2"
+                  backgroundColor: "#22703E"
                 }}
               >
                 {t(button.text)}
@@ -246,9 +246,9 @@ export const CardPrice = ({
                 marginLeft="4px"
                 target="_blank"
                 alignItems="center"
-                color="#0D99FC"
+                color="#0068C5"
                 _hover={{
-                  color: "#0B89E2"
+                  color: "#0057A4"
                 }}
               >
                 {t('termsOfService')}
@@ -361,7 +361,6 @@ export function SectionPrice() {
         <Toggle
           id="toggle-prices"
           defaultChecked
-          className="toggle_variant"
           value={toggleAnual}
           onChange={() => setToggleAnual(!toggleAnual)}
         />

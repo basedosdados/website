@@ -38,13 +38,9 @@ export default function InternalServerError() {
         >
           <Button
             height="54px"
-            backgroundColor="#0D99FC"
             padding="10px 16px"
             fontSize="20px"
             lineHeight="30px"
-            _hover={{
-              backgroundColor: "#0B89E2"
-            }}
           >
             {t('error.checkStatus')}
           </Button>

@@ -1,111 +1,59 @@
 {
-    "pageTitle": "Serviços – Base dos Dados",
-    "metaTitle": "Serviços – Base dos Dados",
-    "slogan": {
-      "title": "Nossos serviços",
-      "description": "A Base dos Dados é a especialista que ajuda você ou sua equipe a trabalhar e extrair o máximo de valor dos dados",
-      "cta": "Vamos fazer um projeto juntos"
-    },
-    "services": {
-      "dataCapture": "Captura de dados",
-      "dataAnalysis": "Análise de dados",
-      "dataConsulting": "Consultoria de dados"
-    },
-    "caseStudies": {
-      "title": "Nossas soluções",
-      "subtitle": "Descubra por que as instituições escolhem inovar com a Base dos Dados",
-      "readMore": "Leia o estudo de caso"
-    },
-    "dataCapture": {
-      "title": "Captura de dados",
-      "description": "Capturamos e disponibilizamos dados sob demanda com rapidez, escala e baixo custo",
-      "longDescription": "Você não precisa se preocupar em criar e manter uma infraestrutura própria ou escrever códigos - nós cuidamos disso. Tudo é feito seguindo a metodologia de tratamento e padronização da Base dos Dados, e conforme as melhores práticas de engenharia de dados do mercado. As tabelas tratadas podem ser disponibilizadas com exclusividade ou serem públicas.",
-      "advantages": {
-        "title": "Principais vantagens",
-        "speed": "Rapidez",
-        "speedDescription": "Mesmo queries muito complexas demoram apenas minutos para serem processadas.",
-        "scale": "Escala",
-        "scaleDescription": "Nosso datalake escala magicamente para hexabytes se necessário.",
-        "cost": "Baixo custo",
-        "costDescription": "Todo usuário possui 1TB gratuito por mês para consulta aos dados."
-      },
-      "work": {
-        "title": "Nosso trabalho com engenharia de dados",
-        "technology": {
-          "title": "Tecnologia de ponta",
-          "description": "Utilizando da infraestrutura do Google Cloud Platform, uma das maiores plataformas de armazenamento e processamento de dados, garantimos a segurança e a confiabilidade do nosso trabalho."
-        },
-        "flexibility": {
-          "title": "Flexibilidade",
-          "description": "Seja envios pontuais, atualizações recorrentes, acesso via API, ou conexão com plataformas de BI, entregamos a solução que você precisa de forma ágil e completa."
-        },
-        "frameworks": {
-          "title": "Frameworks reconhecidos",
-          "description": "Com frameworks e sistemas de gestão de dados, garantimos a qualidade e a organização do seu sistema de dados sem gerar qualquer preocupação para sua equipe."
-        }
-      }
-    },
-    "dataAnalysis": {
-      "title": "Análise de dados",
-      "description": "Construímos análises, relatórios e indicadores essenciais para sua pesquisa ou tomada de decisão",
-      "longDescription": "As informações e insights são gerados a partir de diversos conjuntos de dados já tratados no nosso datalake público atrelado à expertise da nossa equipe de Dados. E mais: utilizamos nossa metodologia padrão de tratamento para que você também possa cruzar esses dados com quaisquer outras bases disponíveis no datalake.",
-      "examples": {
-        "title": "Exemplos de perguntas que podemos responder",
-        "example1": "Como vem evoluindo a economia brasileira, com indicadores detalhados mensais por setor?",
-        "example2": "Quais escolas terão performance acima da média do estado em matemática no ano que vem?",
-        "example3": "Quantas vezes o Diário Oficial da União publica sobre certo tema a cada dia?"
-      }
-    },
-    "dataConsulting": {
-      "title": "Consultoria de dados",
-      "description": "Orientamos como aplicar a nossa metodologia de limpeza, estruturação e padronização de dados",
-      "longDescription": "No seu projeto ou organização através de workshops e materiais exclusivos. Reproduzir nosso processo de tratamento em seu próprio banco de dados pode poupar horas de trabalho de sua equipe ao consultar, manipular ou atualizar as informações.",
-      "advantages": {
-        "title": "Principais vantagens",
-        "advantage1": "Experiência em construir infraestruturas capazes de suportar milhares de acessos mensais.",
-        "advantage2": "Flexibilidade para projetos remotos em qualquer lugar do país.",
-        "advantage3": "Equipe diversa e com expertise em diferentes áreas do conhecimento e dados."
-      },
-      "areas": {
-        "title": "Frentes de atuação",
-        "infrastructure": {
-          "title": "Infraestrutura",
-          "description": "Mentoria para equipes de engenharia de dados que buscam estruturar processos de manutenção de dados, seus próprios datalakes ou ainda alavancarem-se utilizando a infraestrutura da Base dos Dados."
-        },
-        "analysis": {
-          "title": "Análise",
-          "description": "Workshops práticos, mostrando como funciona o datalake da Base dos Dados e ensinando como explorar dados públicos para matérias jornalísticas ou pesquisas científicas."
-        },
-        "programming": {
-          "title": "Programação",
-          "description": "Programas personalizados de ensino para utilizar pacotes de Python, R e Stata da Base dos Dados, além de mentoria de SQL para construir análises rápidas e escaláveis direto na nuvem."
-        }
-      }
-    },
-    "workflow": {
-      "title": "Nosso fluxo de trabalho",
-      "description": "Uma mesma metodologia de trabalho para todos os serviços, pautada na satisfação dos clientes e na primazia pela qualidade",
-      "steps": {
-        "demand": {
-          "title": "Demanda",
-          "subtitle": "Identificação de demandas e necessidades do cliente",
-          "description": "Trabalhamos colaborativamente para compreender as reais necessidades por trás dos pedidos de nossos clientes. O trabalho de descoberta compreende discussões sobre os objetivos do projeto ou o uso dos dados a serem capturados e analisados. É nesta etapa que fica claro para nossa equipe e para os clientes o objetivo final do serviço."
-        },
-        "planning": {
-          "title": "Planejamento",
-          "subtitle": "Alinhamento de expectativas de negócio, engenharia ou capacitação",
-          "description": "O segundo passo é entender qual a melhor forma de entregarmos o valor que você precisa. Não trabalhamos com propostas genéricas. Cada projeto é pensado e orientado 100% para as demandas dos clientes, seja no formato de entrega de dados, análises ou capacitações específicas."
-        },
-        "budget": {
-          "title": "Orçamento",
-          "subtitle": "Orçamento transparente e simplificado",
-          "description": "Uma vez alinhado o escopo, formato e expectativas, entregamos uma proposta de orçamento completamente transparente. Para isso, consideramos fatores como a quantidade e complexidade de datasets, trabalho necessário, tamanho da equipe e urgência. Tudo explícito de forma direta e em conformidade com o que foi determinado até então."
-        },
-        "execution": {
-          "title": "Execução",
-          "subtitle": "Execução ágil e entrega de valor",
-          "description": "Por fim, nossa entrega é comprometida com prazos e, sobretudo, qualidade. A comunicação é constante durante toda execução. Trabalhando de forma lean e com profissionais experientes na área, nossa equipe preza pela satisfação de nossos clientes."
-        }
-      }
-    }
+  "pageTitle": "Serviços – Base dos Dados",
+  "metaTitle": "Serviços – Base dos Dados",
+  "hero-title": "Transforme dados em impacto real",
+  "hero-subtitle": "Oferecemos serviços de engenharia, análise e capacitação de dados para potencializar as suas decisões",
+  "request-a-quote-button": "Solicite uma proposta",
+  "data-team-support-title": "Potencialize suas decisões com dados",
+  "data-team-support-content": "Conte com nossa equipe para construir soluções especializadas de dados,",
+  "data-team-support-content_1": "feitas para ajudar sua equipe a trabalhar melhor e tomar decisões com confiança.",
+  "chatbot-warning-msg": "* No serviço de chatbot, seus dados estarão sujeitos as politicas de segurança e privacidade dos provedores de LLM e infraestrutura.",
+  "diagnostico-title": "Diagnóstico de Maturidade",
+  "diagnostico-subtitle": "Entregamos uma análise técnica e independente, com diagnóstico detalhado e um plano de ação claro para fortalecer sua gestão de dados com eficiência e estratégia.",
+  "diagnostico-content": "Avaliamos o estágio de maturidade da sua organização em múltiplos eixos, como governança, cultura, competências, processos e tecnologia. O diagnóstico acompanha um plano de ação concreto para o curto, médio e longo prazo.",
+  "diagnostico-card-1-title": "Diagnóstico completo e plano de ação aplicável.",
+  "diagnostico-card-1-content": "Mapeamos práticas, fluxos e ferramentas de dados para identificar gargalos e oportunidades, oferecendo recomendações realistas e adaptadas ao seu contexto.",
+  "diagnostico-card-2-title": "Base para decisões mais estratégicas.",
+  "diagnostico-card-2-content": "Recomendamos perfis profissionais, melhorias organizacionais e opções tecnológicas para orientar investimentos e fortalecer a gestão de dados da sua organização.",
+  "arquitetura-title": "Arquitetura de Dados",
+  "arquitetura-subtitle": "Configuramos toda a infraestrutura necessária para a ingestão, modelagem, tratamento e consumo dos seus dados — com eficiência, segurança e privacidade — para gerar valor em qualquer análise ou produto digital.",
+  "arquitetura-content": "Estruturamos ambientes em nuvem, desenhamos a modelagem dos dados e implementamos pipelines e APIs para ingestão, tratamento e integração entre dados públicos e privados.",
+  "arquitetura-card-1-title": "Arquitetura escalável e segura.",
+  "arquitetura-card-1-content": "Sua organização passa a ter um ambiente confiável para armazenar, processar e disponibilizar grandes volumes de dados, com baixo custo operacional e alto padrão de rastreabilidade.",
+  "arquitetura-card-2-title": "Integração eficiente com qualquer fonte de dados.",
+  "arquitetura-card-2-content": "Conectamos sua infraestrutura de dados a fontes internas e externas, automatizando a coleta, o tratamento e a atualização dos dados de forma contínua e segura.",
+  "portal-title": "Portal de Dados",
+  "portal-subtitle": "Reunimos dados e metadados em uma plataforma única e organizada, para que seu público ou organização possa acessar e utilizar as informações com facilidade.",
+  "portal-content": "Desenvolvemos a interface da plataforma e configuramos permissões de acesso, garantindo a disponibilização dos dados em diversos formatos.",
+  "portal-card-1-title": "Dados organizados e consistentes.",
+  "portal-card-1-content": "Criamos diretrizes para estruturar e padronizar os dados e metadados, sempre adaptadas à natureza dos seus dados e às necessidades do seu negócio.",
+  "portal-card-2-title": "Acesso seguro e personalizado.",
+  "portal-card-2-content": "As permissões de acesso aos dados podem ser customizadas, garantindo conformidade com as políticas da sua organização e com a Lei Geral de Proteção de Dados (LGPD).",
+  "painel-title": "Painel Gerencial",
+  "painel-subtitle": "Organizamos seus indicadores em painéis atualizados e intuitivos, para que sua equipe acompanhe as prioridades estratégicas e tome decisões com mais eficiência e agilidade.",
+  "painel-content": "Construímos tabelas agregadas e visualizações com atualização automática, organizando seus indicadores em painéis temáticos e dinâmicos.",
+  "painel-mention-content": "Os painéis estão diretamente integrados ao nosso datalake, o que garante atualizações contínuas, otimizando o monitoramento de indicadores e facilitando a tomada de decisões por parte das diferentes equipes da Fundação Lemann.",
+  "painel-mention-author": "Laura Ogando",
+  "painel-mention-position": "Coordenadora de Conhecimento, Dados e Pesquisa na Fundação Lemann",
+  "painel-card-1-title": "Comunicação eficiente dos seus indicadores.",
+  "painel-card-1-content": "Definimos os gráficos, tabelas e visualizações mais adequados para traduzir seus indicadores em informações claras e acionáveis, alinhadas às metas e decisões estratégicas do seu negócio.",
+  "painel-card-2-title": "Tudo em um só lugar e sempre acessível.",
+  "painel-card-2-content": "Seus indicadores estratégicos ficam centralizados em painéis dinâmicos, com recursos de exportação e compartilhamento, facilitando o alinhamento com sua equipe e parceiros.",
+  "chatbot-title": "Chatbot",
+  "chatbot-subtitle": "Desenvolvemos chatbots integrados aos seus dados, que respondem qualquer pergunta com palavras, tabelas ou gráficos, facilitando o acesso para todas as pessoas, sem necessidade de conhecimento técnico.",
+  "chatbot-content": "Implementamos chatbots que consultam diretamente seu banco de dados, interpretam perguntas em linguagem natural e entregam respostas imediatas em formatos variados.<1>*<1/>",
+  "chatbot-mention-content": "A partir da integração com o nosso datalake, conseguimos fazer perguntas em linguagem natural sobre as bases de dados, promovendo maior autonomia a todo o time. Isso tem democratizado o uso dos dados na organização, reduzido barreiras técnicas e incentivado uma cultura de dados mais acessível e distribuída entre as equipes.",
+  "chatbot-mention-author": "Laura Ogando",
+  "chatbot-mention-position": "Coordenadora de Conhecimento, Dados e Pesquisa na Fundação Lemann",
+  "chatbot-card-1-title": "Consultas flexíveis e respostas instantâneas.",
+  "chatbot-card-1-content": "Nosso chatbot permite acessar qualquer informação disponível nos seus dados, a qualquer momento, de forma simples, direta e sem limitações de escopo.",
+  "chatbot-card-2-title": "Inclusão e democratização do uso de dados.",
+  "chatbot-card-2-content": "Pessoas sem experiência técnica podem obter insights valiosos, promovendo a cultura de dados na sua organização com uma interface intuitiva e acessível.",
+  "formacao-title": "Formação",
+  "formacao-subtitle": "Capacitamos sua equipe para operar, manter e evoluir os produtos de dados do seu projeto, com cursos feitos sob medida e focados no seu contexto.",
+  "formacao-content": "Desenhamos trilhas de formação personalizadas, que combinam aulas de programação, visualização de dados, fundamentos de governança e uso de ferramentas específicas, no formato síncrono ou assíncrono.",
+  "formacao-card-1-title": "Conteúdo prático, alinhado às suas necessidades.",
+  "formacao-card-1-content": "Formações construídas a partir dos desafios reais da sua equipe e dos objetivos do projeto, garantindo que o aprendizado seja aplicável no dia a dia.",
+  "formacao-card-2-title": "Aprendizado contínuo e flexível.",
+  "formacao-card-2-content": "Sua equipe tem acesso vitalício ao material didático, além de exercícios e materiais extras, com trilhas que se adaptam à rotina e ao nível de conhecimento dos participantes."
 }

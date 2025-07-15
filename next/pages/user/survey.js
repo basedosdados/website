@@ -264,15 +264,15 @@ export default function Survey() {
               pointerEvents={isLoading ? "none" : "default"}
               borderRadius="16px"
               cursor="pointer"
-              border={selectedValueStage(elm[1], index) ? "2px solid #0D99FC" : "1px solid #DEDFE0"}
-              backgroundColor={selectedValueStage(elm[1], index) ? "#CFEBFE" : "#FFF"}
+              border={selectedValueStage(elm[1], index) ? "2px solid #2B8C4D" : "1px solid #DEDFE0"}
+              backgroundColor={selectedValueStage(elm[1], index) ? "#D5E8DB" : "#FFF"}
               width="fit-content"
               padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}
               fontFamily="Roboto"
               fontWeight="500"
               fontSize="18px"
               lineHeight="28px"
-              color="#464A51"
+              color={selectedValueStage(elm[1], index) ? "#2B8C4D" : "#464A51"}
             >
               {elm[0]}
             </Box>
@@ -293,6 +293,11 @@ export default function Survey() {
             borderRadius="100px"
             backgroundColor="#DEDFE0"
             value={progressValue()}
+            css={{
+              '& > div': {
+                background: '#2B8C4D',
+              }
+            }}
           />
 
           <Stack
@@ -312,11 +317,11 @@ export default function Survey() {
                 fontFamily="Roboto"
                 fontWeight="500"
                 pointerEvents={isLoading ? "none" : "default"}
-                color={elm.style ? "#0D99FC" : "#FFFFFF"}
-                backgroundColor={elm.style ? "#FFF" : "#0D99FC"}
+                color={elm.style ? "#2B8C4D" : "#FFFFFF"}
+                backgroundColor={elm.style ? "#FFF" : "#2B8C4D"}
                 _hover={{
-                  color: elm.style ? "#0B89E2" : "#FAFAFA",
-                  backgroundColor: elm.style ? "" : "#0B89E2"
+                  color: elm.style ? "#22703E" : "#FAFAFA",
+                  backgroundColor: elm.style ? "" : "#22703E"
                 }}
               >
                 {isLoading ? (elm.text === "Pular" || elm.text === "Enviar")  ? <Spinner /> : elm.text : elm.text}

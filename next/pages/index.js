@@ -9,13 +9,10 @@ import {
   useClipboard,
   Image as ChakraImage,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { useMediaQuery } from "@chakra-ui/react";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { ControlledInput } from "../components/atoms/ControlledInput";
+import { triggerGAEvent } from "../utils";
 import Link from "../components/atoms/Link";
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
@@ -23,21 +20,11 @@ import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
 import { ShadowBox } from "../components/atoms/ShadowBox";
 import Button from "../components/atoms/Button";
-import ThemeCatalog from "../components/molecules/ThemeCatalog";
 import { BePartner } from "../components/organisms/BePartner";
 import { MainPageTemplate } from "../components/templates/main";
-import { triggerGAEvent } from "../utils";
 
-import { getAllThemes } from "./api/themes/getAllThemes";
-import { getAllDatasets } from "./api/themes/getAllDatasets";
-
-import SearchIcon from "../public/img/icons/searchIcon";
-import ArrowIcon from "../public/img/icons/arrowIcon";
 import { CopySolidIcon } from "../public/img/icons/copyIcon";
-import BDLogoImage from "../public/img/logos/bd_logo";
-import DBLogoImage from "../public/img/logos/db_logo";
 import BDLogoEduImage from "../public/img/logos/bd_logo_edu";
-import DBLogoEduImage from "../public/img/logos/db_logo_edu";
 import EnthusiasticImage from "../public/img/enthusiasticImage";
 import DatabaseImage from "../public/img/databaseImage";
 import MasterOfDatabaseImage from "../public/img/masterOfDatabaseImage";
@@ -46,41 +33,22 @@ import ProcessedDataImage from "../public/img/processedDataImage";
 import PayPalButton from '../components/atoms/PayPalButton';
 
 export async function getStaticProps({ locale }) {
-  const themes = await getAllThemes(locale);
-  const defaultDataset = await getAllDatasets(locale);
-
-  let dataThemeCatalog = {
-    themes: themes,
-    defaultDataset: defaultDataset
-  };
-
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'menu', 'dataset'])),
-      dataThemeCatalog
+      ...(await serverSideTranslations(locale, ['home', 'common', 'menu', 'dataset'])),
     },
     revalidate: 30
   };
 }
 
-function Hero({ dataThemeCatalog, locale }) {
-  const { t } = useTranslation('common');
-  const router = useRouter();
-  const [search, setSearch] = useState("");
-
-  function openSearchLink() {
-    if(search.trim() !== "") {
-      triggerGAEvent("search", search)
-      triggerGAEvent("search_home", search)
-      router.push(`/search?q=${search}`);
-    }
-  }
+function Hero({ locale }) {
+  const { t } = useTranslation('home');
 
   return (
     <VStack
       alignItems="center"
       width="100%"
-      marginTop="50px"
+      marginTop={isMobileMod() ? "" : "50px"}
       zIndex="10"
       position="relative"
     >
@@ -89,115 +57,104 @@ function Hero({ dataThemeCatalog, locale }) {
         width="100%"
         maxWidth="1440px"
         height="100%"
+        spacing={0}
+        padding="40px 24px 80px"
+        alignItems="flex-start"
       >
-        <VStack
+        <Stack spacing={0}>
+          <Text
+            as="h1"
+            display="flex"
+            flexDirection="column"
+            width="100%"
+          >
+            <Display as="span" typography={isMobileMod() ? "small" : "large"}>{t("organized_data")}</Display>
+            <Display as="span" typography={isMobileMod() ? "small" : "large"}>{t("reliable_analysis")}</Display>
+          </Text>
+          <TitleText
+            maxWidth="1120px"
+            color="#71757A"
+            paddingTop="16px"
+            typography={isMobileMod() ? "small" : "medium"}
+          >
+            {t("description_organized_data")}
+          </TitleText>
+          <Stack
+            flexDirection={isMobileMod() ? "column" : "row"}
+            gap="16px"
+            padding="32px 0"
+            spacing={0}
+          >
+            <Link
+              href="/search"
+              target="_self"
+              onClick={() => triggerGAEvent("navigating_to_data", "hero-home")}
+            >
+              <Button
+                height="54px"
+                width={isMobileMod() ? "100%" : "fit-content"}
+                justifyContent={{base: "center", md: "flex-start"}}
+              >
+                <LabelText typography={isMobileMod() ? "medium" : "x-large"} color="currentColor">
+                  {t("organized_data_first_button")}
+                </LabelText>
+              </Button>
+            </Link>
+            <Link
+              href="/services"
+              target="_self"
+              onClick={() => triggerGAEvent("navigating_to_services", "hero-home")}
+            >
+              <Button
+                height="54px"
+                width={isMobileMod() ? "100%" : "fit-content"}
+                justifyContent={{base: "center", md: "flex-start"}}
+                isVariant
+              >
+                <LabelText typography={isMobileMod() ? "medium" : "x-large"} color="currentColor">
+                  {t("organized_data_second_button")}
+                </LabelText>
+              </Button>
+            </Link>
+          </Stack>
+        </Stack>
+
+        <Stack
           width="100%"
-          height="100%"
-          justifyContent="center"
-          alignItems="center"
-          spacing={20}
+          padding="40px 0"
+          spacing={0}
         >
-          <VStack
-            position="relative"
+          <Box
             width="100%"
-            marginStart="0px !important"
-            direction="column"
-            marginTop={{
-              base: "64px",
-              lg: "80px"
-            }}
+            height={{base: "100%", md: "780px"}}
+            display="flex"
+            alignItems="center"
+            backgroundColor="#FFFFFF"
+            boxShadow="0px 1.6px 16px rgba(100, 96, 103, 0.16)"
+            borderRadius="16px"
           >
-            {locale === 'en' ? (
-              <DBLogoImage 
-                widthImage={{base: "160px", lg: "200px"}}
-                heightImage={{base: "75px", lg: "94px"}}
-                marginBottom="24px"
-              />
-            ) : (
-              <BDLogoImage 
-                widthImage={{base: "160px", lg: "200px"}}
-                heightImage={{base: "75px", lg: "94px"}}
-                marginBottom="24px"
-              />
-            )}
-            <VStack
-              maxWidth="650px"
-              width={{base: "100vw", lg: "100%"}}
-              paddingX={{base: "24px", lg: "0"}}
-              spacing={4}
-              alignItems="flex-start"
-              flex="3"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              style={{ width: '100%', height: 'auto', borderRadius: '16px' }}
+              onError={(e) => {
+                console.error('Erro ao carregar o vídeo', e);
+              }}
             >
-              <ControlledInput
-                value={search}
-                placeholder={isMobileMod() ? t('search_placeholder_mobile') : t('search_placeholder')}
-                onChange={setSearch}
-                onEnterPress={openSearchLink}
-                inputStyle={{
-                  "aria-label": "Search",
-                  id: "searchDatabases",
-                }}
-                rightIcon={
-                  (search ?
-                    <Link
-                      href={`/search?q=${search}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openSearchLink();
-                      }}
-                    >
-                      <ArrowIcon
-                        alt=""
-                        width={{base: "18px", lg: "28px"}}
-                        height={{base: "18px", lg: "28px"}}
-                        fill="#252A32"
-                        marginRight={{base: "10px", lg: "20px"}}
-                        cursor="pointer"
-                      />
-                    </Link>
-                    :
-                    <SearchIcon
-                      alt="pesquisar"
-                      width={{base: "18px", lg: "28px"}}
-                      height={{base: "18px", lg: "28px"}}
-                      fill="#252A32"
-                      marginRight={{base: "10px", lg: "20px"}}
-                    />
-                  )
-                }
-              />
-            </VStack>
-          </VStack>
-
-          <VStack
-            margin="0 !important"
-            paddingTop={{base: "80px", lg: "120px"}}
-            width="100%"
-            spacing="32px"
-            position="relative"
-            id="theme"
-          >
-            <LabelText
-              typography="x-large"
-              color="#71757A"
-              minHeight="30px"
-              cursor="pointer"
-              onClick={() => window.open("#theme", "_self")}
-            >
-              {t('search_by_theme')}
-            </LabelText>
-
-            <ThemeCatalog data={dataThemeCatalog} locale={locale}/>
-          </VStack>
-        </VStack>
+              <source src={`https://storage.googleapis.com/basedosdados-website/video/platform-presentation-${locale}.mp4`} type="video/mp4" />
+            </video>
+          </Box>
+        </Stack>
       </VStack>
     </VStack>
   );
 }
 
-function Products() {
+function Products({ locale }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
   
   return (
     <VStack
@@ -209,6 +166,7 @@ function Products() {
       <VStack spacing={0} width="100%">
         <Display
           display={{base: "block", md:"flex"}}
+          typography={isMobileMod() ? "small" : "large"}
           flexDirection="column"
           position="relative"
           zIndex="1"
@@ -216,10 +174,12 @@ function Products() {
           textAlign="center"
           margin="104px 0 112px"
         >
-          {t('products.facilitation_text')}
+          {t('products.facilitation_text')} {" "}
           <Text as="span">
-            {t('products.analysis_distance')}
-            <Text as="span" color="#2B8C4D">{t('products.good_question')}</Text>.
+            {t('products.analysis_distance')} {" "}
+            <Text as="span" color="#2B8C4D">
+              {t('products.good_question')}
+            </Text>.
           </Text>
         </Display>
 
@@ -483,9 +443,8 @@ export function StepText ({index, text}) {
   )
 }
 
-function Support() {
+function Support({ locale }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
   const { hasCopied, onCopy } = useClipboard("42494318000116");
 
   return (
@@ -497,6 +456,7 @@ function Support() {
     >
       <VStack id="support" position="relative" width="100%" spacing={0}>
         <Display
+          typography={isMobileMod() ? "small" : "large"}
           display={{base: "block", md:"flex"}}
           flexDirection="column"
           fontFamily="Roboto"
@@ -506,8 +466,13 @@ function Support() {
           textAlign="center"
           margin="104px 0px 40px"
         >
-          <Text as="span">{t('support.existence_through_effort')}</Text>
-          <Text as="span">{t('support.those_who_believe_in_quality_open_data')}</Text>
+          <Text as="span">
+            {t('support.existence_through_effort')}
+          </Text>
+          {" "}
+          <Text as="span">
+            {t('support.those_who_believe_in_quality_open_data')}
+          </Text>
         </Display>
 
         {locale === 'pt' && (
@@ -555,10 +520,6 @@ function Support() {
                   href="https://apoia.se/support/basedosdados/new/15"
                 >
                   <Button
-                    backgroundColor="#0D99FC"
-                    _hover={{
-                      backgroundColor: "#0B86DE"
-                    }}
                     width="200px"
                     justifyContent="center"
                     height="54px"
@@ -604,10 +565,6 @@ function Support() {
                   href="https://apoia.se/support/basedosdados/new/30"
                 >
                   <Button
-                    backgroundColor="#0D99FC"
-                    _hover={{
-                      backgroundColor: "#0B86DE"
-                    }}
                     width="200px"
                     justifyContent="center"
                     height="54px"
@@ -649,10 +606,6 @@ function Support() {
                   href="https://apoia.se/support/basedosdados/new/50"
                 >
                   <Button
-                    backgroundColor="#0D99FC"
-                    _hover={{
-                      backgroundColor: "#0B86DE"
-                    }}
                     width="200px"
                     justifyContent="center"
                     height="54px"
@@ -708,10 +661,6 @@ function Support() {
                   <Button 
                     fontSize="20px"
                     lineHeight="30px"
-                    backgroundColor="#0D99FC"
-                    _hover={{
-                      backgroundColor: "#0B89E2"
-                    }}
                     paddingX="30px"
                     width="100%"
                     height="54px"
@@ -807,6 +756,7 @@ function BDEdu () {
         marginBottom="24px"
       />
       <Display
+        typography={isMobileMod() ? "small" : "large"}
         display={{base: "block", md:"flex"}}
         flexDirection="column"
         textAlign="center"
@@ -829,10 +779,6 @@ function BDEdu () {
         lineHeight="30px"
         height="56px"
         padding="10px 16px"
-        backgroundColor="#0D99FC"
-        _hover={{
-          backgroundColor: "#0B89E2"
-        }}
       >
         <a href={`https://info.basedosdados.org/bd-edu-cursos`} target="_blank">
           {t('edu.take_advantage_of_the_promotional_price')}
@@ -842,17 +788,14 @@ function BDEdu () {
   )
 }
 
-export default function Home({ dataThemeCatalog }) {
-  const router = useRouter();
-  const { locale } = router;
-
+export default function Home({ locale }) {
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero dataThemeCatalog={dataThemeCatalog} locale={locale}/>
+      <Hero locale={locale}/>
       {/* <BDEdu /> */}
       <BePartner />
-      <Products />
-      <Support />
+      <Products locale={locale}/>
+      <Support locale={locale}/>
     </MainPageTemplate>
   );
 }
