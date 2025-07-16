@@ -42,9 +42,7 @@ export default function ContactConsulting() {
             "1b1d4a12-5cbc-4ffc-837a-12b905c2d87b",
           target: '#form-hbspt',
           onFormSubmit: function() {
-            triggerGAEvent("contact_consulting_form_submit", `{
-              'formLocale': ${locale}
-            }`)
+            triggerGAEvent("contact_consulting_form_submit", `${locale}`)
           }
         })
       }
