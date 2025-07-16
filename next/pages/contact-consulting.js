@@ -8,6 +8,7 @@ import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
+import { triggerGAEvent } from "../utils";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export async function getStaticProps({ locale }) {
@@ -40,12 +41,10 @@ export default function ContactConsulting() {
             locale === "es" ? "3e1063fa-f29e-4044-9f71-37e6e0cdf678" :
             "1b1d4a12-5cbc-4ffc-837a-12b905c2d87b",
           target: '#form-hbspt',
-          onFormSubmit: function($form) {
-            window.dataLayer.push({
-              'event': 'contact_consulting_form_submit',
-              'formId': $form.attr('data-form-id'),
-              'formLocale': locale
-            });
+          onFormSubmit: function() {
+            triggerGAEvent("contact_consulting_form_submit", `{
+              'formLocale': ${locale}
+            }`)
           }
         })
       }
