@@ -15,6 +15,7 @@ import Head from "next/head";
 import ReactMarkdown from "react-markdown";
 import { useTranslation, Trans } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { triggerGAEvent } from "../utils";
 import { isMobileMod, useCheckMobile } from "../hooks/useCheckMobile.hook";
 import { withPages } from "../hooks/pages.hook";
 import { MainPageTemplate } from "../components/templates/main";
@@ -560,6 +561,7 @@ export default function Services({ faqs }) {
           href="/contact-consulting"
           target="_blank"
           width={isMobileMod() ? "100%" : "fit-content"}
+          onClick={() => triggerGAEvent("navigating_to_contact-consulting", "hero")}
         >
           <Button
             height="54px"
@@ -719,6 +721,7 @@ export default function Services({ faqs }) {
               href="/contact-consulting"
               target="_blank"
               marginLeft="auto !important"
+              onClick={() => triggerGAEvent("navigating_to_contact-consulting", "menu")}
             >
               <Button
                 width="100%"
@@ -747,6 +750,7 @@ export default function Services({ faqs }) {
           <Link
             href="/contact-consulting"
             target="_blank"
+            onClick={() => triggerGAEvent("navigating_to_contact-consulting", "menu")}
           >
             <Button
               height="54px"
@@ -990,6 +994,7 @@ export default function Services({ faqs }) {
             target="_blank"
             padding="8px 0"
             width={isMobileMod() ? "100%" : "fit-content"}
+            onClick={() => triggerGAEvent("navigating_to_contact-consulting", "footer")}
           >
             <Button
               height="54px"
