@@ -39,7 +39,14 @@ export default function ContactConsulting() {
             locale === "en" ? "a81d259d-7c97-494d-866d-639416f70df2" :
             locale === "es" ? "3e1063fa-f29e-4044-9f71-37e6e0cdf678" :
             "1b1d4a12-5cbc-4ffc-837a-12b905c2d87b",
-          target: '#form-hbspt'
+          target: '#form-hbspt',
+          onFormSubmit: function($form) {
+            window.dataLayer.push({
+              'event': 'contact_consulting_form_submit',
+              'formId': $form.attr('data-form-id'),
+              'formLocale': locale
+            });
+          }
         })
       }
     })
