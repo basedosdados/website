@@ -4,6 +4,7 @@ import BodyText from '../atoms/Text/BodyText';
 import LabelText from '../atoms/Text/LabelText';
 import Link from '../atoms/Link';
 import Button from '../atoms/Button';
+import { triggerGAEvent } from '../../utils';
 import RedirectIcon from '../../public/img/icons/redirectIcon';
 
 export default function ServiceHighlightABTest({
@@ -13,6 +14,7 @@ export default function ServiceHighlightABTest({
   buttonText,
   link,
   imageUrl,
+  value
 }) {
   return (
     <Stack
@@ -41,6 +43,7 @@ export default function ServiceHighlightABTest({
             marginTop="16px !important"
             backgroundColor="transparent"
             _hover={{ backgroundColor: 'transparent' }}
+            onClick={() => {triggerGAEvent("button_service_highlight_ab", value)}}
           >
             <LabelText typography="small" color="current-color">
               {buttonText}

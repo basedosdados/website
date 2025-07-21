@@ -74,14 +74,14 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push('/')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push('/')}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
@@ -210,14 +210,14 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push('/')}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/search')}
+            onClick={() => router.push('/')}
           />
         )}
 
@@ -1047,7 +1047,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             width="80px"
             minWidth="80px"
             _hover={{opacity:"none"}}
-            href={"/search"}
+            href={"/"}
             marginLeft="0 !important"
             transition="0.5s"
             overflow="hidden"

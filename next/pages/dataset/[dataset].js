@@ -290,7 +290,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
       description: "Estruturamos ambientes em nuvem, pipelines e APIs para ingestão, tratamento e integração de dados públicos e privados. Tudo com automação, segurança e rastreabilidade para escalar suas análises e produtos.",
       buttonText: "Conheça os serviços de consultoria",
       link: "/services",
-      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg"
+      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
+      value: "A"
     },
     B: {
       id: "solucoes-de-dados-para-toda-a-jornada",
@@ -298,7 +299,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
       description: "Do diagnóstico à visualização, oferecemos serviços completos para transformar dados em valor: arquitetura, portais, painéis, chatbots e formação. Tudo sob medida para sua organização evoluir com dados.",
       buttonText: "Conheça os serviços de consultoria",
       link: "/services",
-      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg"
+      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
+      value: "B"
     }
   };
 
@@ -350,6 +352,34 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
           isOpen={modalSurveyTour.isOpen}
           onClose={modalSurveyTour.onClose}
         />
+
+        <Stack
+          display={{base: "none", md: "flex"}}
+          width="100%"
+          spacing="0"
+          gap="8px"
+          paddingY="8px"
+          flexDirection="row"
+          alignItems="flex-start"
+        >
+          <Link
+            target="_self"
+            href="/search"
+          >
+            <BodyText
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >
+              Dados
+            </BodyText>
+          </Link>
+          <BodyText>/</BodyText>
+          <BodyText>
+            {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
+          </BodyText>
+        </Stack>
 
         <Grid
           templateColumns={{ base: "1fr", lg: "295px 1fr" }}
