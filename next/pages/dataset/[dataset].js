@@ -372,7 +372,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
                 color: "#0057A4"
               }}
             >
-              Dados
+              {t("data")}
             </BodyText>
           </Link>
           <BodyText>/</BodyText>
