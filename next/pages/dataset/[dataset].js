@@ -24,6 +24,8 @@ import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
 import { ModalInitialTour, ModalSurveyTour, exploreTour } from "../../components/molecules/Tour";
+import ServiceHighlightABTest from "../../components/molecules/ServiceHighlightABTest";
+import useABTestVariant from "../../hooks/useABTestVariant";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -105,6 +107,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   const [exploreTourBegin, setExploreTourBegin] = useState(false);
   const modalTourInitial = useDisclosure();
   const modalSurveyTour = useDisclosure();
+  const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
@@ -280,6 +283,27 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
 
   if(isDatasetEmpty) return null
 
+  const abTestContent = {
+    A: {
+      id: "construa-uma-arquitetura-de-dados-escalavel",
+      title: "Construa uma arquitetura de dados escalável",
+      description: "Estruturamos ambientes em nuvem, pipelines e APIs para ingestão, tratamento e integração de dados públicos e privados. Tudo com automação, segurança e rastreabilidade para escalar suas análises e produtos.",
+      buttonText: "Conheça os serviços de consultoria",
+      link: "/services",
+      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
+      value: "A"
+    },
+    B: {
+      id: "solucoes-de-dados-para-toda-a-jornada",
+      title: "Soluções de dados para toda a jornada",
+      description: "Do diagnóstico à visualização, oferecemos serviços completos para transformar dados em valor: arquitetura, portais, painéis, chatbots e formação. Tudo sob medida para sua organização evoluir com dados.",
+      buttonText: "Conheça os serviços de consultoria",
+      link: "/services",
+      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
+      value: "B"
+    }
+  };
+
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
@@ -328,6 +352,34 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
           isOpen={modalSurveyTour.isOpen}
           onClose={modalSurveyTour.onClose}
         />
+
+        <Stack
+          display={{base: "none", md: "flex"}}
+          width="100%"
+          spacing="0"
+          gap="8px"
+          paddingY="8px"
+          flexDirection="row"
+          alignItems="flex-start"
+        >
+          <Link
+            target="_self"
+            href="/search"
+          >
+            <BodyText
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >
+              {t("data")}
+            </BodyText>
+          </Link>
+          <BodyText>/</BodyText>
+          <BodyText>
+            {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
+          </BodyText>
+        </Stack>
 
         <Grid
           templateColumns={{ base: "1fr", lg: "295px 1fr" }}
@@ -433,6 +485,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
             </Grid>
           </GridItem>
         </Grid>
+
+        {abVariant && (
+          <ServiceHighlightABTest {...abTestContent[abVariant]} />
+        )}
 
         <Stack spacing={0} width="100%" height="100%">
           <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
