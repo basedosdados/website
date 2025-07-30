@@ -37,10 +37,12 @@ import BodyText from "../atoms/Text/BodyText";
 
 import BDLogoImage from "../../public/img/logos/bd_logo";
 import BDLogoProImage from "../../public/img/logos/bd_logo_pro";
+import BDChatbotImage from "../../public/img/logos/bd_chatbot";
 import BDLogoEduImage from "../../public/img/logos/bd_logo_edu";
 import BDLogoLabImage from "../../public/img/logos/bd_logo_lab";
 import DBLogoImage from "../../public/img/logos/db_logo";
 import DBLogoProImage from "../../public/img/logos/db_logo_pro";
+import DBChatbotImage from "../../public/img/logos/db_chatbot";
 import FarBarsIcon from "../../public/img/icons/farBarsIcon";
 import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -902,6 +904,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           href: "https://info.basedosdados.org/bd-pro"
         },
         {
+          icon: <BDChatbotImage widthImage="54px"/>,
+          name: [t('natural_language')],
+          href: "/chatbot"
+        },
+        {
           icon: <BDLogoEduImage widthImage="54px"/>,
           name: [t('data_courses')],
           href: "https://info.basedosdados.org/bd-edu-cursos"
@@ -936,6 +943,11 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           icon: <DBLogoProImage widthImage="54px"/>,
           name: [t('exclusive_data')],
           href: "https://info.basedosdados.org/en/bd-pro"
+        },
+        {
+          icon: <DBChatbotImage widthImage="54px"/>,
+          name: [t('natural_language')],
+          href: "/chatbot"
         }
       ],
       [t('prices')]: "/prices",

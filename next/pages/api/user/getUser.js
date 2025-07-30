@@ -32,6 +32,7 @@ async function getUser(id, token) {
                   linkedin
                   workDataTool
                   availableForResearch
+                  hasChatbotAccess
                   isSubscriber
                   proSubscription
                   proSubscriptionRole

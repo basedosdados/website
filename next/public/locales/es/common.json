@@ -85,6 +85,7 @@
             "publicDatalake": "Datalake público",
             "dataPackages": "Paquetes",
             "DBPro": "BD Pro",
+            "DBChatbot": "BD Bot",
             "DBEdu": "BD Edu"
         },
         "services": {
