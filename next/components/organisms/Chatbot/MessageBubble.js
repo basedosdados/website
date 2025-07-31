@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, VStack, HStack, Text, Button, Avatar, Spinner } from "@chakra-ui/react";
+import { Box, VStack, HStack, Text, Button, Avatar, Spinner, Collapse, Code, Badge, IconButton, Textarea } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
@@ -7,9 +7,13 @@ import LabelText from "../../atoms/Text/LabelText";
 import CodeDisplay from "./CodeDisplay";
 import FeedbackModal from "./FeedbackModal";
 
-export default function MessageBubble({ message, showCode, onFeedback, isStreaming = false }) {
+export default function MessageBubble({ message, onFeedback, isStreaming = false }) {
   const { t } = useTranslation('chatbot');
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [showCode, setShowCode] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [commentText, setCommentText] = useState('');
+  const [feedbackRating, setFeedbackRating] = useState(null);
   const isUser = message.isUser || message.user_message && !message.assistant_message;
 
   const formatTime = (dateString) => {
@@ -23,6 +27,18 @@ export default function MessageBubble({ message, showCode, onFeedback, isStreami
   const handleFeedback = (rating, comment) => {
     onFeedback(message.id, rating, comment);
     setShowFeedbackModal(false);
+    setShowComments(false);
+    setCommentText('');
+    setFeedbackRating(rating);
+  };
+
+  const handleFeedbackClick = (rating) => {
+    setFeedbackRating(rating);
+    setShowComments(true);
+  };
+
+  const handleSendFeedback = () => {
+    handleFeedback(feedbackRating, commentText);
   };
 
   if (isUser) {
@@ -45,12 +61,21 @@ export default function MessageBubble({ message, showCode, onFeedback, isStreami
               {formatTime(message.created_at)}
             </LabelText>
           </VStack>
-          <Avatar 
-            size="sm" 
-            name="Você" 
+          <Box
+            size="sm"
             backgroundColor="#3182CE"
             color="white"
-          />
+            borderRadius="50%"
+            width="32px"
+            height="32px"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            fontSize="xs"
+            fontWeight="bold"
+          >
+            {t('me')}
+          </Box>
         </HStack>
       </Box>
     );
@@ -59,12 +84,21 @@ export default function MessageBubble({ message, showCode, onFeedback, isStreami
   return (
     <Box alignSelf="flex-start" maxWidth="80%">
       <HStack spacing={3} align="flex-start">
-        <Avatar 
-          size="sm" 
-          name="Chatbot BD" 
+        <Box
+          size="sm"
           backgroundColor="#48BB78"
           color="white"
-        />
+          borderRadius="50%"
+          width="32px"
+          height="32px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          fontSize="xs"
+          fontWeight="bold"
+        >
+          {t('bot_name').charAt(0)}
+        </Box>
         <VStack spacing={2} align="flex-start" flex={1}>
           <Box
             backgroundColor="white"
@@ -100,9 +134,37 @@ export default function MessageBubble({ message, showCode, onFeedback, isStreami
                 </Box>
               )}
 
-              {/* SQL Code Display */}
-              {showCode && message.generated_queries && message.generated_queries.length > 0 && (
-                <CodeDisplay queries={message.generated_queries} />
+              {/* SQL Code Display - Always show if available */}
+              {message.generated_queries && message.generated_queries.length > 0 && (
+                <Box>
+                  <VStack spacing={2} align="stretch">
+                    {message.generated_queries.map((query, index) => (
+                      <Box
+                        key={index}
+                        backgroundColor="#F7FAFC"
+                        border="1px solid #E2E8F0"
+                        borderRadius="8px"
+                        padding={3}
+                      >
+                        <LabelText typography="x-small" color="#616161" marginBottom={2}>
+                          {t('sql_query')} {message.generated_queries.length > 1 ? `#${index + 1}` : ''}
+                        </LabelText>
+                        <Code
+                          display="block"
+                          whiteSpace="pre-wrap"
+                          fontSize="xs"
+                          backgroundColor="#2D3748"
+                          color="white"
+                          padding={3}
+                          borderRadius="6px"
+                          overflowX="auto"
+                        >
+                          {query}
+                        </Code>
+                      </Box>
+                    ))}
+                  </VStack>
+                </Box>
               )}
 
               {/* Steps Display */}
@@ -135,58 +197,82 @@ export default function MessageBubble({ message, showCode, onFeedback, isStreami
           </Box>
 
           {/* Message Footer */}
-          <HStack spacing={2} justify="space-between" width="100%">
-            <LabelText typography="x-small" color="#616161">
-              {formatTime(message.created_at)}
-            </LabelText>
+          <VStack spacing={2} align="stretch" width="100%">
+            <HStack spacing={2} justify="space-between">
+              <LabelText typography="x-small" color="#616161">
+                {formatTime(message.created_at)}
+              </LabelText>
 
-            {/* Feedback Buttons */}
-            {!isStreaming && !message.error_message && (
-              <HStack spacing={1}>
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  onClick={() => handleFeedback(1, '')}
-                  color={message.feedback?.rating === 1 ? "#48BB78" : "#616161"}
-                  _hover={{
-                    backgroundColor: "#F0FFF4",
-                    color: "#48BB78"
-                  }}
-                  padding={1}
-                  minWidth="auto"
-                >
-                  {t('feedback.good')}
-                </Button>
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  onClick={() => handleFeedback(0, '')}
-                  color={message.feedback?.rating === 0 ? "#E53E3E" : "#616161"}
-                  _hover={{
-                    backgroundColor: "#FED7D7",
-                    color: "#E53E3E"
-                  }}
-                  padding={1}
-                  minWidth="auto"
-                >
-                  {t('feedback.bad')}
-                </Button>
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  onClick={() => setShowFeedbackModal(true)}
-                  color="#616161"
-                  _hover={{
-                    backgroundColor: "#F7FAFC"
-                  }}
-                  padding={1}
-                  minWidth="auto"
-                >
-                  {t('feedback.comment_label')}
-                </Button>
-              </HStack>
-            )}
-          </HStack>
+              {/* Feedback Buttons */}
+              {!isStreaming && !message.error_message && (
+                <HStack spacing={1}>
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => handleFeedbackClick(1)}
+                    color={feedbackRating === 1 || message.feedback?.rating === 1 ? "#48BB78" : "#616161"}
+                    _hover={{
+                      backgroundColor: "#F0FFF4",
+                      color: "#48BB78"
+                    }}
+                    padding={1}
+                    minWidth="auto"
+                  >
+                    👍
+                  </Button>
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => handleFeedbackClick(0)}
+                    color={feedbackRating === 0 || message.feedback?.rating === 0 ? "#E53E3E" : "#616161"}
+                    _hover={{
+                      backgroundColor: "#FED7D7",
+                      color: "#E53E3E"
+                    }}
+                    padding={1}
+                    minWidth="auto"
+                  >
+                    👎
+                  </Button>
+                </HStack>
+              )}
+            </HStack>
+
+            {/* Comments Section */}
+            <Collapse in={showComments}>
+              <VStack spacing={2} align="stretch">
+                <Textarea
+                  size="sm"
+                  placeholder={t('feedback.comment_placeholder')}
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  resize="vertical"
+                  minHeight="60px"
+                />
+                <HStack spacing={2} justify="flex-end">
+                  <Button
+                    size="xs"
+                    variant="ghost"
+                    onClick={() => {
+                      setShowComments(false);
+                      setCommentText('');
+                      setFeedbackRating(null);
+                    }}
+                  >
+                    {t('cancel')}
+                  </Button>
+                  <Button
+                    size="xs"
+                    colorScheme="blue"
+                    onClick={handleSendFeedback}
+                    isDisabled={!feedbackRating}
+                  >
+                    {t('send')}
+                  </Button>
+                </HStack>
+              </VStack>
+            </Collapse>
+          </VStack>
         </VStack>
       </HStack>
 

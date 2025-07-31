@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const CHATBOT_BASE_URL = "http://localhost:8000";
-
 async function getAuthToken(req) {
   const userBD = req.cookies.userBD;
   const token = req.cookies.token;
@@ -16,8 +14,8 @@ async function getAuthToken(req) {
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(user.id)
 
-  // Get current user data from the main website
-  const userDataResponse = await axios({
+  // Check user access through GraphQL API directly
+  const userResponse = await axios({
     url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`,
     method: "POST",
     headers: {
@@ -32,6 +30,7 @@ async function getAuthToken(req) {
                 id
                 email
                 username
+                hasChatbotAccess
               }
             }
           }
@@ -40,31 +39,39 @@ async function getAuthToken(req) {
     }
   });
 
-  if (userDataResponse.data.errors) {
+  if (userResponse.data.errors) {
     throw new Error('Invalid token');
   }
 
-  const userData = userDataResponse.data.data.allAccount.edges[0]?.node;
+  const userData = userResponse.data.data.allAccount.edges[0]?.node;
   
   if (!userData) {
     throw new Error('User not found');
   }
-  
-  // TODO: Implement proper chatbot access control
-  // - Add has_chatbot_access field to the GraphQL query above
-  // - Check if userData.has_chatbot_access is true
-  // - Throw error if user doesn't have access
 
-  // TODO: Implement proper token bridging between main website and chatbot backend
-  // - The chatbot backend currently requires its own authentication system
-  // - Need to either:
-  //   1. Modify chatbot backend to accept main website's JWT tokens
-  //   2. Create a token bridge endpoint in chatbot backend
-  //   3. Use shared authentication secrets between both systems
+  // Check if user has chatbot access
+  if (!userData.hasChatbotAccess) {
+    throw new Error('Access denied');
+  }
 
-  // For now, return the main website's token
-  // This will likely fail with the chatbot backend until token bridging is implemented
-  return token;
+  // Use token bridge to get chatbot-compatible token
+  try {
+    const tokenBridgeResponse = await axios({
+      url: `${process.env.NEXT_PUBLIC_API_URL}/chatbot/token-from-main/`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: {
+        main_token: token
+      }
+    });
+
+    return tokenBridgeResponse.data.access;
+  } catch (tokenBridgeError) {
+    console.error('Token bridge error:', tokenBridgeError.response?.data || tokenBridgeError.message);
+    throw new Error('Chatbot authentication failed');
+  }
 }
 
 export default async function handler(req, res) {
@@ -75,7 +82,12 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Thread ID is required' });
     }
 
+    console.log('Messages API - Thread ID:', thread_id);
+    console.log('Messages API - Method:', req.method);
+
     const token = await getAuthToken(req);
+    console.log('Messages API - Token obtained successfully');
+    
     const headers = {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
@@ -84,31 +96,97 @@ export default async function handler(req, res) {
     if (req.method === 'GET') {
       // Get messages for a thread
       const orderBy = req.query.order_by || 'created_at';
-      const response = await axios.get(
-        `${CHATBOT_BASE_URL}/chatbot/threads/${thread_id}/messages/?order_by=${orderBy}`,
-        { headers }
-      );
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${thread_id}/messages/?order_by=${orderBy}`;
+      console.log('Messages API - Calling backend URL:', url);
+      
+      const response = await axios.get(url, { headers });
+      console.log('Messages API - Backend response status:', response.status);
       
       return res.status(200).json(response.data);
 
     } else if (req.method === 'POST') {
       // Send message with streaming
-      const response = await axios.post(
-        `${CHATBOT_BASE_URL}/chatbot/threads/${thread_id}/messages/`,
-        req.body,
-        { 
-          headers,
-          responseType: 'stream'
+      console.log('Messages API - Sending message to backend:', req.body);
+      console.log('Messages API - Backend URL:', `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${thread_id}/messages/`);
+      console.log('Messages API - Headers being sent:', headers);
+      
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${thread_id}/messages/`,
+          req.body,
+          { 
+            headers,
+            responseType: 'stream',
+            validateStatus: function (status) {
+              return status < 500; // Resolve only if the status code is less than 500
+            }
+          }
+        );
+        
+        console.log('Messages API - Backend response status:', response.status);
+        console.log('Messages API - Backend response headers:', response.headers);
+        
+        // Set headers for streaming
+        res.setHeader('Content-Type', 'text/event-stream');
+        res.setHeader('Cache-Control', 'no-cache');
+        res.setHeader('Connection', 'keep-alive');
+        res.setHeader('X-Accel-Buffering', 'no');
+        
+        // Pipe the response
+        console.log('Messages API - Piping response to frontend');
+        response.data.pipe(res);
+      } catch (streamError) {
+        console.error('Messages API - Streaming error:', streamError);
+        console.error('Messages API - Streaming error response:', streamError.response?.data);
+        console.error('Messages API - Streaming error status:', streamError.response?.status);
+        
+        // If streaming fails, try to get the error message
+        if (streamError.response?.data) {
+          let errorText = '';
+          
+          // Check if it's a stream or regular response
+          if (typeof streamError.response.data.getReader === 'function') {
+            // It's a stream, try to read it
+            const errorReader = streamError.response.data.getReader();
+            const decoder = new TextDecoder();
+            
+            try {
+              while (true) {
+                const { done, value } = await errorReader.read();
+                if (done) break;
+                errorText += decoder.decode(value);
+              }
+            } catch (readError) {
+              console.error('Messages API - Error reading error stream:', readError);
+            }
+          } else {
+            // It's a regular response, try to get the text
+            try {
+              if (typeof streamError.response.data === 'string') {
+                errorText = streamError.response.data;
+              } else {
+                errorText = JSON.stringify(streamError.response.data);
+              }
+            } catch (parseError) {
+              console.error('Messages API - Error parsing response data:', parseError);
+              errorText = streamError.message;
+            }
+          }
+          
+          console.log('Messages API - Error text from backend:', errorText);
+          return res.status(streamError.response.status || 500).json({ 
+            error: 'Backend error',
+            message: errorText || streamError.message,
+            status: streamError.response.status
+          });
         }
-      );
-
-      // Set headers for streaming
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
-
-      // Pipe the streaming response
-      response.data.pipe(res);
+        
+        // If no response data, return the error message
+        return res.status(500).json({ 
+          error: 'Backend error',
+          message: streamError.message
+        });
+      }
 
     } else {
       return res.status(405).json({ error: 'Method not allowed' });
@@ -116,6 +194,9 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Chatbot messages error:', error);
+    console.error('Chatbot messages error message:', error.message);
+    console.error('Chatbot messages error response:', error.response?.data);
+    console.error('Chatbot messages error status:', error.response?.status);
     
     if (error.message === 'Not authenticated') {
       return res.status(401).json({ error: 'Not authenticated' });
@@ -129,19 +210,28 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid token' });
     }
 
-    // Handle chatbot backend authentication errors
-    if (error.response && error.response.status === 401) {
+    if (error.message === 'Access denied') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    if (error.message === 'Chatbot authentication failed') {
       return res.status(401).json({ 
         error: 'Chatbot authentication failed',
-        message: 'The chatbot backend requires its own authentication system. Token bridging needs to be implemented.',
-        details: error.response.data
+        message: 'Failed to authenticate with chatbot backend'
       });
     }
 
     if (error.response) {
-      return res.status(error.response.status).json(error.response.data);
+      return res.status(error.response.status).json({
+        error: 'Backend error',
+        message: error.response.data,
+        status: error.response.status
+      });
     }
 
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      message: error.message
+    });
   }
 } 

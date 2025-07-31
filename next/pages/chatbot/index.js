@@ -5,6 +5,16 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Box, VStack, HStack, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import cookies from "js-cookie";
 
+// Prevent any automatic scrolling on the chatbot page
+if (typeof window !== 'undefined') {
+  // Override scrollIntoView to do nothing
+  const originalScrollIntoView = Element.prototype.scrollIntoView;
+  Element.prototype.scrollIntoView = function() {
+    // Do nothing - prevent all automatic scrolling
+    return;
+  };
+}
+
 import { MainPageTemplate } from "../../components/templates/main";
 import ChatInterface from "../../components/organisms/Chatbot/ChatInterface";
 import ChatHistory from "../../components/organisms/Chatbot/ChatHistory";
@@ -26,12 +36,14 @@ export default function ChatbotPage() {
   const [hasAccess, setHasAccess] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedThreadId, setSelectedThreadId] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const checkAccess = async () => {
       const userBD = cookies.get('userBD');
+      const token = cookies.get('token');
       
-      if (!userBD) {
+      if (!userBD || !token) {
         router.push(`/user/login?redirect=${encodeURIComponent('/chatbot')}`);
         return;
       }
@@ -40,21 +52,27 @@ export default function ChatbotPage() {
         const userData = JSON.parse(userBD);
         setUser(userData);
 
-        // Check chatbot access through API
-        const response = await fetch('/api/chatbot/auth');
+        // Extract the numeric ID from the user.id (e.g., "AccountNode:4" -> "4")
+        const reg = new RegExp("(?<=:).*")
+        const [ id ] = reg.exec(userData.id)
+
+        // Check chatbot access through getUser API
+        const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(token)}`);
         
         if (response.status === 401) {
           router.push(`/user/login?redirect=${encodeURIComponent('/chatbot')}`);
           return;
         }
-        
-        if (response.status === 403) {
-          router.push('/chatbot/access-denied');
-          return;
-        }
 
         if (!response.ok) {
           throw new Error('Failed to check access');
+        }
+
+        const userInfo = await response.json();
+        
+        if (!userInfo.hasChatbotAccess) {
+          router.push('/chatbot/access-denied');
+          return;
         }
 
         setHasAccess(true);
@@ -87,7 +105,12 @@ export default function ChatbotPage() {
 
   return (
     <MainPageTemplate>
-      <Box maxWidth="1440px" margin="0 auto" width="100%">
+      <Box 
+        maxWidth="1440px" 
+        margin="0 auto" 
+        width="100%"
+        style={{ scrollBehavior: 'auto' }} // Prevent smooth scrolling
+      >
         <VStack spacing={6} align="stretch">
           {/* Header */}
           <Box>
@@ -102,10 +125,11 @@ export default function ChatbotPage() {
           {/* Chat Interface */}
           <HStack spacing={6} align="flex-start" height="calc(100vh - 300px)">
             {/* Sidebar - Thread History */}
-            <Box width="300px" flexShrink={0}>
+            <Box width="300px" flexShrink={0} height="100%">
               <ChatHistory 
                 selectedThreadId={selectedThreadId}
                 onThreadSelect={setSelectedThreadId}
+                refreshTrigger={refreshTrigger}
               />
             </Box>
 
@@ -113,7 +137,10 @@ export default function ChatbotPage() {
             <Box flex={1} height="100%">
               <ChatInterface 
                 threadId={selectedThreadId}
-                onNewThread={() => setSelectedThreadId(null)}
+                onNewThread={(newThreadId) => {
+                  setSelectedThreadId(newThreadId);
+                  setRefreshTrigger(prev => prev + 1);
+                }}
               />
             </Box>
           </HStack>

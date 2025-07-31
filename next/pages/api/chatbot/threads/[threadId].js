@@ -1,7 +1,5 @@
 import axios from "axios";
 
-const CHATBOT_BASE_URL = "http://localhost:8000";
-
 async function getAuthToken(req) {
   const userBD = req.cookies.userBD;
   const token = req.cookies.token;
@@ -16,8 +14,8 @@ async function getAuthToken(req) {
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(user.id)
 
-  // Get current user data from the main website
-  const userDataResponse = await axios({
+  // Check user access through GraphQL API directly
+  const userResponse = await axios({
     url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`,
     method: "POST",
     headers: {
@@ -32,6 +30,7 @@ async function getAuthToken(req) {
                 id
                 email
                 username
+                hasChatbotAccess
               }
             }
           }
@@ -40,31 +39,39 @@ async function getAuthToken(req) {
     }
   });
 
-  if (userDataResponse.data.errors) {
+  if (userResponse.data.errors) {
     throw new Error('Invalid token');
   }
 
-  const userData = userDataResponse.data.data.allAccount.edges[0]?.node;
+  const userData = userResponse.data.data.allAccount.edges[0]?.node;
   
   if (!userData) {
     throw new Error('User not found');
   }
-  
-  // TODO: Implement proper chatbot access control
-  // - Add has_chatbot_access field to the GraphQL query above
-  // - Check if userData.has_chatbot_access is true
-  // - Throw error if user doesn't have access
 
-  // TODO: Implement proper token bridging between main website and chatbot backend
-  // - The chatbot backend currently requires its own authentication system
-  // - Need to either:
-  //   1. Modify chatbot backend to accept main website's JWT tokens
-  //   2. Create a token bridge endpoint in chatbot backend
-  //   3. Use shared authentication secrets between both systems
+  // Check if user has chatbot access
+  if (!userData.hasChatbotAccess) {
+    throw new Error('Access denied');
+  }
 
-  // For now, return the main website's token
-  // This will likely fail with the chatbot backend until token bridging is implemented
-  return token;
+  // Use token bridge to get chatbot-compatible token
+  try {
+    const tokenBridgeResponse = await axios({
+      url: `${process.env.NEXT_PUBLIC_API_URL}/chatbot/token-from-main/`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: {
+        main_token: token
+      }
+    });
+
+    return tokenBridgeResponse.data.access;
+  } catch (tokenBridgeError) {
+    console.error('Token bridge error:', tokenBridgeError.response?.data || tokenBridgeError.message);
+    throw new Error('Chatbot authentication failed');
+  }
 }
 
 export default async function handler(req, res) {
@@ -75,27 +82,26 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Thread ID is required' });
     }
 
+    if (req.method !== 'DELETE') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
     const token = await getAuthToken(req);
     const headers = {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     };
 
-    if (req.method === 'DELETE') {
-      // Delete thread
-      const response = await axios.delete(
-        `${CHATBOT_BASE_URL}/chatbot/threads/${threadId}/`,
-        { headers }
-      );
-      
-      return res.status(204).end();
-
-    } else {
-      return res.status(405).json({ error: 'Method not allowed' });
-    }
+    // Delete thread
+    const response = await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${threadId}/`,
+      { headers }
+    );
+    
+    return res.status(204).send();
 
   } catch (error) {
-    console.error('Chatbot thread delete error:', error);
+    console.error('Chatbot thread deletion error:', error);
     
     if (error.message === 'Not authenticated') {
       return res.status(401).json({ error: 'Not authenticated' });
@@ -109,12 +115,14 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid token' });
     }
 
-    // Handle chatbot backend authentication errors
-    if (error.response && error.response.status === 401) {
+    if (error.message === 'Access denied') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    if (error.message === 'Chatbot authentication failed') {
       return res.status(401).json({ 
         error: 'Chatbot authentication failed',
-        message: 'The chatbot backend requires its own authentication system. Token bridging needs to be implemented.',
-        details: error.response.data
+        message: 'Failed to authenticate with chatbot backend'
       });
     }
 
