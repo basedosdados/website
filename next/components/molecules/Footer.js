@@ -217,6 +217,13 @@ export default function Footer({ template, ocult = false }) {
                                 "https://info.basedosdados.org/bd-pro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
+              <FooterLink
+                target="_self"
+                href="/chatbot"
+                onClick={() => handlerTriggerEvent("navigating_to_chatbot", "footer")}
+              >
+                {t('footer.products.DBChatbot')}
+              </FooterLink>
               {locale === 'pt' && (
                 <FooterLink href="https://info.basedosdados.org/bd-edu-cursos">
                   {t('footer.products.DBEdu')}

@@ -85,6 +85,7 @@
             "publicDatalake": "Public datalake",
             "dataPackages": "Data packages",
             "DBPro": "DB Pro",
+            "DBChatbot": "DB Bot",
             "DBEdu": "DB Edu"
         },
         "services": {

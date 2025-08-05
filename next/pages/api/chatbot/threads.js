@@ -1,0 +1,141 @@
+import axios from "axios";
+
+async function getAuthToken(req) {
+  const userBD = req.cookies.userBD;
+  const token = req.cookies.token;
+  
+  if (!userBD || !token) {
+    throw new Error('Not authenticated');
+  }
+
+  const user = JSON.parse(userBD);
+
+  // Extract the numeric ID from the user.id (e.g., "AccountNode:4" -> "4")
+  const reg = new RegExp("(?<=:).*")
+  const [ id ] = reg.exec(user.id)
+
+  // Check user access through GraphQL API directly
+  const userResponse = await axios({
+    url: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`,
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    data: {
+      query: `
+        query {
+          allAccount (id: "${id}") {
+            edges {
+              node {
+                id
+                email
+                username
+                hasChatbotAccess
+              }
+            }
+          }
+        }
+      `
+    }
+  });
+
+  if (userResponse.data.errors) {
+    throw new Error('Invalid token');
+  }
+
+  const userData = userResponse.data.data.allAccount.edges[0]?.node;
+  
+  if (!userData) {
+    throw new Error('User not found');
+  }
+
+  // Check if user has chatbot access
+  if (!userData.hasChatbotAccess) {
+    throw new Error('Access denied');
+  }
+
+  // Use token bridge to get chatbot-compatible token
+  try {
+    const tokenBridgeResponse = await axios({
+      url: `${process.env.NEXT_PUBLIC_API_URL}/chatbot/token-from-main/`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      data: {
+        main_token: token
+      }
+    });
+
+    return tokenBridgeResponse.data.access;
+  } catch (tokenBridgeError) {
+    console.error('Token bridge error:', tokenBridgeError.response?.data || tokenBridgeError.message);
+    throw new Error('Chatbot authentication failed');
+  }
+}
+
+export default async function handler(req, res) {
+  try {
+    const token = await getAuthToken(req);
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+
+    if (req.method === 'GET') {
+      // Get threads
+      const orderBy = req.query.order_by || 'created_at';
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/?order_by=${orderBy}`,
+        { headers }
+      );
+      
+      return res.status(200).json(response.data);
+
+    } else if (req.method === 'POST') {
+      // Create new thread
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/`,
+        req.body,
+        { headers }
+      );
+      
+      return res.status(201).json(response.data);
+
+    } else {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+  } catch (error) {
+    console.error('Chatbot threads error:', error);
+    
+    if (error.message === 'Not authenticated') {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+    
+    if (error.message === 'User not found') {
+      return res.status(403).json({ error: 'User not found' });
+    }
+
+    if (error.message === 'Invalid token') {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    if (error.message === 'Access denied') {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    if (error.message === 'Chatbot authentication failed') {
+      return res.status(401).json({ 
+        error: 'Chatbot authentication failed',
+        message: 'Failed to authenticate with chatbot backend'
+      });
+    }
+
+    if (error.response) {
+      return res.status(error.response.status).json(error.response.data);
+    }
+
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+} 

@@ -1,0 +1,67 @@
+{
+  "title": "BD Bot",
+  "subtitle": "Para consultas em bases de dados utilizando linguagem natural",
+  "welcome": "Bem Vindo(a)!",
+  "welcome_message": "Bem vindo(a) ao chatbot da BD! Ele vai te ajudar a conversar com seus dados! Basta entrar na página de chat no menu à esquerda e começar a conversa. Faça perguntas sobre os dados disponíveis e o chatbot dará o seu melhor para respondê-las!",
+  "model_title": "Modelo",
+  "model_description": "O modelo por trás do chatbot é o Gemini, do Google.",
+  "features_title": "Funcionalidades",
+  "features": {
+    "code_display": "Exibir Código: Clique no botão de exibição de código para exibir ou ocultar as consultas SQL geradas pelo chatbot.",
+    "feedback": "Feedback: Clique nos botões de feedback para enviar feedbacks sobre as respostas recebidas, com comentários opcionais. É necessário clicar no botão de envio para que o feedback seja enviado.",
+    "delete_conversation": "Excluir Conversa: Clique no botão de excluir conversa para excluir a conversa com o chatbot. Essa ação é irreversível."
+  },
+  "prompt_guide_title": "Guia de Prompt",
+  "prompt_guide_description": "A forma como você conversa com o chatbot pode influenciar na qualidade das respostas! Por isso, abaixo estão listadas algumas dicas para te ajudar a elaborar suas perguntas. Elas podem ser úteis caso as respostas fornecidas estejam incorretas ou não sejam boas o suficiente!",
+  "prompt_tips": [
+    "Tente fazer uma pergunta por vez. Caso sua pergunta seja muito complexa, ou talvez seja um conjunto de várias perguntas, tente separá-la em perguntas menores e mais simples.",
+    "Tente utilizar termos como \"por\" ou \"total\" quando precisar de informações agregadas segundo alguma variável.",
+    "Caso saiba os nomes das colunas das tabelas, tente mencioná-los nas suas perguntas. Por exemplo, se você sabe que uma tabela possui a coluna \"município\", tente usar a palavra município ao invés de \"cidade\". Isso não significa que você não possa usar palavras parecidas, mas usar os nomes das colunas ajuda!",
+    "Caso o chatbot não esteja encontrando uma resposta para a sua pergunta e você saiba em qual tabela estão os dados necessários para respondê-la, você pode tentar pedir explicitamente para procurar nessa tabela específica."
+  ],
+  "important_note": "Importante",
+  "important_message": "Quando enviar uma pergunta ao chatbot, espere até que uma resposta seja fornecida antes de trocar de página ou clicar em qualquer botão dentro da aplicação. Você pode alternar entre as abas do seu navegador normalmente.",
+  "conversations": "Suas Conversas",
+  "new_conversation": "Nova Conversa",
+  "no_conversations": "Nenhuma conversa encontrada.",
+  "start_new_conversation": "Comece uma nova conversa!",
+  "loading_conversations": "Carregando conversas...",
+  "loading_conversation": "Carregando conversa...",
+  "start_conversation": "Comece uma nova conversa fazendo uma pergunta sobre os dados disponíveis!",
+  "input_placeholder": "Digite sua pergunta...",
+  "send": "Enviar",
+  "cancel": "Cancelar",
+  "me": "Eu",
+  "bot_name": "Base dos Dados",
+  "sql_query": "Consulta SQL",
+  "process": "Processo:",
+  "thinking": "Pensando...",
+  "error_sending": "Erro ao enviar mensagem. Tente novamente.",
+  "error_loading_messages": "Erro ao carregar mensagens",
+  "error_loading_conversations": "Erro ao carregar conversas",
+  "error_deleting_conversation": "Erro ao excluir conversa",
+  "feedback": {
+    "title": "Avaliar Resposta",
+    "question": "Como você avalia esta resposta?",
+    "good": "👍 Boa",
+    "bad": "👎 Ruim",
+    "comment_label": "Comentário (opcional)",
+    "comment_placeholder": "Digite seu comentário (opcional)...",
+    "cancel": "Cancelar",
+    "submit": "Enviar Feedback",
+    "error": "Erro ao enviar feedback"
+  },
+  "access_denied": {
+    "title": "Acesso Restrito",
+    "message": "O chatbot da Base dos Dados é uma funcionalidade exclusiva disponível para usuários autorizados. Para solicitar acesso, entre em contato conosco.",
+    "contact_info": "Envie um email para contato@basedosdados.org com o assunto \"Solicitação de Acesso ao Chatbot\" e informe:",
+    "requirements": [
+      "Seu nome completo",
+      "Email da sua conta",
+      "Instituição/organização",
+      "Motivo do uso do chatbot"
+    ],
+    "back_home": "Voltar ao Início",
+    "send_email": "Enviar Email"
+  }
+} 
