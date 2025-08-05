@@ -5,23 +5,15 @@ import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 
-export default function ChatHistory({ selectedThreadId, onThreadSelect, refreshTrigger }) {
+export default function ChatHistory({ selectedThreadId, onThreadSelect }) {
   const { t } = useTranslation('chatbot');
   const [threads, setThreads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Load threads on mount
   useEffect(() => {
     loadThreads();
   }, []);
-
-  // Refresh threads when refreshTrigger changes
-  useEffect(() => {
-    if (refreshTrigger > 0) {
-      loadThreads();
-    }
-  }, [refreshTrigger]);
 
   const loadThreads = async () => {
     try {
@@ -90,7 +82,6 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, refreshT
   };
 
   const truncateTitle = (title, maxLength = 30) => {
-    if (!title) return 'Untitled';
     return title.length > maxLength 
       ? title.substring(0, maxLength) + '...' 
       : title;
@@ -108,9 +99,9 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, refreshT
   }
 
   return (
-    <Box height="100%" display="flex" flexDirection="column" minHeight={0}>
+    <Box height="100%" display="flex" flexDirection="column">
       {/* Header */}
-      <Box padding={4} borderBottom="1px solid #E2E8F0" flexShrink={0}>
+      <Box padding={4} borderBottom="1px solid #E2E8F0">
         <HStack justify="space-between" align="center">
           <LabelText typography="medium" fontWeight="600" color="#252A32">
             {t('conversations')}
@@ -131,14 +122,14 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, refreshT
 
       {/* Error Alert */}
       {error && (
-        <Alert status="error" borderRadius="8px" margin={4} flexShrink={0}>
+        <Alert status="error" borderRadius="8px" margin={4}>
           <AlertIcon />
           <Text fontSize="sm">{error}</Text>
         </Alert>
       )}
 
       {/* Threads List */}
-      <Box flex={1} overflowY="auto" padding={2} minHeight={0}>
+      <Box flex={1} overflowY="auto" padding={2}>
         <VStack spacing={2} align="stretch">
           {threads.length === 0 ? (
             <Box textAlign="center" padding={8}>
@@ -179,10 +170,7 @@ function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, trunca
         backgroundColor: isSelected ? "#EBF8FF" : "#F7FAFC",
         borderColor: isSelected ? "#3182CE" : "#E2E8F0"
       }}
-      onClick={(e) => {
-        e.preventDefault();
-        onSelect();
-      }}
+      onClick={onSelect}
     >
       <VStack spacing={2} align="stretch">
         <HStack justify="space-between" align="flex-start">

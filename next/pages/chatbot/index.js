@@ -5,16 +5,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Box, VStack, HStack, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import cookies from "js-cookie";
 
-// Prevent any automatic scrolling on the chatbot page
-if (typeof window !== 'undefined') {
-  // Override scrollIntoView to do nothing
-  const originalScrollIntoView = Element.prototype.scrollIntoView;
-  Element.prototype.scrollIntoView = function() {
-    // Do nothing - prevent all automatic scrolling
-    return;
-  };
-}
-
 import { MainPageTemplate } from "../../components/templates/main";
 import ChatInterface from "../../components/organisms/Chatbot/ChatInterface";
 import ChatHistory from "../../components/organisms/Chatbot/ChatHistory";
@@ -36,7 +26,6 @@ export default function ChatbotPage() {
   const [hasAccess, setHasAccess] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedThreadId, setSelectedThreadId] = useState(null);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -105,12 +94,7 @@ export default function ChatbotPage() {
 
   return (
     <MainPageTemplate>
-      <Box 
-        maxWidth="1440px" 
-        margin="0 auto" 
-        width="100%"
-        style={{ scrollBehavior: 'auto' }} // Prevent smooth scrolling
-      >
+      <Box maxWidth="1440px" margin="0 auto" width="100%">
         <VStack spacing={6} align="stretch">
           {/* Header */}
           <Box>
@@ -125,11 +109,10 @@ export default function ChatbotPage() {
           {/* Chat Interface */}
           <HStack spacing={6} align="flex-start" height="calc(100vh - 300px)">
             {/* Sidebar - Thread History */}
-            <Box width="300px" flexShrink={0} height="100%">
+            <Box width="300px" flexShrink={0}>
               <ChatHistory 
                 selectedThreadId={selectedThreadId}
                 onThreadSelect={setSelectedThreadId}
-                refreshTrigger={refreshTrigger}
               />
             </Box>
 
@@ -137,10 +120,7 @@ export default function ChatbotPage() {
             <Box flex={1} height="100%">
               <ChatInterface 
                 threadId={selectedThreadId}
-                onNewThread={(newThreadId) => {
-                  setSelectedThreadId(newThreadId);
-                  setRefreshTrigger(prev => prev + 1);
-                }}
+                onNewThread={() => setSelectedThreadId(null)}
               />
             </Box>
           </HStack>
