@@ -1,26 +1,27 @@
 {
+  "loading": "Cargando",
   "title": "BD Bot",
   "subtitle": "Para consultas en bases de datos utilizando lenguaje natural",
   "welcome": "¡Bienvenido(a)!",
-  "welcome_message": "¡Bienvenido(a) al chatbot de BD! Te ayudará a conversar con tus datos. Basta entrar en la página de chat en el menú a la izquierda y comenzar la conversa. Haz preguntas sobre los datos disponibles y el chatbot hará lo mejor para responderlas!",
+  "welcome_message": "¡Bienvenido(a) al BD Bot! Te ayudará a conversar con tus datos. Basta entrar en la página de chat en el menú a la izquierda y comenzar la conversa. Haz preguntas sobre los datos disponibles y el BD Bot hará lo mejor para responderlas!",
   "model_title": "Modelo",
-  "model_description": "El modelo detrás del chatbot es Gemini, de Google.",
+  "model_description": "El modelo detrás del BD Bot es Gemini, de Google.",
   "features_title": "Funcionalidades",
   "features": {
-    "code_display": "Mostrar Código: Haz clic en el botón de mostrar código para mostrar u ocultar las consultas SQL generadas por el chatbot.",
+    "code_display": "Mostrar Código: Haz clic en el botón de mostrar código para mostrar u ocultar las consultas SQL generadas por el BD Bot.",
     "feedback": "Feedback: Haz clic en los botones de feedback para enviar comentarios sobre las respuestas recibidas, con comentarios opcionales. Es necesario hacer clic en el botón de envío para que el feedback se envíe.",
-    "delete_conversation": "Eliminar Conversa: Haz clic en el botón de eliminar conversa para eliminar la conversa con el chatbot. Esta acción es irreversible."
+    "delete_conversation": "Eliminar Conversa: Haz clic en el botón de eliminar conversa para eliminar la conversa con el BD Bot. Esta acción es irreversible."
   },
   "prompt_guide_title": "Guía de Prompt",
-  "prompt_guide_description": "La forma en que conversas con el chatbot puede influir en la calidad de las respuestas. Por eso, a continuación se enumeran algunas sugerencias para ayudarte a elaborar tus preguntas. Pueden ser útiles si las respuestas proporcionadas están incorrectas o no son lo suficientemente buenas!",
+  "prompt_guide_description": "La forma en que conversas con el BD Bot puede influir en la calidad de las respuestas. Por eso, a continuación se enumeran algunas sugerencias para ayudarte a elaborar tus preguntas. Pueden ser útiles si las respuestas proporcionadas están incorrectas o no son lo suficientemente buenas!",
   "prompt_tips": [
     "Intenta hacer una pregunta por vez. Si tu pregunta es muy compleja, o tal vez es un conjunto de varias preguntas, intenta separarlas en preguntas más pequeñas y simples.",
     "Intenta utilizar términos como \"por\" o \"total\" cuando necesites información agregada según alguna variable.",
     "Si conoces los nombres de las columnas de las tablas, intenta mencionarlas en tus preguntas. Por ejemplo, si sabes que una tabla tiene la columna \"município\", intenta usar la palabra município en lugar de \"ciudad\". Esto no significa que no puedas usar palabras similares, pero usar los nombres de las columnas ayuda!",
-    "Si el chatbot no encuentra una respuesta para tu pregunta y sabes en qué tabla están los datos necesarios para responderla, puedes intentar pedirle explícitamente que busque en esa tabla específica."
+    "Si el BD Bot no encuentra una respuesta para tu pregunta y sabes en qué tabla están los datos necesarios para responderla, puedes intentar pedirle explícitamente que busque en esa tabla específica."
   ],
   "important_note": "Importante",
-  "important_message": "Cuando envíes una pregunta al chatbot, espera hasta que se proporcione una respuesta antes de cambiar de página o hacer clic en cualquier botón dentro de la aplicación. Puedes alternar entre las pestañas de tu navegador normalmente.",
+  "important_message": "Cuando envíes una pregunta al BD Bot, espera hasta que se proporcione una respuesta antes de cambiar de página o hacer clic en cualquier botón dentro de la aplicación. Puedes alternar entre las pestañas de tu navegador normalmente.",
   "conversations": "Tus Conversas",
   "new_conversation": "Nueva Conversa",
   "no_conversations": "No hay conversas encontradas.",
@@ -52,15 +53,60 @@
   },
   "access_denied": {
     "title": "Acceso Restrito",
-    "message": "El chatbot de Base de los Datos es una funcionalidad exclusiva disponible para usuarios autorizados. Para solicitar acceso, contáctanos.",
-    "contact_info": "Envía un email a contato@basedosdados.org con el asunto \"Solicitud de Acceso al Chatbot\" y proporciona:",
+    "message": "El BD Bot es una funcionalidad exclusiva disponible para usuarios autorizados. Para solicitar acceso, contáctanos.",
+    "contact_info": "Envía un email a contato@basedosdados.org con el asunto \"Solicitud de Acceso al BD Bot\" y proporciona:",
     "requirements": [
       "Tu nombre completo",
       "Email de tu cuenta",
       "Institución/organización",
-      "Motivo del uso del chatbot"
+      "Motivo del uso del BD Bot"
     ],
     "back_home": "Volver al Inicio",
     "send_email": "Enviar Email"
+  },
+  "landing": {
+    "hero": {
+      "title": "Conversa con Tus Datos",
+      "subtitle": "Haz preguntas en lenguaje natural, obtén insights basados en SQL de Base de los Datos",
+      "beta_badge": "Beta",
+      "cta_button": "Solicitar Acceso Beta",
+      "cta_description": "Únete a nuestro lanzamiento suave y comienza a explorar datos con IA",
+      "access_bd_bot": "Acceder a BD Bot",
+      "login_to_access": "Inicia sesión para acceder al BD Bot"
+    },
+    "cta": {
+      "ready_to_get_started": "¿Listo para empezar?"
+    },
+    "what_is": {
+      "title": "¿Qué es BD Bot?",
+      "description": "BD Bot es un asistente con IA que te ayuda a explorar y analizar datos de Base de los Datos usando lenguaje natural. Simplemente haz preguntas y obtén insights instantáneos sin necesidad de escribir consultas SQL.",
+      "gemini_model": "Alimentado por el modelo Gemini de Google",
+      "key_benefits": "Beneficios",
+      "benefits": [
+        "No requiere conocimiento de SQL",
+        "Consultas en lenguaje natural",
+        "Insights instantáneos de datos",
+        "Acceso a los datasets de Base de los Datos"
+      ]
+    },
+    "features": {
+      "title": "Funcionalidades Principales",
+      "code_display": {
+        "title": "Ver Código SQL",
+        "description": "Ve las consultas SQL generadas detrás de cada respuesta"
+      },
+      "feedback": {
+        "title": "Evaluar Respuestas", 
+        "description": "Ayúdanos a mejorar evaluando y comentando las respuestas"
+      },
+      "delete_chat": {
+        "title": "Eliminar Conversas",
+        "description": "Elimina conversas con un clic"
+      }
+    }
+  },
+  "documentation": {
+    "title": "Documentación",
+    "read_docs": "Leer Documentación"
   }
 } 

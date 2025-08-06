@@ -91,6 +91,10 @@ export default function Login() {
 
     cookies.set('userBD', JSON.stringify(userData))
 
+    if(query.redirect) {
+      return router.push(query.redirect)
+    }
+
     if(query.i) {
       return router.push({
         pathname: '/user/[username]',

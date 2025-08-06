@@ -132,9 +132,53 @@ export default async function handler(req, res) {
         res.setHeader('Connection', 'keep-alive');
         res.setHeader('X-Accel-Buffering', 'no');
         
-        // Pipe the response
-        console.log('Messages API - Piping response to frontend');
-        response.data.pipe(res);
+        // Convert backend's raw JSON lines to SSE format
+        let buffer = '';
+        
+        response.data.on('data', (chunk) => {
+          buffer += chunk.toString();
+          
+          // Process complete lines
+          const lines = buffer.split('\n\n');
+          buffer = lines.pop() || ''; // Keep incomplete line in buffer
+          
+          for (const line of lines) {
+            if (line.trim()) {
+              try {
+                // Backend sends raw JSON, we need to format as SSE
+                const jsonData = JSON.parse(line.trim());
+                res.write(`data: ${JSON.stringify(jsonData)}\n\n`);
+              } catch (parseError) {
+                console.error('Messages API - Error parsing backend JSON:', parseError);
+                // Send the raw line if it can't be parsed
+                res.write(`data: ${line.trim()}\n\n`);
+              }
+            }
+          }
+        });
+        
+        response.data.on('end', () => {
+          // Process any remaining data in buffer
+          if (buffer.trim()) {
+            try {
+              const jsonData = JSON.parse(buffer.trim());
+              res.write(`data: ${JSON.stringify(jsonData)}\n\n`);
+            } catch (parseError) {
+              console.error('Messages API - Error parsing final buffer:', parseError);
+            }
+          }
+          
+          // Send done signal
+          res.write('data: [DONE]\n\n');
+          res.end();
+        });
+        
+        response.data.on('error', (streamError) => {
+          console.error('Messages API - Stream error:', streamError);
+          res.write(`data: ${JSON.stringify({error: 'Stream error', message: streamError.message})}\n\n`);
+          res.end();
+        });
+        
       } catch (streamError) {
         console.error('Messages API - Streaming error:', streamError);
         console.error('Messages API - Streaming error response:', streamError.response?.data);
