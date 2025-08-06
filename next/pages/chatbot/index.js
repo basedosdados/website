@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Box, VStack, HStack, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, VStack, HStack, Text, Spinner, Alert, AlertIcon, Button } from "@chakra-ui/react";
 import cookies from "js-cookie";
 
 import { MainPageTemplate } from "../../components/templates/main";
@@ -10,6 +10,8 @@ import ChatInterface from "../../components/organisms/Chatbot/ChatInterface";
 import ChatHistory from "../../components/organisms/Chatbot/ChatHistory";
 import TitleText from "../../components/atoms/Text/TitleText";
 import BodyText from "../../components/atoms/Text/BodyText";
+import LabelText from "../../components/atoms/Text/LabelText";
+import ChatbotLandingPage from "./landing";
 
 export async function getStaticProps({ locale }) {
   return {
@@ -26,6 +28,11 @@ export default function ChatbotPage() {
   const [hasAccess, setHasAccess] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedThreadId, setSelectedThreadId] = useState(null);
+  const [threadUpdateFunction, setThreadUpdateFunction] = useState(null);
+
+  const handleReadDocs = () => {
+    router.push('/docs/bot');
+  };
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -33,7 +40,8 @@ export default function ChatbotPage() {
       const token = cookies.get('token');
       
       if (!userBD || !token) {
-        router.push(`/user/login?redirect=${encodeURIComponent('/chatbot')}`);
+        // User not logged in - show landing page
+        setIsLoading(false);
         return;
       }
 
@@ -49,7 +57,8 @@ export default function ChatbotPage() {
         const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(token)}`);
         
         if (response.status === 401) {
-          router.push(`/user/login?redirect=${encodeURIComponent('/chatbot')}`);
+          // Token expired - show landing page
+          setIsLoading(false);
           return;
         }
 
@@ -59,16 +68,13 @@ export default function ChatbotPage() {
 
         const userInfo = await response.json();
         
-        if (!userInfo.hasChatbotAccess) {
-          router.push('/chatbot/access-denied');
-          return;
+        if (userInfo.hasChatbotAccess) {
+          setHasAccess(true);
         }
-
-        setHasAccess(true);
+        // If no access, stay on landing page (hasAccess remains false)
       } catch (error) {
         console.error('Error checking access:', error);
-        router.push(`/user/login?redirect=${encodeURIComponent('/chatbot')}`);
-        return;
+        // On error, show landing page
       } finally {
         setIsLoading(false);
       }
@@ -89,7 +95,8 @@ export default function ChatbotPage() {
   }
 
   if (!hasAccess) {
-    return null; // Will redirect to access-denied
+    // Show landing page instead of chat interface
+    return <ChatbotLandingPage />;
   }
 
   return (
@@ -98,12 +105,27 @@ export default function ChatbotPage() {
         <VStack spacing={6} align="stretch">
           {/* Header */}
           <Box>
-            <TitleText typography="large" fontWeight="600" color="#252A32">
-              {t('title')}
-            </TitleText>
-            <BodyText typography="medium" color="#616161" marginTop="8px">
-              {t('subtitle')}
-            </BodyText>
+            <HStack justify="space-between" align="flex-start">
+              <Box>
+                <TitleText typography="large" fontWeight="600" color="#252A32">
+                  {t('title')}
+                </TitleText>
+                <BodyText typography="medium" color="#616161" marginTop="8px">
+                  {t('subtitle')}
+                </BodyText>
+              </Box>
+            </HStack>
+          </Box>
+
+          <Box marginTop="12px">
+            <Button
+              onClick={handleReadDocs}
+              color="#3182CE"
+              _hover={{ backgroundColor: "#E6F3FF" }}
+              size="sm"
+            >
+              {t('documentation.read_docs')}
+            </Button>
           </Box>
 
           {/* Chat Interface */}
@@ -113,6 +135,7 @@ export default function ChatbotPage() {
               <ChatHistory 
                 selectedThreadId={selectedThreadId}
                 onThreadSelect={setSelectedThreadId}
+                onThreadUpdate={setThreadUpdateFunction}
               />
             </Box>
 
@@ -121,9 +144,12 @@ export default function ChatbotPage() {
               <ChatInterface 
                 threadId={selectedThreadId}
                 onNewThread={() => setSelectedThreadId(null)}
+                onThreadActivity={threadUpdateFunction}
               />
             </Box>
           </HStack>
+
+
         </VStack>
       </Box>
     </MainPageTemplate>

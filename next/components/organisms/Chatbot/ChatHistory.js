@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, VStack, HStack, Text, Button, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 
-export default function ChatHistory({ selectedThreadId, onThreadSelect }) {
+export default function ChatHistory({ selectedThreadId, onThreadSelect, onThreadUpdate }) {
   const { t } = useTranslation('chatbot');
   const [threads, setThreads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +27,12 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect }) {
       }
 
       const data = await response.json();
-      setThreads(data);
+      // Add last_activity field defaulting to created_at
+      const threadsWithActivity = data.map(thread => ({
+        ...thread,
+        last_activity: thread.last_activity || thread.created_at
+      }));
+      setThreads(threadsWithActivity);
     } catch (error) {
       console.error('Error loading threads:', error);
       setError(t('error_loading_conversations'));
@@ -35,6 +40,26 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect }) {
       setIsLoading(false);
     }
   };
+
+  // Function to update thread's last activity timestamp
+  const updateThreadActivity = useCallback((threadId) => {
+    setThreads(prev => {
+      const updated = prev.map(thread => 
+        thread.id === threadId 
+          ? { ...thread, last_activity: new Date().toISOString() }
+          : thread
+      );
+      // Sort by last_activity descending
+      return updated.sort((a, b) => new Date(b.last_activity) - new Date(a.last_activity));
+    });
+  }, []);
+
+  // Expose the update function to parent
+  useEffect(() => {
+    if (onThreadUpdate) {
+      onThreadUpdate(updateThreadActivity);
+    }
+  }, [onThreadUpdate, updateThreadActivity]);
 
   const deleteThread = async (threadId) => {
     try {
@@ -129,7 +154,28 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect }) {
       )}
 
       {/* Threads List */}
-      <Box flex={1} overflowY="auto" padding={2}>
+      <Box 
+        flex={1} 
+        overflowY="auto" 
+        padding={2}
+        maxHeight="calc(80vh - 200px)"
+        css={{
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: '#f1f1f1',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: '#c1c1c1',
+            borderRadius: '3px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: '#a1a1a1',
+          },
+        }}
+      >
         <VStack spacing={2} align="stretch">
           {threads.length === 0 ? (
             <Box textAlign="center" padding={8}>
@@ -188,7 +234,7 @@ function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, trunca
               color="#616161"
               marginTop="4px"
             >
-              {formatDate(thread.created_at)}
+              {formatDate(thread.last_activity || thread.created_at)}
             </LabelText>
           </Box>
           
