@@ -1037,7 +1037,6 @@ export default function Services({ faqs }) {
       </BodyText>
 
       <VStack
-        display="none"
         boxSizing="content-box"
         maxWidth="1440px"
         padding="0 24px"
@@ -1062,8 +1061,8 @@ export default function Services({ faqs }) {
             top={{base: "0", lg: "120px"}}
           >
             <CategoryText category="Arquitetura de Dados"/>
-            <CategoryText category="Portal de Dados"/>
             <CategoryText category="Painel Gerencial"/>
+            <CategoryText category="Portal de Dados"/>
             <CategoryText category="Chatbot"/>
             <CategoryText category="Formação"/>
           </Box>
