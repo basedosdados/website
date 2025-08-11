@@ -383,7 +383,7 @@ export default function Services({ faqs }) {
     setQuestions(filteredQuestions);
   }, [categorySelected, allQuestions]);
 
-  const CategoryText = ({ category }) => {
+  const CategoryText = ({ category, text }) => {
     function handlerClick() {
       setCategorySelected(category)
       setCloseQuestion(!closeQuestion)
@@ -413,7 +413,7 @@ export default function Services({ faqs }) {
           borderRadius="8px"
           padding="6px 8px"
         >
-          {category}
+          {t(text)}
         </LabelText>
       </HStack>
     )
@@ -1060,11 +1060,10 @@ export default function Services({ faqs }) {
             position={{base: "relative", lg: "sticky"}}
             top={{base: "0", lg: "120px"}}
           >
-            <CategoryText category="Arquitetura de Dados"/>
-            <CategoryText category="Painel Gerencial"/>
-            <CategoryText category="Portal de Dados"/>
-            <CategoryText category="Chatbot"/>
-            <CategoryText category="Formação"/>
+            <CategoryText category="Arquitetura de Dados" text="arquitetura-title"/>
+            <CategoryText category="Painel Gerencial" text="painel-title"/>
+            <CategoryText category="Chatbot" text="chatbot-title"/>
+            <CategoryText category="Formação" text="formacao-title"/>
           </Box>
 
           <Stack
