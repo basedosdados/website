@@ -292,15 +292,6 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
       link: "/services",
       imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
       value: "A"
-    },
-    B: {
-      id: "solucoes-de-dados-para-toda-a-jornada",
-      title: "Soluções de dados para toda a jornada",
-      description: "Do diagnóstico à visualização, oferecemos serviços completos para transformar dados em valor: arquitetura, portais, painéis, chatbots e formação. Tudo sob medida para sua organização evoluir com dados.",
-      buttonText: "Conheça os serviços de consultoria",
-      link: "/services",
-      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
-      value: "B"
     }
   };
 
@@ -486,7 +477,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
           </GridItem>
         </Grid>
 
-        {abVariant && (
+        {abVariant == "A" && (
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 
