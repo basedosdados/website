@@ -73,8 +73,10 @@ function LatestBlogCard({ slug, frontmatter }) {
         >
           <Link href={`/blog/${slug}`} >
             <Image
+              style={{"aspectRatio": "16/9"}}
+              objectFit="cover"
               cursor="pointer"
-              width={"100%"}
+              width="100%"
               src={
                 frontmatter.thumbnail ??
                 "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"
