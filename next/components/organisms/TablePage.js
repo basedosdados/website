@@ -12,6 +12,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
 import { formatBytes } from "../../utils";
+import Button from "../atoms/Button";
 import Link from "../atoms/Link";
 import ReadMore from "../atoms/ReadMore";
 import TitleText from "../atoms/Text/TitleText";
@@ -749,6 +750,36 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
           color="#464A51"
         >{resource?.version || t('table.notProvided')}</BodyText>
       </SkeletonText>
+
+      <Box
+        display="flex"
+        padding="40px"
+        boxSizing="border-box"
+        flexDirection="column"
+        alignItems="center"
+        textAlign="center"
+        background="#FFFFFF"
+        border="1px solid #DEDFE0"
+        borderRadius="16px"
+      >
+        <TitleText>
+          {t('table.helpInFooterTitle')}
+        </TitleText>
+        <TitleText typography="small" color="#71757A" marginBottom="16px">
+          {t('table.helpInFooterSubtitle')}
+        </TitleText>
+
+        <Link
+          href="/contact"
+          target="_blank"
+        >
+          <Button
+            padding="10px 20px"
+          >
+            {t('table.helpInFooterButton')}
+          </Button>
+        </Link>
+      </Box>
 
       {abVariant == "B" && (
         <ServiceHighlightABTest {...abTestContent[abVariant]} />
