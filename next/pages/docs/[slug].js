@@ -414,60 +414,6 @@ function FigCaption(props) {
   ) : null;
 }
 
-function PythonCode({ id }) {
-  const [content, setContent] = useState('');
-
-  useEffect(() => {
-    fetch("https://basedosdados.github.io/sdk/api_reference_python/")
-      .then((res) => res.text())
-      .then((html) => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
-        const anchor = doc.querySelector(`a[id="${id}"]`);
-
-        if (anchor) {
-          const parentDiv = anchor.closest('.doc-module');
-
-          if (parentDiv) {
-            setContent(parentDiv.innerHTML);
-          } else {
-            console.error("Elemento pai não encontrado para:", id);
-          }
-        } else {
-          console.error("ID não encontrado:", id);
-        }
-      })
-      .catch((err) => console.error('Erro ao carregar:', err));
-  }, [id]);
-
-  useEffect(() => {
-    if (content) {
-      const highlightsInH3 = document.querySelectorAll('h3 .highlight');
-      highlightsInH3.forEach((el) => {
-        hljs.highlightElement(el);
-      });
-
-      const highlightsInH3Code = document.querySelectorAll('h3 code');
-      highlightsInH3Code.forEach((el) => {
-        hljs.highlightElement(el);
-      });
-
-      const highlightsInH4 = document.querySelectorAll('h4 .highlight');
-      highlightsInH4.forEach((el) => {
-        hljs.highlightElement(el);
-      });
-
-      const highlights = document.querySelectorAll('.highlight pre code');
-      highlights.forEach((el) => {
-        hljs.highlightElement(el);
-      });
-    }
-  }, [content]);
-
-  return <div className={styles.python_code_docs} dangerouslySetInnerHTML={{ __html: content }} />;
-}
-
 export const mdxComponents = {
   h1: (props) => <HeadingWithAnchor {...props} />,
   h2: (props) => <HeadingSimple as="h3" fontSize="20px" lineHeight="28px" {...props} />,
@@ -666,9 +612,6 @@ export const mdxComponents = {
       <AspectRatio ratio={16 / 9}>{children}</AspectRatio>
       <FigCaption {...children.props} />
     </Box>
-  ),
-  PythonCode: (props) => (
-    <PythonCode id={props.id}/>
   ),
   PDF: (props) => (
     <Box marginY="16px">
