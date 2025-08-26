@@ -33,7 +33,18 @@ function PartnerBox({ src, ...props }) {
 }
 
 export function BePartner() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("home");
+
+  const partners = [
+    { alt: "tesouro nacional", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png"},
+    { alt: "ipea", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/ipea.png"},
+    { alt: "alziras", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png"},
+    { alt: "fiquem sabendo", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/fiquem_sabendo.png"},
+    { alt: "bg lemann", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/bg__lemann.png"},
+    { alt: "rio", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/rio.png"},
+    { alt: "governosp", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/governosp.png"},
+    { alt: "aponte", src: "https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png"}
+  ];
 
   return (
     <VStack margin="auto" spacing="0">
@@ -45,12 +56,14 @@ export function BePartner() {
         spacing="24px"
       >
         <LabelText
-          typography="large"
+          as="h3"
+          typography="x-large"
           zIndex={2}
           textAlign="center"
-          color="#71757A"
+          fontWeight="400"
+          color="#464A51"
         >
-          {t('partners.partnershipsWith')}
+          {t("partners.partnershipsWith")}
         </LabelText>
 
         <Stack
@@ -63,14 +76,9 @@ export function BePartner() {
           justifyContent="center"
           flexWrap="wrap"
         >
-          <PartnerBox alt="tesouro nacional" src="https://storage.googleapis.com/basedosdados-website/logos/2022/tesouro_nacional.png" />
-          <PartnerBox alt="ipea" src="https://storage.googleapis.com/basedosdados-website/logos/2022/ipea.png" />
-          <PartnerBox alt="alziras" src="https://storage.googleapis.com/basedosdados-website/logos/2022/alziras.png" />
-          <PartnerBox alt="fiquem sabendo" src="https://storage.googleapis.com/basedosdados-website/logos/2022/fiquem_sabendo.png" />
-          <PartnerBox alt="bg lemann" src="https://storage.googleapis.com/basedosdados-website/logos/2022/bg__lemann.png" />
-          <PartnerBox alt="rio" src="https://storage.googleapis.com/basedosdados-website/logos/2022/rio.png" />
-          <PartnerBox alt="governosp" src="https://storage.googleapis.com/basedosdados-website/logos/2022/governosp.png" />
-          <PartnerBox alt="aponte" src="https://storage.googleapis.com/basedosdados-website/logos/2022/aponte.png" />
+          {partners.map((p) => (
+            <PartnerBox key={p.alt} alt={p.alt} src={p.src} />
+          ))}
         </Stack>
       </Stack>
     </VStack>

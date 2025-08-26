@@ -1,7 +1,10 @@
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import Hero from "../components/organisms/Home/Hero";
 import { BePartner } from "../components/organisms/Home/BePartner";
+import MentionSection from '../components/molecules/MentionSection';
+import ContentPublicPurpose from '../components/organisms/Home/ContentPublicPurpose';
 import { MainPageTemplate } from "../components/templates/main";
 
 export async function getStaticProps({ locale }) {
@@ -14,10 +17,25 @@ export async function getStaticProps({ locale }) {
 }
 
 export default function Home({ locale }) {
+  const { t } = useTranslation("home");
+
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
       <Hero locale={locale}/>
       <BePartner />
+      <MentionSection
+        content={t("mentions.home1Content")}
+        author={t("mentions.home1Author")}
+        position={t("mentions.home1Position")}
+        marginTop="120px !important"
+      />
+      <MentionSection
+        content={t("mentions.home2Content")}
+        author={t("mentions.home2Author")}
+        position={t("mentions.home2Position")}
+        marginTop="120px !important"
+      />
+      <ContentPublicPurpose/>
     </MainPageTemplate>
   );
 }
