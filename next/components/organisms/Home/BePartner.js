@@ -6,7 +6,6 @@ import {
 import { useTranslation } from 'next-i18next';
 import LabelText from "../../atoms/Text/LabelText";
 
-
 function PartnerBox({ src, ...props }) {
   return (
     <Stack
@@ -25,6 +24,7 @@ function PartnerBox({ src, ...props }) {
         width="100%"
         height="100%"
         objectFit="contain"
+        loading="lazy"
         src={src}
         {...props}
       />

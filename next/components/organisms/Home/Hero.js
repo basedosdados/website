@@ -14,7 +14,7 @@ import LabelText from "../../atoms/Text/LabelText";
 import Button from "../../atoms/Button";
 
 export default function Hero({ locale }) {
-  const { t } = useTranslation('home');
+  const { t } = useTranslation("home");
 
   return (
     <VStack
@@ -33,7 +33,7 @@ export default function Hero({ locale }) {
         padding="40px 24px"
         alignItems="flex-start"
       >
-        <Stack spacing={0}>
+        <Stack spacing={0} width="100%">
           <Text
             as="h1"
             display="flex"

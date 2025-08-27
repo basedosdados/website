@@ -4,6 +4,11 @@
   "description_organized_data": "A Base dos Dados é uma ONG que mantém a maior plataforma pública de dados do Brasil e oferece serviços especializados em engenharia, análise e capacitação de dados.",
   "organized_data_first_button": "Acesse a plataforma de dados",
   "organized_data_second_button": "Conheça os serviços de consultoria",
+  "socioeconomic_data": "Os principais dados socioeconômicos do Brasil, em um só lugar.",
+  "productivity_data_analysis": {
+    "title": "Ganhe produtividade na sua análise de dados",
+    "subtitle": "Tabelas tratadas e variáveis padronizadas para cruzar conjuntos de dados com facilidade"
+  },
   "partners": {
     "partnershipsWith": "A parceira de quem transforma dados em impacto"
   },

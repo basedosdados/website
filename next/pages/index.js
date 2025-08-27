@@ -3,7 +3,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Hero from "../components/organisms/Home/Hero";
 import { BePartner } from "../components/organisms/Home/BePartner";
+import SocioeconomicData from '../components/organisms/Home/SocioeconomicData';
 import MentionSection from '../components/molecules/MentionSection';
+import ProductivityDataAnalysis from '../components/organisms/Home/ProductivityDataAnalysis';
+import PresentationSolutions from '../components/organisms/Home/PresentationSolutions';
 import ContentPublicPurpose from '../components/organisms/Home/ContentPublicPurpose';
 import { MainPageTemplate } from "../components/templates/main";
 
@@ -21,19 +24,24 @@ export default function Home({ locale }) {
 
   return (
     <MainPageTemplate id="home" backgroundColor="#FFFFFF">
-      <Hero locale={locale}/>
+      <Hero locale={locale} />
       <BePartner />
+      <SocioeconomicData />
       <MentionSection
         content={t("mentions.home1Content")}
         author={t("mentions.home1Author")}
         position={t("mentions.home1Position")}
         marginTop="120px !important"
+        padding={{base: "40px 24px", md: "120px 24px"}}
       />
+      <ProductivityDataAnalysis />
+      <PresentationSolutions />
       <MentionSection
         content={t("mentions.home2Content")}
         author={t("mentions.home2Author")}
         position={t("mentions.home2Position")}
         marginTop="120px !important"
+        padding={{base: "40px 24px", md: "120px 24px"}}
       />
       <ContentPublicPurpose/>
     </MainPageTemplate>
