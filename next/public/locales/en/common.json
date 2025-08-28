@@ -1,70 +1,17 @@
 {
     "search_placeholder": "Find the data you need",
-    "search_placeholder_mobile": "Find the data",
+    "search_placeholder_mobile": "Find data",
     "popular_terms": "Popular terms:",
     "search_by_theme": "Search by theme",
-    "noDatasetsFound": ["No dataset with all selected themes was found.","Try unselecting some of the themes."],
-    "products": {
-        "facilitation_text": "We facilitate access to data so that the distance",
-        "analysis_distance": "between you and an analysis is ",
-        "good_question": "just a good question",
-        "filters": "FILTERS",
-        "search_as_you_want": "Search for data as you wish",
-        "search_description": "There are several filters to help you find the data you need. As you navigate through hundreds of datasets available on the platform, you can refine your search by theme, organization, time coverage, observation level, and more.",
-        "start_search": "Start your search",
-        "processed_tables": "PROCESSED TABLES",
-        "access_quality_data": "Access quality data",
-        "processed_tables_description": "With the processed tables in our data lake, you no longer need to spend hours cleaning data. Our standardization methodology allows you to easily cross-reference data from different organizations. This way, you can focus on what really matters.",
-        "view_available_data": "View available data",
-        "packages": "PACKAGES",
-        "explore_in_your_favorite_language": "Explore in your favorite language",
-        "packages_description": "We have developed packages for accessing processed data in Python, R, and command line. Additionally, you can query and filter data using SQL in our public data lake editor on Google BigQuery.",
-        "learn_how_to_access": "Learn how to access"
-    },
-    "support": {
-        "existence_through_effort": "We exist through the effort of people who",
-        "those_who_believe_in_quality_open_data": "believe in access to quality open data.",
-        "support_us_too": "Support Data Basis too",
-        "enthusiast": "Enthusiast",
-        "tight_pocket": "Tight budget? Just R$0.50 per",
-        "enthusiast_description": "day to help us maintain the initiative.",
-        "month": "month",
-        "databaser": "Databaser",
-        "donate_1_real_per_day": "Donate R$1 per day",
-        "to_make_databasers_happy": "to make databasers happy.",
-        "master_of_data": "Master of Data",
-        "master_of_data_description": "Less than R$2 per day to save you even more work.",
-        "donate_any_amount_via_pix": "Donate any amount via PIX",
-        "company_name": "Company Name",
-        "cnpj": "CNPJ",
-        "bank": "Bank",
-        "agency": "Branch",
-        "account": "Account",
-        "pix_key_copied": "PIX key copied",
-        "copy_pix_key": "Copy PIX key",
-        "follow_the_steps": "Follow the steps",
-        "step_1": "Open your bank app;",
-        "step_2": "Choose the PIX payment option;",
-        "step_3": "Scan the QR Code or enter the key on the side;",
-        "step_4": "Make your donation!",
-        "want_to_institutionally_support_db": "Would you like to support DB institutionally? ",
-        "contact_us": "Contact us.",
-        "donate_any_amount_via_paypal": "Donate any amount via PayPal"
-    },
-    "edu": {
-        "learn_from_the_reference": "Come learn from those who are a reference",
-        "in_making_public_data_available": "in making public data available in Brazil",
-        "with_our_course_you_can_go_further": "With our course, you can go further in your research, profession, or organization",
-        "take_advantage_of_the_promotional_price": "Take advantage of the promotional price"
-    },
+    "noDatasetsFound": ["No dataset with all the selected themes was found.","Try unchecking some of the themes."],
     "tooltip": {
         "helpAndResources": "Help and resources",
         "faq": "Frequently asked questions",
         "documentation": "Documentation",
         "youtubeVideos": "YouTube videos",
         "installPackages": "How to install our packages?",
-        "howToCite": "How to cite our work?",
-        "resetTour": "Restart the tour",
+        "howToCite": "How to cite DB?",
+        "resetTour": "Reset tour",
         "whatAreDirectories": "What are directories?",
         "discordCommunity": "Talk to our community on Discord",
         "contactUs": "Contact us"
@@ -72,8 +19,8 @@
     "footer": {
         "title": "Data Basis",
         "copyright": "® {{year}} Data Basis",
-        "termsOfUse": "Terms of Use",
-        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of use",
+        "privacyPolicy": "Privacy policy",
         "contact": "Contact",
         "faq": "FAQ",
         "newsletter": "Newsletter",
@@ -83,16 +30,16 @@
             "title": "PRODUCTS",
             "searchEngine": "Search engine",
             "publicDatalake": "Public datalake",
-            "dataPackages": "Data packages",
+            "dataPackages": "Packages",
             "DBPro": "DB Pro",
             "DBEdu": "DB Edu"
         },
         "services": {
             "title": "SERVICES",
-            "diagnosticoDeMaturidade": "Maturity Assessment",
+            "diagnosticoDeMaturidade": "Maturity Diagnosis",
             "arquiteturaDeDados": "Data Architecture",
             "portalDeDados": "Data Portal",
-            "painelGerencial": "Management Dashboard",
+            "painelGerencial": "Management Panel",
             "chatbot": "Chatbot",
             "formacao": "Training"
         },
@@ -101,7 +48,7 @@
             "documentation": "Documentation",
             "blog": "Blog",
             "youtubeVideos": "Videos",
-            "faq": "FAQ"
+            "faq": "Frequently asked questions"
         },
         "institutional": {
             "title": "INSTITUTIONAL",
@@ -114,33 +61,13 @@
             "supportProject": "Support the project"
         }
     },
-    "partners": {
-        "partnershipsWith": "Partnerships with",
-        "testimonials": {
-            "fernando": {
-                "name": "Fernando Barbalho",
-                "position": "Data Scientist at the National Treasury",
-                "quote": "SiconfiBD is a package that quickly and programmatically brings data from the National Treasury Secretariat. The code is built open-source by the Treasury team and uses DB tables to compose functions in R. What is the personnel expense of the 100 most populous Brazilian municipalities? These and more than 18 other questions can be consulted directly through the package, without the need for SQL."
-            },
-            "marina": {
-                "name": "Marina Barros",
-                "position": "Executive Director of Instituto Alziras",
-                "quote": "With the support of Data Basis, we conducted a survey of gender and race inequalities in the 2016-2020 elections and the distortions in campaign financing for female mayors and councilors in the last elections, which will result in the launch of an unprecedented publication."
-            },
-            "amanda": {
-                "name": "Amanda de Albuquerque and Mariana Carvalho",
-                "position": "Co-founders of A Ponte",
-                "quote": "We created an important product of ours, the Municipality Photograph, in partnership with DB. The Photograph aggregates various socioeconomic indicators of Brazilian municipalities. A Ponte did the planning and design of the report, while DB took care of the technical part of data visualization and management. The partnership allowed us to advance quickly in the development of the tool and ensured the high data quality we wanted from the beginning."
-            }
-        }
-    },
     "error": {
         "ops": "Ooops...",
-        "notFoundPage": "Unfortunately, we couldn't find this page.",
-        "system": "Unfortunately, an error occurred.",
+        "notFoundPage": "Unfortunately we couldn't find this page.",
+        "system": "Unfortunately an error has occurred.",
         "searchNewBases": "Browse the menu above or search for the data you need in the search bar.",
-        "verifyStatusSystem": "Check our platform's status and try again later.",
+        "verifyStatusSystem": "Check the status of our platform and try to access it again later.",
         "searchData": "Search data",
-        "checkStatus": "Check the status"
+        "checkStatus": "Check status"
     }
 }

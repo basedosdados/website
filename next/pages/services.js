@@ -30,8 +30,8 @@ import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
+import MentionSection from "../components/molecules/MentionSection";
 
-import PointsIcon from "../public/img/icons/pointsIcon";
 import SpeedIcon from "../public/img/icons/speedIcon";
 import DnsIcon from "../public/img/icons/dnsIcon";
 import FlowsheetIcon from "../public/img/icons/flowsheetIcon";
@@ -209,39 +209,11 @@ const Section = ({
       )}
 
       {content[1]?.mention && (
-        <Stack
-          width="100%"
-          backgroundColor="#252A32"
-          marginTop="80px !important"
-          padding={{base: "40px 24px", md: "80px 24px"}}
-          spacing={0}
-        >
-          <Stack
-            width="100%"
-            maxWidth="1440px"
-            flexDirection="column"
-            margin="0 auto !important"
-            spacing={0}
-            gap="24px"
-          >
-            <PointsIcon fill="#2B8C4D" width="25px" height="22px"/>
-            <TitleText
-              maxWidth="900px"
-              typography={isMobileMod() ? "small" : "large"}
-              color="#FFF"
-            >
-              {content[1].mention?.content || ""}
-            </TitleText>
-            <Stack spacing={0}>
-              <BodyText typography="large" color="#FFF">
-                {content[1].mention?.author || ""}
-              </BodyText>
-              <BodyText typography="large" color="#EEEEEE">
-                {content[1].mention?.position || ""}
-              </BodyText>
-            </Stack>
-          </Stack>
-        </Stack>
+        <MentionSection
+          content={content[1].mention?.content}
+          author={content[1].mention?.author}
+          position={content[1].mention?.position}
+        />
       )}
       {cards &&
         <Grid
