@@ -3,5 +3,31 @@
   "reliable_analysis": "Reliable analysis.",
   "description_organized_data": "Data Basis is an NGO that maintains the largest public data platform in Brazil and offers specialized services in data engineering, analysis, and training.",
   "organized_data_first_button": "Access the data platform",
-  "organized_data_second_button": "Learn about consulting services"
+  "organized_data_second_button": "Learn about consulting services",
+  "socioeconomic_data": "The main socioeconomic data from Brazil, in one place.",
+  "productivity_data_analysis": {
+    "title": "Gain productivity in your data analysis",
+    "subtitle": "Treated tables and standardized variables to easily cross datasets"
+  },
+  "partners": {
+    "partnershipsWith": "The partner of those who transform data into impact"
+  },
+  "mentions": {
+      "home1Content": "I usually use the Data Basis platform to search for data on municipalities, especially those that are more stable, such as historical population series. I also use it for CNPJ data and other very large datasets that would be difficult to reassemble in an isolated environment. The ease of using SQL commands helps in crossing and aggregating data.",
+      "home1Author": "Fernando Barbalho",
+      "home1Position": "Technical Advisor to the Vice-President of the Republic",
+      "home2Content": "I end up asking more complex questions in my articles because I know that the data analysis work will not be as complicated thanks to the tools you provide.",
+      "home2Author": "Luiz Fernando Toledo",
+      "home2Position": "Reporter at BBC"
+  },
+  "section_public_purpose": {
+    "title": "An initiative with a public purpose",
+    "content": "Data Basis is an NGO that maintains the open platform with revenues from services in engineering, analysis, and training. By hiring DB, you boost our impact."
+  },
+  "tables_stats": {
+    "tables": "treated tables",
+    "tables_updates": "% of them are updated every month",
+    "size_all_tables": "of organized data",
+    "row_all_tables": "of rows across all tables"
+  }
 }

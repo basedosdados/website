@@ -1,17 +1,17 @@
 {
     "search_placeholder": "Find the data you need",
-    "search_placeholder_mobile": "Find the data",
+    "search_placeholder_mobile": "Find data",
     "popular_terms": "Popular terms:",
     "search_by_theme": "Search by theme",
-    "noDatasetsFound": ["No dataset with all selected themes was found.","Try unselecting some of the themes."],
+    "noDatasetsFound": ["No dataset with all the selected themes was found.","Try unchecking some of the themes."],
     "tooltip": {
         "helpAndResources": "Help and resources",
         "faq": "Frequently asked questions",
         "documentation": "Documentation",
         "youtubeVideos": "YouTube videos",
         "installPackages": "How to install our packages?",
-        "howToCite": "How to cite our work?",
-        "resetTour": "Restart the tour",
+        "howToCite": "How to cite DB?",
+        "resetTour": "Reset tour",
         "whatAreDirectories": "What are directories?",
         "discordCommunity": "Talk to our community on Discord",
         "contactUs": "Contact us"
@@ -19,8 +19,8 @@
     "footer": {
         "title": "Data Basis",
         "copyright": "® {{year}} Data Basis",
-        "termsOfUse": "Terms of Use",
-        "privacyPolicy": "Privacy Policy",
+        "termsOfUse": "Terms of use",
+        "privacyPolicy": "Privacy policy",
         "contact": "Contact",
         "faq": "FAQ",
         "newsletter": "Newsletter",
@@ -30,16 +30,16 @@
             "title": "PRODUCTS",
             "searchEngine": "Search engine",
             "publicDatalake": "Public datalake",
-            "dataPackages": "Data packages",
+            "dataPackages": "Packages",
             "DBPro": "DB Pro",
             "DBEdu": "DB Edu"
         },
         "services": {
             "title": "SERVICES",
-            "diagnosticoDeMaturidade": "Maturity Assessment",
+            "diagnosticoDeMaturidade": "Maturity Diagnosis",
             "arquiteturaDeDados": "Data Architecture",
             "portalDeDados": "Data Portal",
-            "painelGerencial": "Management Dashboard",
+            "painelGerencial": "Management Panel",
             "chatbot": "Chatbot",
             "formacao": "Training"
         },
@@ -48,7 +48,7 @@
             "documentation": "Documentation",
             "blog": "Blog",
             "youtubeVideos": "Videos",
-            "faq": "FAQ"
+            "faq": "Frequently asked questions"
         },
         "institutional": {
             "title": "INSTITUTIONAL",
@@ -61,16 +61,13 @@
             "supportProject": "Support the project"
         }
     },
-    "partners": {
-        "partnershipsWith": "Partnerships with"
-    },
     "error": {
         "ops": "Ooops...",
-        "notFoundPage": "Unfortunately, we couldn't find this page.",
-        "system": "Unfortunately, an error occurred.",
+        "notFoundPage": "Unfortunately we couldn't find this page.",
+        "system": "Unfortunately an error has occurred.",
         "searchNewBases": "Browse the menu above or search for the data you need in the search bar.",
-        "verifyStatusSystem": "Check our platform's status and try again later.",
+        "verifyStatusSystem": "Check the status of our platform and try to access it again later.",
         "searchData": "Search data",
-        "checkStatus": "Check the status"
+        "checkStatus": "Check status"
     }
 }

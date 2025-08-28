@@ -1,7 +1,33 @@
 {
   "organized_data": "Datos organizados.",
   "reliable_analysis": "Análisis confiables.",
-  "description_organized_data": "Base de los Datos es una ONG que mantiene la mayor plataforma pública de datos de Brasil y ofrece servicios especializados en ingeniería, análisis y capacitación de datos.",
+  "description_organized_data": "Base de los Datos es una ONG que mantiene la mayor plataforma de datos públicos de Brasil y ofrece servicios especializados en ingeniería, análisis y capacitación de datos.",
   "organized_data_first_button": "Accede a la plataforma de datos",
-  "organized_data_second_button": "Conoce los servicios de consultoría"
+  "organized_data_second_button": "Conoce los servicios de consultoría",
+  "socioeconomic_data": "Los principales datos socioeconómicos de Brasil, en un solo lugar.",
+  "productivity_data_analysis": {
+    "title": "Gana productividad en tu análisis de datos",
+    "subtitle": "Tablas tratadas y variables estandarizadas para cruzar conjuntos de datos con facilidad"
+  },
+  "partners": {
+    "partnershipsWith": "El socio de quienes transforman datos en impacto"
+  },
+  "mentions": {
+      "home1Content": "Suelo utilizar la plataforma de Base de los Datos para buscar datos de municipios, especialmente aquellos que son más estables, como series históricas de población. También la uso para datos de CNPJ y otros conjuntos de datos muy grandes que serían difíciles de reensamblar en un entorno aislado. La facilidad de usar comandos SQL ayuda a cruzar y agregar datos.",
+      "home1Author": "Fernando Barbalho",
+      "home1Position": "Asesor Técnico del Vicepresidente de la República",
+      "home2Content": "Termino haciendo preguntas más complejas en mis artículos porque sé que el trabajo de análisis de datos no será tan complicado gracias a las herramientas que ustedes proporcionan.",
+      "home2Author": "Luiz Fernando Toledo",
+      "home2Position": "Reportero en la BBC"
+  },
+  "section_public_purpose": {
+    "title": "Una iniciativa con propósito público",
+    "content": "Base de los Datos es una ONG que mantiene la plataforma abierta con ingresos de servicios en ingeniería, análisis y capacitación. Al contratar a BD, impulsas nuestro impacto."
+  },
+  "tables_stats": {
+    "tables": "tablas tratadas",
+    "tables_updates": "% de ellas se actualizan cada mes",
+    "size_all_tables": "de datos organizados",
+    "row_all_tables": "de filas en todas las tablas"
+  }
 }

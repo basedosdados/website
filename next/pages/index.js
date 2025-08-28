@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import Hero from "../components/organisms/Home/Hero";
 import { BePartner } from "../components/organisms/Home/BePartner";
 import SocioeconomicData from '../components/organisms/Home/SocioeconomicData';
+import TablesStats from '../components/organisms/Home/TablesStats';
 import MentionSection from '../components/molecules/MentionSection';
 import ProductivityDataAnalysis from '../components/organisms/Home/ProductivityDataAnalysis';
 import PresentationSolutions from '../components/organisms/Home/PresentationSolutions';
@@ -27,6 +28,7 @@ export default function Home({ locale }) {
       <Hero locale={locale} />
       <BePartner />
       <SocioeconomicData />
+      <TablesStats />
       <MentionSection
         content={t("mentions.home1Content")}
         author={t("mentions.home1Author")}

@@ -1,17 +1,17 @@
 {
     "search_placeholder": "Encuentra los datos que necesitas",
-    "search_placeholder_mobile": "Encuentra los datos",
+    "search_placeholder_mobile": "Encuentra datos",
     "popular_terms": "Términos populares:",
     "search_by_theme": "Buscar por tema",
-    "noDatasetsFound": ["Ningún conjunto con todos los temas seleccionados fue encontrado.","Intente desmarcar alguno de los temas."],
+    "noDatasetsFound": ["No se encontró ningún conjunto con todos los temas seleccionados.","Intenta desmarcar alguno de los temas."],
     "tooltip": {
         "helpAndResources": "Ayuda y recursos",
         "faq": "Preguntas frecuentes",
         "documentation": "Documentación",
-        "youtubeVideos": "Videos de YouTube",
+        "youtubeVideos": "Videos en YouTube",
         "installPackages": "¿Cómo instalar nuestros paquetes?",
-        "howToCite": "¿Cómo citar nuestro trabajo?",
-        "resetTour": "Reiniciar el recorrido",
+        "howToCite": "¿Cómo citar a BD?",
+        "resetTour": "Reiniciar el tour",
         "whatAreDirectories": "¿Qué son los directorios?",
         "discordCommunity": "Habla con nuestra comunidad en Discord",
         "contactUs": "Contáctanos"
@@ -22,8 +22,8 @@
         "termsOfUse": "Términos de uso",
         "privacyPolicy": "Política de privacidad",
         "contact": "Contacto",
-        "faq": "Preguntas frecuentes",
-        "newsletter": "Boletín",
+        "faq": "FAQ",
+        "newsletter": "Newsletter",
         "careers": "Carreras",
         "supportProject": "Apoya el proyecto",
         "products": {
@@ -39,7 +39,7 @@
             "diagnosticoDeMaturidade": "Diagnóstico de Madurez",
             "arquiteturaDeDados": "Arquitectura de Datos",
             "portalDeDados": "Portal de Datos",
-            "painelGerencial": "Panel Gerencial",
+            "painelGerencial": "Panel de Gestión",
             "chatbot": "Chatbot",
             "formacao": "Formación"
         },
@@ -47,30 +47,27 @@
             "title": "RECURSOS",
             "documentation": "Documentación",
             "blog": "Blog",
-            "youtubeVideos": "Vídeos",
+            "youtubeVideos": "Videos",
             "faq": "Preguntas frecuentes"
         },
         "institutional": {
             "title": "INSTITUCIONAL",
             "aboutUs": "Quiénes somos",
             "transparency": "Transparencia",
-            "newsletter": "Boletín",
+            "newsletter": "Newsletter",
             "careers": "Carreras",
             "termsAndPrivacy": "Términos y Privacidad",
             "contact": "Contacto",
             "supportProject": "Apoya el proyecto"
         }
     },
-    "partners": {
-        "partnershipsWith": "Asociaciones con"
-    },
     "error": {
         "ops": "Ooops...",
-        "notFoundPage": "Desafortunadamente no encontramos esta página.",
-        "system": "Desafortunadamente ocurrió un error.",
-        "searchNewBases": "Navega por el menú arriba o busca los datos que necesitas en la barra de búsqueda.",
-        "verifyStatusSystem": "Verifica el estado de nuestra plataforma e intenta acceder nuevamente más tarde.",
-        "searchData": "Busca datos",
-        "checkStatus": "Verifica el estado"
+        "notFoundPage": "Lamentablemente no encontramos esta página.",
+        "system": "Lamentablemente ha ocurrido un error.",
+        "searchNewBases": "Navega por el menú de arriba o busca los datos que necesitas en la barra de búsqueda.",
+        "verifyStatusSystem": "Verifica el estado de nuestra plataforma e intenta acceder de nuevo más tarde.",
+        "searchData": "Buscar datos",
+        "checkStatus": "Comprobar estado"
     }
 }

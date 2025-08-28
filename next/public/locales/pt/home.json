@@ -23,5 +23,11 @@
   "section_public_purpose": {
     "title": "Uma iniciativa com propósito público",
     "content": "A Base dos Dados é uma ONG que mantém a plataforma aberta com receitas de serviços em engenharia, análise e capacitação. Ao contratar a BD, você impulsiona nosso impacto."
+  },
+  "tables_stats": {
+    "tables": "tabelas tratadas",
+    "tables_updates": "% delas são atualizadas todos os meses",
+    "size_all_tables": "de dados organizados",
+    "row_all_tables": "de linhas entre todas as tabelas"
   }
 }

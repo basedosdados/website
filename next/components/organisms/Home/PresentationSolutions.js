@@ -8,17 +8,11 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { useTranslation } from 'next-i18next';
-import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import TitleText from "../../atoms/Text/TitleText";
 import BodyText from "../../atoms/Text/BodyText";
-import CrossIcon from "../../../public/img/icons/crossIcon";
 
 export default function PresentationSolutions() {
-  const { t } = useTranslation("home");
   const [state, setState] = useState(0);
-
-  console.log(state)
 
   const data = [
     {
@@ -46,70 +40,90 @@ export default function PresentationSolutions() {
   return (
     <Stack
       width="100%"
-      maxWidth="1440px"
-      justifyContent="space-between"
-      gap="24px"
-      flexDirection="row"
       spacing={0}
       margin="0 auto"
+      boxSizing="border-box"
+      paddingX="24px"
     >
       <Stack
-        flex={1}
-        maxWidth="624px"
-        paddingY="40px"
+        width="100%"
+        maxWidth="1440px"
+        justifyContent="space-between"
+        gap="24px"
+        flexDirection={{base: "column", md: "column", lg: "row"}}
+        spacing={0}
+        margin="0 auto"
       >
-        <Accordion
-          index={state}
-          onChange={(e) => setState(e)}
+        <Stack
+          flex={1}
+          maxWidth={{md:"100%", lg:"624px"}}
+          padding={{md:"30px 0 40px", lg:"30px 24px 40px 0"}}
         >
-          {data.map((elm, index) => 
-            <AccordionItem key={index}>
-              <AccordionButton>
-                <TitleText
-                  display="flex"
-                  width="100%"
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  color={index === state ? "#252A32" : "#71757A"}
+          <Accordion
+            index={state}
+            onChange={(e) => setState(e)}
+          >
+            {data.map((elm, index) => 
+              <AccordionItem
+                key={index}
+                borderTopWidth="0"
+                borderBottomWidth="1px"
+                padding="10px 0"
+              >
+                <AccordionButton
+                  padding={index === state ? "24px 0 0" : "24px 0"}
                   _hover={{
-                    color: "#252A32"
+                    backgroundColor: "transparent"
                   }}
                 >
-                  {elm.title}
-                <Text
-                  display={state === index ? "none" : "flex"}
-                  fontSize="26px"
-                  fontWeight="500"
-                  color="#2B8C4D"
-                >+</Text>
-                </TitleText>
-              </AccordionButton>
-              <AccordionPanel>
-                <BodyText typography="large" color="#464A51">
-                  {elm.content}
-                </BodyText>
-              </AccordionPanel>
-            </AccordionItem>
-          )}
-        </Accordion>
-      </Stack>
-      <Stack
-        flex={1}
-        width="100%"
-        height="100%"
-        maxWidth="700px"
-        maxHeight="500px"
-        borderRadius="24px"
-        overflow="hidden"
-      >
-        <Image
+                  <TitleText
+                    display="flex"
+                    width="100%"
+                    flexDirection="row"
+                    justifyContent="space-between"
+                    color={index === state ? "#252A32" : "#71757A"}
+                    _hover={{
+                      color: "#252A32"
+                    }}
+                  >
+                    {elm.title}
+                  <Text
+                    display={state === index ? "none" : "flex"}
+                    fontSize="32px"
+                    fontWeight="300"
+                    color="#2B8C4D"
+                  >+</Text>
+                  </TitleText>
+                </AccordionButton>
+                <AccordionPanel
+                  padding="0 0 24px"
+                >
+                  <BodyText typography="large" color="#464A51">
+                    {elm.content}
+                  </BodyText>
+                </AccordionPanel>
+              </AccordionItem>
+            )}
+          </Accordion>
+        </Stack>
+        <Stack
+          flex={1}
           width="100%"
           height="100%"
-          objectFit="contain"
-          loading="lazy"
-          alt={data[state].img || ""}
-          src={`https://storage.googleapis.com/basedosdados-website/images/${data[state].img}.png` || ""}
-        />
+          maxWidth="700px"
+          maxHeight="500px"
+          borderRadius="24px"
+          overflow="hidden"
+        >
+          <Image
+            width="100%"
+            height="100%"
+            objectFit="contain"
+            loading="lazy"
+            alt={data[state].img || ""}
+            src={`https://storage.googleapis.com/basedosdados-website/images/${data[state].img}.png` || ""}
+          />
+        </Stack>
       </Stack>
     </Stack>
   )
