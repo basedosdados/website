@@ -24,23 +24,23 @@ function formatBytes(bytes, decimals = 2) {
   return parseFloat((bytes / Math. pow(k, i)).toFixed(dm)) + sizes[i];                                         
 }
 
-function formatNumber(num) {
-  if (num >= 1000000000) {
-    return (num / 1000000000).toFixed(1).replace(/\.0$/, '') + ' bilhões';
-  }
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1).replace(/\.0$/, '') + ' milhões';
-  }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1).replace(/\.0$/, '') + ' mil';
-  }
-  return num;
-}
-
 export default function TablesStats() {
   const { t } = useTranslation("home");
   const [data, setData] = useState({});
   const { ref, inView } = useInView({ triggerOnce: true });
+
+  function formatNumber(num) {
+    if (num >= 1000000000) {
+      return (num / 1000000000).toFixed(1).replace(/\.0$/, "") + " " + t("tables_stats.number_formats.billion");
+    }
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1).replace(/\.0$/, "") + " " + t("tables_stats.number_formats.million");
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1).replace(/\.0$/, "") + " " + t("tables_stats.number_formats.thousand");
+    }
+    return num;
+  }
 
   useEffect(() => {
     async function fetchData() {

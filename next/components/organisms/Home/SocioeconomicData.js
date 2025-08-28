@@ -50,8 +50,8 @@ export default function SocioeconomicData() {
             key={d.alt}
             alt={d.alt}
             src={d.src}
-            width="100px"
-            height="100px"
+            width={{base: "75px", md: "100px"}}
+            height={{base: "75px", md: "100px"}}
             objectFit="contain"
             loading="lazy"
           />

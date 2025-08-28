@@ -28,6 +28,29 @@
     "tables": "tablas tratadas",
     "tables_updates": "% de ellas se actualizan cada mes",
     "size_all_tables": "de datos organizados",
-    "row_all_tables": "de filas en todas las tablas"
-  }
+    "row_all_tables": "de filas en todas las tablas",
+    "number_formats": {
+        "billion": "mil millones",
+        "million": "millones",
+        "thousand": "mil"
+    }
+  },
+  "presentation_solutions": [
+    {
+      "title": "Encuentra datos rápidamente",
+      "content": "Busca directamente o aplica filtros — como tema, organización y más — para encontrar los datos adecuados para tu análisis."
+    },
+    {
+      "title": "Trabaja en el entorno que ya conoces",
+      "content": "Accede a las tablas tratadas de nuestra plataforma de datos a través de BigQuery, o usando los paquetes de Python y R."
+    },
+    {
+      "title": "Automatiza la traducción de códigos institucionales",
+      "content": "Ahorra tiempo con la traducción automatizada de códigos, como los identificadores de 7 dígitos del IBGE para los municipios brasileños."
+    },
+    {
+      "title": "Construye análisis con el apoyo de las guías de uso",
+      "content": "Consulta detalles sobre series históricas, posibilidades de cruce, cambios en la recolección y otra información relevante."
+    }
+  ]
 }

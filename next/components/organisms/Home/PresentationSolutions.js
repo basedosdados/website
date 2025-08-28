@@ -8,34 +8,22 @@ import {
   Text
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTranslation } from 'next-i18next';
+import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import TitleText from "../../atoms/Text/TitleText";
 import BodyText from "../../atoms/Text/BodyText";
 
 export default function PresentationSolutions() {
+  const { t } = useTranslation("home");
   const [state, setState] = useState(0);
 
-  const data = [
-    {
-      title: "Encontre os dados rapidamente",
-      content: "Pesquise diretamente ou aplique filtros — como tema, organização e mais — para encontrar os dados certos para sua análise.",
-      img: "image_filtros"
-    },
-    {
-      title: "Trabalhe no ambiente que você já conhece",
-      content: "Acesse as tabelas tratadas da nossa plataforma de dados via BigQuery, ou usando os pacotes em Python e R.",
-      img: "image_linguagens"
-    },
-    {
-      title: "Automatize a tradução de códigos institucionais",
-      content: "Poupe tempo com a tradução automatizada de códigos, como os identificadores de 7 dígitos do IBGE para municípios brasileiros.",
-      img: "image_traducao_de_codigos_institucionais"
-    },
-    {
-      title: "Construa análises com apoio dos guias de uso",
-      content: "Consulte detalhes sobre séries históricas, possibilidades de cruzamento, mudanças na coleta e outras informações relevantes.",
-      img: "image_guia_de_uso"
-    }
-  ]
+  const data = t("presentation_solutions", { returnObjects: true });
+  const images = [
+    "image_filtros",
+    "image_linguagens",
+    "image_traducao_de_codigos_institucionais",
+    "image_guia_de_uso",
+  ];
 
   return (
     <Stack
@@ -50,20 +38,21 @@ export default function PresentationSolutions() {
         maxWidth="1440px"
         justifyContent="space-between"
         gap="24px"
-        flexDirection={{base: "column", md: "column", lg: "row"}}
+        flexDirection={{ base: "column-reverse", md: "column-reverse", lg: "row" }}
         spacing={0}
         margin="0 auto"
       >
         <Stack
           flex={1}
-          maxWidth={{md:"100%", lg:"624px"}}
-          padding={{md:"30px 0 40px", lg:"30px 24px 40px 0"}}
+          maxWidth={{ md: "100%", lg: "624px" }}
+          padding={{ md: "30px 0 40px", lg: "30px 24px 40px 0" }}
         >
           <Accordion
             index={state}
             onChange={(e) => setState(e)}
+            allowToggle
           >
-            {data.map((elm, index) => 
+            {data.map((elm, index) => (
               <AccordionItem
                 key={index}
                 borderTopWidth="0"
@@ -73,37 +62,39 @@ export default function PresentationSolutions() {
                 <AccordionButton
                   padding={index === state ? "24px 0 0" : "24px 0"}
                   _hover={{
-                    backgroundColor: "transparent"
+                    backgroundColor: "transparent",
                   }}
                 >
                   <TitleText
+                    typography={isMobileMod() ? "small" : "medium"}
                     display="flex"
                     width="100%"
                     flexDirection="row"
                     justifyContent="space-between"
+                    textAlign="left"
                     color={index === state ? "#252A32" : "#71757A"}
                     _hover={{
-                      color: "#252A32"
+                      color: "#252A32",
                     }}
                   >
                     {elm.title}
-                  <Text
-                    display={state === index ? "none" : "flex"}
-                    fontSize="32px"
-                    fontWeight="300"
-                    color="#2B8C4D"
-                  >+</Text>
+                    <Text
+                      display={state === index ? "none" : "flex"}
+                      fontSize="32px"
+                      fontWeight="300"
+                      color="#2B8C4D"
+                    >
+                      +
+                    </Text>
                   </TitleText>
                 </AccordionButton>
-                <AccordionPanel
-                  padding="0 0 24px"
-                >
-                  <BodyText typography="large" color="#464A51">
+                <AccordionPanel padding="0 0 24px">
+                  <BodyText typography={isMobileMod() ? "medium" : "large"} color="#464A51">
                     {elm.content}
                   </BodyText>
                 </AccordionPanel>
               </AccordionItem>
-            )}
+            ))}
           </Accordion>
         </Stack>
         <Stack
@@ -120,8 +111,11 @@ export default function PresentationSolutions() {
             height="100%"
             objectFit="contain"
             loading="lazy"
-            alt={data[state].img || ""}
-            src={`https://storage.googleapis.com/basedosdados-website/images/${data[state].img}.png` || ""}
+            alt={images[state] || ""}
+            src={
+              `https://storage.googleapis.com/basedosdados-website/images/${images[state]}.png` ||
+              ""
+            }
           />
         </Stack>
       </Stack>
