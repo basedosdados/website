@@ -79,36 +79,6 @@ export default function TablesStats() {
           <Display typography="small">
             <CountUp
               start={inView ? 0 : undefined}
-              end={data?.datasets_with_treated_tables || 0}
-              duration={4}
-              separator="."
-            /> {t("tables_stats.tables")}
-          </Display>
-          <LabelText
-            typography="x-large"
-            color="#464A51"
-            fontWeight="400"
-          >
-            <CountUp
-              start={inView ? 0 : undefined}
-              end={Math.round(data?.percentage_updated_last_30_days || 0)}
-              duration={4}
-            />{t("tables_stats.tables_updates")}
-          </LabelText>
-        </Stack>
-        <Stack
-          flex={1}
-          padding={{base: "40px 24px", md: "40px 120px"}}
-          gap="16px"
-          alignItems="center"
-          spacing={0}
-          borderLeft={"1px solid #DEDFE0"}
-          borderLeftWidth={{base: "0", md: "1px"}}
-          borderTopWidth={{base: "1px", md:"0"}}
-        >
-          <Display typography="small">
-            <CountUp
-              start={inView ? 0 : undefined}
               end={data?.total_size_bytes || 0}
               duration={4}
               formattingFn={(value) => formatBytes(value, 0)}
@@ -125,6 +95,36 @@ export default function TablesStats() {
               duration={4}
               formattingFn={(value) => formatNumber(value)}
             /> {t("tables_stats.row_all_tables")}
+          </LabelText>
+        </Stack>
+        <Stack
+          flex={1}
+          padding={{base: "40px 24px", md: "40px 120px"}}
+          gap="16px"
+          alignItems="center"
+          spacing={0}
+          borderLeft={"1px solid #DEDFE0"}
+          borderLeftWidth={{base: "0", md: "1px"}}
+          borderTopWidth={{base: "1px", md:"0"}}
+        >
+          <Display typography="small">
+            <CountUp
+              start={inView ? 0 : undefined}
+              end={data?.total_treated_tables || 0}
+              duration={4}
+              separator="."
+            /> {t("tables_stats.tables")}
+          </Display>
+          <LabelText
+            typography="x-large"
+            color="#464A51"
+            fontWeight="400"
+          >
+            <CountUp
+              start={inView ? 0 : undefined}
+              end={data?.updated_last_30_days || 0}
+              duration={4}
+            /> {t("tables_stats.tables_updates")}
           </LabelText>
         </Stack>
       </Stack>
