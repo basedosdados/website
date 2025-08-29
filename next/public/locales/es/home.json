@@ -26,7 +26,7 @@
   },
   "tables_stats": {
     "tables": "tablas tratadas",
-    "tables_updates": "% de ellas se actualizan cada mes",
+    "tables_updates": "de ellas se actualizan cada mes",
     "size_all_tables": "de datos organizados",
     "row_all_tables": "de filas en todas las tablas",
     "number_formats": {
