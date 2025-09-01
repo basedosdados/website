@@ -916,13 +916,13 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('resources')]: [
         {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
+        {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
         {name: "Blog", href: "/blog"},
         {name: [t('faq')], href: "/faq"}
       ],
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
         {name: [t('transparency')], href: "/transparency"},
-        {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
         {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
       ],
       [t('contact')]: "/contact",
