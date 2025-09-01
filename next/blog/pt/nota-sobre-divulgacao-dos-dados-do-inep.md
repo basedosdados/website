@@ -9,7 +9,7 @@ authors:
   - name: Base dos Dados
     role: Equipe Base dos Dados
 categories: [institucional]
-thumbnail: /blog/nota-sobre-divulgacao-dos-dados-do-inep/image_0.png
+thumbnail: /blog/nota-sobre-divulgacao-dos-dados-do-inep/thumb_institucional.png
 medum_slug: https://medium.com/@basedosdados/nota-sobre-divulga%C3%A7%C3%A3o-dos-dados-do-inep-9168291dbca0
 published: true
 order: 1

@@ -326,22 +326,28 @@ export default function Transparency({ pages }) {
       </LinkReports>
 
       <LinkReports
+        url="https://storage.googleapis.com/basedosdados-website/pdf/BD%20Relat%C3%B3rio%20de%20Atividades%202024.pdf"
+      >
+          {t('DBReport')} 2024
+      </LinkReports>
+
+      <LinkReports
         url="https://drive.google.com/file/d/1OvqJWAg-m3IRt3NAYZB20uxemNqXJ_MO/view?usp=drive_link"
       >
-          {t('DBReport2023')}
+          {t('DBReport')} 2023
       </LinkReports>
 
       <LinkReports
         url="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2022.pdf"
       >
-          {t('DBReport2022')}
+          {t('DBReport')} 2022
       </LinkReports>
 
       <LinkReports
         paddingBottom={{ base: "80px", lg: "104px" }}
         url="https://storage.googleapis.com/basedosdados-website/pdf/bd_relatorio_anual_2021.pdf"
       >
-          {t('DBReport2021')}
+          {t('DBReport')} 2021
       </LinkReports>
 
       <Stack
