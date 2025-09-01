@@ -50,7 +50,6 @@ export default function PresentationSolutions() {
           <Accordion
             index={state}
             onChange={(e) => setState(e)}
-            allowToggle
           >
             {data.map((elm, index) => (
               <AccordionItem
