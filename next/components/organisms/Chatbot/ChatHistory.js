@@ -5,7 +5,7 @@ import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 
-export default function ChatHistory({ selectedThreadId, onThreadSelect, onThreadUpdate }) {
+export default function ChatHistory({ selectedThreadId, onThreadSelect, onThreadUpdate, onFunctions }) {
   const { t } = useTranslation('chatbot');
   const [threads, setThreads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,12 +54,39 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
     });
   }, []);
 
+  // Function to add a new thread to the local state
+  const addNewThread = useCallback((threadId, title) => {
+    // Ensure both parameters are valid
+    if (!threadId || !title) {
+      console.error('Invalid parameters for addNewThread:', { threadId, title });
+      return;
+    }
+    
+    const newThread = {
+      id: threadId,
+      title: title,
+      created_at: new Date().toISOString(),
+      last_activity: new Date().toISOString()
+    };
+    setThreads(prev => [newThread, ...prev]);
+  }, []);
+
   // Expose the update function to parent
   useEffect(() => {
     if (onThreadUpdate) {
       onThreadUpdate(updateThreadActivity);
     }
   }, [onThreadUpdate, updateThreadActivity]);
+
+  // Expose the functions to parent
+  useEffect(() => {
+    if (onFunctions) {
+      onFunctions({
+        refresh: loadThreads,
+        addNewThread: addNewThread
+      });
+    }
+  }, [onFunctions, addNewThread]);
 
   const deleteThread = async (threadId) => {
     try {
@@ -107,6 +134,10 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
   };
 
   const truncateTitle = (title, maxLength = 30) => {
+    // Ensure title is a valid string
+    if (!title || typeof title !== 'string') {
+      return 'New Chat';
+    }
     return title.length > maxLength 
       ? title.substring(0, maxLength) + '...' 
       : title;
@@ -205,6 +236,12 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
 }
 
 function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, truncateTitle }) {
+  // Ensure thread object has valid properties
+  if (!thread || !thread.id) {
+    console.error('Invalid thread object:', thread);
+    return null;
+  }
+  
   return (
     <Box
       padding={3}
@@ -227,7 +264,7 @@ function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, trunca
               color="#252A32"
               noOfLines={2}
             >
-              {truncateTitle(thread.title)}
+              {truncateTitle(thread.title || 'Untitled')}
             </BodyText>
             <LabelText 
               typography="x-small" 

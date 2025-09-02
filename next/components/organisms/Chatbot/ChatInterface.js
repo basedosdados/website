@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "next-i18next";
 import { Box, VStack, HStack, Input, Button, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import MessageBubble from "./MessageBubble";
@@ -12,47 +12,18 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState(null);
   const [currentStreamingMessage, setCurrentStreamingMessage] = useState(null);
-  const [loadedThreadId, setLoadedThreadId] = useState(null); // Track which thread's messages are loaded
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
 
-  // Load messages when threadId changes (but not during streaming)
-  useEffect(() => {
-    if (threadId && threadId !== loadedThreadId) {
-      loadMessages();
-    } else if (!threadId) {
-      setMessages([]);
-      setLoadedThreadId(null);
-    }
-  }, [threadId]); // Only reload when threadId actually changes
-
-  // Auto-scroll to bottom when messages change
-  const scrollToBottom = () => {
-    // Use requestAnimationFrame to ensure DOM is updated before scrolling
-    requestAnimationFrame(() => {
-      if (messagesContainerRef.current) {
-        // Scroll the messages container to the bottom with smooth behavior
-        messagesContainerRef.current.scrollTo({
-          top: messagesContainerRef.current.scrollHeight,
-          behavior: 'smooth'
-        });
-      }
-    });
-  };
-
-  useEffect(() => {
-    // Only scroll if there are messages to avoid scrolling on initial load
-    if (messages.length > 0 || currentStreamingMessage) {
-      scrollToBottom();
-    }
-  }, [messages, currentStreamingMessage]);
-
-  const loadMessages = async () => {
+  // Load messages only when switching to a different thread
+  const loadMessages = useCallback(async (targetThreadId) => {
+    if (!targetThreadId) return;
+    
     try {
       setIsLoading(true);
       setError(null);
-      const response = await fetch(`/api/chatbot/messages?thread_id=${threadId}&order_by=created_at`);
+      const response = await fetch(`/api/chatbot/messages?thread_id=${targetThreadId}&order_by=created_at`);
       
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -61,14 +32,53 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
 
       const data = await response.json();
       setMessages(data);
-      setLoadedThreadId(threadId); // Mark this thread as loaded
     } catch (error) {
       console.error('Error loading messages:', error);
       setError(`Erro ao carregar mensagens: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // Load messages when threadId changes (but not during streaming)
+  useEffect(() => {
+    if (threadId && !isStreaming) {
+      loadMessages(threadId);
+    } else if (!threadId) {
+      setMessages([]);
+    }
+  }, [threadId, isStreaming, loadMessages]);
+
+  // Always keep focus on the input box
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        const input = inputRef.current;
+        const length = input.value.length;
+        input.setSelectionRange(length, length);
+      }
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Auto-scroll to bottom when messages change
+  const scrollToBottom = useCallback(() => {
+    requestAnimationFrame(() => {
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTo({
+          top: messagesContainerRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0 || currentStreamingMessage) {
+      scrollToBottom();
+    }
+  }, [messages, currentStreamingMessage, scrollToBottom]);
 
   const createNewThread = async (title) => {
     try {
@@ -99,28 +109,30 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
     setInputMessage("");
     setError(null);
 
-    // Add user message immediately for better UX
+    // Add user message immediately
     const userMessage = {
       id: Date.now().toString() + '_user_temp',
       user_message: messageContent,
       assistant_message: null,
       created_at: new Date().toISOString(),
-      isUser: true, // This will render as user-only message
+      isUser: true,
     };
 
     setMessages(prev => [...prev, userMessage]);
 
     let currentThreadId = threadId;
     let isNewThread = false;
+    let threadTitle = null;
     
     try {
       setIsStreaming(true);
 
       // Create new thread if none exists
       if (!currentThreadId) {
-        const threadTitle = messageContent.length > 50 
-          ? messageContent.substring(0, 50)
-          : messageContent;
+        threadTitle = messageContent.length > 50 
+          ? messageContent.substring(0, 50) + '...'
+          : messageContent || 'New Chat';
+        
         currentThreadId = await createNewThread(threadTitle);
         isNewThread = true;
       }
@@ -148,14 +160,13 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
         
         const errorMessage = {
           id: Date.now().toString() + '_error',
-          user_message: messageContent, // Include user message in error pair
+          user_message: messageContent,
           assistant_message: null,
           error_message: errorData.message || errorText,
           created_at: new Date().toISOString(),
-          isUser: false, // This will render as message pair
+          isUser: false,
         };
         
-        // Replace the temporary user message with the error message pair
         setMessages(prev => {
           const filtered = prev.filter(msg => msg.id !== userMessage.id);
           return [...filtered, errorMessage];
@@ -164,13 +175,10 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
       }
 
       // Handle streaming response
-      console.log('ChatInterface - Response body type:', typeof response.body);
-      console.log('ChatInterface - Response body:', response.body);
-      
       let assistantMessage = {
         id: Date.now().toString() + '_assistant',
-        user_message: null,  // This is an assistant message, not user message
-        assistant_message: null,
+        user_message: null,
+        assistant_message: 'Processing...',
         error_message: null,
         created_at: new Date().toISOString(),
         isUser: false,
@@ -180,12 +188,10 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
 
       setCurrentStreamingMessage(assistantMessage);
 
-      let hasReceivedData = false;
       let responseText = '';
 
       // Check if response.body is a ReadableStream
       if (response.body && typeof response.body.getReader === 'function') {
-        console.log('ChatInterface - Using ReadableStream');
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
 
@@ -196,99 +202,84 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
           
           const chunk = decoder.decode(value);
           responseText += chunk;
-          console.log('ChatInterface - Received chunk:', chunk);
           
           const lines = chunk.split('\n');
           
           for (const line of lines) {
             if (line.startsWith('data: ')) {
               const dataStr = line.slice(6);
+              
               if (dataStr === '[DONE]') {
                 setCurrentStreamingMessage(null);
-                setMessages(prev => [...prev, assistantMessage]);
-                
-                // Notify parent about new thread only after successful message
-                if (isNewThread) {
-                  onNewThread(currentThreadId);
-                }
-                return;
+                break;
               }
               
               try {
                 const data = JSON.parse(dataStr);
-                console.log('ChatInterface - Parsed data:', data);
-                hasReceivedData = true;
                 
                 if (data.status === "running" && data.data) {
-                  // Backend double-encodes step data as JSON string
+                  // Parse step data
                   let stepData;
                   if (typeof data.data === 'string') {
                     try {
                       stepData = JSON.parse(data.data);
                     } catch (e) {
-                      console.log('ChatInterface - Error parsing step data:', e);
                       stepData = { label: 'Processing...', content: data.data };
                     }
                   } else {
                     stepData = data.data;
                   }
                   
-                  // Accumulate steps instead of overwriting
-                  const currentSteps = assistantMessage.steps || [];
-                  assistantMessage = {
-                    ...assistantMessage,
-                    steps: [...currentSteps, stepData]
-                  };
-                  setCurrentStreamingMessage(assistantMessage);
+                  // Update streaming message with steps and content
+                  setCurrentStreamingMessage(prev => ({
+                    ...prev,
+                    steps: [...(prev?.steps || []), stepData],
+                    // If the step has content, use it as the assistant message
+                    assistant_message: stepData.content || prev?.assistant_message || 'Processing...'
+                  }));
                   
                 } else if (data.status === "complete" && data.data) {
                   // Final response - create complete message pair
                   const completeMsgPair = {
                     id: data.data.id || assistantMessage.id,
-                    user_message: messageContent, // Include user message in the pair
+                    user_message: messageContent,
                     assistant_message: data.data.assistant_message,
                     error_message: data.data.error_message,
                     generated_queries: data.data.generated_queries || [],
                     steps: assistantMessage.steps || [],
                     created_at: new Date().toISOString(),
-                    isUser: false, // This will render as message pair
+                    isUser: false,
                   };
                   
                   setCurrentStreamingMessage(null);
-                  // Replace the temporary user message with the complete message pair
                   setMessages(prev => {
-                    // Remove the temporary user message and add the complete pair
                     const filtered = prev.filter(msg => msg.id !== userMessage.id);
                     return [...filtered, completeMsgPair];
                   });
                   
-                  // Update thread activity timestamp
+                  // Update thread activity
                   if (onThreadActivity && currentThreadId) {
                     onThreadActivity(currentThreadId);
                   }
                   
-                  // Notify parent about new thread only after successful message
-                  if (isNewThread) {
-                    onNewThread(currentThreadId);
+                  // Notify about new thread
+                  if (isNewThread && onNewThread) {
+                    onNewThread(currentThreadId, threadTitle);
                   }
+                  
                   return;
                 }
               } catch (e) {
                 console.log('ChatInterface - JSON parse error for line:', line, e);
-                // Ignore parsing errors for incomplete chunks
               }
             }
           }
         }
       } else {
-        console.log('ChatInterface - Response is not a ReadableStream, reading as text');
-        // Handle as regular response
+        // Handle non-streaming response
         const responseText = await response.text();
-        console.log('ChatInterface - Full response text:', responseText);
         
-        // Try to parse as JSON - handle backend's streaming format in non-streaming response
         try {
-          // Backend might send multiple JSON objects separated by \n\n
           const jsonLines = responseText.split('\n\n').filter(line => line.trim());
           let finalData = null;
           let allSteps = [];
@@ -297,7 +288,6 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
             try {
               const data = JSON.parse(line);
               if (data.status === "running" && data.data) {
-                // Parse step data (might be double-encoded)
                 let stepData;
                 if (typeof data.data === 'string') {
                   try {
@@ -320,30 +310,31 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
           if (finalData) {
             const finalMessage = {
               id: finalData.id || assistantMessage.id,
-              user_message: messageContent, // Include user message in the pair
+              user_message: messageContent,
               assistant_message: finalData.assistant_message,
               error_message: finalData.error_message,
               generated_queries: finalData.generated_queries || [],
               steps: allSteps,
               created_at: new Date().toISOString(),
-              isUser: false, // This will render as message pair
+              isUser: false,
             };
+            
             setCurrentStreamingMessage(null);
-            // Replace the temporary user message with the complete message pair
             setMessages(prev => {
               const filtered = prev.filter(msg => msg.id !== userMessage.id);
               return [...filtered, finalMessage];
             });
             
-            // Update thread activity timestamp
+            // Update thread activity
             if (onThreadActivity && currentThreadId) {
               onThreadActivity(currentThreadId);
             }
             
-            // Notify parent about new thread only after successful message
-            if (isNewThread) {
-              onNewThread(currentThreadId);
+            // Notify about new thread
+            if (isNewThread && onNewThread) {
+              onNewThread(currentThreadId, threadTitle);
             }
+            
             return;
           }
         } catch (e) {
@@ -353,82 +344,22 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
         // If we get here, treat as error
         const errorMessage = {
           id: Date.now().toString() + '_parse_error',
-          user_message: messageContent, // Include user message in error pair
+          user_message: messageContent,
           assistant_message: null,
           error_message: responseText || 'Unknown response format',
           created_at: new Date().toISOString(),
-          isUser: false, // This will render as message pair
+          isUser: false,
           generated_queries: [],
           steps: [],
         };
+        
         setCurrentStreamingMessage(null);
-        // Replace the temporary user message with the error message pair
         setMessages(prev => {
           const filtered = prev.filter(msg => msg.id !== userMessage.id);
           return [...filtered, errorMessage];
         });
         
-        // Notify parent about new thread even on error
-        if (isNewThread) {
-          onNewThread(currentThreadId);
-        }
         return;
-      }
-
-      // If we didn't receive any proper streaming data, check if we got an error message
-      if (!hasReceivedData && responseText.trim()) {
-        console.log('ChatInterface - No streaming data received, checking for error message:', responseText);
-        
-        // Try to parse as JSON first
-        let errorMessage;
-        try {
-          const parsedData = JSON.parse(responseText.trim());
-          if (parsedData.error || parsedData.message) {
-            // It's a structured error response
-            errorMessage = {
-              ...assistantMessage,
-              assistant_message: null,
-              error_message: parsedData.message || parsedData.error,
-              created_at: new Date().toISOString(),
-            };
-          } else if (parsedData.assistant_message) {
-            // It's a complete message response (non-streaming)
-            const finalMessage = {
-              ...assistantMessage,
-              ...parsedData,
-              created_at: new Date().toISOString(),
-            };
-            setCurrentStreamingMessage(null);
-            setMessages(prev => [...prev, finalMessage]);
-            
-            // Notify parent about new thread only after successful message
-            if (isNewThread) {
-              onNewThread(currentThreadId);
-            }
-            
-            return;
-          }
-        } catch (e) {
-          // Not JSON, treat as plain text error
-          errorMessage = {
-            ...assistantMessage,
-            assistant_message: null,
-            error_message: responseText.trim(),
-            created_at: new Date().toISOString(),
-          };
-        }
-        
-        if (errorMessage) {
-          setCurrentStreamingMessage(null);
-          setMessages(prev => [...prev, errorMessage]);
-          
-          // Notify parent about new thread even on error
-          if (isNewThread) {
-            onNewThread(currentThreadId);
-          }
-          
-          return;
-        }
       }
 
     } catch (error) {
@@ -551,6 +482,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
               borderColor: "#3182CE",
               boxShadow: "0 0 0 1px #3182CE"
             }}
+            autoFocus={true}
           />
           <Button
             onClick={sendMessage}
@@ -568,6 +500,16 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
             {isStreaming ? <Spinner size="sm" /> : t('send')}
           </Button>
         </HStack>
+        
+        {/* Disclaimer Text */}
+        <VStack spacing={2} mt={3} align="start">
+          <Text fontSize="xs" color="#666666" lineHeight="1.4">
+            {t('disclaimer.warning')}
+          </Text>
+          <Text fontSize="xs" color="#666666" lineHeight="1.4">
+            {t('disclaimer.privacy')}
+          </Text>
+        </VStack>
       </Box>
     </Box>
   );
