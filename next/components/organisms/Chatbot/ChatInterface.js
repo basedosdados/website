@@ -474,10 +474,6 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            onBlur={() => {
-              // Re-focus immediately when input loses focus
-              setTimeout(() => inputRef.current?.focus(), 0);
-            }}
             placeholder={t('input_placeholder')}
             disabled={isStreaming}
             backgroundColor="white"
@@ -486,7 +482,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
               borderColor: "#3182CE",
               boxShadow: "0 0 0 1px #3182CE"
             }}
-            autoFocus={true}
+            autoFocus={false}
           />
           <Button
             onClick={sendMessage}
