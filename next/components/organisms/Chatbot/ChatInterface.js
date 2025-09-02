@@ -482,7 +482,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
               borderColor: "#3182CE",
               boxShadow: "0 0 0 1px #3182CE"
             }}
-            autoFocus={false}
+            autoFocus={true}
           />
           <Button
             onClick={sendMessage}
