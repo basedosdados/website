@@ -49,7 +49,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
     }
   }, [threadId, isStreaming, loadMessages]);
 
-  // Auto-focus input when component mounts, when starting a new chat, or when switching to an existing thread
+  // Always keep focus on the input box
   useEffect(() => {
     const timer = setTimeout(() => {
       if (inputRef.current) {
@@ -60,7 +60,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
       }
     }, 100);
     return () => clearTimeout(timer);
-  }, [threadId, messages.length]);
+  }, []);
 
   // Auto-scroll to bottom when messages change
   const scrollToBottom = useCallback(() => {
@@ -474,6 +474,10 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
+            onBlur={() => {
+              // Re-focus immediately when input loses focus
+              setTimeout(() => inputRef.current?.focus(), 0);
+            }}
             placeholder={t('input_placeholder')}
             disabled={isStreaming}
             backgroundColor="white"
@@ -482,7 +486,7 @@ export default function ChatInterface({ threadId, onNewThread, onThreadActivity 
               borderColor: "#3182CE",
               boxShadow: "0 0 0 1px #3182CE"
             }}
-            autoFocus={false}
+            autoFocus={true}
           />
           <Button
             onClick={sendMessage}
