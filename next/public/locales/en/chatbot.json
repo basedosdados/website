@@ -120,5 +120,9 @@
     ],
     "back_home": "Back to Home",
     "send_email": "Send Email"
+  },
+  "disclaimer": {
+    "warning": "The chatbot may make errors. Consider verifying important information.",
+    "privacy": "All information sent here is recorded for analysis and product improvement."
   }
 } 

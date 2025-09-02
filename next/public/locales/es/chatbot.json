@@ -64,6 +64,10 @@
     "back_home": "Volver al Inicio",
     "send_email": "Enviar Email"
   },
+  "disclaimer": {
+    "warning": "El chatbot puede cometer errores. Considere verificar información importante.",
+    "privacy": "Toda la información enviada aquí es registrada para análisis y mejora del producto."
+  },
   "landing": {
     "hero": {
       "title": "Conversa con Tus Datos",

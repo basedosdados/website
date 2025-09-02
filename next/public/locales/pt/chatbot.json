@@ -120,5 +120,9 @@
     ],
     "back_home": "Voltar ao Início",
     "send_email": "Enviar Email"
+  },
+  "disclaimer": {
+    "warning": "O chatbot pode cometer erros. Considere verificar informações importantes.",
+    "privacy": "Todas as informações aqui enviadas são registradas para análise e melhoria do produto."
   }
 } 

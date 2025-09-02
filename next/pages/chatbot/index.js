@@ -29,9 +29,18 @@ export default function ChatbotPage() {
   const [user, setUser] = useState(null);
   const [selectedThreadId, setSelectedThreadId] = useState(null);
   const [threadUpdateFunction, setThreadUpdateFunction] = useState(null);
+  const [chatHistoryFunctions, setChatHistoryFunctions] = useState(null);
 
   const handleReadDocs = () => {
     router.push('/docs/bot');
+  };
+
+  const handleNewThread = (newThreadId, threadTitle) => {
+    setSelectedThreadId(newThreadId);
+    // Add the new thread to the chat history immediately
+    if (chatHistoryFunctions && chatHistoryFunctions.addNewThread) {
+      chatHistoryFunctions.addNewThread(newThreadId, threadTitle);
+    }
   };
 
   useEffect(() => {
@@ -136,6 +145,7 @@ export default function ChatbotPage() {
                 selectedThreadId={selectedThreadId}
                 onThreadSelect={setSelectedThreadId}
                 onThreadUpdate={setThreadUpdateFunction}
+                onFunctions={setChatHistoryFunctions}
               />
             </Box>
 
@@ -143,7 +153,7 @@ export default function ChatbotPage() {
             <Box flex={1} height="100%">
               <ChatInterface 
                 threadId={selectedThreadId}
-                onNewThread={() => setSelectedThreadId(null)}
+                onNewThread={handleNewThread}
                 onThreadActivity={threadUpdateFunction}
               />
             </Box>
