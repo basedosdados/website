@@ -3,5 +3,54 @@
   "reliable_analysis": "Análises confiáveis.",
   "description_organized_data": "A Base dos Dados é uma ONG que mantém a maior plataforma pública de dados do Brasil e oferece serviços especializados em engenharia, análise e capacitação de dados.",
   "organized_data_first_button": "Acesse a plataforma de dados",
-  "organized_data_second_button": "Conheça os serviços de consultoria"
+  "organized_data_second_button": "Conheça os serviços de consultoria",
+  "socioeconomic_data": "Os principais dados socioeconômicos do Brasil, em um só lugar.",
+  "productivity_data_analysis": {
+    "title": "Ganhe produtividade na sua análise de dados",
+    "subtitle": "Tabelas tratadas e variáveis padronizadas para cruzar conjuntos de dados com facilidade"
+  },
+  "partners": {
+    "partnershipsWith": "A parceira de quem transforma dados em impacto"
+  },
+  "mentions": {
+      "home1Content": "Costumo usar a plataforma da Base dos Dados para buscar dados de municípios, principalmente aqueles que são mais estáveis, tais como séries históricas de população. Uso também para dados de CNPJ e outros conjuntos muito grandes que seriam difíceis remontar em um ambiente isolado. A facilidade de usar comandos SQL ajuda no cruzamento e agregação de dados.",
+      "home1Author": "Fernando Barbalho",
+      "home1Position": "Conselheiro Técnico do Vice-Presidente da República",
+      "home2Content": "Acabo fazendo perguntas mais complexas nas pautas porque sei que o trabalho de análise de dados não será tão complicado graças a essas ferramentas que vocês disponibilizam.",
+      "home2Author": "Luiz Fernando Toledo",
+      "home2Position": "Repórter na BBC"
+  },
+  "section_public_purpose": {
+    "title": "Uma iniciativa com propósito público",
+    "content": "A Base dos Dados é uma ONG que mantém a plataforma aberta com receitas de serviços em engenharia, análise e capacitação. Ao contratar a BD, você impulsiona nosso impacto."
+  },
+  "tables_stats": {
+    "tables": "tabelas tratadas",
+    "tables_updates": "delas são atualizadas todos os meses",
+    "size_all_tables": "de dados organizados",
+    "row_all_tables": "de linhas entre todas as tabelas",
+    "number_formats": {
+        "billion": "bilhões",
+        "million": "milhões",
+        "thousand": "mil"
+    }
+  },
+  "presentation_solutions": [
+    {
+      "title": "Encontre os dados rapidamente",
+      "content": "Pesquise diretamente ou aplique filtros — como tema, organização e mais — para encontrar os dados certos para sua análise."
+    },
+    {
+      "title": "Trabalhe no ambiente que você já conhece",
+      "content": "Acesse as tabelas tratadas da nossa plataforma de dados via BigQuery, ou usando os pacotes em Python e R."
+    },
+    {
+      "title": "Automatize a tradução de códigos institucionais",
+      "content": "Poupe tempo com a tradução automatizada de códigos, como os identificadores de 7 dígitos do IBGE para municípios brasileiros."
+    },
+    {
+      "title": "Construa análises com apoio dos guias de uso",
+      "content": "Consulte detalhes sobre séries históricas, possibilidades de cruzamento, mudanças na coleta e outras informações relevantes."
+    }
+  ]
 }

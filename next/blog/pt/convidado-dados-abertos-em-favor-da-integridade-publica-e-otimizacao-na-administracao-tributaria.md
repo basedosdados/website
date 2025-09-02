@@ -8,7 +8,7 @@ authors:
   - name: Marcos Vinicius Acácio dos Santos
     role: Voluntário
     social: 
-thumbnail: /blog/convidado-dados-abertos-em-favor-da-integridade-publica-e-otimizacao-na-administracao-tributaria/imagem1.png
+thumbnail: /blog/convidado-dados-abertos-em-favor-da-integridade-publica-e-otimizacao-na-administracao-tributaria/thumb_analise.png
 categories: [analise]
 medium_slug: >-
   https://medium.com/@basedosdados/diret%C3%B3rios-brasileiros-como-essa-base-facilita-sua-an%C3%A1lise-40dc8ce2ca2
