@@ -39,7 +39,7 @@ export async function getStaticProps({ params, locale }) {
   if (!content) {
     return {
       redirect: {
-        destination: locale === "pt" ? "/services" : `/${locale}/services`,
+        destination: locale === "pt" ? "/case-studies" : `/${locale}/case-studies`,
         permanent: false,
       },
     };
