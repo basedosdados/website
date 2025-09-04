@@ -917,7 +917,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         {name: [t('documentation')], href: "/docs/home"},
         {name: [t('youtube_videos')], href: "https://www.youtube.com/c/BasedosDados/featured"},
         {name: [t('newsletter')], href: "https://info.basedosdados.org/newsletter"},
-        {name: "Blog", href: "/blog"},
+        {name: [t('blog')], href: "/blog"},
+        {name: [t('case_studies')], href: "/case-studies"},
         {name: [t('faq')], href: "/faq"}
       ],
       [t('institutional')]: [
