@@ -122,7 +122,7 @@ export default function CaseStudies ({ serialize }) {
           fontFamily="Roboto"
           fontSize="16px"
           width="fit-content"
-          href={"/services"}
+          href="/case-studies"
         >
           <ChevronIcon
             alt="back"
