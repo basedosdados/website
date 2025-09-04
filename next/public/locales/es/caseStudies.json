@@ -1,8 +1,12 @@
 {
   "pageTitle": "{{title}} – Base de los Datos",
+  "metaTitle": "Estudios de caso – Base de los Datos",
+  "mainTitle": "Estudios de caso",
+  "mainDescription": "Descubra por qué las instituciones eligen innovar con Base de los Datos",
+  "readCaseStudy": "Lea el estudio de caso",
   "backLink": "Volver",
-  "contactText": "Queremos ayudarte.",
-  "contactButton": "Contáctanos",
-  "about": "Acerca de",
+  "contactText": "Queremos ayudarle.",
+  "contactButton": "Póngase en contacto",
+  "about": "Sobre",
   "sector": "Sector"
 }

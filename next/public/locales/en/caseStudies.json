@@ -1,8 +1,12 @@
 {
   "pageTitle": "{{title}} – Data Basis",
+  "metaTitle": "Case Studies – Data Basis",
+  "mainTitle": "Case Studies",
+  "mainDescription": "Discover why institutions choose to innovate with Data Basis",
+  "readCaseStudy": "Read the case study",
   "backLink": "Back",
   "contactText": "We want to help you.",
-  "contactButton": "Contact us",
+  "contactButton": "Get in touch",
   "about": "About",
   "sector": "Sector"
 }
