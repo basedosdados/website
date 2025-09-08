@@ -37,7 +37,7 @@ function SearchColumn({ isLoaded, resource, columns }) {
   const [_timeout, _setTimeout] = useState(null);
 
   function getSearcherColumn() {
-    return new FuzzySearch(resource, ["node.name", "node.description"], {sort: true});
+    return new FuzzySearch(resource, ["name", "description"], {sort: true});
   }
 
   function handleSearch(searchValue) {
@@ -185,8 +185,8 @@ const TableValue = memo(({children, ...props}) => {
 });
 
 function sortElements(a, b) {
-  if (a.node.order < b.node.order) return -1;
-  if (a.node.order > b.node.order) return 1;
+  if (a.order < b.order) return -1;
+  if (a.order > b.order) return 1;
   return 0;
 }
 
@@ -243,7 +243,7 @@ export default function TableColumns({
 
   const handleMasterCheckboxChange = useCallback(() => {
     if(checkedColumns.length > 0) return onChangeCheckedColumns([]);
-    const allColumnSlugs = resource.map(column => column.node.name);
+    const allColumnSlugs = resource.map(column => column.name);
 
     if (checkedColumns.length === allColumnSlugs.length) {
       onChangeCheckedColumns([]);
@@ -398,7 +398,7 @@ export default function TableColumns({
   }
 
   function TranslationTable({ value, dictionary }) {
-    const downloadInfo = HasDownloadPermitted(value?.table?.uncompressedFileSize)
+    const downloadInfo = HasDownloadPermitted(value?.table?.uncompressed_file_size)
     const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
 
     const gcpProjectID = cloudValues?.gcpProjectId || ""
@@ -425,16 +425,16 @@ export default function TableColumns({
             <Text
               as="a"
               target="_blank"
-              href={value?.table?.isClosed || !downloadInfo.downloadPermitted
+              href={value?.table?.is_closed || !downloadInfo.downloadPermitted
                 ? `${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/dataset/${value?.table?.dataset?._id}?table=${value?.table?._id}`
                 : `/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`
               }
               display="flex"
               onClick={() => {
                 if(!downloadInfo.downloadPermitted) return
-                triggerGAEvent("download_da_tabela",`{
-                  gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
-                  tamanho: ${formatBytes(value?.table?.uncompressedFileSize) || ""},
+                triggerGAEvent("download_da_tabela", `{
+                  gcp: ${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId},
+                  tamanho: ${formatBytes(value?.table?.uncompressed_file_size) || ""},
                   dataset: ${value?.table?.dataset?._id},
                   table: ${value?.table?._id},
                   columnDownload: true
@@ -450,7 +450,7 @@ export default function TableColumns({
                 fill:"#0057A4"
               }}
             >
-              {value?.table?.isClosed || !downloadInfo.downloadPermitted
+              {value?.table?.is_closed || !downloadInfo.downloadPermitted
                 ?
                 <>
                   {t('column.accessTranslationTable')}
@@ -486,7 +486,7 @@ export default function TableColumns({
   }
 
   function TranslationColumnException({ value }) {
-    const cloudValues = value?.node?.directoryPrimaryKey?.table?.cloudTables?.edges?.[0]?.node
+    const cloudValues = value?.directory_primary_key?.table?.cloudTables?.edges?.[0]?.node
     const gcpDatasetID = cloudValues?.gcpDatasetId || ""
     const gcpTableId = cloudValues?.gcpTableId || ""
 
@@ -494,10 +494,10 @@ export default function TableColumns({
     if(gcpDatasetID === "br_bd_diretorios_brasil") {
       if(gcpTableId === "empresa" || gcpTableId === "cep") return t('column.no')
     }
-    if(value?.node?.name === "ddd") return t('column.no')
-    if(value?.node?.coveredByDictionary === true) return t('column.yes')
-    if(value?.node?.directoryPrimaryKey?._id) return t('column.yes')
-    if(value?.node?.coveredByDictionary === false) return t('column.no')
+    if(value?.name === "ddd") return t('column.no')
+    if(value?.covered_by_dictionary === true) return t('column.yes')
+    if(value?.directory_primary_key?.id) return t('column.yes')
+    if(value?.covered_by_dictionary === false) return t('column.no')
     return t('column.notProvided')
   }
 
@@ -621,8 +621,8 @@ export default function TableColumns({
                         padding="14px 22px 14px 30px"
                       >
                         <Checkbox
-                          isChecked={isChecked(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
-                          onChange={() => handleCheckboxChange(elm.node[`name${capitalize(locale)}`] || elm.node.name)}
+                          isChecked={isChecked(elm[`name${capitalize(locale)}`] || elm.name)}
+                          onChange={() => handleCheckboxChange(elm[`name${capitalize(locale)}`] || elm.name)}
                         />
                       </Box>
                       <Box
@@ -643,7 +643,7 @@ export default function TableColumns({
                     zIndex="4"
                     backgroundColor="#FFF"
                   >
-                    {elm?.node?.namePt || elm?.node?.name || elm?.node?.[`name${capitalize(locale)}`] || t('column.notProvided')}
+                    {elm?.namePt || elm?.name || elm?.[`name${capitalize(locale)}`] || t('column.notProvided')}
                     <Box
                       display={{base: "none", lg: "flex"}}
                       position="absolute"
@@ -658,8 +658,8 @@ export default function TableColumns({
                   <TableValue>
                     {template === "download" ?
                       <TranslationTable
-                        value={elm?.node?.directoryPrimaryKey}
-                        dictionary={elm?.node?.coveredByDictionary}
+                        value={elm?.directory_primary_key}
+                        dictionary={elm?.covered_by_dictionary}
                       />
                     :
                       <TranslationColumnException value={elm}/>
@@ -667,24 +667,24 @@ export default function TableColumns({
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.[`description${capitalize(locale)}`] || elm?.node?.description || t('column.notProvided')}
+                    {elm?.[`description${capitalize(locale)}`] || elm?.description || t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.bigqueryType?.name ? elm.node.bigqueryType.name : t('column.notProvided')}
+                    {elm?.bigquery_type?.name ? elm.bigquery_type.name : t('column.notProvided')}
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.temporalCoverage?.start && elm?.node?.temporalCoverage?.end ?
-                      elm.node.temporalCoverage.start +" - "+ elm.node.temporalCoverage.end
+                    {elm?.temporal_coverage?.start && elm?.temporal_coverage?.end ?
+                      elm.temporal_coverage.start +" - "+ elm.temporal_coverage.end
                       :
                       t('column.notProvided')
                     }
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.measurementUnit ?
-                      measurementUnit(elm.node.measurementUnit)
+                    {elm?.measurement_unit ?
+                      measurementUnit(elm.measurement_unit)
                       :
                       t('column.notProvided')
                     }
@@ -692,16 +692,16 @@ export default function TableColumns({
 
                   <TableValue>
                     {
-                      elm?.node?.containsSensitiveData === true ? t('column.yes')
+                      elm?.contains_sensitive_data === true ? t('column.yes')
                       :
-                      elm?.node?.containsSensitiveData === false ? t('column.no')
+                      elm?.contains_sensitive_data === false ? t('column.no')
                       :
                       t('column.notProvided')
                     }
                   </TableValue>
 
                   <TableValue>
-                    {elm?.node?.[`observations${capitalize(locale)}`] || elm?.node?.observations || t('column.notProvided')}
+                    {elm?.[`observations${capitalize(locale)}`] || elm?.observations || t('column.notProvided')}
                   </TableValue>
                 </Tr>
               ))}
