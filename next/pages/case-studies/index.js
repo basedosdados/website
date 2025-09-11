@@ -88,6 +88,7 @@ export default function CaseStudies ({ caseStudies }) {
                 overflow="hidden"
                 borderRadius="16px"
                 marginBottom="24px"
+                boxShadow="0 1px 8px rgba(0, 0, 0, 0.10)"
               >
                 {elm?.img.length > 0 ?
                   <Image

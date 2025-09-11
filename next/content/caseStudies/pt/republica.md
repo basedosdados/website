@@ -3,17 +3,17 @@ id: "republica"
 displayTitle: "República"
 thumbnail: ""
 title: "República.org e Base dos Dados usam dados e evidências para abordar desafios na gestão de pessoas no setor público"
-img: ""
+img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_republica.png"
 imgDescription: ""
 description: "O Instituto República.org tem sido uma força motriz na promoção de iniciativas para aprimorar a qualidade e eficiência do setor público brasileiro. Já são mais de 240 projetos e iniciativas para tornar o setor mais efetivo e democrático. Em uma parceria inédita, o instituto e a Base dos Dados disponibilizaram importantes conjuntos de dados sobre o tema para abordar os desafios enfrentados na gestão de pessoas no setor público (GPSP) através de dados e evidências. "
 logo: {
-  img: "",
+  img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/republica.png",
   width: 245,
   height: 85
 }
-about: ""
+about: "Organização social e apartidária que apoia a valorização dos profissionais públicos no Brasil"
 summary: "O Instituto República.org tem sido uma força motriz na promoção de iniciativas para aprimorar a qualidade e eficiência do setor público brasileiro. Já são mais de 240 projetos e iniciativas para tornar o setor mais efetivo e democrático. Em uma parceria inédita, o instituto e a Base dos Dados disponibilizaram importantes conjuntos de dados sobre o tema para abordar os desafios enfrentados na gestão de pessoas no setor público (GPSP) através de dados e evidências. "
-sector: ""
+sector: "Administração pública"
 ---
 
 O Instituto [República.org](https://republica.org/) tem sido uma força motriz na promoção de iniciativas para aprimorar a qualidade e eficiência do setor público brasileiro. Já são mais de 240 projetos e iniciativas para tornar o setor mais efetivo e democrático. Em uma parceria inédita, o instituto e a Base dos Dados disponibilizaram importantes conjuntos de dados sobre o tema para abordar os desafios enfrentados na gestão de pessoas no setor público (GPSP) através de dados e evidências. 
@@ -56,11 +56,11 @@ Foram também exploradas bases já existentes no repositório de dados da BD, ma
 
 Os dados do Worldwide Bureaucracy Indicators (WWBI) sobre emprego e salários no setor público foram fundamentais na elaboração do abrangente estudo “Burocracia Representativa e as desigualdade salariais de mulheres no Brasil e no Mundo”, lançado pela República.org. Através dessas informações, o estudo identificou, por exemplo, que o salário médio das mulheres no setor público brasileiro equivale a 72% do salário médio dos homens e que o Brasil tem a pior razão salarial entre homens e mulheres no setor em comparação com outros países da América Latina, como Chile, Argentina, Uruguai e México.
 
-## IMAGE
+![razao_salarial_no_setor_publico](https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/razao_salarial_no_setor_publico.png)
 
 Através dos dados de remuneração da Relação Anual de Informações Sociais (RAIS), o estudo também indicou que mulheres são a maioria dos vínculos em quase todas as faixas salariais, exceto na faixa acima de cinco salários mínimos, padrão que se repete em quase todas as unidades federativas, exceto no Amapá, Mato Grosso do Sul, Pará e Roraima. 
 
-## IMAGE
+![distribuicao_de_genero_por_faixa_salariais](https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/distribuicao_de_genero_por_faixa_salariais.png)
 
 ### Uma gestão pública mais transparente e igualitária
 

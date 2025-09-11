@@ -893,16 +893,17 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('data')]: `/search`,
       [t('solutions')]: [
         {
+          name: [t('services')],
+          href: "/services"
+        },
+        {
           name: [t('exclusive_data')],
           href: "https://info.basedosdados.org/bd-pro"
         },
         {
+          name: [t('courses')],
           href: "https://info.basedosdados.org/bd-edu-cursos"
-        },
-        {
-          name: [t('services')],
-          href: "/services"
-        },
+        }
       ],
       [t('resources')]: [
         {name: [t('documentation')], href: "/docs/home"},
