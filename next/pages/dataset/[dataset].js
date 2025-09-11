@@ -15,6 +15,7 @@ import cookies from "js-cookie";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useCheckMobile } from "../../hooks/useCheckMobile.hook";
 
+import AdminEdit from "../../components/atoms/AdminEdit";
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
@@ -539,6 +540,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
           }
         </Stack>
       </VStack>
+
+      {isBDSudo === true &&
+        <AdminEdit/>
+      }
     </MainPageTemplate>
   )
 }
