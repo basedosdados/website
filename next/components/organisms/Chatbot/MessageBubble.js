@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, VStack, HStack, Text, Button, Avatar, Spinner, Collapse, Code, Badge, IconButton, Textarea, Flex } from "@chakra-ui/react";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
@@ -15,6 +15,7 @@ export default function MessageBubble({ message, onFeedback, isStreaming = false
   const [showCode, setShowCode] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [showSteps, setShowSteps] = useState(false);
+  const [showThoughts, setShowThoughts] = useState(false);
   const [commentText, setCommentText] = useState('');
   const [feedbackRating, setFeedbackRating] = useState(null);
   
@@ -189,7 +190,7 @@ export default function MessageBubble({ message, onFeedback, isStreaming = false
                   )}
 
                   {/* Collapsible Steps Display */}
-                  {message.steps && message.steps.length > 0 && !isStreaming && (
+                  {message.steps && message.steps.length > 0 && (
                     <Box>
                       <Button
                         variant="ghost"
@@ -202,21 +203,29 @@ export default function MessageBubble({ message, onFeedback, isStreaming = false
                         padding={2}
                         height="auto"
                       >
-                        {showSteps ? t('hide_processing_steps') : t('show_processing_steps')} ({message.steps.length})
+                        {showSteps 
+                          ? (isStreaming ? t('hide_thinking_process') : t('hide_processing_steps'))
+                          : (isStreaming ? t('show_thinking_process') : t('show_processing_steps'))
+                        } ({message.steps.length})
                       </Button>
                       <Collapse in={showSteps}>
                         <VStack spacing={1} align="stretch" marginTop={2}>
                           {message.steps.map((step, index) => (
                             <Box
                               key={index}
-                              backgroundColor="#F7FAFC"
-                              border="1px solid #E2E8F0"
+                              backgroundColor={isStreaming && index === message.steps.length - 1 ? "#E6F3FF" : "#F7FAFC"}
+                              border={`1px solid ${isStreaming && index === message.steps.length - 1 ? "#3182CE" : "#E2E8F0"}`}
                               borderRadius="6px"
                               padding={2}
                             >
-                              <LabelText typography="x-small" color="#616161" fontWeight="500">
-                                {step.label}
-                              </LabelText>
+                              <HStack spacing={2} align="center">
+                                <LabelText typography="x-small" color="#616161" fontWeight="500">
+                                  {step.label}
+                                </LabelText>
+                                {isStreaming && index === message.steps.length - 1 && (
+                                  <Spinner size="xs" color="#3182CE" />
+                                )}
+                              </HStack>
                               <Box marginTop={1}>
                                                               <MarkdownText 
                                 typography="small" 
@@ -388,6 +397,82 @@ export default function MessageBubble({ message, onFeedback, isStreaming = false
               </VStack>
             </VStack>
           </HStack>
+        </Box>
+      )}
+
+      {/* Thoughts Dropdown Banner - Show after assistant response is complete */}
+      {(() => {
+        console.log('MessageBubble: Checking thoughts dropdown conditions:', {
+          isStreaming,
+          hasSteps: !!message.steps,
+          stepsLength: message.steps?.length,
+          messageId: message.id,
+          messageType: message.isUser ? 'user' : 'assistant'
+        });
+        return !isStreaming && message.steps && message.steps.length > 0;
+      })() && (
+        <Box alignSelf="flex-start" maxWidth="80%" mt={2}>
+          <Box
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="md"
+            bg="gray.50"
+            p={2}
+          >
+            <Button
+              size="xs"
+              variant="ghost"
+              onClick={() => setShowThoughts(!showThoughts)}
+              rightIcon={showThoughts ? <ChevronDownIcon /> : <ChevronRightIcon />}
+              width="100%"
+              justifyContent="flex-start"
+              fontWeight="normal"
+              color="gray.600"
+              _hover={{ bg: "gray.100" }}
+              h="auto"
+              py={1}
+            >
+              <HStack spacing={2}>
+                <LabelText typography="x-small" fontWeight="500">
+                  {t('show_processing_steps')} ({message.steps.length})
+                </LabelText>
+              </HStack>
+            </Button>
+
+            <Collapse in={showThoughts} animateOpacity>
+              <VStack align="stretch" spacing={1} mt={2}>
+                {message.steps.map((step, index) => (
+                  <Box
+                    key={index}
+                    p={2}
+                    bg="white"
+                    borderRadius="sm"
+                    border="1px solid"
+                    borderColor="gray.100"
+                  >
+                    <HStack spacing={2} align="flex-start">
+                      <Box
+                        w="4px"
+                        h="4px"
+                        borderRadius="full"
+                        bg="green.500"
+                        flexShrink={0}
+                        mt={1}
+                      />
+                      <VStack align="stretch" spacing={1} flex={1}>
+                        <LabelText typography="x-small" fontWeight="600" color="gray.700">
+                          {step.label || `Step ${index + 1}`}
+                        </LabelText>
+                        <BodyText typography="x-small" color="gray.600">
+                          {step.content || t('processing')}
+                        </BodyText>
+                      </VStack>
+                    </HStack>
+                  </Box>
+                ))}
+              </VStack>
+            </Collapse>
+          </Box>
         </Box>
       )}
 

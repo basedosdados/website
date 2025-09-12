@@ -1,516 +1,162 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useTranslation } from "next-i18next";
-import { Box, VStack, HStack, Input, Button, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
-import MessageBubble from "./MessageBubble";
+import { useRouter } from "next/router";
+import { Box, VStack, HStack, Input, Button, Text, Spinner, Alert, AlertIcon, Flex } from "@chakra-ui/react";
+import ChatPage from "./ChatPage";
+import ChatHistory from "./ChatHistory";
 import BodyText from "../../atoms/Text/BodyText";
+import TitleText from "../../atoms/Text/TitleText";
 
-export default function ChatInterface({ threadId, onNewThread, onThreadActivity }) {
+export default function ChatInterface({ onNewThread, onThreadActivity }) {
   const { t } = useTranslation('chatbot');
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
+  const router = useRouter();
+  const [selectedThreadId, setSelectedThreadId] = useState(null);
+  const [selectedThreadTitle, setSelectedThreadTitle] = useState(null);
+  const [chatHistoryFunctions, setChatHistoryFunctions] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState(null);
-  const [currentStreamingMessage, setCurrentStreamingMessage] = useState(null);
-  const inputRef = useRef(null);
-  const messagesEndRef = useRef(null);
-  const messagesContainerRef = useRef(null);
+  const [focusInput, setFocusInput] = useState(false);
 
-  // Load messages only when switching to a different thread
-  const loadMessages = useCallback(async (targetThreadId) => {
-    if (!targetThreadId) return;
-    
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await fetch(`/api/chatbot/messages?thread_id=${targetThreadId}&order_by=created_at`);
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      setMessages(data);
-    } catch (error) {
-      console.error('Error loading messages:', error);
-      setError(`Erro ao carregar mensagens: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  // Load messages when threadId changes (but not during streaming)
-  useEffect(() => {
-    if (threadId && !isStreaming) {
-      loadMessages(threadId);
-    } else if (!threadId) {
-      setMessages([]);
-    }
-  }, [threadId, isStreaming, loadMessages]);
-
-  // Always keep focus on the input box
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.focus();
-        const input = inputRef.current;
-        const length = input.value.length;
-        input.setSelectionRange(length, length);
-      }
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Auto-scroll to bottom when messages change
-  const scrollToBottom = useCallback(() => {
-    requestAnimationFrame(() => {
-      if (messagesContainerRef.current) {
-        messagesContainerRef.current.scrollTo({
-          top: messagesContainerRef.current.scrollHeight,
-          behavior: 'smooth'
-        });
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (messages.length > 0 || currentStreamingMessage) {
-      scrollToBottom();
-    }
-  }, [messages, currentStreamingMessage, scrollToBottom]);
-
-  const createNewThread = async (title) => {
-    try {
-      const response = await fetch('/api/chatbot/threads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ title }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to create thread');
-      }
-
-      const newThread = await response.json();
-      return newThread.id;
-    } catch (error) {
-      console.error('Error creating thread:', error);
-      throw error;
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!inputMessage.trim() || isStreaming) return;
-
-    const messageContent = inputMessage.trim();
-    setInputMessage("");
+  // Handle thread selection
+  const handleThreadSelect = useCallback((threadId) => {
+    console.log('ChatInterface: Thread selected:', threadId);
+    setSelectedThreadId(threadId);
+    setSelectedThreadTitle(null); // Will be loaded by ChatPage
     setError(null);
+  }, []);
 
-    // Add user message immediately
-    const userMessage = {
-      id: Date.now().toString() + '_user_temp',
-      user_message: messageContent,
-      assistant_message: null,
-      created_at: new Date().toISOString(),
-      isUser: true,
-    };
+  // Handle thread updates (activity tracking)
+  const handleThreadUpdate = useCallback((threadId) => {
+    console.log('ChatInterface: Thread updated:', threadId);
+    if (chatHistoryFunctions?.updateThreadActivity) {
+      chatHistoryFunctions.updateThreadActivity(threadId);
+    }
+    if (onThreadActivity) {
+      onThreadActivity(threadId);
+    }
+  }, [chatHistoryFunctions, onThreadActivity]);
 
-    setMessages(prev => [...prev, userMessage]);
-
-    let currentThreadId = threadId;
-    let isNewThread = false;
-    let threadTitle = null;
+  // Handle new thread creation
+  const handleNewThread = useCallback((threadId, title) => {
+    console.log('ChatInterface: New thread created:', { threadId, title });
+    setSelectedThreadId(threadId);
+    setSelectedThreadTitle(title);
     
-    try {
-      setIsStreaming(true);
-
-      // Create new thread if none exists
-      if (!currentThreadId) {
-        threadTitle = messageContent.length > 50 
-          ? messageContent.substring(0, 50) + '...'
-          : messageContent || 'New Chat';
-        
-        currentThreadId = await createNewThread(threadTitle);
-        isNewThread = true;
-      }
-
-      // Send message
-      const response = await fetch(`/api/chatbot/messages?thread_id=${currentThreadId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: Date.now().toString(),
-          content: messageContent,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        let errorData;
-        try {
-          errorData = JSON.parse(errorText);
-        } catch (e) {
-          errorData = { message: errorText };
-        }
-        
-        const errorMessage = {
-          id: Date.now().toString() + '_error',
-          user_message: messageContent,
-          assistant_message: null,
-          error_message: errorData.message || errorText,
-          created_at: new Date().toISOString(),
-          isUser: false,
-        };
-        
-        setMessages(prev => {
-          const filtered = prev.filter(msg => msg.id !== userMessage.id);
-          return [...filtered, errorMessage];
-        });
-        return;
-      }
-
-      // Handle streaming response
-      let assistantMessage = {
-        id: Date.now().toString() + '_assistant',
-        user_message: null,
-        assistant_message: 'Processing...',
-        error_message: null,
-        created_at: new Date().toISOString(),
-        isUser: false,
-        generated_queries: [],
-        steps: [],
-      };
-
-      setCurrentStreamingMessage(assistantMessage);
-
-      let responseText = '';
-
-      // Check if response.body is a ReadableStream
-      if (response.body && typeof response.body.getReader === 'function') {
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-
-        while (true) {
-          const { done, value } = await reader.read();
-          
-          if (done) break;
-          
-          const chunk = decoder.decode(value);
-          responseText += chunk;
-          
-          const lines = chunk.split('\n');
-          
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const dataStr = line.slice(6);
-              
-              if (dataStr === '[DONE]') {
-                setCurrentStreamingMessage(null);
-                break;
-              }
-              
-              try {
-                const data = JSON.parse(dataStr);
-                
-                if (data.status === "running" && data.data) {
-                  // Parse step data
-                  let stepData;
-                  if (typeof data.data === 'string') {
-                    try {
-                      stepData = JSON.parse(data.data);
-                    } catch (e) {
-                      stepData = { label: 'Processing...', content: data.data };
-                    }
-                  } else {
-                    stepData = data.data;
-                  }
-                  
-                  // Update streaming message with steps and content
-                  setCurrentStreamingMessage(prev => ({
-                    ...prev,
-                    steps: [...(prev?.steps || []), stepData],
-                    // If the step has content, use it as the assistant message
-                    assistant_message: stepData.content || prev?.assistant_message || 'Processing...'
-                  }));
-                  
-                } else if (data.status === "complete" && data.data) {
-                  // Final response - create complete message pair
-                  const completeMsgPair = {
-                    id: data.data.id || assistantMessage.id,
-                    user_message: messageContent,
-                    assistant_message: data.data.assistant_message,
-                    error_message: data.data.error_message,
-                    generated_queries: data.data.generated_queries || [],
-                    steps: assistantMessage.steps || [],
-                    created_at: new Date().toISOString(),
-                    isUser: false,
-                  };
-                  
-                  setCurrentStreamingMessage(null);
-                  setMessages(prev => {
-                    const filtered = prev.filter(msg => msg.id !== userMessage.id);
-                    return [...filtered, completeMsgPair];
-                  });
-                  
-                  // Update thread activity
-                  if (onThreadActivity && currentThreadId) {
-                    onThreadActivity(currentThreadId);
-                  }
-                  
-                  // Notify about new thread
-                  if (isNewThread && onNewThread) {
-                    onNewThread(currentThreadId, threadTitle);
-                  }
-                  
-                  return;
-                }
-              } catch (e) {
-                console.log('ChatInterface - JSON parse error for line:', line, e);
-              }
-            }
-          }
-        }
-      } else {
-        // Handle non-streaming response
-        const responseText = await response.text();
-        
-        try {
-          const jsonLines = responseText.split('\n\n').filter(line => line.trim());
-          let finalData = null;
-          let allSteps = [];
-          
-          for (const line of jsonLines) {
-            try {
-              const data = JSON.parse(line);
-              if (data.status === "running" && data.data) {
-                let stepData;
-                if (typeof data.data === 'string') {
-                  try {
-                    stepData = JSON.parse(data.data);
-                  } catch (e) {
-                    stepData = { label: 'Processing...', content: data.data };
-                  }
-                } else {
-                  stepData = data.data;
-                }
-                allSteps.push(stepData);
-              } else if (data.status === "complete" && data.data) {
-                finalData = data.data;
-              }
-            } catch (lineParseError) {
-              console.log('ChatInterface - Error parsing line:', lineParseError);
-            }
-          }
-          
-          if (finalData) {
-            const finalMessage = {
-              id: finalData.id || assistantMessage.id,
-              user_message: messageContent,
-              assistant_message: finalData.assistant_message,
-              error_message: finalData.error_message,
-              generated_queries: finalData.generated_queries || [],
-              steps: allSteps,
-              created_at: new Date().toISOString(),
-              isUser: false,
-            };
-            
-            setCurrentStreamingMessage(null);
-            setMessages(prev => {
-              const filtered = prev.filter(msg => msg.id !== userMessage.id);
-              return [...filtered, finalMessage];
-            });
-            
-            // Update thread activity
-            if (onThreadActivity && currentThreadId) {
-              onThreadActivity(currentThreadId);
-            }
-            
-            // Notify about new thread
-            if (isNewThread && onNewThread) {
-              onNewThread(currentThreadId, threadTitle);
-            }
-            
-            return;
-          }
-        } catch (e) {
-          console.log('ChatInterface - Response is not JSON:', e);
-        }
-        
-        // If we get here, treat as error
-        const errorMessage = {
-          id: Date.now().toString() + '_parse_error',
-          user_message: messageContent,
-          assistant_message: null,
-          error_message: responseText || 'Unknown response format',
-          created_at: new Date().toISOString(),
-          isUser: false,
-          generated_queries: [],
-          steps: [],
-        };
-        
-        setCurrentStreamingMessage(null);
-        setMessages(prev => {
-          const filtered = prev.filter(msg => msg.id !== userMessage.id);
-          return [...filtered, errorMessage];
-        });
-        
-        return;
-      }
-
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setError('Erro ao enviar mensagem. Tente novamente.');
-      setMessages(prev => prev.filter(msg => msg.id !== userMessage.id));
-    } finally {
-      setIsStreaming(false);
-      setCurrentStreamingMessage(null);
+    // Add to chat history
+    if (chatHistoryFunctions?.addNewThread) {
+      chatHistoryFunctions.addNewThread(threadId, title);
     }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+    
+    if (onNewThread) {
+      onNewThread(threadId, title);
     }
-  };
+  }, [chatHistoryFunctions, onNewThread]);
 
-  const handleFeedback = async (messageId, rating, comment) => {
-    try {
-      const response = await fetch(`/api/chatbot/feedback?message_pair_id=${messageId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ rating, comment }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit feedback');
-      }
-
-      // Update message with feedback
-      setMessages(prev => prev.map(msg => 
-        msg.id === messageId 
-          ? { ...msg, feedback: { rating, comment } }
-          : msg
-      ));
-
-    } catch (error) {
-      console.error('Error sending feedback:', error);
-      setError('Erro ao enviar feedback');
+  // Handle thread deletion
+  const handleDeleteThread = useCallback((threadId) => {
+    console.log('ChatInterface: Thread deleted:', threadId);
+    if (selectedThreadId === threadId) {
+      setSelectedThreadId(null);
+      setSelectedThreadTitle(null);
     }
-  };
+  }, [selectedThreadId]);
 
-  if (isLoading) {
-    return (
-      <Box height="100%" display="flex" alignItems="center" justifyContent="center">
-        <VStack spacing={4}>
-          <Spinner size="xl" color="blue.500" />
-          <Text>{t('loading_conversation')}</Text>
-        </VStack>
-      </Box>
-    );
-  }
+  // Expose chat history functions
+  const handleChatHistoryFunctions = useCallback((functions) => {
+    console.log('ChatInterface: Chat history functions received:', functions);
+    setChatHistoryFunctions(functions);
+  }, []);
+
+  // Handle new conversation button click
+  const handleNewConversation = useCallback(() => {
+    console.log('ChatInterface: New conversation requested');
+    setSelectedThreadId(null);
+    setSelectedThreadTitle(null);
+    setError(null);
+    setFocusInput(true);
+  }, []);
+
+  // Reset focus input flag after it's been used
+  const handleFocusInputUsed = useCallback(() => {
+    setFocusInput(false);
+  }, []);
+
+  // Handle documentation button click
+  const handleReadDocs = useCallback(() => {
+    router.push('/docs/bot');
+  }, [router]);
 
   return (
-    <Box height="100%" display="flex" flexDirection="column">
-      {/* Error Alert */}
-      {error && (
-        <Alert status="error" borderRadius="8px" mb={4}>
-          <AlertIcon />
-          {error}
-        </Alert>
-      )}
-
-      {/* Messages Area */}
-      <Box 
-        ref={messagesContainerRef}
-        flex={1} 
-        overflowY="auto" 
-        padding={4}
-        backgroundColor="#F8F9FA"
-        borderRadius="8px"
-        marginBottom={4}
-      >
-        <VStack spacing={4} align="stretch">
-          {messages.length === 0 && !isStreaming && (
-            <Box textAlign="center" padding={8}>
-              <BodyText typography="medium" color="#616161">
-                {t('start_new_conversation')}
-              </BodyText>
-            </Box>
-          )}
-
-          {messages.map((message) => (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              onFeedback={handleFeedback}
-            />
-          ))}
-
-          {currentStreamingMessage && (
-            <MessageBubble
-              message={currentStreamingMessage}
-              isStreaming={true}
-            />
-          )}
-          
-          {/* Invisible element to scroll to */}
-          <div ref={messagesEndRef} />
-        </VStack>
-      </Box>
-
-      {/* Input Area */}
+    <VStack spacing={6} align="stretch" height="100%">
+      {/* Header */}
       <Box>
-        <HStack spacing={3}>
-          <Input
-            ref={inputRef}
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder={t('input_placeholder')}
-            disabled={isStreaming}
-            backgroundColor="white"
-            borderColor="#E2E8F0"
-            _focus={{
-              borderColor: "#3182CE",
-              boxShadow: "0 0 0 1px #3182CE"
-            }}
-            autoFocus={true}
-          />
-          <Button
-            onClick={sendMessage}
-            disabled={!inputMessage.trim() || isStreaming}
-            backgroundColor="#3182CE"
-            color="white"
-            _hover={{
-              backgroundColor: "#2C5AA0"
-            }}
-            _disabled={{
-              backgroundColor: "#CBD5E0",
-              cursor: "not-allowed"
-            }}
-          >
-            {isStreaming ? <Spinner size="sm" /> : t('send')}
-          </Button>
+        <HStack justify="space-between" align="flex-start">
+          <Box>
+            <TitleText typography="large" fontWeight="600" color="#252A32">
+              {t('title')}
+            </TitleText>
+            <BodyText typography="medium" color="#616161" marginTop="8px">
+              {t('subtitle')}
+            </BodyText>
+          </Box>
         </HStack>
-        
-        {/* Disclaimer Text */}
-        <VStack spacing={2} mt={3} align="start">
-          <Text fontSize="xs" color="#666666" lineHeight="1.4">
-            {t('disclaimer.warning')}
-          </Text>
-          <Text fontSize="xs" color="#666666" lineHeight="1.4">
-            {t('disclaimer.privacy')}
-          </Text>
-        </VStack>
       </Box>
-    </Box>
+
+      <Box marginTop="12px">
+        <Button
+          onClick={handleReadDocs}
+          color="#3182CE"
+          _hover={{ backgroundColor: "#E6F3FF" }}
+          size="sm"
+        >
+          {t('documentation.read_docs')}
+        </Button>
+      </Box>
+
+      {/* Chat Interface */}
+      <Flex height="calc(100% - 160px)" width="100%" overflow="hidden">
+        {/* Chat History Sidebar */}
+        <Box
+          width="280px"
+          minWidth="280px"
+          height="100%"
+          borderRight="1px solid #E2E8F0"
+          backgroundColor="#FAFAFA"
+          display="flex"
+          flexDirection="column"
+        >
+          <ChatHistory
+            selectedThreadId={selectedThreadId}
+            onThreadSelect={handleThreadSelect}
+            onThreadUpdate={handleThreadUpdate}
+            onFunctions={handleChatHistoryFunctions}
+          />
+        </Box>
+
+        {/* Main Chat Area */}
+        <Box flex={1} height="100%" display="flex" flexDirection="column" position="relative" maxWidth="calc(100% - 280px)">
+          {/* Error Alert */}
+          {error && (
+            <Alert status="error" borderRadius="0" margin={0}>
+              <AlertIcon />
+              {error}
+            </Alert>
+          )}
+
+          {/* Chat Page */}
+          <Box flex={1} height="100%" overflow="hidden">
+          <ChatPage
+            threadId={selectedThreadId}
+            threadTitle={selectedThreadTitle}
+            onThreadUpdate={handleThreadUpdate}
+            onDeleteThread={handleDeleteThread}
+            onNewThread={handleNewThread}
+            focusInput={focusInput}
+            onFocusInputUsed={handleFocusInputUsed}
+          />
+        </Box>
+      </Box>
+      </Flex>
+    </VStack>
   );
-} 
+}
