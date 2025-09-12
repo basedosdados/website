@@ -1,9 +1,9 @@
 ---
 id: "republica"
 displayTitle: "República"
-thumbnail: ""
+thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_republica.png"
 title: "República.org e Base dos Dados usam dados e evidências para abordar desafios na gestão de pessoas no setor público"
-img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_republica.png"
+img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/imagens/estudo_de_caso_republica.jpg"
 imgDescription: ""
 description: "O Instituto República.org tem sido uma força motriz na promoção de iniciativas para aprimorar a qualidade e eficiência do setor público brasileiro. Já são mais de 240 projetos e iniciativas para tornar o setor mais efetivo e democrático. Em uma parceria inédita, o instituto e a Base dos Dados disponibilizaram importantes conjuntos de dados sobre o tema para abordar os desafios enfrentados na gestão de pessoas no setor público (GPSP) através de dados e evidências. "
 logo: {
