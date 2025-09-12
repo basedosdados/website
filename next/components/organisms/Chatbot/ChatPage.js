@@ -86,7 +86,6 @@ export default function ChatPage({ threadId, threadTitle, onThreadUpdate, onDele
 
   const createNewThread = async (firstMessage = null) => {
     try {
-      console.log('ChatPage: Creating new thread...');
       
       // Generate title from first message
       let title = 'Nova Conversa';
@@ -352,7 +351,6 @@ export default function ChatPage({ threadId, threadTitle, onThreadUpdate, onDele
                   return;
                 }
               } catch (e) {
-                console.log('ChatPage - JSON parse error for line:', line, e);
               }
             }
           }
@@ -385,7 +383,6 @@ export default function ChatPage({ threadId, threadTitle, onThreadUpdate, onDele
                 finalData = data.data;
               }
             } catch (lineParseError) {
-              console.log('ChatPage - Error parsing line:', lineParseError);
             }
           }
           
@@ -426,7 +423,6 @@ export default function ChatPage({ threadId, threadTitle, onThreadUpdate, onDele
             return;
           }
         } catch (e) {
-          console.log('ChatPage - Response is not JSON:', e);
         }
         
         // If we get here, treat as error

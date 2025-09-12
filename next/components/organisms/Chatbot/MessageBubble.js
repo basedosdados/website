@@ -402,13 +402,6 @@ export default function MessageBubble({ message, onFeedback, isStreaming = false
 
       {/* Thoughts Dropdown Banner - Show after assistant response is complete */}
       {(() => {
-        console.log('MessageBubble: Checking thoughts dropdown conditions:', {
-          isStreaming,
-          hasSteps: !!message.steps,
-          stepsLength: message.steps?.length,
-          messageId: message.id,
-          messageType: message.isUser ? 'user' : 'assistant'
-        });
         return !isStreaming && message.steps && message.steps.length > 0;
       })() && (
         <Box alignSelf="flex-start" maxWidth="80%" mt={2}>

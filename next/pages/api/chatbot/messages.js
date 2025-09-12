@@ -82,11 +82,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Thread ID is required' });
     }
 
-    console.log('Messages API - Thread ID:', thread_id);
-    console.log('Messages API - Method:', req.method);
 
     const token = await getAuthToken(req);
-    console.log('Messages API - Token obtained successfully');
     
     const headers = {
       'Authorization': `Bearer ${token}`,
@@ -97,18 +94,13 @@ export default async function handler(req, res) {
       // Get messages for a thread
       const orderBy = req.query.order_by || 'created_at';
       const url = `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${thread_id}/messages/?order_by=${orderBy}`;
-      console.log('Messages API - Calling backend URL:', url);
       
       const response = await axios.get(url, { headers });
-      console.log('Messages API - Backend response status:', response.status);
       
       return res.status(200).json(response.data);
 
     } else if (req.method === 'POST') {
       // Send message with streaming
-      console.log('Messages API - Sending message to backend:', req.body);
-      console.log('Messages API - Backend URL:', `${process.env.NEXT_PUBLIC_API_URL}/chatbot/threads/${thread_id}/messages/`);
-      console.log('Messages API - Headers being sent:', headers);
       
       try {
         const response = await axios.post(
@@ -123,8 +115,6 @@ export default async function handler(req, res) {
           }
         );
         
-        console.log('Messages API - Backend response status:', response.status);
-        console.log('Messages API - Backend response headers:', response.headers);
         
         // Set headers for streaming
         res.setHeader('Content-Type', 'text/event-stream');
@@ -217,7 +207,6 @@ export default async function handler(req, res) {
             }
           }
           
-          console.log('Messages API - Error text from backend:', errorText);
           return res.status(streamError.response.status || 500).json({ 
             error: 'Backend error',
             message: errorText || streamError.message,

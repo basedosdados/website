@@ -25,12 +25,10 @@ export default function ChatbotPage() {
   const [user, setUser] = useState(null);
 
   const handleNewThread = (newThreadId, threadTitle) => {
-    console.log('ChatbotPage: New thread created:', { newThreadId, threadTitle });
     // The ChatInterface component handles thread management internally
   };
 
   const handleThreadActivity = (threadId) => {
-    console.log('ChatbotPage: Thread activity:', threadId);
     // The ChatInterface component handles thread updates internally
   };
 

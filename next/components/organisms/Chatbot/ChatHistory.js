@@ -70,14 +70,12 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
       last_activity: new Date().toISOString()
     };
     
-    console.log('ChatHistory: Adding new thread:', newThread);
     
     // Set the new thread ID for animation trigger
     setNewThreadId(threadId);
     
     setThreads(prev => {
       const updated = [newThread, ...prev];
-      console.log('ChatHistory: Updated threads state:', updated);
       return updated;
     });
 
@@ -184,7 +182,6 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
           <Button
             size="sm"
             onClick={() => {
-              console.log('ChatHistory: Nova Conversa button clicked, calling onThreadSelect(null)');
               onThreadSelect(null);
             }}
             backgroundColor="#3182CE"

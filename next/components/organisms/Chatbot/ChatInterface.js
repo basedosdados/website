@@ -19,7 +19,6 @@ export default function ChatInterface({ onNewThread, onThreadActivity }) {
 
   // Handle thread selection
   const handleThreadSelect = useCallback((threadId) => {
-    console.log('ChatInterface: Thread selected:', threadId);
     setSelectedThreadId(threadId);
     setSelectedThreadTitle(null); // Will be loaded by ChatPage
     setError(null);
@@ -27,7 +26,6 @@ export default function ChatInterface({ onNewThread, onThreadActivity }) {
 
   // Handle thread updates (activity tracking)
   const handleThreadUpdate = useCallback((threadId) => {
-    console.log('ChatInterface: Thread updated:', threadId);
     if (chatHistoryFunctions?.updateThreadActivity) {
       chatHistoryFunctions.updateThreadActivity(threadId);
     }
@@ -38,7 +36,6 @@ export default function ChatInterface({ onNewThread, onThreadActivity }) {
 
   // Handle new thread creation
   const handleNewThread = useCallback((threadId, title) => {
-    console.log('ChatInterface: New thread created:', { threadId, title });
     setSelectedThreadId(threadId);
     setSelectedThreadTitle(title);
     
@@ -54,7 +51,6 @@ export default function ChatInterface({ onNewThread, onThreadActivity }) {
 
   // Handle thread deletion
   const handleDeleteThread = useCallback((threadId) => {
-    console.log('ChatInterface: Thread deleted:', threadId);
     if (selectedThreadId === threadId) {
       setSelectedThreadId(null);
       setSelectedThreadTitle(null);
@@ -63,13 +59,11 @@ export default function ChatInterface({ onNewThread, onThreadActivity }) {
 
   // Expose chat history functions
   const handleChatHistoryFunctions = useCallback((functions) => {
-    console.log('ChatInterface: Chat history functions received:', functions);
     setChatHistoryFunctions(functions);
   }, []);
 
   // Handle new conversation button click
   const handleNewConversation = useCallback(() => {
-    console.log('ChatInterface: New conversation requested');
     setSelectedThreadId(null);
     setSelectedThreadTitle(null);
     setError(null);
