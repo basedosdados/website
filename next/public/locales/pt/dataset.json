@@ -153,7 +153,8 @@
         "warningPaidPlanRequired": ["O download de tabelas com tamanho entre 100 MB e 1 GB está disponível apenas para ", "assinantes dos nossos planos pagos", ". No entanto, você pode acessar a tabela gratuitamente utilizando SQL, Python, R ou Stata. Considere atualizar para um plano pago para fazer o download."],
         "errorTableTooLarge": "O tamanho da tabela ultrapassou o limite permitido para download, de 1 GB. Você pode acessar os dados em SQL, Python, R ou Stata.",
         "bigQueryAndPackages": "BigQuery e Pacotes",
-        "download": "Download"
+        "download": "Download",
+        "deprecated": "Essa tabela foi descontinuada por algum motivo. Exemplos: fonte de dados desatualizadas, restrição na publicação devido a LGPD, etc."
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",
