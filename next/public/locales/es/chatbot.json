@@ -1,7 +1,7 @@
 {
   "loading": "Cargando",
   "title": "BD Bot",
-  "subtitle": "Para consultas en bases de datos utilizando lenguaje natural",
+  "subtitle": "Para consultas en bases de datos de BD utilizando lenguaje natural",
   "welcome": "¡Bienvenido(a)!",
   "welcome_message": "¡Bienvenido(a) al BD Bot! Te ayudará a conversar con tus datos. Basta entrar en la página de chat en el menú a la izquierda y comenzar la conversa. Haz preguntas sobre los datos disponibles y el BD Bot hará lo mejor para responderlas!",
   "model_title": "Modelo",
@@ -112,5 +112,55 @@
   "documentation": {
     "title": "Documentación",
     "read_docs": "Leer Documentación"
+  },
+  "sql_query": "Consulta SQL",
+  "process": "Proceso:",
+  "thinking": "Pensando...",
+  "processing": "Procesando...",
+  "processing_request": "Procesando su solicitud...",
+  "processing_completed": "Procesamiento completado",
+  "show_processing_steps": "Mostrar pasos de procesamiento",
+  "hide_processing_steps": "Ocultar pasos de procesamiento",
+  "show_thinking_process": "Mostrar proceso de pensamiento",
+  "hide_thinking_process": "Ocultar proceso de pensamiento",
+  "show_sql_code": "Mostrar código SQL",
+  "hide_sql_code": "Ocultar código SQL",
+  "sql_button": "SQL",
+  "good_response": "Buena respuesta",
+  "poor_response": "Mala respuesta",
+  "toggle_sql_visibility": "Alternar visibilidad del código SQL",
+  "query": "consulta",
+  "queries": "consultas",
+  "error_sending": "Error al enviar mensaje. Inténtalo de nuevo.",
+  "error_loading_messages": "Error al cargar mensajes",
+  "error_loading_conversations": "Error al cargar conversas",
+  "error_deleting_conversation": "Error al eliminar conversa",
+  "feedback": {
+    "title": "Evaluar Respuesta",
+    "question": "¿Cómo evalúas esta respuesta?",
+    "good": "👍 Buena",
+    "bad": "👎 Mala",
+    "comment_label": "Comentario (opcional)",
+    "comment_placeholder": "Escribe tu comentario (opcional)...",
+    "cancel": "Cancelar",
+    "submit": "Enviar Feedback",
+    "error": "Error al enviar feedback"
+  },
+  "access_denied": {
+    "title": "Acceso Restringido",
+    "message": "BD Bot es una funcionalidad exclusiva disponible para usuarios autorizados. Para solicitar acceso, contáctanos.",
+    "contact_info": "Envía un email a contato@basedosdados.org con el asunto \"Solicitud de Acceso a BD Bot\" e informa:",
+    "requirements": [
+      "Tu nombre completo",
+      "Email de tu cuenta",
+      "Institución/organización",
+      "Motivo del uso de BD Bot"
+    ],
+    "back_home": "Volver al Inicio",
+    "send_email": "Enviar Email"
+  },
+  "disclaimer": {
+    "warning": "El chatbot puede cometer errores. Considera verificar información importante.",
+    "privacy": "Toda la información aquí enviada es registrada para análisis y mejora del producto."
   }
 } 

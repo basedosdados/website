@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, VStack, HStack, Text, Button, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
+import { Box, VStack, HStack, Text, Button, Spinner, Alert, AlertIcon, Fade, SlideFade } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
@@ -10,6 +10,7 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
   const [threads, setThreads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [newThreadId, setNewThreadId] = useState(null);
 
   useEffect(() => {
     loadThreads();
@@ -54,7 +55,7 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
     });
   }, []);
 
-  // Function to add a new thread to the local state
+  // Function to add a new thread to the local state with animation
   const addNewThread = useCallback((threadId, title) => {
     // Ensure both parameters are valid
     if (!threadId || !title) {
@@ -68,7 +69,22 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
       created_at: new Date().toISOString(),
       last_activity: new Date().toISOString()
     };
-    setThreads(prev => [newThread, ...prev]);
+    
+    console.log('ChatHistory: Adding new thread:', newThread);
+    
+    // Set the new thread ID for animation trigger
+    setNewThreadId(threadId);
+    
+    setThreads(prev => {
+      const updated = [newThread, ...prev];
+      console.log('ChatHistory: Updated threads state:', updated);
+      return updated;
+    });
+
+    // Clear the animation trigger after a short delay
+    setTimeout(() => {
+      setNewThreadId(null);
+    }, 1000);
   }, []);
 
   // Expose the update function to parent
@@ -98,8 +114,11 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
         throw new Error('Failed to delete thread');
       }
 
-      // Remove from local state
-      setThreads(prev => prev.filter(thread => thread.id !== threadId));
+      // Remove from local state with animation
+      setThreads(prev => {
+        const updated = prev.filter(thread => thread.id !== threadId);
+        return updated;
+      });
       
       // If this was the selected thread, clear selection
       if (selectedThreadId === threadId) {
@@ -164,12 +183,16 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
           </LabelText>
           <Button
             size="sm"
-            onClick={() => onThreadSelect(null)}
+            onClick={() => {
+              console.log('ChatHistory: Nova Conversa button clicked, calling onThreadSelect(null)');
+              onThreadSelect(null);
+            }}
             backgroundColor="#3182CE"
             color="white"
             _hover={{
               backgroundColor: "#2C5AA0"
             }}
+            transition="all 0.2s ease-in-out"
           >
             {t('new_conversation')}
           </Button>
@@ -178,10 +201,12 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
 
       {/* Error Alert */}
       {error && (
-        <Alert status="error" borderRadius="8px" margin={4}>
-          <AlertIcon />
-          <Text fontSize="sm">{error}</Text>
-        </Alert>
+        <Fade in={!!error}>
+          <Alert status="error" borderRadius="8px" margin={4}>
+            <AlertIcon />
+            <Text fontSize="sm">{error}</Text>
+          </Alert>
+        </Fade>
       )}
 
       {/* Threads List */}
@@ -189,7 +214,7 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
         flex={1} 
         overflowY="auto" 
         padding={2}
-        maxHeight="calc(80vh - 200px)"
+        maxHeight="calc(100vh - 180px)"
         css={{
           '&::-webkit-scrollbar': {
             width: '6px',
@@ -209,23 +234,27 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
       >
         <VStack spacing={2} align="stretch">
           {threads.length === 0 ? (
-            <Box textAlign="center" padding={8}>
-              <BodyText typography="small" color="#616161">
-                {t('no_conversations')}
-                <br />
-                {t('start_new_conversation')}
-              </BodyText>
-            </Box>
+            <Fade in={threads.length === 0}>
+              <Box textAlign="center" padding={8}>
+                <BodyText typography="small" color="#616161">
+                  {t('no_conversations')}
+                  <br />
+                  {t('start_new_conversation')}
+                </BodyText>
+              </Box>
+            </Fade>
           ) : (
-            threads.map((thread) => (
+            threads.map((thread, index) => (
               <ThreadItem
                 key={thread.id}
                 thread={thread}
                 isSelected={selectedThreadId === thread.id}
+                isNew={newThreadId === thread.id}
                 onSelect={() => onThreadSelect(thread.id)}
                 onDelete={() => deleteThread(thread.id)}
                 formatDate={formatDate}
                 truncateTitle={truncateTitle}
+                index={index}
               />
             ))
           )}
@@ -235,7 +264,7 @@ export default function ChatHistory({ selectedThreadId, onThreadSelect, onThread
   );
 }
 
-function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, truncateTitle }) {
+function ThreadItem({ thread, isSelected, isNew, onSelect, onDelete, formatDate, truncateTitle, index }) {
   // Ensure thread object has valid properties
   if (!thread || !thread.id) {
     console.error('Invalid thread object:', thread);
@@ -243,57 +272,88 @@ function ThreadItem({ thread, isSelected, onSelect, onDelete, formatDate, trunca
   }
   
   return (
-    <Box
-      padding={3}
-      borderRadius="8px"
-      backgroundColor={isSelected ? "#EBF8FF" : "transparent"}
-      border={isSelected ? "1px solid #3182CE" : "1px solid transparent"}
-      cursor="pointer"
-      _hover={{
-        backgroundColor: isSelected ? "#EBF8FF" : "#F7FAFC",
-        borderColor: isSelected ? "#3182CE" : "#E2E8F0"
+    <SlideFade
+      in={true}
+      offsetY={isNew ? -20 : 0}
+      transition={{
+        enter: { 
+          duration: 0.5, 
+          delay: isNew ? 0 : index * 0.05,
+          ease: "easeOut"
+        }
       }}
-      onClick={onSelect}
     >
-      <VStack spacing={2} align="stretch">
-        <HStack justify="space-between" align="flex-start">
-          <Box flex={1} minWidth={0}>
-            <BodyText 
-              typography="small" 
-              fontWeight="500" 
-              color="#252A32"
-              noOfLines={2}
-            >
-              {truncateTitle(thread.title || 'Untitled')}
-            </BodyText>
-            <LabelText 
-              typography="x-small" 
+      <Box
+        padding={3}
+        borderRadius="8px"
+        backgroundColor={isSelected ? "#EBF8FF" : "transparent"}
+        border={isSelected ? "1px solid #3182CE" : "1px solid transparent"}
+        cursor="pointer"
+        _hover={{
+          backgroundColor: isSelected ? "#EBF8FF" : "#F7FAFC",
+          borderColor: isSelected ? "#3182CE" : "#E2E8F0"
+        }}
+        onClick={onSelect}
+        transition="all 0.2s ease-in-out"
+        transform={isNew ? "scale(1.02)" : "scale(1)"}
+        boxShadow={isNew ? "0 4px 12px rgba(49, 130, 206, 0.15)" : "none"}
+        position="relative"
+        overflow="hidden"
+      >
+        {/* New thread indicator */}
+        {isNew && (
+          <Box
+            position="absolute"
+            top={0}
+            left={0}
+            right={0}
+            height="2px"
+            background="linear-gradient(90deg, #3182CE, #63B3ED, #3182CE)"
+            animation="shimmer 2s infinite"
+          />
+        )}
+        
+        <VStack spacing={2} align="stretch">
+          <HStack justify="space-between" align="flex-start">
+            <Box flex={1} minWidth={0}>
+              <BodyText 
+                typography="small" 
+                fontWeight="500" 
+                color="#252A32"
+                noOfLines={2}
+              >
+                {truncateTitle(thread.title || 'Untitled')}
+              </BodyText>
+              <LabelText 
+                typography="x-small" 
+                color="#616161"
+                marginTop="4px"
+              >
+                {formatDate(thread.last_activity || thread.created_at)}
+              </LabelText>
+            </Box>
+            
+            <Button
+              size="xs"
+              variant="ghost"
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
               color="#616161"
-              marginTop="4px"
+              _hover={{
+                backgroundColor: "#FED7D7",
+                color: "#E53E3E"
+              }}
+              padding={1}
+              minWidth="auto"
+              transition="all 0.2s ease-in-out"
             >
-              {formatDate(thread.last_activity || thread.created_at)}
-            </LabelText>
-          </Box>
-          
-          <Button
-            size="xs"
-            variant="ghost"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete();
-            }}
-            color="#616161"
-            _hover={{
-              backgroundColor: "#FED7D7",
-              color: "#E53E3E"
-            }}
-            padding={1}
-            minWidth="auto"
-          >
-            ×
-          </Button>
-        </HStack>
-      </VStack>
-    </Box>
+              ×
+            </Button>
+          </HStack>
+        </VStack>
+      </Box>
+    </SlideFade>
   );
-} 
+}

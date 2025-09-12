@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Box, VStack, HStack, Text, Spinner, Alert, AlertIcon, Button } from "@chakra-ui/react";
+import { Box, VStack, Text, Spinner, Alert, AlertIcon } from "@chakra-ui/react";
 import cookies from "js-cookie";
 
 import { MainPageTemplate } from "../../components/templates/main";
 import ChatInterface from "../../components/organisms/Chatbot/ChatInterface";
-import ChatHistory from "../../components/organisms/Chatbot/ChatHistory";
-import TitleText from "../../components/atoms/Text/TitleText";
-import BodyText from "../../components/atoms/Text/BodyText";
-import LabelText from "../../components/atoms/Text/LabelText";
 import ChatbotLandingPage from "./landing";
 
 export async function getStaticProps({ locale }) {
@@ -27,20 +23,15 @@ export default function ChatbotPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
   const [user, setUser] = useState(null);
-  const [selectedThreadId, setSelectedThreadId] = useState(null);
-  const [threadUpdateFunction, setThreadUpdateFunction] = useState(null);
-  const [chatHistoryFunctions, setChatHistoryFunctions] = useState(null);
-
-  const handleReadDocs = () => {
-    router.push('/docs/bot');
-  };
 
   const handleNewThread = (newThreadId, threadTitle) => {
-    setSelectedThreadId(newThreadId);
-    // Add the new thread to the chat history immediately
-    if (chatHistoryFunctions && chatHistoryFunctions.addNewThread) {
-      chatHistoryFunctions.addNewThread(newThreadId, threadTitle);
-    }
+    console.log('ChatbotPage: New thread created:', { newThreadId, threadTitle });
+    // The ChatInterface component handles thread management internally
+  };
+
+  const handleThreadActivity = (threadId) => {
+    console.log('ChatbotPage: Thread activity:', threadId);
+    // The ChatInterface component handles thread updates internally
   };
 
   useEffect(() => {
@@ -90,7 +81,7 @@ export default function ChatbotPage() {
     };
 
     checkAccess();
-  }, [router]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -110,58 +101,12 @@ export default function ChatbotPage() {
 
   return (
     <MainPageTemplate>
-      <Box maxWidth="1440px" margin="0 auto" width="100%">
-        <VStack spacing={6} align="stretch">
-          {/* Header */}
-          <Box>
-            <HStack justify="space-between" align="flex-start">
-              <Box>
-                <TitleText typography="large" fontWeight="600" color="#252A32">
-                  {t('title')}
-                </TitleText>
-                <BodyText typography="medium" color="#616161" marginTop="8px">
-                  {t('subtitle')}
-                </BodyText>
-              </Box>
-            </HStack>
-          </Box>
-
-          <Box marginTop="12px">
-            <Button
-              onClick={handleReadDocs}
-              color="#3182CE"
-              _hover={{ backgroundColor: "#E6F3FF" }}
-              size="sm"
-            >
-              {t('documentation.read_docs')}
-            </Button>
-          </Box>
-
-          {/* Chat Interface */}
-          <HStack spacing={6} align="flex-start" height="calc(100vh - 300px)">
-            {/* Sidebar - Thread History */}
-            <Box width="300px" flexShrink={0}>
-              <ChatHistory 
-                selectedThreadId={selectedThreadId}
-                onThreadSelect={setSelectedThreadId}
-                onThreadUpdate={setThreadUpdateFunction}
-                onFunctions={setChatHistoryFunctions}
-              />
-            </Box>
-
-            {/* Main Chat Area */}
-            <Box flex={1} height="100%">
-              <ChatInterface 
-                threadId={selectedThreadId}
-                onNewThread={handleNewThread}
-                onThreadActivity={threadUpdateFunction}
-              />
-            </Box>
-          </HStack>
-
-
-        </VStack>
+      <Box height="calc(100vh - 120px)" width="100%" overflow="hidden" maxWidth="1400px" margin="0 auto">
+        <ChatInterface 
+          onNewThread={handleNewThread}
+          onThreadActivity={handleThreadActivity}
+        />
       </Box>
     </MainPageTemplate>
   );
-} 
+}
