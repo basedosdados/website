@@ -52,17 +52,6 @@ export async function getStaticProps(context) {
 
   let contentUserGuide = dataset?.usageGuide ? await getUserGuide(dataset.usageGuide, locale || 'pt') : null;
 
-  function checkStatus() {
-    const statusesToCheck = ["under_review", "excluded"];
-    const edgesToCheck = ["tables", "rawDataSources", "informationRequests"];
-
-    if (dataset?.status?.slug && statusesToCheck.includes(dataset.status.slug)) return true;
-
-    return edgesToCheck.some(edge => 
-      dataset?.[edge]?.edges?.some(item => statusesToCheck.includes(item.node?.status?.slug))
-    );
-  }
-
   if (dataset?.status?.slug === "under_review" || dataset?.status?.slug === "excluded") {
     hiddenDataset = true;
   }
@@ -78,7 +67,6 @@ export async function getStaticProps(context) {
     dataset: dataset || null,
     userGuide: userGuide || null,
     hiddenDataset,
-    verifyBDSudo: checkStatus()
   };
   
   return {
@@ -98,7 +86,7 @@ export async function getStaticPaths(context) {
   }
 }
 
-export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verifyBDSudo }) {
+export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const { t } = useTranslation('dataset', 'common');
   const router = useRouter();
   const { locale, query } = router;
@@ -191,8 +179,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset, verify
   }
 
   useEffect(() => {
-    if (verifyBDSudo) checkBDSudo();
-  }, [verifyBDSudo])
+    checkBDSudo();
+  }, [])
 
   useEffect(() => {
     const userBD = cookies.get("userBD") ? JSON.parse(cookies.get("userBD")) : null;
