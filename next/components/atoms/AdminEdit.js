@@ -70,14 +70,14 @@ export default function AdminEdit() {
           {...menuItemProps}
           onClick={() => window.open(datasetAdminUrl, "_blank")}
         >
-          Editar Dataset
+          Editar Conjunto
         </MenuItem>
         {table && (
           <MenuItem
             {...menuItemProps}
             onClick={() => window.open(tableAdminUrl, "_blank")}
           >
-            Editar Table
+            Editar Tabela
           </MenuItem>
         )}
       </MenuList>
