@@ -39,7 +39,7 @@ export async function getStaticProps({ params, locale }) {
   if (!content) {
     return {
       redirect: {
-        destination: locale === "pt" ? "/services" : `/${locale}/services`,
+        destination: locale === "pt" ? "/case-studies" : `/${locale}/case-studies`,
         permanent: false,
       },
     };
@@ -122,7 +122,7 @@ export default function CaseStudies ({ serialize }) {
           fontFamily="Roboto"
           fontSize="16px"
           width="fit-content"
-          href={"/services"}
+          href="/case-studies"
         >
           <ChevronIcon
             alt="back"
