@@ -61,7 +61,7 @@ function FooterLink(props) {
       fontSize="16px"
       lineHeight="24px"
       color="#464A51"
-      target="_blank"
+      target={props.href.startsWith("http") ? "_blank" : "_self"}
       href={props.href}
       _hover={{ opacity: 0.8 }}
       {...props}
@@ -198,7 +198,6 @@ export default function Footer({ template, ocult = false }) {
           >
             <SectionCategories title={t('footer.products.title')}>
               <FooterLink
-                target="_self"
                 href="/search"
                 onClick={() => handlerTriggerEvent("navigating_to_data", "footer")}
               >
@@ -226,43 +225,37 @@ export default function Footer({ template, ocult = false }) {
             
             {locale === 'pt' && (
               <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#diagnostico-de-maturidade"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
                   {t('footer.services.diagnosticoDeMaturidade')}
                 </FooterLink>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#arquitetura-de-dados"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
                   {t('footer.services.arquiteturaDeDados')}
                 </FooterLink>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#portal-de-dados"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
                   {t('footer.services.portalDeDados')}
                 </FooterLink>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#painel-gerencial"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
                   {t('footer.services.painelGerencial')}
                 </FooterLink>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#chatbot"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
                   {t('footer.services.chatbot')}
                 </FooterLink>
-                <FooterLink 
-                  target="_self"
+                <FooterLink
                   href="/services#formacao"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
                 >
@@ -283,8 +276,16 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink href="https://www.youtube.com/watch?v=nGM2OwTUY_M&list=PLu5pyM8QY6hg3GpNCyCtSS3sUi4Jo8Pir">
                 {t('footer.resources.youtubeVideos')}
               </FooterLink>
+              {locale === 'pt' && (
+                <FooterLink href="https://info.basedosdados.org/newsletter">
+                  {t('footer.institutional.newsletter')}
+                </FooterLink>
+              )}
               <FooterLink href="/blog">
                 {t('footer.resources.blog')}
+              </FooterLink>
+              <FooterLink href="/case-studies">
+                {t('footer.resources.caseStudies')}
               </FooterLink>
               <FooterLink href="/faq">
                 {t('footer.resources.faq')}
@@ -292,30 +293,25 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
 
             <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobileMod() && "24px !important"}>
-              <FooterLink target="_self" href="/about-us">
+              <FooterLink href="/about-us">
                 {t('footer.institutional.aboutUs')}
               </FooterLink>
-              <FooterLink target="_self" href="/transparency">
+              <FooterLink href="/transparency">
                 {t('footer.institutional.transparency')}
               </FooterLink>
               {locale === 'pt' && (
-                <>
-                  <FooterLink href="https://info.basedosdados.org/newsletter">
-                    {t('footer.institutional.newsletter')}
-                  </FooterLink>
-                  <FooterLink href="https://info.basedosdados.org/carreiras">
-                    {t('footer.institutional.careers')}
-                  </FooterLink>
-                </>
+                <FooterLink href="https://info.basedosdados.org/carreiras">
+                  {t('footer.institutional.careers')}
+                </FooterLink>
               )}
-              <FooterLink target="_self" href="/terms">
+              <FooterLink href="/terms">
                 {t('footer.institutional.termsAndPrivacy')}
               </FooterLink>
-              <FooterLink target="_self" href="/contact">
+              <FooterLink href="/contact">
                 {t('footer.institutional.contact')}
               </FooterLink>
               <Link 
-                href="/#support"
+                href="https://apoia.se/basedosdados"
                 fontWeight="500"
                 fontSize="16px"
                 lineHeight="24px"
