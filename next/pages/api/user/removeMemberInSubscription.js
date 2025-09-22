@@ -47,7 +47,7 @@ async function removeMemberInSubscription(idAdmin, id, token) {
       data: {
         query: `
           mutation {
-            updateStripeCustomerSubscription(accountId: "${id}", subscriptionId: "${subscriptionId}") {
+            removeStripeSubscriptionMember(accountId: "${id}", subscriptionId: "${subscriptionId}") {
               ok
               errors
             }

@@ -47,7 +47,7 @@ async function addMemberInSubscription(idAdmin, id, token) {
       data: {
         query: `
           mutation {
-            createStripeCustomerSubscription(accountId: "${id}", subscriptionId: "${subscriptionId}") {
+            addStripeSubscriptionMember(accountId: "${id}", subscriptionId: "${subscriptionId}") {
               ok
               errors
             }
@@ -55,7 +55,7 @@ async function addMemberInSubscription(idAdmin, id, token) {
         `
       }
     })
-    return res.data?.data?.createStripeCustomerSubscription
+    return res.data?.data?.addStripeSubscriptionMember
   } catch(err) {
     return "err"
   }

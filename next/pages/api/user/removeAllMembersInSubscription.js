@@ -47,7 +47,7 @@ async function removeAllMembersInSubscription(idAdmin, token) {
       data: {
         query: `
           mutation {
-            deleteStripeCustomerAllMembers(subscriptionId: "${subscriptionId}") {
+            removeAllStripeSubscriptionMembers(subscriptionId: "${subscriptionId}") {
               ok
               errors
             }
