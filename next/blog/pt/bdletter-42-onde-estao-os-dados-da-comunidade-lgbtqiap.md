@@ -35,7 +35,7 @@ Neste último caso, não temos dados oficiais, mas podemos contar com estatísti
 
 Ciente desta importância, em 2023, o governo federal anunciou que planejava criar um banco de dados sobre crimes de homofobia no país. Aliado à reformulação do Conselho Nacional das Pessoas LGBT+ (conselho recriado em abril do mesmo ano de 2023), eram esperadas mais iniciativas para avaliação e monitoramento de ações voltadas à esta população. 
 
-##Afinal, quais são os dados disponíveis?
+## Afinal, quais são os dados disponíveis?
  
 
 O primeiro levantamento público oficial, encabeçado pelo IBGE, com questionamento a respeito da orientação sexual foi a [PNS (Pesquisa Nacional de Saúde)](https://basedosdados.org/dataset/86bac6cc-575f-4289-a857-13f3f52c9a1d?table=035b8e45-d228-49d1-bb33-b14edfaa3c63&utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz--2uPnfZiXEvYb_WguJl0ODlh67StX5oN6sc_6m0_Z2BXuwDVYaP-sVDE8H2NqkHf72kK-9), em 2019. A pesquisa foi realizada em caráter experimental e os resultados apontaram para uma população de 2,9 milhões de pessoas adultas no espectro LGB da sigla (lésbicas, gays e bissexuais). No entanto, não houve coleta sobre identidade de gênero, e essas informações seguem sem monitoramento por parte de alguma instituição federal. Antes disso, a Contagem Populacional de 2007 e o Censo de 2010 apresentavam a opção de “cônjuge do mesmo sexo”, o que representava uma possibilidade de investigação do tema, apesar de limitada.
