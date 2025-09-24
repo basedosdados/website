@@ -399,11 +399,11 @@ export default function TableColumns({
 
   function TranslationTable({ value, dictionary }) {
     const downloadInfo = HasDownloadPermitted(value?.table?.uncompressed_file_size)
-    const cloudValues = value?.table?.cloudTables?.edges?.[0]?.node
+    const cloudValues = value?.table?.cloud_table
 
-    const gcpProjectID = cloudValues?.gcpProjectId || ""
-    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
-    const gcpTableId = cloudValues?.gcpTableId || ""
+    const gcpProjectID = cloudValues?.gcp_project_id || ""
+    const gcpDatasetID = cloudValues?.gcp_dataset_id || ""
+    const gcpTableId = cloudValues?.gcp_table_id || ""
 
     const datasetName = value?.table?.dataset?.name || ""
     const tableName = value?.table?.name || ""
@@ -486,9 +486,9 @@ export default function TableColumns({
   }
 
   function TranslationColumnException({ value }) {
-    const cloudValues = value?.directory_primary_key?.table?.cloudTables?.edges?.[0]?.node
-    const gcpDatasetID = cloudValues?.gcpDatasetId || ""
-    const gcpTableId = cloudValues?.gcpTableId || ""
+    const cloudValues = value?.directory_primary_key?.table?.cloud_table
+    const gcpDatasetID = cloudValues?.gcp_dataset_id || ""
+    const gcpTableId = cloudValues?.gcp_table_id || ""
 
     if(gcpDatasetID === "br_bd_diretorios_data_tempo") return t('column.no')
     if(gcpDatasetID === "br_bd_diretorios_brasil") {
