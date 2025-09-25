@@ -45,6 +45,7 @@
             "username": {
                 "invalid": "Nome de usuário inválido ou já existe uma conta com este nome de usuário.",
                 "noSpaces": "Nome de usuário não pode haver espaçamento.",
+                "noAccents": "O nome de usuário não pode conter acentos.",
                 "exists": "Conta com este nome de usuário já existe."
             },
             "email": {
