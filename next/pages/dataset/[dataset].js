@@ -281,6 +281,14 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
       link: "/services",
       imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
       value: "A"
+    },
+    B: {
+      id: "solucoes-de-dados-para-toda-a-jornada",
+      alternateTitle: "Integre dados públicos e privados com eficiência, segurança e rastreabilidade.",
+      buttonText: "Conheça os serviços de consultoria",
+      link: "/services",
+      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
+      value: "B"
     }
   };
 
@@ -466,7 +474,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </GridItem>
         </Grid>
 
-        {abVariant == "A" && (
+        {abVariant && (
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 
