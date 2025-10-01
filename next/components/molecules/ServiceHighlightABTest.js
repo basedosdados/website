@@ -11,6 +11,7 @@ export default function ServiceHighlightABTest({
   id,
   title,
   description,
+  alternateTitle = "",
   buttonText,
   link,
   imageUrl,
@@ -36,6 +37,13 @@ export default function ServiceHighlightABTest({
         <BodyText typography="small" color="#464A51" marginTop="16px !important">
           {description}
         </BodyText>
+        {
+          alternateTitle && (
+            <TitleText maxWidth="320px" typography="small" marginTop="16px !important">
+              {alternateTitle}
+            </TitleText>
+          )
+        }
         <Link href={link} target="_blank">
           <Button
             isVariant
