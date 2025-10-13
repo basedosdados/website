@@ -62,6 +62,7 @@ export default function Register() {
   })
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -85,6 +86,9 @@ export default function Register() {
     }
     if(/\s/.test(formData.username)) {
       validationErrors.username = t('signup.errors.username.noSpaces')
+    }
+    if(/[À-ÿ]/.test(formData.username)) {
+      validationErrors.username = t('signup.errors.username.noAccents')
     }
     if (!formData.email) {
       validationErrors.email = t('signup.errors.email.invalid')
@@ -122,6 +126,7 @@ export default function Register() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
+      setIsLoading(true)
       createRegister({
         firstName: cleanString(formData.firstName),
         lastName: cleanString(formData?.lastName) || "null",
@@ -134,9 +139,20 @@ export default function Register() {
     }
   }
 
+  function b64EncodeUnicode(str) {
+    return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g,
+      function toSolidBytes(match, p1) {
+        return String.fromCharCode('0x' + p1);
+      })
+    );
+  }
+
   const createRegister = async ({ firstName, lastName, username, email, password }) => {
     try {
-      const result = await fetch(`/api/user/registerAccount?f=${btoa(firstName)}&l=${btoa(lastName)}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`, { method: "GET" })
+      const b64FirstName = b64EncodeUnicode(firstName);
+      const b64LastName = b64EncodeUnicode(lastName);
+
+      const result = await fetch(`/api/user/registerAccount?f=${b64FirstName}&l=${b64LastName}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`, { method: "GET" })
         .then(res => res.json())
 
       let arrayErrors = {}
@@ -155,9 +171,12 @@ export default function Register() {
         sessionStorage.setItem('registration_email_bd', `${email}`)
         triggerGAEvent("user_register", "register_success")
         router.push('/user/check-email')
+      } else {
+        setIsLoading(false)
       }
     } catch (error) {
       console.error(error)
+      setIsLoading(false)
     }
   }
 
@@ -383,6 +402,7 @@ export default function Register() {
             onClick={() => {}}
             width="100%"
             marginTop="24px !important"
+            pointerEvents={isLoading ? "none" : "auto"}
             backgroundColor={errors?.register ? "#BF3434" : "#2B8C4D"}
           >
             {t('signup.register')}

@@ -1123,7 +1123,7 @@ export default function PlansAndPayment ({ userData }) {
             <CardPrice
               title={t('username.DBEnterprise')}
               subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
+              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
               anualPlan={toggleAnual}
               textResource={t('username.allDBProResources')}
               resources={[

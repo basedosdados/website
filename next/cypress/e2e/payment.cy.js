@@ -70,7 +70,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click({ force: true });
 
         cy.contains('R$ 47').should('be.visible');
-        cy.contains('R$ 350').should('be.visible');
+        cy.contains('R$ 385').should('be.visible');
       });
 
       cy.get('@plansModal').within(() => {
@@ -143,7 +143,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
       cy.verifyElement('BD Empresas');
 
-      cy.contains('R$ 3.360,00/ano')
+      cy.contains('R$ 3.700,00/ano')
         .should('be.visible');
 
       cy.get('#toggle-prices-modal-checkout')
@@ -152,7 +152,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         .and('be.checked')
         .click({ force: true });
 
-      cy.contains('R$ 350,00/mês', { timeout: 20000 })
+      cy.contains('R$ 385,00/mês', { timeout: 20000 })
         .should('be.visible');
     });
   });
@@ -339,7 +339,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
         cy.verifyElement('BD Empresas');
 
-        cy.contains('R$ 3.360,00/ano')
+        cy.contains('R$ 3.700,00/ano')
           .should('be.visible');
 
         cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })

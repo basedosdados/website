@@ -45,6 +45,7 @@
             "username": {
                 "invalid": "Invalid username or an account with this username already exists.",
                 "noSpaces": "Username cannot contain spaces.",
+                "noAccents": "Username cannot contain accents.",
                 "exists": "An account with this username already exists."
             },
             "email": {

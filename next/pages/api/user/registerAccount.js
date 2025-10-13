@@ -15,27 +15,23 @@ async function registerAccount({
       method: "POST",
       data: {
         query: `
-        mutation {
-          CreateUpdateAccount (input:
-            {
-              username : "${username}"
-              email: "${email}"
-              firstName: "${firstName}"
-              lastName: "${lastName}"
-              password: "${password}"
-            }  
-          )
-          {
+        mutation CreateUpdateAccount($input: CreateUpdateAccountInput!) {
+          CreateUpdateAccount(input: $input) {
             account {
-              id,
+              id
               email
             }
             errors {
-              field,
+              field
               messages
             }
           }
-        }`
+        }`,
+        variables: {
+          input: {
+            username, email, firstName, lastName, password
+          }
+        }
       }
     })
     const data = res.data
@@ -50,11 +46,11 @@ export default async function handler(req, res) {
   const { f, l, u, e, p } = req.query
   
   const object = {
-    firstName: atob(f),
-    lastName: atob(l),
-    username: atob(u),
-    email: atob(e),
-    password: atob(p)
+    firstName: Buffer.from(f, 'base64').toString('utf-8'),
+    lastName: Buffer.from(l, 'base64').toString('utf-8'),
+    username: Buffer.from(u, 'base64').toString('utf-8'),
+    email: Buffer.from(e, 'base64').toString('utf-8'),
+    password: Buffer.from(p, 'base64').toString('utf-8')
   }
 
   function replaceNullsWithEmpty(obj) {

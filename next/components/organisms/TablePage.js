@@ -22,8 +22,6 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
-import ServiceHighlightABTest from "../molecules/ServiceHighlightABTest";
-import useABTestVariant from "../../hooks/useABTestVariant";
 
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
@@ -172,7 +170,6 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
   const [isLoading, setIsLoading] = useState(true);
   const [resource, setResource] = useState({});
   const [isError, setIsError] = useState(false);
-  const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
 
   const fetchData = useCallback(async () => {
     try {
@@ -246,18 +243,6 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
     resource?.[`description${capitalize(locale)}`] || resource?.description || t('table.notProvided'),
     [resource, locale, t]
   );
-
-  const abTestContent = {
-    B: {
-      id: "solucoes-de-dados-para-toda-a-jornada",
-      title: "Construa uma arquitetura de dados escalável",
-      description: "Estruturamos ambientes em nuvem, pipelines e APIs para ingestão, tratamento e integração de dados públicos e privados. Tudo com automação, segurança e rastreabilidade para escalar suas análises e produtos.",
-      buttonText: "Conheça os serviços de consultoria",
-      link: "/services",
-      imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
-      value: "B"
-    }
-  };
 
   if (isError) return <FourOFour/>;
 
@@ -780,10 +765,6 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
           </Button>
         </Link>
       </Box>
-
-      {abVariant == "B" && (
-        <ServiceHighlightABTest {...abTestContent[abVariant]} />
-      )}
     </Stack>
   )
 }
