@@ -1,5 +1,5 @@
 ---
-title: O fim da escala 6x1 afetaria a rotina de quantas pessoas? - BDletter 41
+title: O fim da escala 6x1 afetaria a rotina de quantas pessoas? 
 description: >-
   Analisamos os dados da RAIS para entender melhor como é a rotina de trabalho de trabalhadores(as) CLT no Brasil.
 date:

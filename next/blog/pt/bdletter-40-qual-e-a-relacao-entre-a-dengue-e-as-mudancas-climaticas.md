@@ -1,5 +1,5 @@
 ---
-title: Qual é a relação entre a dengue e as mudanças climáticas? - BDletter 40
+title: Qual é a relação entre a dengue e as mudanças climáticas? 
 description: >-
   Temperatura e chuvas podem estar relacionadas ao aumento de casos em algumas cidade
 date:

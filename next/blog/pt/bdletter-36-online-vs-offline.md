@@ -1,5 +1,5 @@
 ---
-title: Online vs offline. Qual estratégia é a preferida de candidatos das eleições? - BDletter 36 
+title: Online vs offline. Qual estratégia é a preferida de candidatos das eleições? 
 description: >-
   Análise mostra a evolução dos gastos de candidatos com propaganda em mídias digitais
 date:

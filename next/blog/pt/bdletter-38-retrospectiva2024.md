@@ -1,5 +1,5 @@
 ---
-title: 2024 em Dados, uma retrospectiva - BDletter 38
+title: 2024 em Dados, uma retrospectiva 
 description: >-
    BDletter. Para comemorar o clima de fim de ano, fizemos uma retrospectiva de análises e dados interessantes deste ano na BD. Afinal, esse não foi um ano qualquer. 
 date:
