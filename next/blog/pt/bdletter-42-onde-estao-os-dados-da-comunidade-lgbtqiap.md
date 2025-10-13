@@ -1,5 +1,5 @@
 ---
-title: Onde estão os dados da Comunidade LGBTQIAP+? - BDletter 41
+title: Onde estão os dados da Comunidade LGBTQIAP+? 
 description: >- 
   Confira um Guia de Dados Disponíveis sobre a comunidade LGBTQIAP+ no Brasil 
 date:
