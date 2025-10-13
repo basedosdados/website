@@ -97,7 +97,7 @@ export const CardPrice = ({
             height="60px"
             alignItems="center"
           >
-            <Display textAlign="center">R$ {anualPlan ? price/12 : price}</Display>
+            <Display textAlign="center">R$ {anualPlan ? Math.ceil(price/12) : price}</Display>
             <TitleText
               typography="small"
               position="relative"
@@ -433,7 +433,7 @@ export function SectionPrice() {
         <CardPrice
           title={t('plans.enterprise.title')}
           subTitle={t('plans.enterprise.subtitle')}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
           anualPlan={toggleAnual}
           textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
           resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
