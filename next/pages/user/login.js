@@ -2,9 +2,10 @@ import {
   Box,
   Stack,
   FormControl,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation } from 'next-i18next';
@@ -23,6 +24,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
+import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
@@ -44,12 +46,49 @@ export default function Login() {
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loginSuccess = urlParams.get('login');
+    
+    if (loginSuccess === 'success') {
+      const token = urlParams.get('token')
+      if(token) {
+        cookies.set('token', token, { expires: 7, path: '/' })
+      }
+      fetchUser(urlParams.get('id'));
+    }
+
+    const error = urlParams.get('error');
+    if (error) {
+      let errorMessage = '';
+      switch (error) {
+        case 'auth_failed':
+          errorMessage = t('login.googleAuthFailed');
+          break;
+        case 'user_info_failed':
+          errorMessage = t('login.googleUserInfoFailed');
+          break;
+        case 'account_creation_failed':
+          errorMessage = t('login.googleAccountCreationFailed');
+          break;
+        case 'internal_server_error':
+        default:
+          errorMessage = t('login.serverError');
+      }
+      setErrors({ login: errorMessage });
+    }
+  }, []);
+
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
       ...prevState,
       [field]: e.target.value,
     }))
   }
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/`;
+  };
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -68,24 +107,8 @@ export default function Login() {
     }
   }
 
-  async function fetchToken({ email, password }) {
-    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
-      .then(res => res.json())
-    if(result.error) {
-      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
-        .then(res => res.json())
-      if(hasActive.isActive === false)  {
-        const reg = new RegExp("(?<=:).*")
-        const [ id ] = reg.exec(hasActive.id)
-
-        sessionStorage.setItem('registration_email_bd', `${email}`)
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
-        return router.push('/user/check-email?e=1')
-      }
-      return setErrors({login: t('login.loginError')})
-    }
-
-    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
+  async function fetchUser(id) {
+    const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     if(userData.error) return setErrors({login: t('login.serverError')}) 
 
@@ -107,6 +130,26 @@ export default function Login() {
     }
     
     return router.push('/')
+  }
+
+  async function fetchToken({ email, password }) {
+    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
+      .then(res => res.json())
+    if(result.error) {
+      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
+        .then(res => res.json())
+      if(hasActive.isActive === false)  {
+        const reg = new RegExp("(?<=:).*")
+        const [ id ] = reg.exec(hasActive.id)
+
+        sessionStorage.setItem('registration_email_bd', `${email}`)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
+        return router.push('/user/check-email?e=1')
+      }
+      return setErrors({login: t('login.loginError')})
+    }
+
+    fetchUser(result.id)
   }
 
   return (
@@ -223,6 +266,18 @@ export default function Login() {
             {t('login.loginButton')}
           </Button>
         </form>
+
+        <Divider borderColor="#E0E0E0" marginBottom="24px !important"/>
+
+        <Button
+          width="100%"
+          marginBottom="24px !important"
+          isVariant
+          onClick={handleGoogleLogin}
+        >
+          <GoogleIcon width="18px" height="18px"/>
+          {t('login.googleLogin')}
+        </Button>
 
         <BodyText
           typography="small"
