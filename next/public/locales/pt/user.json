@@ -12,7 +12,11 @@
         "noAccount": "Não tem uma conta?",
         "signUp": "Cadastre-se",
         "loginError": "E-mail ou senha incorretos.",
-        "serverError": "Não foi possível conectar ao servidor. Tente novamente mais tarde."
+        "serverError": "Não foi possível conectar ao servidor. Tente novamente mais tarde.",
+        "googleAuthFailed": "Falha na autenticação com o Google. Por favor, tente novamente.",
+        "googleUserInfoFailed": "Não foi possível obter suas informações do Google. Por favor, tente novamente.",
+        "googleAccountCreationFailed": "Houve um problema ao criar sua conta. Por favor, tente novamente mais tarde.",
+        "googleLogin": "Continuar com Google"
     },
     "signup": {
         "title": "Cadastre-se",
