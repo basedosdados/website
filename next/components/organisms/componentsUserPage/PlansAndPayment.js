@@ -97,21 +97,22 @@ export default function PlansAndPayment ({ userData }) {
           .then(res => res.json())
 
         if(result.success === true) {
-          function filterData(productName, interval, isActive) {
+          function filterData(productName, interval, isActive, amount) {
             let array = result.data
 
             return array.filter(item => 
               (productName ? item.node.productName === productName : true) &&
               (interval ? item.node.interval === interval : true) &&
+              (amount ? item.node.amount === amount : true) &&
               (isActive !== undefined ? item.node.isActive === isActive : true)
             )
           }
 
           const filteredPlans = {
-            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
-            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
-            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
-            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+            bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
           }
 
           setPlans(filteredPlans)
@@ -1123,7 +1124,7 @@ export default function PlansAndPayment ({ userData }) {
             <CardPrice
               title={t('username.DBEnterprise')}
               subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
+              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
               anualPlan={toggleAnual}
               textResource={t('username.allDBProResources')}
               resources={[

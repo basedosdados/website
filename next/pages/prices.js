@@ -97,7 +97,7 @@ export const CardPrice = ({
             height="60px"
             alignItems="center"
           >
-            <Display textAlign="center">R$ {anualPlan ? price/12 : price}</Display>
+            <Display textAlign="center">R$ {anualPlan ? Math.ceil(price/12) : price}</Display>
             <TitleText
               typography="small"
               position="relative"
@@ -309,22 +309,24 @@ export function SectionPrice() {
           .then(res => res.json())
 
         if(result.success === true) {
-          function filterData(productName, interval, isActive) {
+          function filterData(productName, interval, isActive, amount) {
             let array = result.data
 
             return array.filter(item => 
               (productName ? item.node.productName === productName : true) &&
               (interval ? item.node.interval === interval : true) &&
+              (amount ? item.node.amount === amount : true) &&
               (isActive !== undefined ? item.node.isActive === isActive : true)
             )
           }
 
           const filteredPlans = {
-            bd_pro_month : filterData("BD Pro", "month", true)[0].node,
-            bd_pro_year : filterData("BD Pro", "year", true)[0].node,
-            bd_empresas_month : filterData("BD Empresas", "month", true)[0].node,
-            bd_empresas_year : filterData("BD Empresas", "year", true)[0].node
+            bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
+            bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
+            bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
+            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
           }
+          console.log(filteredPlans)
 
           setPlans(filteredPlans)
         }
@@ -433,7 +435,7 @@ export function SectionPrice() {
         <CardPrice
           title={t('plans.enterprise.title')}
           subTitle={t('plans.enterprise.subtitle')}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3360}
+          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
           anualPlan={toggleAnual}
           textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
           resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
