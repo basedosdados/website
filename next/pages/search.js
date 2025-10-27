@@ -114,36 +114,66 @@ const SkeletonWaitCardMobile = () => {
   )
 }
 
-function DatasetCard({ data, locale }) {
+function DatasetCard({ data, locale, index, page }) {
+  const { t } = useTranslation('dataset');
+
+  const handleClick = () => {
+    const searchAnalytics = JSON.parse(window.sessionStorage.getItem("search_analytics") || "{}");
+    const searchClickOrder = JSON.parse(window.sessionStorage.getItem("search_click_order") || "{}");
+
+    let currentClickOrder = 1;
+    if (searchClickOrder.search_id === searchAnalytics.search_id) {
+      currentClickOrder = searchClickOrder.order + 1;
+    }
+
+    window.sessionStorage.setItem("search_click_order", JSON.stringify({
+      search_id: searchAnalytics.search_id,
+      order: currentClickOrder
+    }));
+
+    const datasetIndex = (page - 1) * 10 + (index + 1);
+
+    const eventData = {
+      search_id: searchAnalytics.search_id,
+      search_query: searchAnalytics.search_query,
+      filters_applied: searchAnalytics.filters_applied,
+      dataset_index: datasetIndex,
+      dataset_name: data?.name,
+      dataset_id: data?.id,
+      dataset_click_order: currentClickOrder,
+      dataset_click_timestamp: new Date().toISOString(),
+    };
+
+    triggerGAEvent("select_dataset", JSON.stringify(eventData));
+  };
+
   return (
-    <DatasetSearchCard
-      id={data.id}
-      themes={data?.themes}
-      name={data?.name || t('noName')}
-      temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
-      // spatialCoverage={data?.spatial_coverage
-      //   ?.map(coverage => coverage.name)
-      //   .sort((a, b) => a.localeCompare(b, locale))
-      //   .join(', ')}
-      organizations={data.organizations}
-      tables={{
-        id: data?.first_table_id,
-        number: data?.n_tables
-      }}
-      rawDataSources={{
-        id: data?.first_raw_data_source_id,
-        number: data?.n_raw_data_sources
-      }}
-      informationRequests={{
-        id: data?.first_information_request_id,
-        number: data?.n_information_requests
-      }}
-      contains={{
-        free: data?.contains_open_data,
-        pro: data?.contains_closed_data
-      }}
-      locale={locale}
-    />
+    <Box onClick={handleClick} cursor="pointer" width="100%">
+      <DatasetSearchCard
+        id={data.id}
+        themes={data?.themes}
+        name={data?.name || t('noName')}
+        temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
+        organizations={data.organizations}
+        tables={{
+          id: data?.first_table_id,
+          number: data?.n_tables
+        }}
+        rawDataSources={{
+          id: data?.first_raw_data_source_id,
+          number: data?.n_raw_data_sources
+        }}
+        informationRequests={{
+          id: data?.first_information_request_id,
+          number: data?.n_information_requests
+        }}
+        contains={{
+          free: data?.contains_open_data,
+          pro: data?.contains_closed_data
+        }}
+        locale={locale}
+      />
+    </Box>
   )
 }
 
@@ -162,10 +192,21 @@ const Pagination = memo(({ pageInfo, query, router, isLoading }) => {
       marginPagesDisplayed={isMobile ? 0 : 1}
       pageRangeDisplayed={isMobile ? 0 : 2}
       onPageChange={(newPage) => {
-        router.push({
-          pathname: router.pathname,
-          query: {...query, page: newPage.selected + 1 || 1}
-        })
+        const newPageNumber = newPage.selected + 1 || 1;
+
+        const lastSearch = JSON.parse(window.sessionStorage.getItem("search_analytics") || "{}");
+
+        const eventData = {
+          search_id: lastSearch.search_id,
+          search_query: lastSearch.search_query,
+          filters_applied: lastSearch.filters_applied,
+          page_number: newPageNumber,
+          page_view_timestamp: new Date().toISOString()
+        };
+
+        triggerGAEvent("view_search_results", JSON.stringify(eventData));
+
+        router.push({ pathname: router.pathname, query: { ...query, page: newPageNumber } });
       }}
       containerClassName={"pagination"}
       activeClassName={"active"}
@@ -212,8 +253,8 @@ export default function SearchDatasetPage() {
     }
   }, [aggregations]);
 
-  async function getDatasets({q, filters, page}) {
-    const res = await getSearchDatasets({q, filter: filters, page, locale: locale || 'pt'})
+  async function getDatasets({filters, page}) {
+    const res = await getSearchDatasets({filter: filters, page, locale: locale || 'pt'})
     if(res === undefined) return router.push({pathname:"500"})
     if(res?.count === 0) setShowEmptyState(true)
     setPageInfo({page: page, count: res?.count})
@@ -221,6 +262,43 @@ export default function SearchDatasetPage() {
     setAggregations(res?.aggregations)
     setCount(res?.count)
     setIsLoading(false)
+
+    if (typeof window !== "undefined") {
+      const lastSearch = JSON.parse(window.sessionStorage.getItem("search_analytics") || "{}");
+      const queryFilter = filters.find(f => f[0] === 'q');
+      const currentQuery = queryFilter ? queryFilter[1] : '';
+      const currentFilters = filters.filter(f => f[0] !== 'q');
+
+      const isNewSearch = (
+        lastSearch.search_query !== currentQuery ||
+        JSON.stringify(lastSearch.filters_applied) !== JSON.stringify(currentFilters)
+      );
+
+      let searchId;
+      if (isNewSearch) {
+        searchId = crypto.randomUUID();
+      } else {
+        searchId = lastSearch.search_id || crypto.randomUUID();
+      }
+
+      if (isNewSearch) {
+        window.sessionStorage.removeItem("search_click_order");
+      }
+
+      const searchData = {
+        "search_id": searchId,
+        "search_query": currentQuery,
+        "search_results_count": res?.count,
+        "filters_applied": currentFilters,
+        "search_timestamp": new Date().toISOString()
+      };
+
+      if (isNewSearch) {
+        triggerGAEvent("search", JSON.stringify(searchData));
+      }
+
+      window.sessionStorage.setItem("search_analytics", JSON.stringify(searchData));
+    }
   }
 
   useEffect(() => {
@@ -238,7 +316,6 @@ export default function SearchDatasetPage() {
 
     const fetchFunc = setTimeout(() => {
       getDatasets({
-        q: query?.q === undefined ? "" : query?.q || "",
         filters: fetchFilter(query),
         page: query?.page || 1
       })
@@ -815,7 +892,13 @@ export default function SearchDatasetPage() {
               ))
               :
               (resource || []).map((res, i) => (
-                <DatasetCard data={res} locale={locale} key={i}/>
+                <DatasetCard
+                  data={res}
+                  locale={locale}
+                  key={i}
+                  index={i}
+                  page={pageInfo.page}
+                />
               ))
             }
 
