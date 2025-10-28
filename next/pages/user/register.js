@@ -27,6 +27,7 @@ import { cleanString } from "../../utils";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
+import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
@@ -63,6 +64,10 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/`;
+  };
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -408,6 +413,16 @@ export default function Register() {
             {t('signup.register')}
           </Button>
         </form>
+
+        <Button
+          width="100%"
+          marginTop="8px !important"
+          isVariant
+          onClick={handleGoogleLogin}
+        >
+          <GoogleIcon width="18px" height="18px"/>
+          {t('login.googleLogin')}
+        </Button>
 
         {errors?.register &&
           <Box

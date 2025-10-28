@@ -1,8 +1,10 @@
 import {
   Box,
   Stack,
+  VStack,
   FormControl,
   Divider,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -45,12 +47,14 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const loginSuccess = urlParams.get('login');
-    
+
     if (loginSuccess === 'success') {
+      setIsLoading(true)
       const token = urlParams.get('token')
       if(token) {
         cookies.set('token', token, { expires: 7, path: '/' })
@@ -110,7 +114,10 @@ export default function Login() {
   async function fetchUser(id) {
     const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
-    if(userData.error) return setErrors({login: t('login.serverError')}) 
+    if(userData.error) {
+      setIsLoading(false)
+      return setErrors({login: t('login.serverError')}) 
+    }
 
     cookies.set('userBD', JSON.stringify(userData))
 
@@ -176,6 +183,18 @@ export default function Login() {
           {t('login.title')}
         </Display>
 
+        {isLoading &&
+          <VStack spacing={4} justify="center" h="300px">
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              color="#2B8C4D"
+              width="200px"
+              height="200px"
+            />
+          </VStack>
+        }
+
         {errors.login && 
           <Box
             display="flex"
@@ -194,7 +213,7 @@ export default function Login() {
           </Box>
         }
 
-        <form onSubmit={handleSubmit}>
+        {!isLoading && <form onSubmit={handleSubmit}>
           <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
             <LabelTextForm text={t('login.emailLabel')}/>
             <InputForm
@@ -261,44 +280,46 @@ export default function Login() {
             type="submit"
             width="100%"
             onClick={() => {}}
-            marginBottom="24px !important"
+            marginBottom="8px !important"
           >
             {t('login.loginButton')}
           </Button>
-        </form>
+        </form>}
 
-        <Divider borderColor="#E0E0E0" marginBottom="24px !important"/>
+        {!isLoading && <>
+          <Button
+            width="100%"
+            marginBottom="24px !important"
+            isVariant
+            onClick={handleGoogleLogin}
+          >
+            <GoogleIcon width="18px" height="18px"/>
+            {t('login.googleLogin')}
+          </Button>
 
-        <Button
-          width="100%"
-          marginBottom="24px !important"
-          isVariant
-          onClick={handleGoogleLogin}
-        >
-          <GoogleIcon width="18px" height="18px"/>
-          {t('login.googleLogin')}
-        </Button>
+          <Divider borderColor="#E0E0E0" marginBottom="24px !important"/>
 
-        <BodyText
-          typography="small"
-          width="100%"
-          display="flex"
-          flexDirection="row"
-          justifyContent="center"
-          textAlign="center"
-        >
-          {t('login.noAccount')}
-          <Link
-            marginLeft="2px"
-            href='/user/register'
-            fontWeight="400"
-            color="#0068C5"
-            _hover={{
-              color: "#0057A4"
-            }}
-          >{t('login.signUp')}
-          </Link>.
-        </BodyText>
+          <BodyText
+            typography="small"
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            justifyContent="center"
+            textAlign="center"
+          >
+            {t('login.noAccount')}
+            <Link
+              marginLeft="2px"
+              href='/user/register'
+              fontWeight="400"
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >{t('login.signUp')}
+            </Link>.
+          </BodyText>
+        </>}
       </Stack>
     </MainPageTemplate>
   )
