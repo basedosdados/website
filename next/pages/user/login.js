@@ -107,6 +107,7 @@ export default function Login() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
+      setIsLoading(true)
       fetchToken(formData)
     }
   }
@@ -153,6 +154,7 @@ export default function Login() {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
         return router.push('/user/check-email?e=1')
       }
+      setIsLoading(false)
       return setErrors({login: t('login.loginError')})
     }
 
@@ -195,7 +197,7 @@ export default function Login() {
           </VStack>
         }
 
-        {errors.login && 
+        {errors.login &&
           <Box
             display="flex"
             flexDirection="row"
@@ -211,6 +213,29 @@ export default function Login() {
               {errors.login}
             </BodyText>
           </Box>
+        }
+
+        {!isLoading && 
+          <>
+            <Button
+              width="100%"
+              marginBottom="16px !important"
+              isVariant
+              onClick={handleGoogleLogin}
+            >
+              <GoogleIcon width="18px" height="18px"/>
+              {t('login.googleLogin')}
+            </Button>
+
+            <BodyText
+              width="100%"
+              textAlign="center"
+              color="#71757A"
+              marginBottom="16px !important"
+            >
+              {t('login.or')}
+            </BodyText>
+          </>
         }
 
         {!isLoading && <form onSubmit={handleSubmit}>
@@ -280,23 +305,13 @@ export default function Login() {
             type="submit"
             width="100%"
             onClick={() => {}}
-            marginBottom="8px !important"
+            marginBottom="24px !important"
           >
             {t('login.loginButton')}
           </Button>
         </form>}
 
         {!isLoading && <>
-          <Button
-            width="100%"
-            marginBottom="24px !important"
-            isVariant
-            onClick={handleGoogleLogin}
-          >
-            <GoogleIcon width="18px" height="18px"/>
-            {t('login.googleLogin')}
-          </Button>
-
           <Divider borderColor="#E0E0E0" marginBottom="24px !important"/>
 
           <BodyText
