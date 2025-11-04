@@ -16,7 +16,8 @@
         "googleAuthFailed": "Falha na autenticação com o Google. Por favor, tente novamente.",
         "googleUserInfoFailed": "Não foi possível obter suas informações do Google. Por favor, tente novamente.",
         "googleAccountCreationFailed": "Houve um problema ao criar sua conta. Por favor, tente novamente mais tarde.",
-        "googleLogin": "Continuar com Google"
+        "googleLogin": "Continuar com o Google",
+        "or": "ou"
     },
     "signup": {
         "title": "Cadastre-se",
