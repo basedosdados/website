@@ -33,8 +33,6 @@ export default function FourOFour() {
 
   function openSearchLink() {
     if(search.trim() === "") return
-    triggerGAEvent("search", search.trim())
-    triggerGAEvent("search_four0four", search.trim())
     router.push(`/search?q=${search.trim()}`);
   }
 

@@ -515,8 +515,6 @@ function SearchInputUser ({ user }) {
 
   function openSearchLink() {
     if(search.trim() === "") return
-    triggerGAEvent("search", search.trim())
-    triggerGAEvent("search_menu", search.trim())
     router.push(`/search?q=${search.trim()}`);
   }
 
