@@ -12,7 +12,12 @@
         "noAccount": "Don't have an account?",
         "signUp": "Sign up",
         "loginError": "Incorrect email or password.",
-        "serverError": "Could not connect to server. Please try again later."
+        "serverError": "Could not connect to server. Please try again later.",
+        "googleAuthFailed": "Google authentication failed. Please try again.",
+        "googleUserInfoFailed": "Could not get your information from Google. Please try again.",
+        "googleAccountCreationFailed": "There was a problem creating your account. Please try again later.",
+        "googleLogin": "Sign in with Google",
+        "or": "or"
     },
     "signup": {
         "title": "Sign up",

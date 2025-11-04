@@ -316,7 +316,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
-            router.push('/')
+            window.location.href = "/"
           }}
         >
           <SignOutIcon width="20px" height="20px"/>
@@ -490,7 +490,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
-              router.push('/')
+              window.location.href = "/"
             }}
           >
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>

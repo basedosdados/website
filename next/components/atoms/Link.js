@@ -16,12 +16,9 @@ export default function Link({
 
   useEffect(() => {
     if (typeof window !== "undefined" && href) {
-      try {
-        const linkUrl = new URL(href, window.location.origin);
-        setIsExternalLink(linkUrl.origin !== window.location.origin);
-      } catch (error) {
-        setIsExternalLink(false);
-      }
+      setIsExternalLink(href.startsWith('http://') || href.startsWith('https://'));
+    } else {
+      setIsExternalLink(false);
     }
   }, [href]);
 

@@ -1,10 +1,13 @@
 import {
   Box,
   Stack,
+  VStack,
   FormControl,
+  Divider,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation } from 'next-i18next';
@@ -23,6 +26,7 @@ import { MainPageTemplate } from "../../components/templates/main";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
+import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
@@ -43,6 +47,41 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const loginSuccess = urlParams.get('login');
+
+    if (loginSuccess === 'success') {
+      setIsLoading(true)
+      const token = urlParams.get('token')
+      if(token) {
+        cookies.set('token', token, { expires: 7, path: '/' })
+      }
+      fetchUser(urlParams.get('id'));
+    }
+
+    const error = urlParams.get('error');
+    if (error) {
+      let errorMessage = '';
+      switch (error) {
+        case 'auth_failed':
+          errorMessage = t('login.googleAuthFailed');
+          break;
+        case 'user_info_failed':
+          errorMessage = t('login.googleUserInfoFailed');
+          break;
+        case 'account_creation_failed':
+          errorMessage = t('login.googleAccountCreationFailed');
+          break;
+        case 'internal_server_error':
+        default:
+          errorMessage = t('login.serverError');
+      }
+      setErrors({ login: errorMessage });
+    }
+  }, []);
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -50,6 +89,10 @@ export default function Login() {
       [field]: e.target.value,
     }))
   }
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/`;
+  };
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -64,30 +107,18 @@ export default function Login() {
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length === 0) {
+      setIsLoading(true)
       fetchToken(formData)
     }
   }
 
-  async function fetchToken({ email, password }) {
-    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
+  async function fetchUser(id) {
+    const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
-    if(result.error) {
-      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
-        .then(res => res.json())
-      if(hasActive.isActive === false)  {
-        const reg = new RegExp("(?<=:).*")
-        const [ id ] = reg.exec(hasActive.id)
-
-        sessionStorage.setItem('registration_email_bd', `${email}`)
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
-        return router.push('/user/check-email?e=1')
-      }
-      return setErrors({login: t('login.loginError')})
+    if(userData.error) {
+      setIsLoading(false)
+      return setErrors({login: t('login.serverError')}) 
     }
-
-    const userData = await fetch(`/api/user/getUser?p=${btoa(result.id)}`, {method: "GET"})
-      .then(res => res.json())
-    if(userData.error) return setErrors({login: t('login.serverError')}) 
 
     cookies.set('userBD', JSON.stringify(userData))
 
@@ -107,6 +138,27 @@ export default function Login() {
     }
     
     return router.push('/')
+  }
+
+  async function fetchToken({ email, password }) {
+    const result = await fetch(`/api/user/getToken?a=${btoa(email)}&q=${btoa(password)}`, {method: "GET"})
+      .then(res => res.json())
+    if(result.error) {
+      const hasActive = await fetch(`/api/user/getIdUser?p=${btoa(email)}`, {method: "GET"})
+        .then(res => res.json())
+      if(hasActive.isActive === false)  {
+        const reg = new RegExp("(?<=:).*")
+        const [ id ] = reg.exec(hasActive.id)
+
+        sessionStorage.setItem('registration_email_bd', `${email}`)
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/account/account_activate/${btoa(id)}/`)
+        return router.push('/user/check-email?e=1')
+      }
+      setIsLoading(false)
+      return setErrors({login: t('login.loginError')})
+    }
+
+    fetchUser(result.id)
   }
 
   return (
@@ -133,7 +185,19 @@ export default function Login() {
           {t('login.title')}
         </Display>
 
-        {errors.login && 
+        {isLoading &&
+          <VStack spacing={4} justify="center" h="300px">
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              color="#2B8C4D"
+              width="200px"
+              height="200px"
+            />
+          </VStack>
+        }
+
+        {errors.login &&
           <Box
             display="flex"
             flexDirection="row"
@@ -151,7 +215,30 @@ export default function Login() {
           </Box>
         }
 
-        <form onSubmit={handleSubmit}>
+        {!isLoading && 
+          <>
+            <Button
+              width="100%"
+              marginBottom="16px !important"
+              isVariant
+              onClick={handleGoogleLogin}
+            >
+              <GoogleIcon width="18px" height="18px"/>
+              {t('login.googleLogin')}
+            </Button>
+
+            <BodyText
+              width="100%"
+              textAlign="center"
+              color="#71757A"
+              marginBottom="16px !important"
+            >
+              {t('login.or')}
+            </BodyText>
+          </>
+        }
+
+        {!isLoading && <form onSubmit={handleSubmit}>
           <FormControl isInvalid={!!errors.email} marginBottom="24px !important">
             <LabelTextForm text={t('login.emailLabel')}/>
             <InputForm
@@ -222,28 +309,32 @@ export default function Login() {
           >
             {t('login.loginButton')}
           </Button>
-        </form>
+        </form>}
 
-        <BodyText
-          typography="small"
-          width="100%"
-          display="flex"
-          flexDirection="row"
-          justifyContent="center"
-          textAlign="center"
-        >
-          {t('login.noAccount')}
-          <Link
-            marginLeft="2px"
-            href='/user/register'
-            fontWeight="400"
-            color="#0068C5"
-            _hover={{
-              color: "#0057A4"
-            }}
-          >{t('login.signUp')}
-          </Link>.
-        </BodyText>
+        {!isLoading && <>
+          <Divider borderColor="#E0E0E0" marginBottom="24px !important"/>
+
+          <BodyText
+            typography="small"
+            width="100%"
+            display="flex"
+            flexDirection="row"
+            justifyContent="center"
+            textAlign="center"
+          >
+            {t('login.noAccount')}
+            <Link
+              marginLeft="2px"
+              href='/user/register'
+              fontWeight="400"
+              color="#0068C5"
+              _hover={{
+                color: "#0057A4"
+              }}
+            >{t('login.signUp')}
+            </Link>.
+          </BodyText>
+        </>}
       </Stack>
     </MainPageTemplate>
   )

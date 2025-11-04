@@ -3,7 +3,8 @@ import {
   FormControl,
   List,
   VStack,
-  Box
+  Box,
+  Spinner
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useTranslation } from 'next-i18next';
@@ -27,6 +28,7 @@ import { cleanString } from "../../utils";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
+import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
@@ -63,6 +65,10 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/`;
+  };
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -194,6 +200,7 @@ export default function Register() {
         height="100%"
         marginTop="50px"
         marginX="27px"
+        spacing={0}
       >
         <Display
           as="h1"
@@ -203,213 +210,250 @@ export default function Register() {
           {t('signup.title')}
         </Display>
 
-        <form onSubmit={handleSubmit}>
-          <VStack
-            spacing={0}
-            gap="24px"
-          >
-            <FormControl isInvalid={!!errors.firstName} >
-              <LabelTextForm text={t('signup.firstName')}/>
-              <InputForm
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={(e) => handleInputChange(e, "firstName")}
-                placeholder={t('signup.placeholders.firstName')}
-              />
-              <ErrorMessage>
-                {errors.firstName}
-              </ErrorMessage>
-            </FormControl>
+        <Button
+          display={isLoading ? "none" : "flex"}
+          width="100%"
+          marginBottom="16px !important"
+          isVariant
+          onClick={handleGoogleLogin}
+        >
+          <GoogleIcon width="18px" height="18px"/>
+          {t('login.googleLogin')}
+        </Button>
 
-            <FormControl isInvalid={!!errors.lastName}>
-              <LabelTextForm text={t('signup.lastName')}/>
-              <InputForm
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={(e) => handleInputChange(e, "lastName")}
-                placeholder={t('signup.placeholders.lastName')}
-              />
-              <ErrorMessage>
-                {errors.lastName}
-              </ErrorMessage>
-            </FormControl>
+        <BodyText
+          display={isLoading ? "none" : "block"}
+          width="100%"
+          textAlign="center"
+          color="#71757A"
+          marginBottom="16px !important"
+        >
+          {t('login.or')}
+        </BodyText>
 
-            <FormControl isInvalid={!!errors.email}>
-              <LabelTextForm text={t('signup.email')} />
-              <InputForm
-                id="username"
-                name="username"
-                type="email"
-                autoComplete="username"
-                value={formData.email}
-                onChange={(e) => handleInputChange(e, "email")}
-                placeholder={t('signup.placeholders.email')}
-              />
-              <ErrorMessage>
-                {errors.email}
-              </ErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.username} >
-              <LabelTextForm text={t('signup.username')}/>
-              <InputForm
-                id="user"
-                name="user"
-                type="text"
-                autoComplete="off"
-                value={formData.username}
-                onChange={(e) => handleInputChange(e, "username")}
-                placeholder={t('signup.placeholders.username')}
-              />
-              <ErrorMessage>
-                {errors.username}
-              </ErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.password}>
-              <LabelTextForm text={t('signup.password')} />
-              <InputForm
-                type={showPassword ? "password" : "text"}
-                id="password"
-                name="password"
-                autoComplete="current-password"
-                value={formData.password}
-                onChange={(e) => handleInputChange(e, "password")}
-                placeholder={t('signup.placeholders.password')}
-                inputElementStyle={{
-                  cursor: "pointer",
-                  onClick: () => setShowPassword(!showPassword)
-                }}
-                icon={showPassword ?
-                  <EyeOffIcon
-                    alt="exibir senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                :
-                  <EyeIcon
-                    alt="esconder senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                }
-              />
-              <BodyText
-                typography="small" 
-                margin="8px 0"
-                color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
-                display="flex"
-                flexDirection="row"
-                gap="8px"
-                alignItems="flex-start"
-              >
-                <Exclamation
-                  display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
-                  width="18px"
-                  height="18px"
-                  fill="#BF3434"
-                /> {t('username.passwordRequirements')}
-              </BodyText>
-
-              <List
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="20px"
-                position="relative"
-                left="2px"
-                display="flex"
-                flexDirection="column"
-                gap="8px"
-              >
-                <ListChecked 
-                  checked={formData.password.length >= 8}
-                  err={errors?.regexPassword?.amount}
-                >
-                  {t('username.minCharacters')}
-                </ListChecked>
-                <ListChecked
-                  checked={/[A-Z]/.test(formData.password)}
-                  err={errors?.regexPassword?.upperCase}
-                >
-                  {t('username.uppercaseLetter')}
-                </ListChecked>
-                <ListChecked
-                  checked={/[a-z]/.test(formData.password)}
-                  err={errors?.regexPassword?.lowerCase}
-                >
-                  {t('username.lowercaseLetter')}
-                </ListChecked>
-                <ListChecked
-                  checked={/\d/.test(formData.password)}
-                  err={errors?.regexPassword?.number}
-                >
-                  {t('username.digit')}
-                </ListChecked>
-                <ListChecked
-                  checked={/[!@#?%&*]/.test(formData.password)}
-                  err={errors?.regexPassword?.special}
-                >
-                  {t('username.specialCharacter')}
-                </ListChecked>
-              </List>
-
-              {errors.password &&
-                <ErrorMessage>{errors.password}</ErrorMessage>
-              }
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.confirmPassword}>
-              <LabelTextForm text={t('signup.confirmPassword')} />
-              <InputForm
-                type={showConfirmPassword ? "password" : "text"}
-                id="confirmPassword"
-                name="password"
-                autoComplete="current-password"
-                value={formData.confirmPassword}
-                onChange={(e) => handleInputChange(e, "confirmPassword")}
-                placeholder={t('signup.placeholders.confirmPassword')}
-                inputElementStyle={{
-                  cursor: "pointer",
-                  onClick: () => setShowConfirmPassword(!showConfirmPassword)
-                }}
-                icon={showConfirmPassword ?
-                  <EyeOffIcon
-                    alt="exibir senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                :
-                  <EyeIcon
-                    alt="esconder senhar"
-                    width="20px"
-                    height="20px"
-                    fill="#464A51"
-                  />
-                }
-              />
-              <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
-            </FormControl>
+        {isLoading &&
+          <VStack spacing={4} justify="center" h="300px">
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              color="#2B8C4D"
+              width="200px"
+              height="200px"
+            />
           </VStack>
+        }
 
-          <Button
-            type="submit"
-            onClick={() => {}}
-            width="100%"
-            marginTop="24px !important"
-            pointerEvents={isLoading ? "none" : "auto"}
-            backgroundColor={errors?.register ? "#BF3434" : "#2B8C4D"}
-          >
-            {t('signup.register')}
-          </Button>
-        </form>
+        {!isLoading &&
+        <>
+          <form onSubmit={handleSubmit}>
+            <VStack
+              spacing={0}
+              gap="24px"
+            >
+              <FormControl isInvalid={!!errors.firstName} >
+                <LabelTextForm text={t('signup.firstName')}/>
+                <InputForm
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={(e) => handleInputChange(e, "firstName")}
+                  placeholder={t('signup.placeholders.firstName')}
+                />
+                <ErrorMessage>
+                  {errors.firstName}
+                </ErrorMessage>
+              </FormControl>
 
-        {errors?.register &&
+              <FormControl isInvalid={!!errors.lastName}>
+                <LabelTextForm text={t('signup.lastName')}/>
+                <InputForm
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={(e) => handleInputChange(e, "lastName")}
+                  placeholder={t('signup.placeholders.lastName')}
+                />
+                <ErrorMessage>
+                  {errors.lastName}
+                </ErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.email}>
+                <LabelTextForm text={t('signup.email')} />
+                <InputForm
+                  id="username"
+                  name="username"
+                  type="email"
+                  autoComplete="username"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange(e, "email")}
+                  placeholder={t('signup.placeholders.email')}
+                />
+                <ErrorMessage>
+                  {errors.email}
+                </ErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.username} >
+                <LabelTextForm text={t('signup.username')}/>
+                <InputForm
+                  id="user"
+                  name="user"
+                  type="text"
+                  autoComplete="off"
+                  value={formData.username}
+                  onChange={(e) => handleInputChange(e, "username")}
+                  placeholder={t('signup.placeholders.username')}
+                />
+                <ErrorMessage>
+                  {errors.username}
+                </ErrorMessage>
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.password}>
+                <LabelTextForm text={t('signup.password')} />
+                <InputForm
+                  type={showPassword ? "password" : "text"}
+                  id="password"
+                  name="password"
+                  autoComplete="current-password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange(e, "password")}
+                  placeholder={t('signup.placeholders.password')}
+                  inputElementStyle={{
+                    cursor: "pointer",
+                    onClick: () => setShowPassword(!showPassword)
+                  }}
+                  icon={showPassword ?
+                    <EyeOffIcon
+                      alt="exibir senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  :
+                    <EyeIcon
+                      alt="esconder senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  }
+                />
+                <BodyText
+                  typography="small" 
+                  margin="8px 0"
+                  color={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "#BF3434" : "#71757A" : "#71757A" }
+                  display="flex"
+                  flexDirection="row"
+                  gap="8px"
+                  alignItems="flex-start"
+                >
+                  <Exclamation
+                    display={errors?.regexPassword ? Object.keys(errors?.regexPassword).length > 0 ? "flex" : "none" : "none"}
+                    width="18px"
+                    height="18px"
+                    fill="#BF3434"
+                  /> {t('username.passwordRequirements')}
+                </BodyText>
+
+                <List
+                  fontFamily="Roboto"
+                  fontSize="14px"
+                  fontWeight="400"
+                  lineHeight="20px"
+                  position="relative"
+                  left="2px"
+                  display="flex"
+                  flexDirection="column"
+                  gap="8px"
+                >
+                  <ListChecked 
+                    checked={formData.password.length >= 8}
+                    err={errors?.regexPassword?.amount}
+                  >
+                    {t('username.minCharacters')}
+                  </ListChecked>
+                  <ListChecked
+                    checked={/[A-Z]/.test(formData.password)}
+                    err={errors?.regexPassword?.upperCase}
+                  >
+                    {t('username.uppercaseLetter')}
+                  </ListChecked>
+                  <ListChecked
+                    checked={/[a-z]/.test(formData.password)}
+                    err={errors?.regexPassword?.lowerCase}
+                  >
+                    {t('username.lowercaseLetter')}
+                  </ListChecked>
+                  <ListChecked
+                    checked={/\d/.test(formData.password)}
+                    err={errors?.regexPassword?.number}
+                  >
+                    {t('username.digit')}
+                  </ListChecked>
+                  <ListChecked
+                    checked={/[!@#?%&*]/.test(formData.password)}
+                    err={errors?.regexPassword?.special}
+                  >
+                    {t('username.specialCharacter')}
+                  </ListChecked>
+                </List>
+
+                {errors.password &&
+                  <ErrorMessage>{errors.password}</ErrorMessage>
+                }
+              </FormControl>
+
+              <FormControl isInvalid={!!errors.confirmPassword}>
+                <LabelTextForm text={t('signup.confirmPassword')} />
+                <InputForm
+                  type={showConfirmPassword ? "password" : "text"}
+                  id="confirmPassword"
+                  name="password"
+                  autoComplete="current-password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => handleInputChange(e, "confirmPassword")}
+                  placeholder={t('signup.placeholders.confirmPassword')}
+                  inputElementStyle={{
+                    cursor: "pointer",
+                    onClick: () => setShowConfirmPassword(!showConfirmPassword)
+                  }}
+                  icon={showConfirmPassword ?
+                    <EyeOffIcon
+                      alt="exibir senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  :
+                    <EyeIcon
+                      alt="esconder senhar"
+                      width="20px"
+                      height="20px"
+                      fill="#464A51"
+                    />
+                  }
+                />
+                <ErrorMessage>{errors.confirmPassword}</ErrorMessage>
+              </FormControl>
+            </VStack>
+
+            <Button
+              type="submit"
+              onClick={() => {}}
+              width="100%"
+              marginTop="24px !important"
+              pointerEvents={isLoading ? "none" : "auto"}
+              backgroundColor={errors?.register ? "#BF3434" : "#2B8C4D"}
+            >
+              {t('signup.register')}
+            </Button>
+          </form>
+        </>
+        }
+
+        {!isLoading && errors?.register &&
           <Box
             display="flex"
             flexDirection="row"
@@ -428,6 +472,7 @@ export default function Register() {
         }
 
         <BodyText
+          display={isLoading ? "none" : "block"}
           typography="small"
           textAlign="center"
           color="#71757A"
@@ -461,6 +506,7 @@ export default function Register() {
         </BodyText>
 
         <BodyText
+          display={isLoading ? "none" : "block"}
           typography="small"
           textAlign="center"
           marginTop="24px !important"
