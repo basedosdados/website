@@ -1,18 +1,18 @@
 ---
 id: "siga_o_dinheiro_2024"
 displayTitle: "Siga o Dinheiro 2024"
-thumbnail: ""
+thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png"
 title: "Siga o Dinheiro 2024: Plataforma facilita o acesso à prestação de contas das Eleições com dados integrados e processamento na nuvem"
-img: ""
+img: "/img/estudo_de_caso_siga_o_dinheiro_2024.png"
 imgDescription: ""
-description: ""
+description: "O financiamento das campanhas eleitorais no Brasil, que movimenta mais de R$ 4,9 bilhões do Fundo Eleitoral, é um tema de grande interesse público, mas de difícil acompanhamento. Embora o Tribunal Superior Eleitoral (TSE) possua um sistema rigoroso de registro de gastos, suas ferramentas de consulta exigem conhecimento prévio, dificultando a análise e a integração dos dados para o cidadão comum e até mesmo para analistas."
 logo: {
-  img: "",
-  width: 245,
+  img: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/logos/jota.svg",
+  width: 222,
   height: 85
 }
 about: "Empresa de jornalismo e tecnologia para tomadores de decisão que tem como missão tornar as instituições brasileiras mais transparentes e previsíveis."
-summary: ""
+summary: "O financiamento das campanhas eleitorais no Brasil, que movimenta mais de R$ 4,9 bilhões do Fundo Eleitoral, é um tema de grande interesse público, mas de difícil acompanhamento. Embora o Tribunal Superior Eleitoral (TSE) possua um sistema rigoroso de registro de gastos, suas ferramentas de consulta exigem conhecimento prévio, dificultando a análise e a integração dos dados para o cidadão comum e até mesmo para analistas."
 sector: "Política"
 ---
 
