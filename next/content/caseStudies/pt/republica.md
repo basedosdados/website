@@ -1,5 +1,7 @@
 ---
 id: "republica"
+created_at: "2025-08-05"
+updated_at: "2025-08-05"
 displayTitle: "República"
 thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_republica.png"
 title: "República.org e Base dos Dados usam dados e evidências para abordar desafios na gestão de pessoas no setor público"

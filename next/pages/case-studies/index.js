@@ -33,6 +33,8 @@ export async function getStaticProps({ locale }) {
 export default function CaseStudies ({ caseStudies }) {
   const { t } = useTranslation('caseStudies');
 
+  const sortedCaseStudies = caseStudies.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
   return (
     <MainPageTemplate>
       <Head>
@@ -72,8 +74,8 @@ export default function CaseStudies ({ caseStudies }) {
           gridGap="32px"
           paddingTop="32px"
         >
-          {caseStudies.length > 0 && 
-          caseStudies.map(elm => 
+          {sortedCaseStudies.length > 0 && 
+          sortedCaseStudies.map(elm => 
             <Stack
               key={elm.id}
               width="100%"

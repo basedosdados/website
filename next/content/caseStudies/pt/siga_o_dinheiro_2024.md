@@ -1,5 +1,7 @@
 ---
 id: "siga_o_dinheiro_2024"
+created_at: "2024-07-25"
+updated_at: "2025-11-05"
 displayTitle: "Siga o Dinheiro 2024"
 thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png"
 title: "Siga o Dinheiro 2024: Plataforma facilita o acesso à prestação de contas das Eleições com dados integrados e processamento na nuvem"
