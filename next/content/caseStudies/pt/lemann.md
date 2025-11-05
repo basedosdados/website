@@ -1,5 +1,7 @@
 ---
 id: "lemann"
+created_at: "2023-05-20"
+updated_at: "2023-05-20"
 displayTitle: "Fundação Lemann"
 thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_flemann.png"
 title: "Fundação Lemann aprimora tomada de decisão e monitoramento de metas com tecnologia de análises e engenharia de dados desenvolvida pela BD"

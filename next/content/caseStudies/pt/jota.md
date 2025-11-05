@@ -1,5 +1,7 @@
 ---
 id: "jota"
+created_at: "2022-10-15"
+updated_at: "2022-10-15"
 displayTitle: "JOTA"
 thumbnail: "https://storage.googleapis.com/basedosdados-website/estudos_de_caso/thumbnails/thumbnail_estudo_de_caso_jota.png"
 title: "Plataforma traz mais transparência para a prestação de contas de candidaturas e partidos nas Eleições 2022"
