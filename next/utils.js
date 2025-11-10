@@ -209,6 +209,17 @@ export function triggerGAEvent(category, action) {
   });
 }
 
+export function triggerGAEventWithData(category, data) {
+  window.dataLayer = window.dataLayer || [];
+
+  const eventData = {
+    event: category,
+    ...data,
+  };
+
+  window.dataLayer.push(eventData);
+}
+
 export function cleanString(string) {
   const newString = string.trim()
   const returnString = newString.replace(/\s+/g, ' ')
