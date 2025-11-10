@@ -19,7 +19,7 @@ import cookies from "js-cookie";
 import { ModalInitialTour } from "../components/molecules/Tour";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useCheckMobile } from "../hooks/useCheckMobile.hook";
-import { triggerGAEvent } from "../utils";
+import { triggerGAEvent, triggerGAEventWithData } from "../utils";
 import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
 import TitleText from "../components/atoms/Text/TitleText";
@@ -144,7 +144,7 @@ function DatasetCard({ data, locale, index, page }) {
       dataset_click_timestamp: new Date().toISOString(),
     };
 
-    triggerGAEvent("select_dataset", JSON.stringify(eventData));
+    triggerGAEventWithData("select_dataset", eventData);
   };
 
   return (
@@ -204,7 +204,7 @@ const Pagination = memo(({ pageInfo, query, router, isLoading }) => {
           page_view_timestamp: new Date().toISOString()
         };
 
-        triggerGAEvent("view_search_results", JSON.stringify(eventData));
+        triggerGAEventWithData("view_search_results", eventData);
 
         router.push({ pathname: router.pathname, query: { ...query, page: newPageNumber } });
       }}
@@ -294,7 +294,7 @@ export default function SearchDatasetPage() {
       };
 
       if (isNewSearch) {
-        triggerGAEvent("search", JSON.stringify(searchData));
+        triggerGAEventWithData("search", searchData);
       }
 
       window.sessionStorage.setItem("search_analytics", JSON.stringify(searchData));
