@@ -163,7 +163,7 @@ const PublishedOrDataCleanedBy = memo(({ resource, t, router }) => {
   );
 });
 
-export default function TablePage({ id, isBDSudo, changeTab }) {
+export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
   const { t } = useTranslation('dataset', 'prices');
   const router = useRouter();
   const { locale } = router;
@@ -359,6 +359,7 @@ export default function TablePage({ id, isBDSudo, changeTab }) {
 
         <DataInformationQuery
           resource={resource}
+          datasetName={datasetName}
           changeTab={changeTab}
         />
       </Stack>
