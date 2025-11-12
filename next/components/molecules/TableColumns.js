@@ -19,7 +19,7 @@ import Latex from 'react-latex-next';
 import cookies from 'js-cookie';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
-import { triggerGAEvent, formatBytes } from '../../utils';
+import { triggerGAEventWithData, formatBytes } from '../../utils';
 import { useTranslation } from 'next-i18next';
 import { capitalize } from 'lodash';
 
@@ -362,13 +362,15 @@ export default function TableColumns({
       let cloudTables = result?.cloudTables?.edges[0]?.node
       const downloadInfo = HasDownloadPermitted(result?.uncompressedFileSize)
 
-      triggerGAEvent("download_da_tabela",`{
-        gcp: ${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId},
-        tamanho: ${formatBytes(result.uncompressedFileSize) || ""},
-        dataset: ${query.dataset},
-        table: ${resource?._id},
-        columnDownload: true
-      }`)
+      triggerGAEventWithData("download_table", {
+        gcp_path: `${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId}`,
+        file_size: `${formatBytes(result?.uncompressedFileSize) || ""}`,
+        dataset_id: `${query.dataset}`,
+        dataset_name: `${result?.dataset?.name}`,
+        table_id: `${result?._id}`,
+        table_name: `${result?.name}`,
+        column_download: true
+      })
 
       window.open(`/api/tables/downloadTable?p=${btoa(cloudTables?.gcpDatasetId)}&q=${btoa(cloudTables?.gcpTableId)}&d=${btoa(downloadInfo.downloadPermitted)}&s=${btoa(downloadInfo.downloadWarning)}`)
     }
@@ -432,13 +434,15 @@ export default function TableColumns({
               display="flex"
               onClick={() => {
                 if(!downloadInfo.downloadPermitted) return
-                triggerGAEvent("download_da_tabela", `{
-                  gcp: ${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId},
-                  tamanho: ${formatBytes(value?.table?.uncompressed_file_size) || ""},
-                  dataset: ${value?.table?.dataset?._id},
-                  table: ${value?.table?._id},
-                  columnDownload: true
-                }`)
+                triggerGAEventWithData("download_table", {
+                  gcp_path: `${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId}`,
+                  file_size: `${formatBytes(value?.table?.uncompressed_file_size) || ""}`,
+                  dataset_id: `${value?.table?.dataset?.id}`,
+                  dataset_name: `${value?.table?.dataset?.name}`,
+                  table_id: `${value?.table?.id}`,
+                  table_name: `${value?.table?.name}`,
+                  column_download: true
+                })
               }}
               flexDirection="row"
               alignItems="center"

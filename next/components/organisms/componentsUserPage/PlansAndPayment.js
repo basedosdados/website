@@ -420,7 +420,7 @@ export default function PlansAndPayment ({ userData }) {
     if(response.ok) {
       if(emailGCP !== userData?.email) {
         if(emailGCP !== userData?.gcpEmail) {
-          triggerGAEvent("troca_do_email_gcp",`checkout_de_pagamento`)
+          triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
         }
       }
       setIsLoadingEmailChange(false)

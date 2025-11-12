@@ -55,7 +55,7 @@ export default function BigQuery ({ userInfo }) {
       if(response.ok) {
         if(emailGcp !== userInfo?.email) {
           if(emailGcp !== userInfo?.gcpEmail) {
-            triggerGAEvent("troca_do_email_gcp",`section_bigquery`)
+            triggerGAEvent("exchange_email_gcp",`section_bigquery`)
           }
         }
 

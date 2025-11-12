@@ -19,6 +19,11 @@ async function getDictionaryTable(id, slug) {
                       _id
                       slug
                       uncompressedFileSize
+                      name
+                      dataset {
+                        name
+                        _id
+                      }
                       cloudTables{
                         edges{
                           node{
