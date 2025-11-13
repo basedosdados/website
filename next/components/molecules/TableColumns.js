@@ -364,7 +364,7 @@ export default function TableColumns({
 
       triggerGAEventWithData("download_table", {
         gcp_path: `${cloudTables?.gcpProjectId+"."+cloudTables?.gcpDatasetId+"."+cloudTables?.gcpTableId}`,
-        file_size: `${formatBytes(result?.uncompressedFileSize) || ""}`,
+        file_size: `${result?.uncompressedFileSize}`,
         dataset_id: `${query.dataset}`,
         dataset_name: `${result?.dataset?.name}`,
         table_id: `${result?._id}`,
@@ -436,7 +436,7 @@ export default function TableColumns({
                 if(!downloadInfo.downloadPermitted) return
                 triggerGAEventWithData("download_table", {
                   gcp_path: `${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId}`,
-                  file_size: `${formatBytes(value?.table?.uncompressed_file_size) || ""}`,
+                  file_size: `${value?.table?.uncompressed_file_size}`,
                   dataset_id: `${value?.table?.dataset?.id}`,
                   dataset_name: `${value?.table?.dataset?.name}`,
                   table_id: `${value?.table?.id}`,
