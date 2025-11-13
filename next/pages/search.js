@@ -204,7 +204,7 @@ const Pagination = memo(({ pageInfo, query, router, isLoading }) => {
           page_view_timestamp: new Date().toISOString()
         };
 
-        triggerGAEventWithData("view_search_results", eventData);
+        triggerGAEventWithData("browse_search_pages", eventData);
 
         router.push({ pathname: router.pathname, query: { ...query, page: newPageNumber } });
       }}

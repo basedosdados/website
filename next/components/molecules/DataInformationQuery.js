@@ -286,7 +286,7 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
     window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
     triggerGAEventWithData("download_table", {
       gcp_path: `${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId}`,
-      file_size: `${formatBytes(resource?.uncompressedFileSize) || ""}`,
+      file_size: `${resource?.uncompressedFileSize}`,
       dataset_id: `${resource?.dataset?._id}`,
       dataset_name: `${datasetName}`,
       table_id: `${resource?._id}`,
