@@ -15,31 +15,31 @@ Ela garante que, independentemente de quem comunica ou do canal, a organização
 ### Características principais da voz
 
 **Objetiva**
-Vai direto ao ponto, evitando jargões e complexidade desnecessária.<br><br>
+Vai direto ao ponto, evitando jargões e complexidade desnecessária.
 
 **Precisa**
-Usa termos corretos e dados verificados, com atenção aos detalhes.<br><br>
+Usa termos corretos e dados verificados, com atenção aos detalhes.
 
 **Consistente**
-Mantém clareza e unidade de estilo em todas as interações e produtos.<br><br>
+Mantém clareza e unidade de estilo em todas as interações e produtos.
 
 **Honesta**
-Comunica com transparência, reconhecendo limites, incertezas e aprendizados.<br><br>
+Comunica com transparência, reconhecendo limites, incertezas e aprendizados.
 
 **Responsável**
-Zela pelo uso ético das informações e pela confiabilidade das fontes.<br><br>
+Zela pelo uso ético das informações e pela confiabilidade das fontes.
 
 **Didática**
-Explica conceitos de forma simples, facilitando a compreensão de quem usa dados.<br><br>
+Explica conceitos de forma simples, facilitando a compreensão de quem usa dados.
 
 **Empática**
-Fala de forma humana e respeitosa, considerando diferentes níveis de familiaridade com dados.<br><br>
+Fala de forma humana e respeitosa, considerando diferentes níveis de familiaridade com dados.
 
 **Convidativa**
-Estimula a participação, a troca e a colaboração entre pessoas e instituições.<br><br>
+Estimula a participação, a troca e a colaboração entre pessoas e instituições.
 
 **Inspiradora**
-Compartilha propósito e entusiasmo, mostrando como o uso de dados pode gerar conhecimento e impacto social.<br><br>
+Compartilha propósito e entusiasmo, mostrando como o uso de dados pode gerar conhecimento e impacto social.
 
 
 ## Tom
