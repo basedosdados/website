@@ -18,11 +18,6 @@ import {
   Image,
   AspectRatio,
   useClipboard,
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  AccordionItem,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
@@ -38,7 +33,6 @@ import Link from "../../components/atoms/Link";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import WarningIcon from "../../public/img/icons/warningIcon";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
-import styles from "../../styles/docs.module.css";
 
 import {
   getAllDocs,
@@ -158,7 +152,12 @@ function Toc({ allDocs, headings, slug, locale }) {
     default: "Contribua"
   };
 
-  const schemeCategories = ["Docs", "APIs", translations[locale] || translations.default];
+  const schemeCategories = [
+    "Docs",
+    "APIs",
+    translations[locale] || translations.default,
+    "Guia Central de Identidade Verbal"
+  ];
 
   const groupedDocs = allDocs.reduce((acc, doc) => {
     const category = doc.frontmatter.category;
