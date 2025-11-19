@@ -11,6 +11,8 @@ order: 4
 **Esta matriz ajuda a decidir como empregar termos técnicos na comunicação da Base dos Dados.**  
 Ela deve ser usada como referência para equilibrar precisão e acessibilidade em todos os contextos — seja plataforma ou marketing.  
 
+<Spacing height="16px"/>
+
 | Situação                          | O que fazer | Exemplo                                                                 | Como aplicar                                                                                                       |
 |-----------------------------------|-------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
 | **É amplamente conhecido**        | Use         | API, BigQuery                                                          | Use o termo naturalmente.                                                                                          |
@@ -21,11 +23,14 @@ Ela deve ser usada como referência para equilibrar precisão e acessibilidade e
 | **É só jargão**                   | Evite        | “Geramos um snapshot incremental da tabela” vs “Criamos uma versão atualizada da tabela” | Substitua o termo quando seu uso não for necessário.                                                                |
 | **Existe forma mais clara**       | Evite        | “Orquestramos os jobs com Airflow” vs “Coordenamos as etapas do processo com o Airflow” | Substitua o termo quando seu uso não for necessário.                                                                |
 
+<Spacing height="24px"/>
 
 ## Glossário
 
 **Este glossário reúne os principais termos padronizados de uso na comunicação da Base dos Dados.**  
 Ele deve ser usado como referência para garantir consistência terminológica em conteúdos de todas as áreas da organização.  
+
+<Spacing height="16px"/>
 
 | Termo | Definição | Recomendação | Use | Evite |
 |-------|-----------|--------------|-----|-------|
