@@ -39,3 +39,5 @@ Prefira a segunda pessoa (“você”) e um tom acolhedor e empático.
 **Padronização de formatações**  
 Mantenha consistência nas formatações dentro de cada contexto, garantindo clareza e legibilidade.    
 Cada área deve adotar os padrões mais adequados ao seu tipo de conteúdo — o importante é que as escolhas sejam coerentes, justificadas e aplicadas de forma uniforme.  
+
+
