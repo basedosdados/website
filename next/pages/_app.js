@@ -98,7 +98,7 @@ function MyApp({ Component, pageProps }) {
 
         {/* TAG GTM DEVELOPMENT */}
         {/* <!-- Google Tag Manager --> */}
-        {local === "https://development.basedosdados.org" &&
+        {/* {local === "https://development.basedosdados.org" && */}
           <script
             dangerouslySetInnerHTML={{
               __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -108,7 +108,7 @@ function MyApp({ Component, pageProps }) {
               })(window,document,'script','dataLayer','GTM-5NWMN98');`,
             }}
           ></script>
-        }
+        {/* } */}
         {/* <!-- End Google Tag Manager --> */}
         {/* FIM DA TAG DEVELOPMENT */}
       </Head>
@@ -132,7 +132,7 @@ function MyApp({ Component, pageProps }) {
 
       {/* TAG GTM DEVELOPMENT  */}
       {/* <!-- Google Tag Manager (noscript) --> */}
-      {local === "https://development.basedosdados.org" &&
+      {/* {local === "https://development.basedosdados.org" && */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-5NWMN98&gtm_auth=JqCpoVwQlMgubUGPVq7Z9g&gtm_preview=env-10&gtm_cookies_win=x"
@@ -141,7 +141,7 @@ function MyApp({ Component, pageProps }) {
             style={{ display: "none", visibility: "hidden" }}
           ></iframe>
         </noscript>
-      }
+      {/* } */}
       {/* <!-- End Google Tag Manager (noscript) --> */}
       {/* FIM DA TAG DEVELOPMENT */}
 
