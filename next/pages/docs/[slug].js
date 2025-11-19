@@ -521,23 +521,52 @@ export const mdxComponents = {
     />
   ),
   table: (props) => (
-    <TableContainer margin="16px 0">
-      <Table variant="simple" border="1px solid #edf2f7" {...props} />
+    <TableContainer
+      border="1px solid #DEDFE0"
+      borderRadius="20px"
+    >
+      <Table variant="simple" {...props} />
     </TableContainer>
   ),
-  thead: (props) => <Thead {...props} />,
+  thead: (props) => (
+    <Thead
+      backgroundColor="#F7F7F7"
+      {...props}
+    />
+  ),
   tbody: (props) => <Tbody {...props} />,
   tr: (props) => <Tr {...props} />,
   td: (props) => (
     <Td
-      fontFamily={"Roboto"}
-      color="rgb(55, 65, 81)"
-      paddingY={"0.5rem"}
-      style={{ textWrap: "wrap" }}
+      padding="14px 22px"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#464A51"
+      backgroundColor="#FFF"
+      borderColor="#DEDFE0"
+      textTransform="none"
+      letterSpacing="inherit"
+      whiteSpace="break-spaces"
       {...props}
     />
   ),
-  th: (props) => <Th fontFamily={"Roboto"} {...props} />,
+  th: (props) => (
+    <Th
+      padding="14px 22px"
+      textTransform="none"
+      letterSpacing="inherit"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#252A32"
+      borderBottom="1px solid #DEDFE0 !important"
+      boxSizing="content-box"
+      {...props}
+    />
+  ),
   Button: (props) => (
     <Button
       margin="16px 0 8px"
@@ -546,6 +575,7 @@ export const mdxComponents = {
       {props.text}
     </Button>
   ),
+  Spacing: (props) => <Box {...props} />,
   Warning: (props) => (
     <Box
       as="blockquote"
