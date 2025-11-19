@@ -18,11 +18,6 @@ import {
   Image,
   AspectRatio,
   useClipboard,
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  AccordionItem,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
@@ -38,7 +33,6 @@ import Link from "../../components/atoms/Link";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import WarningIcon from "../../public/img/icons/warningIcon";
 import { CopyIcon } from "../../public/img/icons/copyIcon";
-import styles from "../../styles/docs.module.css";
 
 import {
   getAllDocs,
@@ -158,7 +152,12 @@ function Toc({ allDocs, headings, slug, locale }) {
     default: "Contribua"
   };
 
-  const schemeCategories = ["Docs", "APIs", translations[locale] || translations.default];
+  const schemeCategories = [
+    "Docs",
+    "APIs",
+    translations[locale] || translations.default,
+    "Guia Central de Identidade Verbal"
+  ];
 
   const groupedDocs = allDocs.reduce((acc, doc) => {
     const category = doc.frontmatter.category;
@@ -522,23 +521,52 @@ export const mdxComponents = {
     />
   ),
   table: (props) => (
-    <TableContainer margin="16px 0">
-      <Table variant="simple" border="1px solid #edf2f7" {...props} />
+    <TableContainer
+      border="1px solid #DEDFE0"
+      borderRadius="20px"
+    >
+      <Table variant="simple" {...props} />
     </TableContainer>
   ),
-  thead: (props) => <Thead {...props} />,
+  thead: (props) => (
+    <Thead
+      backgroundColor="#F7F7F7"
+      {...props}
+    />
+  ),
   tbody: (props) => <Tbody {...props} />,
   tr: (props) => <Tr {...props} />,
   td: (props) => (
     <Td
-      fontFamily={"Roboto"}
-      color="rgb(55, 65, 81)"
-      paddingY={"0.5rem"}
-      style={{ textWrap: "wrap" }}
+      padding="14px 22px"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#464A51"
+      backgroundColor="#FFF"
+      borderColor="#DEDFE0"
+      textTransform="none"
+      letterSpacing="inherit"
+      whiteSpace="break-spaces"
       {...props}
     />
   ),
-  th: (props) => <Th fontFamily={"Roboto"} {...props} />,
+  th: (props) => (
+    <Th
+      padding="14px 22px"
+      textTransform="none"
+      letterSpacing="inherit"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#252A32"
+      borderBottom="1px solid #DEDFE0 !important"
+      boxSizing="content-box"
+      {...props}
+    />
+  ),
   Button: (props) => (
     <Button
       margin="16px 0 8px"
@@ -547,6 +575,7 @@ export const mdxComponents = {
       {props.text}
     </Button>
   ),
+  Spacing: (props) => <Box {...props} />,
   Warning: (props) => (
     <Box
       as="blockquote"
