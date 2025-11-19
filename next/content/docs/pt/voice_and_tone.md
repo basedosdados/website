@@ -59,11 +59,11 @@ Estimula a participação, a troca e a colaboração entre pessoas e instituiç�
 **Inspiradora**  
 Compartilha propósito e entusiasmo, mostrando como o uso de dados pode gerar conhecimento e impacto social.  
 
-<Spacing height="32px"/>
+<Spacing height="24px"/>
 
 ## Tom
 
-**O tom se adapta conforme o objetivo e o canal da comunicação da Base dos Dados.**
+**O tom se adapta conforme o objetivo e o canal da comunicação da Base dos Dados.**  
 O tom pode se adaptar ao contexto — sendo mais técnico em uma documentação, mais empático em uma notificação de erro na plataforma ou mais inspirador em uma campanha de marketing —, mas sempre preserva coerência com a voz e os valores da organização.
 
 <Spacing height="4px"/>
