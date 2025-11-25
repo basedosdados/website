@@ -351,6 +351,8 @@
         "onlyAvailableInBDEnterprises": "Available only in the DB Enterprises plan",
         "addUser": "Add user",
         "addUserInfo": "Enter the email of the user you want to add. If the user does not have an active account, they will need to create one before being added.",
+        "addGoogleAccount": "Add Google account",
+        "addGoogleAccountInfo": "Enter the email associated with the Google service account — the email inside the service account will be used to link the account.",
         "userNotFound": "Check if the email is correct and if the account is active on the platform.",
         "userAlreadyHasSubscription": "The account already has an active subscription",
         "unexpectedError": "Unexpected error",
