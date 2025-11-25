@@ -34,7 +34,7 @@ import TableColumns from "./TableColumns";
 import { SectionPrice } from "../../pages/prices";
 import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
-import { triggerGAEvent, formatBytes } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, formatBytes } from "../../utils";
 
 import {
   getBigTableQuery
@@ -177,7 +177,7 @@ const CodeHighlight = memo(({ language, children }) => {
   );
 });
 
-const DataInformationQuery = memo(({ resource, changeTab }) => {
+const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
   const { t } = useTranslation('dataset');
   const { locale } = useRouter();
   const [tabAccessIndex, setTabAccessIndex] = useState(0);
@@ -274,7 +274,7 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
       setInsufficientChecks(true);
       return;
     }
-    triggerGAEvent("gerar_consulta_click", queryLanguage());
+    triggerGAEvent("generate_query_click", queryLanguage());
     setHasLoadingResponse(true);
   }, [checkedColumns.length, queryLanguage]);
 
@@ -284,12 +284,15 @@ const DataInformationQuery = memo(({ resource, changeTab }) => {
       return;
     }
     window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
-    triggerGAEvent("download_da_tabela",`{
-      gcp: ${gcpProjectID+"."+gcpDatasetID+"."+gcpTableId},
-      tamanho: ${formatBytes(resource?.uncompressedFileSize) || ""},
-      dataset: ${resource?.dataset?._id},
-      table: ${resource?._id},
-    }`);
+    triggerGAEventWithData("download_table", {
+      gcp_path: `${gcpProjectID + "." + gcpDatasetID + "." + gcpTableId}`,
+      file_size: `${resource?.uncompressedFileSize}`,
+      dataset_id: `${resource?.dataset?._id}`,
+      dataset_name: `${datasetName}`,
+      table_id: `${resource?._id}`,
+      table_name: `${resource?.name}`,
+      column_download: false
+    })
   }, [downloadWarning, isUserPro, gcpDatasetID, gcpTableId, downloadPermitted, gcpProjectID, resource]);
 
   useEffect(() => {

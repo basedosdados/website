@@ -36,6 +36,8 @@ export default function Accesses ({ userInfo }) {
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [isLoadingAddMember, setIsLoadingAddMember] = useState(false)
+  const AddGoogleModal = useDisclosure()
+  const [isLoadingAddGoogle, setIsLoadingAddGoogle] = useState(false)
   const [owner, setOwner] = useState(null)
   const [subscriptionMembers, setSubscriptionMembers] = useState([])
   const [isMaxMembersReached, setIsMaxMembersReached] = useState(false)
@@ -120,6 +122,41 @@ export default function Accesses ({ userInfo }) {
       setErrors({ email: t('username.unexpectedError') })
     } finally {
       setIsLoadingAddMember(false)
+    }
+  }
+
+  const handleAddGoogleService = async () => {
+    setErrors({})
+    const valueEmailTrim = valueEmail.trim()
+
+    if (!valueEmailTrim || !/^\S+@\S+$/.test(valueEmailTrim)) {
+      setErrors({ email: t('username.pleaseEnterValidEmail') });
+      return;
+    }
+
+    setIsLoadingAddGoogle(true)
+
+    try {
+      const res = await fetch(`/api/user/addMemberInSubscriptionServiceAccount?p=${btoa(valueEmailTrim)}&r=${btoa(id)}`)
+      const result = await res.json()
+
+      if (result.success) {
+        setIsLoading(true)
+        AddGoogleModal.onClose()
+        setValueEmail("")
+        setErrors({})
+        getMembers()
+      } else {
+        setErrors({
+          email: result?.error?.[0] === "Conta possui inscrição ativa" ? t('username.userAlreadyHasSubscription')
+          :
+          result?.error?.[0] || t('username.unexpectedError')
+        })
+      }
+    } catch (error) {
+      setErrors({ email: t('username.unexpectedError') })
+    } finally {
+      setIsLoadingAddGoogle(false)
     }
   }
 
@@ -277,7 +314,7 @@ export default function Accesses ({ userInfo }) {
 
   return (
     <Stack spacing="0" flex="1">
-      <Box display={isLoading || isLoadingAddMember ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+      <Box display={isLoading || isLoadingAddMember || isLoadingAddGoogle ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
 
       <ModalGeneral
         isOpen={AddMemberModal.isOpen}
@@ -331,6 +368,60 @@ export default function Accesses ({ userInfo }) {
             pointerEvents={isLoadingAddMember ? "none" : "default"}
           >
             {t('username.addUser')}
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
+      <ModalGeneral
+        isOpen={AddGoogleModal.isOpen}
+        onClose={() => {
+          setValueEmail("")
+          setErrors({})
+          AddGoogleModal.onClose()
+        }}
+        propsModalContent={{
+          width: "100%",
+          maxWidth: "600px",
+          margin: "24px"
+        }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">{t('username.addGoogleAccount')}</TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="28px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+          />
+        </Stack>
+
+        <Stack spacing={0}>
+          <ExtraInfoTextForm marginBottom="16px">
+            {t('username.addGoogleAccountInfo')}
+          </ExtraInfoTextForm>
+          <FormControl isInvalid={!!errors.email}>
+            <LabelTextForm text={t('username.email')}/>
+            <InputForm
+              id="email_google"
+              name="email_google"
+              value={valueEmail}
+              justifyContent="start"
+              onChange={(e) => setValueEmail(e.target.value)}
+            />
+            <ErrorMessage>
+              {errors.email}
+            </ErrorMessage>
+          </FormControl>
+        </Stack>
+
+        <Stack spacing={0} marginTop="24px">
+          <Button
+            width={{base: "100%", lg: "fit-content"}}
+            onClick={() => handleAddGoogleService()}
+            isLoading={isLoadingAddGoogle}
+            pointerEvents={isLoadingAddGoogle ? "none" : "default"}
+          >
+            {t('username.addGoogleAccount')}
           </Button>
         </Stack>
       </ModalGeneral>
@@ -503,6 +594,13 @@ export default function Accesses ({ userInfo }) {
             onClick={() => RemoveAllMembersModal.onOpen()}
           >
             {t('username.removeAllMembers')}
+          </Button>
+
+          <Button
+            width={{base: "100%", lg: "auto"}}
+            onClick={() => AddGoogleModal.onOpen()}
+          >
+            {t('username.addGoogleAccount')}
           </Button>
 
           {!isMaxMembersReached ?

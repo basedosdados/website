@@ -357,7 +357,7 @@ const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSourc
   );
 });
 
-const SwitchResource = memo(({ route, isBDSudo, changeTabDataInformationQuery, locale }) => {
+const SwitchResource = memo(({ route, isBDSudo, changeTabDataInformationQuery, datasetName, locale }) => {
   switch(true) {
     case route.hasOwnProperty("table"):
       return (
@@ -365,6 +365,7 @@ const SwitchResource = memo(({ route, isBDSudo, changeTabDataInformationQuery, l
           id={route.table}
           isBDSudo={isBDSudo}
           changeTab={changeTabDataInformationQuery}
+          datasetName={datasetName}
         />
       );
 
@@ -715,6 +716,7 @@ export default function DatasetResource({
         route={query}
         isBDSudo={isBDSudo}
         changeTabDataInformationQuery={changeTabDataInformationQuery}
+        datasetName={dataset?.name}
         locale={locale}
       />
     </Stack>

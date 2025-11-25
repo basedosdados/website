@@ -9,7 +9,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../components/templates/main";
 import { ControlledInputSimple } from "../components/atoms/ControlledInput";
 import { useTranslation } from 'next-i18next';
-import { triggerGAEvent } from "../utils";
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
 import BodyText from "../components/atoms/Text/BodyText"
