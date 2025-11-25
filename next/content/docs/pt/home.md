@@ -59,7 +59,6 @@ Os pacotes atualmente disponíveis são:
 
 - **Python**
 - **R**
-- **Stata**
 
 <Button
   href="/docs/access_data_packages"

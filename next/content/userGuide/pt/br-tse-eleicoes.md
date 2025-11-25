@@ -116,7 +116,6 @@ Os tratamentos realizados foram:
 * [Siga o dinheiro: Painel desenvolvido pela BD para entender de onde vem e onde está sendo gasto o dinheiro das campanhas](https://www.sigaodinheiro.org/)
 * [Curso de Análise de Dados Eleitorais da BD](https://info.basedosdados.org/bd-edu-eleicoes)
 
-[code-stata]: https://github.com/basedosdados/sdk/tree/master/bases/br_tse_eleicoes/code
 [code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
 [code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
 [queries-dir]: https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_tse_eleicoes

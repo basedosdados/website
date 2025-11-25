@@ -11,7 +11,6 @@ directly from your computer or development environment. Currently available in:
 
 - **Python**
 - **R**
-- **Stata**
 - **CLI (terminal)**
 
 Ready to start? On this page you'll find:
@@ -59,19 +58,6 @@ editor of your preference.
     install.packages("basedosdados")
     ```
 
-**Stata**
-
-Requerimentos:
-
-1. Ensure your Stata is __version 16+__
-2. Ensure Python is installed on your computer.
-
-Once the requirements are met, run the following commands:
-
-```stata
-net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/sdk/master/stata-package")
-```
-
 ### Configuring the package
 
 Once you have your project, you need to configure the package to use the ID
@@ -91,10 +77,6 @@ project is created.
     ```R
     set_billing_id("<YOUR_PROJECT_ID>")
     ```
-
-**Stata**
-    *You need to specify the `project_id` every time you use the package.*
-
 
 ### Make your first query
 
@@ -120,14 +102,6 @@ function `download`, downloading the data directly to our machine.
     ```
 
     *To understand more about the `download` function, read the [reference manual](../api_reference_r).*
-
-**Stata**
-    ```stata
-    bd_read_sql, ///
-        path("<PATH>") ///
-        query("SELECT * FROM `basedosdados.br_bd_diretorios_brasil.municipio`") ///
-        billing_project_id("<PROJECT_ID>")
-    ```
 
 **CLI**
     ```bash
@@ -166,14 +140,8 @@ for you to start using them.
 
     - [Workshop: Learn how to access public data in R](https://www.youtube.com/watch?v=M9ayiseIjvI&t=250s)
 
-**Stata**
-    Documentation:
-
-    - [GitHub](https://github.com/basedosdados/sdk/tree/master/stata-package)
-
 ## Reference manuals (API)
 
 * [Python](../api_reference_python)
 * [R](../api_reference_r)
-* [Stata](../api_reference_stata)
 * [CLI](../api_reference_cli)
