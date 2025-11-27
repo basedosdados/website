@@ -269,6 +269,8 @@
         "userAlreadyHasSubscription": "La cuenta ya tiene una suscripción activa",
         "unexpectedError": "Error inesperado",
         "maxMembersReached": "Ha alcanzado el límite de accesos para usuarios. Para agregar más usuarios, elimine un acceso existente.",
+        "addGoogleAccount": "Agregar cuenta Google",
+        "addGoogleAccountInfo": "Ingrese el correo electrónico asociado a la cuenta de servicio de Google — se utilizará la dirección de correo dentro de la propia cuenta de servicio para vincularla.",
         "user": "Usuario",
         "access": "Accesos",
         "member": "Miembro",

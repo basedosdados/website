@@ -359,6 +359,8 @@
         "onlyAvailableInBDEnterprises": "Disponível apenas no plano BD Empresas",
         "addUser": "Adicionar usuário",
         "addUserInfo": "Insira o e-mail do usuário que deseja adicionar. Se o usuário não tiver uma conta ativa, ele precisará criar uma antes de ser adicionado.",
+        "addGoogleAccount": "Adicionar conta de serviço Google",
+        "addGoogleAccountInfo": "Insira o e-mail associado à conta de serviço Google — o endereço de e-mail presente dentro da própria account service será usado para vincular a conta.",
         "userNotFound": "Verifique se o e-mail está correto e se a conta está ativa na plataforma.",
         "userAlreadyHasSubscription": "Este usuário já está vinculado a outra assinatura e não pode ser adicionado a este plano.",
         "unexpectedError": "Erro inesperado",
