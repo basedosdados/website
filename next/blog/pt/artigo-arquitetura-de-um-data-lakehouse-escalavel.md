@@ -4,9 +4,15 @@ description: Conheça a arquitetura em zonas que desenvolvemos para unir escalab
 date:
   created: "2025-11-27T15:00:00"
 authors:
-  - name: Patrick 
-    role: Autora
+  - name: Patrick Teixeira
+    role: Autor
     social: 
+  - name: Thais Filipi  
+    role: Edição
+    social:      
+   - name: Laura Amaral  
+    role: Edição
+    social:    
 thumbnail: /blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/thumnb_1.png
 categories: [analise]
 medium_slug: >-
@@ -66,7 +72,7 @@ O consumo de dados da camada de produção é projetado para integração imedia
 Todos esses elementos estão ilustrados no esquema a seguir:
 
 
-<Image src="/blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/esquema.png" caption="Esquema ilustrativo da Arquitetura de Dados em Fases"/>
+<Image src="/blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/esquema.png" caption="Esquema ilustrativo da Arquitetura de Dados em Fases (ilustração: José Félix)"/>
 
 ## Fase 2: Construção da infraestrutura
 
