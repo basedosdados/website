@@ -43,7 +43,6 @@ The *datalake* access packages are constantly being improved, and you can collab
 
 - [Explore Python package issues](https://github.com/basedosdados/sdk/labels/python)
 - [Explore R package issues](https://github.com/basedosdados/sdk/labels/R)
-- [Help develop the Stata package](https://github.com/basedosdados/sdk/pull/754)
 
 ## Website
 

@@ -71,7 +71,6 @@ Como você pode colaborar? **Aqui estão algumas ideias:**
 - Fazendo a revisão de submissões de dados
 - Aprimorando e criando novas funcionalidades do pacote em Python
 - Aprimorando e criando novas funcionalidades do pacote em R
-- Criando um pacote em Stata
 - Adicionando checagens automáticas de dados
 - Adicionando checagens automáticas de metadados
 - Desenvolvendo novas features para o site

@@ -72,7 +72,7 @@ Apesar do acesso aos dados brutos facilitar, e muito, o processo de análise e e
 
 ## Por que acessar os dados da Câmara pela BD?
 
-A Base dos Dados disponibiliza um datalake público com os principais indicadores brasileiros. Isso permite que você acesse, explore e cruze os dados pelo próprio Google Cloud. Uma vez no nosso _datalake_, onde os dados já estão tratados, padronizados e atualizados, tudo o que precisamos fazer é interagir com eles via SQL ou por _download_ diretamente no site da BD. Via SQL — e aí dá para usar a linguagem de consulta mesmo dentro do R, Python ou Stata –, muitas portas se abrem, como a conexão com as demais tabelas do conjunto dos Dados Abertos da Câmara e outras do _datalake_, quando a conexão fizer sentido.
+A Base dos Dados disponibiliza um datalake público com os principais indicadores brasileiros. Isso permite que você acesse, explore e cruze os dados pelo próprio Google Cloud. Uma vez no nosso _datalake_, onde os dados já estão tratados, padronizados e atualizados, tudo o que precisamos fazer é interagir com eles via SQL ou por _download_ diretamente no site da BD. Via SQL — e aí dá para usar a linguagem de consulta mesmo dentro do R ou Python –, muitas portas se abrem, como a conexão com as demais tabelas do conjunto dos Dados Abertos da Câmara e outras do _datalake_, quando a conexão fizer sentido.
 
 Estamos preparando um tutorial completo para demonstrar como é o processo de tratamento dos dados pela BD e como você pode usar nosso datalake para cruzar essas informações com outras indicadores importantes, mas você já pode conferir abaixo um exemplo da praticidade que isso proporciona.
 

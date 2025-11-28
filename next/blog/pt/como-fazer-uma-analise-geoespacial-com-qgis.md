@@ -30,7 +30,7 @@ Foi com dados do geobr que elaboramos, por exemplo, a análise dos resultados ge
 
 <Image src="/blog/como-fazer-uma-analise-geoespacial-com-qgis/image_1.png" caption="Proficiência média por escolar no Ceará"/>
 
-Além de poder acessar esses dados em Python, R, Stata e pelo BigQuery usando SQL, é possível exportar essas informações em `.csv` e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
+Além de poder acessar esses dados em Python, R e pelo BigQuery usando SQL, é possível exportar essas informações em `.csv` e adicioná-las no seu Sistema de Informação Geográfica (SIG) favorito.
 
 SIG é um conjunto de sistemas de softwares e hardwares que permitem visualizar e analisar dados geográficos para compreender relações, padrões e tendências. Existem diversos tipos de SIG diferentes. Nesse artigo utilizamos o [QGIS](https://qgis.org/pt_BR/site/about/index.html) por ser uma plataforma open source, colaborativa e gratuita para análise de dados geoespaciais.
 

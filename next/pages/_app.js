@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
   const metaData = {
     en: {
       title: 'Data Basis',
-      description: 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python, R, or Stata.',
+      description: 'Hundreds of open datasets for you to explore however you like. Download or access processed data ready for analysis using SQL, Python or R.',
       icon: '/favicon_en.ico',
       siteName: 'Data Basis',
       ogTitle: 'Data Basis - Open Datasets',
@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }) {
     },
     es: {
       title: 'Base de los Datos',
-      description: 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python, R y Stata.',
+      description: 'Cientos de conjuntos de datos abiertos para que explores como quieras. Descarga o accede a datos procesados y listos para análisis usando SQL, Python y R.',
       icon: '/favicon_default.ico',
       siteName: 'Base de los Datos',
       ogTitle: 'Base de los Datos - Conjuntos de datos abiertos',
@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }) {
     },
     pt: {
       title: 'Base dos Dados',
-      description: 'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python, R ou Stata.',
+      description: 'Centenas de conjuntos de dados abertos para você explorar como quiser. Baixe ou acesse dados tratados e prontos para análise usando SQL, Python ou R.',
       icon: '/favicon_default.ico',
       siteName: 'Base dos Dados',
       ogTitle: 'Base dos Dados - Conjuntos de dados abertos',

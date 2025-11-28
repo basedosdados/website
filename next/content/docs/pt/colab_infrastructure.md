@@ -53,7 +53,6 @@ mais.
 
 - [Explore os issues do pacote Python](https://github.com/basedosdados/sdk/labels/python)
 - [Explore os issues do pacote R](https://github.com/basedosdados/sdk/labels/R)
-- [Ajude a desenvolver o pacote em Stata](https://github.com/basedosdados/sdk/pull/754)
 
 ## Website
 

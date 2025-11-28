@@ -11,7 +11,6 @@ direto do seu computador ou ambiente de desenvolvimento. Atualmente disponíveis
 
 - **Python**
 - **R**
-- **Stata**
 - **CLI (terminal)**
 
 Pronto(a) para começar? Nesta página você encontra:
@@ -58,18 +57,6 @@ RStudio ou editor de sua preferência.
     install.packages("basedosdados")
     ```
 
-**Stata**
-
-Requerimentos:
-
-1. Garantir que seu Stata seja a __versão 16+__
-2. Garantir que o Python esteja instalado no seu computador.
-
-Com os requerimentos satisfeitos, rodar os comandos abaixo:
-```stata
-net install basedosdados, from("https://raw.githubusercontent.com/basedosdados/sdk/master/stata-package")
-```
-
 ### Configurando o pacote
 
 Uma vez com seu projeto, você precisa configurar o pacote para usar o ID
@@ -89,11 +76,6 @@ projeto é criado.
     ```R
     set_billing_id("<YOUR_PROJECT_ID>")
     ```
-
-**Stata**
-
-*É necessário especificar o `project_id` a cada vez que usar o pacote.*
-
 
 ### Faça sua primeira consulta
 
@@ -119,14 +101,6 @@ função `download`, baixando os dados direto para nossa máquina.
     ```
 
     *Para entender mais sobre a função `download`, leia o [manual de referência](../api_reference_r).*
-
-**Stata**
-    ```stata
-    bd_read_sql, ///
-        path("<PATH>") ///
-        query("SELECT * FROM `basedosdados.br_bd_diretorios_brasil.municipio`") ///
-        billing_project_id("<PROJECT_ID>")
-    ```
 
 **CLI**
     ```bash
@@ -165,14 +139,8 @@ para você começar a usá-los.
 
     - [Workshop: Aprenda a acessar dados públicos em R](https://www.youtube.com/watch?v=M9ayiseIjvI&t=250s)
 
-**Stata**
-    Documentação:
-
-    - [GitHub](https://github.com/basedosdados/sdk/tree/master/stata-package)
-
 ## Manuais de referência (API)
 
 * [Python](../api_reference_python)
 * [R](../api_reference_r)
-* [Stata](../api_reference_stata)
 * [CLI](../api_reference_cli)
