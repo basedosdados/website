@@ -15,7 +15,7 @@ categories: [analise]
 thumbnail: 
 medum_slug: 
 published: true
-order: 0
+order: 1
 ---
 
 Você, leitor de longa data da BDLetter, deve ter estranhado essa pergunta. Afinal, costumamos preferir perguntas mais específicas (uma boa pergunta costuma ser bem delimitada). Mas hoje queremos explorar essa questão extremamente abrangente e falar sobre sua resposta: a Comex Stat.

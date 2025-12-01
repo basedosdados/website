@@ -1,5 +1,5 @@
 ---
-title: Arquitetura de um data lakehouse Escalável: Case Real com GCP, GitHub e Metabase 
+title: "Arquitetura de um data lakehouse Escalável: Case Real com GCP, GitHub e Metabase"
 description: Conheça a arquitetura em zonas que desenvolvemos para unir escalabilidade, versionamento de código com CI/CD e dashboards interativos
 date:
   created: "2025-11-27T15:00:00"
@@ -10,14 +10,14 @@ authors:
   - name: Thais Filipi  
     role: Edição
     social:      
-   - name: Laura Amaral  
+  - name: Laura Amaral  
     role: Edição
     social:    
 thumbnail: /blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/thumnb_1.png
 categories: [analise]
 medium_slug: >-
- 
 published: true
+order: 0
 ---
 
 ## TL;DR
