@@ -54,13 +54,17 @@ export const prettyCategory = (category) => {
 };
 
 function LatestBlogCard({ slug, frontmatter }) {
-  const { title, description, date, authors, categories } = frontmatter;
+  const { title, description, date, authors, categories, thumbnail } = frontmatter;
 
   const categoryThumbnails = {
     tutorial: "/blog/thumbnails/thumb_tutorial.png",
     analise: "/blog/thumbnails/thumb_analise.png",
     institucional: "/blog/thumbnails/thumb_institucional.png",
   };
+
+  const thumbnailSrc = (typeof thumbnail === "string" && thumbnail.trim().length > 0)
+    ? thumbnail
+    : (categoryThumbnails[categories?.[0]] || "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png");
 
   return (
     <Stack
@@ -83,8 +87,8 @@ function LatestBlogCard({ slug, frontmatter }) {
               style={{"aspectRatio": "16/9"}}
               objectFit="cover"
               cursor="pointer"
-              width="100%"              
-              src={categoryThumbnails[categories?.[0]] || "https://storage.googleapis.com/basedosdados-website/blog/um-site-feito-a-varias-maos/image_9.png"}
+              width="100%"
+              src={thumbnailSrc}
               transition={
                 "transform .6s cubic-bezier(0.01, 0.97, 0.42, 1.09)"
               }

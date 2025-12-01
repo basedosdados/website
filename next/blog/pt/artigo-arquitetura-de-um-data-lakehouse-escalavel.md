@@ -13,7 +13,7 @@ authors:
   - name: Laura Amaral  
     role: Edição
     social:    
-thumbnail: /blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/thumnb_1.png
+thumbnail: /blog/artigo-arquitetura-de-um-data-lakehouse-escalavel/thumnb_1.png
 categories: [analise]
 medium_slug: >-
 published: true
