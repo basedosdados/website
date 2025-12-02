@@ -72,7 +72,7 @@ O consumo de dados da camada de produção é projetado para integração imedia
 Todos esses elementos estão ilustrados no esquema a seguir:
 
 
-<Image src="/blog/pt/artigo-arquitetura-de-um-data-lakehouse-escalavel/esquema.png" caption="Esquema ilustrativo da Arquitetura de Dados em Fases (ilustração: José Félix)"/>
+<Image src="/blog/artigo-arquitetura-de-um-data-lakehouse-escalavel/esquema.png" caption="Esquema ilustrativo da Arquitetura de Dados em Fases (ilustração: José Félix)"/>
 
 ## Fase 2: Construção da infraestrutura
 
