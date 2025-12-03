@@ -48,6 +48,15 @@ function MyApp({ Component, pageProps }) {
   };
 
   const currentMeta = metaData[locale] || metaData.pt;
+  const pageOgImage =
+    pageProps?.meta?.ogImage ||
+    Component?.ogImage ||
+    pageProps?.meta?.image ||
+    pageProps?.frontmatter?.thumbnail ||
+    pageProps?.mdxSource?.frontmatter?.thumbnail ||
+    pageProps?.post?.frontmatter?.thumbnail ||
+    pageProps?.post?.thumbnail ||
+    null;
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -58,10 +67,14 @@ function MyApp({ Component, pageProps }) {
         )}
         {/* <meta/> para não noindex ambientes de development e staging */}
 
-        <link
-          rel="image_src"
-          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
-        />
+        {pageOgImage ? (
+          <link rel="image_src" href={pageOgImage} />
+        ) : (
+          <link
+            rel="image_src"
+            href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
+          />
+        )}
 
         <title>{currentMeta.title}</title>
         <meta name="description" content={currentMeta.description} />
@@ -72,14 +85,22 @@ function MyApp({ Component, pageProps }) {
         <meta property="twitter:url" content={local} />
         <meta property="twitter:title" content={currentMeta.ogTitle} />
         <meta property="twitter:description" content={currentMeta.ogDescription} />
-        <meta property="twitter:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        {pageOgImage ? (
+          <meta property="twitter:image" content={pageOgImage} />
+        ) : (
+          <meta property="twitter:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        )}
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={local} />
         <meta property="og:title" content={currentMeta.ogTitle} />
         <meta property="og:description" content={currentMeta.ogDescription} />
-        <meta property="og:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        {pageOgImage ? (
+          <meta property="og:image" content={pageOgImage} />
+        ) : (
+          <meta property="og:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        )}
         <meta property="og:site_name" content={currentMeta.siteName} />
 
         {/* <!-- Google Tag Manager --> */}
