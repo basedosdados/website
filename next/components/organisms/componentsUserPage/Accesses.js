@@ -596,12 +596,15 @@ export default function Accesses ({ userInfo }) {
             {t('username.removeAllMembers')}
           </Button>
 
-          <Button
-            width={{base: "100%", lg: "auto"}}
-            onClick={() => AddGoogleModal.onOpen()}
-          >
-            {t('username.addGoogleAccount')}
-          </Button>
+          {!isMaxMembersReached &&
+            <Button
+              isVariant={true}
+              width={{base: "100%", lg: "auto"}}
+              onClick={() => AddGoogleModal.onOpen()}
+            >
+              {t('username.addGoogleAccount')}
+            </Button>
+          }
 
           {!isMaxMembersReached ?
             <Button onClick={() => AddMemberModal.onOpen()} width={{base: "100%", lg: "auto"}}>
