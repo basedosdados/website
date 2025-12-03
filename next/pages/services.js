@@ -779,6 +779,13 @@ export default function Services({ faqs }) {
               width: 600,
               height: 300,
             }
+          },
+          {
+            mention: {
+              content: t("arquitetura-mention-content"),
+              author: t("arquitetura-mention-author"),
+              position: t("arquitetura-mention-position")
+            }
           }
         ]}
         cards={[
