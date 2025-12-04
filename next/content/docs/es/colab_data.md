@@ -41,7 +41,7 @@ Para facilitar la explicación, seguiremos un ejemplo ya listo con datos de [RAI
 
 Algunos conocimientos son necesarios para realizar este proceso:
 
-- **Python, R, SQL y/o Stata**: para crear los códigos de captura y limpieza de los datos.
+- **Python, R y/o SQL**: para crear los códigos de captura y limpieza de los datos.
 - **Línea de comandos**: para configurar tu ambiente local
   y conexión con Google Cloud.
 - **Github**: para subir tu código para revisión de
@@ -143,8 +143,7 @@ La tabla `microdados_vinculos` de RAIS, por ejemplo, es una tabla muy grande (+2
 
 #### Estándares necesarios en el código
 
-- Deben ser escritos en [Python](https://www.python.org/),
-  [R](https://www.r-project.org/) o [Stata](https://www.stata.com/) -
+- Deben ser escritos en [Python](https://www.python.org/) o [R](https://www.r-project.org/) -
   para que la revisión pueda ser realizada por el equipo.
 - Puede estar en script (`.py`, `.R`, ...) o *notebooks* (Google Colab, Jupyter, Rmarkdown, etc).
 - Las rutas de archivos deben ser atajos _relativos_ a la carpeta raíz

@@ -147,7 +147,7 @@ Fill in the `temporal_coverage` column in table, column, and key metadata (in di
 - Date: `YYYY-MM-DD`
 - Time (24h): `HH:MM:SS`
 - Datetime ([ISO-8601](https://en.wikipedia.org/wiki/ISO_8601)): `YYYY-MM-DDTHH:MM:SS.sssZ`
-- Null value: `""` (csv), `NULL` (Python), `NA` (R), `.` or `""` (Stata)
+- Null value: `""` (csv), `NULL` (Python), `NA` (R)
 - Proportion/percentage: between 0-100
 
 ## Table partitioning

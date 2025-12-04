@@ -41,7 +41,7 @@ To facilitate the explanation, we'll follow a ready-made example with data from 
 
 Some knowledge is necessary to carry out this process:
 
-- **Python, R, SQL and/or Stata**: to create data capture and cleaning codes.
+- **Python, R and/or SQL**: to create data capture and cleaning codes.
 - **Command line**: to set up your local environment
   and connection with Google Cloud.
 - **Github**: to upload your code for review by
@@ -141,8 +141,7 @@ The `microdados_vinculos` table from RAIS, for example, is a very large table (+
 
 #### Required patterns in the code
 
-- Must be written in [Python](https://www.python.org/),
-  [R](https://www.r-project.org/) or [Stata](https://www.stata.com/) -
+- Must be written in [Python](https://www.python.org/) or [R](https://www.r-project.org/) -
   so that the review can be performed by our team.
 - Can be in script (`.py`, `.R`, ...) or *notebooks* (Google Colab, Jupyter, Rmarkdown, etc).
 - File paths must be shortcuts _relative_ to the root folder

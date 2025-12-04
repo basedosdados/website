@@ -15,7 +15,7 @@ categories: [analise]
 thumbnail: 
 medum_slug: 
 published: true
-order: 0
+order: 1
 ---
 
 Você, leitor de longa data da BDLetter, deve ter estranhado essa pergunta. Afinal, costumamos preferir perguntas mais específicas (uma boa pergunta costuma ser bem delimitada). Mas hoje queremos explorar essa questão extremamente abrangente e falar sobre sua resposta: a Comex Stat.
@@ -85,4 +85,4 @@ Este é um exemplo de como a Comex Stat nos permite investigar diversas relaçõ
 
 Agora é a sua vez, databaser. Explore, conheça e analise os dados da Comex. Você pode, inclusive, utilizar os [códigos desta análise](https://github.com/basedosdados/analises/commit/a0061fd3b6cca7e4e7400981b0c5c985b5da456d?utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz--9a4I7710KnANEHDFtnaxgrM3vUAcZUQ6qM8sSL20Ibcq388Bz4GEy8IQhm59xTZBd7PPD) como inspiração. Depois nos conte quais insights você conseguiu encontrar. 
 
-Acesse os dados da ComexStat por **[aqui]**(https://basedosdados.org/dataset/74827951-3f2c-4f9f-b3d0-56e3aa7aeb39?table=f4b08023-5530-4dc9-bced-3321e8928fd7&utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz--9a4I7710KnANEHDFtnaxgrM3vUAcZUQ6qM8sSL20Ibcq388Bz4GEy8IQhm59xTZBd7PPD).
+Acesse os dados da ComexStat por [aqui](https://basedosdados.org/dataset/74827951-3f2c-4f9f-b3d0-56e3aa7aeb39?table=f4b08023-5530-4dc9-bced-3321e8928fd7&utm_source=hs_email&utm_medium=email&_hsenc=p2ANqtz--9a4I7710KnANEHDFtnaxgrM3vUAcZUQ6qM8sSL20Ibcq388Bz4GEy8IQhm59xTZBd7PPD).

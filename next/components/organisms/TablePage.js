@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback, useMemo, memo } from "react";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
+import cookies from "js-cookie";
 import { formatBytes } from "../../utils";
 import Button from "../atoms/Button";
 import Link from "../atoms/Link";
@@ -28,6 +29,7 @@ import WebIcon from "../../public/img/icons/webIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
+import NotificationIcon from "../../public/img/icons/notificationIcon";
 
 const createKeyIcons = (router) => (ref) => {
   let href = "";
@@ -54,15 +56,17 @@ const createKeyIcons = (router) => (ref) => {
   }
 
   return {
-    alt,
-    cursor: "pointer",
+    'aria-label': alt,
+    role: 'link',
+    tabIndex: 0,
+    cursor: href ? "pointer" : "default",
     width: "20px",
     height: "20px",
     fill: "#0068C5",
     _hover: {
       fill: "#0057A4"
     },
-    onClick: () => {router.push(href)}
+    onClick: href ? () => window.open(href, '_blank', 'noopener,noreferrer') : undefined,
   };
 };
 
@@ -95,20 +99,22 @@ const TooltipText = memo(({ text, info, ...props }) => {
           maxWidth="300px"
           {...props}
         >
-          <InfoIcon
-            alt="tip"
-            cursor="pointer"
-            fill="#878A8E"
-            width="16px"
-            height="16px"
-          />
+          <Box as="span" display="inline-flex">
+            <InfoIcon
+              alt="tip"
+              cursor="pointer"
+              fill="#878A8E"
+              width="16px"
+              height="16px"
+            />
+          </Box>
         </Tooltip>
       </TitleText>
     </Box>
   );
 });
 
-const StackSkeleton = memo(({ children, ...props }) => {
+const StackSkeleton = memo(({ children, isLoading, ...props }) => {
   return (
     <Skeleton
       startColor="#F0F0F0"
@@ -116,7 +122,7 @@ const StackSkeleton = memo(({ children, ...props }) => {
       borderRadius="6px"
       height="36px"
       width="100%"
-      isLoaded={!props.isLoading}
+      isLoaded={!isLoading}
       {...props}
     >
       {children}
@@ -164,12 +170,74 @@ const PublishedOrDataCleanedBy = memo(({ resource, t, router }) => {
 });
 
 export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
-  const { t } = useTranslation('dataset', 'prices');
+  const { t } = useTranslation(['dataset', 'prices']);
   const router = useRouter();
   const { locale } = router;
+  const [tableNotificationIsHidden, setTableNotificationIsHidden] = useState(true);
+  const [tableNotificationStatus, setTableNotificationStatus] = useState(false);
+  const [toggleDisabled, setToggleDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resource, setResource] = useState({});
   const [isError, setIsError] = useState(false);
+
+  const getUserIdFromCookie = useCallback(() => {
+    const rawUser = cookies.get("userBD");
+    if (!rawUser) return null;
+    try {
+      const parsed = JSON.parse(rawUser);
+      const userIdRaw = parsed?.id;
+      if (!userIdRaw) return null;
+      return String(userIdRaw).includes(":") ? String(userIdRaw).split(":").pop() : String(userIdRaw);
+    } catch (err) {
+      console.error('Error parsing userBD cookie', err);
+      return null;
+    }
+  }, []);
+
+  const handlerTableNotificationHiding = useCallback(() => {
+    const rawUser = cookies.get("userBD");
+    const user = rawUser ? JSON.parse(rawUser) : null;
+    if (user?.isAdmin || user?.isSubscriber) {
+      setTableNotificationIsHidden(false);
+    }
+  }, []);
+
+  async function handlerStatusTableNotification() {
+    const idUser = getUserIdFromCookie();
+    if (!idUser) return;
+
+    try {
+      const response = await fetch(`/api/tables/getStatusTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}`, { method: "GET" });
+      const result = await response.json();
+      if (result) {
+        setTableNotificationStatus(result?.status);
+      }
+    } catch (err) {
+      console.error('Error fetching table notification status', err);
+    }
+  }
+
+  async function handlerToggleTableNotification() {
+    if (toggleDisabled) return;
+
+    const idUser = getUserIdFromCookie();
+    if (!idUser) return;
+
+    setToggleDisabled(true);
+    try {
+      const response = await fetch(`/api/tables/toggleTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}&s=${btoa(tableNotificationStatus)}`, { method: "GET" });
+      const result = await response.json();
+      if (result) {
+        const response = await fetch(`/api/tables/getStatusTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}`, { method: "GET" });
+        const result = await response.json();
+        setTableNotificationStatus(result?.status);
+      }
+    } catch (err) {
+      console.error('Error toggling table notification', err);
+    } finally {
+      setTimeout(() => setToggleDisabled(false), 3000);
+    }
+  }
 
   const fetchData = useCallback(async () => {
     try {
@@ -192,6 +260,8 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
       console.error("Fetch error: ", error);
       setIsError(true);
     } finally {
+      handlerTableNotificationHiding();
+      handlerStatusTableNotification();
       setIsLoading(false);
     }
   }, [id, locale, isBDSudo]);
@@ -254,27 +324,64 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
     >
       <StackSkeleton
         display="flex"
+        width="100%"
         height="fit-content"
-        flexDirection={{base: "column", lg: "row"}}
-        alignItems={{base: "start", lg: "center"}}
+        flexDirection="row"
         gap="8px"
+        justifyContent="space-between"
+        alignItems="center"
         isLoading={isLoading}
       >
-        <TitleText
-          width={{base: "100%", lg:"fit-content"}}
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace={{base: "normal", lg:"nowrap"}}
+        <Stack
+          display="flex"
+          width="100%"
+          minWidth="0"
+          height="fit-content"
+          flexDirection={{base: "column", lg: "row"}}
+          alignItems={{base: "start", lg: "center"}}
+          gap="8px"
+          spacing={0}
         >
-          {tableName}
-        </TitleText>
-        {resource?.uncompressedFileSize &&
-          <LabelText
-            typography="x-small"
-            color="#71757A"
+          <TitleText
+            display="block"
+            width="fit-content"
+            overflow="hidden"
+            textOverflow="ellipsis"
+            whiteSpace={{base: "normal", lg:"nowrap"}}
           >
-            {`(${formatBytes(resource.uncompressedFileSize)})`}
-          </LabelText>
+            {tableName}
+          </TitleText>
+
+          {resource?.uncompressedFileSize &&
+            <LabelText
+              width="fit-content"
+              typography="x-small"
+              color="#71757A"
+              whiteSpace="nowrap"
+              flexShrink={0}
+            >
+              {`(${formatBytes(resource.uncompressedFileSize)})`}
+            </LabelText>
+          }
+        </Stack>
+
+        {!tableNotificationIsHidden && 
+          <Button
+              width="34px"
+              height="34px"
+              padding="8px"
+              borderRadius="50%"
+              flexShrink={0}
+              onClick={() => { if (!toggleDisabled) handlerToggleTableNotification(); }}
+              aria-disabled={toggleDisabled}
+              opacity={toggleDisabled ? 0.6 : 1}
+              pointerEvents={toggleDisabled ? 'none' : 'auto'}
+            >
+            <NotificationIcon
+              width="18px"
+              height="18px"
+            />
+          </Button>
         }
       </StackSkeleton>
 
@@ -507,6 +614,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
             gap="8px"
             href={`https://console.cloud.google.com/bigquery?p=${resource?.cloudTables?.[0]?.gcpProjectId}&d=${resource?.cloudTables?.[0]?.gcpDatasetId}&t=${resource?.cloudTables?.[0]?.gcpTableId}&page=table`}
             target="_blank"
+            rel="noopener noreferrer"
             cursor="pointer"
             fontWeight="400"
             color={resource?.cloudTables ? "#0068C5" : "#464A51"}
@@ -646,6 +754,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
                   <Link
                     key={i}
                     target="_blank"
+                    rel="noopener noreferrer"
                     display="flex"
                     flexDirection="row"
                     gap="8px"
@@ -758,6 +867,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         <Link
           href="/contact"
           target="_blank"
+          rel="noopener noreferrer"
         >
           <Button
             padding="10px 20px"

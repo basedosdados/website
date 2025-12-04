@@ -178,7 +178,7 @@ Llenar la columna `cobertura_temporal` en los metadatos de tabla, columna y clav
 - Fecha: `YYYY-MM-DD`
 - Horario (24h): `HH:MM:SS`
 - Datetime ([ISO-8601](https://en.wikipedia.org/wiki/ISO_8601)): `YYYY-MM-DDTHH:MM:SS.sssZ`
-- Valor nulo: `""` (csv), `NULL` (Python), `NA` (R), `.` o `""` (Stata)
+- Valor nulo: `""` (csv), `NULL` (Python), `NA` (R)
 - Proporción/porcentaje: entre 0-100
 
 ## Particionamiento de tablas
