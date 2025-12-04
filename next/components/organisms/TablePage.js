@@ -175,9 +175,24 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
   const { locale } = router;
   const [tableNotificationIsHidden, setTableNotificationIsHidden] = useState(true);
   const [tableNotificationStatus, setTableNotificationStatus] = useState(false);
+  const [toggleDisabled, setToggleDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [resource, setResource] = useState({});
   const [isError, setIsError] = useState(false);
+
+  const getUserIdFromCookie = useCallback(() => {
+    const rawUser = cookies.get("userBD");
+    if (!rawUser) return null;
+    try {
+      const parsed = JSON.parse(rawUser);
+      const userIdRaw = parsed?.id;
+      if (!userIdRaw) return null;
+      return String(userIdRaw).includes(":") ? String(userIdRaw).split(":").pop() : String(userIdRaw);
+    } catch (err) {
+      console.error('Error parsing userBD cookie', err);
+      return null;
+    }
+  }, []);
 
   const handlerTableNotificationHiding = useCallback(() => {
     const rawUser = cookies.get("userBD");
@@ -188,19 +203,39 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
   }, []);
 
   async function handlerStatusTableNotification() {
-    const rawUser = cookies.get("userBD");
-    if (!rawUser) return;
-    const parsed = JSON.parse(rawUser);
-    const userIdRaw = parsed?.id;
-    if (!userIdRaw) return;
-    const idUser = String(userIdRaw).includes(":") ? String(userIdRaw).split(":").pop() : String(userIdRaw);
+    const idUser = getUserIdFromCookie();
     if (!idUser) return;
 
-    const response = await fetch(`/api/tables/getStatusTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}`, { method: "GET" });
-    const result = await response.json();
+    try {
+      const response = await fetch(`/api/tables/getStatusTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}`, { method: "GET" });
+      const result = await response.json();
+      if (result) {
+        setTableNotificationStatus(result?.status);
+      }
+    } catch (err) {
+      console.error('Error fetching table notification status', err);
+    }
+  }
 
-    if (result) {
-      setTableNotificationStatus(result?.status);
+  async function handlerToggleTableNotification() {
+    if (toggleDisabled) return;
+
+    const idUser = getUserIdFromCookie();
+    if (!idUser) return;
+
+    setToggleDisabled(true);
+    try {
+      const response = await fetch(`/api/tables/toggleTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}&s=${btoa(tableNotificationStatus)}`, { method: "GET" });
+      const result = await response.json();
+      if (result) {
+        const response = await fetch(`/api/tables/getStatusTableUpdateNotification?p=${btoa(idUser)}&q=${btoa(id)}`, { method: "GET" });
+        const result = await response.json();
+        setTableNotificationStatus(result?.status);
+      }
+    } catch (err) {
+      console.error('Error toggling table notification', err);
+    } finally {
+      setTimeout(() => setToggleDisabled(false), 3000);
     }
   }
 
@@ -332,12 +367,16 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
 
         {!tableNotificationIsHidden && 
           <Button
-            width="34px"
-            height="34px"
-            padding="8px"
-            borderRadius="50%"
-            flexShrink={0}
-          >
+              width="34px"
+              height="34px"
+              padding="8px"
+              borderRadius="50%"
+              flexShrink={0}
+              onClick={() => { if (!toggleDisabled) handlerToggleTableNotification(); }}
+              aria-disabled={toggleDisabled}
+              opacity={toggleDisabled ? 0.6 : 1}
+              pointerEvents={toggleDisabled ? 'none' : 'auto'}
+            >
             <NotificationIcon
               width="18px"
               height="18px"
