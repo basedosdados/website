@@ -156,7 +156,10 @@
         "download": "Download",
         "helpInFooterTitle": "Found something strange in the data?",
         "helpInFooterSubtitle": "Talk to our team to ask questions or report a problem",
-        "helpInFooterButton": "Get in touch"
+        "helpInFooterButton": "Get in touch",
+        "notificationEnabled": "Notifications enabled for this table",
+        "notificationDisabled": "Notifications disabled for this table",
+        "notificationToggleFailed": "Failed to toggle notifications for this table"
     },
     "temporalCoverageBar": {
         "title": "Temporal coverage",
