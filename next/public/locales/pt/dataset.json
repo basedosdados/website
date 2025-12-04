@@ -159,7 +159,11 @@
         "helpInFooterButton": "Entrar em contato",
         "notificationEnabled": "Notificações ativadas para essa tabela",
         "notificationDisabled": "Notificações desativadas para essa tabela",
-        "notificationToggleFailed": "Falha ao alterar notificações para essa tabela"
+        "notificationToggleFailed": "Falha ao alterar notificações para essa tabela",
+        "enableNotification": "Ativar notificações",
+        "disableNotification": "Desativar notificações",
+        "tooltipEnableNotification": "Receber avisos por e-mail quando esta tabela for atualizada.",
+        "tooltipDisableNotification": "Parar de receber avisos por e-mail desta tabela."
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",

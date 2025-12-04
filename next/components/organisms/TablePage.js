@@ -30,7 +30,7 @@ import WebIcon from "../../public/img/icons/webIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
-import NotificationIcon from "../../public/img/icons/notificationIcon";
+import {NotificationSolidIcon, NotificationDeactivateIcon} from "../../public/img/icons/notificationIcon";
 
 const createKeyIcons = (router) => (ref) => {
   let href = "";
@@ -382,24 +382,55 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         </Stack>
 
         {!tableNotificationIsHidden && 
-          <Button
-            width="34px"
-            height="34px"
-            padding="8px"
-            borderRadius="50%"
-            flexShrink={0}
-            justifyContent="center"
-            isVariant={tableNotificationStatus}
-            onClick={() => { if (!toggleDisabled) handlerToggleTableNotification(); }}
-            aria-disabled={toggleDisabled}
-            opacity={toggleDisabled ? 0.6 : 1}
-            pointerEvents={toggleDisabled ? 'none' : 'auto'}
+          <Tooltip
+            label={tableNotificationStatus ? t('table.tooltipDisableNotification') : t('table.tooltipEnableNotification')}
+            hasArrow
+            maxWidth={tableNotificationStatus ? "212px" : "245px"}
+            padding="16px"
+            backgroundColor="#252A32"
+            boxSizing="border-box"
+            borderRadius="8px"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+            textAlign="center"
+            color="#FFFFFF"
+            placement="top"
           >
-            <NotificationIcon
-              width="18px"
-              height="18px"
-            />
-          </Button>
+            <Box
+              display="flex"
+              flexShrink={0}
+            >
+              <Button
+                width="fit-content"
+                padding="11px 16px"
+                borderRadius="8px"
+                flexShrink={0}
+                justifyContent="center"
+                isVariant
+                onClick={() => { if (!toggleDisabled) handlerToggleTableNotification(); }}
+                aria-disabled={toggleDisabled}
+                opacity={toggleDisabled ? 0.6 : 1}
+                pointerEvents={toggleDisabled ? 'none' : 'auto'}
+              >
+                {tableNotificationStatus ?
+                  <NotificationDeactivateIcon
+                    width="18px"
+                    height="18px"
+                  />
+                :
+                  <NotificationSolidIcon
+                    width="18px"
+                    height="18px"
+                  />
+                }
+                <LabelText color="currentColor">
+                  {tableNotificationStatus ? t('table.disableNotification') : t('table.enableNotification')}
+                </LabelText>
+              </Button>
+            </Box>
+          </Tooltip>
         }
       </StackSkeleton>
 
