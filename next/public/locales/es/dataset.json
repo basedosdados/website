@@ -156,7 +156,14 @@
         "download": "Descargar",
         "helpInFooterTitle": "¿Encontraste algo raro en los datos?",
         "helpInFooterSubtitle": "Habla con nuestro equipo para resolver dudas o informar un problema",
-        "helpInFooterButton": "Ponerse en contacto"
+        "helpInFooterButton": "Ponerse en contacto",
+        "notificationEnabled": "Notificaciones activadas para esa tabla",
+        "notificationDisabled": "Notificaciones desactivadas para esa tabla",
+        "notificationToggleFailed": "Error al cambiar las notificaciones para esa tabla",
+        "enableNotification": "Activar notificaciones",
+        "disableNotification": "Desactivar notificaciones",
+        "tooltipEnableNotification": "Recibir notificaciones por correo electrónico cuando se actualice esta tabla.",
+        "tooltipDisableNotification": "Dejar de recibir notificaciones por correo electrónico para esta tabla."
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",
