@@ -40,7 +40,7 @@ Por ter mais de 20 tabelas, este conjunto pode ser complexo à primeira vista. P
 Candidatos podem repassar verbas entre si, o que faz com que uma mesma receita apareça mais de uma vez.
 
 ## Coluna id_municipio
-Alguns registros têm a coluna `id_municipio nulo`, pois o TSE registra municípios no exterior, que não possuem código IBGE. Nesses casos, apenas a coluna `id_municipio_tse` está preenchido.
+Alguns registros têm a coluna `id_municipio nulo`, pois o TSE registra municípios no exterior, que não possuem código IBGE. Nesses casos, apenas a coluna `id_municipio_tse` está preenchida.
 
 ## Situação do candidato
 Candidaturas podem ser indeferidas pela justiça eleitoral, para filtrar apenas candidatos que concorreram em uma eleição, use o filtro `situacao = 'deferida'`.
@@ -48,11 +48,15 @@ Candidaturas podem ser indeferidas pela justiça eleitoral, para filtrar apenas 
 ## Prestação de contas
 Os dados são preenchidos manualmente, o que pode gerar inconsistências, valores ausentes ou duplicidades, especialmente durante os períodos de campanha.
 
+## Porpoção de votos válidos para senado
+Nos anos em que a eleição para o Senado envolve duas vagas, a proporção de votos válidos nas tabelas `detalhes_votacao_municipio`, `detalhes_votacao_municipio_zona` e `detalhes_votacao_secao` pode ultrapassar 100%.
+Isso ocorre porque, nesses anos, cada eleitor pode votar em dois candidatos diferentes, e o TSE contabiliza cada voto individualmente como um voto válido para o cargo. Assim, um mesmo eleitor aparece duas vezes na contagem, o que eleva a proporção de votos válidos acima de 100%.
+
 # Limitações
-As tabelas não incluem informações de eleições para o conselho tutelar.
+As tabelas do TSE não incluem informações de eleições para o conselho tutelar.
 
 # Inconsistências
-Não foram encontradas inconsistências neste conjunto de dados.
+Além do comportamento esperado nos anos com duas vagas para o Senado, identificamos que existem algumas dezenas de linhas na tabela `detalhes_votacao_secao` em que a proporção de votos válidos ultrapassa 100% sem uma causa conhecida. Esse conjunto de casos é muito pequeno em relação ao total de linhas da tabela e, até o momento, não encontramos uma explicação para o ocorrido. Recomendamos tratar esses registros como residuais e analisá-los com cautela caso tenham impacto direto na sua aplicação.
 
 # Observações ao longo tempo
 Para acompanhar os candidatos ao longo dos anos, você pode usar a coluna `titulo_eleitoral`. Esse identificador rastreia indivíduos de forma consistente, superando a limitação de outros IDs associados que mudam entre pleitos. Ele identifica os candidatos em 99,5% dos casos. No entanto, é importante observar que podem existir valores nulos ou dois identificadores diferentes para o mesmo candidato em alguns casos.
