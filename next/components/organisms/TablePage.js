@@ -31,6 +31,9 @@ import InfoIcon from "../../public/img/icons/infoIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import {NotificationSolidIcon, NotificationDeactivateIcon} from "../../public/img/icons/notificationIcon";
+import CheckIcon from "../../public/img/icons/checkIcon";
+import WarningIcon from "../../public/img/icons/warningIcon";
+import CrossIcon from "../../public/img/icons/crossIcon";
 
 const createKeyIcons = (router) => (ref) => {
   let href = "";
@@ -238,18 +241,91 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         const enabledMessage = t('table.notificationEnabled');
         const disabledMessage = t('table.notificationDisabled');
         toast({
-          title: statusResult.status ? enabledMessage : disabledMessage,
           status: "success",
           duration: 3000,
-          position: "bottom"
+          position: "bottom",
+          render: () => (
+            <Box
+              display="flex"
+              flexDirection="row"
+              gap="8px"
+              padding="12px 16px"
+              backgroundColor="#252A32"
+              borderRadius="8px"
+              color="#FFF"
+              fill="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="14px"
+              lineHeight="20px"
+            >
+              <CheckIcon
+                width="20px"
+                height="20px"
+              />
+              {statusResult.status ? enabledMessage : disabledMessage}
+            </Box>
+          ),
         });
       } else if (toggleResult && toggleResult.message) {
-        toast({ title: toggleResult.message, status: "info", duration: 3000, position: "bottom" });
+        toast({
+          status: "info",
+          duration: 3000,
+          position: "bottom",
+          render: () => (
+            <Box
+              display="flex"
+              flexDirection="row"
+              gap="8px"
+              padding="12px 16px"
+              backgroundColor="#252A32"
+              borderRadius="8px"
+              color="#FFF"
+              fill="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="14px"
+              lineHeight="20px"
+            >
+              <WarningIcon
+                width="20px"
+                height="20px"
+              />
+              {toggleResult.message}
+            </Box>
+          ),
+        });
       }
     } catch (err) {
       console.error('Error toggling table notification', err);
       const failMessage = t('table.notificationToggleFailed');
-      toast({ title: failMessage, status: "error", duration: 4000, position: "bottom" });
+      toast({ title: failMessage,
+        status: "error",
+        duration: 4000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <CrossIcon
+              width="20px"
+              height="20px"
+            />
+            {toggleResult.message}
+          </Box>
+        ),
+      });
     } finally {
       setTimeout(() => setToggleDisabled(false), 3000);
     }
