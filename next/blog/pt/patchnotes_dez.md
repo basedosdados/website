@@ -4,7 +4,7 @@ description: Fique por dentro das atualizações técnicas da BD neste mês
 date:
   created: "2025-12-07T15:00:00"
 authors:
-thumbnail: website/next/public/blog/patchnotes_dez/thumb_patchnotes.png
+thumbnail: /blog/patchnotes_dez/thumb_patchnotes.png
 categories: [institucional]
 medium_slug: >-
 published: true
