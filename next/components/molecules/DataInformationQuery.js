@@ -499,9 +499,9 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
                 type="info"
               >
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[0]}
-                <Link href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Link>
+                <Link href="https://basedosdados.org/dataset/e083c9a2-1cee-4342-bedc-535cbad6f3cd?table=0308fbe0-270c-4135-9115-ea1100f400f6" margin="0 4px 0 0" display="inline" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[1]}</Link>
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[2]}
-                <Link href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Link>
+                <Link href="https://basedosdados.org/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=dffb65ac-9df9-4151-94bf-88c45bfcb056" margin="0 4px" display="inline" target="_blank" color="#0068C5" _hover={{color: "#0057A4"}}>{t('table.infoTranslationNotAvailable', { returnObjects: true })[3]}</Link>
                 {t('table.infoTranslationNotAvailable', { returnObjects: true })[4]}
               </AlertDiscalimerBox>
             </Skeleton>

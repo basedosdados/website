@@ -242,5 +242,12 @@
         "notProvided": "No informado",
         "additionalInformation": "Información adicional",
         "status": "Estado"
+    },
+    "abTest": {
+        "aTitle": "Construya una arquitectura de datos escalable",
+        "aDescription": "Estructuramos entornos en la nube, pipelines y APIs para la ingesta, el procesamiento y la integración de datos públicos y privados. Todo con automatización, seguridad y trazabilidad para escalar sus análisis y productos.",
+        "aButton": "Conozca los servicios de consultoría",
+        "bTitle": "Integre datos públicos y privados con eficiencia, seguridad y trazabilidad.",
+        "bButton": "Conozca los servicios de consultoría"
     }
 }

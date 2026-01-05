@@ -275,17 +275,17 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const abTestContent = {
     A: {
       id: "construa-uma-arquitetura-de-dados-escalavel",
-      title: "Construa uma arquitetura de dados escalável",
-      description: "Estruturamos ambientes em nuvem, pipelines e APIs para ingestão, tratamento e integração de dados públicos e privados. Tudo com automação, segurança e rastreabilidade para escalar suas análises e produtos.",
-      buttonText: "Conheça os serviços de consultoria",
+      title: t('abTest.aTitle'),
+      description: t('abTest.aDescription'),
+      buttonText: t('abTest.aButton'),
       link: "/services",
       imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
       value: "A"
     },
     B: {
       id: "solucoes-de-dados-para-toda-a-jornada",
-      alternateTitle: "Integre dados públicos e privados com eficiência, segurança e rastreabilidade.",
-      buttonText: "Conheça os serviços de consultoria",
+      alternateTitle: t('abTest.bTitle'),
+      buttonText: t('abTest.bButton'),
       link: "/services",
       imageUrl: "https://storage.googleapis.com/basedosdados-website/images/image-servicos.svg",
       value: "B"
