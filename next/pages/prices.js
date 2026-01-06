@@ -326,7 +326,6 @@ export function SectionPrice() {
             bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
             bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
           }
-          console.log(filteredPlans)
 
           setPlans(filteredPlans)
         }

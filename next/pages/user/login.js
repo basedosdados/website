@@ -136,7 +136,16 @@ export default function Login() {
     if(userData.workDataTool === null) {
       return router.push('/user/survey')
     }
-    
+
+    const previousPath = localStorage.getItem('previousPath')
+    const isAuthPage = previousPath && (previousPath.includes('/user/login') || previousPath.includes('/user/register'))
+
+    if(previousPath && !isAuthPage) {
+      localStorage.removeItem('previousPath')
+      return window.location.href = previousPath
+    }
+    if (previousPath) localStorage.removeItem('previousPath')
+
     return router.push('/')
   }
 
