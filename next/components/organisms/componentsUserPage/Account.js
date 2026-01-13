@@ -3,7 +3,8 @@ import {
   Box,
   FormControl,
   useDisclosure,
-  ModalCloseButton
+  ModalCloseButton,
+  useToast
 } from "@chakra-ui/react";
 import { useState } from "react";
 import cookies from 'js-cookie';
@@ -11,6 +12,8 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import Link from "../../atoms/Link";
 import TitleText from "../../atoms/Text/TitleText";
+import CheckIcon from "../../../public/img/icons/checkIcon";
+import WarningIcon from "../../../public/img/icons/warningIcon";
 
 import {
   LabelTextForm,
@@ -25,6 +28,7 @@ import {
 export default function Account({ userInfo }) {
   const { t } = useTranslation('user');
   const router = useRouter();
+  const toast = useToast();
   const usernameModal = useDisclosure();
   const eraseModalAccount = useDisclosure();
   const sucessEraseModalAccount = useDisclosure();
@@ -137,6 +141,78 @@ export default function Account({ userInfo }) {
     sucessEraseModalAccount.onClose()
     return window.open("/", "_self")
   }
+
+  async function handleDisableAllNotifications() {
+    setIsLoading(true)
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+
+    // const result = await fetch(`/api/user/****?p=${btoa(id)}`, {method: "GET"})
+    //   .then(res => res.json())
+    let result = {ok: true} // --- IGNORE ---
+
+    if(result?.ok === true) {
+      toast({
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <CheckIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.disableNotificationsSuccess')}
+          </Box>
+        )
+      })
+    } else {
+      toast({
+        status: "error",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <WarningIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.disableNotificationsError')}
+          </Box>
+        )
+      })
+    }
+    setIsLoading(false)
+  }
+
 
   return (
     <Stack spacing="24px">
@@ -324,6 +400,15 @@ export default function Account({ userInfo }) {
           isVariant
           onClick={() => usernameModal.onOpen()}
         >{t('username.changeUsername')}</Button>
+      </Box>
+
+      <Box>
+        <TitleTextForm>{t('username.disableAllNotifications')}</TitleTextForm>
+        <ExtraInfoTextForm>{t('username.disableNotificationsInfo')}</ExtraInfoTextForm>
+        <Button
+          isVariant
+          onClick={() => handleDisableAllNotifications()}
+        >{t('username.disableNotificationsButton')}</Button>
       </Box>
 
       <Box>
