@@ -250,5 +250,12 @@
         "notProvided": "Not provided",
         "additionalInformation": "Additional information",
         "status": "Status"
+    },
+    "abTest": {
+        "aTitle": "Build a scalable data architecture",
+        "aDescription": "We structure cloud environments, pipelines, and APIs for the ingestion, processing, and integration of public and private data. All with automation, security, and traceability to scale your analyses and products.",
+        "aButton": "Explore our consulting services",
+        "bTitle": "Integrate public and private data with efficiency, security, and traceability.",
+        "bButton": "Explore our consulting services"
     }
 }

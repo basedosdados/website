@@ -58,6 +58,16 @@ export default function Survey() {
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(userData))
     triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu")
+
+    const previousPath = localStorage.getItem('previousPath')
+    const isAuthPage = previousPath && (previousPath.includes('/user/login') || previousPath.includes('/user/register'))
+
+    if(previousPath && !isAuthPage) {
+      localStorage.removeItem('previousPath')
+      return window.location.href = previousPath
+    }
+    if (previousPath) localStorage.removeItem('previousPath')
+
     router.push('/')
   }
 

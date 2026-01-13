@@ -165,7 +165,15 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
           <></>
         ) : (
           <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
-            <Link href="/user/login" width="100%">
+            <Link
+              href="/user/login"
+              width="100%"
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('previousPath', window.location.href)
+                }
+              }}
+            >
               <Button width="100%" justifyContent="center">
                 {t('enter', { ns: 'menu' })}
               </Button>
@@ -316,7 +324,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           onClick={() => {
             cookies.remove('userBD', { path: '/' })
             cookies.remove('token', { path: '/' })
-            window.location.href = "/"
+            if(window.location.pathname.includes('/user/')) return window.location.href = "/"
+            window.location.reload()
           }}
         >
           <SignOutIcon width="20px" height="20px"/>
@@ -490,7 +499,8 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             onClick={() => {
               cookies.remove('userBD', { path: '/' })
               cookies.remove('token', { path: '/' })
-              window.location.href = "/"
+              if(window.location.pathname.includes('/user/')) return window.location.href = "/"
+              window.location.reload()
             }}
           >
             <SignOutIcon width="20px" height="20px" fill="#D0D0D0"/>
@@ -760,6 +770,7 @@ function DesktopLinks({
                 {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
                 {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"explore"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
                 {},
+                {name: t('tooltip.downloadCatalog'), url: `${process.env.NEXT_PUBLIC_API_URL}/export/catalog/?locale=${locale || 'pt'}`},
                 {name: t('tooltip.installPackages'), url: 
                   locale === "en" ? "/en/docs/access_data_packages/" :
                   locale === "es" ? "/es/docs/access_data_packages/" :
@@ -792,6 +803,11 @@ function DesktopLinks({
               gap="8px"
               _hover={{
                 opacity: 0.7
+              }}
+              onClick={() => {
+                if (typeof window !== 'undefined') {
+                  localStorage.setItem('previousPath', window.location.href)
+                }
               }}
             >
               {t('enter', { ns: 'menu' })}

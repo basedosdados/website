@@ -94,11 +94,11 @@ export default function RawDataSourcesPage({ id, isBDSudo }) {
     const value = resource?.updates?.[0];
     if (!value || Object.keys(value).length === 0) return t('rawDataSource.notProvided');
 
-    const localizedName = value.entity[`name${capitalize(locale)}`];
-    const defaultName = value.entity.name;
+    const localizedName = value?.entity?.[`name${capitalize(locale)}`];
+    const defaultName = value?.entity?.name;
 
-    if (value.frequency >= 0 && (localizedName || defaultName)) {
-      return `${value.frequency} ${localizedName || defaultName}`;
+    if (value?.frequency >= 0 && (localizedName || defaultName)) {
+      return `${value?.frequency} ${localizedName || defaultName}`;
     }
     if (localizedName || defaultName) {
       return `${localizedName || defaultName}`;
