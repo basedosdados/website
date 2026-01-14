@@ -297,7 +297,8 @@
         "disableNotificationsInfo": "Al hacer clic en el botón de abajo, se desactivarán todas las notificaciones de actualización de tablas.",
         "disableNotificationsButton": "Desactivar notificaciones",
         "disableNotificationsSuccess": "¡Notificaciones desactivadas con éxito!",
-        "disableNotificationsError": "Error al desactivar las notificaciones"
+        "disableNotificationsError": "Error al desactivar las notificaciones",
+        "noActiveNotifications": "No hay notificaciones activas para desactivar."
     },
     "activate": {
         "accountActive": "Cuenta activa",

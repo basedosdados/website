@@ -147,11 +147,10 @@ export default function Account({ userInfo }) {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
 
-    // const result = await fetch(`/api/user/****?p=${btoa(id)}`, {method: "GET"})
-    //   .then(res => res.json())
-    let result = {ok: true} // --- IGNORE ---
+    const result = await fetch(`/api/tables/disableAllTableUpdateNotifications?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
 
-    if(result?.ok === true) {
+    if(result?.success === true) {
       toast({
         status: "success",
         duration: 3000,
@@ -177,6 +176,35 @@ export default function Account({ userInfo }) {
               height="20px"
             />
             {t('username.disableNotificationsSuccess')}
+          </Box>
+        )
+      })
+    } else if (result === null) {
+      toast({
+        status: "info",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <WarningIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.noActiveNotifications')}
           </Box>
         )
       })
