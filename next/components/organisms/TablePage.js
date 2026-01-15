@@ -24,6 +24,7 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
+import { triggerGAEventWithData } from "../../utils";
 
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
@@ -240,6 +241,17 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         setTableNotificationStatus(statusResult.status);
         const enabledMessage = t('table.notificationEnabled');
         const disabledMessage = t('table.notificationDisabled');
+
+        const eventData = {
+          dataset_id: `${resource?.dataset?._id || ''}`,
+          dataset_name: `${datasetName || ''}`,
+          table_id: `${resource?._id || ''}`,
+          table_name: `${resource?.name || ''}`,
+          notification_status: statusResult.status ? 'enabled' : 'disabled',
+        }
+
+        triggerGAEventWithData("table_notification_toggle", eventData)
+
         toast({
           status: "success",
           duration: 3000,
