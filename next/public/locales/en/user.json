@@ -378,7 +378,13 @@
         "pleaseEnterValidEmail": "Please enter a valid email.",
         "tourTitle": "Restart Tour", 
         "tourContext": "This button restarts the platform's guided tour. All explanations will be shown again from the beginning.",
-        "resetTour": "Restart"
+        "resetTour": "Restart",
+        "disableAllNotifications": "Disable all notifications",
+        "disableNotificationsInfo": "By clicking the button below, all table update notifications will be disabled.",
+        "disableNotificationsButton": "Disable notifications",
+        "disableNotificationsSuccess": "Notifications disabled successfully!",
+        "disableNotificationsError": "Error disabling notifications",
+        "noActiveNotifications": "There are no active notifications to disable."
     },
     "activate": {
         "accountActive": "Active account",

@@ -395,7 +395,13 @@
         "pleaseEnterValidEmail": "Por favor, insira um e-mail válido.",
         "tourTitle": "Reiniciar Tour",
         "tourContext": "Este botão permite reiniciar o tour guiado na plataforma. Todas as explicações serão mostradas novamente desde o início.",
-        "resetTour": "Reiniciar"
+        "resetTour": "Reiniciar",
+        "disableAllNotifications": "Desativar todas as notificações",
+        "disableNotificationsInfo": "Ao clicar no botão abaixo, todas as notificações de atualização de tabelas serão desativadas.",
+        "disableNotificationsButton": "Desativar notificações",
+        "disableNotificationsSuccess": "Notificações desativadas com sucesso!",
+        "disableNotificationsError": "Erro ao desativar notificações",
+        "noActiveNotifications": "Não há notificações ativas para desativar."
     },
     "activate": {
         "accountActive": "Conta ativa",
