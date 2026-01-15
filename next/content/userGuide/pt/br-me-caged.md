@@ -39,11 +39,11 @@ A título de exemplo de como realizar o procedimento de ajuste, esta _query_ pod
 
 ```sql
 with tabelas_unidas as (
-select *, 0 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao`
+select *, 0 as indicador_exclusao from `basedosdados.br_me_caged.microdados_movimentacao`
 union all
-select * except (ano,mes), 0 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao_fora_prazo`
+select * except (ano,mes), 0 as indicador_exclusao from `basedosdados.br_me_caged.microdados_movimentacao_fora_prazo`
 union all
-select * except (ano,mes, ano_declaracao_movimentacao, mes_declaracao_movimentacao, indicador_exclusao), 1 as indicador_exclusao from `basedosdados-dev.br_me_caged.microdados_movimentacao_excluida`),
+select * except (ano,mes, ano_declaracao_movimentacao, mes_declaracao_movimentacao, indicador_exclusao), 1 as indicador_exclusao from `basedosdados.br_me_caged.microdados_movimentacao_excluida`),
 
 tabela_ajustada as (
 select *,
