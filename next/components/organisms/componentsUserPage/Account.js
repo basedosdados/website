@@ -430,14 +430,15 @@ export default function Account({ userInfo }) {
         >{t('username.changeUsername')}</Button>
       </Box>
 
-      <Box>
+      {/* FEAT: Notificação de tabela */}
+      {/* <Box>
         <TitleTextForm>{t('username.disableAllNotifications')}</TitleTextForm>
         <ExtraInfoTextForm>{t('username.disableNotificationsInfo')}</ExtraInfoTextForm>
         <Button
           isVariant
           onClick={() => handleDisableAllNotifications()}
         >{t('username.disableNotificationsButton')}</Button>
-      </Box>
+      </Box> */}
 
       <Box>
         <TitleTextForm>{t('username.exportAccountData')}</TitleTextForm>
