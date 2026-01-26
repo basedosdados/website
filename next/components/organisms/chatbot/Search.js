@@ -1,9 +1,10 @@
 import {
+  VStack,
   Stack
 } from "@chakra-ui/react";
 import { InputForm } from "../../molecules/uiUserPage";
 import BodyText from "../../atoms/Text/BodyText";
-import SearchIcon from "../../../public/img/icons/searchIcon";
+import SendIcon from "../../../public/img/icons/sendIcon";
 
 export default function Search() {
   return (
@@ -11,7 +12,7 @@ export default function Search() {
       width="100%"
       maxWidth="600px"
       margin="auto auto 0"
-      spacing={0}
+      spacing="8px"
     >
       <InputForm
         placeholder="Faça sua pergunta"
@@ -27,9 +28,10 @@ export default function Search() {
           fontSize: "14px"
         }}
         icon={
-          <SearchIcon 
-            width="24px"
-            height="24px"
+          <SendIcon 
+            cursor="pointer"
+            width="18px"
+            height="18px"
             fill="#71757A"
             _hover={{
               fill: "#2B8C4D"
@@ -37,13 +39,25 @@ export default function Search() {
           />
         }
       />
-      <BodyText
-        typography="small"
-        color="#71757A"
+      <VStack
+        display={{base: "inline", md: "flex"}}
+        spacing={0}
       >
-        O chatbot pode cometer erros. Considere verificar informações importantes.
-        Todas as informações aqui enviadas são registradas para análise e melhoria do produto.
-      </BodyText>
+        <BodyText
+          display="inline"
+          typography="small"
+          color="#ACAEB1"
+        >
+          O chatbot pode cometer erros. Considere verificar informações importantes.
+        </BodyText>
+        <BodyText
+          display="inline"
+          typography="small"
+          color="#ACAEB1"
+        >
+          Todas as informações aqui enviadas são registradas para análise e melhoria do produto.
+        </BodyText>
+      </VStack>
     </Stack>
   )
 }
