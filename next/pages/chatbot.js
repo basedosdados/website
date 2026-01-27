@@ -4,11 +4,20 @@ import {
   HStack,
   Stack
 } from "@chakra-ui/react";
+import { useState } from "react";
 import Head from "next/head";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 
 export default function Chatbot() {
+  const [value, setValue] = useState("");
+
+  const handleSend = () => {
+    if (value.trim() !== "") {
+      setValue("");
+    }
+  };
+
   return (
     <HStack
       width="100%"
@@ -52,7 +61,11 @@ export default function Chatbot() {
             boxSizing="border-box"
             spacing={0}
           >
-            <Search />
+            <Search
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              onSend={handleSend}
+            />
           </Stack>
         </Flex>
       </HStack>

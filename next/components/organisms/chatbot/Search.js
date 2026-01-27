@@ -1,63 +1,140 @@
+import { useRef, useEffect } from 'react';
 import {
+  Flex,
   VStack,
-  Stack
+  Box,
+  Textarea
 } from "@chakra-ui/react";
-import { InputForm } from "../../molecules/uiUserPage";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
 
-export default function Search() {
+export default function Search({ value, onChange, onSend }) {
+  const textareaRef = useRef(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "24px";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [value]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (onSend) onSend();
+    }
+  };
+
   return (
-    <Stack
+    <VStack
       width="100%"
       maxWidth="600px"
       margin="auto auto 0"
-      spacing="8px"
+      spacing="24px"
     >
-      <InputForm
-        placeholder="Faça sua pergunta"
+      <Flex
         width="100%"
-        height="48px"
-        borderRadius="8px"
-        fontSize="14px"
-        color="#71757A"
-        fill="#71757A"
-        backgroundColor="#F7F7F7"
-        _placeholder={{
-          color: "#71757A",
-          fontSize: "14px"
+        borderRadius="14px"
+        backgroundColor="#EEEEEE"
+        padding="12px 16px"
+        alignItems="flex-end"
+        border="2px solid transparent !important"
+        _hover={{
+          border: "2px solid transparent !important",
+          backgroundColor: "#DEDFE0",
         }}
-        icon={
-          <SendIcon 
-            cursor="pointer"
+        _focusWithin={{
+          border: "2px solid #0068C5 !important",
+          backgroundColor: "#FFF",
+        }}
+      >
+        <Textarea
+          id="search-chatbot"
+          ref={textareaRef}
+          value={value}
+          onChange={(e) => {
+            e.target.style.height = '24px'; 
+            e.target.style.height = `${e.target.scrollHeight}px`;
+            if (onChange) onChange(e);
+          }}
+          onKeyDown={handleKeyDown}
+          placeholder="Faça sua pergunta!"
+          variant="unstyled"
+          width="100%"
+          minHeight="24px"
+          maxHeight="400px"
+          resize="none"
+          padding="0"
+          fontSize="14px"
+          lineHeight="24px"
+          fontFamily="Roboto"
+          fontWeight="400"
+          color="#464A51"
+          overflowY="auto"
+          _placeholder={{
+            color: "#464A51",
+            fontSize: "14px",
+            opacity: 1
+          }}
+          css={{
+            "&::-webkit-scrollbar": {
+              width: "4px",
+            },
+            "&::-webkit-scrollbar-track": {
+              width: "6px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#C4C4C4",
+              borderRadius: "24px",
+            },
+          }}
+        />
+        <Box
+          marginLeft="8px"
+          cursor="pointer"
+          onClick={onSend}
+          color="#464A51"
+          opacity={value ? 1 : 0.5}
+          minWidth="24px"
+          minHeight="24px"
+          element="div"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          pointerEvents={value ? "auto" : "none"}
+          _hover={{
+            color: "#2B8C4D",
+            fill: "#2B8C4D"
+          }}
+        >
+          <SendIcon
             width="18px"
             height="18px"
-            fill="#71757A"
-            _hover={{
-              fill: "#2B8C4D"
-            }}
+            fill="currentColor"
+            transform="rotate(45deg)"
           />
-        }
-      />
+        </Box>
+      </Flex>
+
       <VStack
-        display={{base: "inline", md: "flex"}}
+        width="100%"
         spacing={0}
+        align="center"
+        textAlign="center"
       >
         <BodyText
-          display="inline"
           typography="small"
           color="#ACAEB1"
         >
           O chatbot pode cometer erros. Considere verificar informações importantes.
         </BodyText>
         <BodyText
-          display="inline"
           typography="small"
           color="#ACAEB1"
         >
           Todas as informações aqui enviadas são registradas para análise e melhoria do produto.
         </BodyText>
       </VStack>
-    </Stack>
+    </VStack>
   )
 }
