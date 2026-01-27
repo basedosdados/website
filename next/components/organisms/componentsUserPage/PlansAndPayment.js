@@ -412,22 +412,33 @@ export default function PlansAndPayment ({ userData }) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return emailRegex.test(email)
     }
-    if(!isValidEmail(emailGCP)) return setErrEmailGCP(true)
 
-    const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
-      .then(res => res.json())
-
-    if(response.ok) {
-      if(emailGCP !== userData?.email) {
-        if(emailGCP !== userData?.gcpEmail) {
-          triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
-        }
-      }
-      setIsLoadingEmailChange(false)
-      EmailModal.onClose()
-      PaymentModal.onOpen()
-    } else {
+    if(!isValidEmail(emailGCP)) {
       setErrEmailGCP(true)
+      setIsLoadingEmailChange(false)
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
+        .then(res => res.json())
+
+      if(response.ok) {
+        if(emailGCP !== userData?.email) {
+          if(emailGCP !== userData?.gcpEmail) {
+            triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
+          }
+        }
+        setIsLoadingEmailChange(false)
+        EmailModal.onClose()
+        PaymentModal.onOpen()
+      } else {
+        setErrEmailGCP(true)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoadingEmailChange(false)
     }
   }
 
