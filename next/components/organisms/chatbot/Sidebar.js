@@ -10,7 +10,7 @@ import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import BodyText from '../../atoms/Text/BodyText'
 import PenSquareIcon from '../../../public/img/icons/penSquareIcon'
 
-export default function Sidebar() {
+export default function Sidebar({ onNewChat }) {
   const [isOpen, setIsOpen] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -91,6 +91,7 @@ export default function Sidebar() {
             padding="8px"
             borderRadius="8px"
             gap={isOpen ? "4px" : "0"}
+            onClick={onNewChat}
             _hover={{
               color: "#2B8C4D",
               fill: "#2B8C4D",

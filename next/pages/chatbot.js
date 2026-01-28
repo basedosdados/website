@@ -1,19 +1,23 @@
-
 import {
   Flex,
   HStack,
-  Stack
+  Stack,
+  Box
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Head from "next/head";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
+import ChatWindow from "../components/organisms/chatbot/ChatWindow";
+import useChatbot from "../hooks/useChatbot";
 
 export default function Chatbot() {
   const [value, setValue] = useState("");
+  const { messages, isLoading, sendMessage, sendFeedback, resetChat } = useChatbot();
 
   const handleSend = () => {
     if (value.trim() !== "") {
+      sendMessage(value);
       setValue("");
     }
   };
@@ -44,7 +48,7 @@ export default function Chatbot() {
         height="100%"
         display="flex"
       >
-        <Sidebar />
+        <Sidebar onNewChat={resetChat} />
         <Flex
           flex={1}
           width="100%"
@@ -53,6 +57,7 @@ export default function Chatbot() {
           overflow="hidden"
           justifyContent="center"
           alignItems="center"
+          position="relative"
         >
           <Stack
             width="100%"
@@ -60,12 +65,20 @@ export default function Chatbot() {
             maxWidth="1440px"
             boxSizing="border-box"
             spacing={0}
+            justify="center"
           >
-            <Search
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onSend={handleSend}
-            />
+            <Box flex={1} overflow="hidden" width="100%">
+              <ChatWindow messages={messages} onFeedback={sendFeedback} />
+            </Box>
+
+            <Box width="100%" paddingTop="24px">
+              <Search
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                onSend={handleSend}
+                isLoading={isLoading}
+              />
+            </Box>
           </Stack>
         </Flex>
       </HStack>

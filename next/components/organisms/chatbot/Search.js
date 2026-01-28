@@ -8,7 +8,7 @@ import {
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
 
-export default function Search({ value, onChange, onSend }) {
+export default function Search({ value, onChange, onSend, isLoading }) {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -51,14 +51,17 @@ export default function Search({ value, onChange, onSend }) {
         <Textarea
           id="search-chatbot"
           ref={textareaRef}
+          disabled={isLoading}
           value={value}
           onChange={(e) => {
             e.target.style.height = '24px'; 
             e.target.style.height = `${e.target.scrollHeight}px`;
             if (onChange) onChange(e);
           }}
-          onKeyDown={handleKeyDown}
-          placeholder="Faça sua pergunta!"
+          onKeyDown={(e) => {
+            if (!isLoading) handleKeyDown(e);
+          }}
+          placeholder={isLoading ? "Aguarde a resposta..." : "Faça sua pergunta!"}
           variant="unstyled"
           width="100%"
           minHeight="24px"
@@ -91,17 +94,17 @@ export default function Search({ value, onChange, onSend }) {
         />
         <Box
           marginLeft="8px"
-          cursor="pointer"
-          onClick={onSend}
+          cursor={isLoading ? "not-allowed" : "pointer"}
+          onClick={!isLoading ? onSend : undefined}
           color="#464A51"
-          opacity={value ? 1 : 0.5}
+          opacity={value && !isLoading ? 1 : 0.5}
           minWidth="24px"
           minHeight="24px"
           element="div"
           display="flex"
           alignItems="center"
           justifyContent="center"
-          pointerEvents={value ? "auto" : "none"}
+          pointerEvents={value && !isLoading ? "auto" : "none"}
           _hover={{
             color: "#2B8C4D",
             fill: "#2B8C4D"
