@@ -31,8 +31,9 @@ Quer subir dados na BD e nos ajudar a construir esse repositório?
 
 Para facilitar a explicação, vamos seguir um exemplo já pronto com dados da [RAIS](https://basedosdados.org/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213).
 
-<Tip caption="Você pode navegar pelas etapas no menu à esquerda.">
-  Sugerimos fortemente que entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) para tirar dúvidas e interagir com a equipe e outros(as) colaboradores(as)! 😉
+>***Você pode navegar pelas etapas no menu à esquerda.***
+>
+> Sugerimos fortemente que entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) para tirar dúvidas e interagir com a equipe e outros(as) colaboradores(as)! 😉
 </Tip>
 
 ### Antes de começar
@@ -45,10 +46,10 @@ Alguns conhecimentos são necessárias para realizar esse processo:
 - **Github**: para subir seu código para revisão da
   nossa equipe.
 
-<Tip caption="Não tem alguma dessas habilidades, mas quer colaborar?">
-    Temos um time de dados que pode te ajudar, basta entrar no [nosso
+> **Não tem alguma dessas habilidades, mas quer colaborar?**
+>
+>Temos um time de dados que pode te ajudar, basta entrar no [nosso
     Discord](https://discord.gg/huKWpsVYx4) e mandar uma mensagem em #quero-contribuir.
-</Tip>
 
 ### Como funciona o processo?
 
@@ -112,7 +113,7 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 
 #### Para o preenchimento de cada tabela do seu conjunto siga esse passo a passo:
 
-<Tip caption="A cada início e final de etapa consulte nosso [manual de estilo](style_data) para garantir que você está seguindo a padronização da BD"/>
+>A cada início e final de etapa consulte nosso [manual de estilo](style_data) para garantir que você está seguindo a padronização da BD
 
 1. Listar todas as variáveis dos dados na coluna `original_name`
     - Obs: Caso a base mude o nome das variáveis ao longo dos anos (como a RAIS), é necessário fazer a compatibilização entre anos para todas as variáveis preenchendo a coluna de `original_name_YYYY` para cada ano ou mês disponível
@@ -126,7 +127,9 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 8. Para as variáveis do tipo `int64` ou `float64` verificar se é necessário incluir uma [unidade de medida](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
 9. Reordernar as variáveis conforme o [manual](style_data)
 
-<Tip caption="Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo. É necessário que esteja claro o formato final que os dados devem ficar _antes_ de começar a escrever o código. Assim a gente evita o retrabalho."/>
+>Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo. 
+
+>É necessário que esteja claro o formato final que os dados devem ficar _antes_ de começar a escrever o código. Assim a gente evita o retrabalho.
 
 ### 4. Escrever codigo de captura e limpeza de dados
 
@@ -228,9 +231,7 @@ Os dados vão passar por 3 lugares no Google Cloud:
 
 
 
-<Tip caption=
-"Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."
-/>
+> Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."
 
 
 
@@ -260,7 +261,7 @@ Os dados vão passar por 3 lugares no Google Cloud:
   arch.update_dbt_project()
 
   ```
-<Tip caption="Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!"/>
+> Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!
 
 
 ## 8. Usando o DBT
