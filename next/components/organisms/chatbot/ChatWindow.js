@@ -36,7 +36,7 @@ export default function ChatWindow({ messages, onFeedback }) {
       }}
     >
       <Box flex="1" />
-      
+
       {messages.map((msg) => (
         <Message 
           key={msg.id} 
@@ -44,7 +44,7 @@ export default function ChatWindow({ messages, onFeedback }) {
           onFeedback={onFeedback} 
         />
       ))}
-      
+
       <div ref={messagesEndRef} />
     </VStack>
   );

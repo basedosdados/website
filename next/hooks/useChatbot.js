@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
 import cookies from 'js-cookie';
 
@@ -8,11 +8,76 @@ export default function useChatbot() {
   const [threadId, setThreadId] = useState(null);
   const [error, setError] = useState(null);
 
-  const apiUrl = "http://localhost:8000";
+  const abortControllerRef = useRef(null);
+  const charQueueRef = useRef([]);
+  const isTypingRef = useRef(false);
+  const currentBotMessageIdRef = useRef(null);
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  const loginToChatbot = useCallback(async () => {
+    try {
+      const email = process.env.NEXT_PUBLIC_CHATBOT_EMAIL;
+      const password = process.env.NEXT_PUBLIC_CHATBOT_PASSWORD;
+
+      if (!email || !password) {
+        console.error('Chatbot credentials not configured');
+        return null;
+      }
+
+      const response = await axios.post(`${apiUrl}/chatbot/token/`, {
+        email: email,
+        password: password
+      });
+
+      const { access, refresh } = response.data;
+      cookies.set('chatbot_token', access, { path: '/' });
+      cookies.set('chatbot_refresh_token', refresh, { path: '/' });
+      return access;
+    } catch (e) {
+      console.error('Chatbot auto-login failed:', e);
+      return null;
+    }
+  }, [apiUrl]);
+
+  const refreshToken = useCallback(async () => {
+    try {
+      const refresh = cookies.get('chatbot_refresh_token');
+      if (!refresh) throw new Error('No refresh token');
+      const response = await axios.post(`${apiUrl}/chatbot/token/refresh/`, { refresh });
+      const newAccess = response.data.access;
+      cookies.set('chatbot_token', newAccess, { path: '/' });
+      return newAccess;
+    } catch (e) {
+      console.error('RefreshToken failed', e);
+      return null;
+    }
+  }, [apiUrl]);
+
+  const getAccessToken = useCallback(async () => {
+    let token = cookies.get('chatbot_token');
+
+    if (token) return token;
+
+    token = await refreshToken();
+    if (token) return token;
+
+    token = await loginToChatbot();
+    return token;
+  }, [refreshToken, loginToChatbot]);
 
   const createThread = useCallback(async () => {
     try {
-      const response = await axios.post(`${apiUrl}/api/v1/chatbot/threads`, { title: 'New Conversation' });
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        setError('Falha na autenticação. Por favor, faça login novamente.');
+        return null;
+      }
+      const response = await axios.post(`${apiUrl}/chatbot/threads/`, { title: 'New Conversation' }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
       const newThreadId = response.data.id;
       setThreadId(newThreadId);
       return newThreadId;
@@ -21,39 +86,96 @@ export default function useChatbot() {
       setError('Falha ao iniciar conversa.');
       return null;
     }
+  }, [apiUrl, getAccessToken]);
+
+  const processQueue = useCallback(() => {
+    if (charQueueRef.current.length > 0) {
+      const charsToAppend = charQueueRef.current.splice(0, 2).join('');
+      
+      const botId = currentBotMessageIdRef.current;
+
+      setMessages(prev => prev.map(msg => {
+        if (msg.id !== botId) return msg;
+        return { ...msg, content: (msg.content || '') + charsToAppend };
+      }));
+
+      setTimeout(() => processQueue(), 20);
+    } else {
+      isTypingRef.current = false;
+    }
   }, []);
 
+  const addToQueue = useCallback((text) => {
+    if (!text) return;
+
+    const lineCount = text.split('\n').length;
+    const botId = currentBotMessageIdRef.current;
+
+    if (lineCount > 40) {
+      setMessages(prev => prev.map(msg => {
+        if (msg.id !== botId) return msg;
+        const prefix = msg.content ? '\n\n' : '';
+        return { ...msg, content: (msg.content || '') + prefix + text };
+      }));
+
+      charQueueRef.current = [];
+      isTypingRef.current = false;
+
+      return;
+    }
+
+    charQueueRef.current.push(...text.split(''));
+
+    if (!isTypingRef.current) {
+      isTypingRef.current = true;
+      processQueue();
+    }
+  }, [processQueue]);
+
+
   const sendMessage = useCallback(async (content) => {
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setIsLoading(true);
     setError(null);
+    charQueueRef.current = [];
 
-    const userMessageId = `user-${Date.now()}`;
     const userMessage = {
-      id: userMessageId,
+      id: `user-${Date.now()}`,
       role: 'user',
       content: content,
       status: 'SUCCESS'
     };
     setMessages(prev => [...prev, userMessage]);
 
-    let currentThreadId = threadId;
-    if (!currentThreadId) {
-      currentThreadId = await createThread();
-      if (!currentThreadId) {
-        setIsLoading(false);
-        return;
-      }
-    }
+    const botMessageId = crypto.randomUUID();
+    currentBotMessageIdRef.current = botMessageId;
+
+    setMessages(prev => [...prev, {
+      id: botMessageId,
+      role: 'assistant',
+      content: '',
+      isLoading: true,
+      toolCalls: []
+    }]);
 
     try {
-      const accessToken = cookies.get('token');
-      const response = await fetch(`${apiUrl}/api/v1/chatbot/threads/${currentThreadId}/messages`, {
+      let currentThreadId = threadId || await createThread();
+      if (!currentThreadId) return;
+
+      const accessToken = await getAccessToken();
+      if (!accessToken) throw new Error('No access token');
+
+      const response = await fetch(`${apiUrl}/chatbot/threads/${currentThreadId}/messages/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`,
         },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content, stream: true }),
+        signal: controller.signal,
       });
 
       if (!response.ok) {
@@ -67,14 +189,6 @@ export default function useChatbot() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = '';
-      
-      const botMessageId = `bot-${Date.now()}`;
-      setMessages(prev => [...prev, {
-        id: botMessageId,
-        role: 'assistant',
-        content: '',
-        isLoading: true
-      }]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -85,63 +199,88 @@ export default function useChatbot() {
         buffer = lines.pop() || '';
 
         for (const line of lines) {
-          if (line.trim() === '') continue;
-
+          if (!line.trim()) continue;
           try {
             const event = JSON.parse(line);
-            handleStreamEvent(event, botMessageId);
+
+            switch (event.type) {
+              case 'tool_output':
+                setMessages(prev => prev.map(msg => 
+                  msg.id === botMessageId 
+                    ? { ...msg, toolCalls: [...(msg.toolCalls || []), event.data] }
+                    : msg
+                ));
+                break;
+
+              case 'tool_call':
+                addToQueue(event.data?.content);
+                break;
+
+              case 'final_answer':
+                addToQueue(event.data?.content);
+                break;
+
+              case 'error':
+                setMessages(prev => prev.map(msg => 
+                  msg.id === botMessageId 
+                    ? { ...msg, isError: true, content: event.data?.error_details?.message }
+                    : msg
+                ));
+                break;
+
+              case 'complete':
+                setMessages(prev => prev.map(msg => 
+                  msg.id === botMessageId 
+                    ? { ...msg, isLoading: false, runId: event.data?.run_id }
+                    : msg
+                ));
+                break;
+            }
           } catch (e) {
-            console.error('Error parsing JSON stream:', e);
+            console.error('JSON Parse error', e);
           }
         }
       }
-
-      setMessages(prev => prev.map(msg => 
-        msg.id === botMessageId ? { ...msg, isLoading: false } : msg
-      ));
-
     } catch (err) {
+      if (err.name === 'AbortError') return;
       console.error(err);
       setError('Erro ao enviar mensagem.');
       setMessages(prev => prev.map(msg => 
-        msg.role === 'assistant' && msg.isLoading ? { ...msg, isLoading: false, isError: true, content: 'Ocorreu um erro.' } : msg
+        msg.id === currentBotMessageIdRef.current 
+          ? { ...msg, isLoading: false, isError: true, content: 'Ocorreu um erro.' } 
+          : msg
       ));
     } finally {
       setIsLoading(false);
     }
-  }, [threadId, createThread]);
+  }, [threadId, createThread, getAccessToken, addToQueue]);
 
-  const handleStreamEvent = (event, botMessageId) => {
-    setMessages(prev => prev.map(msg => {
-      if (msg.id !== botMessageId) return msg;
-
-      switch (event.type) {
-        case 'tool_call':
-          return { ...msg, toolCall: event.data };
-        case 'tool_output':
-          return { ...msg, toolCall: null };
-        case 'final_answer':
-          return { ...msg, content: (msg.content || '') + (event.data.content || '') };
-        case 'error':
-          return { ...msg, isError: true, content: event.data.error_details?.message || 'Erro no chatbot.' };
-        case 'complete':
-          return { ...msg, isLoading: false, runId: event.data.run_id };
-        default:
-          return msg;
-      }
-    }));
-  };
-
-  const sendFeedback = useCallback(async (messageId, rating) => {
+  const sendFeedback = useCallback(async (clientMessageId, rating) => {
     try {
-      await axios.put(`${apiUrl}/api/v1/chatbot/messages/${messageId}/feedback`, { rating });
+      const message = messages.find(m => m.id === clientMessageId);
+      if (!message || !message.messagePairId) {
+        console.error('Message pair ID not found for feedback');
+        return;
+      }
+
+      const accessToken = await getAccessToken();
+      if (!accessToken) return;
+
+      await axios.post(`${apiUrl}/chatbot/message-pairs/${message.messagePairId}/feedbacks/`, {
+        score: rating 
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+
       setMessages(prev => prev.map(msg => 
-        msg.id === messageId ? { ...msg, feedback: rating } : msg
+        msg.id === clientMessageId ? { ...msg, feedback: rating } : msg
       ));
     } catch (err) {
       console.error('Failed to send feedback:', err);
     }
-  }, []);
+  }, [messages, getAccessToken]);
 
   const resetChat = useCallback(() => {
     setThreadId(null);

@@ -59,7 +59,8 @@ export default function Message({ message, onFeedback }) {
       paddingY="12px"
     >
       <Box
-        maxWidth="80%"
+        maxWidth={isUser ? "80%" : "100%"}
+        width={isUser ? "fit-content" : "100%"}
         borderRadius="12px"
         padding="16px"
         backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
@@ -80,7 +81,6 @@ export default function Message({ message, onFeedback }) {
             >
               {message.content}
             </ReactMarkdown>
-            {message.isLoading && <Text fontStyle="italic" color="gray.500" mt={2}>Digitando...</Text>}
           </Box>
         )}
 
