@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import cookies from 'js-cookie';
+import useChatbotAuth from './useChatbotAuth';
 
 export default function useChatbot() {
   const [messages, setMessages] = useState([]);
@@ -15,65 +16,22 @@ export default function useChatbot() {
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-  const loginToChatbot = useCallback(async () => {
-    try {
-      const email = process.env.NEXT_PUBLIC_CHATBOT_EMAIL;
-      const password = process.env.NEXT_PUBLIC_CHATBOT_PASSWORD;
+  const { getAccessToken } = useChatbotAuth();
 
-      if (!email || !password) {
-        console.error('Chatbot credentials not configured');
-        return null;
-      }
-
-      const response = await axios.post(`${apiUrl}/chatbot/token/`, {
-        email: email,
-        password: password
-      });
-
-      const { access, refresh } = response.data;
-      cookies.set('chatbot_token', access, { path: '/' });
-      cookies.set('chatbot_refresh_token', refresh, { path: '/' });
-      return access;
-    } catch (e) {
-      console.error('Chatbot auto-login failed:', e);
-      return null;
-    }
-  }, [apiUrl]);
-
-  const refreshToken = useCallback(async () => {
-    try {
-      const refresh = cookies.get('chatbot_refresh_token');
-      if (!refresh) throw new Error('No refresh token');
-      const response = await axios.post(`${apiUrl}/chatbot/token/refresh/`, { refresh });
-      const newAccess = response.data.access;
-      cookies.set('chatbot_token', newAccess, { path: '/' });
-      return newAccess;
-    } catch (e) {
-      console.error('RefreshToken failed', e);
-      return null;
-    }
-  }, [apiUrl]);
-
-  const getAccessToken = useCallback(async () => {
-    let token = cookies.get('chatbot_token');
-
-    if (token) return token;
-
-    token = await refreshToken();
-    if (token) return token;
-
-    token = await loginToChatbot();
-    return token;
-  }, [refreshToken, loginToChatbot]);
-
-  const createThread = useCallback(async () => {
+  const createThread = useCallback(async (firstMessage) => {
     try {
       const accessToken = await getAccessToken();
       if (!accessToken) {
-        setError('Falha na autenticação. Por favor, faça login novamente.');
+        cookies.remove('chatbot_access_token');
+        cookies.remove('chatbot_refresh_token');
         return null;
       }
-      const response = await axios.post(`${apiUrl}/chatbot/threads/`, { title: 'New Conversation' }, {
+
+      const title = firstMessage 
+        ? (firstMessage.length > 30 ? `${firstMessage.substring(0, 30)}...` : firstMessage)
+        : 'Nova conversa';
+
+      const response = await axios.post(`${apiUrl}/chatbot/threads/`, { title }, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         },
@@ -99,7 +57,7 @@ export default function useChatbot() {
         return { ...msg, content: (msg.content || '') + charsToAppend };
       }));
 
-      setTimeout(() => processQueue(), 20);
+      setTimeout(() => processQueue(), 15);
     } else {
       isTypingRef.current = false;
     }
@@ -162,11 +120,15 @@ export default function useChatbot() {
     }]);
 
     try {
-      let currentThreadId = threadId || await createThread();
+      let currentThreadId = threadId || await createThread(content);
       if (!currentThreadId) return;
 
       const accessToken = await getAccessToken();
-      if (!accessToken) throw new Error('No access token');
+      if (!accessToken) { 
+        cookies.remove('chatbot_access_token');
+        cookies.remove('chatbot_refresh_token');
+        return;
+      }
 
       const response = await fetch(`${apiUrl}/chatbot/threads/${currentThreadId}/messages/`, {
         method: 'POST',
@@ -264,7 +226,11 @@ export default function useChatbot() {
       }
 
       const accessToken = await getAccessToken();
-      if (!accessToken) return;
+      if (!accessToken) {
+        cookies.remove('chatbot_access_token');
+        cookies.remove('chatbot_refresh_token');
+        return;
+      }
 
       await axios.post(`${apiUrl}/chatbot/message-pairs/${message.messagePairId}/feedbacks/`, {
         score: rating 

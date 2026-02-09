@@ -9,8 +9,9 @@ import BDLogoImage from '../../../public/img/logos/bd_logo'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import BodyText from '../../atoms/Text/BodyText'
 import PenSquareIcon from '../../../public/img/icons/penSquareIcon'
+import ThreadList from './ThreadList'
 
-export default function Sidebar({ onNewChat }) {
+export default function Sidebar({ onNewChat, onSelectThread, currentThreadId }) {
   const [isOpen, setIsOpen] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -116,6 +117,11 @@ export default function Sidebar({ onNewChat }) {
               Nova conversa
             </BodyText>
           </Box>
+          <ThreadList
+            onSelectThread={onSelectThread}
+            currentThreadId={currentThreadId}
+            isSidebarOpen={isOpen}
+          />
         </Stack>
       </VStack>
     </Box>
