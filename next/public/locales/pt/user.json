@@ -401,7 +401,10 @@
         "disableNotificationsButton": "Desativar notificações",
         "disableNotificationsSuccess": "Notificações desativadas com sucesso!",
         "disableNotificationsError": "Erro ao desativar notificações",
-        "noActiveNotifications": "Não há notificações ativas para desativar."
+        "noActiveNotifications": "Não há notificações ativas para desativar.",
+        "changeBillingInformation": "Alterar dados de faturamento",
+        "changeBillingInformationInfo": "Saiba mais sobre como alterar os dados de faturamento <1>aqui</1>.",
+        "changeBillingInformationButton": "Alterar dados de faturamento"
     },
     "activate": {
         "accountActive": "Conta ativa",

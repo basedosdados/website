@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
@@ -26,6 +26,7 @@ import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
 import {
+  TitleTextForm,
   ExtraInfoTextForm,
   ModalGeneral,
   Button
@@ -1404,6 +1405,39 @@ export default function PlansAndPayment ({ userData }) {
               </BodyText>
             }
           </Stack>
+        </Stack>
+
+        <Stack>
+          <Box>
+            <TitleTextForm>{t('username.changeBillingInformation')}</TitleTextForm>
+            <ExtraInfoTextForm>
+              <Trans
+                i18nKey={t('username.changeBillingInformationInfo')}
+                components={{
+                  1:
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color:"#0057A4",
+                      }}
+                      href="https://coda.io/@base-dos-dados/faq-bd-pro/assinatura-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                }}
+              />
+            </ExtraInfoTextForm>
+            <Button
+              as="a"
+              href="https://billing.stripe.com/p/login/bIY4jedfK4kRgda144"
+              isVariant
+              onClick={() => {}}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{t('username.changeBillingInformationButton')}</Button>
+          </Box>
         </Stack>
       </Stack>
     </Stack>
