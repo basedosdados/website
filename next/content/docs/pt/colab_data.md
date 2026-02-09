@@ -29,11 +29,11 @@ order: 0
 Quer subir dados na BD e nos ajudar a construir esse repositório?
 *Maravilha!* Organizamos tudo o que você precisa no manual abaixo em 8 passos
 
-Para facilitar a explicação, vamos seguir um exemplo já pronto com dados da [RAIS](https://basedosdados.org/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213).
+Para facilitar a explicação, vamos seguir um exemplo já pronto com dados da [RAIS](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213).
 
->***Você pode navegar pelas etapas no menu à esquerda.***
->
-> Sugerimos fortemente que entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) para tirar dúvidas e interagir com a equipe e outros(as) colaboradores(as)! 😉
+<Tip caption="Você pode navegar pelas etapas no menu à esquerda"
+
+ Sugerimos fortemente que entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) para tirar dúvidas e interagir com a equipe e outros(as) colaboradores(as)! 😉
 </Tip>
 
 ### Antes de começar
@@ -46,10 +46,10 @@ Alguns conhecimentos são necessárias para realizar esse processo:
 - **Github**: para subir seu código para revisão da
   nossa equipe.
 
-> **Não tem alguma dessas habilidades, mas quer colaborar?**
->
->Temos um time de dados que pode te ajudar, basta entrar no [nosso
-    Discord](https://discord.gg/huKWpsVYx4) e mandar uma mensagem em #quero-contribuir.
+<Tip caption="Não tem alguma dessas habilidades, mas quer colaborar?"
+
+Temos um time de dados que pode te ajudar, basta entrar no [nosso Discord](https://discord.gg/huKWpsVYx4) e mandar uma mensagem em #quero-contribuir.
+</Tip>
 
 ### Como funciona o processo?
 
@@ -123,7 +123,7 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 5. A partir da compatibilização entre anos e/ou consultas aos dados brutos, preencher a cobertura temporal em `temporal_coverage` de cada variável
     - Obs: Caso as variáveis tenham a mesma cobertura temporal da tabela preencher apenas com '(1)'
 6. Indicar com 'yes' ou 'no' se há dicionário para as variáveis em `covered_by_dictionary`
-7. Verificar se as variáveis representam alguma entidade presente nos [diretórios](https://basedosdados.org/dataset?q=diret%C3%B3rio&datasets_with=open_tables&organization=bd&page=1) para preencher o `directory_column`
+7. Verificar se as variáveis representam alguma entidade presente nos [diretórios](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735) para preencher o `directory_column`
 8. Para as variáveis do tipo `int64` ou `float64` verificar se é necessário incluir uma [unidade de medida](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
 9. Reordernar as variáveis conforme o [manual](style_data)
 
@@ -143,6 +143,7 @@ Após validadas as tabelas de arquitetura, podemos escrever os códigos de
 Cada tabela limpa para produção pode ser salva como um arquivo único ou, caso seja muito grande (e.g. acima de 200 mb), ser particionada no formato [Hive](https://cloud.google.com/bigquery/docs/hive-partitioned-loads-gcs) em vários sub-arquivos. Os formatos aceitos são `.csv` ou `.parquet`. Nossa recomendação é particionar tabelas por `ano`, `mes` e `sigla_uf`. O particionamento é feito através da estrutura de pastas, veja o exemplo a baixo para visualizar como.
 
 #### Exemplo: RAIS - Particionamento
+
 A tabela `microdados_vinculos` da RAIS Vinculos, por exemplo, é uma tabela muito grande (+400GB) por isso nós particionamos por `ano` e `sigla_uf`. O particionamento foi feito usando a estrutura de pastas `/microdados_vinculos/ano=YYYY/sigla_uf=XX` .
 
 #### Padrões necessários no código
@@ -211,22 +212,22 @@ Os dados vão passar por 3 lugares no Google Cloud:
 **7.3** Crie a tabela no *bucket do GCS* e *BigQuey-DEV-staging*, usando a API do Python, da seguinte forma:
 
 ```python
-    import basedosdados as bd
+import basedosdados as bd
 
-    DATASET_ID = "dataset_id"  # Nome do dataset
-    TABLE_ID = "table_id"  # Nome da tabela
+DATASET_ID = "dataset_id"  # Nome do dataset
+TABLE_ID = "table_id"  # Nome da tabela
 
-    tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
+tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
 ``` 
 
 
 ```python
-    tb.create(
-    path=path_to_data,  # Caminho para o arquivo csv ou parquet
-    if_storage_data_exists="raise",
-    if_table_exists="replace",
-    source_format="csv",
-    )
+tb.create(
+path=path_to_data,  # Caminho para o arquivo csv ou parquet
+if_storage_data_exists="raise",
+if_table_exists="replace",
+source_format="csv",
+)
 ```
 
 
@@ -242,23 +243,23 @@ Os dados vão passar por 3 lugares no Google Cloud:
 **7.4** Crie os arquivos .sql e schema.yml a partir da tabela de arquitetura para rodar a materialização e os testes no dbt (data build-tool):
 
   ```python
-  from databasers_utils import TableArchitecture
+from databasers_utils import TableArchitecture
 
-  arch = TableArchitecture(
-      dataset_id="<dataset-id>",
-      tables={
-          "<table-id>": "URL da arquiterura do Google Sheet",  # Exemplo https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
-      },
-  )
+arch = TableArchitecture(
+    dataset_id="<dataset-id>",
+    tables={
+        "<table-id>": "URL da arquiterura do Google Sheet",  # Exemplo https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
+    },
+)
 
-  # Cria o yaml file
-  arch.create_yaml_file()
+# Cria o yaml file
+arch.create_yaml_file()
 
-  # Cria os arquivos sql
-  arch.create_sql_files()
+# Cria os arquivos sql
+arch.create_sql_files()
 
-  # Atualiza o dbt_project.yml
-  arch.update_dbt_project()
+# Atualiza o dbt_project.yml
+arch.update_dbt_project()
 
   ```
 > Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!
@@ -278,25 +279,25 @@ from {{ set_datalake_project("<DATASET_ID>_staging.<TABLE_ID>") }}
 
 ### Materializando o modelo no BigQuery
 
-Materializa um único modelo pelo nome em basedosdados-dev consumindo os dados de basedosdados-dev.{table_id}_staging
+Materializa um único modelo pelo nome em basedosdados-dev consumindo os dados de `basedosdados-dev.{table_id}_staging`
 
 ```sh
 dbt run --select dataset_id__table_id
 ```
 
-Materializa todos os modelos em uma pasta em basedosdados-dev consumindo os dados de basedosdados-dev.{table_id}_staging
+Materializa todos os modelos em uma pasta em basedosdados-dev consumindo os dados de `basedosdados-dev.{table_id}_staging`
 
 ```sh
 dbt run --select model.dateset_id.dateset_id__table_id
 ```
 
-Materializa todos os modelos no caminho em basedosdados-dev consumindo os dados de basedosdados-dev.{table_id}_staging
+Materializa todos os modelos no caminho em basedosdados-dev consumindo os dados de `basedosdados-dev.{table_id}_staging`
 
 ```sh
 dbt run --select models/dataset_id
 ```
 
-Materializa um único modelo pelo caminho do arquivo sql em basedosdados-dev consumindo os dados de basedosdados-dev.{table_id}_staging
+Materializa um único modelo pelo caminho do arquivo sql em basedosdados-dev consumindo os dados de `basedosdados-dev.{table_id}_staging`
 
 ```sh
 dbt run --select models/dataset/table_id.sql
