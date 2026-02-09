@@ -31,7 +31,7 @@ Quer subir dados na BD e nos ajudar a construir esse repositório?
 
 Para facilitar a explicação, vamos seguir um exemplo já pronto com dados da [RAIS](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213).
 
-<Tip caption="Você pode navegar pelas etapas no menu à esquerda"
+<Tip caption="Você pode navegar pelas etapas no menu à esquerda">
 
  Sugerimos fortemente que entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4) para tirar dúvidas e interagir com a equipe e outros(as) colaboradores(as)! 😉
 </Tip>
@@ -46,7 +46,7 @@ Alguns conhecimentos são necessárias para realizar esse processo:
 - **Github**: para subir seu código para revisão da
   nossa equipe.
 
-<Tip caption="Não tem alguma dessas habilidades, mas quer colaborar?"
+<Tip caption="Não tem alguma dessas habilidades, mas quer colaborar?">
 
 Temos um time de dados que pode te ajudar, basta entrar no [nosso Discord](https://discord.gg/huKWpsVYx4) e mandar uma mensagem em #quero-contribuir.
 </Tip>
