@@ -1,13 +1,17 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
 import cookies from 'js-cookie';
 import useChatbotAuth from './useChatbotAuth';
 
-export default function useChatbot() {
+export default function useChatbot(initialThreadId = null) {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [threadId, setThreadId] = useState(null);
+  const [threadId, setThreadId] = useState(initialThreadId);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setThreadId(initialThreadId);
+  }, [initialThreadId]);
 
   const abortControllerRef = useRef(null);
   const charQueueRef = useRef([]);
@@ -257,6 +261,7 @@ export default function useChatbot() {
   return {
     messages,
     isLoading,
+    threadId,
     error,
     sendMessage,
     createThread,

@@ -4,22 +4,45 @@ import {
   Stack,
   Box
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import useChatbot from "../hooks/useChatbot";
 
 export default function Chatbot() {
+  const router = useRouter();
+  const { t: threadIdFromUrl } = router.query;
   const [value, setValue] = useState("");
-  const { messages, isLoading, sendMessage, sendFeedback, resetChat } = useChatbot();
+  const { messages, isLoading, threadId, sendMessage, sendFeedback, resetChat } = useChatbot(threadIdFromUrl);
+
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    if (threadId && !threadIdFromUrl) {
+      const { t, ...otherQuery } = router.query;
+      router.push({
+        pathname: router.pathname,
+        query: { ...otherQuery, t: threadId }
+      }, undefined, { shallow: true });
+    }
+  }, [threadId, threadIdFromUrl, router.isReady, router.pathname]);
 
   const handleSend = () => {
     if (value.trim() !== "") {
       sendMessage(value);
       setValue("");
     }
+  };
+
+  const handleNewChat = () => {
+    resetChat();
+    router.push({
+      pathname: router.pathname,
+      query: {}
+    }, undefined, { shallow: true });
   };
 
   return (
@@ -48,7 +71,10 @@ export default function Chatbot() {
         height="100%"
         display="flex"
       >
-        <Sidebar onNewChat={resetChat} />
+        <Sidebar 
+          onNewChat={handleNewChat} 
+          currentThreadId={threadIdFromUrl}
+        />
         <Flex
           flex={1}
           width="100%"

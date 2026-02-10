@@ -1,29 +1,113 @@
+import { useEffect, useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 import {
   VStack,
-  Button,
-  Text,
-  Spinner,
-  Box
+  Box,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  SkeletonText,
+  useDisclosure,
+  ModalCloseButton,
+  Stack
 } from '@chakra-ui/react';
 import BodyText from '../../atoms/Text/BodyText';
+import TitleText from '../../atoms/Text/TitleText';
+import {
+  ModalGeneral,
+  Button,
+  ExtraInfoTextForm
+} from '../../molecules/uiUserPage';
 import useThreads from '../../../hooks/useThreads';
+import TrashIcon from '../../../public/img/icons/trashIcon';
 
 export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen }) {
-  const { data: threads, isLoading, error } = useThreads();
+  const router = useRouter();
+  const { query } = router;
+  const { data: threads, isLoading, error, refetch, deleteThread, isDeleting } = useThreads();
+  const deleteModal = useDisclosure();
+  const [threadToDelete, setThreadToDelete] = useState(null);
+  const isInternalChange = useRef(false);
 
-  if (isLoading) return <Box display="flex" justifyContent="center" mt={4}><Spinner size="sm" /></Box>;
-  if (error) return <Text color="red.500" mt={4} fontSize="sm">Erro ao carregar histórico.</Text>;
+  useEffect(() => {
+    if (!query.t) return;
+    if (isInternalChange.current) {
+      isInternalChange.current = false;
+      return;
+    }
+    refetch();
+  }, [query.t, refetch]);
 
-  return (
+  const handleSelectThread = (thread) => {
+    isInternalChange.current = true;
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, t: thread.id }
+    }, undefined, { shallow: true });
+    
+    if (onSelectThread) onSelectThread(thread);
+  };
+
+  const handleDeleteClick = (e, thread) => {
+    e.stopPropagation();
+    setThreadToDelete(thread);
+    deleteModal.onOpen();
+  };
+
+  const confirmDelete = async () => {
+    if (threadToDelete) {
+      await deleteThread(threadToDelete.id);
+      deleteModal.onClose();
+      setThreadToDelete(null);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <VStack
+        align="stretch"
+        spacing="20px"
+        padding="16px 10px"
+        marginTop="16px"
+        width="100%"
+      >
+        <SkeletonText
+          startColor="#DEDFE0"
+          endColor="#EEEEEE"
+          borderRadius="6px"
+          noOfLines={1}
+          spacing="8px"
+          skeletonHeight="18px"
+          width="60%"
+        />
+        {new Array(3).fill(0).map((_, index) => (
+          <SkeletonText
+            key={index}
+            startColor="#DEDFE0"
+            endColor="#EEEEEE"
+            borderRadius="6px"
+            noOfLines={1}
+            spacing="8px"
+            skeletonHeight="18px"
+          />
+        ))}
+      </VStack>
+    );
+  }
+
+  if (error) return (
     <VStack
       align="stretch"
-      spacing="4px"
+      spacing="20px"
+      padding="16px 10px"
       marginTop="16px"
-      overflowY="auto"
+      width="100%"
     >
       <BodyText
         typography="small"
-        color="currentColor"
+        color="#BF3434"
         whiteSpace="nowrap"
         height="18px"
         lineHeight="18px"
@@ -32,26 +116,170 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
         transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
         transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
       >
-        Conversas
+        Erro ao carregar histórico.
       </BodyText>
-      {threads?.map((thread) => (
-        <BodyText
-          key={thread.id}
-          onClick={() => onSelectThread && onSelectThread(thread)}
-          typography="small"
-          color="currentColor"
-          whiteSpace="nowrap"
-          height="18px"
-          lineHeight="18px"
-          width={isSidebarOpen ? "auto" : "0"}
-          opacity={isSidebarOpen ? 1 : 0}
-          transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
-          transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
-        >
-          {thread.title}
-        </BodyText>
-      ))}
     </VStack>
+  );
+
+  return (
+    <>
+      <ModalGeneral
+        isOpen={deleteModal.isOpen}
+        onClose={deleteModal.onClose}
+        propsModalContent={{ minWidth: { base: "", lg: "620px !important" } }}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">Confirmar exclusão de conversa</TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
+            onClick={() => deleteModal.onClose()}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm>
+            Tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={{ base: "column-reverse", lg: "row" }}
+          spacing={0}
+          gap="16px"
+          width={{ base: "100%", lg: "fit-content" }}
+        >
+          <Button
+            width="100%"
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
+            onClick={() => deleteModal.onClose()}
+          >
+            Cancelar
+          </Button>
+
+          <Button
+            width="100%"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
+            onClick={() => confirmDelete()}
+            isLoading={isDeleting}
+          >
+            Excluir
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
+      <Accordion
+        allowToggle={isSidebarOpen}
+        index={isSidebarOpen ? undefined : [0]}
+        defaultIndex={[0]}
+        width="100%"
+        marginTop="16px"
+      >
+        <AccordionItem border="none">
+          <AccordionButton
+            padding="8px"
+            cursor={isSidebarOpen ? "pointer" : "default"}
+            _hover={{ backgroundColor: "transparent" }}
+            _focus={{ boxShadow: "none" }}
+            display="flex"
+            justifyContent="space-between"
+            width="100%"
+            pointerEvents={isSidebarOpen ? "auto" : "none"}
+          >
+            <BodyText
+              typography="small"
+              color="currentColor"
+              whiteSpace="nowrap"
+              height="18px"
+              lineHeight="18px"
+              width={isSidebarOpen ? "auto" : "0"}
+              opacity={isSidebarOpen ? 1 : 0}
+              transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+              transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
+            >
+              Conversas
+            </BodyText>
+            {isSidebarOpen && threads?.length > 0 && <AccordionIcon color="#252A32" />}
+          </AccordionButton>
+          <AccordionPanel padding="0">
+            <VStack
+              align="stretch"
+              spacing="0"
+              overflowY="auto"
+              maxHeight="100%"
+            >
+              {threads?.map((thread) => (
+                <Box
+                  position="relative"
+                  role="group"
+                  cursor="pointer"
+                  key={thread.id}
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  padding="8px"
+                  borderRadius="8px"
+                  gap={isSidebarOpen ? "4px" : "0"}
+                  onClick={() => handleSelectThread(thread)}
+                  backgroundColor={isSidebarOpen && currentThreadId === thread.id ? "#EEEEEE" : "transparent"}
+                  pointerEvents={isSidebarOpen ? "auto" : "none"}
+                  _hover={{
+                    color: "#2B8C4D",
+                    fill: "#2B8C4D",
+                    backgroundColor: "#EEEEEE"
+                  }}
+                >
+                  <BodyText
+                    typography="small"
+                    color={currentThreadId === thread.id ? "#2B8C4D" : "currentColor"}
+                    whiteSpace="nowrap"
+                    overflow="hidden"
+                    textOverflow="ellipsis"
+                    height="18px"
+                    lineHeight="18px"
+                    width={isSidebarOpen ? "auto" : "0"}
+                    opacity={isSidebarOpen ? 1 : 0}
+                    transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+                    transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
+                  >
+                    {thread.title}
+                  </BodyText>
+                  {isSidebarOpen && (
+                    <TrashIcon
+                      position="absolute"
+                      top="8px"
+                      right="8px"
+                      display="none"
+                      _groupHover={{ display: "block" }}
+                      width="18px"
+                      height="18px"
+                      fill="#ACAEB1"
+                      cursor="pointer"
+                      onClick={(e) => handleDeleteClick(e, thread)}
+                      _hover={{
+                        color: "#BF3434",
+                        fill: "#BF3434",
+                      }}
+                    />
+                  )}
+                </Box>
+              ))}
+            </VStack>
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    </>
   );
 };
 
