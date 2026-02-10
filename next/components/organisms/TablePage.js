@@ -650,9 +650,9 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
                 borderRadius="4px"
               >
                 {resource?.updates?.[0]?.frequency === 1 ?
-                  getUpdateFormat(resource.updates[0].entity.slug)
+                  getUpdateFormat(resource?.updates?.[0]?.entity?.slug)
                 :
-                  getUpdateFormat(resource.updates[0].entity.slug, true, resource?.updates?.[0]?.frequency)
+                  getUpdateFormat(resource?.updates?.[0]?.entity?.slug, true, resource?.updates?.[0]?.frequency)
                 }
               </LabelText>
             }

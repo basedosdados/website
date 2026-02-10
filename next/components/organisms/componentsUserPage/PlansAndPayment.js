@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
@@ -26,6 +26,7 @@ import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
 import {
+  TitleTextForm,
   ExtraInfoTextForm,
   ModalGeneral,
   Button
@@ -189,6 +190,7 @@ export default function PlansAndPayment ({ userData }) {
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
         {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+        {name: t('username.selectedTableNotifications')}
       ]
     },
     "bd_pro_empresas" : {
@@ -412,22 +414,33 @@ export default function PlansAndPayment ({ userData }) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return emailRegex.test(email)
     }
-    if(!isValidEmail(emailGCP)) return setErrEmailGCP(true)
 
-    const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
-      .then(res => res.json())
-
-    if(response.ok) {
-      if(emailGCP !== userData?.email) {
-        if(emailGCP !== userData?.gcpEmail) {
-          triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
-        }
-      }
-      setIsLoadingEmailChange(false)
-      EmailModal.onClose()
-      PaymentModal.onOpen()
-    } else {
+    if(!isValidEmail(emailGCP)) {
       setErrEmailGCP(true)
+      setIsLoadingEmailChange(false)
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
+        .then(res => res.json())
+
+      if(response.ok) {
+        if(emailGCP !== userData?.email) {
+          if(emailGCP !== userData?.gcpEmail) {
+            triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
+          }
+        }
+        setIsLoadingEmailChange(false)
+        EmailModal.onClose()
+        PaymentModal.onOpen()
+      } else {
+        setErrEmailGCP(true)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoadingEmailChange(false)
     }
   }
 
@@ -1107,7 +1120,8 @@ export default function PlansAndPayment ({ userData }) {
               resources={[
                 {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
+                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+                {name: t('username.selectedTableNotifications')}
               ]}
               button={{
                 id: "bd_pro_button_sub_btn",
@@ -1393,6 +1407,39 @@ export default function PlansAndPayment ({ userData }) {
               </BodyText>
             }
           </Stack>
+        </Stack>
+
+        <Stack>
+          <Box>
+            <TitleTextForm>{t('username.changeBillingInformation')}</TitleTextForm>
+            <ExtraInfoTextForm>
+              <Trans
+                i18nKey={t('username.changeBillingInformationInfo')}
+                components={{
+                  1:
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color:"#0057A4",
+                      }}
+                      href="https://coda.io/@base-dos-dados/faq-bd-pro/assinatura-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                }}
+              />
+            </ExtraInfoTextForm>
+            <Button
+              as="a"
+              href="https://billing.stripe.com/p/login/bIY4jedfK4kRgda144"
+              isVariant
+              onClick={() => {}}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{t('username.changeBillingInformationButton')}</Button>
+          </Box>
         </Stack>
       </Stack>
     </Stack>
