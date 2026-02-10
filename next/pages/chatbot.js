@@ -16,7 +16,21 @@ export default function Chatbot() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
   const [value, setValue] = useState("");
-  const { messages, isLoading, threadId, sendMessage, sendFeedback, resetChat } = useChatbot(threadIdFromUrl);
+  const {
+    messages,
+    isLoading,
+    threadId,
+    sendMessage,
+    fetchThreadMessages,
+    sendFeedback,
+    resetChat
+  } = useChatbot(threadIdFromUrl);
+
+  useEffect(() => {
+    if (threadIdFromUrl) {
+      fetchThreadMessages(threadIdFromUrl);
+    }
+  }, [threadIdFromUrl, fetchThreadMessages]);
 
   useEffect(() => {
     if (!router.isReady) return;

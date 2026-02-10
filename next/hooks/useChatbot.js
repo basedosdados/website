@@ -252,6 +252,57 @@ export default function useChatbot(initialThreadId = null) {
     }
   }, [messages, getAccessToken]);
 
+  const fetchThreadMessages = useCallback(async (id) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        cookies.remove('chatbot_access_token');
+        cookies.remove('chatbot_refresh_token');
+        return;
+      }
+
+      const response = await axios.get(`${apiUrl}/chatbot/threads/${id}/messages/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      const formattedMessages = [];
+      response.data.forEach(pair => {
+        formattedMessages.push({
+          id: `user-${pair.id}`,
+          role: 'user',
+          content: pair.user_message,
+          status: 'SUCCESS',
+          created_at: pair.created_at
+        });
+
+        const toolCalls = (pair.events || [])
+          .filter(ev => ev.type === 'tool_output')
+          .map(ev => ev.data);
+
+        formattedMessages.push({
+          id: pair.id,
+          role: 'assistant',
+          content: pair.assistant_message,
+          toolCalls: toolCalls,
+          isLoading: false,
+          created_at: pair.created_at
+        });
+      });
+
+      setMessages(formattedMessages);
+      setThreadId(id);
+    } catch (err) {
+      console.error('Failed to fetch thread messages:', err);
+      setError('Falha ao carregar histórico de mensagens.');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [apiUrl, getAccessToken]);
+
   const resetChat = useCallback(() => {
     setThreadId(null);
     setMessages([]);
@@ -265,6 +316,7 @@ export default function useChatbot(initialThreadId = null) {
     error,
     sendMessage,
     createThread,
+    fetchThreadMessages,
     sendFeedback,
     resetChat
   };
