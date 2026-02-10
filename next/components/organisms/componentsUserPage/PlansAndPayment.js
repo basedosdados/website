@@ -1332,7 +1332,7 @@ export default function PlansAndPayment ({ userData }) {
 
         <Stack
           spacing={0}
-          gap="64px"
+          gap={userData?.proSubscription === "bd_pro_empresas" ? {base: "0", lg: "64px"} : "64px"}
           flexDirection={{base: "column", lg: "row"}}
         >
           <Stack minWidth="350px" spacing="8px">
@@ -1350,19 +1350,19 @@ export default function PlansAndPayment ({ userData }) {
                 return <ListFeature elm={elm} index={index} key={index}/>
               })
             }
+          </Stack>
+
+          <Stack spacing="8px">
             {userData?.proSubscription === "bd_pro_empresas" &&
-              <>
+              <Stack spacing={0} gap="8px" marginTop={{base: "8px", lg: "36px"}}>
                 {resources["bd_pro"].resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
-              </>
+              </Stack>
             }
-          </Stack>
-
-          <Stack spacing="8px">
             {userData?.proSubscription !== "bd_pro_empresas" &&
               <BodyText
                 typography="small"
