@@ -190,6 +190,7 @@ export default function PlansAndPayment ({ userData }) {
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
         {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+        {name: t('username.selectedTableNotifications')}
       ]
     },
     "bd_pro_empresas" : {
@@ -1119,7 +1120,8 @@ export default function PlansAndPayment ({ userData }) {
               resources={[
                 {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
+                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+                {name: t('username.selectedTableNotifications')}
               ]}
               button={{
                 id: "bd_pro_button_sub_btn",

@@ -387,7 +387,11 @@
         "noActiveNotifications": "There are no active notifications to disable.",
         "changeBillingInformation": "Change billing information",
         "changeBillingInformationInfo": "Learn more about how to change your billing information <1>here</1>.",
-        "changeBillingInformationButton": "Change billing information"
+        "changeBillingInformationButton": "Change billing information",
+        "confirmDisableNotificationsTitle": "Are you sure you want to disable all notifications?",
+        "confirmDisableNotificationsDescription": "By clicking \"Disable\", you will no longer receive alerts about updates on all tables you currently follow.",
+        "confirmDisableNotificationsConfirmButton": "Disable",
+        "selectedTableNotifications": "Selected table notifications"
     },
     "activate": {
         "accountActive": "Active account",
