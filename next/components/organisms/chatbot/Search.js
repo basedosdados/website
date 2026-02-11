@@ -7,8 +7,9 @@ import {
 } from "@chakra-ui/react";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
+import StopIcon from "../../../public/img/icons/stopIcon";
 
-export default function Search({ value, onChange, onSend, isLoading }) {
+export default function Search({ value, onChange, onSend, onStop, isLoading, isGenerating }) {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function Search({ value, onChange, onSend, isLoading }) {
         <Textarea
           id="search-chatbot"
           ref={textareaRef}
-          disabled={isLoading}
+          disabled={isLoading || isGenerating}
           value={value}
           onChange={(e) => {
             e.target.style.height = '24px'; 
@@ -59,9 +60,9 @@ export default function Search({ value, onChange, onSend, isLoading }) {
             if (onChange) onChange(e);
           }}
           onKeyDown={(e) => {
-            if (!isLoading) handleKeyDown(e);
+            if (!isLoading && !isGenerating) handleKeyDown(e);
           }}
-          placeholder={isLoading ? "Aguarde a resposta..." : "Faça sua pergunta!"}
+          placeholder={isLoading || isGenerating ? "Aguarde a resposta..." : "Faça sua pergunta!"}
           variant="unstyled"
           width="100%"
           minHeight="24px"
@@ -94,28 +95,37 @@ export default function Search({ value, onChange, onSend, isLoading }) {
         />
         <Box
           marginLeft="8px"
-          cursor={isLoading ? "not-allowed" : "pointer"}
-          onClick={!isLoading ? onSend : undefined}
-          color="#464A51"
-          opacity={value && !isLoading ? 1 : 0.5}
+          cursor="pointer"
+          onClick={isGenerating ? onStop : onSend}
+          color={isGenerating ? "#FF4D4D" : "#464A51"}
+          opacity={isGenerating || value ? 1 : 0.5}
           minWidth="24px"
           minHeight="24px"
           element="div"
           display="flex"
           alignItems="center"
           justifyContent="center"
-          pointerEvents={value && !isLoading ? "auto" : "none"}
+          pointerEvents={isGenerating || value ? "auto" : "none"}
+          transition="color 0.2s ease, fill 0.2s ease"
           _hover={{
-            color: "#2B8C4D",
-            fill: "#2B8C4D"
+            color: isGenerating ? "#FF0000" : "#2B8C4D",
+            fill: isGenerating ? "#FF0000" : "#2B8C4D"
           }}
         >
-          <SendIcon
-            width="18px"
-            height="18px"
-            fill="currentColor"
-            transform="rotate(45deg)"
-          />
+          {isGenerating ? (
+            <StopIcon
+              width="24px"
+              height="24px"
+              fill="currentColor"
+            />
+          ) : (
+            <SendIcon
+              width="18px"
+              height="18px"
+              fill="currentColor"
+              transform="rotate(45deg)"
+            />
+          )}
         </Box>
       </Flex>
 

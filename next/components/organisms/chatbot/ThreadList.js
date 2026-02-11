@@ -22,6 +22,7 @@ import {
 } from '../../molecules/uiUserPage';
 import useThreads from '../../../hooks/useThreads';
 import TrashIcon from '../../../public/img/icons/trashIcon';
+import ReloadIcon from '../../../public/img/icons/reloadIcon';
 
 export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen }) {
   const router = useRouter();
@@ -30,15 +31,32 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
   const deleteModal = useDisclosure();
   const [threadToDelete, setThreadToDelete] = useState(null);
   const isInternalChange = useRef(false);
+  const lastThreadId = useRef(query.t);
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
-    if (!query.t) return;
-    if (isInternalChange.current) {
-      isInternalChange.current = false;
+    if (!router.isReady) return;
+
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      lastThreadId.current = query.t;
       return;
     }
+
+    if (!query.t) {
+      lastThreadId.current = null;
+      return;
+    }
+
+    if (isInternalChange.current || query.t === lastThreadId.current) {
+      isInternalChange.current = false;
+      lastThreadId.current = query.t;
+      return;
+    }
+
+    lastThreadId.current = query.t;
     refetch();
-  }, [query.t, refetch]);
+  }, [query.t, router.isReady, refetch]);
 
   const handleSelectThread = (thread) => {
     isInternalChange.current = true;
@@ -96,30 +114,6 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       </VStack>
     );
   }
-
-  if (error) return (
-    <VStack
-      align="stretch"
-      spacing="20px"
-      padding="16px 10px"
-      marginTop="16px"
-      width="100%"
-    >
-      <BodyText
-        typography="small"
-        color="#BF3434"
-        whiteSpace="nowrap"
-        height="18px"
-        lineHeight="18px"
-        width={isSidebarOpen ? "auto" : "0"}
-        opacity={isSidebarOpen ? 1 : 0}
-        transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
-        transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
-      >
-        Erro ao carregar histórico.
-      </BodyText>
-    </VStack>
-  );
 
   return (
     <>
@@ -210,15 +204,52 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             >
               Conversas
             </BodyText>
-            {isSidebarOpen && threads?.length > 0 && <AccordionIcon color="#252A32" />}
+            {isSidebarOpen && <AccordionIcon color="#252A32" />}
           </AccordionButton>
           <AccordionPanel padding="0">
-            <VStack
-              align="stretch"
-              spacing="0"
-              overflowY="auto"
-              maxHeight="100%"
-            >
+            {error && isSidebarOpen && (
+              <VStack
+                align="stretch"
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                spacing="0"
+                padding="8px"
+                maxHeight="100%"
+              >
+                <BodyText
+                  display="flex"
+                  flexDirection="column"
+                  typography="small"
+                  color="#BF3434"
+                  width={isSidebarOpen ? "auto" : "0"}
+                  opacity={isSidebarOpen ? 1 : 0}
+                  transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+                  transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
+                >
+                  <span>Erro ao carregar histórico.</span>
+                  <span>Tente novamente.</span>
+                </BodyText>
+                <ReloadIcon
+                  cursor="pointer"
+                  width="20px"
+                  height="20px"
+                  _hover={{
+                    opacity: 0.8,
+                    transform: "rotate(360deg)",
+                    transition: "opacity 0.2s ease, transform 0.8s ease"
+                  }}
+                  onClick={() => refetch()}
+                />
+              </VStack>
+            )}
+            {!error && (
+              <VStack
+                align="stretch"
+                spacing="0"
+                overflowY="auto"
+                maxHeight="100%"
+              >
               {threads?.map((thread) => (
                 <Box
                   position="relative"
@@ -275,7 +306,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   )}
                 </Box>
               ))}
-            </VStack>
+              </VStack>
+            )}
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

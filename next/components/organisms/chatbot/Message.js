@@ -1,8 +1,14 @@
-import { Box, Flex, Text, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  HStack,
+  useToast
+} from "@chakra-ui/react";
+import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CopyIcon } from "@chakra-ui/icons";
-import { useState } from "react";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
 
@@ -45,11 +51,39 @@ const CodeBlock = ({ inline, className, children, ...props }) => {
 
 export default function Message({ message, onFeedback }) {
   const isUser = message.role === "user";
-  const [feedback, setFeedback] = useState(message.feedback || null);
+  const [feedback, setFeedback] = useState(null);
+  const toast = useToast();
 
-  const handleFeedback = (rating) => {
-    setFeedback(rating);
-    if (onFeedback) onFeedback(message.id, rating);
+  const handleFeedback = async (rating) => {
+    if (onFeedback) {
+      const success = await onFeedback(message.id, rating);
+      if (success) {
+        setFeedback(rating);
+        toast({
+          duration: 3000,
+          position: "bottom",
+          render: () => (
+            <Box
+              width="fit-content"
+              display="flex"
+              flexDirection="row"
+              gap="8px"
+              padding="12px 16px"
+              backgroundColor="#252A32"
+              borderRadius="8px"
+              color="#FFF"
+              fill="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="14px"
+              lineHeight="20px"
+            >
+              Obrigado pelo seu feedback!
+            </Box>
+          ),
+        });
+      }
+    }
   };
 
   return (
@@ -84,29 +118,27 @@ export default function Message({ message, onFeedback }) {
           </Box>
         )}
 
-        {!isUser && !message.isLoading && !message.isError && (
-          <HStack spacing={2} marginTop="8px" justify="flex-end">
+        {!isUser && !message.isLoading && !message.isTyping && !message.isError && message.id && (
+          <HStack spacing="8px" marginTop="8px" justify="flex-end">
             <Box 
-                cursor="pointer" 
-                onClick={() => handleFeedback(1)}
-                opacity={feedback === 1 ? 1 : 0.5}
-                _hover={{ opacity: 1 }}
+              cursor="pointer" 
+              onClick={() => handleFeedback(1)}
+              pointerEvents={feedback === 1 ? "none" : "auto"}
+              opacity={feedback === 1 ? 1 : 0.5}
+              _hover={{ opacity: 1 }}
             >
               <ThumbUpIcon />
             </Box>
             <Box  
               cursor="pointer" 
               onClick={() => handleFeedback(0)}
+              pointerEvents={feedback === 0 ? "none" : "auto"}
               opacity={feedback === 0 ? 1 : 0.5}
               _hover={{ opacity: 1 }}
             >
               <ThumbDownIcon />
             </Box>
           </HStack>
-        )}
-        
-        {message.isError && (
-          <Text color="red.500" fontSize="12px" mt={2}>Erro: {message.content}</Text>
         )}
       </Box>
     </Flex>

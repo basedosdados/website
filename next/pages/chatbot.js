@@ -19,11 +19,13 @@ export default function Chatbot() {
   const {
     messages,
     isLoading,
+    isGenerating,
     threadId,
     sendMessage,
     fetchThreadMessages,
     sendFeedback,
-    resetChat
+    resetChat,
+    stopSendMessage
   } = useChatbot(threadIdFromUrl);
 
   useEffect(() => {
@@ -116,7 +118,9 @@ export default function Chatbot() {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onSend={handleSend}
+                onStop={stopSendMessage}
                 isLoading={isLoading}
+                isGenerating={isGenerating}
               />
             </Box>
           </Stack>

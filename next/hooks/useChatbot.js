@@ -8,6 +8,7 @@ export default function useChatbot(initialThreadId = null) {
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState(initialThreadId);
   const [error, setError] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
     setThreadId(initialThreadId);
@@ -61,9 +62,15 @@ export default function useChatbot(initialThreadId = null) {
         return { ...msg, content: (msg.content || '') + charsToAppend };
       }));
 
-      setTimeout(() => processQueue(), 15);
+      setTimeout(() => processQueue(), 1);
     } else {
       isTypingRef.current = false;
+      const botId = currentBotMessageIdRef.current;
+      if (botId) {
+        setMessages(prev => prev.map(msg => 
+          msg.id === botId ? { ...msg, isTyping: false } : msg
+        ));
+      }
     }
   }, []);
 
@@ -90,17 +97,22 @@ export default function useChatbot(initialThreadId = null) {
 
     if (!isTypingRef.current) {
       isTypingRef.current = true;
+      setMessages(prev => prev.map(msg => 
+        msg.id === botId ? { ...msg, isTyping: true } : msg
+      ));
       processQueue();
     }
   }, [processQueue]);
 
-
   const sendMessage = useCallback(async (content) => {
+    if (isLoading || isGenerating) return;
+
     if (abortControllerRef.current) abortControllerRef.current.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
     setIsLoading(true);
+    setIsGenerating(true);
     setError(null);
     charQueueRef.current = [];
 
@@ -120,12 +132,20 @@ export default function useChatbot(initialThreadId = null) {
       role: 'assistant',
       content: '',
       isLoading: true,
+      isTyping: false,
       toolCalls: []
     }]);
 
     try {
       let currentThreadId = threadId || await createThread(content);
-      if (!currentThreadId) return;
+      if (!currentThreadId) {
+        setMessages(prev => prev.map(msg => 
+          msg.id === botMessageId 
+            ? { ...msg, isLoading: false, isError: true, content: 'Não foi possível iniciar uma conversa com o chatbot. Por favor, tente novamente.' } 
+            : msg
+        ));
+        return;
+      }
 
       const accessToken = await getAccessToken();
       if (!accessToken) { 
@@ -197,7 +217,12 @@ export default function useChatbot(initialThreadId = null) {
               case 'complete':
                 setMessages(prev => prev.map(msg => 
                   msg.id === botMessageId 
-                    ? { ...msg, isLoading: false, runId: event.data?.run_id }
+                    ? { 
+                        ...msg, 
+                        id: event.data?.message_id, 
+                        isLoading: false, 
+                        runId: event.data?.run_id
+                      }
                     : msg
                 ));
                 break;
@@ -213,7 +238,7 @@ export default function useChatbot(initialThreadId = null) {
       setError('Erro ao enviar mensagem.');
       setMessages(prev => prev.map(msg => 
         msg.id === currentBotMessageIdRef.current 
-          ? { ...msg, isLoading: false, isError: true, content: 'Ocorreu um erro.' } 
+          ? { ...msg, isLoading: false, isError: true, content: 'Ocorreu um erro. Por favor, tente novamente.' } 
           : msg
       ));
     } finally {
@@ -221,13 +246,9 @@ export default function useChatbot(initialThreadId = null) {
     }
   }, [threadId, createThread, getAccessToken, addToQueue]);
 
-  const sendFeedback = useCallback(async (clientMessageId, rating) => {
+  const sendFeedback = useCallback(async (id, rating) => {
     try {
-      const message = messages.find(m => m.id === clientMessageId);
-      if (!message || !message.messagePairId) {
-        console.error('Message pair ID not found for feedback');
-        return;
-      }
+      if (!id) return;
 
       const accessToken = await getAccessToken();
       if (!accessToken) {
@@ -236,8 +257,8 @@ export default function useChatbot(initialThreadId = null) {
         return;
       }
 
-      await axios.post(`${apiUrl}/chatbot/message-pairs/${message.messagePairId}/feedbacks/`, {
-        score: rating 
+      await axios.put(`${apiUrl}/chatbot/message-pairs/${id}/feedbacks/`, {
+        rating: rating 
       }, {
         headers: {
           'Authorization': `Bearer ${accessToken}`
@@ -245,12 +266,14 @@ export default function useChatbot(initialThreadId = null) {
       });
 
       setMessages(prev => prev.map(msg => 
-        msg.id === clientMessageId ? { ...msg, feedback: rating } : msg
+        msg.id === id ? { ...msg, rating: rating } : msg
       ));
+      return true;
     } catch (err) {
       console.error('Failed to send feedback:', err);
+      return false;
     }
-  }, [messages, getAccessToken]);
+  }, [getAccessToken, apiUrl]);
 
   const fetchThreadMessages = useCallback(async (id) => {
     try {
@@ -289,6 +312,7 @@ export default function useChatbot(initialThreadId = null) {
           content: pair.assistant_message,
           toolCalls: toolCalls,
           isLoading: false,
+          isTyping: false,
           created_at: pair.created_at
         });
       });
@@ -309,12 +333,32 @@ export default function useChatbot(initialThreadId = null) {
     setError(null);
   }, []);
 
+  const stopSendMessage = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    charQueueRef.current = [];
+    isTypingRef.current = false;
+    setIsLoading(false);
+    setIsGenerating(false);
+
+    if (currentBotMessageIdRef.current) {
+      setMessages(prev => prev.map(msg => 
+        msg.id === currentBotMessageIdRef.current 
+          ? { ...msg, isLoading: false, isTyping: false } 
+          : msg
+      ));
+    }
+  }, []);
+
   return {
     messages,
     isLoading,
+    isGenerating,
     threadId,
     error,
     sendMessage,
+    stopSendMessage,
     createThread,
     fetchThreadMessages,
     sendFeedback,
