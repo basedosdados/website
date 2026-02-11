@@ -81,7 +81,5 @@ Os tratamentos realizados foram:
 * [Manual de orientação para os empregadores sobre como preencher os campos do formulário](http://www.rais.gov.br/sitio/rais_ftp/ManualRAIS2023.pdf)
 * [Informações detalhadas sobre a RAIS no site do MTE](http://www.rais.gov.br/sitio/sobre.jsf)
 * [Dashboard do MTE com números consolidados da RAIS completa](https://app.powerbi.com/view?r=eyJrIjoiZmJmMDVhODctMTEwOS00YTVhLWJhNzItOWE3NmVlMWEwMTUxIiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9)
-* [Dashboard do MTE com números consolidados da RAIS parcial](https://app.powerbi.com/view?r=eyJrIjoiNjk3M2IwZDYtOGQzMS00YmE1LWE3M2MtZWRjODA4NTk3YTQ2IiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9) 
-
-
-
+* [Dashboard do MTE com números consolidados da RAIS parcial](https://app.powerbi.com/view?r=eyJrIjoiNjk3M2IwZDYtOGQzMS00YmE1LWE3M2MtZWRjODA4NTk3YTQ2IiwidCI6IjNlYzkyOTY5LTVhNTEtNGYxOC04YWM5LWVmOThmYmFmYTk3OCJ9)
+* [Sistema Dardo: sistema que utilizamos para validação das tabelas disponibilizadas](https://bi.mte.gov.br/bgcaged/)
