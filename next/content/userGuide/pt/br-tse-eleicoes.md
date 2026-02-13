@@ -59,9 +59,12 @@ As tabelas do TSE não incluem informações de eleições para o conselho tutel
 Além do comportamento esperado nos anos com duas vagas para o Senado, identificamos que existem algumas dezenas de linhas na tabela `detalhes_votacao_secao` em que a proporção de votos válidos ultrapassa 100% sem uma causa conhecida. Esse conjunto de casos é muito pequeno em relação ao total de linhas da tabela e, até o momento, não encontramos uma explicação para o ocorrido. Recomendamos tratar esses registros como residuais e analisá-los com cautela caso tenham impacto direto na sua aplicação.
 
 # Observações ao longo tempo
-Para acompanhar os candidatos ao longo dos anos, você pode usar a coluna `titulo_eleitoral`. Esse identificador rastreia indivíduos de forma consistente, superando a limitação de outros IDs associados que mudam entre pleitos. Ele identifica os candidatos em 99,5% dos casos. No entanto, é importante observar que podem existir valores nulos ou dois identificadores diferentes para o mesmo candidato em alguns casos.
 
-Para acompanhar os partidos, é preciso considerar mudanças de nome e fusões ao longo do tempo.
+- Para acompanhar os candidatos ao longo dos anos, você pode usar a coluna `titulo_eleitoral`. Esse identificador rastreia indivíduos de forma consistente, superando a limitação de outros IDs associados que mudam entre pleitos. Ele identifica os candidatos em 99,5% dos casos. No entanto, é importante observar que podem existir valores nulos ou dois identificadores diferentes para o mesmo candidato em alguns casos.
+
+- Para acompanhar os partidos, é preciso considerar mudanças de nome e fusões ao longo do tempo.
+
+- Pode haver mais de um prefeito, governador ou presidente da República eleito dentro da mesma janela de mandato de quatro anos (por exemplo, 2020–2024). Isso ocorre quando a Justiça Eleitoral, anula mais de 50% dos votos válidos de uma eleição em razão do indeferimento do registro de candidatura ou da cassação do diploma do candidato eleito. Nesses casos, é convocada eleição suplementar para que o eleitorado eleja um novo representante. Para fazer análise dos Dados, recomenda-se utilizar a coluna `data_eleicao` nas tabelas de resultados, permitindo distinguir eleições ordinárias e suplementares ocorridas dentro da mesma janela de mandato. Para maiores informações, leia a seção: [Materiais de apoio](#materiais-de-apoio)
 
 # Linhas duplicadas
 As linhas duplicadas são removidas no tratamento feito pela BD.
@@ -119,6 +122,7 @@ Os tratamentos realizados foram:
 * [Painel para consulta de informações sobre candidaturas e contas eleitorais](https://divulgacandcontas.tse.jus.br/divulga/#/home)
 * [Siga o dinheiro: Painel desenvolvido pela BD para entender de onde vem e onde está sendo gasto o dinheiro das campanhas](https://www.sigaodinheiro.org/)
 * [Curso de Análise de Dados Eleitorais da BD](https://info.basedosdados.org/bd-edu-eleicoes)
+* [Eleições Suplementar](https://www.tse.jus.br/comunicacao/noticias/2025/Fevereiro/voce-sabe-o-que-e-uma-eleicao-suplementar)
 
 [code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
 [code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
