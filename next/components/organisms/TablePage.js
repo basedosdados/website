@@ -469,8 +469,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
           }
         </Stack>
 
-        {/* FEAT: Notificação de tabela */}
-        {/* {!tableNotificationIsHidden && 
+        {!tableNotificationIsHidden && 
           <Tooltip
             label={tableNotificationStatus ? t('table.tooltipDisableNotification') : t('table.tooltipEnableNotification')}
             hasArrow
@@ -520,7 +519,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
               </Button>
             </Box>
           </Tooltip>
-        } */}
+        }
       </StackSkeleton>
 
       <SkeletonText

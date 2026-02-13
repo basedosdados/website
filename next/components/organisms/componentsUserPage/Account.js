@@ -33,6 +33,7 @@ export default function Account({ userInfo }) {
   const eraseModalAccount = useDisclosure();
   const sucessEraseModalAccount = useDisclosure();
   const errorEraseModalAccount = useDisclosure();
+  const disableNotificationsModal = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [hasCancelSubscription, setHasCancelSubscription] = useState(false);
   const [hasMembers, setHasMembers] = useState(false);
@@ -144,6 +145,7 @@ export default function Account({ userInfo }) {
 
   async function handleDisableAllNotifications() {
     setIsLoading(true)
+    disableNotificationsModal.onClose()
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
 
@@ -421,6 +423,62 @@ export default function Account({ userInfo }) {
         </Stack>
       </ModalGeneral>
 
+      <ModalGeneral
+        isOpen={disableNotificationsModal.isOpen}
+        onClose={disableNotificationsModal.onClose}
+        propsModalContent={{minWidth: {base: "", lg: "800px !important"}}}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">{t('username.confirmDisableNotificationsTitle')}</TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            onClick={() => disableNotificationsModal.onClose()}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm>
+            {t('username.confirmDisableNotificationsDescription')}
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={{base: "column-reverse", lg: "row"}}
+          spacing={0}
+          gap="16px"
+          width={{base:"100%", lg: "fit-content"}}
+        >
+          <Button
+            width="100%"
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
+            onClick={() => disableNotificationsModal.onClose()}
+          >
+            {t('username.cancel')}
+          </Button>
+
+          <Button
+            width="100%"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
+            onClick={() => handleDisableAllNotifications()}
+            isLoading={isLoading}
+          >
+            {t('username.confirmDisableNotificationsConfirmButton')}
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
       <Box marginTop="0 !important">
         <TitleTextForm>{t('username.username')}</TitleTextForm>
         <ExtraInfoTextForm>{userInfo.username}</ExtraInfoTextForm>
@@ -430,15 +488,14 @@ export default function Account({ userInfo }) {
         >{t('username.changeUsername')}</Button>
       </Box>
 
-      {/* FEAT: Notificação de tabela */}
-      {/* <Box>
+      <Box>
         <TitleTextForm>{t('username.disableAllNotifications')}</TitleTextForm>
         <ExtraInfoTextForm>{t('username.disableNotificationsInfo')}</ExtraInfoTextForm>
         <Button
           isVariant
-          onClick={() => handleDisableAllNotifications()}
+          onClick={() => disableNotificationsModal.onOpen()}
         >{t('username.disableNotificationsButton')}</Button>
-      </Box> */}
+      </Box>
 
       <Box>
         <TitleTextForm>{t('username.exportAccountData')}</TitleTextForm>

@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
@@ -26,6 +26,7 @@ import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
 import {
+  TitleTextForm,
   ExtraInfoTextForm,
   ModalGeneral,
   Button
@@ -189,6 +190,7 @@ export default function PlansAndPayment ({ userData }) {
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
         {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+        {name: t('username.selectedTableNotifications')}
       ]
     },
     "bd_pro_empresas" : {
@@ -1118,7 +1120,8 @@ export default function PlansAndPayment ({ userData }) {
               resources={[
                 {name: t('username.dozensOfHighFrequencyDatasets')},
                 {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
+                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+                {name: t('username.selectedTableNotifications')}
               ]}
               button={{
                 id: "bd_pro_button_sub_btn",
@@ -1331,7 +1334,7 @@ export default function PlansAndPayment ({ userData }) {
 
         <Stack
           spacing={0}
-          gap="64px"
+          gap={userData?.proSubscription === "bd_pro_empresas" ? {base: "0", lg: "64px"} : "64px"}
           flexDirection={{base: "column", lg: "row"}}
         >
           <Stack minWidth="350px" spacing="8px">
@@ -1349,19 +1352,19 @@ export default function PlansAndPayment ({ userData }) {
                 return <ListFeature elm={elm} index={index} key={index}/>
               })
             }
+          </Stack>
+
+          <Stack spacing="8px">
             {userData?.proSubscription === "bd_pro_empresas" &&
-              <>
+              <Stack spacing={0} gap="8px" marginTop={{base: "8px", lg: "36px"}}>
                 {resources["bd_pro"].resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
-              </>
+              </Stack>
             }
-          </Stack>
-
-          <Stack spacing="8px">
             {userData?.proSubscription !== "bd_pro_empresas" &&
               <BodyText
                 typography="small"
@@ -1404,6 +1407,39 @@ export default function PlansAndPayment ({ userData }) {
               </BodyText>
             }
           </Stack>
+        </Stack>
+
+        <Stack>
+          <Box>
+            <TitleTextForm>{t('username.changeBillingInformation')}</TitleTextForm>
+            <ExtraInfoTextForm>
+              <Trans
+                i18nKey={t('username.changeBillingInformationInfo')}
+                components={{
+                  1:
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color:"#0057A4",
+                      }}
+                      href="https://coda.io/@base-dos-dados/faq-bd-pro/assinatura-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                }}
+              />
+            </ExtraInfoTextForm>
+            <Button
+              as="a"
+              href="https://billing.stripe.com/p/login/bIY4jedfK4kRgda144"
+              isVariant
+              onClick={() => {}}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{t('username.changeBillingInformationButton')}</Button>
+          </Box>
         </Stack>
       </Stack>
     </Stack>

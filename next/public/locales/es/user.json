@@ -298,7 +298,14 @@
         "disableNotificationsButton": "Desactivar notificaciones",
         "disableNotificationsSuccess": "¡Notificaciones desactivadas con éxito!",
         "disableNotificationsError": "Error al desactivar las notificaciones",
-        "noActiveNotifications": "No hay notificaciones activas para desactivar."
+        "noActiveNotifications": "No hay notificaciones activas para desactivar.",
+        "changeBillingInformation": "Cambiar información de facturación",
+        "changeBillingInformationInfo": "Obtenga más información sobre cómo cambiar su información de facturación <1>aquí</1>.",
+        "changeBillingInformationButton": "Cambiar información de facturación",
+        "confirmDisableNotificationsTitle": "¿Está seguro de que desea desactivar todas las notificaciones?",
+        "confirmDisableNotificationsDescription": "Al hacer clic en \"Desactivar\", dejará de recibir alertas sobre actualizaciones en todas las tablas que sigue actualmente.",
+        "confirmDisableNotificationsConfirmButton": "Desactivar",
+        "selectedTableNotifications": "Notificaciones de actualización de tabla"
     },
     "activate": {
         "accountActive": "Cuenta activa",
