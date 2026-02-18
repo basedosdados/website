@@ -20,51 +20,24 @@ import {
   Button,
   ExtraInfoTextForm
 } from '../../molecules/uiUserPage';
-import useThreads from '../../../hooks/useThreads';
+import { useChatbotContext } from '../../../context/ChatbotContext';
 import TrashIcon from '../../../public/img/icons/trashIcon';
 import ReloadIcon from '../../../public/img/icons/reloadIcon';
 
-export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen }) {
+export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, isGenerating, onNewChat }) {
   const router = useRouter();
-  const { query } = router;
-  const { data: threads, isLoading, error, refetch, deleteThread, isDeleting } = useThreads();
+  const { threads, isLoading, error, refetch, deleteThread, isDeleting } = useChatbotContext();
   const deleteModal = useDisclosure();
   const [threadToDelete, setThreadToDelete] = useState(null);
-  const isInternalChange = useRef(false);
-  const lastThreadId = useRef(query.t);
-  const hasInitialized = useRef(false);
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-      lastThreadId.current = query.t;
-      return;
-    }
-
-    if (!query.t) {
-      lastThreadId.current = null;
-      return;
-    }
-
-    if (isInternalChange.current || query.t === lastThreadId.current) {
-      isInternalChange.current = false;
-      lastThreadId.current = query.t;
-      return;
-    }
-
-    lastThreadId.current = query.t;
-    refetch();
-  }, [query.t, router.isReady, refetch]);
 
   const handleSelectThread = (thread) => {
-    isInternalChange.current = true;
+    if (isGenerating) return;
+
     router.push({
       pathname: router.pathname,
       query: { ...router.query, t: thread.id }
     }, undefined, { shallow: true });
-    
+
     if (onSelectThread) onSelectThread(thread);
   };
 
@@ -76,9 +49,14 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
 
   const confirmDelete = async () => {
     if (threadToDelete) {
+      const isDeletingCurrent = threadToDelete.id === currentThreadId;
       await deleteThread(threadToDelete.id);
       deleteModal.onClose();
       setThreadToDelete(null);
+
+      if (isDeletingCurrent && onNewChat) {
+        onNewChat();
+      }
     }
   };
 
@@ -264,7 +242,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   gap={isSidebarOpen ? "4px" : "0"}
                   onClick={() => handleSelectThread(thread)}
                   backgroundColor={isSidebarOpen && currentThreadId === thread.id ? "#EEEEEE" : "transparent"}
-                  pointerEvents={isSidebarOpen ? "auto" : "none"}
+                  pointerEvents={isSidebarOpen && !isGenerating ? "auto" : "none"}
                   _hover={{
                     color: "#2B8C4D",
                     fill: "#2B8C4D",

@@ -7,9 +7,8 @@ import {
 } from "@chakra-ui/react";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
-import StopIcon from "../../../public/img/icons/stopIcon";
 
-export default function Search({ value, onChange, onSend, onStop, isLoading, isGenerating }) {
+export default function Search({ value, onChange, onSend, isLoading, isGenerating }) {
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -96,36 +95,27 @@ export default function Search({ value, onChange, onSend, onStop, isLoading, isG
         <Box
           marginLeft="8px"
           cursor="pointer"
-          onClick={isGenerating ? onStop : onSend}
-          color={isGenerating ? "#FF4D4D" : "#464A51"}
-          opacity={isGenerating || value ? 1 : 0.5}
+          onClick={onSend}
+          color="#464A51"
+          opacity={isGenerating || !value ? 0.5 : 1}
           minWidth="24px"
           minHeight="24px"
-          element="div"
           display="flex"
           alignItems="center"
           justifyContent="center"
-          pointerEvents={isGenerating || value ? "auto" : "none"}
+          pointerEvents={isGenerating || !value ? "none" : "auto"}
           transition="color 0.2s ease, fill 0.2s ease"
           _hover={{
-            color: isGenerating ? "#FF0000" : "#2B8C4D",
-            fill: isGenerating ? "#FF0000" : "#2B8C4D"
+            color: "#2B8C4D",
+            fill: "#2B8C4D"
           }}
         >
-          {isGenerating ? (
-            <StopIcon
-              width="24px"
-              height="24px"
-              fill="currentColor"
-            />
-          ) : (
-            <SendIcon
-              width="18px"
-              height="18px"
-              fill="currentColor"
-              transform="rotate(45deg)"
-            />
-          )}
+          <SendIcon
+            width="18px"
+            height="18px"
+            fill="currentColor"
+            transform="rotate(45deg)"
+          />
         </Box>
       </Flex>
 

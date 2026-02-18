@@ -37,9 +37,9 @@ export default function ChatWindow({ messages, onFeedback }) {
     >
       <Box flex="1" />
 
-      {messages.map((msg) => (
+      {messages.map((msg, index) => (
         <Message 
-          key={msg.id} 
+          key={msg.id || `msg-${index}`} 
           message={msg} 
           onFeedback={onFeedback} 
         />

@@ -4,18 +4,20 @@ import {
   Stack,
   Box
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import useChatbot from "../hooks/useChatbot";
+import { ChatbotProvider } from "../context/ChatbotContext";
 
-export default function Chatbot() {
+function ChatbotContent() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
   const [value, setValue] = useState("");
+  const skipFetchRef = useRef(false);
   const {
     messages,
     isLoading,
@@ -24,27 +26,28 @@ export default function Chatbot() {
     sendMessage,
     fetchThreadMessages,
     sendFeedback,
-    resetChat,
-    stopSendMessage
+    resetChat
   } = useChatbot(threadIdFromUrl);
 
   useEffect(() => {
     if (threadIdFromUrl) {
+      if (skipFetchRef.current) {
+        skipFetchRef.current = false;
+        return;
+      }
       fetchThreadMessages(threadIdFromUrl);
     }
   }, [threadIdFromUrl, fetchThreadMessages]);
 
   useEffect(() => {
-    if (!router.isReady) return;
-
-    if (threadId && !threadIdFromUrl) {
-      const { t, ...otherQuery } = router.query;
-      router.push({
+    if (threadId && threadId !== threadIdFromUrl) {
+      skipFetchRef.current = true;
+      router.replace({
         pathname: router.pathname,
-        query: { ...otherQuery, t: threadId }
+        query: { ...router.query, t: threadId }
       }, undefined, { shallow: true });
     }
-  }, [threadId, threadIdFromUrl, router.isReady, router.pathname]);
+  }, [threadId]);
 
   const handleSend = () => {
     if (value.trim() !== "") {
@@ -90,6 +93,7 @@ export default function Chatbot() {
         <Sidebar 
           onNewChat={handleNewChat} 
           currentThreadId={threadIdFromUrl}
+          isGenerating={isGenerating}
         />
         <Flex
           flex={1}
@@ -118,7 +122,6 @@ export default function Chatbot() {
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 onSend={handleSend}
-                onStop={stopSendMessage}
                 isLoading={isLoading}
                 isGenerating={isGenerating}
               />
@@ -127,5 +130,13 @@ export default function Chatbot() {
         </Flex>
       </HStack>
     </HStack>
+  )
+}
+
+export default function Chatbot() {
+  return (
+    <ChatbotProvider>
+      <ChatbotContent />
+    </ChatbotProvider>
   )
 }

@@ -11,7 +11,7 @@ import BodyText from '../../atoms/Text/BodyText'
 import PenSquareIcon from '../../../public/img/icons/penSquareIcon'
 import ThreadList from './ThreadList'
 
-export default function Sidebar({ onNewChat, onSelectThread, currentThreadId }) {
+export default function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
   const [isOpen, setIsOpen] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -92,7 +92,8 @@ export default function Sidebar({ onNewChat, onSelectThread, currentThreadId }) 
             padding="8px"
             borderRadius="8px"
             gap={isOpen ? "4px" : "0"}
-            onClick={onNewChat}
+            onClick={!isGenerating ? onNewChat : undefined}
+            pointerEvents={isGenerating ? "none" : "auto"}
             _hover={{
               color: "#2B8C4D",
               fill: "#2B8C4D",
@@ -121,6 +122,8 @@ export default function Sidebar({ onNewChat, onSelectThread, currentThreadId }) 
             onSelectThread={onSelectThread}
             currentThreadId={currentThreadId}
             isSidebarOpen={isOpen}
+            isGenerating={isGenerating}
+            onNewChat={onNewChat}
           />
         </Stack>
       </VStack>

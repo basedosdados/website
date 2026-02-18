@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
 import cookies from 'js-cookie';
 import useChatbotAuth from './useChatbotAuth';
+import { useChatbotContext } from '../context/ChatbotContext';
 
 export default function useChatbot(initialThreadId = null) {
   const [messages, setMessages] = useState([]);
@@ -9,10 +10,6 @@ export default function useChatbot(initialThreadId = null) {
   const [threadId, setThreadId] = useState(initialThreadId);
   const [error, setError] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  useEffect(() => {
-    setThreadId(initialThreadId);
-  }, [initialThreadId]);
 
   const abortControllerRef = useRef(null);
   const charQueueRef = useRef([]);
@@ -22,6 +19,7 @@ export default function useChatbot(initialThreadId = null) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const { getAccessToken } = useChatbotAuth();
+  const { refetch: refetchThreads } = useChatbotContext();
 
   const createThread = useCallback(async (firstMessage) => {
     try {
@@ -43,6 +41,7 @@ export default function useChatbot(initialThreadId = null) {
       });
       const newThreadId = response.data.id;
       setThreadId(newThreadId);
+      if (refetchThreads) refetchThreads();
       return newThreadId;
     } catch (err) {
       console.error('Failed to create thread:', err);
@@ -105,8 +104,6 @@ export default function useChatbot(initialThreadId = null) {
   }, [processQueue]);
 
   const sendMessage = useCallback(async (content) => {
-    if (isLoading || isGenerating) return;
-
     if (abortControllerRef.current) abortControllerRef.current.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
@@ -117,7 +114,7 @@ export default function useChatbot(initialThreadId = null) {
     charQueueRef.current = [];
 
     const userMessage = {
-      id: `user-${Date.now()}`,
+      id: `user-${crypto.randomUUID()}`,
       role: 'user',
       content: content,
       status: 'SUCCESS'
@@ -178,11 +175,12 @@ export default function useChatbot(initialThreadId = null) {
 
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
+        if (!done) {
+          buffer += decoder.decode(value, { stream: true });
+        }
 
-        buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+        buffer = done ? '' : (lines.pop() || '');
 
         for (const line of lines) {
           if (!line.trim()) continue;
@@ -209,17 +207,19 @@ export default function useChatbot(initialThreadId = null) {
               case 'error':
                 setMessages(prev => prev.map(msg => 
                   msg.id === botMessageId 
-                    ? { ...msg, isError: true, content: event.data?.error_details?.message }
+                    ? { ...msg, isError: true, isLoading: false, content: event.data?.error_details?.message }
                     : msg
                 ));
                 break;
 
               case 'complete':
+                const completeId = event.data?.message_id || botMessageId;
+                currentBotMessageIdRef.current = completeId;
                 setMessages(prev => prev.map(msg => 
                   msg.id === botMessageId 
                     ? { 
                         ...msg, 
-                        id: event.data?.message_id, 
+                        id: completeId, 
                         isLoading: false, 
                         runId: event.data?.run_id
                       }
@@ -231,6 +231,27 @@ export default function useChatbot(initialThreadId = null) {
             console.error('JSON Parse error', e);
           }
         }
+
+        if (done) break;
+      }
+
+      try {
+        const tokenForId = await getAccessToken();
+        if (tokenForId && currentThreadId) {
+          const msgResponse = await axios.get(`${apiUrl}/chatbot/threads/${currentThreadId}/messages/`, {
+            headers: { 'Authorization': `Bearer ${tokenForId}` },
+          });
+          const lastPair = msgResponse.data[msgResponse.data.length - 1];
+          if (lastPair?.id) {
+            const prevBotId = currentBotMessageIdRef.current;
+            currentBotMessageIdRef.current = lastPair.id;
+            setMessages(prev => prev.map(msg =>
+              msg.id === prevBotId ? { ...msg, id: lastPair.id } : msg
+            ));
+          }
+        }
+      } catch (e) {
+        console.error('Failed to fetch message pair ID:', e);
       }
     } catch (err) {
       if (err.name === 'AbortError') return;
@@ -243,6 +264,14 @@ export default function useChatbot(initialThreadId = null) {
       ));
     } finally {
       setIsLoading(false);
+      setIsGenerating(false);
+
+      const finalBotId = currentBotMessageIdRef.current || botMessageId;
+      setMessages(prev => prev.map(msg =>
+        msg.id === finalBotId
+          ? { ...msg, isLoading: false }
+          : msg
+      ));
     }
   }, [threadId, createThread, getAccessToken, addToQueue]);
 
@@ -333,24 +362,6 @@ export default function useChatbot(initialThreadId = null) {
     setError(null);
   }, []);
 
-  const stopSendMessage = useCallback(() => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-    charQueueRef.current = [];
-    isTypingRef.current = false;
-    setIsLoading(false);
-    setIsGenerating(false);
-
-    if (currentBotMessageIdRef.current) {
-      setMessages(prev => prev.map(msg => 
-        msg.id === currentBotMessageIdRef.current 
-          ? { ...msg, isLoading: false, isTyping: false } 
-          : msg
-      ));
-    }
-  }, []);
-
   return {
     messages,
     isLoading,
@@ -358,7 +369,6 @@ export default function useChatbot(initialThreadId = null) {
     threadId,
     error,
     sendMessage,
-    stopSendMessage,
     createThread,
     fetchThreadMessages,
     sendFeedback,
