@@ -128,7 +128,7 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 8. Para as variáveis do tipo `int64` ou `float64` verificar se é necessário incluir uma [unidade de medida](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
 9. Reordernar as variáveis conforme o [manual](style_data)
 
-<Tip caption="Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo. "/>
+<Tip caption="Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo.">
 
 É necessário que esteja claro o formato final que os dados devem ficar _antes_ de começar a escrever o código. Assim a gente evita o retrabalho.
 

@@ -96,7 +96,7 @@ estructura es la siguiente:
         - `dicionario.csv`: Tabla diccionario de todo el conjunto de datos ([veremos más en el paso 6](#6-si-es-necesario-crear-tabla-diccionario)).
 
 
-<Tip caption="Solo la carpeta `code` se confirmará en su proyecto, los demás archivos solo existirán localmente o en Google Cloud.">
+<Tip caption="Solo la carpeta `code` se confirmará en su proyecto, los demás archivos solo existirán localmente o en Google Cloud."/>
 
 
 ### 3. Rellenar las tablas de arquitectura
@@ -105,7 +105,7 @@ Las tablas de arquitectura determinan **la estructura de
 cada tabla de su conjunto de datos**. Definen, por ejemplo, el nombre, el orden y los metadatos de las variables, además de las compatibilidades cuando hay cambios en las versiones (por
 ejemplo, si una variable cambia de nombre de un año a otro).
 
-<Tip caption="Cada tabla del conjunto de datos debe tener su propia tabla de arquitectura (hoja de cálculo), que debe completarse en **Google Drive** para que nuestro equipo de datos pueda corregirla.">
+<Tip caption="Cada tabla del conjunto de datos debe tener su propia tabla de arquitectura (hoja de cálculo), que debe completarse en **Google Drive** para que nuestro equipo de datos pueda corregirla."/>
 
 
 #### Ejemplo: RAIS - Tablas de arquitectura
@@ -227,7 +227,7 @@ source_format="csv",)
 
 ```
 
-<Tip caption="Si tus datos están particionados, la ruta debe apuntar a la carpeta donde están las particiones. En caso contrario, debe apuntar a un archivo `.csv` (por ejemplo, microdados.csv)."/>
+<Tip caption="Si tus datos están particionados, la ruta debe apuntar a la carpeta donde están las particiones. En caso contrario, debe apuntar a un archivo `.csv` (por ejemplo, microdados.csv).">
 
  Si el proyecto no existe en BigQuery, se creará automáticamente.
 

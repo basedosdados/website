@@ -96,7 +96,7 @@ structure is as follows:
         - `auxiliary_files/`: Auxiliary files for the data ([we will see more in step 5](#5-if-necessary-organize-auxiliary-files)).
         - `dictionary.csv`: Dictionary table for the entire dataset ([we will see more in step 6](#6-if-necessary-create-dictionary-table)).
 
-<Tip caption="Only the `code` folder will be committed to your project; the other files will exist only locally or in Google Cloud.">
+<Tip caption="Only the `code` folder will be committed to your project; the other files will exist only locally or in Google Cloud."/>
 
 
 ### 3. Fill in the architecture tables
@@ -106,7 +106,7 @@ each table in your dataset**. They define, for example, the name, order, and met
 example, if a variable changes its name from one year to the next).
 
 
-<Tip caption="Each table in the dataset must have its own architecture table (spreadsheet), which must be filled out in **Google Drive** to allow our data team to correct it.">
+<Tip caption="Each table in the dataset must have its own architecture table (spreadsheet), which must be filled out in **Google Drive** to allow our data team to correct it."/>
 
 
 #### Example: RAIS - Architecture tables
@@ -177,7 +177,7 @@ Feel free to structure subfolders as you wish within this directory. The importa
 
 Often, especially with older databases, there are multiple dictionaries in Excel or other formats. In the Database, we unify everything into a single file in `.csv` format—a single dictionary for all columns in all tables in your set.
 
-<Tip caption="Important details on how to build your dictionary are in our [style manual](style_data).">
+<Tip caption="Important details on how to build your dictionary are in our [style manual](style_data)."/>
 
 
 #### Example: RAIS - Dictionary
@@ -191,7 +191,7 @@ It already has the standard structure we use for dictionaries.
 All done! Now all that's left is to upload it to Google Cloud and send it for review.
 To do this, we will use the `basedosdados` client (available in Python), which facilitates the settings and steps of the process.
 
-<Tip caption="Since there is a cost for storage, to complete this step we will need to provide you with a specific api_key for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/huKWpsVYx4), call us at ‘quero-contribuir’ and tag `@equipe_dados`">
+<Tip caption="Since there is a cost for storage, to complete this step we will need to provide you with a specific api_key for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/huKWpsVYx4), call us at ‘quero-contribuir’ and tag `@equipe_dados`"/>
 
 #### Configure your credentials locally
 **7.1** Install our client on your terminal: `pip install basedosdados`.
@@ -232,7 +232,7 @@ source_format="csv",)
 
 ```
 
-<Tip caption="If your data is partitioned, the path must point to the folder where the partitions are. Otherwise, it must point to a `.csv` file (for example, microdados.csv)."/>
+<Tip caption="If your data is partitioned, the path must point to the folder where the partitions are. Otherwise, it must point to a `.csv` file (for example, microdados.csv).">
 
  If the project does not exist in BigQuery, it will be automatically created.
 
