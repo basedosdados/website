@@ -52,8 +52,11 @@ Os dados são preenchidos manualmente, o que pode gerar inconsistências, valore
 Nos anos em que a eleição para o Senado envolve duas vagas, a proporção de votos válidos nas tabelas `detalhes_votacao_municipio`, `detalhes_votacao_municipio_zona` e `detalhes_votacao_secao` pode ultrapassar 100%.
 Isso ocorre porque, nesses anos, cada eleitor pode votar em dois candidatos diferentes, e o TSE contabiliza cada voto individualmente como um voto válido para o cargo. Assim, um mesmo eleitor aparece duas vezes na contagem, o que eleva a proporção de votos válidos acima de 100%.
 
-## Eleições suplementares
-Pode haver mais de um prefeito, governador ou presidente da República eleito dentro da mesma janela de mandato de quatro anos (por exemplo, 2020–2024. Isso ocorre quando a Justiça Eleitoral anula mais de 50% dos votos válidos de uma eleição e é convocada eleição suplementar para que seja eleito um novo representante. Para fazer análise dos dados, recomenda-se utilizar a coluna `tipo_eleição` e `data_eleicao` nas tabelas de resultados, permitindo distinguir eleições ordinárias e suplementares ocorridas dentro da mesma janela de mandato. Para maiores informações, leia a seção: [Materiais de apoio](#materiais-de-apoio)
+## Eleições suplementares 
+Pode haver mais de um prefeito, governador ou presidente eleito dentro do mesmo mandato (por exemplo, 2020–2024). Isso ocorre quando a Justiça Eleitoral anula mais de 50% dos votos válidos e convoca uma eleição suplementar para eleger um novo representante. Para análise, utilize a coluna `tipo_eleição` para diferenciar eleições ordinárias e suplementares dentro do mesmo ciclo eleitoral.
+
+## Coluna ano
+A coluna ano indica o ano do ciclo eleitoral originalmente previsto (ex.: 2020), mesmo que a eleição tenha ocorrido posteriormente. Por exemplo, a coluna `data_eleicao` pode indicar uma data em 2022, enquanto a coluna `ano` permanece com o valor 2020.
 
 # Limitações
 As tabelas do TSE não incluem informações de eleições para o conselho tutelar.
