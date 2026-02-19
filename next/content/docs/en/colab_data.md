@@ -10,164 +10,175 @@ order: 0
 
 - **Ability to cross-reference your databases with data from different
   organizations** in a simple and easy way. There are already hundreds of
-  public datasets from the largest organizations in Brazil and worldwide present
+  public data sets from the largest organizations in Brazil and around the world present
   in our *datalake*.
 
 - **Commitment to transparency, data quality, and
-  development of better research, analysis, and solutions** for
-  society. We not only democratize access to open data but also quality data.
-  We have a specialized team that reviews and ensures the quality of
+  the development of better research, analysis, and solutions** for
+  society. Not only do we democratize access to open data, but also to
+  quality data. We have a specialized team that reviews and ensures the quality of the
   data added to the *datalake*.
 
-- **Participation in an ever-growing community**: thousands
-  of journalists, researchers, developers already use and
-  follow Data Basis.
-  {/* TODO: Add the link to our audience dashboard when it's ready :) */}
+- **Participation in an ever-growing community**: thousands of
+  journalists, researchers, and developers already use and
+  follow the Database.
+  {/* TODO: Put the link to our audience panel here when it's ready :) */}
 
-## Step by step to upload data
+## Step by step guide to uploading data
 
-Want to upload data to DB and help us build this repository?
-*Wonderful!* We've organized everything you need in the manual below in 8 steps
+Want to upload data to the database and help us build this repository?
+*Great!* We've organized everything you need in the manual below in 8 steps
 
-To facilitate the explanation, we'll follow a ready-made example with data from [RAIS](https://basedosdados.org/en/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00).
+To make the explanation easier, we will follow a ready-made example with data from [RAIS](/en/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213).
 
-<Tip caption="You can navigate through the steps in the menu on the left.">
-    We strongly suggest joining our [Discord
-    channel](https://discord.gg/huKWpsVYx4) to ask questions and
-    interact with the team and other contributors! 😉
+<Tip caption="You can navigate through the steps in the menu on the left">
+
+ We strongly suggest that you join our Discord channel to ask questions and interact with the team and other contributors! 😉
 </Tip>
 
-### Before starting
+### Before you begin
 
-Some knowledge is necessary to carry out this process:
+Some knowledge is required to perform this process:
 
-- **Python, R and/or SQL**: to create data capture and cleaning codes.
-- **Command line**: to set up your local environment
-  and connection with Google Cloud.
+- **Python, R, and/or SQL**: to create the codes for capturing and cleaning the data.
+- **Command line**: to configure your local environment
+  and connection to Google Cloud.
 - **Github**: to upload your code for review by
   our team.
 
-<Tip caption="Don't have some of these skills but want to contribute?">
-    We have a data team that can help you, just join [our
-    Discord](https://discord.gg/huKWpsVYx4) and send a message in #want-to-contribute.
+<Tip caption="Don't have any of these skills, but want to collaborate?">
+
+We have a data team that can help you. Just join [our Discord](https://discord.gg/huKWpsVYx4) and send a message to #quero-contribuir.
 </Tip>
 
 ### How does the process work?
 
-1. [Choose the dataset and understand more about the data](#1-choose-the-dataset-and-understand-more-about-the-data) - first we need to know what we're dealing with.
-2. [Download our template folder](#2-download-our-template-folder) - it's time to structure the work to be done
-3. [Fill in the architecture tables](#3-fill-in-the-architecture-tables) - it's essential to define the data structure before we start treatment
-4. [Write data capture and cleaning code](#4-write-data-capture-and-cleaning-code) - time to get to work!
-5. [(If necessary) Organize auxiliary files](#5-if-necessary-organize-auxiliary-files) - because even data needs guides
-6. [(If necessary) Create dictionary table](#6-if-necessary-create-dictionary-table) - time to build the dictionaries
-7. [Upload everything to Google Cloud](#7-upload-everything-to-google-cloud) - after all, that's where DB data is stored
-8. [Send everything for review](#8-send-everything-for-review) - a look from our team to ensure everything is ready for production!
+- [1. Choose the database and understand more about the data](#1-choose-the-database-and-understand-more-about-the-data) - first we need to know what we are dealing with.
+- [2. Download our template folder](#2-download-our-template-folder) - it's time to structure the work to be done
+- [3. Fill in the architecture tables](#3-fill-in-the-architecture-tables) - it is essential to define the data structure before we start processing
+- [4. Write data capture and cleaning code](#4-write-data-capture-and-cleaning-code) - time to get down to business!
+- [5. (If necessary) Organize auxiliary files](#5-if-necessary-organize-auxiliary-files) - because even data needs guides
+- [6. (If necessary) Create a dictionary table](#6-if-necessary-create-dictionary-table) - time to assemble the dictionaries
+- [7. Upload everything to Google Cloud](#7-upload-everything-to-google-cloud) - after all, that's where the database data is stored
+- [8. Send everything for review](#8-send-everything-for-review) - our team takes a look to make sure everything is ready to go into production!
 
 
-### 1. Choose the dataset and understand more about the data
+### 1. Choose the database and learn more about the data
 
-We keep the list of datasets for volunteers in our [Github](https://github.com/orgs/basedosdados/projects/17/views/10). To start uploading a base of your interest, just open a [new issue](https://github.com/basedosdados/queries-basedosdados/issues/new?assignees=&labels=&projects=&template=issue--novos-dados.md&title=%5Bdados%5D+%3Cdataset_id%3E) with data. If your base (dataset) is already listed, just mark your Github user as `assignee`
 
-Your first task is to fill in the information in the issue. These information will help you understand the data better and will be very useful for treatment and filling in metadata.
+We maintain a list of datasets for volunteers on our [Github](https://github.com/orgs/basedosdados/projects/17/views/9). To start uploading a database that interests you, simply open a new data issue. If your database (set) is already listed, just mark your Github user as assignee.
 
-When you finish this step, call someone from the data team to that the information you mapped about the dataset already enter our site!
+Your first task is to fill in the information in the issue. This information will help you better understand the data and will be very useful for processing and filling in metadata.
+
+When you have completed this step, call someone from the data team so that the information you have mapped about the set can be entered into our website!
+
 ### 2. Download our template folder
 
-[Download here the template
-_template_](https://drive.google.com/drive/folders/1xXXon0vdjSKr8RCNcymRdOKgq64iqfS5?usp=sharing)
- and rename it to `<dataset_id>` (defined in the issue of [step 1](#-1-Choose-the-database-and-understand-more-about-the-data)). This template folder simplifies and organizes all the steps from here on. Its
+[Download the
+_template_ folder here](https://drive.google.com/drive/folders/1xXXon0vdjSKr8RCNcymRdOKgq64iqfS5?usp=sharing)
+ and rename it to `<dataset_id>` (defined in the issue in [step 1](#-1-Choose-the-base-and-understand-more-about-the-data)). This template folder facilitates and organizes all the
+steps from here on out. Its
 structure is as follows:
 
 - `<dataset_id>/`
-    - `code/`: Necessary codes for **capture** and **cleaning** of data
+    - `code/`: Codes needed for **capturing** and **cleaning** the data
     ([we'll see more in step
-    4](#4-write-data-capture-and-cleaning-code)).
-    - `input/`: Contains all the original files with data, exactly
-    as downloaded from the primary source. ([we'll see more in step
-    4](#4-write-data-capture-and-cleaning-code)).
-    - `output/`: Final files, already in the ready-to-upload format ([we'll see more in step
-    4](#4-write-data-capture-and-cleaning-code)).
-    - `tmp/`: Any temporary files created by the code in `/code` during the cleaning and treatment process ([we'll see more in step
-    4](#4-write-data-capture-and-cleaning-code)).
-    - `extra/`
-        - `architecture/`: Architecture tables ([we'll see more in step 3](#3-fill-in-the-architecture-tables)).
-        - `auxiliary_files/`: Auxiliary files to the data ([we'll see more in step 5](#5-if-necessary-organize-auxiliary-files)).
-        - `dicionario.csv`: Dictionary table for the entire dataset ([we'll see more in step 6](#6-if-necessary-create-dictionary-table)).
+    4](#4-writing-code-for-data-capture-and-cleaning)).
+    - `input/`: Contains all files with original data, exactly
+    as downloaded from the primary source. ([we will see more in step
+    4](#4-writing-code-for-data-capture-and-cleaning)).
+    - `output/`: Final files, already in a format ready to be uploaded to the database ([we will see more in step
+    4](#4-write-code-for-data-capture-and-cleaning)).
+- `tmp/`: Any temporary files created by the code in `/code` during the cleaning and processing process ( [we will see more in step
+    4](#4-writing-data-capture-and-cleaning-code)).
+- `extra/`
+- `architecture/`: Architecture tables ([we will see more in step 3](#3-filling-in-the-architecture-tables)).
+        - `auxiliary_files/`: Auxiliary files for the data ([we will see more in step 5](#5-if-necessary-organize-auxiliary-files)).
+        - `dictionary.csv`: Dictionary table for the entire dataset ([we will see more in step 6](#6-if-necessary-create-dictionary-table)).
 
-> Only the `code` folder will be committed to your project, the other files will only exist locally or in Google Cloud.
+<Tip caption="Only the `code` folder will be committed to your project; the other files will exist only locally or in Google Cloud.">
+
 
 ### 3. Fill in the architecture tables
 
-The architecture tables determine **what the structure of
-each table in your dataset is**. They define, for example, the name, order, and metadata of the variables, as well as compatibilities when there are changes in versions (for example, if a variable changes name from one year to the next).
+The architecture tables determine **the structure of
+each table in your dataset**. They define, for example, the name, order, and metadata of the variables, as well as compatibility when there are changes in versions (for
+example, if a variable changes its name from one year to the next).
 
-> Each dataset table must have its own architecture table (spreadsheet), which must be filled in **Google Drive** to allow correction by our data team.
+
+<Tip caption="Each table in the dataset must have its own architecture table (spreadsheet), which must be filled out in **Google Drive** to allow our data team to correct it.">
 
 
 #### Example: RAIS - Architecture tables
 
-The RAIS architecture tables [can be consulted here](https://docs.google.com/spreadsheets/d/1dPLUCeE4MSjs0ykYUDsFd-e7-9Nk6LVV/edit?usp=sharing&ouid=103008455637924805982&rtpof=true&sd=true). They are a great reference for you to start your work since they have many variables and examples of various situations you might end up encountering.
+The RAIS architecture tables [can be found here](https://docs.google.com/spreadsheets/d/1dPLUCeE4MSjs0ykYUDsFd-e7-9Nk6LVV/edit?usp=sharing&ouid=103008455637924805982&rtpof=true&sd=true). They are a great reference to get you started, as they contain many variables and examples of different situations you may encounter.
 
-#### To fill in each table of your dataset, follow these steps:
+#### To fill in each table in your set, follow these steps:
 
 <Tip caption="A each beginning and end of step, consult our [style guide](style_data) to ensure you're following the BD standardization"/>
 
-1. List all the variables in the data in the `original_name` column
-    - Obs: If the base changes the name of the variables over time (like RAIS), it's necessary to make compatibilities between years for all the variables by filling in the `original_name_YYYY` column for each year or month available
+1. List all data variables in the `original_name` column
+- Note: If the database changes the names of variables over the years (such as RAIS), it is necessary to make all variables compatible between years by filling in the `original_name_YYYY` column for each available year or month
 2. Rename the variables according to our [manual](style_data) in the `name` column
-3. Understand the type of variable and fill in the `bigquery_type` column
-4. Fill in the description in the `description` column according to the [manual](style_data)
-5. From the compatibilities between years and/or queries to the raw data, fill in the temporal coverage in `temporal_coverage` for each variable
-    - Obs: If the variables have the same temporal coverage as the table, fill in only with '(1)'
-6. Indicate with 'yes' or 'no' if there's a dictionary for the variables in `covered_by_dictionary`
-7. Check if the variables represent any entity present in the [directories](https://basedosdados.org/dataset?q=diret%C3%B3rio&datasets_with=open_tables&organization=bd&page=1) to fill in the `directory_column`
-8. For variables of type `int64` or `float64`, check if it's necessary to include a [measurement unit](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
+3. Understand the variable type and fill in the `bigquery_type` column
+4. Fill in the description in `description` according to the [manual] (style_data)
+5. Based on the reconciliation between years and/or queries to the raw data, fill in the temporal coverage in `temporal_coverage` for each variable
+- Note: If the variables have the same temporal coverage as the table, fill in only '(1)'
+6. Indicate with ‘yes’ or ‘no’ if there is a dictionary for the variables in `covered_by_dictionary`
+7. Check if the variables represent any entity present in the [directories](/en/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e? table=0a2d8187-f936-437d-89db-b4eb3a7e1735) to fill in `directory_column`
+8. For variables of type `int64` or `float64`, check if it is necessary to include a [unit of measurement](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
 9. Reorder the variables according to the [manual](style_data)
 
-<Tip caption="When you finish filling in the architecture tables, contact the Data Basis team to validate everything. It's necessary that it's clear what the final format of the data should be _before_ starting to write the code. This way we avoid redoing the work."/>
+<Tip caption="When you have finished filling in the architecture tables, contact the Database team to validate everything.">
+
+It is necessary to be clear about the final format that the data should be in _before_ starting to write the code. This way we avoid rework.
+</Tip>
 
 ### 4. Write data capture and cleaning code
 
-After validating the architecture tables, we can write the **capture** and **cleaning** codes for the data.
+Once the architecture tables have been validated, we can write the codes for
+**capturing** and **cleaning** the data.
 
-- **Capture**: Code that automatically downloads all the original data and saves it in `/input`. These data can be available on portals or links FTP, can be scraped from websites, among others.
+- **Capture**: Code that automatically downloads all the original data and saves it in `/input`. This data may be available on portals or FTP links, or it may be scraped from websites, among other sources.
 
-- **Cleaning**: Code that transforms the original data saved in `/input` into clean data, saves it in the `/output` folder, to be later uploaded to DB.
+- **Cleaning**: Code that transforms the original data saved in `/input` into clean data, saves it in the `/output` folder, and then uploads it to the database.
 
-Each clean table for production can be saved as a single file or, if it's very large (e.g. above 200 mb), it can be partitioned in the [Hive](https://cloud.google.com/bigquery/docs/hive-partitioned-loads-gcs) format in several sub-files. The accepted formats are `.csv` or `.parquet`. Our recommendation is to partition tables by `year`, `month`, and `state_abbreviation`. The partitioning is done through the folder structure, see the example below to visualize how.
+Each cleaned table for production can be saved as a single file or, if it is too large (e.g., over 200 MB), it can be partitioned in [Hive](https://cloud.google.com/bigquery/docs/hive-partitioned-loads-gcs) format into several subfiles. The accepted formats are `.csv` or `.parquet`. We recommend partitioning tables by `year`, `month`, and `state_code`. Partitioning is done through the folder structure. See the example below to see how.
 
 #### Example: RAIS - Partitioning
-The `microdados_vinculos` table from RAIS, for example, is a very large table (+250GB) so we partition it by `year` and `state_abbreviation`. The partitioning was done using the folder structure `/microdados_vinculos/year=YYYY/state_abbreviation=XX` .
 
-#### Required patterns in the code
+The `microdados_vinculos` table from RAIS Vinculos, for example, is a very large table (+400GB), so we partitioned it by `year` and `sigla_uf`. Partitioning was done using the folder structure `/microdados_vinculos/year=YYYY/sigla_uf=XX`.
+
+#### Required standards in the code
 
 - Must be written in [Python](https://www.python.org/) or [R](https://www.r-project.org/) -
-  so that the review can be performed by our team.
-- Can be in script (`.py`, `.R`, ...) or *notebooks* (Google Colab, Jupyter, Rmarkdown, etc).
+  so that the team can review it.
+- They can be in script (`.py`, `.R`, ...) or *notebooks* (Google Colab, Jupyter, Rmarkdown, etc).
 - File paths must be shortcuts _relative_ to the root folder
-  (`<dataset_id>`), that is, they must not depend on the paths of your
+  (`<dataset_id>`), i.e., they must not depend on the paths on your
   computer.
-- The cleaning must follow our [style guide](style_data) and the [best programming practices](https://en.wikipedia.org/wiki/Best_coding_practices).
+- Cleaning must follow our [style guide](style_data) and [best programming practices](https://en.wikipedia.org/wiki/Best_coding_practices).
 
-#### Example: PNAD Continuous - Cleaning Code
+#### Example: Continuous PNAD - Cleaning code
 
-The cleaning code was built in R and [can be consulted
+The cleaning code was built in R and [can be found
 here](https://github.com/basedosdados/sdk/tree/master/bases/br_ibge_pnadc/code).
 
-#### Example: Activity in the Legislative Chamber - Download and Cleaning Code
-The cleaning code was built in Python [can be consulted here](https://github.com/basedosdados/sdk/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code)
+#### Example: Legislative Chamber Activity - Download and cleaning code
+The cleaning code was built in Python [and can be found here](https://github.com/basedosdados/sdk/tree/bea9a323afcea8aa1609e9ade2502ca91f88054c/bases/br_camara_atividade_legislativa/code).
 
 ### 5. (If necessary) Organize auxiliary files
 
-It's common for databases to be made available with auxiliary files. These can include technical notes, collection and sampling descriptions, etc. To help users of Data Basis have more context and understand the data better, organize all these auxiliary files in `/extra/auxiliary_files`.
+It is common for databases to be made available with auxiliary files. These may include technical notes, collection and sampling descriptions, etc. To help database users gain more context and better understand the data, organize all these auxiliary files in `/extra/auxiliary_files`.
 
-Feel free to structure sub-folders as you like there. What matters is that it's clear what these files are.
+Feel free to structure subfolders as you wish within this directory. The important thing is that it is clear what these files are.
 
-### 6. (If necessary) Create dictionary table
+### 6. (If necessary) Create a dictionary table
 
-Sometimes, especially with old bases, there are multiple dictionaries in Excel or other formats. In Data Basis, we unify everything in a single file in `.csv` format - a single dictionary for all columns of all tables in your dataset.
+Often, especially with older databases, there are multiple dictionaries in Excel or other formats. In the Database, we unify everything into a single file in `.csv` format—a single dictionary for all columns in all tables in your set.
 
-> Important details on how to build your dictionary are in our [style guide](../style_data/#dictionaries).
+<Tip caption="Important details on how to build your dictionary are in our [style manual](style_data).">
+
 
 #### Example: RAIS - Dictionary
 
@@ -177,101 +188,156 @@ It already has the standard structure we use for dictionaries.
 
 ### 7. Upload everything to Google Cloud
 
-All set! Now all that's left is to upload to Google Cloud and send for review. For that, we'll use the `basedosdados` client (available in Python) that facilitates the process.
+All done! Now all that's left is to upload it to Google Cloud and send it for review.
+To do this, we will use the `basedosdados` client (available in Python), which facilitates the settings and steps of the process.
 
-> Since there's a cost for storage in the storage, to finalize this step we'll need to make you available an api_key specifically for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/huKWpsVYx4) and call us in 'want-to-contribute'
+<Tip caption="Since there is a cost for storage, to complete this step we will need to provide you with a specific api_key for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/huKWpsVYx4), call us at ‘quero-contribuir’ and tag `@equipe_dados`">
 
 #### Configure your credentials locally
+**7.1** Install our client on your terminal: `pip install basedosdados`.
 
-**7.1** Install our client in your terminal: `pip install basedosdados`.
-
-**7.2** Run `import basedosdados as bd` in python and follow the step-by-step process to configure locally with the credentials of your project in Google Cloud. Fill in the information as follows:
+**7.2** Run `import basedosdados as bd` in Python and follow the step-by-step instructions to configure locally with your Google Cloud project credentials. Fill in the information as follows:
 ```
     * STEP 1: y
-    * STEP 2: basedosdados-dev  (put the .json passed by the bd team in the credentials folder)
+    * STEP 2: basedosdados-dev  (place the .json file provided by the bd team in the credentials folder)
     * STEP 3: y
     * STEP 4: basedosdados-dev
     * STEP 5: https://api.basedosdados.org/api/v1/graphql
 ```
 #### Upload the files to the Cloud
-The data will pass through 3 places in Google Cloud:
+The data will pass through three places in Google Cloud:
 
-  * **Storage**: also called GCS is the local where the "cold" files (architectures, data, auxiliary files) will be stored.
-  * **BigQuery-DEV-Staging**: table that connects the data from storage to the basedosdados-dev project in bigquery
-  * **BigQuery-DEV-Production**: table used for testing and treatment via SQL of the dataset
+  * **Storage**: also called GCS, this is where “cold” files (architectures, data, auxiliary files) will be stored.
+  * **BigQuery-DEV-Staging**: table that connects the storage data to the basedosdados-dev project in BigQuery
+  * **BigQuery-DEV-Production**: table used for testing and processing the dataset via SQL
 
 **7.3** Create the table in the *GCS bucket* and *BigQuery-DEV-staging*, using the Python API, as follows:
 
-    ```python
-    import basedosdados as bd
+python
+import basedosdados as bd
 
-    tb = bd.Table(
-      dataset_id='<dataset_id>',
-      table_id='<table_id>')
+DATASET_ID = “dataset_id”  # Name of the dataset
+TABLE_ID = “table_id”  # Name of the table
 
-    tb.create(
-        path='<path_to_the_data>',
-        if_table_exists='raise',
-        if_storage_data_exists='raise',
-    )
-    ```
-
-    The following parameters can be used:
+tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
+``` 
 
 
-    - `path` (required): the complete path of the file on your computer, like: `/Users/<your_username>/projects/basedosdados/sdk/bases/[DATASET_ID]/output/microdados.csv`.
+```python
+tb.create(
+path=path_to_data,  # Path to the csv or parquet file
+if_storage_data_exists="raise",
+if_table_exists="replace",
+source_format="csv",)
 
+```
 
 <Tip caption="If your data is partitioned, the path must point to the folder where the partitions are. Otherwise, it must point to a `.csv` file (for example, microdados.csv)."/>
 
-    - `force_dataset`: command that creates the dataset configuration files in BigQuery.
-        - _True_: the dataset configuration files will be created in your project and, if it doesn't exist in BigQuery, it will be created automatically. **If you already created and configured the dataset, don't use this option, as it will overwrite files**.
-        - _False_: the dataset won't be recreated and, if it doesn't exist, it will be created automatically.
-    - `if_table_exists` : command used if the **table already exists in BQ**:
-        - _raise_: returns an error message.
-        - _replace_: replaces the table.
-        - _pass_: does nothing.
+ If the project does not exist in BigQuery, it will be automatically created.
 
-    - `if_storage_data_exists`: command used if the **data already exists in Google Cloud Storage**:
-        - _raise_: returns an error message
-        - _replace_: replaces the existing data.
-        - _pass_: does nothing.
+  See also our [API](https://basedosdados.org/docs/api_reference_python) for more details on each method.
+</Tip>
 
-> If the project doesn't exist in BigQuery, it will be automatically created
+**7.4** Create the .sql and schema.yml files from the architecture table to run materialization and tests in dbt (data build-tool):
 
-  Consult our [API](../api_reference_cli) for more details on each method.
+```python
+from databasers_utils import TableArchitecture
 
-**7.4** Create the .sql and schema.yml files from the architecture table following this [documentation](https://github.com/basedosdados/pipelines/wiki/Fun%C3%A7%C3%A3o-%60create_yaml_file()%60)
-<Tip caption="If you need, at this moment you can change the SQL query to perform final treatments from the `staging` table, you can include columns, remove columns, perform algebraic operations, substitute strings, etc. SQL is the limit!"/>
+arch = TableArchitecture(
+    dataset_id="<dataset-id>",
+    tables={
+        “<table-id>”: “URL of the Google Sheet architecture”,  # Example https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
+    },
+)
 
-**7.5** Run and test the models locally following this [documentation](https://github.com/basedosdados/pipelines/wiki/Testar-modelos-dbt-localmente)
+# Creates the yaml file
+arch.create_yaml_file()
 
-**7.6** Upload the table metadata to the site:
-> For now, only the data team has permissions to upload the table metadata to the site, so it will be necessary to contact us. We're already working to make it possible for volunteers to update data on the site in the near future.
+# Creates the sql files
+arch.create_sql_files()
 
-**7.7** Upload the auxiliary files:
-    ```python
-    st = bd.Storage(
-      dataset_id = <dataset_id>,
-      table_id = <table_id>)
+# Updates the dbt_project.yml
+arch.update_dbt_project()
 
-    st.upload(
-      path='caminho_para_os_auxiliary_files',
-      mode = 'auxiliary_files',
-      if_exists = 'raise')
-    ```
+```
+
+<Tip caption="If necessary, at this point you can change the SQL query to perform final processing from the `staging` table. You can add columns, remove columns, perform algebraic operations, replace strings, etc. SQL is the limit!"/>
+
+
+**7.5** Using DBT
+
+The dbt sql files use the `set_datalake_project` macro, which indicates which project (databases-staging or databases-dev) the data will be consumed from. When creating the files using the `create_sql_files` function, the macro will be inserted.
+
+```sql
+select
+    col_name
+from {{ set_datalake_project(“<DATASET_ID>_staging.<TABLE_ID>”) }}
+```
+
+
+### Materializing the model in BigQuery
+
+Materializes a single model by name in basedosdados-dev consuming data from `basedosdados-dev.{table_id}_staging`
+
+```sh
+dbt run --select dataset_id__table_id
+```
+
+Materialize all models in a folder in basedosdados-dev consuming data from `basedosdados-dev.{table_id}_staging`
+
+```sh
+dbt run --select model.dateset_id.dateset_id__table_id
+```
+
+Materialize all models in the path in basedosdados-dev consuming data from `basedosdados-dev.{table_id}_staging`
+
+```sh
+dbt run --select models/dataset_id
+```
+
+Materialize a single model by the sql file path in basedosdados-dev consuming data from `basedosdados-dev.{table_id}_staging`
+
+```sh
+dbt run --select models/dataset/table_id.sql
+```
+
+### Testing the model in BigQuery
+
+Tests a single model
+
+```sh
+dbt test --select dataset_id__table_id
+```
+
+Tests all models in a folder
+
+```sh
+dbt test --select model.dateset_id.dateset_id__table_id
+```
+
+Tests all models in the path
+
+```sh
+dbt test --select models/dataset_id
+```
+
+**7.6** Upload table metadata to the website:
+<Tip caption="For now, only the data team has permission to upload table metadata to the website, so you will need to contact us. We are already working to enable volunteers to update data on the website in the near future."/>
 
 ### 8. Send everything for review
 
-Yay, that's it! Now all that's left is to send everything for review in
-[the repository](https://github.com/basedosdados/queries-basedosdados) of Data Basis.
+Phew, that's it! Now all that's left is to send everything for review to the
+[repository](https://github.com/basedosdados/pipelines) in the Database.
 
-1. Clone our [repository](https://github.com/basedosdados/queries-basedosdados) locally.
-2. Give a `cd` to the local folder of the repository and open a new branch with `git checkout -b [dataset_id]`. All additions and modifications will be included in this _branch_.
-3. For each new table, include the file with name `table_id.sql` in the `queries-basedosdados/models/dataset_id/` folder by copying the queries you developed in step 7.
-4. Include the schema.yaml file developed in step 7
-5. If it's a new dataset, include the dataset according to the instructions in the `queries-basedosdados/dbt_project.yaml` file (don't forget to follow the alphabetical order to not mess up the organization)
-6. Include your data capture and cleaning code in the `queries-basedosdados/models/dataset_id/code` folder
-7. Now it's just about publishing the branch, opening a PR with the labels 'table-approve' and marking the data team for correction
+1. Clone our [repository](https://github.com/basedosdados/pipelines) locally.
+2. Use `cd` to navigate to the local repository folder and open a new branch with `git checkout -b [dataset_id]`. All additions and modifications will be included in this _branch_.
+3. For each new table, include the file named `dataset__table_id.sql` in the `pipelines/models/dataset_id/` folder by copying the queries and schema you created in step 7.
+4. Include your capture and cleaning code in the `pipelines/models/dataset_id/code` folder.
+5. Now just publish the branch, open the PR with the labels ‘table-approve’ and tag the data team for correction.
 
-**And now?** Our team will review the data and metadata submitted via Github. We can contact you to ask questions or request changes to the code. When everything is OK, we'll do a _merge_ of your *pull request* and the data will be automatically published on our platform!
+**What now?** Our team will review the data and metadata submitted
+via GitHub. We may contact you to ask questions or request
+changes to the code. When everything is OK, we will merge your
+pull request and the data will be automatically published on our
+platform!

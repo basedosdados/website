@@ -26,7 +26,7 @@ O texto tem como base o workshop feito por João Carabetta disponível em [nosso
 
 ### Introdução
 
-As bases disponíveis para download e análise no nosso site possuem o ícone **BD+** e seus ícones de temas estão na cor azul. Isto significa que a base está disponível no nosso datalake público, ou seja, estes dados já foram tratados pela nossa equipe técnica e são atualizados frequentemente.
+As bases disponíveis para download e análise no nosso site possuem o ícone **BD** e seus ícones de temas estão na cor azul. Isto significa que a base está disponível no nosso datalake público, ou seja, estes dados já foram tratados pela nossa equipe técnica e são atualizados frequentemente.
 
 Ao longo do texto iremos explorar os dados da [RAIS (Relação Anual de Informações Sociais)](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=86b69f96-0bfe-45da-833b-6edc9a0af213), mas o processo é o mesmo para qualquer base que você desejar acessar. A RAIS é um relatório de informações socioeconômicas solicitado pela Secretaria de Trabalho do Ministério da Economia brasileiro às pessoas jurídicas e outros empregadores anualmente.
 
@@ -44,7 +44,7 @@ Para explorar uma tabela em específico, você deve clicar nela e a seção Cons
 
 ## Navegando pelo BigQuery
 
-Abaixo vamos entender melhor como funciona a interface do BigQuery. Após criar o projeto, ele vai aparecer para você no canto superior esquerdo **(1)**. Logo abaixo terá uma lista de Projeto fixos do BigQuery, dentre esses o `basedosdados` **(2)** - o ícone de pino azul indica que o projeto está fixado e poderá ser acessado sempre que você abrir o BigQuery. A seta à esquerda do nome `basedosdados` nos permite expandir a lista de todas as bases disponíveis na BD+ logo abaixo.
+Abaixo vamos entender melhor como funciona a interface do BigQuery. Após criar o projeto, ele vai aparecer para você no canto superior esquerdo **(1)**. Logo abaixo terá uma lista de Projeto fixos do BigQuery, dentre esses o `basedosdados` **(2)** - o ícone de pino azul indica que o projeto está fixado e poderá ser acessado sempre que você abrir o BigQuery. A seta à esquerda do nome `basedosdados` nos permite expandir a lista de todas as bases disponíveis na BD logo abaixo.
 
 <Image src="/blog/google-bigquery-sql-101/image_3.png"/>
 

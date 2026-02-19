@@ -113,7 +113,8 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 
 #### Para o preenchimento de cada tabela do seu conjunto siga esse passo a passo:
 
->A cada início e final de etapa consulte nosso [manual de estilo](style_data) para garantir que você está seguindo a padronização da BD
+<Tip caption="A cada início e final de etapa consulte nosso [manual de estilo](style_data) para garantir que você está seguindo a padronização da BD"/>
+
 
 1. Listar todas as variáveis dos dados na coluna `original_name`
     - Obs: Caso a base mude o nome das variáveis ao longo dos anos (como a RAIS), é necessário fazer a compatibilização entre anos para todas as variáveis preenchendo a coluna de `original_name_YYYY` para cada ano ou mês disponível
@@ -127,9 +128,11 @@ As tabelas de arquitetura da RAIS [podem ser consultadas aqui](https://docs.goog
 8. Para as variáveis do tipo `int64` ou `float64` verificar se é necessário incluir uma [unidade de medida](https://github.com/basedosdados/website/blob/master/ckanext-basedosdados/ckanext/basedosdados/validator/available_options/measurement_unit.py)
 9. Reordernar as variáveis conforme o [manual](style_data)
 
->Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo. 
+<Tip caption="Quando terminar de preencher as tabelas de arquitetura, entre em contato com a equipe da Base dos Dados para validar tudo. "/>
 
->É necessário que esteja claro o formato final que os dados devem ficar _antes_ de começar a escrever o código. Assim a gente evita o retrabalho.
+É necessário que esteja claro o formato final que os dados devem ficar _antes_ de começar a escrever o código. Assim a gente evita o retrabalho.
+
+</Tip>
 
 ### 4. Escrever codigo de captura e limpeza de dados
 
@@ -176,7 +179,7 @@ Fique à vontade para estruturar sub-pastas como quiser lá dentro. O que import
 
 Muitas vezes, especialmente com bases antigas, há múltiplos dicionários em formatos Excel ou outros. Na Base dos Dados nós unificamos tudo em um único arquivo em formato `.csv` - um único dicionário para todas as colunas de todas as tabelas do seu conjunto.
 
-> Detalhes importantes de como construir seu dicionário estão no nosso [manual de estilo](style_data).
+<Tip caption="Detalhes importantes de como construir seu dicionário estão no nosso [manual de estilo](style_data)."/>
 
 #### Exemplo: RAIS - Dicionário
 
@@ -189,7 +192,8 @@ Ele já possui a estrutura padrão que utilizamos para dicionários.
 Tudo pronto! Agora só falta subir para o Google Cloud e enviar para
 revisão. Para isso, vamos usar o cliente `basedosdados` (disponível em Python) que facilita as configurações e etapas do processo.
 
-> Como existe um custo para o armazenamento no storage, para finalizar essa etapa vamos precisar te disponibilizar uma api_key especifica para voluntários para subir os dados em nosso ambiente de desenvolvimento. Assim, entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4), nos chame em 'quero-contribuir' e marque a `@equipe_dados`
+
+<Tip caption="Como existe um custo para o armazenamento no storage, para finalizar essa etapa vamos precisar te disponibilizar uma api_key especifica para voluntários para subir os dados em nosso ambiente de desenvolvimento. Assim, entre em nosso [canal no Discord](https://discord.gg/huKWpsVYx4), nos chame em 'quero-contribuir' e marque a `@equipe_dados`"/>
 
 #### Configure suas credenciais localmente
   **7.1** No seu terminal instale nosso cliente: `pip install basedosdados`.
@@ -231,18 +235,17 @@ source_format="csv",
 ```
 
 
+<Tip caption="Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."/>
 
-> Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."
+Se o projeto não existir no BigQuery, ele será automaticamente criado
 
+Consulte também nossa [API](https://basedosdados.org/docs/api_reference_python) para mais detalhes de cada método.
 
-
-> Se o projeto não existir no BigQuery, ele será automaticamente criado
-
-  Consulte também nossa [API](https://basedosdados.org/docs/api_reference_python) para mais detalhes de cada método.
+</Tip>
 
 **7.4** Crie os arquivos .sql e schema.yml a partir da tabela de arquitetura para rodar a materialização e os testes no dbt (data build-tool):
 
-  ```python
+```python
 from databasers_utils import TableArchitecture
 
 arch = TableArchitecture(
@@ -261,12 +264,13 @@ arch.create_sql_files()
 # Atualiza o dbt_project.yml
 arch.update_dbt_project()
 
-  ```
-> Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!
+```
+
+<Tip caption="Caso você precise, nesse momento você pode alterar a consulta em SQL para realizar tratamentos finais a partir da tabela `staging`, pode incluir coluna, remover coluna, fazer operações algébricas, substituir strings, etc. O SQL é o limite!"/>
 
 
-## 8. Usando o DBT
-#### Macro `set_datalake_project`
+
+**7.5** Usando o DBT
 
 Os arquivos sql do dbt usam a macro `set_datalake_project` que indica de qual projeto (basedosdados-staging ou basedosdados-dev) serão consumidos os dados. Ao criar os arquivos usando a função `create_sql_files` a macro será inserida.
 
@@ -324,7 +328,8 @@ dbt test --select models/dataset_id
 ```
 
 **7.6** Suba os metadados da tabela no site:
-> Por enquanto apenas a equipe dados tem permissões de subir os metadados da tabela no site, por isso será necessário entrar em contato conosco. Já estamos trabalhando para que, num futuro próximo, os voluntários também possam atualizar dados no site.
+
+<Tip caption="Por enquanto apenas a equipe dados tem permissões de subir os metadados da tabela no site, por isso será necessário entrar em contato conosco. Já estamos trabalhando para que, num futuro próximo, os voluntários também possam atualizar dados no site."/>
 
 
 ### 8. Enviar tudo para revisão
@@ -338,8 +343,4 @@ Ufa, é isso! Agora só resta enviar tudo para revisão no
 4. Inclua o seu código de captura e limpeza em na pasta `pipelines/models/dataset_id/code`
 5. Agora é só publicar a branch, abrir o PR com as labels 'table-approve' e marcar a equipe dados para correção
 
-**E agora?** Nossa equipe irá revisar os dados e metadados submetidos
-via Github. Podemos entrar em contato para tirar dúvidas ou solicitar
-mudanças no código. Quando tudo estiver OK, fazemos um _merge_ do seu
-*pull request* e os dados são automaticamente publicados na nossa
-plataforma!
+**E agora?** Nossa equipe irá revisar os dados e metadados submetidos via Github. Podemos entrar em contato para tirar dúvidas ou solicitar mudanças no código. Quando tudo estiver OK, fazemos um _merge_ do seu *pull request* e os dados são automaticamente publicados na nossa plataforma!
