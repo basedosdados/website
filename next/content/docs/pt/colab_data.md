@@ -235,7 +235,7 @@ source_format="csv",
 ```
 
 
-<Tip caption="Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv)."/>
+<Tip caption="Caso seus dados sejam particionados, o caminho deve apontar para a pasta onde estão as partições. No contrário, deve apontar para um arquivo `.csv` (por exemplo, microdados.csv).">
 
 Se o projeto não existir no BigQuery, ele será automaticamente criado
 
