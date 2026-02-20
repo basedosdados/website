@@ -1,7 +1,7 @@
 ---
 question: O que são tabelas tratadas?
 categories: [Dados]
-keywords: tratada, tratado, BD+, tabela, datalake, cruzar, cruzamento, padronização, compatibilização
+keywords: tratada, tratado, BD, tabela, datalake, cruzar, cruzamento, padronização, compatibilização
 id: tables
 ---
 
