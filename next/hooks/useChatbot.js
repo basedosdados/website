@@ -189,15 +189,12 @@ export default function useChatbot(initialThreadId = null) {
 
             switch (event.type) {
               case 'tool_output':
+              case 'tool_call':
                 setMessages(prev => prev.map(msg => 
                   msg.id === botMessageId 
-                    ? { ...msg, toolCalls: [...(msg.toolCalls || []), event.data] }
+                    ? { ...msg, toolCalls: [...(msg.toolCalls || []), { ...event.data, type: event.type }] }
                     : msg
                 ));
-                break;
-
-              case 'tool_call':
-                addToQueue(event.data?.content);
                 break;
 
               case 'final_answer':
@@ -332,8 +329,8 @@ export default function useChatbot(initialThreadId = null) {
         });
 
         const toolCalls = (pair.events || [])
-          .filter(ev => ev.type === 'tool_output')
-          .map(ev => ev.data);
+          .filter(ev => ev.type === 'tool_output' || ev.type === 'tool_call')
+          .map(ev => ({ ...ev.data, type: ev.type }));
 
         formattedMessages.push({
           id: pair.id,

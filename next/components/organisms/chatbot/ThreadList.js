@@ -152,13 +152,14 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       </ModalGeneral>
 
       <Accordion
+        display="flex"
         allowToggle={isSidebarOpen}
         index={isSidebarOpen ? undefined : [0]}
         defaultIndex={[0]}
         width="100%"
         marginTop="16px"
       >
-        <AccordionItem border="none">
+        <AccordionItem border="none" width="100%">
           <AccordionButton
             padding="8px"
             cursor={isSidebarOpen ? "pointer" : "default"}
@@ -182,7 +183,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             >
               Conversas
             </BodyText>
-            {isSidebarOpen && <AccordionIcon color="#252A32" />}
+            {isSidebarOpen && threads.length > 0 && <AccordionIcon color="#252A32" />}
           </AccordionButton>
           <AccordionPanel padding="0">
             {error && isSidebarOpen && (

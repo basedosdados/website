@@ -208,6 +208,10 @@ body {
   background-color: #252A32 !important;
 }
 
+.hljs.hljs-chatbot {
+  background-color: #F9FAFB !important;
+}
+
 .rjsf {
   width: 100%;
   white-space: break-spaces;
