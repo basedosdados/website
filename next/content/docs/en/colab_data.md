@@ -213,7 +213,7 @@ The data will pass through three places in Google Cloud:
 
 **7.3** Create the table in the *GCS bucket* and *BigQuery-DEV-staging*, using the Python API, as follows:
 
-python
+```python
 import basedosdados as bd
 
 DATASET_ID = “dataset_id”  # Name of the dataset
@@ -222,14 +222,13 @@ TABLE_ID = “table_id”  # Name of the table
 tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
 ``` 
 
-
 ```python
 tb.create(
-path=path_to_data,  # Path to the csv or parquet file
-if_storage_data_exists="raise",
-if_table_exists="replace",
-source_format="csv",)
-
+    path=path_to_data,  # Path to the csv or parquet file
+    if_storage_data_exists="raise",
+    if_table_exists="replace",
+    source_format="csv"
+)
 ```
 
 <Tip caption="If your data is partitioned, the path must point to the folder where the partitions are. Otherwise, it must point to a `.csv` file (for example, microdados.csv).">
@@ -247,7 +246,7 @@ from databasers_utils import TableArchitecture
 arch = TableArchitecture(
     dataset_id="<dataset-id>",
     tables={
-        “<table-id>”: “URL of the Google Sheet architecture”,  # Example https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
+        "<table-id>": "URL of the Google Sheet architecture",  # Example https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
     },
 )
 
@@ -259,7 +258,6 @@ arch.create_sql_files()
 
 # Updates the dbt_project.yml
 arch.update_dbt_project()
-
 ```
 
 <Tip caption="If necessary, at this point you can change the SQL query to perform final processing from the `staging` table. You can add columns, remove columns, perform algebraic operations, replace strings, etc. SQL is the limit!"/>

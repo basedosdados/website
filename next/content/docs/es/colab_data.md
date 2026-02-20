@@ -211,20 +211,19 @@ Los datos pasarán por tres lugares en Google Cloud:
 ```python
 import basedosdados as bd
 
-DATASET_ID = «dataset_id» 
-TABLE_ID = «table_id»
+DATASET_ID = "dataset_id"
+TABLE_ID = "table_id"
 
 tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
 ``` 
 
-
 ```python
 tb.create(
-path=path_to_data,
-if_storage_data_exists="raise",
-if_table_exists="replace",
-source_format="csv",)
-
+    path=path_to_data,
+    if_storage_data_exists="raise",
+    if_table_exists="replace",
+    source_format="csv"
+)
 ```
 
 <Tip caption="Si tus datos están particionados, la ruta debe apuntar a la carpeta donde están las particiones. En caso contrario, debe apuntar a un archivo `.csv` (por ejemplo, microdados.csv).">
@@ -243,7 +242,7 @@ from databasers_utils import TableArchitecture
 arch = TableArchitecture(
     dataset_id="<dataset-id>",
     tables={
-        «<table-id>»: «URL de la arquitectura de Google Sheet»,  # Ejemplo https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
+        "<table-id>": "URL de la arquitectura de Google Sheet",  # Ejemplo https://docs.google.com/spreadsheets/d/1K1svie4Gyqe6NnRjBgJbapU5sTsLqXWTQUmTRVIRwQc/edit?usp=drive_link
     },
 )
 
@@ -255,8 +254,7 @@ arch.create_sql_files()
 
 # Actualiza el dbt_project.yml
 arch.update_dbt_project()
-
-  ```
+```
 
 <Tip caption="Si lo necesita, en este momento puede modificar la consulta en SQL para realizar tratamientos finales a partir de la tabla `staging`, puede incluir columnas, eliminar columnas, realizar operaciones algebraicas, sustituir cadenas, etc. ¡El SQL es el límite!"/>
 

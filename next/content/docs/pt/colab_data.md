@@ -227,10 +227,10 @@ tb = bd.Table(dataset_id=DATASET_ID, table_id=TABLE_ID)
 
 ```python
 tb.create(
-path=path_to_data,  # Caminho para o arquivo csv ou parquet
-if_storage_data_exists="raise",
-if_table_exists="replace",
-source_format="csv",
+    path=path_to_data,  # Caminho para o arquivo csv ou parquet
+    if_storage_data_exists="raise",
+    if_table_exists="replace",
+    source_format="csv"
 )
 ```
 
