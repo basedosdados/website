@@ -1,0 +1,66 @@
+{
+  "hero": {
+    "title": "Dados públicos tratados, integrados e atualizados",
+    "description": "Garantimos atualização automática de bases de dados, além de tirar a dor de cabeça de manter pipelines de coleta. Tudo isso enquanto você apoia o maior acervo de dados públicos tratados do Brasil.",
+    "stats": "Mais de 25k pesquisadores, servidores públicos e empresas utilizam a BD mensalmente.",
+    "highlights": {
+      "cnpjs": {
+        "title": "Cadastros de CNPJs",
+        "description": "Dados de cadastrais de todas empresas do Brasil atualizado mensalmente"
+      },
+      "obras": {
+        "title": "Cadastros de Obras",
+        "description": "Cadastro de obras da Receita Federal atualizado diariamente"
+      },
+      "datasus": {
+        "title": "Cadastros do Datasus",
+        "description": "CNES, SIH, SIA... Atualizado mensalmente"
+      },
+      "empregos": {
+        "title": "Cadastro geral de empregos",
+        "description": "Dados de emprego e mercado de trabalho"
+      },
+      "comex": {
+        "title": "Comex Stat",
+        "description": "Dados de comércio exterior"
+      }
+    }
+  },
+  "presentation": {
+    "title": "Como funciona nosso produto?",
+    "tabs": {
+      "tab1": { "label": "Acesso a dados atualizados" },
+      "tab2": { "label": "Acesso nativo no BigQuery" },
+      "tab3": { "label": "Integração direta com Python e R" },
+      "tab4": { "label": "Alertas e notificações de atualização" }
+    }
+  },
+  "testimonials": {
+    "title": "Quem usa a Base dos Dados"
+  },
+  "cta_final": {
+    "title": "Assine já e destrave o potencial dos seus dados",
+    "groups": {
+      "individual": {
+        "label": "Pesquisadores, Consultores e Pequenas empresas",
+        "price": "R$ 47/mês"
+      },
+      "corporate": {
+        "label": "Médias e grandes empresas e instituições públicas",
+        "price": "R$ 350/mês"
+      }
+    },
+    "button": "Ver planos e preços"
+  },
+  "faq": {
+    "title": "Dúvidas Frequentes - FAQ",
+    "q1": "O que é a BD Pro?",
+    "a1": "A BD Pro é uma assinatura de dados exclusivos, com valor de mercado e de alta frequência, construída pela Base dos Dados. Ela conta com todas as funcionalidades do nosso datalake original, mas oferece acesso à versão mais atualizada de tabelas cruciais (como CNES, dados de CNPJ e Brasileirão) e conjuntos exclusivos priorizados para solucionar problemas complexos.",
+    "q2": "Quais bases tenho acesso?",
+    "a2": "Você pode acompanhar os dados que já temos disponíveis [aqui](https://basedosdados.org/search?contains=tables).",
+    "q3": "Como faço para ter acesso aos dados mais recentes?",
+    "a3": "Para ter acesso à assinatura Pro, basta assinar o nosso serviço clicando no link abaixo, e seu acesso é concedido instantaneamente! Qualquer pessoa ou organização pode assinar sem restrições. Uma vez que o pagamento é concluído, o acesso é concedido automaticamente para o usuário, que já pode usufruir dos benefícios da plataforma.",
+    "q4": "Qual é a diferença entre a versão aberta da BD e a assinatura Pro?",
+    "a4": "A assinatura Pro é uma versão mais poderosa, atualizada e completa do datalake. Enquanto a versão aberta possui uma defasagem intencional de atualização (geralmente seis unidades temporais, como 6 meses de atraso no Comex Stat), os assinantes Pro acessam esses dados sem atraso. Além disso, bases de alto valor de mercado, como cotações de ações, são exclusivas para assinantes."
+  }
+}
