@@ -36,7 +36,19 @@
     }
   },
   "testimonials": {
-    "title": "Quem usa a Base dos Dados"
+    "title": "Quem usa a Base dos Dados",
+    "list": {
+      "t1": {
+        "name": "Fernando Barbalho",
+        "role": "Conselheiro Técnico do Vice-Presidente da República",
+        "text": "Costumo usar a plataforma da Base dos Dados para buscar dados de municípios, principalmente aqueles que são mais estáveis, tais como séries históricas de população. Uso também para dados de CNPJ e outros conjuntos muito grandes que seriam difíceis remontar em um ambiente isolado. A facilidade de usar comandos SQL ajuda no cruzamento e agregação de dados."
+      },
+      "t2": {
+        "name": "Luiz Fernando Toledo",
+        "role": "Repórter na BBC",
+        "text": "Acabo fazendo perguntas mais complexas nas pautas porque sei que o trabalho de análise de dados não será tão complicado graças a essas ferramentas que vocês disponibilizam."
+      }
+    }
   },
   "cta_final": {
     "title": "Assine já e destrave o potencial dos seus dados",

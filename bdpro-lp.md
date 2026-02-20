@@ -49,16 +49,20 @@ Carrossel com depoimentos de usuários.
   - `Carousel` (`next/components/atoms/Carousel.js`): Configurado com `pagination` e `navigation`.
   - `Card` (`next/components/molecules/Card.js`): Adaptado para exibir foto, nome, cargo e depoimento.
 
-### Tela 4: Chamada de Compra (CTA Final)
-Apresentação dos planos com navegação por público-alvo (Nav Bar).
+### Tela 4: Comparação de Planos (Prices)
+Reprodução da estrutura da página de preços atual para conversão direta.
 
-- **Layout:** `VStack` com `padding="80px 0"`.
+- **Layout:** `VStack` com espaçamento de `40px`, contendo o seletor de período e o grid de cards.
 - **Componentes:**
-  - `Tabs` (Nav Bar) para alternar entre os públicos:
-    - **Aba 1:** Pesquisadores, Consultores e Pequenas empresas (Valor: **R$ 47/mês**).
-    - **Aba 2:** Médias e grandes empresas e instituições públicas (Valor: **R$ 350/mês**).
-  - Exibição dinâmica do valor correspondente ao grupo selecionado.
-  - `Button`: Botão de assinatura em destaque (cor primária `#2B8C4D`).
+  - `Toggle`: Interruptor para alternância entre faturamento mensal e anual (exibindo o selo de "economize 20%").
+  - `CardPrice`: Componente detalhado para os planos:
+    - **Grátis:** Recursos básicos para exploração.
+    - **Pro:** Focado em pesquisadores e consultores (dados sem defasagem e suporte prioritário).
+    - **Empresas:** Focado em médias e grandes instituições.
+- **Lógica de Negócio:**
+  - Consumo da API `/api/stripe/getPlans` para exibição de valores dinâmicos.
+  - Verificação de estado do usuário (logado/assinado) para alterar o CTA do botão (Assinar vs. Plano Atual).
+  - Tooltips informativos utilizando o componente `Tooltip` do Chakra UI.
 
 ### Tela 5: FAQ (Dúvidas Frequentes)
 Dropdown com perguntas selecionadas.
