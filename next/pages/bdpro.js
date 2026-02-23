@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   VStack,
   Stack,
   HStack,
-  Text,
-  Image as ChakraImage,
   Tabs,
   TabList,
   TabPanels,
-  Tab,
   TabPanel,
   Accordion,
   AccordionItem,
@@ -24,6 +21,7 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
+
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
 import BodyText from "../components/atoms/Text/BodyText";
@@ -31,7 +29,6 @@ import LabelText from "../components/atoms/Text/LabelText";
 import GreenTab from "../components/atoms/GreenTab";
 import Carousel from "../components/atoms/Carousel";
 import Card from "../components/molecules/Card";
-import Button from "../components/atoms/Button";
 import Link from "../components/atoms/Link";
 import Toggle from "../components/atoms/Toggle";
 import BDLogoProImage from "../public/img/logos/bd_logo_pro";
@@ -39,6 +36,7 @@ import { isMobileMod } from "../hooks/useCheckMobile.hook";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
+import styles from "../styles/bdpro.module.css";
 
 export async function getStaticProps({ locale }) {
   return {
@@ -423,100 +421,153 @@ function SectionPrice() {
   );
 }
 
-function HighlightBox({ title, description }) {
-  const [isHovered, setIsHovered] = useState(false);
+function HighlightBox({ title, description, cn, isActive, onActivate, onDeactivate }) {
+  const isMobile = isMobileMod();
 
   return (
-    <Box
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      padding="10px"
-      backgroundColor="#F5F5F5"
-      borderRadius="10px"
-      width="170px"
-      height="75px"
-      display="flex"
+    <Box 
+      className={`${styles['float-pill']} ${styles[cn]}`} 
+      position="relative" 
+      display="flex" 
+      justifyContent="center" 
       alignItems="center"
-      justifyContent="center"
-      textAlign="center"
-      transition="all 0.3s"
-      cursor="default"
-      _hover={{ backgroundColor: "#EBEBEB", transform: "scale(1.05)" }}
+      zIndex={isActive ? 10 : 1}
     >
-      {isHovered ? (
-        <BodyText fontSize="11px" lineHeight="14px">{description}</BodyText>
-      ) : (
-        <TitleText typography="small" fontSize="13px" fontWeight="700">{title}</TitleText>
-      )}
+      <Box padding="10px 16px" visibility="hidden">
+        <BodyText fontSize="16px" lineHeight="24px" whiteSpace="nowrap">
+          {title}
+        </BodyText>
+      </Box>
+
+      <Box
+        position="absolute"
+        top="50%"
+        left="50%"
+        transform={isActive ? "translate(-50%, calc(-50% - 3px))" : "translate(-50%, -50%)"}
+        cursor="pointer"
+        onMouseEnter={() => !isMobile && onActivate()}
+        onMouseLeave={() => !isMobile && onDeactivate()}
+        onClick={() => {
+          if (isMobile) {
+            isActive ? onDeactivate() : onActivate();
+          }
+        }}
+        padding={isActive ? "12px 16px" : "10px 16px"}
+        color="#FFFFFF"
+        backgroundColor="#161d19bf"
+        border="1px solid #ffffff1a"
+        borderRadius="14px"
+        textAlign="center"
+        transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+        backdropFilter="blur(4px)"
+        width="max-content"
+        maxWidth="260px"
+        zIndex={isActive ? 10 : 1}
+        _hover={{
+          borderColor: "#29b47366",
+          background: "#29b47314",
+          color: "#29b473",
+          boxShadow: "0 8px 32px rgba(41,180,115,0.15)",
+        }}
+      >
+        <BodyText 
+          color="currentcolor" 
+          fontWeight={isActive ? "400" : "500"}
+          fontSize={isActive ? "14px" : "16px"}
+          lineHeight={isActive ? "22px" : "24px"}
+          whiteSpace={isActive ? "normal" : "nowrap"}
+        >
+          {isActive ? description : title}
+        </BodyText>
+      </Box>
     </Box>
   );
 }
 
 function Hero({ t }) {
-  const isMobile = isMobileMod();
+  const [activeHightlight, setActiveHightlight] = useState(null);
 
   const highlights = [
-    { key: 'cnpjs', top: "-30%", left: "-260px" },
-    { key: 'obras', top: "-30%", right: "-260px" },
-    { key: 'datasus', bottom: "-55%", left: "-210px" },
-    { key: 'empregos', bottom: "-55%", right: "-230px"},
-    { key: 'comex', top: "50%", left: "-320px", transform: "translateY(-50%)" },
+    { key: 'cnpjs', top: "10%", left: "26%", cn: "cnpjs" },
+    { key: 'obras', top: "22%", right: "16%", cn: "obras" },
+    { key: 'datasus', bottom: "50%", left: "3%", transform: "translateY(-50%)", cn: "datasus" },
+    { key: 'empregos', bottom: "18%", right: "4%", transform: "translateY(-50%)", cn: "empregos" },
+    { key: 'comex', top: "76%", left: "6%", transform: "translateY(-50%)", cn: "comex" },
   ];
 
-  if (isMobile) {
-    return (
-      <VStack spacing={8} padding="40px 24px" width="100%" backgroundColor="#333">
-        <VStack spacing={4} textAlign="center">
-          <BDLogoProImage widthImage="100px" heightImage="25px" marginBottom="12px" />
-          <Display fontSize="26px" lineHeight="32px" color="white">
-            {t('hero.title')}
-          </Display>
-          <BodyText fontSize="15px" color="rgba(255, 255, 255, 0.8)">
-            {t('hero.description')}
-          </BodyText>
-          <LabelText color="rgba(255, 255, 255, 0.6)" fontWeight="500" fontSize="11px">
-            {t('hero.stats')}
-          </LabelText>
-        </VStack>
-        <HStack spacing={4} wrap="wrap" justifyContent="center">
-          {highlights.map((h) => (
-            <HighlightBox
-              key={h.key}
-              title={t(`hero.highlights.${h.key}.title`)}
-              description={t(`hero.highlights.${h.key}.description`)}
-            />
-          ))}
-        </HStack>
-      </VStack>
-    );
-  }
-
   return (
-    <Box 
-      width="100%" 
+    <Box
+      position="relative"
+      width="100%"
       display="flex" 
+      flexDirection="column"
       justifyContent="center" 
       alignItems="center"
-      position="relative"
-      minHeight="700px"
-      backgroundColor="#333"
+      minHeight={{ base: "800px", lg: "700px" }}
+      backgroundColor="#0a2213"
+      bgGradient="radial-gradient(ellipse 70% 55% at 50% 45%, rgba(41,180,115,0.13) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 15% 60%, rgba(41,180,115,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 85% 35%, rgba(41,180,115,0.07) 0%, transparent 60%);"
       padding="40px 24px"
       overflow="hidden"
     >
-      <Box position="relative" maxWidth="550px" width="100%">
-        <VStack spacing={5} textAlign="center" position="relative" zIndex="2">
-          <BDLogoProImage widthImage="120px" heightImage="30px" marginBottom="16px" />
-          <Display fontSize="32px" lineHeight="40px" color="white">
-            {t('hero.title')}
-          </Display>
-          <BodyText fontSize="16px" color="rgba(255, 255, 255, 0.8)">
-            {t('hero.description')}
-          </BodyText>
-          <LabelText color="rgba(255, 255, 255, 0.6)" fontWeight="500" fontSize="13px">
-            {t('hero.stats')}
-          </LabelText>
-        </VStack>
+      <Box
+        position="absolute"
+        top="0"
+        left="0"
+        opacity="0.4"
+        zIndex="1"
+        width="100%"
+        height="100%"
+        bgGradient="linear-gradient(#ffffff1a 1px, transparent 1px),
+          linear-gradient(90deg, #ffffff1a 1px, transparent 1px);"
+        maskImage="radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);"
+        backgroundSize="60px 60px"
+      />
+      <VStack
+        gap="16px"
+        spacing="0"
+        textAlign="center"
+        zIndex="2"
+      >
+        <BDLogoProImage widthImage="160px" heightImage="40px" marginBottom="16px" />
+        <Display
+          as="h1"
+          typography={isMobileMod() ? "small" : "medium"}
+          maxWidth="800px"
+          color="white"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+        >
+          <Box as="span">{t('hero.title',{ returnObjects: true })[0]}</Box>
+          <Box as="span">{t('hero.title',{ returnObjects: true })[1]}</Box>
+        </Display>
+        <TitleText
+          as="h2"
+          maxWidth="850px"
+          typography={isMobileMod() ? "small" : "medium"}
+          fontWeight="400"
+          color="#ffffffc7"
+        >
+          {t('hero.description')}
+        </TitleText>
+        <BodyText
+          as="h3"
+          typography={isMobileMod() ? "small" : "medium"}
+          color="#ffffffc7"
+        >
+          {t('hero.stats')}
+        </BodyText>
+      </VStack>
 
+      <Box
+        position="absolute"
+        width="1280px"
+        height="100%"
+        zIndex="3"
+        display={{ base: "none", lg: "block" }}
+      >
         {highlights.map((h) => (
           <Box
             key={h.key}
@@ -526,13 +577,40 @@ function Hero({ t }) {
             right={h.right}
             bottom={h.bottom}
             transform={h.transform}
-            zIndex="1"
+            zIndex={activeHightlight === h.key ? 10 : 1}
           >
             <HighlightBox
               title={t(`hero.highlights.${h.key}.title`)}
               description={t(`hero.highlights.${h.key}.description`)}
+              cn={h.cn}
+              isActive={activeHightlight === h.key}
+              onActivate={() => setActiveHightlight(h.key)}
+              onDeactivate={() => setActiveHightlight(null)}
             />
           </Box>
+        ))}
+      </Box>
+
+      <Box
+        display={{ base: "flex", lg: "none" }}
+        flexWrap="wrap"
+        justifyContent="center"
+        alignItems="center"
+        gap="12px"
+        width="90%"
+        marginTop="40px"
+        zIndex="3"
+      >
+        {highlights.map((h) => (
+          <HighlightBox
+            key={h.key}
+            title={t(`hero.highlights.${h.key}.title`)}
+            description={t(`hero.highlights.${h.key}.description`)}
+            cn={h.cn}
+            isActive={activeHightlight === h.key}
+            onActivate={() => setActiveHightlight(h.key)}
+            onDeactivate={() => setActiveHightlight(null)}
+          />
         ))}
       </Box>
     </Box>
@@ -541,24 +619,59 @@ function Hero({ t }) {
 
 function Presentation({ t }) {
   const tabs = [1, 2, 3, 4];
+  const isMobile = isMobileMod();
 
   return (
-    <VStack width="100%" padding="80px 24px" spacing={8}>
-      <TitleText typography="large">{t('presentation.title')}</TitleText>
-      <Tabs variant="unstyled" align="center" width="100%" maxWidth="1200px">
-        <TabList borderBottom="1px solid #DEDFE0" width="100%" justifyContent="center">
+    <VStack width="100%" padding="80px 24px" spacing="24px">
+      <Display
+        as="h2"
+        typography={isMobile ? "small" : "medium"}
+        width="100%"
+        maxWidth="800px"
+        textAlign="center"
+        margin="0 auto"
+      >
+        {t('presentation.title')}
+      </Display>
+      <Tabs variant="unstyled" align="center" width="100%" maxWidth="1440px" margin="0 auto">
+        <TabList
+          borderBottom="1px solid #DEDFE0"
+          width="100%"
+          justifyContent={{ base: "flex-start", md: "center" }}
+          overflowX={{ base: "auto", md: "visible" }}
+          overflowY="hidden"
+          paddingBottom="4px"
+          sx={{
+            '::-webkit-scrollbar': { display: 'none' },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+          }}
+        >
           {tabs.map((i) => (
-            <GreenTab key={i}>{t(`presentation.tabs.tab${i}.label`)}</GreenTab>
+            <GreenTab 
+              key={i} 
+              whiteSpace="nowrap" 
+              flexShrink="0"
+            >
+              {t(`presentation.tabs.tab${i}.label`)}
+            </GreenTab>
           ))}
         </TabList>
         <TabPanels>
           {tabs.map((i) => (
             <TabPanel key={i} padding="40px 0">
-              <Box height="450px" bg="#F9F9F9" borderRadius="16px" display="flex" alignItems="center" justifyContent="center" border="1px dashed #DDD">
-                <VStack spacing={4}>
-                  <ChakraImage src={`/img/bdpro_demo_${i}.gif`} fallbackSrc="https://via.placeholder.com/800x450?text=GIF+Demonstrativo" borderRadius="8px" maxWidth="800px" width="100%" />
-                  <BodyText color="#71757A">{t(`presentation.tabs.tab${i}.label`)}</BodyText>
-                </VStack>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
+                height={{ base: "auto", md: "450px" }}
+                minHeight={{ base: "250px", md: "450px" }}
+                backgroundColor="#F9F9F9"
+                boxShadow="0px 1.6px 16px rgba(100, 96, 103, 0.16)"
+                borderRadius="16px"
+              >
+
               </Box>
             </TabPanel>
           ))}
@@ -654,13 +767,14 @@ export default function BDProPage() {
   return (
     <MainPageTemplate>
       <Head>
-        <title>BD Pro | Base dos Dados</title>
+        <title>{t('head.pageTitle')}</title>
+        <meta property="og:title" content={t('head.metaTitle')} key="ogtitle" />
       </Head>
       <Hero t={t} />
       <Presentation t={t} />
-      <Testimonials t={t} />
-      <PricingSection t={t} />
-      <FAQ t={t} />
+      {/* <Testimonials t={t} /> */}
+      {/* <PricingSection t={t} /> */}
+      {/* <FAQ t={t} /> */}
     </MainPageTemplate>
   );
 }

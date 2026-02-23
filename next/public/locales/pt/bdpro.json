@@ -1,6 +1,10 @@
 {
+  "head": {
+    "pageTitle": "BD Pro - Base dos Dados",
+    "metaTitle": "BD Pro - Base dos Dados"
+  },
   "hero": {
-    "title": "Dados públicos tratados, integrados e atualizados",
+    "title": ["Dados públicos", "tratados, integrados e atualizados"],
     "description": "Garantimos atualização automática de bases de dados, além de tirar a dor de cabeça de manter pipelines de coleta. Tudo isso enquanto você apoia o maior acervo de dados públicos tratados do Brasil.",
     "stats": "Mais de 25k pesquisadores, servidores públicos e empresas utilizam a BD mensalmente.",
     "highlights": {
@@ -49,20 +53,6 @@
         "text": "Acabo fazendo perguntas mais complexas nas pautas porque sei que o trabalho de análise de dados não será tão complicado graças a essas ferramentas que vocês disponibilizam."
       }
     }
-  },
-  "cta_final": {
-    "title": "Assine já e destrave o potencial dos seus dados",
-    "groups": {
-      "individual": {
-        "label": "Pesquisadores, Consultores e Pequenas empresas",
-        "price": "R$ 47/mês"
-      },
-      "corporate": {
-        "label": "Médias e grandes empresas e instituições públicas",
-        "price": "R$ 350/mês"
-      }
-    },
-    "button": "Ver planos e preços"
   },
   "faq": {
     "title": "Dúvidas Frequentes - FAQ",

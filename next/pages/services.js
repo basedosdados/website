@@ -288,7 +288,11 @@ const QuestionsBox = ({ question, answer, id, active }) => {
       <Box
         display="flex"
         cursor="pointer"
-        marginBottom="24px"
+        paddingBottom="24px"
+        _hover={{
+          opacity: 0.8
+        }}
+        transition="opacity 0.2s ease"
         gap="20px"
         justifyContent="space-between"
         onClick={() => OpenCloseQuestion()}

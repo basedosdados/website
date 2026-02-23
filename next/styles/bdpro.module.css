@@ -1,0 +1,50 @@
+.float-pill {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+.float-pill:hover {
+  animation-play-state: paused;
+}
+
+.cnpjs {
+  animation-delay: 0s;
+}
+
+.obras {
+  animation-delay: 1.2s;
+}
+
+.datasus {
+  animation-delay: 2.1s;
+  animation-name: floatX;
+}
+
+.empregos {
+  animation-delay: .7s;
+  animation-name: floatX;
+}
+
+.comex {
+  animation-delay: 1.2s;
+  animation-name: floatX;
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatX {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(-6px);
+  }
+}
