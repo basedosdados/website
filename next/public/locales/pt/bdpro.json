@@ -33,10 +33,18 @@
   "presentation": {
     "title": "Como funciona nosso produto?",
     "tabs": {
-      "tab1": { "label": "Acesso a dados atualizados" },
-      "tab2": { "label": "Acesso nativo no BigQuery" },
-      "tab3": { "label": "Integração direta com Python e R" },
-      "tab4": { "label": "Alertas e notificações de atualização" }
+      "tab1": {
+        "label": "Acesso nativo no BigQuery",
+        "description": ""
+      },
+      "tab2": {
+        "label": "Integração direta com Python e R",
+        "description": ""
+      },
+      "tab3": {
+        "label": "Alertas e notificações de atualização",
+        "description": ""
+      }
     }
   },
   "testimonials": {
@@ -55,14 +63,6 @@
     }
   },
   "faq": {
-    "title": "Dúvidas Frequentes - FAQ",
-    "q1": "O que é a BD Pro?",
-    "a1": "A BD Pro é uma assinatura de dados exclusivos, com valor de mercado e de alta frequência, construída pela Base dos Dados. Ela conta com todas as funcionalidades do nosso datalake original, mas oferece acesso à versão mais atualizada de tabelas cruciais (como CNES, dados de CNPJ e Brasileirão) e conjuntos exclusivos priorizados para solucionar problemas complexos.",
-    "q2": "Quais bases tenho acesso?",
-    "a2": "Você pode acompanhar os dados que já temos disponíveis [aqui](https://basedosdados.org/search?contains=tables).",
-    "q3": "Como faço para ter acesso aos dados mais recentes?",
-    "a3": "Para ter acesso à assinatura Pro, basta assinar o nosso serviço clicando no link abaixo, e seu acesso é concedido instantaneamente! Qualquer pessoa ou organização pode assinar sem restrições. Uma vez que o pagamento é concluído, o acesso é concedido automaticamente para o usuário, que já pode usufruir dos benefícios da plataforma.",
-    "q4": "Qual é a diferença entre a versão aberta da BD e a assinatura Pro?",
-    "a4": "A assinatura Pro é uma versão mais poderosa, atualizada e completa do datalake. Enquanto a versão aberta possui uma defasagem intencional de atualização (geralmente seis unidades temporais, como 6 meses de atraso no Comex Stat), os assinantes Pro acessam esses dados sem atraso. Além disso, bases de alto valor de mercado, como cotações de ações, são exclusivas para assinantes."
+    "title": "Dúvidas Frequentes - FAQ"
   }
 }
