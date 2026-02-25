@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Stack,
@@ -11,7 +11,7 @@ import BodyText from '../../atoms/Text/BodyText'
 import PenSquareIcon from '../../../public/img/icons/penSquareIcon'
 import ThreadList from './ThreadList'
 
-export default function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
+function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
   const [isOpen, setIsOpen] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -130,3 +130,5 @@ export default function Sidebar({ onNewChat, onSelectThread, currentThreadId, is
     </Box>
   )
 }
+
+export default React.memo(Sidebar);

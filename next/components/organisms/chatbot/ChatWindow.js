@@ -1,11 +1,12 @@
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { VStack, Box } from '@chakra-ui/react';
 import Message from './Message';
 
-export default function ChatWindow({ messages, onFeedback }) {
+function ChatWindow({ messages, onFeedback }) {
   const messagesEndRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const prevMessagesLength = useRef(messages.length);
+  const prevLastMessageContentLength = useRef(0);
 
   const scrollToBottom = (behavior = "smooth") => {
     messagesEndRef.current?.scrollIntoView({ behavior });
@@ -15,6 +16,10 @@ export default function ChatWindow({ messages, onFeedback }) {
     const container = scrollContainerRef.current;
     if (container) {
       const isNewMessage = messages.length > prevMessagesLength.current;
+      const lastMessage = messages[messages.length - 1];
+      const currentContentLength = lastMessage?.content?.length || 0;
+      const isStreaming = lastMessage?.role === 'assistant' && lastMessage?.isTyping;
+      const contentGrew = currentContentLength > prevLastMessageContentLength.current;
       
       const newMessages = messages.slice(prevMessagesLength.current);
       const hasUserMessage = newMessages.some(msg => msg.role === 'user');
@@ -24,9 +29,11 @@ export default function ChatWindow({ messages, onFeedback }) {
       if (hasUserMessage) {
         scrollToBottom("smooth");
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      } else if (isAtBottom && isNewMessage) {
+      } else if (isAtBottom && (isNewMessage || (isStreaming && contentGrew))) {
         scrollToBottom("auto");
       }
+
+      prevLastMessageContentLength.current = currentContentLength;
     }
     prevMessagesLength.current = messages.length;
   }, [messages]);
@@ -68,3 +75,5 @@ export default function ChatWindow({ messages, onFeedback }) {
     </VStack>
   );
 }
+
+export default React.memo(ChatWindow);

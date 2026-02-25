@@ -4,7 +4,7 @@ import {
   Stack,
   Box
 } from "@chakra-ui/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
@@ -47,22 +47,43 @@ function ChatbotContent() {
         query: { ...router.query, t: threadId }
       }, undefined, { shallow: true });
     }
+  }, [threadId, threadIdFromUrl, router]);
+
+  useEffect(() => {
+    const draftKey = `chatbot_draft_${threadId || 'new'}`;
+    const savedDraft = localStorage.getItem(draftKey);
+    if (savedDraft) {
+      setValue(savedDraft);
+    } else {
+      setValue("");
+    }
   }, [threadId]);
 
-  const handleSend = () => {
+  useEffect(() => {
+    const draftKey = `chatbot_draft_${threadId || 'new'}`;
+    if (value) {
+      localStorage.setItem(draftKey, value);
+    } else {
+      localStorage.removeItem(draftKey);
+    }
+  }, [value, threadId]);
+
+  const handleSend = useCallback(() => {
     if (value.trim() !== "") {
       sendMessage(value);
       setValue("");
+      const draftKey = `chatbot_draft_${threadId || 'new'}`;
+      localStorage.removeItem(draftKey);
     }
-  };
+  }, [value, sendMessage, threadId]);
 
-  const handleNewChat = () => {
+  const handleNewChat = useCallback(() => {
     resetChat();
     router.push({
       pathname: router.pathname,
       query: {}
     }, undefined, { shallow: true });
-  };
+  }, [resetChat, router]);
 
   return (
     <HStack
