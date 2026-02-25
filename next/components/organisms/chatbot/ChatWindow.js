@@ -4,17 +4,36 @@ import Message from './Message';
 
 export default function ChatWindow({ messages, onFeedback }) {
   const messagesEndRef = useRef(null);
+  const scrollContainerRef = useRef(null);
+  const prevMessagesLength = useRef(messages.length);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const scrollToBottom = (behavior = "smooth") => {
+    messagesEndRef.current?.scrollIntoView({ behavior });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    const container = scrollContainerRef.current;
+    if (container) {
+      const isNewMessage = messages.length > prevMessagesLength.current;
+      
+      const newMessages = messages.slice(prevMessagesLength.current);
+      const hasUserMessage = newMessages.some(msg => msg.role === 'user');
+      
+      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
+      
+      if (hasUserMessage) {
+        scrollToBottom("smooth");
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      } else if (isAtBottom && isNewMessage) {
+        scrollToBottom("auto");
+      }
+    }
+    prevMessagesLength.current = messages.length;
   }, [messages]);
 
   return (
     <VStack
+      ref={scrollContainerRef}
       width="100%"
       height="100%"
       overflowY="auto"

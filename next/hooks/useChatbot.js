@@ -52,7 +52,7 @@ export default function useChatbot(initialThreadId = null) {
 
   const processQueue = useCallback(() => {
     if (charQueueRef.current.length > 0) {
-      const charsToAppend = charQueueRef.current.splice(0, 2).join('');
+      const charsToAppend = charQueueRef.current.splice(0, 8).join('');
       
       const botId = currentBotMessageIdRef.current;
 
