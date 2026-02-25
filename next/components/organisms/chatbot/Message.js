@@ -4,13 +4,10 @@ import {
   Text,
   HStack,
   useToast,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
+  Collapse,
+  Divider,
+  VStack,
   UnorderedList,
-  Button,
   ListItem,
   OrderedList,
   useClipboard
@@ -21,17 +18,21 @@ import ReactMarkdown from "react-markdown";
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js/lib/core";
 import sql from "highlight.js/lib/languages/sql";
+import json from "highlight.js/lib/languages/json";
 
 import remarkGfm from "remark-gfm";
 import BodyText from "../../atoms/Text/BodyText";
+import LabelText from "../../atoms/Text/LabelText";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
+import CrossIcon from "../../../public/img/icons/crossIcon";
 
 hljs.registerLanguage("sql", sql);
+hljs.registerLanguage("json", json);
 
-function CodeBlock({ inline, children }) {
+function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
   const code = String(children).replace(/\n$/, "");
   const { hasCopied, onCopy } = useClipboard(code);
 
@@ -51,12 +52,12 @@ function CodeBlock({ inline, children }) {
     );
   }
 
-  const highlighted = hljs.highlight(code, { language: "sql" });
+  const highlighted = hljs.highlight(code, { language });
 
   return (
     <Box
       position="relative"
-      marginY="24px"
+      marginY={marginY}
       borderRadius="12px"
       backgroundColor="#F9FAFB"
       overflow="hidden"
@@ -73,6 +74,7 @@ function CodeBlock({ inline, children }) {
         height="16px"
         fill="#252A32"
         onClick={onCopy}
+        zIndex="1"
         backgroundColor="transparent"
       >
         {hasCopied ? (
@@ -94,7 +96,7 @@ function CodeBlock({ inline, children }) {
       >
         <Box
           as="code"
-          className="hljs hljs-chatbot"
+          className={`hljs hljs-chatbot language-${language}`}
           color="#1F2937"
           dangerouslySetInnerHTML={{ __html: highlighted.value }}
         />
@@ -147,6 +149,7 @@ const componentsMk = {
 export default function Message({ message, onFeedback }) {
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(null);
+  const [isThinkingOpen, setIsThinkingOpen] = useState(false);
   const toast = useToast();
 
   const handleFeedback = async (rating) => {
@@ -196,26 +199,115 @@ export default function Message({ message, onFeedback }) {
         color="#000"
       >
         {!isUser && !message.isLoading && message.toolCalls && message.toolCalls.length > 0 && (
-          <Accordion allowToggle>
-            <AccordionItem>
-              <AccordionButton>
-                <Box flex="1" textAlign="left">
-                  Ver processo de pensamento
-                </Box>
-                <AccordionIcon />
-              </AccordionButton>
-              <AccordionPanel pb={4}>
+          <VStack
+            spacing={0}
+            align="stretch"
+            width="100%"
+            marginBottom="24px"
+          >
+            <Box
+              display="flex"
+              cursor="pointer"
+              gap="20px"
+              justifyContent="space-between"
+              alignItems="center"
+              padding="0 0 16px"
+              _hover={{
+                opacity: 0.9
+              }}
+              transition="opacity 0.2s ease"
+              onClick={() => setIsThinkingOpen(!isThinkingOpen)}
+            >
+              <LabelText typography="medium" color="#252A32" fontWeight="500">
+                Ver processo de pensamento
+              </LabelText>
+              <CrossIcon
+                alt={isThinkingOpen ? "ocultar processo" : "mostrar processo"}
+                color="#252A32"
+                transform={!isThinkingOpen && "rotate(45deg)"}
+                width="18px"
+                height="18px"
+                transition="transform 0.2s ease"
+              />
+            </Box>
+            <Collapse in={isThinkingOpen} animateOpacity>
+              <VStack spacing="12px" align="stretch" marginTop="16px">
                 {message.toolCalls.map((toolCall, index) => (
-                  <Box key={index} mb={4} p={2} bg="gray.50" borderRadius="md">
-                    <Text fontWeight="bold" textTransform="capitalize">{toolCall.type.replace(/_/g, " ")}</Text>
-                    <Box as="pre" p={2} bg="gray.100" borderRadius="md" overflowX="auto">
-                      <code>{JSON.stringify(toolCall, null, 2)}</code>
-                    </Box>
+                  <Box 
+                    key={index} 
+                    padding="12px" 
+                    borderRadius="12px"
+                    border="1px solid #E5E7EB"
+                  >
+                    {toolCall.type === "tool_call" ? (
+                      <VStack align="stretch" spacing="12px">
+                        {toolCall.content && (
+                          <Box className="markdown-body" fontSize="14px">
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={componentsMk}
+                            >
+                              {toolCall.content}
+                            </ReactMarkdown>
+                          </Box>
+                        )}
+                        {toolCall.tool_calls?.map((call, idx) => (
+                          <VStack key={idx} align="stretch" spacing="4px">
+                            <BodyText fontWeight="600" color="#374151">
+                              Executando ferramenta: <CodeBlock inline language="sql">{call.name}</CodeBlock>
+                            </BodyText>
+                            <BodyText typography="small" fontWeight="600" color="#6B7280">
+                              Solicitação:
+                            </BodyText>
+                            <CodeBlock 
+                              language="json" 
+                              marginY="8px"
+                            >
+                              {JSON.stringify(call.args, null, 2)}
+                            </CodeBlock>
+                          </VStack>
+                        ))}
+                      </VStack>
+                    ) : toolCall.type === "tool_output" ? (
+                      <VStack align="stretch" spacing="12px">
+                        {toolCall.tool_outputs?.map((output, idx) => (
+                          <VStack key={idx} align="stretch" spacing="4px">
+                            <BodyText typography="small" fontWeight="600" color="#6B7280">
+                              Resultado:
+                            </BodyText>
+                            <CodeBlock 
+                              language="json" 
+                              marginY="8px"
+                            >
+                              {typeof output.output === 'string' ? output.output : JSON.stringify(output.output, null, 2)}
+                            </CodeBlock>
+                          </VStack>
+                        ))}
+                      </VStack>
+                    ) : (
+                      <>
+                        <BodyText 
+                          fontWeight="600" 
+                          color="#374151" 
+                          marginBottom="8px"
+                          textTransform="capitalize"
+                        >
+                          {toolCall.type.replace(/_/g, " ")}
+                        </BodyText>
+                        <CodeBlock 
+                          language="json" 
+                          marginY="8px"
+                        >
+                          {JSON.stringify(toolCall, null, 2)}
+                        </CodeBlock>
+                      </>
+                    )}
                   </Box>
                 ))}
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
+              </VStack>
+            </Collapse>
+            <Divider borderColor="#DEDFE0" marginTop="16px"/>
+          </VStack>
         )}
 
         {isUser ? (
