@@ -4,29 +4,29 @@
     "metaTitle": "BD Pro - Base dos Dados"
   },
   "hero": {
-    "title": ["Dados públicos", "tratados, integrados e atualizados"],
-    "description": "Garantimos atualização automática de bases de dados, além de tirar a dor de cabeça de manter pipelines de coleta. Tudo isso enquanto você apoia o maior acervo de dados públicos tratados do Brasil.",
-    "stats": "Mais de 25k pesquisadores, servidores públicos e empresas utilizam a BD mensalmente.",
+    "title": ["Dados públicos", "tratados e sempre atualizados"],
+    "description": "A assinatura de dados com tratamento e atualização automática. Foque na análise, enquanto a gente garante que os dados estejam frescos e prontos para uso. Assine e nos ajude a manter o maior acervo público de dados tratados no Brasil.",
+    "stats": "Aceleramos o trabalho de mais de 25 mil pesquisadores, servidores públicos e empresas mensalmente",
     "highlights": {
       "cnpjs": {
         "title": "Cadastros de CNPJs",
-        "description": "Dados de cadastrais de todas empresas do Brasil atualizado mensalmente"
+        "description": "Dados de cadastrais de todas empresas do Brasil atualizados mensalmente"
       },
       "obras": {
         "title": "Cadastros de Obras",
-        "description": "Cadastro de obras da Receita Federal atualizado diariamente"
+        "description": "Cadastro de obras da Receita Federal atualizados diariamente"
       },
       "datasus": {
         "title": "Cadastros do Datasus",
-        "description": "CNES, SIH, SIA... Atualizado mensalmente"
+        "description": "Dados dos principais sistemas do Datasus (SIA, CNES, SIH...) atualizados mensalmente"
       },
       "empregos": {
         "title": "Cadastro geral de empregos",
-        "description": "Dados de emprego e mercado de trabalho"
+        "description": "Dados do CAGED atualizados mensalmente"
       },
       "comex": {
         "title": "Comex Stat",
-        "description": "Dados de comércio exterior"
+        "description": "Dados de comércio exterior atualizados mensalmente"
       }
     }
   },
@@ -34,16 +34,16 @@
     "title": "Como funciona nosso produto?",
     "tabs": {
       "tab1": {
-        "label": "Acesso nativo no BigQuery",
-        "description": ""
+        "label": "Acesso os dados no BigQuery",
+        "description": "Consulte os dados diretamente no Big Query com SQL"
       },
       "tab2": {
         "label": "Integração direta com Python e R",
-        "description": ""
+        "description": "Acesse os dados direto no seu ambiente de trabalho com nossos pacotes Python e R"
       },
       "tab3": {
         "label": "Alertas e notificações de atualização",
-        "description": ""
+        "description": "Receba um email assim que a tabela fora atualizada na BD"
       }
     }
   },
