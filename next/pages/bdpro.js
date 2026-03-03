@@ -247,6 +247,12 @@ function Presentation({ t }) {
   const tabs = [1, 2, 3];
   const isMobile = isMobileMod();
 
+  const videoUrls = {
+    1: "https://storage.googleapis.com/basedosdados-website/bdpro/bigquery-access.mp4",
+    2: "https://storage.googleapis.com/basedosdados-website/bdpro/python-r-clients.mp4",
+    3: "https://storage.googleapis.com/basedosdados-website/bdpro/updates-alerts.mp4",
+  }
+
   return (
     <VStack width="100%" padding="80px 24px" spacing="24px">
       <Display
@@ -314,8 +320,18 @@ function Presentation({ t }) {
                 backgroundColor="#F9F9F9"
                 boxShadow="0px 1.6px 16px rgba(100, 96, 103, 0.16)"
                 borderRadius="16px"
+                overflow="hidden"
               >
-
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }}
+                >
+                  <source src={videoUrls[i]} type="video/mp4" />
+                </video>
               </Box>
             </TabPanel>
           ))}
