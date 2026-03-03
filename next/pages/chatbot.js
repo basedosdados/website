@@ -40,14 +40,14 @@ function ChatbotContent() {
   }, [threadIdFromUrl, fetchThreadMessages]);
 
   useEffect(() => {
-    if (threadId && threadId !== threadIdFromUrl) {
+    if (threadId && !threadIdFromUrl) {
       skipFetchRef.current = true;
       router.replace({
         pathname: router.pathname,
         query: { ...router.query, t: threadId }
       }, undefined, { shallow: true });
     }
-  }, [threadId, threadIdFromUrl, router]);
+  }, [threadId, threadIdFromUrl]);
 
   useEffect(() => {
     const draftKey = `chatbot_draft_${threadId || 'new'}`;

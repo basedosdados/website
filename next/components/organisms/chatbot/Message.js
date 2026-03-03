@@ -12,7 +12,7 @@ import {
   OrderedList,
   useClipboard
 } from "@chakra-ui/react";
-import { useState } from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import "highlight.js/styles/github.css";
@@ -146,7 +146,7 @@ const componentsMk = {
   ),
 }
 
-export default function Message({ message, onFeedback }) {
+function Message({ message, onFeedback }) {
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(null);
   const [isThinkingOpen, setIsThinkingOpen] = useState(false);
@@ -189,6 +189,10 @@ export default function Message({ message, onFeedback }) {
       width="100%"
       justify={isUser ? "flex-end" : "flex-start"}
       paddingY="12px"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: 'auto 100px',
+      }}
     >
       <Box
         maxWidth={isUser ? "80%" : "100%"}
@@ -353,3 +357,5 @@ export default function Message({ message, onFeedback }) {
     </Flex>
   );
 }
+
+export default React.memo(Message);

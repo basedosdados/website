@@ -11,10 +11,15 @@ export default function useChatbot(initialThreadId = null) {
   const [error, setError] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  useEffect(() => {
+    setThreadId(initialThreadId);
+  }, [initialThreadId]);
+
   const abortControllerRef = useRef(null);
   const charQueueRef = useRef([]);
   const isTypingRef = useRef(false);
   const currentBotMessageIdRef = useRef(null);
+  const animationFrameRef = useRef(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -53,7 +58,6 @@ export default function useChatbot(initialThreadId = null) {
   const processQueue = useCallback(() => {
     if (charQueueRef.current.length > 0) {
       const charsToAppend = charQueueRef.current.splice(0, 8).join('');
-      
       const botId = currentBotMessageIdRef.current;
 
       setMessages(prev => prev.map(msg => {
@@ -61,7 +65,7 @@ export default function useChatbot(initialThreadId = null) {
         return { ...msg, content: (msg.content || '') + charsToAppend };
       }));
 
-      setTimeout(() => processQueue(), 1);
+      animationFrameRef.current = requestAnimationFrame(processQueue);
     } else {
       isTypingRef.current = false;
       const botId = currentBotMessageIdRef.current;
@@ -70,6 +74,7 @@ export default function useChatbot(initialThreadId = null) {
           msg.id === botId ? { ...msg, isTyping: false } : msg
         ));
       }
+      animationFrameRef.current = null;
     }
   }, []);
 
@@ -303,6 +308,7 @@ export default function useChatbot(initialThreadId = null) {
 
   const fetchThreadMessages = useCallback(async (id) => {
     try {
+      setMessages([]);
       setIsLoading(true);
       setError(null);
       const accessToken = await getAccessToken();
@@ -357,6 +363,14 @@ export default function useChatbot(initialThreadId = null) {
     setThreadId(null);
     setMessages([]);
     setError(null);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
   }, []);
 
   return {

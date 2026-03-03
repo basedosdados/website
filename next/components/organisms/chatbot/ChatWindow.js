@@ -1,42 +1,41 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { VStack, Box } from '@chakra-ui/react';
 import Message from './Message';
 
 function ChatWindow({ messages, onFeedback }) {
-  const messagesEndRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const messagesEndRef = useRef(null);
   const prevMessagesLength = useRef(messages.length);
-  const prevLastMessageContentLength = useRef(0);
 
-  const scrollToBottom = (behavior = "smooth") => {
-    messagesEndRef.current?.scrollIntoView({ behavior });
-  };
+  const scrollToBottom = useCallback((behavior = "smooth") => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      scrollToBottom("auto");
+    }
+  }, [messages[0]?.id]);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (container) {
-      const isNewMessage = messages.length > prevMessagesLength.current;
-      const lastMessage = messages[messages.length - 1];
-      const currentContentLength = lastMessage?.content?.length || 0;
-      const isStreaming = lastMessage?.role === 'assistant' && lastMessage?.isTyping;
-      const contentGrew = currentContentLength > prevLastMessageContentLength.current;
-      
-      const newMessages = messages.slice(prevMessagesLength.current);
-      const hasUserMessage = newMessages.some(msg => msg.role === 'user');
-      
-      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
-      
-      if (hasUserMessage) {
-        scrollToBottom("smooth");
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      } else if (isAtBottom && (isNewMessage || (isStreaming && contentGrew))) {
-        scrollToBottom("auto");
-      }
+    if (!container) return;
 
-      prevLastMessageContentLength.current = currentContentLength;
+    const isNewMessage = messages.length > prevMessagesLength.current;
+    const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 150;
+
+    if (isNewMessage && isAtBottom) {
+      scrollToBottom("auto");
     }
+
     prevMessagesLength.current = messages.length;
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
   return (
     <VStack
