@@ -1,0 +1,73 @@
+.float-pill {
+  animation: floatY 5s ease-in-out infinite;
+}
+
+.float-pill:hover {
+  animation-play-state: paused;
+}
+
+.cnpjs {
+  animation-delay: 0s;
+}
+
+.obras {
+  animation-delay: 1.2s;
+}
+
+.datasus {
+  animation-delay: 2.1s;
+  animation-name: floatX;
+}
+
+.empregos {
+  animation-delay: .7s;
+  animation-name: floatX;
+}
+
+.comex {
+  animation-delay: 1.2s;
+  animation-name: floatX;
+}
+
+.testimonials :global(.swiper-pagination-bullet) {
+  background-color: #FFFFFF;
+}
+
+.testimonials :global(.swiper-slide) {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease;
+}
+
+.testimonials :global(.swiper-slide-active) {
+  opacity: 1 !important;
+}
+
+.testimonials :global(.swiper) {
+  padding: 0 !important;
+}
+
+.testimonials :global(.swiper-button-next),
+.testimonials :global(.swiper-button-prev) {
+  display: none;
+}
+
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes floatX {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(-6px);
+  }
+}

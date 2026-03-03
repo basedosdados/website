@@ -1,0 +1,68 @@
+{
+  "head": {
+    "pageTitle": "BD Pro - Base dos Dados",
+    "metaTitle": "BD Pro - Base dos Dados"
+  },
+  "hero": {
+    "title": ["Dados públicos", "tratados e sempre atualizados"],
+    "description": "A assinatura de dados com tratamento e atualização automática. Foque na análise, enquanto a gente garante que os dados estejam frescos e prontos para uso. Assine e nos ajude a manter o maior acervo público de dados tratados no Brasil.",
+    "stats": "Aceleramos o trabalho de mais de 25 mil pesquisadores, servidores públicos e empresas mensalmente",
+    "highlights": {
+      "cnpjs": {
+        "title": "Cadastros de CNPJs",
+        "description": "Dados de cadastrais de todas empresas do Brasil atualizados mensalmente"
+      },
+      "obras": {
+        "title": "Cadastros de Obras",
+        "description": "Cadastro de obras da Receita Federal atualizados diariamente"
+      },
+      "datasus": {
+        "title": "Cadastros do Datasus",
+        "description": "Dados dos principais sistemas do Datasus (SIA, CNES, SIH...) atualizados mensalmente"
+      },
+      "empregos": {
+        "title": "Cadastro geral de empregos",
+        "description": "Dados do CAGED atualizados mensalmente"
+      },
+      "comex": {
+        "title": "Comex Stat",
+        "description": "Dados de comércio exterior atualizados mensalmente"
+      }
+    }
+  },
+  "presentation": {
+    "title": "Como funciona nosso produto?",
+    "tabs": {
+      "tab1": {
+        "label": "Acesso os dados no BigQuery",
+        "description": "Consulte os dados diretamente no Big Query com SQL"
+      },
+      "tab2": {
+        "label": "Integração direta com Python e R",
+        "description": "Acesse os dados direto no seu ambiente de trabalho com nossos pacotes Python e R"
+      },
+      "tab3": {
+        "label": "Alertas e notificações de atualização",
+        "description": "Receba um email assim que a tabela fora atualizada na BD"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Quem usa a Base dos Dados",
+    "list": {
+      "t1": {
+        "name": "Fernando Barbalho",
+        "role": "Conselheiro Técnico do Vice-Presidente da República",
+        "text": "Costumo usar a plataforma da Base dos Dados para buscar dados de municípios, principalmente aqueles que são mais estáveis, tais como séries históricas de população. Uso também para dados de CNPJ e outros conjuntos muito grandes que seriam difíceis remontar em um ambiente isolado. A facilidade de usar comandos SQL ajuda no cruzamento e agregação de dados."
+      },
+      "t2": {
+        "name": "Luiz Fernando Toledo",
+        "role": "Repórter na BBC",
+        "text": "Acabo fazendo perguntas mais complexas nas pautas porque sei que o trabalho de análise de dados não será tão complicado graças a essas ferramentas que vocês disponibilizam."
+      }
+    }
+  },
+  "faq": {
+    "title": "Dúvidas Frequentes - FAQ"
+  }
+}

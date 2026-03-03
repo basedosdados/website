@@ -2,15 +2,11 @@ import {
   Box,
   VStack,
   Stack,
-  Divider,
-  Collapse,
 } from "@chakra-ui/react";
 import Link from "../components/atoms/Link";
 import Head from "next/head";
 import FuzzySearch from 'fuzzy-search';
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import ReactMarkdown from "react-markdown";
 import { useTranslation } from 'next-i18next';
 import Display from "../components/atoms/Text/Display";
 import LabelText from "../components/atoms/Text/LabelText";
@@ -18,6 +14,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DebouncedSimpleControlledInput } from "../components/atoms/ControlledInput";
+import QuestionsBox from "../components/molecules/QuestionsBox";
 
 import {
   getAllFAQs,
@@ -25,7 +22,6 @@ import {
 
 import CrossIcon from "../public/img/icons/crossIcon";
 import SearchIcon from "../public/img/icons/searchIcon";
-import styles from "../styles/faq.module.css";
 
 export async function getStaticProps({ locale }) {
   const faqs = await getAllFAQs(locale)
@@ -37,80 +33,6 @@ export async function getStaticProps({ locale }) {
     },
     revalidate: 30
   }
-}
-
-const QuestionsBox = ({ question, answer, id, active }) => {
-  const [isActive, setIsActive] = useState(false)
-  const router = useRouter()
-
-  const scrollFocus = (idElement) => {
-    const targetElement = document.getElementById(idElement).getBoundingClientRect()
-    const heightScreen = window.innerHeight
-    const positionTarget = targetElement.top
-
-    window.scrollTo(0, positionTarget - (heightScreen/2))
-  }
-
-  useEffect(() => {
-    setIsActive(false)
-  },[active])
-
-  useEffect(() => {
-    if(router.asPath === `/faq#${id}`) return setIsActive(true)
-  },[id])
-
-  useEffect(() => {
-    if(router.asPath === `/faq#${id}`) return scrollFocus(id)
-  },[isActive])
-
-  const OpenCloseQuestion = () => {
-    setIsActive(!isActive)
-  }
-
-  return (
-    <Stack
-      spacing={0}
-      className={styles.questionContainer}
-    >
-      <Box
-        display="flex"
-        cursor="pointer"
-        marginBottom="24px"
-        gap="20px"
-        justifyContent="space-between"
-        onClick={() => OpenCloseQuestion()}
-      >
-        <LabelText typography="x-large">
-          {question}
-        </LabelText>
-        <CrossIcon
-          alt={isActive ? "fecha pergunta" : "abrir pergunta"}
-          color="#252A32"
-          transform={!isActive && "rotate(45deg)"}
-          width="20px"
-          height="20px"
-        />
-      </Box>
-      <Collapse in={isActive} animateOpacity>
-        <Box
-          id={id}
-          as="div"
-          height={isActive ? "100%" : "0"}
-          marginBottom={isActive && "32px !important"}
-          overflow="hidden"
-          transition="all 1s ease"
-          fontFamily="Roboto"
-          color="#464A51"
-          fontSize="18px"
-          lineHeight="28px"
-          fontWeight="400"
-        >
-          <ReactMarkdown>{answer}</ReactMarkdown>
-        </Box>
-      </Collapse>
-      <Divider borderColor="#DEDFE0"/>
-    </Stack>
-  )
 }
 
 export default function FAQ({ faqs }) {
