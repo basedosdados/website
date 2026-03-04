@@ -2,7 +2,8 @@
 question: O que são dados de média frequência BD Pro?
 categories: []
 keywords: []
-id: what-is-high-frequency-data
+order: 10
+id: what-is-medium-frequency-data
 ---
 
 Consideramos como dados de média frequência aqueles que são atualizados mensalmente ou com uma frequência ainda maior, com atualização semanal ou até diária, como é o caso dos dados de cotações de ações, por exemplo.  

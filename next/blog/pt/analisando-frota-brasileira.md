@@ -37,7 +37,7 @@ A Base dos Dados disponibiliza dados de 2003 até 2021, com estatísticas da Fro
 
 ## Acessando os dados
 
-Com a facilidade que a BD+ proporciona, já podemos cruzar as tabelas do IBGE e do Denatran com uma query no R. Conforme aimagem abaixo:
+Com a facilidade que a BD proporciona, já podemos cruzar as tabelas do IBGE e do Denatran com uma query no R. Conforme aimagem abaixo:
 
 ```r
 # Pacotes utilizados
@@ -76,7 +76,7 @@ WHERE
 df <- read_sql(query)
 ```
 
-OBS: Para fazer a mudança de id_município para o nome próprio das cidades, foi necessário cruzar com a tabela de [diretórios brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735) da BD+, que funciona como uma referência de centralização de informações de unidades básicas para análises.
+OBS: Para fazer a mudança de id_município para o nome próprio das cidades, foi necessário cruzar com a tabela de [diretórios brasileiros](/dataset/33b49786-fb5f-496f-bb7c-9811c985af8e?table=0a2d8187-f936-437d-89db-b4eb3a7e1735) da BD, que funciona como uma referência de centralização de informações de unidades básicas para análises.
 
 ## Respondendo a pergunta: Qual cidade brasileira tem mais carro por habitante?
 

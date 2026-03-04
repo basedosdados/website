@@ -20,7 +20,7 @@ Hoje começa mais uma edição das Olimpíadas, mas você sabia que os jogos da 
 
 <Image src="/blog/analisando-o-brasil-nas-olimpiadas-2016/image_0.jpg"/>
 
-O script de análise foi executado em R usando nosso pacote de dados. A ideia aqui é mostrar um panorama da performance brasileira nas edições em que a delegação brasileira esteve presente. Vale lembrar que, com a BD+, você também pode acessar esses dados em Python ou diretamente pelo BigQuery.
+O script de análise foi executado em R usando nosso pacote de dados. A ideia aqui é mostrar um panorama da performance brasileira nas edições em que a delegação brasileira esteve presente. Vale lembrar que, com a BD, você também pode acessar esses dados em Python ou diretamente pelo BigQuery.
 
 ```r
 library("basedosdados")

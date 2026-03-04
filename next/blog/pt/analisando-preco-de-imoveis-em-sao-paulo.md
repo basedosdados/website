@@ -30,7 +30,7 @@ Nesta análise, concentramos nossa atenção no valor do metro quadrado constru�
 
 A distribuição geográfica dos valores do metro quadrado construído na cidade de São Paulo revela uma notável disparidade. O bairro do Jardim Paulistano, localizado na Zona Norte da cidade, apresenta o menor valor de metro quadrado construído, avaliado em R$ 7.960, enquanto o bairro do Itaim Bibi, na Zona Oeste, registra o maior valor, impressionantes R$ 39.980 por metro quadrado. Isso significa que a diferença entre o metro quadrado mais caro e o mais barato na cidade é de aproximadamente cinco vezes, destacando as variações significativas nos preços imobiliários em diferentes regiões da metrópole paulistana. O valor médio por metro quadrado na cidade é R$ 23.088.
 
-Com assinatura BDPro você pode acessar dados atualizados periodicamente pelo cadastro fiscal da Prefeitura, com informações como valor do terreno, área construída, uso do imóvel e até características do bairro. Comece já seu [teste grátis](https://info.basedosdados.org/bd-pro) e explore!
+Com assinatura BDPro você pode acessar dados atualizados periodicamente pelo cadastro fiscal da Prefeitura, com informações como valor do terreno, área construída, uso do imóvel e até características do bairro. Comece já seu [teste grátis](https://basedosdados.org/bdpro) e explore!
 
 Que tal utilizar o código dessa análise para criar seus próprios recortes? Todos os códigos das análises que publicamos estão disponíveis em nosso [GitHub](https://github.com/basedosdados/analises/blob/main/redes_sociais/br_sp_geosampa_iptu_iptu_20230829.ipynb).
 

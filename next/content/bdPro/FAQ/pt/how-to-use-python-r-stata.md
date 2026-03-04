@@ -2,6 +2,7 @@
 question: Como posso usar os pacotes de Python, R e Stata da assinatura?
 categories: []
 keywords: []
+order: 7
 id: how-to-use-python-r-stata
 ---
 

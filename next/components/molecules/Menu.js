@@ -916,7 +916,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         },
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/bd-pro"
+          href: "/bdpro"
         },
         {
           name: [t('courses')],
@@ -945,7 +945,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/en/bd-pro"
+          href: "/en/bdpro"
         }
       ],
       [t('resources')]: [
@@ -967,7 +967,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/es/bd-pro"
+          href: "/es/bdpro"
         }
       ],
       [t('resources')]: [

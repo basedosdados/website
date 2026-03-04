@@ -6,11 +6,12 @@ import {
   Box,
   Spinner
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { triggerGAEvent } from "../../utils";
 import { useRouter } from 'next/router';
+import cookies from 'js-cookie';
 
 import {
   LabelTextForm,
@@ -518,7 +519,9 @@ export default function Register() {
             _hover={{
               color: "#0057A4"
             }}
-            href="/user/login"
+            href={{
+                pathname: '/user/login',
+              }}
           >
             {t('signup.login')}
           </Link>.

@@ -21,7 +21,7 @@ import TitleText from "../../atoms/Text/TitleText";
 import LabelText from "../../atoms/Text/LabelText";
 import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
-import { CardPrice } from "../../../pages/prices";
+import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
@@ -140,9 +140,14 @@ export default function PlansAndPayment ({ userData }) {
   }, [plan, plans])
 
   useEffect(() => {
-    if(query.i) {
-      if(userData?.isSubscriber) return AlertChangePlanModal.onOpen()
-      setPlan(query.i)
+    const planSelected = cookies.get('plan_selected');
+    if (planSelected) {
+      if (userData?.isSubscriber) {
+        cookies.remove('plan_selected');
+        return AlertChangePlanModal.onOpen();
+      }
+      setPlan(planSelected);
+      cookies.remove('plan_selected');
     }
   }, [query])
 
@@ -1036,128 +1041,13 @@ export default function PlansAndPayment ({ userData }) {
           />
         </Stack>
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          gridGap="40px"
-        >
-          <Box
-            display="flex"
-            width="100%"
-            flexDirection="row"
-            justifyContent="center"
-            alignitems="center"
-            gap="8px"
-          >
-            <Toggle
-              id="toggle-prices"
-              defaultChecked
-              value={toggleAnual}
-              onChange={() => setToggleAnual(!toggleAnual)}
-            />
-            <LabelText
-              typography="large"
-              position="relative"
-              top="-2px"
-              gap="8px"
-              display="flex"
-              fontWeight="400"
-              alignItems="center"
-              textAlign="center"
-            >
-              {t('username.annualDiscount')}
-              <LabelText
-                typography="large"
-                as="span"
-                color="#2B8C4D"
-                backgroundColor="#D5E8DB"
-                padding="2px 4px"
-                borderRadius="4px"
-                height="32px"
-              >
-                {t('username.save20')}
-              </LabelText>
-            </LabelText>
-          </Box>
-
-          <Stack
-            display={{base: "flex", lg: "grid"}}
-            gridTemplateColumns="repeat(3, 320px)"
-            gridTemplateRows="1fr"
-            alignItems={{base: "center", lg: "inherit"}}
-            padding="0 10px 6px"
-            justifyContent="center"
-            justifyItems="center"
-            gap="24px"
-            spacing={0}
-          >
-            <CardPrice
-              title={t('username.DBFree')}
-              subTitle={<>{t('username.DBFreeSubtitle')}</>}
-              price={"0"}
-              textResource={t('username.resources')}
-              resources={[
-                {name: t('username.processedTables')},
-                {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
-                {name: t('username.cloudAccess')},
-                {name: t('username.sqlPythonRAccess')},
-                {name: t('username.biIntegration')},
-                {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
-              ]}
-              button={{
-                text: t('username.exploreFeatures'),
-                href: "/search",
-                noHasModal: true,
-              }}
-            />
-
-            <CardPrice
-              title={t('username.DBPro')}
-              subTitle={<>{t('username.DBProSubtitle')}</>}
-              price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
-              anualPlan={toggleAnual}
-              textResource={t('username.allDBFreeResources')}
-              resources={[
-                {name: t('username.dozensOfHighFrequencyDatasets')},
-                {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
-                {name: t('username.selectedTableNotifications')}
-              ]}
-              button={{
-                id: "bd_pro_button_sub_btn",
-                text: `${userData?.proSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                  setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
-                  PlansModal.onClose()
-                  EmailModal.onOpen()
-                },
-                isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
-              }}
-            />
-
-            <CardPrice
-              title={t('username.DBEnterprise')}
-              subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
-              anualPlan={toggleAnual}
-              textResource={t('username.allDBProResources')}
-              resources={[
-                {name: t('username.accessFor10Accounts')},
-                {name: t('username.prioritySupport')}
-              ]}
-              button={{
-                id: "bd_pro_empresas_button_sub_btn",
-                text: `${userData?.proSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                  setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
-                  PlansModal.onClose()
-                  EmailModal.onOpen()
-                },
-                isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
-              }}
-            />
-          </Stack>
-        </Box>
+        <SectionPrice
+          action={(planId) => {
+            setPlan(planId)
+            PlansModal.onClose()
+            EmailModal.onOpen()
+          }}
+        />
       </ModalGeneral>
 
       {/* err plans */}

@@ -1,17 +1,12 @@
 import {
-  Stack,
   HStack,
   Box,
   Tooltip,
   useDisclosure,
-  ModalCloseButton
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
-import { SectionPrice } from "../../pages/prices";
-import { ModalGeneral } from "./uiUserPage";
-import TitleText from "../atoms/Text/TitleText";
 import BodyText from "../atoms/Text/BodyText";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
@@ -19,7 +14,6 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 export function TemporalCoverageBar ({ value }) {
   const { t } = useTranslation(['dataset', 'prices']);
   const [values, setValues] = useState({})
-  const plansModal = useDisclosure()
 
   const isUserPro = () => {
     let user
@@ -68,34 +62,6 @@ export function TemporalCoverageBar ({ value }) {
       alignItems="normal"
       spacing={0}
     >
-      <ModalGeneral
-        isOpen={plansModal.isOpen}
-        onClose={plansModal.onClose}
-        propsModalContent={{
-          minWidth: "fit-content",
-          overflow: "auto"
-        }}
-        isCentered={false}
-      >
-        <Stack spacing={0} marginBottom="16px">
-          <TitleText
-            width="100%"
-            fontWeight="400"
-            textAlign="center"
-          >
-            {t('temporalCoverageBar.comparePlans')}
-          </TitleText>
-          <ModalCloseButton
-            fontSize="14px"
-            top="34px"
-            right="26px"
-            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
-          />
-        </Stack>
-
-        <SectionPrice/>
-      </ModalGeneral>
-
       <Tooltip
         hasArrow
         padding="16px"
@@ -242,8 +208,8 @@ export function TemporalCoverageBar ({ value }) {
             }}
             onClick={() => {
               if(isUserPro()) return
-              plansModal.onOpen()}
-            }
+              window.location.href = '/bdpro'
+            }}
           >
             {t('temporalCoverageBar.paid')}
             {isUserPro() ?

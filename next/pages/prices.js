@@ -202,7 +202,7 @@ export const CardPrice = ({
             </LabelText>
           ) : (
             <Link
-              href={button.onClick ? '#' : button.href}
+              href={button.href || '#'}
               width="100%"
               style={{ textDecoration: 'none' }}
             >
@@ -262,7 +262,9 @@ export const CardPrice = ({
   )
 }
 
-export function SectionPrice() {
+export function SectionPrice({
+  action = () => {}
+}) {
   const { t, ready } = useTranslation('prices');
   const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
@@ -425,7 +427,11 @@ export function SectionPrice() {
           }))}
           button={{
             text: isBDPro.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-            href: username === null ? `/user/login?i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id}`,
+            href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+            onClick: () => {
+              cookies.set('plan_selected', plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
+              action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
+            },
             isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
           }}
           locale={locale}
@@ -440,7 +446,11 @@ export function SectionPrice() {
           resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
           button={{
             text: isBDEmp.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-            href: username === null ? `/user/login?i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}` :`/user/${username}?plans_and_payment&i=${plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id}`,
+            href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+            onClick: () => {
+              cookies.set('plan_selected', plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
+              action(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
+            },
             isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
           }}
           locale={locale}

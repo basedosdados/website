@@ -2,6 +2,7 @@
 question: O que são dados integrados? 
 categories: [data]
 keywords: []
+order: 11
 id: what-is-integranted-data
 ---
 
