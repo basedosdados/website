@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Box,
   VStack,
@@ -27,7 +27,6 @@ import BDLogoProImage from "../public/img/logos/bd_logo_pro";
 import QuestionsBox from "../components/molecules/QuestionsBox";
 
 import styles from "../styles/bdpro.module.css";
-import stylesFaq from "../styles/faq.module.css";
 
 export async function getStaticProps({ locale }) {
   const faqs = await getAllFAQs(locale, "bdPro/FAQ")
@@ -105,6 +104,56 @@ function HighlightBox({ title, description, cn, isActive, onActivate, onDeactiva
   );
 }
 
+function VideoPlayer({ src, isActive }) {
+  const videoRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (videoRef.current) {
+      observer.observe(videoRef.current);
+    }
+
+    return () => {
+      if (videoRef.current) {
+        observer.unobserve(videoRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isActive && isVisible) {
+      video.play().catch((error) => {
+        console.error("Video play failed:", error);
+      });
+    } else {
+      video.pause();
+    }
+  }, [isActive, isVisible]);
+
+  return (
+    <video
+      ref={videoRef}
+      loop
+      muted
+      playsInline
+      preload="auto"
+      style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }}
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  );
+}
+
 function Hero({ t }) {
   const [activeHightlight, setActiveHightlight] = useState(null);
 
@@ -112,7 +161,7 @@ function Hero({ t }) {
     { key: 'cnpjs', top: "10%", left: "26%", cn: "cnpjs" },
     { key: 'obras', top: "22%", right: "16%", cn: "obras" },
     { key: 'datasus', bottom: "50%", left: "3%", transform: "translateY(-50%)", cn: "datasus" },
-    { key: 'empregos', bottom: "18%", right: "4%", transform: "translateY(-50%)", cn: "empregos" },
+    { key: 'empregos', bottom: "18%", right: "0", transform: "translateY(-50%)", cn: "empregos" },
     { key: 'comex', top: "76%", left: "6%", transform: "translateY(-50%)", cn: "comex" },
   ];
 
@@ -171,7 +220,7 @@ function Hero({ t }) {
         </Display>
         <TitleText
           as="h2"
-          maxWidth="850px"
+          maxWidth="880px"
           typography={isMobileMod() ? "small" : "medium"}
           fontWeight="400"
           color="#ffffffc7"
@@ -246,6 +295,7 @@ function Hero({ t }) {
 function Presentation({ t }) {
   const tabs = [1, 2, 3, 4];
   const isMobile = isMobileMod();
+  const [tabIndex, setTabIndex] = useState(0);
 
   const videoUrls = {
     1: "https://storage.googleapis.com/basedosdados-website/bdpro/bigquery-access.mp4",
@@ -266,7 +316,15 @@ function Presentation({ t }) {
       >
         {t('presentation.title')}
       </Display>
-      <Tabs variant="unstyled" align="center" width="100%" maxWidth="1440px" margin="0 auto">
+      <Tabs
+        index={tabIndex}
+        onChange={(index) => setTabIndex(index)}
+        variant="unstyled"
+        align="center"
+        width="100%"
+        maxWidth="1440px"
+        margin="0 auto"
+      >
         <TabList
           borderBottom="1px solid #DEDFE0"
           width="100%"
@@ -291,7 +349,7 @@ function Presentation({ t }) {
           ))}
         </TabList>
         <TabPanels>
-          {tabs.map((i) => (
+          {tabs.map((i, index) => (
             <TabPanel
               key={i}
               padding="24px 0"
@@ -315,7 +373,8 @@ function Presentation({ t }) {
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
-                width="100%"
+                width="fit-content"
+                maxWidth="800px"
                 height={{ base: "auto", md: "450px" }}
                 minHeight={{ base: "250px", md: "450px" }}
                 backgroundColor="#F9F9F9"
@@ -323,16 +382,10 @@ function Presentation({ t }) {
                 borderRadius="16px"
                 overflow="hidden"
               >
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '16px' }}
-                >
-                  <source src={videoUrls[i]} type="video/mp4" />
-                </video>
+                <VideoPlayer
+                  src={videoUrls[i]}
+                  isActive={tabIndex === index}
+                />
               </Box>
             </TabPanel>
           ))}

@@ -122,7 +122,7 @@ Nesta seção, apresentamos algumas dicas simples para reduzir os custos das con
 
 <Image src="/docs/bq_query_estimated_costs.png"/>
 
-- Este é o mecanismo básico e prontamente acessível de previsibilidade dos custos de processamento. Infelizmente, não funciona para todas as tabelas. Por motivos de limitação interna do próprio Big Query, consultas à tabelas específicas não exibem estimativas de custos. É o caso das tabelas que possuem **Row Access Policy**. Isto é, tabelas onde o número de linhas acessíveis é limitada a depender do usuário. Este é o caso das tabelas que fazem parte do serviço [BDpro](https://info.basedosdados.org/bd-pro)
+- Este é o mecanismo básico e prontamente acessível de previsibilidade dos custos de processamento. Infelizmente, não funciona para todas as tabelas. Por motivos de limitação interna do próprio Big Query, consultas à tabelas específicas não exibem estimativas de custos. É o caso das tabelas que possuem **Row Access Policy**. Isto é, tabelas onde o número de linhas acessíveis é limitada a depender do usuário. Este é o caso das tabelas que fazem parte do serviço [BDpro](https://basedosdados.org/bdpro)
 
 - Exemplo da tabela `agencia` do conjunto `br_bcb_estban`. 
 
