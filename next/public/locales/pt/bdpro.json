@@ -38,12 +38,16 @@
         "description": "Consulte os dados diretamente no Big Query com SQL"
       },
       "tab2": {
-        "label": "Integração direta com Python e R",
-        "description": "Acesse os dados direto no seu ambiente de trabalho com nossos pacotes Python e R"
+        "label": "Acesso a dados atualizados",
+        "description": "Acesse os dados atualizados na plataforma em até 1 dia após a liberação da fonte original"
       },
       "tab3": {
         "label": "Alertas e notificações de atualização",
         "description": "Receba um email assim que a tabela fora atualizada na BD"
+      },
+      "tab4": {
+        "label": "Integração direta com Python e R",
+        "description": "Acesse os dados direto no seu ambiente de trabalho com nossos pacotes Python e R"
       }
     }
   },

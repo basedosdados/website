@@ -244,13 +244,14 @@ function Hero({ t }) {
 }
 
 function Presentation({ t }) {
-  const tabs = [1, 2, 3];
+  const tabs = [1, 2, 3, 4];
   const isMobile = isMobileMod();
 
   const videoUrls = {
     1: "https://storage.googleapis.com/basedosdados-website/bdpro/bigquery-access.mp4",
-    2: "https://storage.googleapis.com/basedosdados-website/bdpro/python-r-clients.mp4",
+    2: "https://storage.googleapis.com/basedosdados-website/bdpro/update-frequency.mp4",
     3: "https://storage.googleapis.com/basedosdados-website/bdpro/updates-alerts.mp4",
+    4: "https://storage.googleapis.com/basedosdados-website/bdpro/python-r-clients.mp4",
   }
 
   return (
@@ -412,6 +413,7 @@ function PricingSection({ t }) {
 
   return (
     <VStack
+      id="pricing"
       width="100%"
       padding="80px 24px"
       gap="24px"
