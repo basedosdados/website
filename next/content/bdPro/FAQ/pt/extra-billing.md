@@ -3,6 +3,7 @@ question: Posso ter cobranças extras por usar os dados BD Pro?
 categories: []
 keywords: []
 id: extra-billing
+order: 9
 ---
 
 É importante dizer que a Base dos Dados jamais cobrará taxas extras sem o usuário ter confirmado e processo o pagamento por conta própria em nosso portal de pagamento.
