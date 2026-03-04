@@ -10,8 +10,6 @@ import {
   Tooltip,
   Skeleton,
   Stack,
-  useDisclosure,
-  ModalCloseButton,
   Spinner
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef, useCallback, useMemo, memo } from "react";
@@ -24,15 +22,12 @@ import 'highlight.js/styles/obsidian.css'
 import { useTranslation } from 'next-i18next';
 import { useRouter } from "next/router";
 
-import TitleText from "../atoms/Text/TitleText";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 import Button from "../atoms/Button";
 import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import TableColumns from "./TableColumns";
-import { SectionPrice } from "../../pages/prices";
-import { ModalGeneral } from "./uiUserPage";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
 import { triggerGAEvent, triggerGAEventWithData, formatBytes } from "../../utils";
 
@@ -193,7 +188,6 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
   const [isLoadingCode, setIsLoadingCode] = useState(false);
   const [isLoadingSpin, setIsLoadingSpin] = useState(false);
   const [hasLoadingResponse, setHasLoadingResponse] = useState(false);
-  const plansModal = useDisclosure();
 
   const [gcpProjectID, setGcpProjectID] = useState("");
   const [gcpDatasetID, setGcpDatasetID] = useState("");
@@ -280,7 +274,7 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
 
   const handleDownload = useCallback(() => {
     if(downloadWarning !== "free" && isUserPro() === false) {
-      plansModal.onOpen();
+      window.open("/bdpro", "_blank");
       return;
     }
     window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
@@ -398,32 +392,6 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
       border="1px solid #DEDFE0"
       borderRadius="16px"
     >
-      <ModalGeneral
-        isOpen={plansModal.isOpen}
-        onClose={plansModal.onClose}
-        propsModalContent={{
-          minWidth: "fit-content"
-        }}
-      >
-        <Stack spacing={0} marginBottom="16px">
-          <TitleText
-            width="100%"
-            fontWeight="400"
-            textAlign="center"
-          >
-            {t('table.compareThePlans')}
-          </TitleText>
-          <ModalCloseButton
-            fontSize="14px"
-            top="34px"
-            right="26px"
-            _hover={{backgroundColor: "transparent", color:"#0B89E2"}}
-          />
-        </Stack>
-
-        <SectionPrice/>
-      </ModalGeneral>
-
       <Tabs
         width="100%"
         variant="unstyled"
