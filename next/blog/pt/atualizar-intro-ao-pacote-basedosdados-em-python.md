@@ -20,13 +20,13 @@ published: false
 
 ## TL;DR
 
-Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso _datalake_ público BD+, obter informações sobre tabelas, carregar dados no pandas, e mais.
+Vamos demonstrar **como usar o pacote da Base dos Dados em Python.** O pacote permite acessar e analisar mais de 70 conjuntos de dados do nosso _datalake_ público BD, obter informações sobre tabelas, carregar dados no pandas, e mais.
 
-Conteúdo baseado no [Workshop “Brincando com dados BD+ em Python”](https://www.youtube.com/watch?v=wI2xEioDPgM).
+Conteúdo baseado no [Workshop “Brincando com dados BD em Python”](https://www.youtube.com/watch?v=wI2xEioDPgM).
 
-## Como acessar a BD+ em Python
+## Como acessar a BD em Python
 
-A Base dos Dados Mais (BD+) é o nosso _datalake_ de dados públicos **limpos, integrados e atualizados** pela nossa equipe de dados — dados prontos para análise.
+A Base dos Dados Mais (BD) é o nosso _datalake_ de dados públicos **limpos, integrados e atualizados** pela nossa equipe de dados — dados prontos para análise.
 
 O _datalake_ é mantido no Google BigQuery e tem custo praticamente zero para todos os usuários — você tem 1 TB disponível por mês para fazer consulta aos dados. Para facilitar ainda mais a vida de Pythonistas, criamos um pacote de acesso direto ao repositório via Python: **basedosdados**
 

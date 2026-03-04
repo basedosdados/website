@@ -52,6 +52,12 @@ Os dados são preenchidos manualmente, o que pode gerar inconsistências, valore
 Nos anos em que a eleição para o Senado envolve duas vagas, a proporção de votos válidos nas tabelas `detalhes_votacao_municipio`, `detalhes_votacao_municipio_zona` e `detalhes_votacao_secao` pode ultrapassar 100%.
 Isso ocorre porque, nesses anos, cada eleitor pode votar em dois candidatos diferentes, e o TSE contabiliza cada voto individualmente como um voto válido para o cargo. Assim, um mesmo eleitor aparece duas vezes na contagem, o que eleva a proporção de votos válidos acima de 100%.
 
+## Eleições suplementares 
+Pode haver mais de um prefeito, governador ou presidente eleito dentro do mesmo mandato (por exemplo, 2020–2024). Isso ocorre quando a Justiça Eleitoral anula mais de 50% dos votos válidos e convoca uma eleição suplementar para eleger um novo representante. Para análise, utilize a coluna `tipo_eleição` para diferenciar eleições ordinárias e suplementares dentro do mesmo ciclo eleitoral.
+
+## Coluna ano
+A coluna ano indica o ano do ciclo eleitoral originalmente previsto (ex.: 2020), mesmo que a eleição tenha ocorrido posteriormente. Por exemplo, a coluna `data_eleicao` pode indicar uma data em 2022, enquanto a coluna `ano` permanece com o valor 2020.
+
 # Limitações
 As tabelas do TSE não incluem informações de eleições para o conselho tutelar.
 
@@ -59,10 +65,11 @@ As tabelas do TSE não incluem informações de eleições para o conselho tutel
 Além do comportamento esperado nos anos com duas vagas para o Senado, identificamos que existem algumas dezenas de linhas na tabela `detalhes_votacao_secao` em que a proporção de votos válidos ultrapassa 100% sem uma causa conhecida. Esse conjunto de casos é muito pequeno em relação ao total de linhas da tabela e, até o momento, não encontramos uma explicação para o ocorrido. Recomendamos tratar esses registros como residuais e analisá-los com cautela caso tenham impacto direto na sua aplicação.
 
 # Observações ao longo tempo
-Para acompanhar os candidatos ao longo dos anos, você pode usar a coluna `titulo_eleitoral`. Esse identificador rastreia indivíduos de forma consistente, superando a limitação de outros IDs associados que mudam entre pleitos. Ele identifica os candidatos em 99,5% dos casos. No entanto, é importante observar que podem existir valores nulos ou dois identificadores diferentes para o mesmo candidato em alguns casos.
 
-Para acompanhar os partidos, é preciso considerar mudanças de nome e fusões ao longo do tempo.
+- Para acompanhar os candidatos ao longo dos anos, você pode usar a coluna `titulo_eleitoral`. Esse identificador rastreia indivíduos de forma consistente, superando a limitação de outros IDs associados que mudam entre pleitos. Ele identifica os candidatos em 99,5% dos casos. No entanto, é importante observar que podem existir valores nulos ou dois identificadores diferentes para o mesmo candidato em alguns casos.
 
+- Para acompanhar os partidos, é preciso considerar mudanças de nome e fusões ao longo do tempo.
+  
 # Linhas duplicadas
 As linhas duplicadas são removidas no tratamento feito pela BD.
 
@@ -119,6 +126,7 @@ Os tratamentos realizados foram:
 * [Painel para consulta de informações sobre candidaturas e contas eleitorais](https://divulgacandcontas.tse.jus.br/divulga/#/home)
 * [Siga o dinheiro: Painel desenvolvido pela BD para entender de onde vem e onde está sendo gasto o dinheiro das campanhas](https://www.sigaodinheiro.org/)
 * [Curso de Análise de Dados Eleitorais da BD](https://info.basedosdados.org/bd-edu-eleicoes)
+* [Notícia do TSE sobre as eleições suplementares](https://www.tse.jus.br/comunicacao/noticias/2025/Fevereiro/voce-sabe-o-que-e-uma-eleicao-suplementar)
 
 [code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
 [code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
