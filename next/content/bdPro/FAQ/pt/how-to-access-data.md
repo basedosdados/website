@@ -6,7 +6,7 @@ order: 5
 id: how-to-access-data
 ---
 
-Os dados BD Pro podem ser acessados de inúmeras maneiras entre elas:
+Os dados BD Pro podem ser acessados de inúmeras maneiras, entre elas:
 
 * Diretamente no Google Big Query, utilizando SQL para fazer consultas
 * Por meio dos nossos pacotes de programação que incluem, Python, R e Stata
