@@ -204,11 +204,11 @@ export const CardPrice = ({
           ) : (
             <Link
               href={button.href || '#'}
-              width="100%"
-              style={{ textDecoration: 'none' }}
+              passHref
             >
               <Box
                 id={button?.id}
+                as="a"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
