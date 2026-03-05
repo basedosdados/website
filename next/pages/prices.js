@@ -2,6 +2,8 @@ import {
   Box,
   Stack,
   Tooltip,
+  Skeleton,
+  SkeletonText,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
@@ -43,6 +45,16 @@ export const CardPrice = ({
   locale,
 }) => {
   const { t } = useTranslation('prices');
+  const router = useRouter();
+
+  const handleNavigation = () => {
+    if (button.onClick) {
+      button.onClick();
+    }
+    if (button.href) {
+      router.push(button.href);
+    }
+  };
 
   return (
     <Box
@@ -202,34 +214,28 @@ export const CardPrice = ({
               {t('currentPlan')}
             </LabelText>
           ) : (
-            <Link
-              href={button.href || '#'}
-              passHref
+            <Box
+              id={button?.id}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              width="100%"
+              borderRadius="8px"
+              backgroundColor="#2B8C4D"
+              padding="12px 16px"
+              cursor="pointer"
+              color="#FFF"
+              fontFamily="Roboto"
+              fontWeight="500"
+              fontSize="20px"
+              lineHeight="36px"
+              onClick={handleNavigation}
+              _hover={{
+                backgroundColor: "#22703E"
+              }}
             >
-              <Box
-                id={button?.id}
-                as="a"
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
-                borderRadius="8px"
-                backgroundColor="#2B8C4D"
-                padding="12px 16px"
-                cursor="pointer"
-                color="#FFF"
-                fontFamily="Roboto"
-                fontWeight="500"
-                fontSize="20px"
-                lineHeight="36px"
-                onClick={button.onClick}
-                _hover={{
-                  backgroundColor: "#22703E"
-                }}
-              >
-                {t(button.text)}
-              </Box>
-            </Link>
+              {t(button.text)}
+            </Box>
           )}
 
           <BodyText 
@@ -274,74 +280,94 @@ export function SectionPrice({
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [hasSubscribed, setHasSubscribed] = useState(true)
+  const [isLoading, setLoading] = useState(true)
 
   if (!ready) return null
 
-  async function alreadySubscribed(id) {
-    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
-      .then(res => res.json())
-    setHasSubscribed(result)
-  } 
-
-  useEffect(() => {
-    let user = null
-    if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
-
-    if(user) {
-      const reg = new RegExp("(?<=:).*")
-      const [ id ] = reg.exec(user.id)
-      alreadySubscribed(id)
-    } else {
+  async function fetchAlreadySubscribed(id) {
+    try {
+      const res = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      const result = await res.json()
+      setHasSubscribed(result)
+    } catch (e) {
+      console.error(e)
       setHasSubscribed(false)
     }
+  }
 
-    const stripeSubscription = {
-      stripeSubscription: user?.proSubscription,
-      planInterval: user?.internalSubscription?.edges?.[0]?.node?.planInterval || user?.subscriptionSet?.edges?.[0]?.node?.planInterval
-    }
+  async function fetchPlans() {
+    try {
+      const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
+        .then(res => res.json())
 
-    if(user != null) {
-      setUsername(user?.username)
-      setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
-      setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
-    }
+      if(result.success === true) {
+        function filterData(productName, interval, isActive, amount) {
+          let array = result.data
 
-    async function fecthPlans() {
-      try {
-        const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
-          .then(res => res.json())
-
-        if(result.success === true) {
-          function filterData(productName, interval, isActive, amount) {
-            let array = result.data
-
-            return array.filter(item => 
-              (productName ? item.node.productName === productName : true) &&
-              (interval ? item.node.interval === interval : true) &&
-              (amount ? item.node.amount === amount : true) &&
-              (isActive !== undefined ? item.node.isActive === isActive : true)
-            )
-          }
-
-          const filteredPlans = {
-            bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-            bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-            bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
-            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
-          }
-
-          setPlans(filteredPlans)
+          return array.filter(item => 
+            (productName ? item.node.productName === productName : true) &&
+            (interval ? item.node.interval === interval : true) &&
+            (amount ? item.node.amount === amount : true) &&
+            (isActive !== undefined ? item.node.isActive === isActive : true)
+          )
         }
-      } catch (error) {
-        console.error(error)
+
+        const filteredPlans = {
+          bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
+          bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
+          bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
+          bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
+        }
+
+        setPlans(filteredPlans)
       }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    async function loadData() {
+      setLoading(true)
+      let user = null
+      if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+
+      const promises = []
+
+      if(user) {
+        const reg = new RegExp("(?<=:).*")
+        const match = reg.exec(user.id)
+        if (match) {
+          const [id] = match
+          promises.push(fetchAlreadySubscribed(id))
+        } else {
+          setHasSubscribed(false)
+        }
+      } else {
+        setHasSubscribed(false)
+      }
+
+      promises.push(fetchPlans())
+
+      if(user != null) {
+        const stripeSubscription = {
+          stripeSubscription: user?.proSubscription,
+          planInterval: user?.internalSubscription?.edges?.[0]?.node?.planInterval || user?.subscriptionSet?.edges?.[0]?.node?.planInterval
+        }
+        setUsername(user?.username)
+        setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
+        setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
+      }
+
+      await Promise.all(promises)
+      setLoading(false)
     }
 
     setToggleAnual(true)
-    fecthPlans()
+    loadData()
   }, [])
 
-  function planIntervalPlan() {
+  function planIntervalPlan(toggleAnual) {
     const planInterval = toggleAnual ? "year" : "month"
 
     if(isBDPro?.planInterval === planInterval) return true
@@ -391,81 +417,118 @@ export function SectionPrice({
         </LabelText>
       </Box>
 
-      <Stack
-        display={{base: "flex", lg: "grid"}}
-        gridTemplateColumns="repeat(3, 320px)"
-        gridTemplateRows="1fr"
-        justifyContent="center"
-        justifyItems="center"
-        gap="20px"
-        spacing={0}
-      >
-        <CardPrice
-          title={t('plans.free.title')}
-          subTitle={t('plans.free.subtitle')}
-          price="0"
-          textResource={t('features')}
-          resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
-            name: feature,
-            tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
-          }))}
-          button={{
-            text: t('exploreFeatures'),
-            href: "/search",
-            onClick: () => triggerGAEvent("explore_features_card_price", "click"),
-          }}
-          locale={locale}
-        />
+      {isLoading ? (
+        <Stack
+          display={{base: "flex", lg: "grid"}}
+          gridTemplateColumns="repeat(3, 320px)"
+          gridTemplateRows="1fr"
+          justifyContent="center"
+          justifyItems="center"
+          gap="20px"
+          spacing={0}
+        >
+          {[1, 2, 3].map((i) => (
+            <Box
+              key={i}
+              display="flex"
+              flexDirection="column"
+              width={{base: "100%", lg: "272px"}}
+              boxSizing={{base: "inherit", lg: "content-box"}}
+              borderRadius="16px"
+              boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
+              padding="40px 24px"
+              textAlign="center"
+            >
+              <Skeleton height="32px" width="150px" margin="0 auto 8px" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+              <Skeleton height="20px" width="200px" margin="0 auto 24px" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+              <Box marginBottom="40px">
+                <Skeleton height="60px" width="120px" margin="0 auto" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+              </Box>
+              <Box flex={1} textAlign="start">
+                <SkeletonText mt="4" noOfLines={6} spacing="4" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+                <Skeleton height="48px" width="100%" borderRadius="8px" marginTop="40px" startColor="#F0F0F0" endColor="#F3F3F3"/>
+                <Skeleton height="20px" width="80%" margin="16px auto 0" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+              </Box>
+            </Box>
+          ))}
+        </Stack>
+      ) : (
+        <Stack
+          display={{base: "flex", lg: "grid"}}
+          gridTemplateColumns="repeat(3, 320px)"
+          gridTemplateRows="1fr"
+          justifyContent="center"
+          justifyItems="center"
+          gap="20px"
+          spacing={0}
+        >
+          <CardPrice
+            title={t('plans.free.title')}
+            subTitle={t('plans.free.subtitle')}
+            price="0"
+            textResource={t('features')}
+            resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
+              name: feature,
+              tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
+            }))}
+            button={{
+              text: t('exploreFeatures'),
+              href: "/search",
+              onClick: () => triggerGAEvent("explore_features_card_price", "click"),
+            }}
+            locale={locale}
+          />
 
-        <CardPrice
-          title={t('plans.pro.title')}
-          subTitle={t('plans.pro.subtitle')}
-          price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
-          anualPlan={toggleAnual}
-          textResource={t('allFeaturesPlus', { plan: t('plans.free.title') })}
-          resources={t('plans.pro.features', { returnObjects: true }).map((feature, index) => ({
-            name: feature,
-            tooltip: index === 2 ? t('tooltips.downloadLimitPro') : null
-          }))}
-          button={{
-            text: isBDPro.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-            href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
-            onClick: () => {
-              triggerGAEventWithData("bd_pro_card_price", {
-                plan_interval: toggleAnual ? 'year' : 'month',
-                is_free_trial: !hasSubscribed
-              })
-              cookies.set('plan_selected', plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
-              action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
-            },
-            isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(),
-          }}
-          locale={locale}
-        />
+          <CardPrice
+            title={t('plans.pro.title')}
+            subTitle={t('plans.pro.subtitle')}
+            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444}
+            anualPlan={toggleAnual}
+            textResource={t('allFeaturesPlus', { plan: t('plans.free.title') })}
+            resources={t('plans.pro.features', { returnObjects: true }).map((feature, index) => ({
+              name: feature,
+              tooltip: index === 2 ? t('tooltips.downloadLimitPro') : null
+            }))}
+            button={{
+              text: isBDPro.isCurrentPlan && planIntervalPlan(toggleAnual) ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
+              href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+              onClick: () => {
+                triggerGAEventWithData("bd_pro_card_price", {
+                  plan_interval: toggleAnual ? 'year' : 'month',
+                  is_free_trial: !hasSubscribed
+                })
+                cookies.set('plan_selected', plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
+                action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
+              },
+              isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(toggleAnual),
+            }}
+            locale={locale}
+          />
 
-        <CardPrice
-          title={t('plans.enterprise.title')}
-          subTitle={t('plans.enterprise.subtitle')}
-          price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
-          anualPlan={toggleAnual}
-          textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
-          resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
-          button={{
-            text: isBDEmp.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-            href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
-            onClick: () => {
-              triggerGAEventWithData("bd_empresas_card_price", {
-                plan_interval: toggleAnual ? 'year' : 'month',
-                is_free_trial: !hasSubscribed
-              })
-              cookies.set('plan_selected', plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
-              action(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
-            },
-            isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(),
-          }}
-          locale={locale}
-        />
-      </Stack>
+          <CardPrice
+            title={t('plans.enterprise.title')}
+            subTitle={t('plans.enterprise.subtitle')}
+            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?.amount || 3700}
+            anualPlan={toggleAnual}
+            textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
+            resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
+            button={{
+              text: isBDEmp.isCurrentPlan && planIntervalPlan(toggleAnual) ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
+              href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+              onClick: () => {
+                triggerGAEventWithData("bd_empresas_card_price", {
+                  plan_interval: toggleAnual ? 'year' : 'month',
+                  is_free_trial: !hasSubscribed
+                })
+                cookies.set('plan_selected', plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
+                action(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
+              },
+              isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(toggleAnual),
+            }}
+            locale={locale}
+          />
+        </Stack>
+      )}
     </Box>
   )
 }
