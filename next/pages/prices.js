@@ -20,6 +20,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
+import { triggerGAEvent, triggerGAEventWithData } from "../utils";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -411,6 +412,7 @@ export function SectionPrice({
           button={{
             text: t('exploreFeatures'),
             href: "/search",
+            onClick: () => triggerGAEvent("explore_features_card_price", "click"),
           }}
           locale={locale}
         />
@@ -429,6 +431,10 @@ export function SectionPrice({
             text: isBDPro.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
             href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
             onClick: () => {
+              triggerGAEventWithData("bd_pro_card_price", {
+                plan_interval: toggleAnual ? 'year' : 'month',
+                is_free_trial: !hasSubscribed
+              })
               cookies.set('plan_selected', plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
               action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
             },
@@ -448,6 +454,10 @@ export function SectionPrice({
             text: isBDEmp.isCurrentPlan && planIntervalPlan() ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
             href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
             onClick: () => {
+              triggerGAEventWithData("bd_empresas_card_price", {
+                plan_interval: toggleAnual ? 'year' : 'month',
+                is_free_trial: !hasSubscribed
+              })
               cookies.set('plan_selected', plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
               action(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
             },
