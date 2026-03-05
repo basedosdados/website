@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Text } from "@chakra-ui/react";
 
 const typographyStyles = {
@@ -23,11 +24,12 @@ const typographyStyles = {
   }
 };
 
-export default function LabelText ({ children, typography = "medium", ...props }) {
+const LabelText = forwardRef(({ children, typography = "medium", ...props }, ref) => {
   const { fontSize, lineHeight } = typographyStyles[typography];
 
   return (
     <Text
+      ref={ref}
       fontFamily="Roboto"
       fontWeight="500"
       fontSize={fontSize}
@@ -38,4 +40,6 @@ export default function LabelText ({ children, typography = "medium", ...props }
       {children}
     </Text>
   );
-};
+});
+
+export default LabelText;
