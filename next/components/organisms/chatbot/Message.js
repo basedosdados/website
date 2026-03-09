@@ -189,10 +189,6 @@ function Message({ message, onFeedback }) {
       width="100%"
       justify={isUser ? "flex-end" : "flex-start"}
       paddingY="12px"
-      style={{
-        contentVisibility: 'auto',
-        containIntrinsicSize: 'auto 100px',
-      }}
     >
       <Box
         maxWidth={isUser ? "80%" : "100%"}
@@ -318,7 +314,7 @@ function Message({ message, onFeedback }) {
           <BodyText
             whiteSpace="pre-wrap"
           >
-              {message.content}
+            {message.content}
           </BodyText>
         ) : (
           <Box className="markdown-body" fontSize="16px">
