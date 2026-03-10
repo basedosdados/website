@@ -28,6 +28,9 @@ async function refreshToken(token) {
 }
 
 export default async function handler(req, res) {
+  if (!req.query.p) {
+    return res.status(400).json({ error: 'Missing token parameter', success: false });
+  }
   const result = await refreshToken(atob(req.query.p))
 
   if(result.errors) return res.status(500).json({error: result.errors})

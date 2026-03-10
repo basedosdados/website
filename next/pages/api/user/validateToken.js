@@ -25,6 +25,9 @@ async function validateToken(token) {
 }
 
 export default async function handler(req, res) {
+  if (!req.query.p) {
+    return res.status(400).json({ error: 'Missing token parameter', success: false });
+  }
   const result = await validateToken(atob(req.query.p))
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false })

@@ -127,7 +127,7 @@ function ChatbotContent() {
           position="relative"
         >
           <Stack
-            width="100%"
+            width={{ base: "100%", md: "800px" }}
             height="100%"
             maxWidth="1440px"
             boxSizing="border-box"

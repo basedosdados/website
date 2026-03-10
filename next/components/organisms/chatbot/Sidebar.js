@@ -110,9 +110,8 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
               whiteSpace="nowrap"
               height="18px"
               lineHeight="18px"
-              width={isOpen ? "auto" : "0"}
               opacity={isOpen ? 1 : 0}
-              transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+              transition="opacity 0.2s ease, transform 0.2s ease"
               transform={isOpen ? "translateX(0)" : "translateX(4px)"}
             >
               Nova conversa

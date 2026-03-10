@@ -30,8 +30,6 @@ export default function useChatbot(initialThreadId = null) {
     try {
       const accessToken = await getAccessToken();
       if (!accessToken) {
-        cookies.remove('chatbot_access_token');
-        cookies.remove('chatbot_refresh_token');
         return null;
       }
 
@@ -151,8 +149,6 @@ export default function useChatbot(initialThreadId = null) {
 
       const accessToken = await getAccessToken();
       if (!accessToken) { 
-        cookies.remove('chatbot_access_token');
-        cookies.remove('chatbot_refresh_token');
         return;
       }
 
@@ -201,6 +197,16 @@ export default function useChatbot(initialThreadId = null) {
                     : msg
                 ));
                 break;
+
+              // testes
+              // case 'tool_call':
+              //   addToQueue(event.data?.content);
+              //   break;
+
+              // testes
+              // case 'tool_output':
+              //   addToQueue(event.data?.tool_outputs?.output);
+              //   break;
 
               case 'final_answer':
                 addToQueue(event.data?.content);

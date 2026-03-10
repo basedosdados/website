@@ -3,58 +3,44 @@ import axios from 'axios';
 import cookies from 'js-cookie';
 
 export default function useChatbotAuth() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
-  const loginToChatbot = useCallback(async () => {
+  const validateToken = useCallback(async (token) => {
     try {
-      const email = process.env.NEXT_PUBLIC_CHATBOT_EMAIL;
-      const password = process.env.NEXT_PUBLIC_CHATBOT_PASSWORD;
-
-      if (!email || !password) {
-        console.error('Chatbot credentials not configured');
-        return null;
-      }
-
-      const response = await axios.post(`${apiUrl}/chatbot/token/`, {
-        email: email,
-        password: password
+      const response = await axios.get('/api/user/validateToken', {
+        params: { p: btoa(token) }
       });
-
-      const { access, refresh } = response.data;
-      cookies.set('chatbot_token', access, { path: '/' });
-      cookies.set('chatbot_refresh_token', refresh, { path: '/' });
-      return access;
+      return response.data.success;
     } catch (e) {
-      console.error('Chatbot auto-login failed:', e);
-      return null;
+      return false;
     }
-  }, [apiUrl]);
+  }, []);
 
-  const refreshToken = useCallback(async () => {
+  const refreshToken = useCallback(async (token) => {
     try {
-      const refresh = cookies.get('chatbot_refresh_token');
-      if (!refresh) throw new Error('No refresh token');
-      const response = await axios.post(`${apiUrl}/chatbot/token/refresh/`, { refresh });
-      const newAccess = response.data.access;
-      cookies.set('chatbot_token', newAccess, { path: '/' });
-      return newAccess;
+      const response = await axios.get('/api/user/refreshToken', {
+        params: { p: btoa(token) }
+      });
+      return response.data.success;
     } catch (e) {
-      console.error('RefreshToken failed', e);
-      return null;
+      console.error('Token refresh failed:', e);
+      return false;
     }
-  }, [apiUrl]);
+  }, []);
 
   const getAccessToken = useCallback(async () => {
-    let token = cookies.get('chatbot_token');
+    const token = cookies.get('token');
 
-    if (token) return token;
+    if (!token) return null;
 
-    token = await refreshToken();
-    if (token) return token;
+    const isValid = await validateToken(token);
+    if (isValid) return token;
 
-    token = await loginToChatbot();
-    return token;
-  }, [refreshToken, loginToChatbot]);
+    const refreshed = await refreshToken(token);
+    if (refreshed) {
+      return cookies.get('token');
+    }
+
+    return null;
+  }, [validateToken, refreshToken]);
 
   return { getAccessToken };
 }

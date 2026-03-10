@@ -176,9 +176,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
               whiteSpace="nowrap"
               height="18px"
               lineHeight="18px"
-              width={isSidebarOpen ? "auto" : "0"}
               opacity={isSidebarOpen ? 1 : 0}
-              transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+              transition="opacity 0.2s ease, transform 0.2s ease"
               transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
             >
               Conversas
@@ -201,9 +200,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   flexDirection="column"
                   typography="small"
                   color="#BF3434"
-                  width={isSidebarOpen ? "auto" : "0"}
                   opacity={isSidebarOpen ? 1 : 0}
-                  transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+                  transition="opacity 0.2s ease, transform 0.2s ease"
                   transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
                 >
                   <span>Erro ao carregar histórico.</span>
@@ -258,9 +256,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                     textOverflow="ellipsis"
                     height="18px"
                     lineHeight="18px"
-                    width={isSidebarOpen ? "auto" : "0"}
                     opacity={isSidebarOpen ? 1 : 0}
-                    transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
+                    transition="opacity 0.2s ease, transform 0.2s ease"
                     transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
                   >
                     {thread.title}

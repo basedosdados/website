@@ -92,7 +92,7 @@ function ChatWindow({ messages, onFeedback }) {
       width="100%"
       height="100%"
       overflowY="auto"
-      paddingX={{ base: "16px", md: "48px", lg: "120px" }}
+      paddingX={{ base: "16px", md: "32px" }}
       paddingBottom="24px"
       align="stretch"
       spacing={0}
