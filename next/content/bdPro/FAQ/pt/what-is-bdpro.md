@@ -6,7 +6,7 @@ order: 1
 id: what-is-bdpro
 ---
 
-O BD Pro é a assinatura que garante acesso ao que há de mais atualizado em dados públicos no Brasil. Com ela, você acessa dezenas de bases de dados de média frequência — como CNPJ, CAGED, Comex e Datasus — tratadas, integradas e prontas para análise via SQL, Python ou R. Além disso, assinantes contam com notificações automáticas de atualização e limites ampliados para download direto.
+O BD Pro é a assinatura da Base dos Dados que dá acesso aos dados públicos mais atualizados do Brasil. Com ela, você acessa os principais conjuntos de dados do país — como CNPJ, CAGED, Comex e Datasus — sempre atualizados, tratados, integrados e prontos para análise via SQL, Python ou R. A assinatura inclui ainda notificações automáticas de atualização e limites ampliados para download direto.
 
 
-Ao assinar o BD Pro, você financia a sustentabilidade da Base dos Dados, uma organização sem fins lucrativos. Sua assinatura permite que continuemos limpando, padronizando e disponibilizando gratuitamente milhares de outras bases de dados, democratizando o acesso à informação de qualidade e acelerando o trabalho de pesquisadores, jornalistas, gestores públicos e empresas que buscam solucionar problemas do país através de dados.
+Ao assinar o BD Pro, você contribui para a missão da Base dos Dados — uma organização sem fins lucrativos que extrai, padroniza e disponibiliza gratuitamente milhares de outros conjuntos de dados, democratizando o acesso à informação e acelerando o trabalho de pesquisadores, jornalistas, gestores públicos e empresas.

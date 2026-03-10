@@ -5,4 +5,4 @@ keywords: pro, empresas, assinatura, dados exclusivos, pagar, custo, gratuito, g
 id: subscriptions-data
 ---
 
-A assinatura dá acesso a dados de alta frequência atualizados. Esses podem às vezes ser um subconjunto de uma tabela tratada maior, ou ser uma tabela tratada inteira. Nosso mecanismo de busca e páginas específicas de conjuntos indicam o que é disponível gratuitamente e o que está coberto pela assinatura dos planos pagos.
+A assinatura dá acesso a dados atualizados. Esses podem às vezes ser um subconjunto de uma tabela tratada maior, ou ser uma tabela tratada inteira. Nosso mecanismo de busca e páginas específicas de conjuntos indicam o que é disponível gratuitamente e o que está coberto pela assinatura dos planos pagos.

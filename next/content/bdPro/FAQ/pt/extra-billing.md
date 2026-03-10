@@ -6,8 +6,8 @@ id: extra-billing
 order: 9
 ---
 
-É importante dizer que a Base dos Dados jamais cobrará taxas extras sem o usuário ter confirmado e processo o pagamento por conta própria em nosso portal de pagamento.
+A Base dos Dados nunca cobrará taxas extras sem que você tenha confirmado e processado o pagamento por conta própria em nossa plataforma de pagamento.
 
-Porém o usuário poderá ser cobrado pelo Google Cloud caso exceda sua cota gratuita no projeto que está utilizando e ele tenha habilitado a cobrança pelo Google. No momento, o custo de análise do Big Query é de US$5/TB adicional processado
+No entanto, o Google Cloud pode cobrar caso você exceda a cota gratuita do projeto e tenha habilitado a cobrança. No momento, o custo de análise do BigQuery é de US$5/TB adicional processado.
 
-O detalhamento atualizado dos custos do Google Cloud Plataform para o Big Query podem ser acessados nesse link: [Preços  |  BigQuery: armazenamento de dados na nuvem  |  Google Cloud](https://cloud.google.com/bigquery/pricing?hl=pt-br)
+Você pode conferir os custos atualizados do BigQuery no site do [Google Cloud Platform ](https://cloud.google.com/bigquery/pricing?hl=pt-br)
