@@ -9,6 +9,7 @@ export default function Card({
   icons = [],
   spacing = 5,
   padding = "25px 25px 25px 25px",
+  ...props
 }) {
 
   return (
@@ -23,6 +24,7 @@ export default function Card({
       padding={padding}
       borderRadius="10px"
       margin={{ base: "20px 0 !important", lg: "10px 0px" }}
+      {...props}
     >
       <Flex
         flexDirection="column"

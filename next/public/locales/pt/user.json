@@ -296,7 +296,7 @@
         "downloadLimit100MBTooltip": "Esse limite não se aplica ao acesso via SQL, Python ou R.",
         "proPlan": "BD Pro",
         "allFreePlanResources": "Todos os recursos do plano gratuito, mais:",
-        "dozensOfHighFrequencyDatasets": "Dezenas de bases de alta frequência atualizadas",
+        "dozensOfHighFrequencyDatasets": "Dezenas de tabelas atualizadas automaticamente",
         "companyReferenceTable": "Tabela de referência de empresas com informações atualizadas",
         "downloadLimit1GB": "Download direto até 1 GB (~80% das tabelas da plataforma)",
         "downloadLimit1GBTooltip": "Tabelas maiores que 1 GB não estão disponíveis para download parcial ou completo. Esse limite não se aplica ao acesso via SQL, Python ou R.",

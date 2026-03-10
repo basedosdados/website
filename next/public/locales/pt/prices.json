@@ -1,7 +1,7 @@
 {
     "pageTitle": "Preços – Base dos Dados",
     "ogTitle": "Preço – Base dos Dados",
-    "ogDescription": "Compare os planos da Base dos Dados: Grátis, Pro e Empresas. Com a BD Pro você conta com recursos avançados da nossa plataforma, dados de alta frequência e conjuntos exclusivos a partir de R$47/mês.",
+    "ogDescription": "Compare os planos da Base dos Dados: Grátis, Pro e Empresas. Com a BD Pro você conta com recursos avançados da nossa plataforma, dados atualizados e conjuntos exclusivos a partir de R$47/mês.",
     "comparePlans": "Compare os planos",
     "annualDiscount": "Desconto anual",
     "save20": "Economize 20%",
@@ -34,7 +34,7 @@
         "title": "BD Pro",
         "subtitle": "Para você ter acesso aos dados mais atualizados",
         "features": [
-          "Dezenas de bases de alta frequência atualizadas",
+          "Dezenas de tabelas atualizadas automaticamente",
           "Tabela de referência de empresas com informações atualizadas",
           "Download direto até 1GB (80% das tabelas da plataforma)",
           "Notificações de atualização de tabela"
