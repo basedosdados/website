@@ -1,19 +1,41 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import cookies from 'js-cookie';
 import useChatbotAuth from './useChatbotAuth';
 import { useChatbotContext } from '../context/ChatbotContext';
+import { useRouter } from 'next/router';
 
-export default function useChatbot(initialThreadId = null) {
+export default function useChatbot(initialThreadId = null, options = {}) {
+  const { onThreadCreated } = options;
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [threadId, setThreadId] = useState(initialThreadId);
   const [error, setError] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  const handleAuthError = useCallback(() => {
+    cookies.remove('token');
+    cookies.remove('userBD');
+    router.push('/user/login');
+  }, [router]);
+
+  const lastInitialThreadIdRef = useRef(initialThreadId);
 
   useEffect(() => {
-    setThreadId(initialThreadId);
-  }, [initialThreadId]);
+    if (initialThreadId !== lastInitialThreadIdRef.current) {
+      setThreadId(initialThreadId);
+      if (!initialThreadId) {
+        setMessages([]);
+        queryClient.removeQueries({ queryKey: ['chatbotMessages'] });
+      }
+      lastInitialThreadIdRef.current = initialThreadId;
+    }
+  }, [initialThreadId, queryClient]);
 
   const abortControllerRef = useRef(null);
   const charQueueRef = useRef([]);
@@ -21,37 +43,121 @@ export default function useChatbot(initialThreadId = null) {
   const currentBotMessageIdRef = useRef(null);
   const animationFrameRef = useRef(null);
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
   const { getAccessToken } = useChatbotAuth();
   const { refetch: refetchThreads } = useChatbotContext();
 
-  const createThread = useCallback(async (firstMessage) => {
-    try {
+  const historyQuery = useQuery({
+    queryKey: ['chatbotMessages', threadId],
+    queryFn: async () => {
+      if (!threadId) return [];
       const accessToken = await getAccessToken();
       if (!accessToken) {
-        return null;
+        handleAuthError();
+        return [];
+      }
+      const response = await axios.get('/api/chatbot/messages', {
+        params: { threadId },
+        headers: { 'Authorization': `Bearer ${accessToken}` },
+      });
+
+      const formattedMessages = [];
+      response.data.forEach(pair => {
+        formattedMessages.push({
+          id: `user-${pair.id}`,
+          role: 'user',
+          content: pair.user_message,
+          status: 'SUCCESS',
+          created_at: pair.created_at
+        });
+
+        const toolCalls = (pair.events || [])
+          .filter(ev => ev.type === 'tool_output' || ev.type === 'tool_call')
+          .map(ev => ({ ...ev.data, type: ev.type }));
+
+        formattedMessages.push({
+          id: pair.id,
+          role: 'assistant',
+          content: pair.assistant_message,
+          toolCalls: toolCalls,
+          isLoading: false,
+          isTyping: false,
+          created_at: pair.created_at,
+          rating: pair.feedback?.rating
+        });
+      });
+      return formattedMessages;
+    },
+    enabled: !!threadId && !isGenerating,
+    staleTime: 1000 * 60,
+    keepPreviousData: false,
+  });
+
+  useEffect(() => {
+    if (threadId && historyQuery.isSuccess && !isGenerating && !isTyping) {
+      setMessages(historyQuery.data);
+    } else if (!threadId && !isGenerating && !isTyping) {
+      setMessages([]);
+    }
+  }, [threadId, historyQuery.data, historyQuery.isSuccess, isGenerating, isTyping]);
+
+  const createThreadMutation = useMutation({
+    mutationFn: async (firstMessage) => {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        handleAuthError();
+        throw new Error('Unauthorized');
       }
 
       const title = firstMessage 
         ? (firstMessage.length > 30 ? `${firstMessage.substring(0, 30)}...` : firstMessage)
         : 'Nova conversa';
 
-      const response = await axios.post(`${apiUrl}/chatbot/threads/`, { title }, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
+      const response = await axios.post('/api/chatbot/threads', { title }, {
+        headers: { 'Authorization': `Bearer ${accessToken}` },
       });
-      const newThreadId = response.data.id;
+      return response.data.id;
+    },
+    onSuccess: (newThreadId) => {
       setThreadId(newThreadId);
       if (refetchThreads) refetchThreads();
-      return newThreadId;
-    } catch (err) {
+      if (onThreadCreated) onThreadCreated(newThreadId);
+    },
+    onError: (err) => {
       console.error('Failed to create thread:', err);
       setError('Falha ao iniciar conversa.');
-      return null;
     }
-  }, [apiUrl, getAccessToken]);
+  });
+
+  const createThread = createThreadMutation.mutateAsync;
+
+  const feedbackMutation = useMutation({
+    mutationFn: async ({ id, rating }) => {
+      const accessToken = await getAccessToken();
+      if (!accessToken) {
+        handleAuthError();
+        throw new Error('Unauthorized');
+      }
+
+      await axios.put('/api/chatbot/feedback', {
+        rating: rating 
+      }, {
+        params: { messageId: id },
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      });
+
+      return { id, rating };
+    },
+    onSuccess: ({ id, rating }) => {
+      setMessages(prev => prev.map(msg => 
+        msg.id === id ? { ...msg, rating: rating } : msg
+      ));
+    },
+    onError: (err) => {
+      console.error('Failed to send feedback:', err);
+    }
+  });
+
+  const sendFeedback = (id, rating) => feedbackMutation.mutate({ id, rating });
 
   const processQueue = useCallback(() => {
     if (charQueueRef.current.length > 0) {
@@ -66,6 +172,7 @@ export default function useChatbot(initialThreadId = null) {
       animationFrameRef.current = requestAnimationFrame(processQueue);
     } else {
       isTypingRef.current = false;
+      setIsTyping(false);
       const botId = currentBotMessageIdRef.current;
       if (botId) {
         setMessages(prev => prev.map(msg => 
@@ -99,6 +206,7 @@ export default function useChatbot(initialThreadId = null) {
 
     if (!isTypingRef.current) {
       isTypingRef.current = true;
+      setIsTyping(true);
       setMessages(prev => prev.map(msg => 
         msg.id === botId ? { ...msg, isTyping: true } : msg
       ));
@@ -115,6 +223,7 @@ export default function useChatbot(initialThreadId = null) {
     setIsGenerating(true);
     setError(null);
     charQueueRef.current = [];
+    let currentThreadId = threadId;
 
     const userMessage = {
       id: `user-${crypto.randomUUID()}`,
@@ -137,7 +246,9 @@ export default function useChatbot(initialThreadId = null) {
     }]);
 
     try {
-      let currentThreadId = threadId || await createThread(content);
+      if (!currentThreadId) {
+        currentThreadId = await createThread(content);
+      }
       if (!currentThreadId) {
         setMessages(prev => prev.map(msg => 
           msg.id === botMessageId 
@@ -149,10 +260,11 @@ export default function useChatbot(initialThreadId = null) {
 
       const accessToken = await getAccessToken();
       if (!accessToken) { 
+        handleAuthError();
         return;
       }
 
-      const response = await fetch(`${apiUrl}/chatbot/threads/${currentThreadId}/messages/`, {
+      const response = await fetch(`/api/chatbot/messages?threadId=${currentThreadId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -198,18 +310,10 @@ export default function useChatbot(initialThreadId = null) {
                 ));
                 break;
 
-              // testes
-              // case 'tool_call':
-              //   addToQueue(event.data?.content);
-              //   break;
-
-              // testes
-              // case 'tool_output':
-              //   addToQueue(event.data?.tool_outputs?.output);
-              //   break;
-
               case 'final_answer':
-                addToQueue(event.data?.content);
+                if (event.data?.content) {
+                  addToQueue(event.data.content);
+                }
                 break;
 
               case 'error':
@@ -243,24 +347,6 @@ export default function useChatbot(initialThreadId = null) {
         if (done) break;
       }
 
-      try {
-        const tokenForId = await getAccessToken();
-        if (tokenForId && currentThreadId) {
-          const msgResponse = await axios.get(`${apiUrl}/chatbot/threads/${currentThreadId}/messages/`, {
-            headers: { 'Authorization': `Bearer ${tokenForId}` },
-          });
-          const lastPair = msgResponse.data[msgResponse.data.length - 1];
-          if (lastPair?.id) {
-            const prevBotId = currentBotMessageIdRef.current;
-            currentBotMessageIdRef.current = lastPair.id;
-            setMessages(prev => prev.map(msg =>
-              msg.id === prevBotId ? { ...msg, id: lastPair.id } : msg
-            ));
-          }
-        }
-      } catch (e) {
-        console.error('Failed to fetch message pair ID:', e);
-      }
     } catch (err) {
       if (err.name === 'AbortError') return;
       console.error(err);
@@ -280,96 +366,30 @@ export default function useChatbot(initialThreadId = null) {
           ? { ...msg, isLoading: false }
           : msg
       ));
-    }
-  }, [threadId, createThread, getAccessToken, addToQueue]);
 
-  const sendFeedback = useCallback(async (id, rating) => {
-    try {
-      if (!id) return;
-
-      const accessToken = await getAccessToken();
-      if (!accessToken) {
-        cookies.remove('chatbot_access_token');
-        cookies.remove('chatbot_refresh_token');
-        return;
-      }
-
-      await axios.put(`${apiUrl}/chatbot/message-pairs/${id}/feedbacks/`, {
-        rating: rating 
-      }, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      });
-
-      setMessages(prev => prev.map(msg => 
-        msg.id === id ? { ...msg, rating: rating } : msg
-      ));
-      return true;
-    } catch (err) {
-      console.error('Failed to send feedback:', err);
-      return false;
-    }
-  }, [getAccessToken, apiUrl]);
-
-  const fetchThreadMessages = useCallback(async (id) => {
-    try {
-      setMessages([]);
-      setIsLoading(true);
-      setError(null);
-      const accessToken = await getAccessToken();
-      if (!accessToken) {
-        cookies.remove('chatbot_access_token');
-        cookies.remove('chatbot_refresh_token');
-        return;
-      }
-
-      const response = await axios.get(`${apiUrl}/chatbot/threads/${id}/messages/`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-        },
-      });
-
-      const formattedMessages = [];
-      response.data.forEach(pair => {
-        formattedMessages.push({
-          id: `user-${pair.id}`,
-          role: 'user',
-          content: pair.user_message,
-          status: 'SUCCESS',
-          created_at: pair.created_at
+      if (currentThreadId) {
+        queryClient.invalidateQueries({
+          queryKey: ['chatbotMessages', currentThreadId]
         });
+      }
+    }
+  }, [threadId, createThread, getAccessToken, addToQueue, queryClient]);
 
-        const toolCalls = (pair.events || [])
-          .filter(ev => ev.type === 'tool_output' || ev.type === 'tool_call')
-          .map(ev => ({ ...ev.data, type: ev.type }));
-
-        formattedMessages.push({
-          id: pair.id,
-          role: 'assistant',
-          content: pair.assistant_message,
-          toolCalls: toolCalls,
-          isLoading: false,
-          isTyping: false,
-          created_at: pair.created_at
-        });
-      });
-
-      setMessages(formattedMessages);
+  const fetchThreadMessages = (id) => {
+    if (id !== threadId) {
       setThreadId(id);
-    } catch (err) {
-      console.error('Failed to fetch thread messages:', err);
-      setError('Falha ao carregar histórico de mensagens.');
-    } finally {
-      setIsLoading(false);
     }
-  }, [apiUrl, getAccessToken]);
+  };
 
   const resetChat = useCallback(() => {
+    queryClient.removeQueries({ queryKey: ['chatbotMessages'] });
     setThreadId(null);
     setMessages([]);
     setError(null);
-  }, []);
+    setIsLoading(false);
+    setIsGenerating(false);
+    setIsTyping(false);
+  }, [queryClient]);
 
   useEffect(() => {
     return () => {
@@ -381,10 +401,10 @@ export default function useChatbot(initialThreadId = null) {
 
   return {
     messages,
-    isLoading,
+    isLoading: isLoading || (!!threadId && historyQuery.isLoading),
     isGenerating,
     threadId,
-    error,
+    error: error || historyQuery.error,
     sendMessage,
     createThread,
     fetchThreadMessages,

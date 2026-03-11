@@ -27,27 +27,24 @@ function ChatbotContent() {
     fetchThreadMessages,
     sendFeedback,
     resetChat
-  } = useChatbot(threadIdFromUrl);
+  } = useChatbot(threadIdFromUrl, {
+    onThreadCreated: (id) => {
+      router.replace({
+        pathname: router.pathname,
+        query: { ...router.query, t: id }
+      }, undefined, { shallow: true });
+    }
+  });
 
   useEffect(() => {
-    if (threadIdFromUrl) {
+    if (threadIdFromUrl && threadIdFromUrl !== threadId) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
         return;
       }
       fetchThreadMessages(threadIdFromUrl);
     }
-  }, [threadIdFromUrl, fetchThreadMessages]);
-
-  useEffect(() => {
-    if (threadId && !threadIdFromUrl) {
-      skipFetchRef.current = true;
-      router.replace({
-        pathname: router.pathname,
-        query: { ...router.query, t: threadId }
-      }, undefined, { shallow: true });
-    }
-  }, [threadId, threadIdFromUrl]);
+  }, [threadIdFromUrl, threadId, fetchThreadMessages]);
 
   useEffect(() => {
     const draftKey = `chatbot_draft_${threadId || 'new'}`;

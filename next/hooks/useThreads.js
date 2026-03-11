@@ -1,66 +1,52 @@
-import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import useChatbotAuth from './useChatbotAuth';
 
 export default function useThreads() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const { getAccessToken } = useChatbotAuth();
+  const queryClient = useQueryClient();
 
-  const [threads, setThreads] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchThreads = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const {
+    data: threads = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['chatbotThreads'],
+    queryFn: async () => {
       const accessToken = await getAccessToken();
-      const { data } = await axios.get(`${apiUrl}/chatbot/threads/`, {
+      const { data } = await axios.get('/api/chatbot/threads', {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      setThreads(data);
-    } catch (err) {
-      setError(err);
-      console.error("Error fetching threads:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [apiUrl, getAccessToken]);
+      return data;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
 
-  const deleteThread = async (threadId) => {
-    try {
-      setIsDeleting(true);
-      setError(null);
+  const deleteMutation = useMutation({
+    mutationFn: async (threadId) => {
       const accessToken = await getAccessToken();
-      await axios.delete(`${apiUrl}/chatbot/threads/${threadId}/`, {
+      await axios.delete(`/api/chatbot/threads`, {
+        params: { id: threadId },
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      await fetchThreads();
-    } catch (err) {
-      setError(err);
-      console.error("Error deleting thread:", err);
-      throw err;
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchThreads();
-  }, [fetchThreads]);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['chatbotThreads']);
+    },
+  });
 
   return {
     data: threads,
     threads,
-    isLoading,
+    isLoading: isLoading || deleteMutation.isLoading,
     error,
-    refetch: fetchThreads,
-    deleteThread,
-    isDeleting,
+    refetch,
+    deleteThread: deleteMutation.mutateAsync,
+    isDeleting: deleteMutation.isLoading,
   };
 }
