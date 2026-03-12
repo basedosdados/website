@@ -4,7 +4,7 @@ import {
   Stack,
   Box
 } from "@chakra-ui/react";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
@@ -57,12 +57,16 @@ function ChatbotContent() {
   }, [threadId]);
 
   useEffect(() => {
-    const draftKey = `chatbot_draft_${threadId || 'new'}`;
-    if (value) {
-      localStorage.setItem(draftKey, value);
-    } else {
-      localStorage.removeItem(draftKey);
-    }
+    const timeoutId = setTimeout(() => {
+      const draftKey = `chatbot_draft_${threadId || 'new'}`;
+      if (value) {
+        localStorage.setItem(draftKey, value);
+      } else {
+        localStorage.removeItem(draftKey);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [value, threadId]);
 
   const handleSend = useCallback(() => {
@@ -75,6 +79,7 @@ function ChatbotContent() {
   }, [value, sendMessage, threadId]);
 
   const handleNewChat = useCallback(() => {
+    skipFetchRef.current = true;
     resetChat();
     router.push({
       pathname: router.pathname,
@@ -132,7 +137,9 @@ function ChatbotContent() {
             justify="center"
           >
             <Box flex={1} overflow="hidden" width="100%">
-              <ChatWindow messages={messages} onFeedback={sendFeedback} />
+              {useMemo(() => (
+                <ChatWindow messages={messages} onFeedback={sendFeedback} />
+              ), [messages, sendFeedback])}
             </Box>
 
             <Box width="100%" paddingTop="24px">
