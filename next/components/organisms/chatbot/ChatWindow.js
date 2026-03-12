@@ -1,90 +1,19 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
 function ChatWindow({ messages, onFeedback }) {
   const scrollContainerRef = useRef(null);
-  const prevMessagesLength = useRef(messages.length);
-  const prevLastMessageContent = useRef(messages[messages.length - 1]?.content);
-  const [shouldFollowBottom, setShouldFollowBottom] = useState(true);
 
   const rowVirtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 120,
-    overscan: 15,
-    gap: 16
+    overscan: 10,
+    gap: 16,
+    getItemKey: useCallback((index) => messages[index]?.id || index, [messages])
   });
-
-  const scrollToBottom = useCallback((behavior = "smooth") => {
-    if (messages.length > 0) {
-      rowVirtualizer.scrollToIndex(messages.length - 1, {
-        align: 'end',
-        behavior
-      });
-    }
-  }, [messages.length, rowVirtualizer]);
-
-  useEffect(() => {
-    if (messages.length > 0) {
-      const timer = setTimeout(() => {
-        scrollToBottom("auto");
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [messages[0]?.id, scrollToBottom]);
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      const atBottom = (scrollTop + clientHeight) >= scrollHeight * 0.98 || 
-        (scrollHeight - scrollTop - clientHeight) < 50;
-
-      setShouldFollowBottom(atBottom);
-    };
-
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container || messages.length === 0) {
-      prevMessagesLength.current = messages.length;
-      prevLastMessageContent.current = messages[messages.length - 1]?.content;
-      return;
-    }
-
-    const lastMessage = messages[messages.length - 1];
-    const isNewMessage = messages.length > prevMessagesLength.current;
-    const isContentUpdate = lastMessage?.content !== prevLastMessageContent.current;
-
-    const userJustSent = isNewMessage && lastMessage?.role === 'user';
-
-    if (userJustSent) {
-      setShouldFollowBottom(true);
-    }
-
-    const shouldScroll =
-      userJustSent ||
-      (shouldFollowBottom && (isNewMessage || isContentUpdate));
-
-    if (shouldScroll) {
-      scrollToBottom("auto");
-    }
-
-    prevMessagesLength.current = messages.length;
-    prevLastMessageContent.current = lastMessage?.content;
-  }, [
-    messages.length,
-    messages[messages.length - 1]?.content,
-    scrollToBottom,
-    shouldFollowBottom
-  ]);
 
   return (
     <VStack

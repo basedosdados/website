@@ -114,7 +114,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       
       const newThreadId = response.data.id;
       setThreadId(newThreadId);
-      lastFetchedThreadIdRef.current = newThreadId; // Mark it as current so we don't refetch history
+      lastFetchedThreadIdRef.current = newThreadId;
       if (refetchThreads) refetchThreads();
       if (onThreadCreated) onThreadCreated(newThreadId);
       
