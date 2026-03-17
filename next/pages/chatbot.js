@@ -17,6 +17,7 @@ function ChatbotContent() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
   const [value, setValue] = useState("");
+  const [scrollTrigger, setScrollTrigger] = useState(0);
   const skipFetchRef = useRef(false);
   const {
     messages,
@@ -72,6 +73,7 @@ function ChatbotContent() {
   const handleSend = useCallback(() => {
     if (value.trim() !== "") {
       sendMessage(value);
+      setScrollTrigger(prev => prev + 1);
       setValue("");
       const draftKey = `chatbot_draft_${threadId || 'new'}`;
       localStorage.removeItem(draftKey);
@@ -137,9 +139,11 @@ function ChatbotContent() {
             justify="center"
           >
             <Box flex={1} overflow="hidden" width="100%">
-              {useMemo(() => (
-                <ChatWindow messages={messages} onFeedback={sendFeedback} />
-              ), [messages, sendFeedback])}
+              <ChatWindow
+                messages={messages}
+                onFeedback={sendFeedback}
+                scrollTrigger={scrollTrigger}
+              />
             </Box>
 
             <Box width="100%" paddingTop="24px">
