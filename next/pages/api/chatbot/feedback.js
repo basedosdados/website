@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_CHATBOT;
 
 export default async function handler(req, res) {
   const { method } = req;
@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   try {
     if (method === 'PUT') {
-      const response = await axios.put(`${API_URL}/chatbot/message-pairs/${messageId}/feedbacks/`, req.body, {
+      const response = await axios.put(`${API_URL}/api/v1/chatbot/messages/${messageId}/feedbacks/`, req.body, {
         headers: { Authorization: authHeader },
       });
       return res.status(200).json(response.data);
