@@ -2,12 +2,12 @@ import {
   HStack,
   Box,
   Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import BodyText from "../atoms/Text/BodyText";
+import { triggerGAEvent } from "../../utils";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
@@ -208,7 +208,8 @@ export function TemporalCoverageBar ({ value }) {
             }}
             onClick={() => {
               if(isUserPro()) return
-              window.location.href = '/bdpro'
+              triggerGAEvent("table_coverage_redirect_bdpro", "click");
+              window.open("/bdpro", "_blank")
             }}
           >
             {t('temporalCoverageBar.paid')}

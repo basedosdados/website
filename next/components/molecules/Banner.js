@@ -29,6 +29,7 @@ export default function Banner({
       borderRadius="16px"
       boxSizing="border-box"
       backgroundColor="#EAF3ED"
+      alignItems="center"
       {...props}
     >
       <Stack width="100%" maxWidth="560px" padding="16px" spacing={0}>

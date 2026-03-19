@@ -99,6 +99,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const modalTourInitial = useDisclosure();
   const modalSurveyTour = useDisclosure();
   const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
+  const [isSubscriber, setIsSubscriber] = useState(false);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
@@ -128,6 +129,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
 
   useEffect(() => {
     if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
+    const rawUser = cookies.get("userBD");
+    const user = rawUser ? JSON.parse(rawUser) : null;
+    if (user?.isSubscriber) setIsSubscriber(true);
   }, [])
 
   useEffect(() => {
@@ -487,13 +491,13 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </GridItem>
         </Grid>
 
-        {hasPaidTables ? (
+        {(hasPaidTables && !isSubscriber) ? (
           <Banner
             title={t('banner.title', { ns: 'bdpro' })}
             description={t('banner.description', { ns: 'bdpro' })}
             buttonText={t('banner.button', { ns: 'bdpro' })}
             href="/bdpro"
-            onClick={() => triggerGAEvent("button_banner_bdpro", "click")}
+            onClick={() => triggerGAEvent("button_banner_bdpro_lp", "click")}
             imageSrc="/img/banner_bd_pro.svg"
           />
         ) : (
