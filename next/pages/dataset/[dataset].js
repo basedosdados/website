@@ -6,7 +6,7 @@ import {
   Stack,
   useDisclosure
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useTranslation } from "next-i18next";
@@ -27,6 +27,8 @@ import { MainPageTemplate } from "../../components/templates/main";
 import { ModalInitialTour, ModalSurveyTour, exploreTour } from "../../components/molecules/Tour";
 import ServiceHighlightABTest from "../../components/molecules/ServiceHighlightABTest";
 import useABTestVariant from "../../hooks/useABTestVariant";
+import Banner from "../../components/molecules/Banner";
+import { triggerGAEvent } from "../../utils";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -63,7 +65,7 @@ export async function getStaticProps(context) {
   }
 
   const props = {
-    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices', 'tour'])),
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices', 'tour', 'bdpro'])),
     dataset: dataset || null,
     userGuide: userGuide || null,
     hiddenDataset,
@@ -87,7 +89,7 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
-  const { t } = useTranslation('dataset', 'common');
+  const { t } = useTranslation('dataset', 'common', 'bdpro');
   const router = useRouter();
   const { locale, query } = router;
   const [tabIndex, setTabIndex] = useState(0);
@@ -99,6 +101,17 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
+
+  const hasPaidTables = useMemo(() => {
+    const tables = dataset?.tables?.edges?.map((elm) => elm.node) || [];
+    return tables.some((table) => {
+      const isVisible = !["under_review", "excluded"].includes(table?.status?.slug) && !["dicionario", "dictionary"].includes(table?.slug);
+      if (!isVisible) return false;
+      const coverage = table?.fullTemporalCoverage;
+      if (!coverage) return false;
+      return Object.values(coverage).some(c => c?.type === "closed");
+    });
+  }, [dataset]);
 
   useEffect(() => {
     const handleLoadingTourSurvey = (e) => {
@@ -474,8 +487,19 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </GridItem>
         </Grid>
 
-        {abVariant && (
-          <ServiceHighlightABTest {...abTestContent[abVariant]} />
+        {hasPaidTables ? (
+          <Banner
+            title={t('banner.title', { ns: 'bdpro' })}
+            description={t('banner.description', { ns: 'bdpro' })}
+            buttonText={t('banner.button', { ns: 'bdpro' })}
+            href="/bdpro"
+            onClick={() => triggerGAEvent("button_banner_bdpro", "click")}
+            imageSrc="/img/banner_bd_pro.svg"
+          />
+        ) : (
+          abVariant && (
+            <ServiceHighlightABTest {...abTestContent[abVariant]} />
+          )
         )}
 
         <Stack spacing={0} width="100%" height="100%">

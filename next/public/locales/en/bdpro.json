@@ -1,0 +1,77 @@
+{
+  "head": {
+    "pageTitle": "BD Pro - Data Basis",
+    "metaTitle": "BD Pro - Data Basis"
+  },
+  "hero": {
+    "title": ["Public data,", "processed and always up-to-date"],
+    "description": "The data subscription with automatic processing and updates. Focus on analysis while we ensure the data is fresh and ready to use. Subscribe and help maintain the largest collection of processed public data in Brazil.",
+    "stats": "We accelerate the work of over 25,000 researchers, public servants, and companies every month",
+    "highlights": {
+      "cnpjs": {
+        "title": "Company Registrations (CNPJ)",
+        "description": "Registration data for all companies in Brazil, updated monthly"
+      },
+      "obras": {
+        "title": "Construction Project Registry",
+        "description": "Federal Revenue construction project registry, updated daily"
+      },
+      "datasus": {
+        "title": "Datasus Registries",
+        "description": "Data from major Datasus systems (SIA, CNES, SIH...), updated monthly"
+      },
+      "empregos": {
+        "title": "General Employment Registry",
+        "description": "CAGED (General Employment Registry) data, updated monthly"
+      },
+      "comex": {
+        "title": "Comex Stat",
+        "description": "Foreign trade data, updated monthly"
+      }
+    }
+  },
+  "presentation": {
+    "title": "How does our product work?",
+    "tabs": {
+      "tab1": {
+        "label": "Access data in BigQuery",
+        "description": "Query the data directly in BigQuery using SQL"
+      },
+      "tab2": {
+        "label": "Access to updated data",
+        "description": "Access updated data on the platform within 1 day of the original source's release"
+      },
+      "tab3": {
+        "label": "Update alerts and notifications",
+        "description": "Receive an email as soon as a table is updated at Data Basis"
+      },
+      "tab4": {
+        "label": "Direct integration with Python and R",
+        "description": "Access data directly in your work environment with our Python and R packages"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Who uses Data Basis",
+    "list": {
+      "t1": {
+        "name": "Fernando Barbalho",
+        "role": "Technical Advisor to the Vice President of the Republic",
+        "text": "I usually use the Data Basis platform to look for municipal data, especially the more stable ones, such as historical population series. I also use it for CNPJ data and other very large datasets that would be difficult to reconstruct in an isolated environment. The ease of using SQL commands helps with cross-referencing and aggregating data."
+      },
+      "t2": {
+        "name": "Luiz Fernando Toledo",
+        "role": "Reporter at BBC",
+        "text": "I end up asking more complex questions in my stories because I know the data analysis work won't be as complicated, thanks to these tools you provide."
+      }
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions - FAQ"
+  },
+  "banner": {
+    "title": "Discover BD Pro",
+    "description": "Subscribe to BD Pro to access the most updated version of these and other datasets, always in sync with the original source. Besides having constant access to integrated, quality data, your subscription helps Data Basis maintain and expand the largest public and free datalake in Brazil.",
+    "button": "Learn more and take a free test"
+  }
+}

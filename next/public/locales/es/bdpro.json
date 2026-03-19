@@ -1,0 +1,77 @@
+{
+  "head": {
+    "pageTitle": "BD Pro - Base de los Datos",
+    "metaTitle": "BD Pro - Base de los Datos"
+  },
+  "hero": {
+    "title": ["Datos públicos,", "procesados y siempre actualizados"],
+    "description": "La suscripción de datos con procesamiento y actualización automática. Concéntrate en el análisis, mientras nosotros nos aseguramos de que los datos estén frescos y listos para usar. Suscríbete y ayuda a mantener el mayor acervo de datos públicos procesados de Brasil.",
+    "stats": "Aceleramos el trabajo de más de 25.000 investigadores, funcionarios públicos y empresas cada mes",
+    "highlights": {
+      "cnpjs": {
+        "title": "Registros de CNPJs",
+        "description": "Datos de registro de todas las empresas de Brasil, actualizados mensualmente"
+      },
+      "obras": {
+        "title": "Registro de Obras",
+        "description": "Registro de obras de la Receita Federal, actualizado diariamente"
+      },
+      "datasus": {
+        "title": "Registros del Datasus",
+        "description": "Datos de los principales sistemas del Datasus (SIA, CNES, SIH...), actualizados mensualmente"
+      },
+      "empregos": {
+        "title": "Registro general de empleo",
+        "description": "Datos del CAGED (Registro General de Empleados y Desempleados), actualizados mensualmente"
+      },
+      "comex": {
+        "title": "Comex Stat",
+        "description": "Datos de comercio exterior, actualizados mensualmente"
+      }
+    }
+  },
+  "presentation": {
+    "title": "¿Cómo funciona nuestro producto?",
+    "tabs": {
+      "tab1": {
+        "label": "Accede a los datos en BigQuery",
+        "description": "Consulta los datos directamente en BigQuery con SQL"
+      },
+      "tab2": {
+        "label": "Acceso a datos actualizados",
+        "description": "Accede a los datos actualizados en la plataforma dentro de 1 día después de la liberación de la fuente original"
+      },
+      "tab3": {
+        "label": "Alertas y notificaciones de actualización",
+        "description": "Recibe un correo electrónico tan pronto como la tabla se actualice en Base de los Datos"
+      },
+      "tab4": {
+        "label": "Integración directa con Python y R",
+        "description": "Accede a los datos directamente en tu entorno de trabajo con nuestros paquetes de Python y R"
+      }
+    }
+  },
+  "testimonials": {
+    "title": "Quién usa Base de los Datos",
+    "list": {
+      "t1": {
+        "name": "Fernando Barbalho",
+        "role": "Asesor Técnico del Vicepresidente de la República",
+        "text": "Suelo usar la plataforma de Base de los Datos para buscar datos municipales, especialmente aquellos que son más estables, como las series históricas de población. También la uso para datos de CNPJ y otros conjuntos de datos muy grandes que serían difíciles de reconstruir en un entorno aislado. La facilidad de usar comandos SQL ayuda a cruzar y agregar datos."
+      },
+      "t2": {
+        "name": "Luiz Fernando Toledo",
+        "role": "Reportero en BBC",
+        "text": "Termino haciendo preguntas más complejas en los reportajes porque sé que el trabajo de análisis de datos no será tan complicado gracias a estas herramientas que ustedes proporcionan."
+      }
+    }
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes - FAQ"
+  },
+  "banner": {
+    "title": "Conoce BD Pro",
+    "description": "Suscríbete a BD Pro para acceder a la versión más actualizada de estos y otros conjuntos de datos, siempre de acuerdo con la fuente original. Además de tener siempre acceso a datos integrados y de calidad, con la suscripción ayudas a Base de los Datos a mantener y expandir el mayor datalake público y gratuito de Brasil.",
+    "button": "Conoce más y haz una prueba gratis"
+  }
+}
