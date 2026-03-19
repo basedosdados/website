@@ -163,7 +163,8 @@
         "enableNotification": "Activar notificaciones",
         "disableNotification": "Desactivar notificaciones",
         "tooltipEnableNotification": "Recibir notificaciones por correo electrónico cuando se actualice esta tabla.",
-        "tooltipDisableNotification": "Dejar de recibir notificaciones por correo electrónico para esta tabla."
+        "tooltipDisableNotification": "Dejar de recibir notificaciones por correo electrónico para esta tabla.",
+        "tooltipUpgradeRequired": "Suscríbete a BD Pro para desbloquear esta función, haz clic aquí para saber más."
     },
     "temporalCoverageBar": {
         "title": "Cobertura temporal",

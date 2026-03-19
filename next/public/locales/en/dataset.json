@@ -163,7 +163,8 @@
         "enableNotification": "Enable notifications",
         "disableNotification": "Disable notifications",
         "tooltipEnableNotification": "Receive email notifications when this table is updated.",
-        "tooltipDisableNotification": "Stop receiving email notifications for this table."
+        "tooltipDisableNotification": "Stop receiving email notifications for this table.",
+        "tooltipUpgradeRequired": "Subscribe to BD Pro to unlock this feature, click here to learn more."
     },
     "temporalCoverageBar": {
         "title": "Temporal coverage",

@@ -24,7 +24,7 @@ import ObservationLevel from "../atoms/ObservationLevelTable";
 import { TemporalCoverageBar } from "../molecules/TemporalCoverageDisplay";
 import DataInformationQuery from "../molecules/DataInformationQuery";
 import FourOFour from "../templates/404";
-import { triggerGAEventWithData } from "../../utils";
+import { triggerGAEventWithData, triggerGAEvent } from "../../utils";
 
 import GithubIcon from "../../public/img/icons/githubIcon";
 import WebIcon from "../../public/img/icons/webIcon";
@@ -179,7 +179,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
   const router = useRouter();
   const { locale } = router;
   const toast = useToast();
-  const [tableNotificationIsHidden, setTableNotificationIsHidden] = useState(true);
+  const [isUserAuthorized, setIsUserAuthorized] = useState(false);
   const [tableNotificationStatus, setTableNotificationStatus] = useState(false);
   const [toggleDisabled, setToggleDisabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -204,7 +204,9 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
     const rawUser = cookies.get("userBD");
     const user = rawUser ? JSON.parse(rawUser) : null;
     if (user?.isAdmin || user?.isSubscriber) {
-      setTableNotificationIsHidden(false);
+      setIsUserAuthorized(true);
+    } else {
+      setIsUserAuthorized(false);
     }
   }, []);
 
@@ -469,57 +471,71 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
           }
         </Stack>
 
-        {!tableNotificationIsHidden && 
-          <Tooltip
-            label={tableNotificationStatus ? t('table.tooltipDisableNotification') : t('table.tooltipEnableNotification')}
-            hasArrow
-            maxWidth={tableNotificationStatus ? "212px" : "245px"}
-            padding="16px"
-            backgroundColor="#252A32"
-            boxSizing="border-box"
-            borderRadius="8px"
-            fontFamily="Roboto"
-            fontWeight="500"
-            fontSize="14px"
-            lineHeight="20px"
-            textAlign="center"
-            color="#FFFFFF"
-            placement="top"
+        <Tooltip
+          label={
+            !isUserAuthorized ? t('table.tooltipUpgradeRequired') :
+            tableNotificationStatus ? t('table.tooltipDisableNotification') : t('table.tooltipEnableNotification')
+          }
+          hasArrow
+          maxWidth={!isUserAuthorized ? "250px" : tableNotificationStatus ? "212px" : "245px"}
+          padding="16px"
+          backgroundColor="#252A32"
+          boxSizing="border-box"
+          borderRadius="8px"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          textAlign="center"
+          color="#FFFFFF"
+          placement="top"
+        >
+          <Box
+            display="flex"
+            flexShrink={0}
           >
-            <Box
-              display="flex"
+            <Button
+              width="fit-content"
+              padding="11px 16px"
+              borderRadius="8px"
               flexShrink={0}
-            >
-              <Button
-                width="fit-content"
-                padding="11px 16px"
-                borderRadius="8px"
-                flexShrink={0}
-                justifyContent="center"
-                isVariant
-                onClick={() => { if (!toggleDisabled) handlerToggleTableNotification(); }}
-                aria-disabled={toggleDisabled}
-                opacity={toggleDisabled ? 0.6 : 1}
-                pointerEvents={toggleDisabled ? 'none' : 'auto'}
-              >
-                {tableNotificationStatus ?
-                  <NotificationDeactivateIcon
-                    width="18px"
-                    height="18px"
-                  />
-                :
-                  <NotificationSolidIcon
-                    width="18px"
-                    height="18px"
-                  />
+              justifyContent="center"
+              isVariant
+              onClick={() => {
+                if (!isUserAuthorized) {
+                  window.open("/bdpro", "_blank");
+                  triggerGAEvent("table_notification_redirect_bdpro", "click");
+                  return;
                 }
-                <LabelText color="currentColor">
-                  {tableNotificationStatus ? t('table.disableNotification') : t('table.enableNotification')}
-                </LabelText>
-              </Button>
-            </Box>
-          </Tooltip>
-        }
+                if (!toggleDisabled) handlerToggleTableNotification();
+              }}
+              aria-disabled={toggleDisabled}
+              opacity={!isUserAuthorized ? 1 : toggleDisabled ? 0.6 : 1}
+              color={!isUserAuthorized ? "#ACAEB1" : "currentColor"}
+              borderColor={!isUserAuthorized ? "#ACAEB1" : "currentColor"}
+              _hover={{
+                opacity: 0.8
+              }}
+              pointerEvents={toggleDisabled ? 'none' : 'auto'}
+            >
+              {tableNotificationStatus ?
+                <NotificationDeactivateIcon
+                  width="18px"
+                  height="18px"
+                />
+              :
+                <NotificationSolidIcon
+                  width="18px"
+                  height="18px"
+                  fill={!isUserAuthorized ? "#ACAEB1" : "currentColor"}
+                />
+              }
+              <LabelText color="currentColor">
+                {tableNotificationStatus ? t('table.disableNotification') : t('table.enableNotification')}
+              </LabelText>
+            </Button>
+          </Box>
+        </Tooltip>
       </StackSkeleton>
 
       <SkeletonText
