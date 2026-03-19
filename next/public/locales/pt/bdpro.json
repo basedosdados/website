@@ -68,5 +68,10 @@
   },
   "faq": {
     "title": "Dúvidas Frequentes - FAQ"
+  },
+  "banner": {
+    "title": "Conheça a BD Pro",
+    "description": "Assine BD Pro para acessar a versão mais atualizada desses e de outros conjuntos de dados, sempre de acordo com a fonte original. Além de ter sempre acesso a dados integrados e de qualidade, com a assinatura você ajuda a BD a manter e expandir o maior datalake público e gratuito do Brasil.",
+    "button": "Conheça e faça um teste grátis"
   }
 }

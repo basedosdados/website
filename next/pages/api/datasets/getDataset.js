@@ -99,6 +99,7 @@ export default async function getDataset(id, locale = 'pt') {
                       name${capitalize(locale)}
                       slug
                       isClosed
+                      fullTemporalCoverage
                       order
                       status {
                         _id
