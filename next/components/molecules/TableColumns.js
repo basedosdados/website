@@ -603,7 +603,33 @@ export default function TableColumns({
             </Thead>
 
             <Tbody role="rowgroup" position="relative">
-              {columns.length > 0 && columns.map((elm,i) => (
+              {columns.length > 0 && columns.map((elm,i) => {
+                const name = elm?.namePt || elm?.name || elm?.[`name${capitalize(locale)}`];
+                const isNameNotProvided = !name;
+                
+                const translationException = template !== "download" ? TranslationColumnException({value: elm}) : null;
+                const isTranslationNotProvided = template !== "download" && translationException === t('column.notProvided');
+
+                const description = elm?.[`description${capitalize(locale)}`] || elm?.description;
+                const isDescriptionNotProvided = !description;
+
+                const bigQueryType = elm?.bigquery_type?.name;
+                const isBigQueryTypeNotProvided = !bigQueryType;
+
+                const temporalCoverageStart = elm?.temporal_coverage?.start;
+                const temporalCoverageEnd = elm?.temporal_coverage?.end;
+                const isTemporalCoverageNotProvided = !(temporalCoverageStart && temporalCoverageEnd);
+
+                const measurementUnitValue = elm?.measurement_unit;
+                const isMeasurementUnitNotProvided = !measurementUnitValue;
+
+                const sensitiveData = elm?.contains_sensitive_data;
+                const isSensitiveDataNotProvided = sensitiveData !== true && sensitiveData !== false;
+
+                const observations = elm?.[`observations${capitalize(locale)}`] || elm?.observations;
+                const isObservationsNotProvided = !observations;
+
+                return (
                 <Tr
                   key={i}
                   role="row"
@@ -645,9 +671,9 @@ export default function TableColumns({
                     position="sticky"
                     left={{base: "none", lg: template === "download" ? "0" : "72px"}}
                     zIndex="4"
-                    backgroundColor="#FFF"
+                    backgroundColor={isNameNotProvided ? "#F7F7F7" : "#FFF"}
                   >
-                    {elm?.namePt || elm?.name || elm?.[`name${capitalize(locale)}`] || t('column.notProvided')}
+                    {isNameNotProvided ? "" : name}
                     <Box
                       display={{base: "none", lg: "flex"}}
                       position="absolute"
@@ -659,56 +685,42 @@ export default function TableColumns({
                     />
                   </TableValue>
 
-                  <TableValue>
-                    {template === "download" ?
+                  <TableValue {...(isTranslationNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isTranslationNotProvided ? "" : (template === "download" ?
                       <TranslationTable
                         value={elm?.directory_primary_key}
                         dictionary={elm?.covered_by_dictionary}
                       />
                     :
-                      <TranslationColumnException value={elm}/>
-                    }
+                      translationException
+                    )}
                   </TableValue>
 
-                  <TableValue>
-                    {elm?.[`description${capitalize(locale)}`] || elm?.description || t('column.notProvided')}
+                  <TableValue {...(isDescriptionNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isDescriptionNotProvided ? "" : description}
                   </TableValue>
 
-                  <TableValue>
-                    {elm?.bigquery_type?.name ? elm.bigquery_type.name : t('column.notProvided')}
+                  <TableValue {...(isBigQueryTypeNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isBigQueryTypeNotProvided ? "" : bigQueryType}
                   </TableValue>
 
-                  <TableValue>
-                    {elm?.temporal_coverage?.start && elm?.temporal_coverage?.end ?
-                      elm.temporal_coverage.start +" - "+ elm.temporal_coverage.end
-                      :
-                      t('column.notProvided')
-                    }
+                  <TableValue {...(isTemporalCoverageNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isTemporalCoverageNotProvided ? "" : (temporalCoverageStart +" - "+ temporalCoverageEnd)}
                   </TableValue>
 
-                  <TableValue>
-                    {elm?.measurement_unit ?
-                      measurementUnit(elm.measurement_unit)
-                      :
-                      t('column.notProvided')
-                    }
+                  <TableValue {...(isMeasurementUnitNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isMeasurementUnitNotProvided ? "" : measurementUnit(measurementUnitValue)}
                   </TableValue>
 
-                  <TableValue>
-                    {
-                      elm?.contains_sensitive_data === true ? t('column.yes')
-                      :
-                      elm?.contains_sensitive_data === false ? t('column.no')
-                      :
-                      t('column.notProvided')
-                    }
+                  <TableValue {...(isSensitiveDataNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isSensitiveDataNotProvided ? "" : (sensitiveData === true ? t('column.yes') : t('column.no'))}
                   </TableValue>
 
-                  <TableValue>
-                    {elm?.[`observations${capitalize(locale)}`] || elm?.observations || t('column.notProvided')}
+                  <TableValue {...(isObservationsNotProvided && { backgroundColor: "#F7F7F7" })}>
+                    {isObservationsNotProvided ? "" : observations}
                   </TableValue>
                 </Tr>
-              ))}
+              )})}
             </Tbody>
           </Table>
         </TableContainer>
