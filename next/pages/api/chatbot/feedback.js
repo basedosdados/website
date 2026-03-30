@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   try {
     if (method === 'PUT') {
       const response = await axios.put(
-        `${API_URL}/api/v1/chatbot/messages/${messageId}/feedbacks/`,
+        `${API_URL}/api/v1/chatbot/messages/${messageId}/feedbacks`,
         req.body,
         {
           headers: { Authorization: authHeader }

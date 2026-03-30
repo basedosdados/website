@@ -12,14 +12,14 @@ export default async function handler(req, res) {
 
   try {
     if (method === 'GET') {
-      const response = await axios.get(`${API_URL}/api/v1/chatbot/threads/`, {
+      const response = await axios.get(`${API_URL}/api/v1/chatbot/threads`, {
         headers: { Authorization: authHeader }
       })
       return res.status(200).json(response.data)
     }
 
     if (method === 'POST') {
-      const response = await axios.post(`${API_URL}/api/v1/chatbot/threads/`, req.body, {
+      const response = await axios.post(`${API_URL}/api/v1/chatbot/thread`, req.body, {
         headers: { Authorization: authHeader }
       })
       return res.status(201).json(response.data)
@@ -29,7 +29,7 @@ export default async function handler(req, res) {
       const { id } = req.query
       if (!id) return res.status(400).json({ error: 'Missing thread id' })
 
-      const response = await axios.delete(`${API_URL}/api/v1/chatbot/threads/${id}/`, {
+      const response = await axios.delete(`${API_URL}/api/v1/chatbot/threads/${id}`, {
         headers: { Authorization: authHeader }
       })
       return res.status(200).json(response.data)

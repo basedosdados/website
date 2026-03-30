@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
   try {
     if (method === 'GET') {
-      const response = await axios.get(`${API_URL}/api/v1/chatbot/hreads/${threadId}/messages/`, {
+      const response = await axios.get(`${API_URL}/api/v1/chatbot/threads/${threadId}/messages`, {
         headers: { Authorization: authHeader }
       })
       return res.status(200).json(response.data)
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     if (method === 'POST') {
       const response = await axios({
         method: 'POST',
-        url: `${API_URL}/api/v1/chatbot/threads/${threadId}/messages/`,
+        url: `${API_URL}/api/v1/chatbot/threads/${threadId}/messages`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: authHeader
