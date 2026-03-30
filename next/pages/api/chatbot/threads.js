@@ -19,7 +19,7 @@ export default async function handler(req, res) {
     }
 
     if (method === 'POST') {
-      const response = await axios.post(`${API_URL}/api/v1/chatbot/thread`, req.body, {
+      const response = await axios.post(`${API_URL}/api/v1/chatbot/threads`, req.body, {
         headers: { Authorization: authHeader }
       })
       return res.status(201).json(response.data)
