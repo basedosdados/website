@@ -1,5 +1,5 @@
 # Install dependencies only when needed
-FROM node:18.17.0-alpine  AS deps
+FROM node:20.18.1-alpine  AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -16,7 +16,7 @@ ARG URL_DOWNLOAD_CLOSED
 ARG URL_DOWNLOAD_OPEN
 
 # Rebuild the source code only when needed
-FROM node:18.17.0-alpine AS builder
+FROM node:20.18.1-alpine AS builder
 
 ARG NEXT_PUBLIC_DOMAIN
 ARG NEXT_PUBLIC_SITE_NAME
@@ -46,16 +46,18 @@ COPY . .
 RUN npm run build
 
 # Production image, copy all the files and run next
-FROM node:18.17.0-alpine AS runner
+FROM node:20.18.1-alpine AS runner
 WORKDIR /app
 
 ARG URL_DOWNLOAD_CLOSED
 ARG URL_DOWNLOAD_OPEN
+ARG NEXT_PUBLIC_CHATBOT_URL
 
-ENV NODE_ENV production
-ENV NODE_OPTIONS '-r next-logger'
+ENV NODE_ENV=production
+ENV NODE_OPTIONS='-r next-logger'
 ENV URL_DOWNLOAD_CLOSED=$URL_DOWNLOAD_CLOSED
 ENV URL_DOWNLOAD_OPEN=$URL_DOWNLOAD_OPEN
+ENV NEXT_PUBLIC_CHATBOT_URL=$NEXT_PUBLIC_CHATBOT_URL
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -76,6 +78,6 @@ USER nextjs
 
 EXPOSE 3000
 
-ENV PORT 3000
+ENV PORT=3000
 
 CMD ["server.js"]
