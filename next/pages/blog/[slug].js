@@ -16,7 +16,7 @@ import {
   Header,
   Toc,
   mdxComponents,
-} from "../../components/organisms/Blog/Slug";
+} from "../../components/organisms/blog/Slug";
 
 import hljs from "highlight.js/lib/core";
 import sqlHighlight from "highlight.js/lib/languages/sql";

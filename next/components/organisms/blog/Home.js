@@ -2,7 +2,6 @@ import {
   Stack,
   Box,
   Image,
-  Text,
   UnorderedList,
   ListItem,
   Grid,

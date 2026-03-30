@@ -1,14 +1,14 @@
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import Hero from "../components/organisms/Home/Hero";
-import { BePartner } from "../components/organisms/Home/BePartner";
-import SocioeconomicData from '../components/organisms/Home/SocioeconomicData';
-import TablesStats from '../components/organisms/Home/TablesStats';
+import Hero from "../components/organisms/home/Hero";
+import { BePartner } from "../components/organisms/home/BePartner";
+import SocioeconomicData from '../components/organisms/home/SocioeconomicData';
+import TablesStats from '../components/organisms/home/TablesStats';
 import MentionSection from '../components/molecules/MentionSection';
-import ProductivityDataAnalysis from '../components/organisms/Home/ProductivityDataAnalysis';
-import PresentationSolutions from '../components/organisms/Home/PresentationSolutions';
-import ContentPublicPurpose from '../components/organisms/Home/ContentPublicPurpose';
+import ProductivityDataAnalysis from '../components/organisms/home/ProductivityDataAnalysis';
+import PresentationSolutions from '../components/organisms/home/PresentationSolutions';
+import ContentPublicPurpose from '../components/organisms/home/ContentPublicPurpose';
 import { MainPageTemplate } from "../components/templates/main";
 
 export async function getStaticProps({ locale }) {
