@@ -25,7 +25,7 @@ import {
 
 import {
   mdxComponents
-} from "../../components/organisms/Blog/Slug"
+} from "../../components/organisms/blog/Slug"
 
 import ChevronIcon from "../../public/img/icons/chevronIcon";
 import Button from "../../components/atoms/Button";
