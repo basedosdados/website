@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = process.env.NEXT_PUBLIC_CHATBOT_URL
+const API_URL = process.env.CHATBOT_URL
 
 export default async function handler(req, res) {
   const { method } = req
