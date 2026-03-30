@@ -770,6 +770,11 @@ function DesktopLinks({
                 {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
                 {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"explore"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
                 {},
+                {name: t('tooltip.downloadCatalog'), component: 
+                  <Link id="menu_help_widge_download_catalog" href={`${process.env.NEXT_PUBLIC_API_URL}/export/catalog/?locale=${locale || 'pt'}`}>
+                    {t('tooltip.downloadCatalog')}
+                  </Link>
+                },
                 {name: t('tooltip.installPackages'), url: 
                   locale === "en" ? "/en/docs/access_data_packages/" :
                   locale === "es" ? "/es/docs/access_data_packages/" :
@@ -911,7 +916,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         },
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/bd-pro"
+          href: "/bdpro"
         },
         {
           name: [t('courses')],
@@ -940,7 +945,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/en/bd-pro"
+          href: "/en/bdpro"
         }
       ],
       [t('resources')]: [
@@ -962,7 +967,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "https://info.basedosdados.org/es/bd-pro"
+          href: "/es/bdpro"
         }
       ],
       [t('resources')]: [

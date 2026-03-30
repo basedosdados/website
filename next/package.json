@@ -49,8 +49,9 @@
     "react-markdown": "^8.0.7",
     "react-paginate": "^8.2.0",
     "rehype-slug": "^6.0.0",
-    "remark-gfm": "^3.0.1",
-    "swiper": "^8.4.5"
+    "remark-gfm": "^4.0.0",
+    "swiper": "^8.4.5",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "cypress": "^14.4.0",

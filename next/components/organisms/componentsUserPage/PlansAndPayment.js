@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { isMobileMod } from "../../../hooks/useCheckMobile.hook";
 import { ControlledInputSimple } from "../../atoms/ControlledInput";
 import Link from "../../atoms/Link";
@@ -21,11 +21,12 @@ import TitleText from "../../atoms/Text/TitleText";
 import LabelText from "../../atoms/Text/LabelText";
 import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
-import { CardPrice } from "../../../pages/prices";
+import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent } from "../../../utils";
 
 import {
+  TitleTextForm,
   ExtraInfoTextForm,
   ModalGeneral,
   Button
@@ -139,9 +140,14 @@ export default function PlansAndPayment ({ userData }) {
   }, [plan, plans])
 
   useEffect(() => {
-    if(query.i) {
-      if(userData?.isSubscriber) return AlertChangePlanModal.onOpen()
-      setPlan(query.i)
+    const planSelected = cookies.get('plan_selected');
+    if (planSelected) {
+      if (userData?.isSubscriber) {
+        cookies.remove('plan_selected');
+        return AlertChangePlanModal.onOpen();
+      }
+      setPlan(planSelected);
+      cookies.remove('plan_selected');
     }
   }, [query])
 
@@ -189,6 +195,7 @@ export default function PlansAndPayment ({ userData }) {
         {name: t('username.dozensOfHighFrequencyDatasets')},
         {name: t('username.companyReferenceTable')},
         {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')},
+        {name: t('username.selectedTableNotifications')}
       ]
     },
     "bd_pro_empresas" : {
@@ -412,22 +419,33 @@ export default function PlansAndPayment ({ userData }) {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
       return emailRegex.test(email)
     }
-    if(!isValidEmail(emailGCP)) return setErrEmailGCP(true)
 
-    const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
-      .then(res => res.json())
-
-    if(response.ok) {
-      if(emailGCP !== userData?.email) {
-        if(emailGCP !== userData?.gcpEmail) {
-          triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
-        }
-      }
-      setIsLoadingEmailChange(false)
-      EmailModal.onClose()
-      PaymentModal.onOpen()
-    } else {
+    if(!isValidEmail(emailGCP)) {
       setErrEmailGCP(true)
+      setIsLoadingEmailChange(false)
+      return
+    }
+
+    try {
+      const response = await fetch(`/api/user/changeUserGcpEmail?p=${btoa(emailGCP)}`)
+        .then(res => res.json())
+
+      if(response.ok) {
+        if(emailGCP !== userData?.email) {
+          if(emailGCP !== userData?.gcpEmail) {
+            triggerGAEvent("exchange_email_gcp",`checkout_de_pagamento`)
+          }
+        }
+        setIsLoadingEmailChange(false)
+        EmailModal.onClose()
+        PaymentModal.onOpen()
+      } else {
+        setErrEmailGCP(true)
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoadingEmailChange(false)
     }
   }
 
@@ -1023,127 +1041,13 @@ export default function PlansAndPayment ({ userData }) {
           />
         </Stack>
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          gridGap="40px"
-        >
-          <Box
-            display="flex"
-            width="100%"
-            flexDirection="row"
-            justifyContent="center"
-            alignitems="center"
-            gap="8px"
-          >
-            <Toggle
-              id="toggle-prices"
-              defaultChecked
-              value={toggleAnual}
-              onChange={() => setToggleAnual(!toggleAnual)}
-            />
-            <LabelText
-              typography="large"
-              position="relative"
-              top="-2px"
-              gap="8px"
-              display="flex"
-              fontWeight="400"
-              alignItems="center"
-              textAlign="center"
-            >
-              {t('username.annualDiscount')}
-              <LabelText
-                typography="large"
-                as="span"
-                color="#2B8C4D"
-                backgroundColor="#D5E8DB"
-                padding="2px 4px"
-                borderRadius="4px"
-                height="32px"
-              >
-                {t('username.save20')}
-              </LabelText>
-            </LabelText>
-          </Box>
-
-          <Stack
-            display={{base: "flex", lg: "grid"}}
-            gridTemplateColumns="repeat(3, 320px)"
-            gridTemplateRows="1fr"
-            alignItems={{base: "center", lg: "inherit"}}
-            padding="0 10px 6px"
-            justifyContent="center"
-            justifyItems="center"
-            gap="24px"
-            spacing={0}
-          >
-            <CardPrice
-              title={t('username.DBFree')}
-              subTitle={<>{t('username.DBFreeSubtitle')}</>}
-              price={"0"}
-              textResource={t('username.resources')}
-              resources={[
-                {name: t('username.processedTables')},
-                {name: t('username.integratedData'), tooltip: t('username.integratedDataTooltip')},
-                {name: t('username.cloudAccess')},
-                {name: t('username.sqlPythonRAccess')},
-                {name: t('username.biIntegration')},
-                {name: t('username.downloadLimit100MB'), tooltip: t('username.downloadLimit100MBTooltip')},
-              ]}
-              button={{
-                text: t('username.exploreFeatures'),
-                href: "/search",
-                noHasModal: true,
-              }}
-            />
-
-            <CardPrice
-              title={t('username.DBPro')}
-              subTitle={<>{t('username.DBProSubtitle')}</>}
-              price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`].amount || 444}
-              anualPlan={toggleAnual}
-              textResource={t('username.allDBFreeResources')}
-              resources={[
-                {name: t('username.dozensOfHighFrequencyDatasets')},
-                {name: t('username.companyReferenceTable')},
-                {name: t('username.downloadLimit1GB'), tooltip: t('username.downloadLimit1GBTooltip')}
-              ]}
-              button={{
-                id: "bd_pro_button_sub_btn",
-                text: `${userData?.proSubscription === "bd_pro" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro" ? () => {} : () => {
-                  setPlan(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
-                  PlansModal.onClose()
-                  EmailModal.onOpen()
-                },
-                isCurrentPlan: userData?.proSubscription === "bd_pro" ? true : false,
-              }}
-            />
-
-            <CardPrice
-              title={t('username.DBEnterprise')}
-              subTitle={<>{t('username.DBEnterpriseSubtitle')}</>}
-              price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`].amount || 3700}
-              anualPlan={toggleAnual}
-              textResource={t('username.allDBProResources')}
-              resources={[
-                {name: t('username.accessFor10Accounts')},
-                {name: t('username.prioritySupport')}
-              ]}
-              button={{
-                id: "bd_pro_empresas_button_sub_btn",
-                text: `${userData?.proSubscription === "bd_pro_empresas" ? t('username.currentPlan') : hasSubscribed ? t('username.subscribe') : t('username.startFreeTrial')}`,
-                onClick: userData?.proSubscription === "bd_pro_empresas" ? () => {} : () => {
-                  setPlan(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
-                  PlansModal.onClose()
-                  EmailModal.onOpen()
-                },
-                isCurrentPlan: userData?.proSubscription === "bd_pro_empresas" ? true : false,
-              }}
-            />
-          </Stack>
-        </Box>
+        <SectionPrice
+          action={(planId) => {
+            setPlan(planId)
+            PlansModal.onClose()
+            EmailModal.onOpen()
+          }}
+        />
       </ModalGeneral>
 
       {/* err plans */}
@@ -1320,7 +1224,7 @@ export default function PlansAndPayment ({ userData }) {
 
         <Stack
           spacing={0}
-          gap="64px"
+          gap={userData?.proSubscription === "bd_pro_empresas" ? {base: "0", lg: "64px"} : "64px"}
           flexDirection={{base: "column", lg: "row"}}
         >
           <Stack minWidth="350px" spacing="8px">
@@ -1338,19 +1242,19 @@ export default function PlansAndPayment ({ userData }) {
                 return <ListFeature elm={elm} index={index} key={index}/>
               })
             }
+          </Stack>
+
+          <Stack spacing="8px">
             {userData?.proSubscription === "bd_pro_empresas" &&
-              <>
+              <Stack spacing={0} gap="8px" marginTop={{base: "8px", lg: "36px"}}>
                 {resources["bd_pro"].resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
                 {planResource.resources.map((elm, index) => {
                   return <ListFeature elm={elm} index={index} key={index}/>
                 })}
-              </>
+              </Stack>
             }
-          </Stack>
-
-          <Stack spacing="8px">
             {userData?.proSubscription !== "bd_pro_empresas" &&
               <BodyText
                 typography="small"
@@ -1393,6 +1297,39 @@ export default function PlansAndPayment ({ userData }) {
               </BodyText>
             }
           </Stack>
+        </Stack>
+
+        <Stack>
+          <Box>
+            <TitleTextForm>{t('username.changeBillingInformation')}</TitleTextForm>
+            <ExtraInfoTextForm>
+              <Trans
+                i18nKey={t('username.changeBillingInformationInfo')}
+                components={{
+                  1:
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color:"#0057A4",
+                      }}
+                      href="https://coda.io/@base-dos-dados/faq-bd-pro/assinatura-2"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    />
+                }}
+              />
+            </ExtraInfoTextForm>
+            <Button
+              as="a"
+              href="https://billing.stripe.com/p/login/bIY4jedfK4kRgda144"
+              isVariant
+              onClick={() => {}}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{t('username.changeBillingInformationButton')}</Button>
+          </Box>
         </Stack>
       </Stack>
     </Stack>

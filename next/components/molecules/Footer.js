@@ -211,9 +211,9 @@ export default function Footer({ template, ocult = false }) {
               >
                 {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href={locale === 'en' ? "https://info.basedosdados.org/en/bd-pro" : 
-                                locale === 'es' ? "https://info.basedosdados.org/es/bd-pro" : 
-                                "https://info.basedosdados.org/bd-pro"}>
+              <FooterLink href={locale === 'en' ? "/en/bdpro" : 
+                                locale === 'es' ? "/es/bdpro" : 
+                                "/bdpro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
               {locale === 'pt' && (

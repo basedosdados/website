@@ -122,13 +122,14 @@ export default function Login() {
 
     cookies.set('userBD', JSON.stringify(userData))
 
-    if(query.i) {
+    const postAuthPlanId = cookies.get('plan_selected');
+
+    if(postAuthPlanId) {
       return router.push({
         pathname: '/user/[username]',
         query: { 
           username: userData.username,
           plans_and_payment: '',
-          i: query.i
         }
       })
     }
@@ -334,7 +335,9 @@ export default function Login() {
             {t('login.noAccount')}
             <Link
               marginLeft="2px"
-              href='/user/register'
+              href={{
+                pathname: '/user/register',
+              }}
               fontWeight="400"
               color="#0068C5"
               _hover={{

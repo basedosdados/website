@@ -10,7 +10,7 @@ La misión de Base de los Datos es universalizar el uso de datos de calidad
 en Brasil y el mundo. Para ello, creamos una herramienta que te permite **acceder a
 recursos importantes de diversos conjuntos de datos públicos**, como:
 
-- **Tablas procesadas BD+**: Tablas completas, ya procesadas y listas
+- **Tablas procesadas BD**: Tablas completas, ya procesadas y listas
   para análisis, disponibles en nuestro datalake público.
 
 - **Datos originales**: Enlaces con información útil para explorar más
@@ -18,7 +18,7 @@ recursos importantes de diversos conjuntos de datos públicos**, como:
 
 > Tenemos un equipo de Datos y voluntarios(as) de todo Brasil que ayudan a limpiar y mantener las tablas procesadas. [Aprende cómo formar parte](colab_data)
 
-## Accediendo a tablas procesadas BD+
+## Accediendo a tablas procesadas BD
 
 En nuestro sitio encontrarás la lista de todas las tablas procesadas de
 cada conjunto de datos. También presentamos información importante de todas

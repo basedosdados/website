@@ -312,7 +312,7 @@ Diretórios são as pedras fundamentais da estrutura do nosso _datalake_. Nossas
 - Nomes de variáveis com prefixo `id_` são reservadas para chaves
   primárias de entidades.
 
-Veja todas as [tabelas já disponíveis aqui.](https://basedosdados.org/dataset?organization=br-bd&order_by=score&q=%22diret%C3%B3rios%22)
+Veja todas as [tabelas já disponíveis aqui.](https://basedosdados.org/search?q=diret%C3%B3rios&organization=bd&theme=territory&page=1)
 
 ### **Como preencher os metadados das tabelas de diretório?**
 - Preencher o *`spatial_coverage`* (`cobertura_espacial`), que é a máxima unidade espacial que a tabela cobre. Exemplo: sa.br, que significa que o nível de agregação espacial da tabela é o Brasil.
@@ -329,4 +329,4 @@ O campo se refere aos dados na fonte original, que ainda não passaram pela meto
 
 ## **Pensou em melhorias para os padrões definidos?**
 
-Abra um [issue no nosso Github](https://github.com/basedosdados/sdk/labels/docs) ou mande uma mensagem no [Discord](https://discord.gg/huKWpsVYx4) para conversarmos :)
+Abra um [issue no nosso Github](https://github.com/basedosdados/website/pulls) ou mande uma mensagem no [Discord](https://discord.gg/huKWpsVYx4) para conversarmos :)

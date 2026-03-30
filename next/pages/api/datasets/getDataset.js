@@ -1,9 +1,14 @@
 import axios from "axios";
 import { capitalize } from 'lodash';
+import { validate as isUuid } from "uuid";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`;
 
 export default async function getDataset(id, locale = 'pt') {
+  if (!id || !isUuid(id)) {
+    return null;
+  }
+
   try {
     const res = await axios({
       url: API_URL,
@@ -94,6 +99,7 @@ export default async function getDataset(id, locale = 'pt') {
                       name${capitalize(locale)}
                       slug
                       isClosed
+                      fullTemporalCoverage
                       order
                       status {
                         _id

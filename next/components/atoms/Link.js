@@ -15,7 +15,7 @@ export default function Link({
   const [isExternalLink, setIsExternalLink] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && href) {
+    if (typeof window !== "undefined" && typeof href === "string") {
       setIsExternalLink(href.startsWith('http://') || href.startsWith('https://'));
     } else {
       setIsExternalLink(false);

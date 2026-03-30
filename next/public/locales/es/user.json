@@ -292,7 +292,20 @@
         "pleaseEnterValidEmail": "Por favor, ingrese un correo electrónico válido.",
         "tourTitle": "Reiniciar Tour",
         "tourContext": "Este botón reinicia el tour guiado de la plataforma. Todas las explicaciones se mostrarán nuevamente desde el inicio.",
-        "resetTour": "Reiniciar"
+        "resetTour": "Reiniciar",
+        "disableAllNotifications": "Desactivar todas las notificaciones",
+        "disableNotificationsInfo": "Al hacer clic en el botón de abajo, se desactivarán todas las notificaciones de actualización de tablas.",
+        "disableNotificationsButton": "Desactivar notificaciones",
+        "disableNotificationsSuccess": "¡Notificaciones desactivadas con éxito!",
+        "disableNotificationsError": "Error al desactivar las notificaciones",
+        "noActiveNotifications": "No hay notificaciones activas para desactivar.",
+        "changeBillingInformation": "Cambiar información de facturación",
+        "changeBillingInformationInfo": "Obtenga más información sobre cómo cambiar su información de facturación <1>aquí</1>.",
+        "changeBillingInformationButton": "Cambiar información de facturación",
+        "confirmDisableNotificationsTitle": "¿Está seguro de que desea desactivar todas las notificaciones?",
+        "confirmDisableNotificationsDescription": "Al hacer clic en \"Desactivar\", dejará de recibir alertas sobre actualizaciones en todas las tablas que sigue actualmente.",
+        "confirmDisableNotificationsConfirmButton": "Desactivar",
+        "selectedTableNotifications": "Notificaciones de actualización de tabla"
     },
     "activate": {
         "accountActive": "Cuenta activa",

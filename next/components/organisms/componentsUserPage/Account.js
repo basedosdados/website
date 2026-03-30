@@ -3,7 +3,8 @@ import {
   Box,
   FormControl,
   useDisclosure,
-  ModalCloseButton
+  ModalCloseButton,
+  useToast
 } from "@chakra-ui/react";
 import { useState } from "react";
 import cookies from 'js-cookie';
@@ -11,6 +12,8 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import Link from "../../atoms/Link";
 import TitleText from "../../atoms/Text/TitleText";
+import CheckIcon from "../../../public/img/icons/checkIcon";
+import WarningIcon from "../../../public/img/icons/warningIcon";
 
 import {
   LabelTextForm,
@@ -25,10 +28,12 @@ import {
 export default function Account({ userInfo }) {
   const { t } = useTranslation('user');
   const router = useRouter();
+  const toast = useToast();
   const usernameModal = useDisclosure();
   const eraseModalAccount = useDisclosure();
   const sucessEraseModalAccount = useDisclosure();
   const errorEraseModalAccount = useDisclosure();
+  const disableNotificationsModal = useDisclosure();
   const [isLoading, setIsLoading] = useState(false);
   const [hasCancelSubscription, setHasCancelSubscription] = useState(false);
   const [hasMembers, setHasMembers] = useState(false);
@@ -137,6 +142,107 @@ export default function Account({ userInfo }) {
     sucessEraseModalAccount.onClose()
     return window.open("/", "_self")
   }
+
+  async function handleDisableAllNotifications() {
+    setIsLoading(true)
+    disableNotificationsModal.onClose()
+    const reg = new RegExp("(?<=:).*")
+    const [ id ] = reg.exec(userInfo?.id)
+
+    const result = await fetch(`/api/tables/disableAllTableUpdateNotifications?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
+
+    if(result?.success === true) {
+      toast({
+        status: "success",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <CheckIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.disableNotificationsSuccess')}
+          </Box>
+        )
+      })
+    } else if (result === null) {
+      toast({
+        status: "info",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <WarningIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.noActiveNotifications')}
+          </Box>
+        )
+      })
+    } else {
+      toast({
+        status: "error",
+        duration: 3000,
+        position: "bottom",
+        render: () => (
+          <Box
+            display="flex"
+            width="fit-content"
+            flexDirection="row"
+            gap="8px"
+            padding="12px 16px"
+            backgroundColor="#252A32"
+            borderRadius="8px"
+            color="#FFF"
+            fill="#FFF"
+            fontFamily="Roboto"
+            fontWeight="500"
+            fontSize="14px"
+            lineHeight="20px"
+          >
+            <WarningIcon
+              width="20px"
+              height="20px"
+            />
+            {t('username.disableNotificationsError')}
+          </Box>
+        )
+      })
+    }
+    setIsLoading(false)
+  }
+
 
   return (
     <Stack spacing="24px">
@@ -317,6 +423,62 @@ export default function Account({ userInfo }) {
         </Stack>
       </ModalGeneral>
 
+      <ModalGeneral
+        isOpen={disableNotificationsModal.isOpen}
+        onClose={disableNotificationsModal.onClose}
+        propsModalContent={{minWidth: {base: "", lg: "800px !important"}}}
+      >
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="20px">{t('username.confirmDisableNotificationsTitle')}</TitleText>
+          <ModalCloseButton
+            fontSize="14px"
+            top="34px"
+            right="26px"
+            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            onClick={() => disableNotificationsModal.onClose()}
+          />
+        </Stack>
+
+        <Stack spacing="24px" marginBottom="16px">
+          <ExtraInfoTextForm>
+            {t('username.confirmDisableNotificationsDescription')}
+          </ExtraInfoTextForm>
+        </Stack>
+
+        <Stack
+          flexDirection={{base: "column-reverse", lg: "row"}}
+          spacing={0}
+          gap="16px"
+          width={{base:"100%", lg: "fit-content"}}
+        >
+          <Button
+            width="100%"
+            border="1px solid #BF3434"
+            color="#BF3434"
+            backgroundColor="#fff"
+            _hover={{
+              color: "#992A2A",
+              borderColor: "#992A2A"
+            }}
+            onClick={() => disableNotificationsModal.onClose()}
+          >
+            {t('username.cancel')}
+          </Button>
+
+          <Button
+            width="100%"
+            backgroundColor="#BF3434"
+            _hover={{
+              backgroundColor: "#992A2A",
+            }}
+            onClick={() => handleDisableAllNotifications()}
+            isLoading={isLoading}
+          >
+            {t('username.confirmDisableNotificationsConfirmButton')}
+          </Button>
+        </Stack>
+      </ModalGeneral>
+
       <Box marginTop="0 !important">
         <TitleTextForm>{t('username.username')}</TitleTextForm>
         <ExtraInfoTextForm>{userInfo.username}</ExtraInfoTextForm>
@@ -324,6 +486,15 @@ export default function Account({ userInfo }) {
           isVariant
           onClick={() => usernameModal.onOpen()}
         >{t('username.changeUsername')}</Button>
+      </Box>
+
+      <Box>
+        <TitleTextForm>{t('username.disableAllNotifications')}</TitleTextForm>
+        <ExtraInfoTextForm>{t('username.disableNotificationsInfo')}</ExtraInfoTextForm>
+        <Button
+          isVariant
+          onClick={() => disableNotificationsModal.onOpen()}
+        >{t('username.disableNotificationsButton')}</Button>
       </Box>
 
       <Box>
