@@ -5,9 +5,9 @@ on:
     branches:
       - staging
     paths:
-      - ".github/workflows/release-staging.yaml"
-      - "next/**/*"
-      - "!next/cypress/**/*"
+      - '.github/workflows/release-staging.yaml'
+      - 'next/**/*'
+      - '!next/cypress/**/*'
   workflow_dispatch:
 
 jobs:
@@ -21,6 +21,7 @@ jobs:
       NEXT_PUBLIC_SITE_NAME: ${{ vars.NEXT_PUBLIC_SITE_NAME }}
       NEXT_PUBLIC_KEY_STRIPE: ${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}
       NEXT_PUBLIC_BASE_URL_FRONTEND: ${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+      CHATBOT_URL: ${{ vars.CHATBOT_URL }}
       NODE_ENV: ${{ vars.NODE_ENV }}
       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:staging
 
@@ -59,5 +60,6 @@ jobs:
             NEXT_PUBLIC_SITE_NAME=${{ env.NEXT_PUBLIC_SITE_NAME }}
             NEXT_PUBLIC_KEY_STRIPE=${{ env.NEXT_PUBLIC_KEY_STRIPE }}
             NEXT_PUBLIC_BASE_URL_FRONTEND=${{ env.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+            CHATBOT_URL=${{ env.CHATBOT_URL }}
             URL_DOWNLOAD_CLOSED=${{ steps.import_secrets.outputs.URL_DOWNLOAD_CLOSED }}
             URL_DOWNLOAD_OPEN=${{ steps.import_secrets.outputs.URL_DOWNLOAD_OPEN }}
