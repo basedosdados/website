@@ -22,7 +22,7 @@ jobs:
       NEXT_PUBLIC_KEY_STRIPE: ${{ secrets.NEXT_PUBLIC_KEY_STRIPE }}
       NEXT_PUBLIC_BASE_URL_FRONTEND: ${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
       NODE_ENV: ${{ vars.NODE_ENV }}
-      CHATBOT_URL: ${{ vars.CHATBOT_URL }}
+      CHATBOT_URL: ${{ secrets.CHATBOT_URL }}
       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:staging
 
     steps:
