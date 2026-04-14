@@ -13,7 +13,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { capitalize } from 'lodash';
 import cookies from "js-cookie";
-import { formatBytes } from "../../utils";
+import { formatBytes, hasBDProSubscription } from "../../utils";
 import Button from "../atoms/Button";
 import Link from "../atoms/Link";
 import ReadMore from "../atoms/ReadMore";
@@ -203,7 +203,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
   const handlerTableNotificationHiding = useCallback(() => {
     const rawUser = cookies.get("userBD");
     const user = rawUser ? JSON.parse(rawUser) : null;
-    if (user?.isAdmin || user?.isSubscriber) {
+    if (user?.isAdmin || hasBDProSubscription(user)) {
       setIsUserAuthorized(true);
     } else {
       setIsUserAuthorized(false);

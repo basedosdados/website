@@ -29,7 +29,7 @@ import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import TableColumns from "./TableColumns";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
-import { triggerGAEvent, triggerGAEventWithData, formatBytes } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, formatBytes, hasBDProSubscription } from "../../utils";
 
 import {
   getBigTableQuery
@@ -196,7 +196,7 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
   const isUserPro = useCallback(() => {
     let user;
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
-    return user?.isSubscriber || false;
+    return hasBDProSubscription(user);
   }, []);
 
   const getTourBD = useCallback(() => {

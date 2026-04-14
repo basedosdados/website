@@ -45,7 +45,7 @@ async function getUser(id, token) {
                       }
                     }
                   }
-                  internalSubscription (isActive: true, first: 1) {
+                  internalSubscription (isActive: true, first: 20) {
                     edges {
                       node {
                         canceledAt
@@ -83,5 +83,24 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
+  const accountNode = result?.data?.allAccount?.edges?.[0]?.node
+  const internalSubscriptions = accountNode?.internalSubscription?.edges || []
+  const sortedSubscriptions = [...internalSubscriptions].sort((a, b) => {
+    const aSlug = (a?.node?.stripeSubscription || "").toLowerCase()
+    const bSlug = (b?.node?.stripeSubscription || "").toLowerCase()
+    const aIsBDPro = aSlug.includes("bd_pro") || aSlug.includes("empresas")
+    const bIsBDPro = bSlug.includes("bd_pro") || bSlug.includes("empresas")
+
+    if (aIsBDPro && !bIsBDPro) return -1
+    if (!aIsBDPro && bIsBDPro) return 1
+    return 0
+  })
+
+  res.status(200).json({
+    ...accountNode,
+    internalSubscription: {
+      ...accountNode?.internalSubscription,
+      edges: sortedSubscriptions
+    }
+  })
 }

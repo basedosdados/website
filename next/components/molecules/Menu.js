@@ -31,7 +31,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription } from "../../utils";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 
@@ -849,8 +849,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
+    return hasBDProSubscription(user)
   }
 
   const haveInterprisePlan = () => {

@@ -240,3 +240,36 @@ export function formatBytes(bytes) {
     return `${(bytes / (1024 * 1024 * 1024 * 1024)).toFixed(2)} TB`
   }
 }
+
+const BD_PRO_SUBSCRIPTIONS = ["bd_pro", "bd_pro_empresas"]
+const matchesBDProSubscription = (value) => {
+  const normalized = (value || "").toLowerCase()
+  return normalized.includes("bd_pro") || normalized.includes("empresas")
+}
+
+export function hasBDProSubscription(user) {
+  return BD_PRO_SUBSCRIPTIONS.includes(user?.proSubscription)
+}
+
+export function getActiveInternalSubscription(user) {
+  const subscriptions = user?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  const bdProSubscription = subscriptions.find((subscription) =>
+    matchesBDProSubscription(subscription?.stripeSubscription)
+  )
+  if (bdProSubscription) return bdProSubscription
+  return subscriptions[0] || null
+}
+
+export function hasChatbotSubscription(user) {
+  const subscriptions = user?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  return subscriptions.some((subscription) =>
+    (subscription?.stripeSubscription || "").toLowerCase().includes("chatbot")
+  )
+}
+
+export function getSubscriptionType(user) {
+  if (hasBDProSubscription(user)) return "bd_pro"
+  if (hasChatbotSubscription(user)) return "chatbot"
+  if (user?.isSubscriber) return "unknown"
+  return "none"
+}
