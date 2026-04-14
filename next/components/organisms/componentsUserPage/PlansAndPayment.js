@@ -51,7 +51,6 @@ export default function PlansAndPayment ({ userData }) {
   const [couponInfos, setCouponInfos] = useState({})
   const [couponInputFocus, setCouponInputFocus] = useState(false)
   const [coupon, setCoupon] = useState("")
-  const [hasOpenEmailModal, setHasOpenEmailModal] = useState(false)
   const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
   const [emailGCPFocus, setEmailGCPFocus] = useState(false)
   const [errEmailGCP, setErrEmailGCP] = useState(false)
@@ -115,13 +114,25 @@ export default function PlansAndPayment ({ userData }) {
             )
           }
 
+          function filterChatbot(interval, amount) {
+            return result.data.filter((item) => {
+              const name = item.node.productName?.toLowerCase() || ""
+              const slug = item.node.productSlug?.toLowerCase() || ""
+              const isChatbotProduct = name === "chatbot" || slug.includes("chatbot")
+              return isChatbotProduct &&
+                item.node.interval === interval &&
+                item.node.amount === amount &&
+                item.node.isActive === true
+            })
+          }
+
           const filteredPlans = {
             bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
             bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
             bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
             bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node,
-            bd_chatbot_month : filterData("Chatbot", "month", true, 30)[0].node,
-            bd_chatbot_year : filterData("Chatbot", "year", true, 326)[0].node,
+            bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
+            bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
           }
 
           setPlans(filteredPlans)
@@ -141,16 +152,16 @@ export default function PlansAndPayment ({ userData }) {
     const value = Object.values(plans).find(elm => elm._id === plan)
     if(value?.interval === "month") setToggleAnual(false)
     setCheckoutInfos(value)
-    
+
     const isChatbotType = value?.productName?.toLowerCase().includes("chatbot") || value?.productSlug?.toLowerCase().includes("chatbot")
 
-    if(!hasOpenEmailModal) {
+    const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
+    if (!checkoutAlreadyVisible) {
       if (isChatbotType) {
         PaymentModal.onOpen()
       } else {
         EmailModal.onOpen()
       }
-      setHasOpenEmailModal(true)
     }
   }, [plan, plans])
 
@@ -461,8 +472,8 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
         setIsLoadingEmailChange(false)
-        EmailModal.onClose()
         PaymentModal.onOpen()
+        EmailModal.onClose()
       } else {
         setErrEmailGCP(true)
       }
@@ -497,7 +508,6 @@ export default function PlansAndPayment ({ userData }) {
         onClose={() => {
           setToggleAnual(true)
           setValueCoupon("")
-          setHasOpenEmailModal(false)
           setPlan("")
           if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
           PaymentModal.onClose()
@@ -551,7 +561,7 @@ export default function PlansAndPayment ({ userData }) {
                 gap="8px"
                 width="100%"
               >
-                <LabelText>
+                <LabelText textTransform="capitalize">
                   {checkoutInfos?.productName}
                 </LabelText>
                 <BodyText
@@ -565,7 +575,6 @@ export default function PlansAndPayment ({ userData }) {
                     setErrCoupon(false)
                     setCoupon("")
                     setValueCoupon("")
-                    setHasOpenEmailModal(false)
                     setPlan("")
                     const isChatbotType = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
                     if (!isChatbotType) {
@@ -743,7 +752,6 @@ export default function PlansAndPayment ({ userData }) {
                 width={{base: "100%", lg: "fit-content"}}
                 onClick={() => {
                   PaymentModal.onClose()
-                  setHasOpenEmailModal(false)
                   setPlan("")
                   const isChatbotType = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
                   if (!isChatbotType) {
@@ -774,7 +782,6 @@ export default function PlansAndPayment ({ userData }) {
                 width={{base: "100%", lg: "fit-content"}}
                 onClick={() => {
                   PaymentModal.onClose()
-                  setHasOpenEmailModal(false)
                   setPlan("")
                   const isChatbotType = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
                   if (!isChatbotType) {
@@ -796,7 +803,6 @@ export default function PlansAndPayment ({ userData }) {
         onClose={() => {
           setEmailGCP(userData?.gcpEmail || userData?.email)
           setErrEmailGCP(false)
-          setHasOpenEmailModal(false)
           setPlan("")
           EmailModal.onClose()
         }}
@@ -898,7 +904,6 @@ export default function PlansAndPayment ({ userData }) {
             onClick={() => {
               setEmailGCP(userData?.gcpEmail || userData?.email)
               setErrEmailGCP(false)
-              setHasOpenEmailModal(false)
               setPlan("")
               EmailModal.onClose()
             }}
@@ -1003,7 +1008,6 @@ export default function PlansAndPayment ({ userData }) {
       <ModalGeneral
         isOpen={ErroPaymentModal.isOpen}
         onClose={() => {
-          setHasOpenEmailModal(false)
           setPlan("")
           ErroPaymentModal.onClose()
         }}
@@ -1074,7 +1078,6 @@ export default function PlansAndPayment ({ userData }) {
       <ModalGeneral
         isOpen={PlansModal.isOpen}
         onClose={() => {
-          setHasOpenEmailModal(false)
           setPlan("")
           PlansModal.onClose()
         }}
@@ -1110,7 +1113,6 @@ export default function PlansAndPayment ({ userData }) {
           action={(planId) => {
             setPlan(planId)
             PlansModal.onClose()
-            EmailModal.onOpen()
           }}
         />
       </ModalGeneral>
