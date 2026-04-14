@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
 import BodyText from "../atoms/Text/BodyText";
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription } from "../../utils";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
@@ -19,8 +19,7 @@ export function TemporalCoverageBar ({ value }) {
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
 
-    if(user?.isSubscriber) return user?.isSubscriber
-    return false
+    return hasBDProSubscription(user)
   }
 
   const TextData = ({ string, ...style }) => {
