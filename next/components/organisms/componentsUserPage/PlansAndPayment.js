@@ -10,7 +10,7 @@ import {
   Grid,
   GridItem
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation, Trans } from "react-i18next";
@@ -39,6 +39,17 @@ import InfoIcon from "../../../public/img/icons/infoIcon";
 import { SuccessIcon } from "../../../public/img/icons/successIcon";
 import ErrIcon from "../../../public/img/icons/errIcon";
 import stylesPS from "../../../styles/paymentSystem.module.css";
+
+function purchaseReflectedInUserData(user, expectChatbot) {
+  if (!user) return false
+  if (expectChatbot) return hasChatbotSubscription(user)
+  if (hasBDProSubscription(user)) return true
+  const nodes = user?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  return nodes.some((node) => {
+    const slug = (node?.stripeSubscription || "").toLowerCase()
+    return slug.includes("bd_pro") || slug.includes("empresas")
+  })
+}
 
 export default function PlansAndPayment ({ userData }) {
   const { t } = useTranslation('user');
@@ -72,6 +83,7 @@ export default function PlansAndPayment ({ userData }) {
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
   const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
+  const successCheckoutKindRef = useRef(null)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
   const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
@@ -305,6 +317,10 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   const openModalSucess = () => {
+    const isChatbotPurchase =
+      checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
+      checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+    successCheckoutKindRef.current = isChatbotPurchase ? "chatbot" : "bd_pro"
     PaymentModal.onClose()
     SucessPaymentModal.onOpen()
   }
@@ -336,16 +352,18 @@ export default function PlansAndPayment ({ userData }) {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
 
+    const expectChatbot = successCheckoutKindRef.current === "chatbot"
+
     let user
     let attempts = 0
     const maxAttempts = 10
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-    while (!user?.internalSubscription?.edges?.[0]?.node && attempts < maxAttempts) {
+    while (!purchaseReflectedInUserData(user, expectChatbot) && attempts < maxAttempts) {
       user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
         .then((res) => res.json())
 
-      if (user?.internalSubscription?.edges?.[0]?.node) {
+      if (purchaseReflectedInUserData(user, expectChatbot)) {
         cookies.set("userBD", JSON.stringify(user))
         break
       }
@@ -353,6 +371,8 @@ export default function PlansAndPayment ({ userData }) {
       attempts++
       await delay(10000)
     }
+
+    successCheckoutKindRef.current = null
 
     if(isLoadingH === true) return window.open("/", "_self")
     window.open(`/user/${userData.username}?plans_and_payment`, "_self")
@@ -958,16 +978,17 @@ export default function PlansAndPayment ({ userData }) {
             fill="#34A15A"
           />
           <TitleText>
-            {isChatbotCheckout ? "Assinatura do Chatbot ativada!" : t('username.congratulations')}
+            {isChatbotCheckout ? t('username.chatbotSubscriptionSuccessTitle') : t('username.congratulations')}
           </TitleText>
           {isChatbotCheckout ? (
             <BodyText color="#464A51">
-              Seu pagamento foi aprovado e seu plano do Chatbot ja esta ativo.
-              Se precisar de ajuda para configurar ou usar o produto, fale com o nosso time pelo{" "}
-              <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>
-                suporte
-              </Text>
-              .
+              <Trans
+                t={t}
+                i18nKey="username.chatbotSubscriptionSuccessDescription"
+                components={{
+                  1: <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{ color: "#0057A4" }} />
+                }}
+              />
             </BodyText>
           ) : (
             <BodyText color="#464A51">
@@ -991,7 +1012,7 @@ export default function PlansAndPayment ({ userData }) {
             onClick={() => window.open(isChatbotCheckout ? `/user/${userData?.username}?plans_and_payment` : `/user/${userData?.username}?big_query`, "_self")}
             isLoading={isLoading}
           >
-            {isChatbotCheckout ? "Ver assinatura" : t('username.continueSettings')}
+            {isChatbotCheckout ? t('username.viewChatbotSubscription') : t('username.continueSettings')}
           </Button>
 
           <Button
@@ -1368,7 +1389,7 @@ export default function PlansAndPayment ({ userData }) {
 
         <Stack>
           <Box>
-            <Stack display="flex" flexDirection="column" spacing={0} gap="8px">
+            <Stack display="flex" flexDirection="column" spacing={0} gap="8px" marginTop="8px">
               {hasChatbotActiveSubscription && (
                 <Badge
                   width="fit-content"
@@ -1387,7 +1408,7 @@ export default function PlansAndPayment ({ userData }) {
                 </Badge>
               )}
               <Box display="flex" flexDirection="row" gap="8px" alignItems="center">
-                <TitleTextForm marginBottom="0 !important">Chatbot</TitleTextForm>
+                <TitleTextForm marginBottom="0 !important">{t('username.chatbotSectionTitle')}</TitleTextForm>
                 {chatbotSubscriptionInfo?.planInterval && 
                   <LabelText typography="x-small" color="#71757A" marginLeft="8px">
                     {formattedPlanInterval(chatbotSubscriptionInfo?.planInterval)}
@@ -1418,7 +1439,7 @@ export default function PlansAndPayment ({ userData }) {
                   if (plans?.bd_chatbot_year?._id) setPlan(plans.bd_chatbot_year._id)
                 }}
               >
-                Assinar Chatbot
+                {t('username.subscribeChatbot')}
               </Button>
             )}
             {hasChatbotActiveSubscription && (
@@ -1439,7 +1460,7 @@ export default function PlansAndPayment ({ userData }) {
                   backgroundColor: "#FFF",
                 }}
               >
-                Cancelar assinatura do Chatbot
+                {t('username.cancelChatbotSubscription')}
               </Button>
             )}
           </Box>
