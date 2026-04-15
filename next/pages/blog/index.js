@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { MainPageTemplate } from "../../components/templates/main";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { BlogGrid } from "../../components/organisms/Blog/Home";
+import { BlogGrid } from "../../components/organisms/blog/Home";
 import { getAllPosts } from "../api/blog";
 
 export async function getStaticProps({ locale }) {
