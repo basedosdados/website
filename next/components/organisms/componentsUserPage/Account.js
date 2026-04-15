@@ -14,6 +14,7 @@ import Link from "../../atoms/Link";
 import TitleText from "../../atoms/Text/TitleText";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import WarningIcon from "../../../public/img/icons/warningIcon";
+import { hasBDProSubscription } from "../../../utils";
 
 import {
   LabelTextForm,
@@ -100,7 +101,7 @@ export default function Account({ userInfo }) {
   }
 
   async function validateAccountDeletion(id) {
-    if (!userInfo?.isSubscriber || userInfo?.proSubscriptionRole === "member") {
+    if (!hasBDProSubscription(userInfo) || userInfo?.proSubscriptionRole === "member") {
       return true
     }
 

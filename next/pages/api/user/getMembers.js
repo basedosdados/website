@@ -38,9 +38,10 @@ async function getMembers(id, token) {
                       }
                     }
                   }
-                  internalSubscription (isActive: true, first: 1) {
+                  internalSubscription (isActive: true, first: 20) {
                     edges {
                       node {
+                        stripeSubscription
                         subscribers {
                           edges {
                             node {
@@ -86,5 +87,17 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})
 
-  res.status(200).json(result?.data?.allAccount?.edges[0]?.node)
+  const accountNode = result?.data?.allAccount?.edges?.[0]?.node
+  const internalSubscriptions = accountNode?.internalSubscription?.edges || []
+  const bdProSubscription = internalSubscriptions.find((edge) => {
+    const slug = (edge?.node?.stripeSubscription || "").toLowerCase()
+    return slug.includes("bd_pro") || slug.includes("empresas")
+  })
+
+  res.status(200).json({
+    ...accountNode,
+    internalSubscription: {
+      edges: bdProSubscription ? [bdProSubscription] : []
+    }
+  })
 }
