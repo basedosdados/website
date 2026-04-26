@@ -19,7 +19,8 @@ import {
   Menu,
   MenuButton,
   MenuList,
-  MenuItem
+  MenuItem,
+  Badge
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router"
@@ -31,7 +32,8 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, hasBDProSubscription } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription } from "../../utils";
+
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 
@@ -42,6 +44,8 @@ import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
+
+const CHATBOT_APP_URL = "https://basedosdados.org/chatbot-streamlit/";
 
 function useIsMobileMod() {
   return useCheckMobile();
@@ -191,19 +195,19 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
   );
 }
 
-function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan }) {
+function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan, hasChatbotAccess }) {
   const router = useRouter();
-  const { t } = useTranslation('menu');
+  const { t: tMenu } = useTranslation('menu');
   const { locale } = useRouter();
 
   const links = [
-    {name: t('public_profile'), value: "profile"},
-    {name: t('account'), value: "account"},
-    {name: t('password'), value: "new_password"},
-    {name: t('plans_and_payment'), value: "plans_and_payment"},
-    isUserPro && {name: t('bigquery'), value: "big_query"},
-    haveInterprisePlan && {name: t('access'), value: "accesses"},
-  ]
+    {name: tMenu('public_profile'), value: "profile"},
+    {name: tMenu('account'), value: "account"},
+    {name: tMenu('password'), value: "new_password"},
+    {name: tMenu('plans_and_payment'), value: "plans_and_payment"},
+    isUserPro && {name: tMenu('bigquery'), value: "big_query"},
+    haveInterprisePlan && {name: tMenu('access'), value: "accesses"},
+  ].filter(Boolean)
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -259,11 +263,11 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           >
             {isUserPro
               ? (userData?.plan === "bd_pro_empresas"
-                ? t('DBEnterprise')
+                ? tMenu('DBEnterprise')
                 : userData?.plan === "bd_pro"
-                  ? t('DBPro')
+                  ? tMenu('DBPro')
                   : null)
-              : t('DBFree')
+              : tMenu('DBFree')
             }
           </LabelText>
         </Stack>
@@ -278,7 +282,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
               <Stack spacing={0} flexDirection="row" alignItems="center" gap="8px">
                 <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
                 <BodyText typography="small">
-                  {t('settings')}
+                  {tMenu('settings')}
                 </BodyText>
               </Stack>
               <AccordionIcon />
@@ -290,19 +294,52 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
               gridGap="10px"
               padding="0 0 0 28px"
             >
-              {links.map((elm, index) => {
-                return (
-                  <Link
-                    key={index}
-                    color="#71757A"
-                    fontWeight="400"
-                    onClick={() => {
-                      onClose()
-                      router.push({pathname: `/user/${userData.username}`, query: elm.value})}
-                    }
-                  >{elm.name}</Link>
-                )
-              })}
+              {links.map((elm, index) => (
+                <Link
+                  key={index}
+                  color="#71757A"
+                  fontWeight="400"
+                  onClick={() => {
+                    onClose()
+                    router.push({ pathname: `/user/${userData.username}`, query: elm.value })
+                  }}
+                >
+                  {elm.name}
+                </Link>
+              ))}
+              {hasChatbotAccess && (
+                <Link
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  flexWrap="wrap"
+                  gap="6px"
+                  color="#71757A"
+                  fontWeight="400"
+                  onClick={() => {
+                    onClose()
+                    window.open(CHATBOT_APP_URL, "_blank", "noopener,noreferrer")
+                    triggerGAEvent("open_chatbot", "menu")
+                  }}
+                >
+                  {tMenu("openChatbot")}
+                  <Badge
+                    width="fit-content"
+                    padding="2px 8px"
+                    textTransform="none"
+                    borderRadius="6px"
+                    backgroundColor="#E8F2FC"
+                    color="#0068C5"
+                    fontSize="12px"
+                    lineHeight="18px"
+                    fontFamily="Roboto"
+                    fontWeight="500"
+                    letterSpacing="0.1px"
+                  >
+                    {tMenu("chatbotNewBadge")}
+                  </Badge>
+                </Link>
+              )}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -333,7 +370,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
             typography="small"
             marginLeft="8px !important"
           >
-            {t('exit')}
+            {tMenu('exit')}
           </BodyText>
         </Stack>
       </DrawerContent>
@@ -642,7 +679,8 @@ function DesktopLinks({
   links,
   path,
   userTemplate = false,
-  isUserPro
+  isUserPro,
+  hasChatbotAccess
 }) {
   const isMobile = useIsMobileMod();
   const { t } = useTranslation('common', 'menu');
@@ -684,7 +722,12 @@ function DesktopLinks({
       transition="1s"
       marginLeft="28px !important"
     >
-      <HStack display={userTemplate ? "none" : "flex"} width="100%" flex="3" spacing={7}>
+      <HStack
+        display={userTemplate ? "none" : "flex"}
+        width="100%"
+        flex="3"
+        spacing={7}
+      >
         {Object.entries(links).map(([k, v], i) => {
           if (k === "Button") {
             return v.map((b, j) => (
@@ -699,7 +742,7 @@ function DesktopLinks({
                   {b.name}
                 </Button>
               </a>
-            ))
+            ));
           }
 
           if (typeof v === "object") {
@@ -718,9 +761,9 @@ function DesktopLinks({
                 lineHeight="20px"
                 borderRadius="10px"
                 padding="32px"
-                _first={{ paddingTop: "10px"}}
-                _last={{ paddingBottom: "10px"}}
-                boxShadow= "0 1px 8px 1px rgba(64, 60, 67, 0.16)"
+                _first={{ paddingTop: "10px" }}
+                _last={{ paddingBottom: "10px" }}
+                boxShadow="0 1px 8px 1px rgba(64, 60, 67, 0.16)"
               >
                 {v.map((elm, j) => (
                   <LinkMenuDropDown
@@ -731,7 +774,7 @@ function DesktopLinks({
                   />
                 ))}
               </MenuDropdown>
-            )
+            );
           }
 
           return (
@@ -745,54 +788,142 @@ function DesktopLinks({
             >
               {k}
             </Link>
-          )
+          );
         })}
       </HStack>
 
-      {userTemplate && !isMobile &&
-        <SearchInputUser
-          user={userData !== null}
-        />
-      }
+      {userTemplate && !isMobile && (
+        <SearchInputUser user={userData !== null} />
+      )}
 
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
-        {(path === "/search" || path === "/dataset/[dataset]" || path === "/user/[username]") &&
+        {(path === "/search" ||
+          path === "/dataset/[dataset]" ||
+          path === "/user/[username]") && (
           <Box id="widget_help_and_resources">
             <HelpWidget
-              tooltip={t('tooltip.helpAndResources')}
+              tooltip={t("tooltip.helpAndResources")}
               options={[
-                {name: t('tooltip.faq'), component: <Link href="/faq">{t('tooltip.faq')}</Link>},
-                {name: t('tooltip.documentation'), url: 
-                  locale === "en" ? "/en/docs/home" :
-                  locale === "es" ? "/es/docs/home" :
-                  "/docs/home"
+                {
+                  name: t("tooltip.faq"),
+                  component: <Link href="/faq">{t("tooltip.faq")}</Link>,
                 },
-                {name: t('tooltip.youtubeVideos'), url: "https://www.youtube.com/c/BasedosDados/featured"},
-                {name: t('tooltip.resetTour'), component: <Link onClick={() => cookies.set('tourBD', '{"state":"explore"}', { expires: 360 })}>{t('tooltip.resetTour')}</Link>},
+                {
+                  name: t("tooltip.documentation"),
+                  url:
+                    locale === "en"
+                      ? "/en/docs/home"
+                      : locale === "es"
+                        ? "/es/docs/home"
+                        : "/docs/home",
+                },
+                {
+                  name: t("tooltip.youtubeVideos"),
+                  url: "https://www.youtube.com/c/BasedosDados/featured",
+                },
+                {
+                  name: t("tooltip.resetTour"),
+                  component: (
+                    <Link
+                      onClick={() =>
+                        cookies.set("tourBD", '{"state":"explore"}', {
+                          expires: 360,
+                        })
+                      }
+                    >
+                      {t("tooltip.resetTour")}
+                    </Link>
+                  ),
+                },
                 {},
-                {name: t('tooltip.downloadCatalog'), component: 
-                  <Link id="menu_help_widge_download_catalog" href={`${process.env.NEXT_PUBLIC_API_URL}/export/catalog/?locale=${locale || 'pt'}`}>
-                    {t('tooltip.downloadCatalog')}
-                  </Link>
+                {
+                  name: t("tooltip.downloadCatalog"),
+                  component: (
+                    <Link
+                      id="menu_help_widge_download_catalog"
+                      href={`${process.env.NEXT_PUBLIC_API_URL}/export/catalog/?locale=${locale || "pt"}`}
+                    >
+                      {t("tooltip.downloadCatalog")}
+                    </Link>
+                  ),
                 },
-                {name: t('tooltip.installPackages'), url: 
-                  locale === "en" ? "/en/docs/access_data_packages/" :
-                  locale === "es" ? "/es/docs/access_data_packages/" :
-                  "/docs/access_data_packages/"
+                {
+                  name: t("tooltip.installPackages"),
+                  url:
+                    locale === "en"
+                      ? "/en/docs/access_data_packages/"
+                      : locale === "es"
+                        ? "/es/docs/access_data_packages/"
+                        : "/docs/access_data_packages/",
                 },
-                {name: t('tooltip.howToCite'), component: <Link href="/faq#reference">{t('tooltip.howToCite')}</Link>},
-                {name: t('tooltip.whatAreDirectories'), component: <Link href="/faq#directories">{t('tooltip.whatAreDirectories')}</Link>},
+                {
+                  name: t("tooltip.howToCite"),
+                  component: (
+                    <Link href="/faq#reference">{t("tooltip.howToCite")}</Link>
+                  ),
+                },
+                {
+                  name: t("tooltip.whatAreDirectories"),
+                  component: (
+                    <Link href="/faq#directories">
+                      {t("tooltip.whatAreDirectories")}
+                    </Link>
+                  ),
+                },
                 {},
-                {name: t('tooltip.discordCommunity'), url: "https://discord.gg/huKWpsVYx4"},
-                {name: t('tooltip.contactUs'), component: <Link href="/contact">{t('tooltip.contactUs')}</Link>},
+                {
+                  name: t("tooltip.discordCommunity"),
+                  url: "https://discord.gg/huKWpsVYx4",
+                },
+                {
+                  name: t("tooltip.contactUs"),
+                  component: (
+                    <Link href="/contact">{t("tooltip.contactUs")}</Link>
+                  ),
+                },
               ]}
             />
           </Box>
-        }
+        )}
+
+        {userData && hasChatbotAccess && (
+          <Button
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            gap="8px"
+            as="a"
+            href={CHATBOT_APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => triggerGAEvent("open_chatbot", "menu")}
+            minWidth="auto"
+            height="35px"
+            fontWeight="400"
+            isVariant
+          >
+            {t("openChatbot", { ns: "menu" })}
+            <Badge
+              width="fit-content"
+              padding="2px 8px"
+              textTransform="none"
+              borderRadius="6px"
+              backgroundColor="#E8F2FC"
+              color="#0068C5"
+              fontSize="12px"
+              lineHeight="18px"
+              fontFamily="Roboto"
+              fontWeight="500"
+              letterSpacing="0.1px"
+            >
+              {t("chatbotNewBadge", { ns: "menu" })}
+            </Badge>
+          </Button>
+        )}
 
         {userData ? (
           <HStack spacing="20px">
-            <MenuUser userData={userData} isUserPro={isUserPro}/>
+            <MenuUser userData={userData} isUserPro={isUserPro} />
           </HStack>
         ) : (
           <>
@@ -806,27 +937,25 @@ function DesktopLinks({
               fontWeight="400"
               gap="8px"
               _hover={{
-                opacity: 0.7
+                opacity: 0.7,
               }}
               onClick={() => {
-                if (typeof window !== 'undefined') {
-                  localStorage.setItem('previousPath', window.location.href)
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("previousPath", window.location.href);
                 }
               }}
             >
-              {t('enter', { ns: 'menu' })}
+              {t("enter", { ns: "menu" })}
             </Link>
 
             <Link href="/user/register">
-              <Button isVariant>
-                {t('register', { ns: 'menu' })}
-              </Button>
+              <Button isVariant>{t("register", { ns: "menu" })}</Button>
             </Link>
           </>
         )}
       </HStack>
     </HStack>
-  )
+  );
 }
 
 export default function MenuNav({ simpleTemplate = false, userTemplate = false }) {
@@ -856,6 +985,12 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
     let user
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
     return user?.proSubscription === "bd_pro_empresas"
+  }
+
+  const hasChatbotAccess = () => {
+    let user
+    if (cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"))
+    return hasChatbotSubscription(user)
   }
 
   useEffect(() => {
@@ -1078,6 +1213,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
               path={router.pathname}
               userTemplate={userTemplate}
               isUserPro={isUserPro()}
+              hasChatbotAccess={hasChatbotAccess()}
             />
           }
 
@@ -1101,6 +1237,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
             onClose={menuUserMobile.onClose}
             isUserPro={isUserPro()}
             haveInterprisePlan={haveInterprisePlan()}
+            hasChatbotAccess={hasChatbotAccess()}
           />
         </HStack>
       </Box>

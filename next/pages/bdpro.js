@@ -483,7 +483,9 @@ function PricingSection({ t }) {
       >
         {t('prices:comparePlans')}
       </Display>
-      <SectionPrice />
+      <Box width="100%" maxWidth="1264px" margin="0 auto">
+        <SectionPrice/>
+      </Box>
     </VStack>
   );
 }
