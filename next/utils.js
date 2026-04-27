@@ -273,3 +273,16 @@ export function getSubscriptionType(user) {
   if (user?.isSubscriber) return "unknown"
   return "none"
 }
+
+const CHATBOT_STREAMLIT_PATH = "/chatbot-streamlit/"
+
+export function getChatbotStreamlitAppUrl() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND || "https://basedosdados.org"
+  if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") {
+    return `https://development.basedosdados.org${CHATBOT_STREAMLIT_PATH}`
+  }
+  if (baseUrl === "https://staging.basedosdados.org") {
+    return `https://staging.basedosdados.org${CHATBOT_STREAMLIT_PATH}`
+  }
+  return `https://basedosdados.org${CHATBOT_STREAMLIT_PATH}`
+}

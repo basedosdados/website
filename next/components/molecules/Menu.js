@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -44,8 +44,6 @@ import SearchIcon from "../../public/img/icons/searchIcon";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
 import SettingsIcon from "../../public/img/icons/settingsIcon";
 import SignOutIcon from "../../public/img/icons/signOutIcon";
-
-const CHATBOT_APP_URL = "https://basedosdados.org/chatbot-streamlit/";
 
 function useIsMobileMod() {
   return useCheckMobile();
@@ -60,7 +58,7 @@ function handleMenuLinkClick(href) {
   }
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links }) {
+function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
   const { t } = useTranslation('menu');
   const { locale } = useRouter();
   const router = useRouter();
@@ -164,6 +162,57 @@ function MenuDrawer({ userData, isOpen, onClose, links }) {
             }
           })}
         </VStack>
+
+        <Stack
+          display={{ base: "flex", lg: "none" }}
+          width="100%"
+          marginTop="20px"
+          paddingTop="20px"
+          borderTop="1px solid"
+          borderColor="#DEDFE0"
+        >
+          <Link
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            flexWrap="wrap"
+            gap="6px"
+            color="#252A32"
+            fontSize="20px"
+            fontFamily="Roboto"
+            fontWeight="400"
+            href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+            onClick={(e) => {
+              onClose();
+              if (hasChatbotAccess) {
+                e.preventDefault();
+                window.open(
+                  getChatbotStreamlitAppUrl(),
+                  "_blank",
+                  "noopener,noreferrer"
+                );
+                triggerGAEvent("open_chatbot", "menu");
+              }
+            }}
+          >
+            {t("openChatbot")}
+            <Badge
+              width="fit-content"
+              padding="2px 8px"
+              textTransform="none"
+              borderRadius="6px"
+              backgroundColor="#E8F2FC"
+              color="#0068C5"
+              fontSize="12px"
+              lineHeight="18px"
+              fontFamily="Roboto"
+              fontWeight="500"
+              letterSpacing="0.1px"
+            >
+              {t("chatbotNewBadge")}
+            </Badge>
+          </Link>
+        </Stack>
 
         {userData ? (
           <></>
@@ -307,39 +356,45 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                   {elm.name}
                 </Link>
               ))}
-              {hasChatbotAccess && (
-                <Link
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  flexWrap="wrap"
-                  gap="6px"
-                  color="#71757A"
-                  fontWeight="400"
-                  onClick={() => {
-                    onClose()
-                    window.open(CHATBOT_APP_URL, "_blank", "noopener,noreferrer")
+              <Link
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                flexWrap="wrap"
+                gap="6px"
+                color="#71757A"
+                fontWeight="400"
+                href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+                onClick={(e) => {
+                  onClose()
+                  if (hasChatbotAccess) {
+                    e.preventDefault()
+                    window.open(
+                      getChatbotStreamlitAppUrl(),
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
                     triggerGAEvent("open_chatbot", "menu")
-                  }}
+                  }
+                }}
+              >
+                {tMenu("openChatbot")}
+                <Badge
+                  width="fit-content"
+                  padding="2px 8px"
+                  textTransform="none"
+                  borderRadius="6px"
+                  backgroundColor="#E8F2FC"
+                  color="#0068C5"
+                  fontSize="12px"
+                  lineHeight="18px"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  letterSpacing="0.1px"
                 >
-                  {tMenu("openChatbot")}
-                  <Badge
-                    width="fit-content"
-                    padding="2px 8px"
-                    textTransform="none"
-                    borderRadius="6px"
-                    backgroundColor="#E8F2FC"
-                    color="#0068C5"
-                    fontSize="12px"
-                    lineHeight="18px"
-                    fontFamily="Roboto"
-                    fontWeight="500"
-                    letterSpacing="0.1px"
-                  >
-                    {tMenu("chatbotNewBadge")}
-                  </Badge>
-                </Link>
-              )}
+                  {tMenu("chatbotNewBadge")}
+                </Badge>
+              </Link>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -684,7 +739,8 @@ function DesktopLinks({
 }) {
   const isMobile = useIsMobileMod();
   const { t } = useTranslation('common', 'menu');
-  const { locale } = useRouter();
+  const router = useRouter();
+  const { locale } = router;
 
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
@@ -886,40 +942,47 @@ function DesktopLinks({
           </Box>
         )}
 
-        {userData && hasChatbotAccess && (
-          <Button
-            display="flex"
-            flexDirection="row"
-            alignItems="center"
-            gap="8px"
-            as="a"
-            href={CHATBOT_APP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => triggerGAEvent("open_chatbot", "menu")}
-            minWidth="auto"
-            height="35px"
-            fontWeight="400"
-            isVariant
+        <Button
+          display="flex"
+          flexDirection="row"
+          alignItems="center"
+          gap="8px"
+          {...(hasChatbotAccess
+            ? {
+                as: "a",
+                href: getChatbotStreamlitAppUrl(),
+                target: "_blank",
+                rel: "noopener noreferrer",
+                onClick: () => triggerGAEvent("open_chatbot", "menu"),
+              }
+            : {
+                type: "button",
+                onClick: () => {
+                  router.push("/prices");
+                },
+              })}
+          minWidth="auto"
+          height="35px"
+          fontWeight="400"
+          isVariant
+        >
+          {t("openChatbot", { ns: "menu" })}
+          <Badge
+            width="fit-content"
+            padding="2px 8px"
+            textTransform="none"
+            borderRadius="6px"
+            backgroundColor="#E8F2FC"
+            color="#0068C5"
+            fontSize="12px"
+            lineHeight="18px"
+            fontFamily="Roboto"
+            fontWeight="500"
+            letterSpacing="0.1px"
           >
-            {t("openChatbot", { ns: "menu" })}
-            <Badge
-              width="fit-content"
-              padding="2px 8px"
-              textTransform="none"
-              borderRadius="6px"
-              backgroundColor="#E8F2FC"
-              color="#0068C5"
-              fontSize="12px"
-              lineHeight="18px"
-              fontFamily="Roboto"
-              fontWeight="500"
-              letterSpacing="0.1px"
-            >
-              {t("chatbotNewBadge", { ns: "menu" })}
-            </Badge>
-          </Button>
-        )}
+            {t("chatbotNewBadge", { ns: "menu" })}
+          </Badge>
+        </Button>
 
         {userData ? (
           <HStack spacing="20px">
@@ -1143,6 +1206,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       <MenuDrawer
         userData={userData}
         links={links}
+        hasChatbotAccess={hasChatbotAccess()}
         {...menuDisclosure}
       />
 
