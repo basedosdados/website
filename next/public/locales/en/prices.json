@@ -16,6 +16,7 @@
     "subscribe": "Subscribe",
     "startFreeTrial": "Start free trial",
     "exploreFeatures": "Explore features",
+    "beta": "Beta",
     "plans": {
       "free": {
         "title": "DB Free",

@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription } from "../../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
 
 import {
   TitleTextForm,
@@ -40,7 +40,6 @@ import { SuccessIcon } from "../../../public/img/icons/successIcon";
 import ErrIcon from "../../../public/img/icons/errIcon";
 import stylesPS from "../../../styles/paymentSystem.module.css";
 
-const CHATBOT_APP_URL = "https://basedosdados.org/chatbot-streamlit/";
 
 function purchaseReflectedInUserData(user, expectChatbot) {
   if (!user) return false
@@ -1103,7 +1102,7 @@ export default function PlansAndPayment ({ userData }) {
                 isVariant
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
-                  setIsLoadingH(true)
+                  setIsLoadingH(true);
                 }}
                 isLoading={isLoadingH}
               >
@@ -1111,16 +1110,16 @@ export default function PlansAndPayment ({ userData }) {
               </Button>
               <Button
                 as="a"
-                href={CHATBOT_APP_URL}
+                href={getChatbotStreamlitAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
-                  successCheckoutKindRef.current = null
-                  setIsLoading(false)
-                  setIsLoadingH(false)
-                  SucessPaymentModal.onClose()
-                  triggerGAEvent("open_chatbot", "payment_success_modal")
+                  successCheckoutKindRef.current = null;
+                  setIsLoading(false);
+                  setIsLoadingH(false);
+                  SucessPaymentModal.onClose();
+                  triggerGAEvent("open_chatbot", "payment_success_modal");
                 }}
                 isLoading={isLoading}
               >
@@ -1133,14 +1132,11 @@ export default function PlansAndPayment ({ userData }) {
                 isVariant
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
-                  successCheckoutKindRef.current = null
-                  setIsLoading(false)
-                  setIsLoadingH(false)
-                  SucessPaymentModal.onClose()
-                  window.open(
-                    `/user/${userData?.username}?big_query`,
-                    "_self",
-                  )
+                  successCheckoutKindRef.current = null;
+                  setIsLoading(false);
+                  setIsLoadingH(false);
+                  SucessPaymentModal.onClose();
+                  window.open(`/user/${userData?.username}?big_query`, "_self");
                 }}
                 isLoading={isLoading}
               >
@@ -1254,8 +1250,8 @@ export default function PlansAndPayment ({ userData }) {
             _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
-        
-        <Stack width={{base: "100%", lg: "1008px"}}>
+
+        <Stack width={{ base: "100%", lg: "1008px" }}>
           <SectionPrice
             hasChatbot={false}
             action={(planId) => {
@@ -1586,9 +1582,9 @@ export default function PlansAndPayment ({ userData }) {
                 alignItems="center"
                 flexWrap="wrap"
               >
-                <TitleTextForm marginBottom="0 !important">
+                <LabelText typography="large">
                   {t("username.chatbotSectionTitle")}
-                </TitleTextForm>
+                </LabelText>
                 <Badge
                   width="fit-content"
                   padding="2px 8px"
@@ -1656,7 +1652,7 @@ export default function PlansAndPayment ({ userData }) {
               >
                 <Button
                   as="a"
-                  href="https://basedosdados.org/chatbot-streamlit/"
+                  href={getChatbotStreamlitAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => {}}
