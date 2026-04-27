@@ -32,5 +32,7 @@
     "contact": "Contact",
     "DBFree": "DB Free",
     "DBPro": "DB Pro",
-    "DBEnterprise": "DB Enterprise"
+    "DBEnterprise": "DB Enterprise",
+    "openChatbot": "Chatbot",
+    "chatbotNewBadge": "Beta"
 }

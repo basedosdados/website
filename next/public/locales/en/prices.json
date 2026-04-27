@@ -1,7 +1,7 @@
 {
     "pageTitle": "Prices – Data Basis",
     "ogTitle": "Price – Data Basis",
-    "ogDescription": "Compare Data Basis plans: Free, Pro, and Enterprise. With DB Pro, you get advanced features of our platform, high-frequency data, and exclusive datasets starting at R$47/month.",
+    "ogDescription": "Compare Data Basis plans: Free, Pro, Enterprise, and Chatbot. With DB Pro, you get advanced features of our platform, high-frequency data, and exclusive datasets starting at R$47/month.",
     "comparePlans": "Compare plans",
     "annualDiscount": "Annual discount",
     "annualBillingMessage": "{{price}} charged once a year",
@@ -45,6 +45,17 @@
         "subtitle": "For your company to save time and improve decision quality",
         "features": [
           "Access for 10 accounts",
+          "Priority support via email and Discord"
+        ]
+      },
+      "chatbot": {
+        "title": "Chatbot",
+        "subtitle": "Create analyses in seconds with the power of AI",
+        "exclusiveFeaturesHeading": "Exclusive features:",
+        "features": [
+          "Chatbot connected to the datalake with over 8.7 TB of data",
+          "Unlimited questions",
+          "Ready-to-use code for data extraction",
           "Priority support via email and Discord"
         ]
       }
