@@ -4,7 +4,7 @@
     "ogDescription": "Compare os planos da Base dos Dados: Grátis, Pro, Empresas e Chatbot. Com a BD Pro você conta com recursos avançados da nossa plataforma, dados atualizados e conjuntos exclusivos a partir de R$47/mês.",
     "comparePlans": "Compare os planos",
     "annualDiscount": "Desconto anual",
-    "save20": "Economize 20%",
+    "save20": "Economize até 20%",
     "perMonth": "/mês",
     "chargedAnnually": "cobrado uma vez no ano",
     "annualBillingMessage": "{{price}} cobrado uma vez no ano",
@@ -54,7 +54,7 @@
         "subtitle": "Para você criar análises em segundos com o poder da IA",
         "exclusiveFeaturesHeading": "Recursos exclusivos:",
         "features": [
-          "Chatbot conectado ao datalake com mais de 8.7 TB de dados",
+          "Chatbot conectado a 741 tabelas de dados públicos",
           "Perguntas ilimitadas",
           "Códigos prontos para extração de dados",
           "Suporte prioritário via email e Discord"
