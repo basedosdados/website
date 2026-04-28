@@ -962,9 +962,13 @@ function DesktopLinks({
                 },
               })}
           minWidth="auto"
-          height="35px"
           fontWeight="400"
-          isVariant
+          color="#0068C5"
+          backgroundColor="#E8F2FC"
+          _hover={{
+            backgroundColor: "#E8F2FC",
+            opacity: 0.9,
+          }}
         >
           {t("openChatbot", { ns: "menu" })}
           <Badge
@@ -972,8 +976,8 @@ function DesktopLinks({
             padding="2px 8px"
             textTransform="none"
             borderRadius="6px"
-            backgroundColor="#E8F2FC"
-            color="#0068C5"
+            backgroundColor="#0068C5"
+            color="#FFFFFF"
             fontSize="12px"
             lineHeight="18px"
             fontFamily="Roboto"

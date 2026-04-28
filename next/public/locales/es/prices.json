@@ -5,7 +5,7 @@
     "comparePlans": "Comparar planes",
     "annualDiscount": "Descuento anual",
     "annualBillingMessage": "{{price}} cobrado una vez al año",
-    "save20": "Ahorre 20%",
+    "save20": "Ahorre hasta 20%",
     "perMonth": "/mes",
     "chargedAnnually": "cobrado una vez al año",
     "readThe": "Lea los",
@@ -54,7 +54,7 @@
         "subtitle": "Para crear análisis en segundos con el poder de la IA",
         "exclusiveFeaturesHeading": "Recursos exclusivos:",
         "features": [
-          "Chatbot conectado al datalake con más de 8,7 TB de datos",
+          "Chatbot conectado a 741 tablas de datos públicos",
           "Preguntas ilimitadas",
           "Códigos listos para extracción de datos",
           "Soporte prioritario por correo electrónico y Discord"
