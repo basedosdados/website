@@ -19,7 +19,7 @@ import Latex from 'react-latex-next';
 import cookies from 'js-cookie';
 import { ControlledInputSimple } from '../atoms/ControlledInput';
 import Checkbox from '../atoms/Checkbox';
-import { triggerGAEventWithData, formatBytes } from '../../utils';
+import { triggerGAEventWithData, hasBDProSubscription } from '../../utils';
 import { useTranslation } from 'next-i18next';
 import { capitalize } from 'lodash';
 
@@ -230,7 +230,7 @@ export default function TableColumns({
   const isUserPro = useCallback(() => {
     let user;
     if(cookies.get("userBD")) user = JSON.parse(cookies.get("userBD"));
-    return user?.isSubscriber || false;
+    return hasBDProSubscription(user);
   }, []);
 
   const handleCheckboxChange = useCallback((columnSlug) => {

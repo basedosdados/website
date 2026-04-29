@@ -9,6 +9,7 @@ import { serialize } from 'cookie';
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
+import { hasBDProSubscription } from "../../utils";
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 
@@ -79,7 +80,7 @@ export async function getServerSideProps(context) {
   const userDataString = JSON.stringify(getUser)
   res.setHeader('Set-Cookie', serialize('userBD', userDataString, { maxAge: 60 * 60 * 24 * 7, path: '/'}))
 
-  const isUserPro = getUser?.isSubscriber;
+  const isUserPro = hasBDProSubscription(getUser);
   const haveInterprisePlan = getUser?.proSubscription === "bd_pro_empresas"
 
   return {

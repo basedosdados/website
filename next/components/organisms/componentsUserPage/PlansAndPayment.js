@@ -10,7 +10,7 @@ import {
   Grid,
   GridItem
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import cookies from 'js-cookie';
 import { useTranslation, Trans } from "react-i18next";
@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent } from "../../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
 
 import {
   TitleTextForm,
@@ -40,6 +40,18 @@ import { SuccessIcon } from "../../../public/img/icons/successIcon";
 import ErrIcon from "../../../public/img/icons/errIcon";
 import stylesPS from "../../../styles/paymentSystem.module.css";
 
+
+function purchaseReflectedInUserData(user, expectChatbot) {
+  if (!user) return false
+  if (expectChatbot) return hasChatbotSubscription(user)
+  if (hasBDProSubscription(user)) return true
+  const nodes = user?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  return nodes.some((node) => {
+    const slug = (node?.stripeSubscription || "").toLowerCase()
+    return slug.includes("bd_pro") || slug.includes("empresas")
+  })
+}
+
 export default function PlansAndPayment ({ userData }) {
   const { t } = useTranslation('user');
   const router = useRouter()
@@ -51,7 +63,6 @@ export default function PlansAndPayment ({ userData }) {
   const [couponInfos, setCouponInfos] = useState({})
   const [couponInputFocus, setCouponInputFocus] = useState(false)
   const [coupon, setCoupon] = useState("")
-  const [hasOpenEmailModal, setHasOpenEmailModal] = useState(false)
   const [emailGCP, setEmailGCP] = useState(userData?.gcpEmail || userData?.email)
   const [emailGCPFocus, setEmailGCPFocus] = useState(false)
   const [errEmailGCP, setErrEmailGCP] = useState(false)
@@ -63,7 +74,7 @@ export default function PlansAndPayment ({ userData }) {
   const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
   const CancelModalPlan = useDisclosure()
-  const AlertChangePlanModal  = useDisclosure()
+  const AlertChangePlanModal = useDisclosure()
   
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingH, setIsLoadingH] = useState(false)
@@ -72,11 +83,18 @@ export default function PlansAndPayment ({ userData }) {
   const [hasSubscribed, setHasSubscribed] = useState(true)
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
+  const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
+  const successCheckoutKindRef = useRef(null)
 
-  const subscriptionInfo = () => {
-    if(userData?.internalSubscription?.edges?.[0]?.node) return userData?.internalSubscription?.edges?.[0]?.node
-    if(userData?.subscriptionSet?.edges?.[0]?.node) return userData?.subscriptionSet?.edges?.[0]?.node
-  }
+  const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
+    const slug = (subscription?.stripeSubscription || "").toLowerCase()
+    return slug.includes("bd_pro") || slug.includes("empresas")
+  }) || userData?.subscriptionSet?.edges?.[0]?.node
+  const chatbotSubscriptionInfo = internalSubscriptions.find((subscription) => {
+    const slug = (subscription?.stripeSubscription || "").toLowerCase()
+    return slug.includes("chatbot")
+  }) || null
 
   async function alreadySubscribed(id) {
     const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
@@ -109,11 +127,25 @@ export default function PlansAndPayment ({ userData }) {
             )
           }
 
+          function filterChatbot(interval, amount) {
+            return result.data.filter((item) => {
+              const name = item.node.productName?.toLowerCase() || ""
+              const slug = item.node.productSlug?.toLowerCase() || ""
+              const isChatbotProduct = name === "chatbot" || slug.includes("chatbot")
+              return isChatbotProduct &&
+                item.node.interval === interval &&
+                item.node.amount === amount &&
+                item.node.isActive === true
+            })
+          }
+
           const filteredPlans = {
             bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
             bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
             bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
-            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
+            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node,
+            bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
+            bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
           }
 
           setPlans(filteredPlans)
@@ -131,27 +163,74 @@ export default function PlansAndPayment ({ userData }) {
     if(plan === "") return
 
     const value = Object.values(plans).find(elm => elm._id === plan)
+    if (!value) return
+
+    const isChatbotType = value?.productName?.toLowerCase().includes("chatbot") || value?.productSlug?.toLowerCase().includes("chatbot")
+    if (
+      isChatbotType &&
+      hasChatbotSubscription(userData) &&
+      chatbotSubscriptionInfo?.planInterval &&
+      value?.interval &&
+      value.interval !== chatbotSubscriptionInfo.planInterval
+    ) {
+      setPlan("")
+      setToggleAnual(true)
+      setCheckoutInfos({})
+      return AlertChangePlanModal.onOpen()
+    }
+
     if(value?.interval === "month") setToggleAnual(false)
     setCheckoutInfos(value)
-    if(!hasOpenEmailModal) {
-      EmailModal.onOpen()
-      setHasOpenEmailModal(true)
+
+    const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
+    if (!checkoutAlreadyVisible) {
+      if (isChatbotType) {
+        PaymentModal.onOpen()
+      } else {
+        EmailModal.onOpen()
+      }
     }
-  }, [plan, plans])
+  }, [plan, plans, userData, chatbotSubscriptionInfo])
 
   useEffect(() => {
     const planSelected = cookies.get('plan_selected');
-    if (planSelected) {
-      if (userData?.isSubscriber) {
+    if (planSelected && plans) {
+      const monthId = plans.bd_chatbot_month?._id
+      const yearId = plans.bd_chatbot_year?._id
+      const chatbotPlanIds = [monthId, yearId].filter(Boolean)
+      const isChatbotType = chatbotPlanIds.includes(planSelected)
+
+      if (hasBDProSubscription(userData) && !isChatbotType) {
         cookies.remove('plan_selected');
         return AlertChangePlanModal.onOpen();
+      }
+      if (
+        hasChatbotSubscription(userData) &&
+        isChatbotType &&
+        chatbotSubscriptionInfo?.planInterval
+      ) {
+        const selectedInterval =
+          planSelected === monthId
+            ? "month"
+            : planSelected === yearId
+              ? "year"
+              : null
+        if (
+          selectedInterval &&
+          selectedInterval !== chatbotSubscriptionInfo.planInterval
+        ) {
+          cookies.remove('plan_selected');
+          return AlertChangePlanModal.onOpen();
+        }
       }
       setPlan(planSelected);
       cookies.remove('plan_selected');
     }
-  }, [query])
+  }, [query, plans, userData, chatbotSubscriptionInfo])
 
-  const planActive = userData?.isSubscriber
+  const planActive = hasBDProSubscription(userData)
+  const hasChatbotActiveSubscription = hasChatbotSubscription(userData)
+  const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
 
   const resources = {
     "BD Gratis" : {
@@ -177,11 +256,14 @@ export default function PlansAndPayment ({ userData }) {
       title: t('username.DBPro'),
       buttons : [{
         text: t('username.cancelPlan'),
-        onClick: () => CancelModalPlan.onOpen(),
+        onClick: () => {
+          setSubscriptionToCancel("bd_pro")
+          CancelModalPlan.onOpen()
+        },
         props: {
-          borderColor: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          color: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          pointerEvents: subscriptionInfo()?.canceledAt ? "none" : "default",
+          borderColor: bdProSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: bdProSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: bdProSubscriptionInfo?.canceledAt ? "none" : "default",
           backgroundColor: "#FFF",
           border: "1px solid",
           _hover: {
@@ -202,11 +284,14 @@ export default function PlansAndPayment ({ userData }) {
       title: t('username.DBEnterprise'),
       buttons : [{
         text: t('username.cancelPlan'),
-        onClick: () => CancelModalPlan.onOpen(),
+        onClick: () => {
+          setSubscriptionToCancel("bd_pro")
+          CancelModalPlan.onOpen()
+        },
         props: {
-          borderColor: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          color: subscriptionInfo()?.canceledAt ? "#ACAEB1" : "#2B8C4D",
-          pointerEvents: subscriptionInfo()?.canceledAt ? "none" : "default",
+          borderColor: bdProSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          color: bdProSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#2B8C4D",
+          pointerEvents: bdProSubscriptionInfo?.canceledAt ? "none" : "default",
           backgroundColor: "#FFF",
           border: "1px solid",
           _hover: {
@@ -224,10 +309,11 @@ export default function PlansAndPayment ({ userData }) {
 
   const defaultResource = resources["BD Gratis"]
   const planResource = resources[userData?.proSubscription]
-  const planCanceled = subscriptionInfo()?.canceledAt
+  const planCanceled = bdProSubscriptionInfo?.canceledAt
 
   const controlResource  = () => {
-    return planActive ? planResource : defaultResource
+    if (!planActive || !planResource) return defaultResource
+    return planResource
   }
 
   const ListFeature = ({ elm, index, notIncludes = false }) => {
@@ -267,6 +353,10 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   const openModalSucess = () => {
+    const isChatbotPurchase =
+      checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
+      checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+    successCheckoutKindRef.current = isChatbotPurchase ? "chatbot" : "bd_pro"
     PaymentModal.onClose()
     SucessPaymentModal.onOpen()
   }
@@ -280,10 +370,7 @@ export default function PlansAndPayment ({ userData }) {
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
 
-    const subscriptionActive = await fetch(`/api/stripe/getSubscriptionActive?p=${btoa(id)}`, {method: "GET"})
-      .then(res => res.json())
-
-    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(subscriptionActive)}`, {method: "GET"})
+    const result = await fetch(`/api/stripe/removeSubscription?p=${btoa(id)}&t=${btoa(subscriptionToCancel)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.success === false) {
@@ -298,19 +385,23 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   async function closeModalSucess() {
+    SucessPaymentModal.onClose()
+
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userData.id)
+
+    const expectChatbot = successCheckoutKindRef.current === "chatbot"
 
     let user
     let attempts = 0
     const maxAttempts = 10
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-    while (!user?.internalSubscription?.edges?.[0]?.node && attempts < maxAttempts) {
+    while (!purchaseReflectedInUserData(user, expectChatbot) && attempts < maxAttempts) {
       user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
         .then((res) => res.json())
 
-      if (user?.internalSubscription?.edges?.[0]?.node) {
+      if (purchaseReflectedInUserData(user, expectChatbot)) {
         cookies.set("userBD", JSON.stringify(user))
         break
       }
@@ -318,6 +409,8 @@ export default function PlansAndPayment ({ userData }) {
       attempts++
       await delay(10000)
     }
+
+    successCheckoutKindRef.current = null
 
     if(isLoadingH === true) return window.open("/", "_self")
     window.open(`/user/${userData.username}?plans_and_payment`, "_self")
@@ -437,8 +530,8 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
         setIsLoadingEmailChange(false)
-        EmailModal.onClose()
         PaymentModal.onOpen()
+        EmailModal.onClose()
       } else {
         setErrEmailGCP(true)
       }
@@ -461,93 +554,121 @@ export default function PlansAndPayment ({ userData }) {
     if(isLoadingCanSub === true) cancelSubscripetion()
   }, [isLoading, isLoadingH, isLoadingCanSub]) 
 
+  useEffect(() => {
+    const onPopState = () => {
+      successCheckoutKindRef.current = null
+      setIsLoading(false)
+      setIsLoadingH(false)
+      SucessPaymentModal.onClose()
+    }
+    window.addEventListener("popstate", onPopState)
+    return () => window.removeEventListener("popstate", onPopState)
+  }, [])
+
   return (
     <Stack spacing={0}>
-      <Box display={isLoading || isLoadingH ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
+      <Box
+        display={isLoading || isLoadingH ? "flex" : "none"}
+        position="fixed"
+        top="0"
+        left="0"
+        width="100%"
+        height="100%"
+        zIndex="99999"
+      />
 
       {/* stripe */}
       <ModalGeneral
-        propsModal={{id:"modal-stripe-checkout"}}
+        propsModal={{ id: "modal-stripe-checkout" }}
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={() => {
-          setToggleAnual(true)
-          setValueCoupon("")
-          if(query.i) return window.open(`/user/${userData.username}?plans_and_payment`, "_self")
-          PaymentModal.onClose()
+          setToggleAnual(true);
+          setValueCoupon("");
+          setPlan("");
+          if (query.i)
+            return window.open(
+              `/user/${userData.username}?plans_and_payment`,
+              "_self",
+            );
+          PaymentModal.onClose();
         }}
         propsModalContent={{
           width: "100%",
-          maxWidth:"1008px",
-          margin: "24px"
+          maxWidth: "1008px",
+          margin: "24px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
           <BodyText
+            display={
+              checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
+              checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+                ? "none"
+                : "flex"
+            }
             typography="small"
             width="100%"
             color="#2B8C4D"
           >
-            {t('username.step2of2')}
+            {t("username.step2of2")}
           </BodyText>
-          <TitleText width="100%">
-            {t('username.payment')}
-          </TitleText>
+          <TitleText width="100%">{t("username.payment")}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
         <Stack
           display="flex"
-          flexDirection={{base: "column", lg: "row"}}
+          flexDirection={{ base: "column", lg: "row" }}
           gap="80px"
           spacing={0}
           pointerEvents={isLoadingClientSecret ? "none" : "default"}
         >
-          <Stack
-            flex={1}
-            spacing="32px"
-          >
-            <Stack
-              flexDirection="column"
-              spacing={0}
-              gap="16px"
-            >
-              <Box
-                display="flex"
-                flexDirection="row"
-                gap="8px"
-                width="100%"
-              >
-                <LabelText>
+          <Stack flex={1} spacing="32px">
+            <Stack flexDirection="column" spacing={0} gap="16px">
+              <Box display="flex" flexDirection="row" gap="8px" width="100%">
+                <LabelText textTransform="capitalize">
                   {checkoutInfos?.productName}
                 </LabelText>
                 <BodyText
                   cursor="pointer"
                   color="#0068C5"
-                  _hover={{color: "#0057A4"}}
+                  _hover={{ color: "#0057A4" }}
                   marginLeft="auto"
                   onClick={() => {
-                    PaymentModal.onClose()
-                    setToggleAnual(true)
-                    setErrCoupon(false)
-                    setCoupon("")
-                    setValueCoupon("")
-                    PlansModal.onOpen()
+                    PaymentModal.onClose();
+                    setToggleAnual(true);
+                    setErrCoupon(false);
+                    setCoupon("");
+                    setValueCoupon("");
+                    setPlan("");
+                    const isChatbotType =
+                      checkoutInfos?.productName
+                        ?.toLowerCase()
+                        .includes("chatbot") ||
+                      checkoutInfos?.productSlug
+                        ?.toLowerCase()
+                        .includes("chatbot");
+                    if (!isChatbotType) {
+                      PlansModal.onOpen();
+                    }
                   }}
-                >{t('username.changePlan')}</BodyText>
+                >
+                  {t("username.changePlan")}
+                </BodyText>
               </Box>
 
               <Box
                 display="flex"
-                flexDirection={{base: "column", lg: "row"}}
+                flexDirection={{ base: "column", lg: "row" }}
                 gap="8px"
-                alignItems={{base: "start", lg: "center"}}
+                alignItems={{ base: "start", lg: "center" }}
               >
                 <Box
                   display="flex"
@@ -555,23 +676,21 @@ export default function PlansAndPayment ({ userData }) {
                   gap="8px"
                   alignItems="center"
                 >
-                  {toggleAnual ?  
-                      <Toggle
-                        id="toggle-prices-modal-checkout"
-                        defaultChecked
-                        value={toggleAnual}
-                        onChange={() => changeIntervalPlanCheckout()}
-                      />
-                    : 
-                      <Toggle
-                        id="toggle-prices-modal-checkout"
-                        value={toggleAnual}
-                        onChange={() => changeIntervalPlanCheckout()}
-                      />
-                  }
-                  <BodyText>
-                    {t('username.annualDiscount')}
-                  </BodyText>
+                  {toggleAnual ? (
+                    <Toggle
+                      id="toggle-prices-modal-checkout"
+                      defaultChecked
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                  ) : (
+                    <Toggle
+                      id="toggle-prices-modal-checkout"
+                      value={toggleAnual}
+                      onChange={() => changeIntervalPlanCheckout()}
+                    />
+                  )}
+                  <BodyText>{t("username.annualDiscount")}</BodyText>
                 </Box>
 
                 <TitleText
@@ -583,23 +702,17 @@ export default function PlansAndPayment ({ userData }) {
                   borderRadius="4px"
                   height="32px"
                 >
-                  {t('username.save20')}
+                  {t("username.save20")}
                 </TitleText>
               </Box>
             </Stack>
 
-            <Stack
-              flexDirection="column"
-              spacing={0}
-              gap="8px"
-            >
-              <LabelText>
-                {t('username.discountCoupon')}
-              </LabelText>
+            <Stack flexDirection="column" spacing={0} gap="8px">
+              <LabelText>{t("username.discountCoupon")}</LabelText>
 
               <Box
                 display="flex"
-                flexDirection={{base: "column", lg: "row"}}
+                flexDirection={{ base: "column", lg: "row" }}
                 alignItems="center"
                 gap="8px"
               >
@@ -610,7 +723,7 @@ export default function PlansAndPayment ({ userData }) {
                     inputFocus={couponInputFocus}
                     changeInputFocus={setCouponInputFocus}
                     width="100%"
-                    placeholder={t('username.enterCoupon')}
+                    placeholder={t("username.enterCoupon")}
                     inputElementStyle={{
                       display: "none",
                     }}
@@ -618,34 +731,34 @@ export default function PlansAndPayment ({ userData }) {
                       paddingLeft: "16px !important",
                       paddingRight: "40px !important",
                       borderRadius: "8px",
-                      height: "44px"
+                      height: "44px",
                     }}
                   />
-                  {valueCoupon &&
+                  {valueCoupon && (
                     <CrossIcon
                       position="absolute"
                       top="10px"
                       right="12px"
-                      alt={t('username.clear')}
+                      alt={t("username.clear")}
                       width="24px"
                       height="24px"
                       fill="#878A8E"
                       cursor="pointer"
                       onClick={() => setValueCoupon("")}
                     />
-                  }
+                  )}
                 </Stack>
 
                 <Button
                   isVariant
-                  width={{base: "100%", lg: "fit-content"}}
+                  width={{ base: "100%", lg: "fit-content" }}
                   onClick={() => validateStripeCoupon()}
                 >
-                  {t('username.apply')}
+                  {t("username.apply")}
                 </Button>
               </Box>
 
-              {errCoupon && 
+              {errCoupon && (
                 <BodyText
                   typography="small"
                   display="flex"
@@ -655,13 +768,10 @@ export default function PlansAndPayment ({ userData }) {
                   height="24px"
                   alignItems="center"
                 >
-                  <Exclamation
-                    width="21px"
-                    height="21px"
-                    fill="#BF3434"
-                  /> {t('username.enterValidCoupon')}
+                  <Exclamation width="21px" height="21px" fill="#BF3434" />{" "}
+                  {t("username.enterValidCoupon")}
                 </BodyText>
-              }
+              )}
             </Stack>
 
             <BodyText
@@ -669,7 +779,7 @@ export default function PlansAndPayment ({ userData }) {
               fontFamily="Roboto"
               color="#464A51"
             >
-              {t('username.trialPeriod')}
+              {t("username.trialPeriod")}
             </BodyText>
 
             <Divider borderColor="#DEDFE0" />
@@ -686,43 +796,72 @@ export default function PlansAndPayment ({ userData }) {
               color="#464A51"
             >
               <GridItem>
-                <Text>{t('username.subtotal')}</Text>
+                <Text>{t("username.subtotal")}</Text>
               </GridItem>
               <GridItem textAlign="end">
-                <Text>{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+                <Text>
+                  {checkoutInfos?.amount?.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                    minimumFractionDigits: 2,
+                  })}
+                  /{formattedPlanInterval(checkoutInfos?.interval, true)}
+                </Text>
               </GridItem>
 
-              {couponInfos?.isValid &&
-                <CouponDisplay />
-              }
+              {couponInfos?.isValid && <CouponDisplay />}
               <TotalToPayDisplay />
             </Grid>
 
-            {(couponInfos?.duration === "once" || couponInfos?.duration === "repeating") &&
+            {(couponInfos?.duration === "once" ||
+              couponInfos?.duration === "repeating") && (
               <BodyText color="#464A51">
-                {t('username.couponDuration', { returnObjects: true })[0]}{couponInfos?.duration === "once" && 2} {couponInfos?.duration === "repeating" && couponInfos?.durationInMonths + 1}º {formattedPlanInterval(checkoutInfos?.interval, true)} {!hasSubscribed && "e 7º dia"}{t('username.couponDuration', { returnObjects: true })[1]}{checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}.
+                {t("username.couponDuration", { returnObjects: true })[0]}
+                {couponInfos?.duration === "once" && 2}{" "}
+                {couponInfos?.duration === "repeating" &&
+                  couponInfos?.durationInMonths + 1}
+                º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
+                {!hasSubscribed && "e 7º dia"}
+                {t("username.couponDuration", { returnObjects: true })[1]}
+                {checkoutInfos?.amount?.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                  minimumFractionDigits: 2,
+                })}
+                /{formattedPlanInterval(checkoutInfos?.interval, true)}.
               </BodyText>
-            }
+            )}
 
-            <Box display={{base:"none", lg: "flex"}} marginTop="auto !important">
+            <Box
+              display={{ base: "none", lg: "flex" }}
+              marginTop="auto !important"
+            >
               <Button
                 marginTop="24px"
                 isVariant
-                width={{base: "100%", lg: "fit-content"}}
+                width={{ base: "100%", lg: "fit-content" }}
                 onClick={() => {
-                  PaymentModal.onClose()
-                  EmailModal.onOpen()
+                  PaymentModal.onClose();
+                  setPlan("");
+                  const isChatbotType =
+                    checkoutInfos?.productName
+                      ?.toLowerCase()
+                      .includes("chatbot") ||
+                    checkoutInfos?.productSlug
+                      ?.toLowerCase()
+                      .includes("chatbot");
+                  if (!isChatbotType) {
+                    EmailModal.onOpen();
+                  }
                 }}
               >
-                {t('username.back')}
+                {t("username.back")}
               </Button>
             </Box>
           </Stack>
 
           <Box display="flex" flexDirection="column" gap="24px" flex={1}>
-            <LabelText>
-              {t('username.paymentDetails')}
-            </LabelText>
+            <LabelText>{t("username.paymentDetails")}</LabelText>
             <PaymentSystem
               userData={userData}
               plan={plan}
@@ -732,15 +871,28 @@ export default function PlansAndPayment ({ userData }) {
               isLoading={(e) => setIsLoadingClientSecret(e)}
             />
 
-            <Box display={{base:"flex", lg: "none"}} marginTop="auto !important">
-              <Button                
-                width={{base: "100%", lg: "fit-content"}}
+            <Box
+              display={{ base: "flex", lg: "none" }}
+              marginTop="auto !important"
+            >
+              <Button
+                width={{ base: "100%", lg: "fit-content" }}
                 onClick={() => {
-                  PaymentModal.onClose()
-                  EmailModal.onOpen()
+                  PaymentModal.onClose();
+                  setPlan("");
+                  const isChatbotType =
+                    checkoutInfos?.productName
+                      ?.toLowerCase()
+                      .includes("chatbot") ||
+                    checkoutInfos?.productSlug
+                      ?.toLowerCase()
+                      .includes("chatbot");
+                  if (!isChatbotType) {
+                    EmailModal.onOpen();
+                  }
                 }}
               >
-                {t('username.back')}
+                {t("username.back")}
               </Button>
             </Box>
           </Box>
@@ -749,57 +901,51 @@ export default function PlansAndPayment ({ userData }) {
 
       {/* email gcp */}
       <ModalGeneral
-        propsModal={{id:"modal-email-gcp"}}
+        propsModal={{ id: "modal-email-gcp" }}
         isOpen={EmailModal.isOpen}
         onClose={() => {
-          setEmailGCP(userData?.gcpEmail || userData?.email)
-          setErrEmailGCP(false)
-          EmailModal.onClose()
+          setEmailGCP(userData?.gcpEmail || userData?.email);
+          setErrEmailGCP(false);
+          setPlan("");
+          EmailModal.onClose();
         }}
         propsModalContent={{
           width: "100%",
-          maxWidth:"1008px",
+          maxWidth: "1008px",
           margin: "24px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0}>
-          <BodyText
-            typography="small"
-            width="100%"
-            color="#2B8C4D"
-          >
-            {t('username.step1of2')}
+          <BodyText typography="small" width="100%" color="#2B8C4D">
+            {t("username.step1of2")}
           </BodyText>
           <ModalCloseButton
             fontSize="14px"
             top="28px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
-        <Stack marginBottom={{base: "24px", lg: "285px !important"}}>
-          <TitleText>
-            {t('username.BQEmail')}
-          </TitleText>
+        <Stack marginBottom={{ base: "24px", lg: "285px !important" }}>
+          <TitleText>{t("username.BQEmail")}</TitleText>
 
-          <BodyText
-            color="#464A51"
-            marginBottom="32px !important"
-          >
-            {t('username.BQEmailDescription1')}
-            <Text as="span" fontWeight="500">{t('username.BQEmailDescription2')}</Text> 
-            {t('username.BQEmailDescription3')}
+          <BodyText color="#464A51" marginBottom="32px !important">
+            {t("username.BQEmailDescription1")}
+            <Text as="span" fontWeight="500">
+              {t("username.BQEmailDescription2")}
+            </Text>
+            {t("username.BQEmailDescription3")}
           </BodyText>
 
           <LabelText marginBottom="8px !important">
-            {t('username.BQEmail')}
+            {t("username.BQEmail")}
           </LabelText>
 
           <Stack
             spacing={0}
-            width={{base: "100%", lg: "464px"}}
+            width={{ base: "100%", lg: "464px" }}
             position="relative"
           >
             <ControlledInputSimple
@@ -817,12 +963,12 @@ export default function PlansAndPayment ({ userData }) {
                 paddingRight: "40px !important",
                 borderRadius: "8px",
                 height: "44px",
-                backgroundColor: errEmailGCP ? "#F6E3E3" : "#EEEEEE"
+                backgroundColor: errEmailGCP ? "#F6E3E3" : "#EEEEEE",
               }}
             />
           </Stack>
 
-          {errEmailGCP && 
+          {errEmailGCP && (
             <BodyText
               typography="small"
               display="flex"
@@ -832,13 +978,10 @@ export default function PlansAndPayment ({ userData }) {
               height="24px"
               alignItems="center"
             >
-              <Exclamation
-                width="21px"
-                height="21px"
-                fill="#BF3434"
-              /> {t('username.pleaseEnterValidEmail')}
+              <Exclamation width="21px" height="21px" fill="#BF3434" />{" "}
+              {t("username.pleaseEnterValidEmail")}
             </BodyText>
-          }
+          )}
         </Stack>
 
         <Stack
@@ -846,47 +989,48 @@ export default function PlansAndPayment ({ userData }) {
           spacing={0}
           gap="16px"
           justifyContent="end"
-          flexDirection={{base: "column-reverse", lg:"row"}}
+          flexDirection={{ base: "column-reverse", lg: "row" }}
         >
           <Button
             isVariant
-            width={{base: "100%", lg:"fit-content"}}
+            width={{ base: "100%", lg: "fit-content" }}
             onClick={() => {
-              setEmailGCP(userData?.gcpEmail || userData?.email)
-              setErrEmailGCP(false)
-              EmailModal.onClose()
+              setEmailGCP(userData?.gcpEmail || userData?.email);
+              setErrEmailGCP(false);
+              setPlan("");
+              EmailModal.onClose();
             }}
           >
-            {t('username.cancel')}
+            {t("username.cancel")}
           </Button>
 
           <Button
-            width={{base: "100%", lg:"fit-content"}}
+            width={{ base: "100%", lg: "fit-content" }}
             onClick={() => handlerEmailGcp()}
             isLoading={isLoadingEmailChange}
           >
-            {t('username.next')}
+            {t("username.next")}
           </Button>
         </Stack>
       </ModalGeneral>
 
       {/* success */}
       <ModalGeneral
-        propsModal={{id:"modal-stripe-payment_intent-succeeded"}}
+        propsModal={{ id: "modal-stripe-payment_intent-succeeded" }}
         isOpen={SucessPaymentModal.isOpen}
         propsModalContent={{
           width: "100%",
-          maxWidth: "656px"
+          maxWidth: "656px",
         }}
         onClose={() => setIsLoading(true)}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Box height="24px"/>
+          <Box height="24px" />
           <ModalCloseButton
             fontSize="14px"
             top="28px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
@@ -901,59 +1045,131 @@ export default function PlansAndPayment ({ userData }) {
           marginBottom="24px"
           spacing={0}
         >
-          <SuccessIcon
-            width="90px"
-            height="64px"
-            fill="#34A15A"
-          />
+          <SuccessIcon width="90px" height="64px" fill="#34A15A" />
           <TitleText>
-            {t('username.congratulations')}
+            {isChatbotCheckout
+              ? t("username.chatbotSubscriptionSuccessTitle")
+              : t("username.congratulations")}
           </TitleText>
-          <BodyText color="#464A51">
-            {t('username.BQEmailDescription4')} <Text as="span" fontWeight="500">{emailGCP}</Text>.
-            {t('username.BQEmailDescription5')}
-
-            {t('username.BQEmailDescription6')} <Text as="a" href="/contact" target="_self" color="#0068C5" _hover={{color: "#0057A4"}}>{t('username.BQEmailDescription7')}</Text>
-          </BodyText>
+          {isChatbotCheckout ? (
+            <BodyText color="#464A51">
+              <Trans
+                t={t}
+                i18nKey="username.chatbotSubscriptionSuccessDescription"
+                components={{
+                  1: (
+                    <Text
+                      as="a"
+                      href="/contact"
+                      target="_self"
+                      color="#0068C5"
+                      _hover={{ color: "#0057A4" }}
+                    />
+                  ),
+                }}
+              />
+            </BodyText>
+          ) : (
+            <BodyText color="#464A51">
+              {t("username.BQEmailDescription4")}{" "}
+              <Text as="span" fontWeight="500">
+                {emailGCP}
+              </Text>
+              .{t("username.BQEmailDescription5")}
+              {t("username.BQEmailDescription6")}{" "}
+              <Text
+                as="a"
+                href="/contact"
+                target="_self"
+                color="#0068C5"
+                _hover={{ color: "#0057A4" }}
+              >
+                {t("username.BQEmailDescription7")}
+              </Text>
+            </BodyText>
+          )}
         </Stack>
 
         <Stack
-          flexDirection={{base: "column-reverse", lg: "row"}}
+          flexDirection={{ base: "column-reverse", lg: "row" }}
           spacing={0}
           gap="24px"
           width="100%"
         >
-          <Button
-            isVariant
-            width={{base:"100%", lg: "50%"}}
-            onClick={() => window.open(`/user/${userData?.username}?big_query`, "_self")}
-            isLoading={isLoading}
-          >
-            {t('username.continueSettings')}
-          </Button>
+          {isChatbotCheckout ? (
+            <>
+              <Button
+                isVariant
+                width={{ base: "100%", lg: "50%" }}
+                onClick={() => {
+                  setIsLoadingH(true);
+                }}
+                isLoading={isLoadingH}
+              >
+                {t("username.goToHomepage")}
+              </Button>
+              <Button
+                as="a"
+                href={getChatbotStreamlitAppUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                width={{ base: "100%", lg: "50%" }}
+                onClick={() => {
+                  successCheckoutKindRef.current = null;
+                  setIsLoading(false);
+                  setIsLoadingH(false);
+                  SucessPaymentModal.onClose();
+                  triggerGAEvent("open_chatbot", "payment_success_modal");
+                }}
+                isLoading={isLoading}
+              >
+                {t("username.openChatbot")}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                isVariant
+                width={{ base: "100%", lg: "50%" }}
+                onClick={() => {
+                  successCheckoutKindRef.current = null;
+                  setIsLoading(false);
+                  setIsLoadingH(false);
+                  SucessPaymentModal.onClose();
+                  window.open(`/user/${userData?.username}?big_query`, "_self");
+                }}
+                isLoading={isLoading}
+              >
+                {t("username.continueSettings")}
+              </Button>
 
-          <Button
-            width={{base:"100%", lg: "50%"}}
-            onClick={() => setIsLoadingH(true)}
-            isLoading={isLoadingH}
-          >
-            {t('username.goToHomepage')}
-          </Button>
+              <Button
+                width={{ base: "100%", lg: "50%" }}
+                onClick={() => setIsLoadingH(true)}
+                isLoading={isLoadingH}
+              >
+                {t("username.goToHomepage")}
+              </Button>
+            </>
+          )}
         </Stack>
       </ModalGeneral>
 
       {/* err */}
       <ModalGeneral
         isOpen={ErroPaymentModal.isOpen}
-        onClose={ErroPaymentModal.onClose}
+        onClose={() => {
+          setPlan("");
+          ErroPaymentModal.onClose();
+        }}
       >
         <Stack spacing={0} marginBottom="16px">
-          <Box height="24px"/>
+          <Box height="24px" />
           <ModalCloseButton
             fontSize="14px"
             top="28px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
@@ -968,43 +1184,37 @@ export default function PlansAndPayment ({ userData }) {
           marginBottom="24px"
           spacing={0}
         >
-          <ErrIcon
-            width="90px"
-            height="64px"
-            fill="#BF3434"
-          />
-          <TitleText>{t('username.paymentFailed')}</TitleText>
-          <BodyText
-            typography="small"
-            color="#464A51"
-            marginBottom="8px"
-          >
-            {t('username.paymentError')}
+          <ErrIcon width="90px" height="64px" fill="#BF3434" />
+          <TitleText>{t("username.paymentFailed")}</TitleText>
+          <BodyText typography="small" color="#464A51" marginBottom="8px">
+            {t("username.paymentError")}
             <Link
               display="inline"
               color="#0068C5"
               _hover={{
-                color: "#0057A4"
+                color: "#0057A4",
               }}
               fontWeight="400"
               href="/contact"
               target="_self"
               marginLeft="2px"
-            >{t('username.contactUs')}</Link>
+            >
+              {t("username.contactUs")}
+            </Link>
             .
           </BodyText>
         </Stack>
 
         <Stack
-          width={{base: "100%", lg: "fit-content"}}
+          width={{ base: "100%", lg: "fit-content" }}
           alignItems="center"
           spacing={0}
         >
           <Button
-            width={{base: "100%", lg: "fit-content"}}
+            width={{ base: "100%", lg: "fit-content" }}
             onClick={() => ErroPaymentModal.onClose()}
           >
-            {t('username.understood')}
+            {t("username.understood")}
           </Button>
         </Stack>
       </ModalGeneral>
@@ -1012,113 +1222,114 @@ export default function PlansAndPayment ({ userData }) {
       {/* modal plans */}
       <ModalGeneral
         isOpen={PlansModal.isOpen}
-        onClose={PlansModal.onClose}
+        onClose={() => {
+          setPlan("");
+          PlansModal.onClose();
+        }}
         propsModal={{
-          scrollBehavior: {base: "outside", lg: "inside"}
+          scrollBehavior: { base: "outside", lg: "inside" },
         }}
         propsModalContent={{
           maxWidth: "fit-content",
           minWidth: "fit-content",
           maxHeight: "fit-content",
-          margin: {base: "0", lg: "24px"},
+          margin: { base: "0", lg: "24px" },
           padding: "32px 22px 26px 22px",
-          borderRadius: {base: "0", lg: "20px"},
+          borderRadius: { base: "0", lg: "20px" },
         }}
         isCentered={false}
       >
         <Stack spacing={0} marginBottom="40px">
-          <TitleText
-            width="100%"
-            paddingLeft="10px"
-          >
-            {t('username.comparePlans')}
+          <TitleText width="100%" paddingLeft="10px">
+            {t("username.comparePlans")}
           </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
-        <SectionPrice
-          action={(planId) => {
-            setPlan(planId)
-            PlansModal.onClose()
-            EmailModal.onOpen()
-          }}
-        />
+        <Stack width={{ base: "100%", lg: "1008px" }}>
+          <SectionPrice
+            hasChatbot={false}
+            action={(planId) => {
+              setPlan(planId);
+              PlansModal.onClose();
+            }}
+          />
+        </Stack>
       </ModalGeneral>
 
       {/* err plans */}
       <ModalGeneral
         isOpen={AlertChangePlanModal.isOpen}
         onClose={AlertChangePlanModal.onClose}
-        propsModalContent={{maxWidth: "500px"}}
+        propsModalContent={{ maxWidth: "500px" }}
       >
         <Stack
           spacing={0}
           marginBottom="16px"
-          height={{base: "100%", lg: "fit-content"}}
+          height={{ base: "100%", lg: "fit-content" }}
         >
-          <TitleText>{t('username.planChange')}</TitleText>
+          <TitleText>{t("username.planChange")}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm>
-            {t('username.changePlanInstructions')}
+            {t("username.changePlanInstructions")}
           </ExtraInfoTextForm>
         </Stack>
 
         <Stack
           spacing={0}
           gap="24px"
-          width={{base: "100%", lg: "fit-content"}}
+          width={{ base: "100%", lg: "fit-content" }}
         >
           <Button
-            width={{base: "100%", lg: "fit-content"}}
+            width={{ base: "100%", lg: "fit-content" }}
             onClick={() => {
-              AlertChangePlanModal.onClose()
-              window.open("/contact", "_self")
+              AlertChangePlanModal.onClose();
+              window.open("/contact", "_self");
             }}
           >
-            {t('username.contactUs')}
+            {t("username.contactUs")}
           </Button>
         </Stack>
       </ModalGeneral>
 
       {/* cancel */}
       <ModalGeneral
-        propsModal={{id:"modal-cancel-sub"}}
+        propsModal={{ id: "modal-cancel-sub" }}
         isOpen={CancelModalPlan.isOpen}
         onClose={CancelModalPlan.onClose}
-        propsModalContent={{maxWidth: "fit-content"}}
+        propsModalContent={{ maxWidth: "fit-content" }}
       >
-        <Stack
-          spacing={0}
-          marginBottom="16px"
-        >
-          <TitleText marginRight="24px">{t('username.confirmPlanCancellation')}</TitleText>
+        <Stack spacing={0} marginBottom="16px">
+          <TitleText marginRight="24px">
+            {t("username.confirmPlanCancellation")}
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
             right="26px"
-            _hover={{backgroundColor: "transparent", opacity: 0.7}}
+            _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </Stack>
 
         <Stack
-          flexDirection={{base: "column-reverse", lg: "row"}}
+          flexDirection={{ base: "column-reverse", lg: "row" }}
           spacing={0}
           gap="16px"
           marginLeft="auto"
-          width={{base:"100%", lg: "300px"}}
+          width={{ base: "100%", lg: "300px" }}
         >
           <Button
             width="100%"
@@ -1127,11 +1338,11 @@ export default function PlansAndPayment ({ userData }) {
             backgroundColor="#fff"
             _hover={{
               color: "#992A2A",
-              borderColor: "#992A2A"
+              borderColor: "#992A2A",
             }}
             onClick={() => CancelModalPlan.onClose()}
           >
-            {t('username.back')}
+            {t("username.back")}
           </Button>
 
           <Button
@@ -1143,7 +1354,7 @@ export default function PlansAndPayment ({ userData }) {
             onClick={() => setIsLoadingCanSub(true)}
             isLoading={isLoadingCanSub}
           >
-            {t('username.cancelPlan')}
+            {t("username.cancelPlan")}
           </Button>
         </Stack>
       </ModalGeneral>
@@ -1152,27 +1363,32 @@ export default function PlansAndPayment ({ userData }) {
         <Stack
           width="100%"
           spacing={0}
-          flexDirection={{base: "column", lg: "row"}}
+          flexDirection={{ base: "column", lg: "row" }}
           justifyContent="space-between"
         >
-          <Stack
-            spacing="8px"
-            marginBottom={{base: "16px", lg: "0"}}
-          >
+          <Stack spacing="8px" marginBottom={{ base: "16px", lg: "0" }}>
             <Badge
               width="fit-content"
               padding="2px 4px"
               textTransform="none"
               borderRadius="6px"
-              backgroundColor={planActive ? planCanceled ? "#F6E3E3" : "#D5E8DB" : "#D5E8DB"}
-              color={planActive ? planCanceled ? "#BF3434" : "#2B8C4D": "#2B8C4D"}
+              backgroundColor={
+                planActive ? (planCanceled ? "#F6E3E3" : "#D5E8DB") : "#D5E8DB"
+              }
+              color={
+                planActive ? (planCanceled ? "#BF3434" : "#2B8C4D") : "#2B8C4D"
+              }
               fontSize="12px"
               lineHeight="18px"
               fontFamily="Roboto"
               fontWeight="500"
               letterSpacing="0.1px"
             >
-              {planActive ? planCanceled ? t('username.canceled') : t('username.active') : t('username.active')}
+              {planActive
+                ? planCanceled
+                  ? t("username.canceled")
+                  : t("username.active")
+                : t("username.active")}
             </Badge>
 
             <Box
@@ -1181,39 +1397,43 @@ export default function PlansAndPayment ({ userData }) {
               gap="8px"
               alignItems="center"
             >
-              <LabelText typography="large">{controlResource().title}</LabelText>
-              <LabelText
-                typography="x-small"
-                color="#71757A"
-              >
-                {formattedPlanInterval(subscriptionInfo()?.planInterval)}
+              <LabelText typography="large">
+                {controlResource().title}
+              </LabelText>
+              <LabelText typography="x-small" color="#71757A">
+                {formattedPlanInterval(bdProSubscriptionInfo?.planInterval)}
               </LabelText>
             </Box>
 
-            <Box display={subscriptionInfo() ? "flex" : "none"}>
-              <BodyText
-                typography="small"
-                color="#71757A"
-              >
-                {subscriptionInfo()?.canceledAt ? t('username.planAccessUntil') : t('username.nextAutoRenewal')}<Text
-                  as="span"
-                  fontWeight="500"
-                  color="#464A51"
-                >
-                  {formatTimeStamp(subscriptionInfo()?.canceledAt ? subscriptionInfo()?.canceledAt : subscriptionInfo()?.nextBillingCycle)}
+            <Box display={bdProSubscriptionInfo ? "flex" : "none"}>
+              <BodyText typography="small" color="#71757A">
+                {bdProSubscriptionInfo?.canceledAt
+                  ? t("username.planAccessUntil")
+                  : t("username.nextAutoRenewal")}
+                <Text as="span" fontWeight="500" color="#464A51">
+                  {formatTimeStamp(
+                    bdProSubscriptionInfo?.canceledAt
+                      ? bdProSubscriptionInfo?.canceledAt
+                      : bdProSubscriptionInfo?.nextBillingCycle,
+                  )}
                 </Text>
               </BodyText>
             </Box>
           </Stack>
 
           <Stack
-            display={userData?.proSubscription === "bd_pro_empresas" && userData?.proSubscriptionRole === "member" ? "none" : "flex"}
+            display={
+              userData?.proSubscription === "bd_pro_empresas" &&
+              userData?.proSubscriptionRole === "member"
+                ? "none"
+                : "flex"
+            }
             spacing={0}
             gap="24px"
-            flexDirection={{base: "column-reverse", lg: "row"}}
+            flexDirection={{ base: "column-reverse", lg: "row" }}
           >
             <Button
-              width={{base: "100%", lg: "fit-content"}}
+              width={{ base: "100%", lg: "fit-content" }}
               onClick={() => controlResource().buttons[0].onClick()}
               {...controlResource()?.buttons?.[0]?.props}
             >
@@ -1224,100 +1444,273 @@ export default function PlansAndPayment ({ userData }) {
 
         <Stack
           spacing={0}
-          gap={userData?.proSubscription === "bd_pro_empresas" ? {base: "0", lg: "64px"} : "64px"}
-          flexDirection={{base: "column", lg: "row"}}
+          gap={
+            userData?.proSubscription === "bd_pro_empresas"
+              ? { base: "0", lg: "64px" }
+              : "64px"
+          }
+          flexDirection={{ base: "column", lg: "row" }}
         >
           <Stack minWidth="350px" spacing="8px">
-            <BodyText
-              typography="small"
-              color="#464A51"
-              marginBottom="8px"
-            >{t('username.includes')}</BodyText>
+            <BodyText typography="small" color="#464A51" marginBottom="8px">
+              {t("username.includes")}
+            </BodyText>
             {defaultResource.resources.map((elm, index) => {
-              if(elm === "") return
-              return <ListFeature elm={elm} index={index} key={index}/>
+              if (elm === "") return;
+              return <ListFeature elm={elm} index={index} key={index} />;
             })}
-            {userData?.proSubscription === "bd_pro" && 
+            {userData?.proSubscription === "bd_pro" &&
               planResource.resources.map((elm, index) => {
-                return <ListFeature elm={elm} index={index} key={index}/>
-              })
-            }
+                return <ListFeature elm={elm} index={index} key={index} />;
+              })}
           </Stack>
 
           <Stack spacing="8px">
-            {userData?.proSubscription === "bd_pro_empresas" &&
-              <Stack spacing={0} gap="8px" marginTop={{base: "8px", lg: "36px"}}>
+            {userData?.proSubscription === "bd_pro_empresas" && (
+              <Stack
+                spacing={0}
+                gap="8px"
+                marginTop={{ base: "8px", lg: "36px" }}
+              >
                 {resources["bd_pro"].resources.map((elm, index) => {
-                  return <ListFeature elm={elm} index={index} key={index}/>
+                  return <ListFeature elm={elm} index={index} key={index} />;
                 })}
                 {planResource.resources.map((elm, index) => {
-                  return <ListFeature elm={elm} index={index} key={index}/>
+                  return <ListFeature elm={elm} index={index} key={index} />;
                 })}
               </Stack>
-            }
-            {userData?.proSubscription !== "bd_pro_empresas" &&
-              <BodyText
-                typography="small"
-                color="#464A51"
-                marginBottom="8px"
-              >{t('username.doesNotInclude')}</BodyText>}
+            )}
+            {userData?.proSubscription !== "bd_pro_empresas" && (
+              <BodyText typography="small" color="#464A51" marginBottom="8px">
+                {t("username.doesNotInclude")}
+              </BodyText>
+            )}
 
-              {!planActive && 
-                <>
-                  {resources["bd_pro"].resources.map((elm, index) => {
-                    return <ListFeature notIncludes elm={elm} index={index} key={index}/>
-                  })}
-                  {resources["bd_pro_empresas"].resources.map((elm, index) => {
-                    return <ListFeature notIncludes elm={elm} index={index} key={index}/>
-                  })}
-                </>
-              }
+            {!planActive && (
+              <>
+                {resources["bd_pro"].resources.map((elm, index) => {
+                  return (
+                    <ListFeature
+                      notIncludes
+                      elm={elm}
+                      index={index}
+                      key={index}
+                    />
+                  );
+                })}
+                {resources["bd_pro_empresas"].resources.map((elm, index) => {
+                  return (
+                    <ListFeature
+                      notIncludes
+                      elm={elm}
+                      index={index}
+                      key={index}
+                    />
+                  );
+                })}
+              </>
+            )}
 
-              {userData?.proSubscription === "bd_pro" &&
-                resources["bd_pro_empresas"].resources.map((elm, index) => {
-                  return <ListFeature notIncludes elm={elm} index={index} key={index}/>
-                })
-              }
+            {userData?.proSubscription === "bd_pro" &&
+              resources["bd_pro_empresas"].resources.map((elm, index) => {
+                return (
+                  <ListFeature
+                    notIncludes
+                    elm={elm}
+                    index={index}
+                    key={index}
+                  />
+                );
+              })}
 
-            {!userData?.isSubscriber &&
+            {!planActive && (
               <BodyText
                 typography="small"
                 as="button"
                 display="flex"
                 justifyContent="start"
                 color="#0068C5"
-                _hover={{color: "#0057A4"}}
+                _hover={{ color: "#0057A4" }}
                 marginTop="16px !important"
                 onClick={() => {
-                  PlansModal.onOpen()
-                  setToggleAnual(true)
+                  PlansModal.onOpen();
+                  setToggleAnual(true);
                 }}
               >
-                {t('username.viewAllAndComparePlans')}
+                {t("username.viewAllAndComparePlans")}
               </BodyText>
-            }
+            )}
           </Stack>
         </Stack>
 
         <Stack>
           <Box>
-            <TitleTextForm>{t('username.changeBillingInformation')}</TitleTextForm>
+            <Stack
+              display="flex"
+              flexDirection="column"
+              spacing={0}
+              gap="8px"
+              marginTop="8px"
+            >
+              {hasChatbotActiveSubscription && (
+                <Badge
+                  width="fit-content"
+                  padding="2px 4px"
+                  textTransform="none"
+                  borderRadius="6px"
+                  backgroundColor={
+                    chatbotSubscriptionInfo?.canceledAt ? "#F6E3E3" : "#D5E8DB"
+                  }
+                  color={
+                    chatbotSubscriptionInfo?.canceledAt ? "#BF3434" : "#2B8C4D"
+                  }
+                  fontSize="12px"
+                  lineHeight="18px"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  letterSpacing="0.1px"
+                >
+                  {chatbotSubscriptionInfo?.canceledAt
+                    ? t("username.canceled")
+                    : t("username.active")}
+                </Badge>
+              )}
+              <Box
+                display="flex"
+                flexDirection="row"
+                gap="8px"
+                alignItems="center"
+                flexWrap="wrap"
+              >
+                <LabelText typography="large">
+                  {t("username.chatbotSectionTitle")}
+                </LabelText>
+                <Badge
+                  width="fit-content"
+                  padding="2px 8px"
+                  textTransform="none"
+                  borderRadius="6px"
+                  backgroundColor="#E8F2FC"
+                  color="#0068C5"
+                  fontSize="12px"
+                  lineHeight="18px"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  letterSpacing="0.1px"
+                >
+                  {t("username.chatbotNewBadge")}
+                </Badge>
+                {chatbotSubscriptionInfo?.planInterval && (
+                  <LabelText typography="x-small" color="#71757A">
+                    {formattedPlanInterval(
+                      chatbotSubscriptionInfo?.planInterval,
+                    )}
+                  </LabelText>
+                )}
+              </Box>
+            </Stack>
+            <ExtraInfoTextForm margin="8px 0">
+              {t("username.chatbotSectionTagline")}
+            </ExtraInfoTextForm>
+            {hasChatbotActiveSubscription && (
+              <Stack spacing="8px" marginTop="8px" marginBottom="16px">
+                <BodyText typography="small" color="#71757A">
+                  {chatbotSubscriptionInfo?.canceledAt
+                    ? t("username.planAccessUntil")
+                    : t("username.nextAutoRenewal")}
+                  <Text as="span" fontWeight="500" color="#464A51">
+                    {formatTimeStamp(
+                      chatbotSubscriptionInfo?.canceledAt
+                        ? chatbotSubscriptionInfo?.canceledAt
+                        : chatbotSubscriptionInfo?.nextBillingCycle,
+                    )}
+                  </Text>
+                </BodyText>
+              </Stack>
+            )}
+            {!hasChatbotActiveSubscription && (
+              <Button
+                isVariant
+                marginTop="8px"
+                onClick={() => {
+                  setToggleAnual(true);
+                  if (plans?.bd_chatbot_year?._id)
+                    setPlan(plans.bd_chatbot_year._id);
+                }}
+              >
+                {t("username.subscribeChatbot")}
+              </Button>
+            )}
+            {hasChatbotActiveSubscription && (
+              <Stack
+                display="flex"
+                flexDirection="row"
+                spacing="0"
+                gap="8px"
+                marginTop="8px"
+                alignItems="flex-start"
+              >
+                <Button
+                  as="a"
+                  href={getChatbotStreamlitAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {}}
+                >
+                  {t("username.openChatbot")}
+                </Button>
+                <Button
+                  isVariant
+                  onClick={() => {
+                    setSubscriptionToCancel("chatbot");
+                    CancelModalPlan.onOpen();
+                  }}
+                  borderColor={
+                    chatbotSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#BF3434"
+                  }
+                  color={
+                    chatbotSubscriptionInfo?.canceledAt ? "#ACAEB1" : "#BF3434"
+                  }
+                  pointerEvents={
+                    chatbotSubscriptionInfo?.canceledAt ? "none" : "default"
+                  }
+                  backgroundColor="#FFF"
+                  border="1px solid"
+                  _hover={{
+                    borderColor: "#992A2A",
+                    color: "#992A2A",
+                    backgroundColor: "#FFF",
+                  }}
+                >
+                  {t("username.cancelChatbotSubscription")}
+                </Button>
+              </Stack>
+            )}
+          </Box>
+        </Stack>
+
+        <Stack>
+          <Box>
+            <TitleTextForm>
+              {t("username.changeBillingInformation")}
+            </TitleTextForm>
             <ExtraInfoTextForm>
               <Trans
-                i18nKey={t('username.changeBillingInformationInfo')}
+                i18nKey={t("username.changeBillingInformationInfo")}
                 components={{
-                  1:
+                  1: (
                     <Link
                       display="inline"
                       fontWeight="400"
                       color="#0068C5"
                       _hover={{
-                        color:"#0057A4",
+                        color: "#0057A4",
                       }}
                       href="https://coda.io/@base-dos-dados/faq-bd-pro/assinatura-2"
                       target="_blank"
                       rel="noopener noreferrer"
                     />
+                  ),
                 }}
               />
             </ExtraInfoTextForm>
@@ -1328,10 +1721,12 @@ export default function PlansAndPayment ({ userData }) {
               onClick={() => {}}
               target="_blank"
               rel="noopener noreferrer"
-            >{t('username.changeBillingInformationButton')}</Button>
+            >
+              {t("username.changeBillingInformationButton")}
+            </Button>
           </Box>
         </Stack>
       </Stack>
     </Stack>
-  )
+  );
 }

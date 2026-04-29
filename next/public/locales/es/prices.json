@@ -1,11 +1,11 @@
 {
     "pageTitle": "Precios – Base de los Datos",
     "ogTitle": "Precio – Base de los Datos",
-    "ogDescription": "Compare los planes de Base de los Datos: Gratis, Pro y Empresas. Con BD Pro, cuenta con funciones avanzadas de nuestra plataforma, datos de alta frecuencia y conjuntos exclusivos desde R$47/mes.",
+    "ogDescription": "Compare los planes de Base de los Datos: Gratis, Pro, Empresas y Chatbot. Con BD Pro, cuenta con funciones avanzadas de nuestra plataforma, datos de alta frecuencia y conjuntos exclusivos desde R$47/mes.",
     "comparePlans": "Comparar planes",
     "annualDiscount": "Descuento anual",
     "annualBillingMessage": "{{price}} cobrado una vez al año",
-    "save20": "Ahorre 20%",
+    "save20": "Ahorre hasta 20%",
     "perMonth": "/mes",
     "chargedAnnually": "cobrado una vez al año",
     "readThe": "Lea los",
@@ -16,6 +16,7 @@
     "subscribe": "Suscribirse",
     "startFreeTrial": "Iniciar prueba gratuita",
     "exploreFeatures": "Explorar características",
+    "beta": "Beta",
     "plans": {
       "free": {
         "title": "BD Gratis",
@@ -45,6 +46,17 @@
         "subtitle": "Para que tu empresa gane tiempo y calidad en las decisiones",
         "features": [
           "Acceso para 10 cuentas",
+          "Soporte prioritario por correo electrónico y Discord"
+        ]
+      },
+      "chatbot": {
+        "title": "Chatbot",
+        "subtitle": "Para crear análisis en segundos con el poder de la IA",
+        "exclusiveFeaturesHeading": "Recursos exclusivos:",
+        "features": [
+          "Chatbot conectado a 741 tablas de datos públicos",
+          "Preguntas ilimitadas",
+          "Códigos listos para extracción de datos",
           "Soporte prioritario por correo electrónico y Discord"
         ]
       }

@@ -2,6 +2,14 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
+function getBDProSubscriptionId(subscriptions = []) {
+  const match = subscriptions.find((subscription) => {
+    const slug = (subscription?.stripeSubscription || "").toLowerCase()
+    return slug.includes("bd_pro") || slug.includes("empresas")
+  })
+  return match?._id || null
+}
+
 async function addMemberInSubscriptionServiceAccount(idAdmin, email, token) {
   let subscriptionId = null
 
@@ -18,10 +26,11 @@ async function addMemberInSubscriptionServiceAccount(idAdmin, email, token) {
             allAccount (id: "${idAdmin}") {
               edges {
                 node {
-                  internalSubscription (isActive: true, first: 1) {
+                  internalSubscription (isActive: true, first: 20) {
                     edges {
                       node {
                         _id
+                        stripeSubscription
                       }
                     }
                   }
@@ -32,7 +41,9 @@ async function addMemberInSubscriptionServiceAccount(idAdmin, email, token) {
         `
       }
     })
-    subscriptionId = res.data.data.allAccount.edges[0].node.internalSubscription.edges[0].node._id
+    const subscriptions = res?.data?.data?.allAccount?.edges?.[0]?.node?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+    subscriptionId = getBDProSubscriptionId(subscriptions)
+    if (!subscriptionId) return { errors: ["subscription_not_found"] }
   } catch (error) {
     return "err"
   }
