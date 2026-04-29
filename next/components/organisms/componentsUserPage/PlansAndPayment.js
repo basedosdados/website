@@ -131,8 +131,10 @@ export default function PlansAndPayment ({ userData }) {
             return result.data.filter((item) => {
               const name = item.node.productName?.toLowerCase() || ""
               const slug = item.node.productSlug?.toLowerCase() || ""
-              const isChatbotProduct = name === "chatbot" || slug.includes("chatbot")
-              return isChatbotProduct &&
+              const isConsumerChatbot =
+                (name.includes("chatbot") || slug.includes("chatbot")) &&
+                !name.includes("empresas")
+              return isConsumerChatbot &&
                 item.node.interval === interval &&
                 item.node.amount === amount &&
                 item.node.isActive === true
@@ -162,7 +164,7 @@ export default function PlansAndPayment ({ userData }) {
     if(plans === null) return
     if(plan === "") return
 
-    const value = Object.values(plans).find(elm => elm._id === plan)
+    const value = Object.values(plans).find(elm => elm?._id === plan)
     if (!value) return
 
     const isChatbotType = value?.productName?.toLowerCase().includes("chatbot") || value?.productSlug?.toLowerCase().includes("chatbot")
@@ -436,7 +438,8 @@ export default function PlansAndPayment ({ userData }) {
 
   function changeIntervalPlanCheckout() {
     let togglerValue = !toggleAnual ? "year" : "month"
-    const value = Object.values(plans).find(elm => elm.interval === togglerValue && elm.productSlug === checkoutInfos?.productSlug)
+    const value = Object.values(plans).find(elm => elm?.interval === togglerValue && elm?.productSlug === checkoutInfos?.productSlug)
+    if (!value?._id) return
     setCheckoutInfos(value)
     setCoupon("")
     setValueCoupon("")
