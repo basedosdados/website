@@ -1613,7 +1613,23 @@ export default function PlansAndPayment ({ userData }) {
               </Box>
             </Stack>
             <ExtraInfoTextForm margin="8px 0">
-              {t("username.chatbotSectionTagline")}
+              <Trans
+                t={t}
+                i18nKey="username.chatbotSectionTagline"
+                components={{
+                  1: (
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color: "#0057A4",
+                      }}
+                      href="/blog/chatbot"
+                    />
+                  ),
+                }}
+              />
             </ExtraInfoTextForm>
             {hasChatbotActiveSubscription && (
               <Stack spacing="8px" marginTop="8px" marginBottom="16px">
