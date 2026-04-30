@@ -25,7 +25,7 @@ _E é aí que entra o Chatbot da BD._
 
 Vamos por partes. **O Chatbot da BD é uma interface de consulta que utiliza linguagem natural para que qualquer pessoa consiga explorar o datalake público da BD Brasil sem precisar dominar nenhuma linguagem de programação**. Ele utiliza o Gemini, o modelo de inteligência artificial de última geração do Google, treinado para entender suas perguntas e transformá-las em consultas precisas, extraindo informações diretamente dos nossos conjuntos de dados públicos. 
 
-Para quem não conhece, o datalake público da BD possui mais de 860 tabelas de dados sobre diferentes temas, como educação, economia, saúde, mercado de trabalho, informações demográficas, meio ambiente e mais. Para te dar uma noção, hoje os nossos conjuntos de dados mais acessados são os dados de CNPJ, Caged e Rais, do Ministério da Economia; os dados do Censo 2022, do IBGE; dados de eleições, do TSE, e por aí vai.
+Para quem não conhece, o datalake público da BD possui mais de 740 tabelas de dados sobre diferentes temas, como educação, economia, saúde, mercado de trabalho, informações demográficas, meio ambiente e mais. Para te dar uma noção, hoje os nossos conjuntos de dados mais acessados são os dados de CNPJ, Caged e Rais, do Ministério da Economia; os dados do Censo 2022, do IBGE; dados de eleições, do TSE, e por aí vai.
 
 ## Como funciona? 
 
