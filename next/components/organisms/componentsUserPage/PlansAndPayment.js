@@ -670,32 +670,25 @@ export default function PlansAndPayment ({ userData }) {
                 <LabelText textTransform="capitalize">
                   {checkoutInfos?.productName}
                 </LabelText>
-                <BodyText
-                  cursor="pointer"
-                  color="#0068C5"
-                  _hover={{ color: "#0057A4" }}
-                  marginLeft="auto"
-                  onClick={() => {
-                    PaymentModal.onClose();
-                    setToggleAnual(true);
-                    setErrCoupon(false);
-                    setCoupon("");
-                    setValueCoupon("");
-                    setPlan("");
-                    const isChatbotType =
-                      checkoutInfos?.productName
-                        ?.toLowerCase()
-                        .includes("chatbot") ||
-                      checkoutInfos?.productSlug
-                        ?.toLowerCase()
-                        .includes("chatbot");
-                    if (!isChatbotType) {
+                {!isChatbotCheckout && (
+                  <BodyText
+                    cursor="pointer"
+                    color="#0068C5"
+                    _hover={{ color: "#0057A4" }}
+                    marginLeft="auto"
+                    onClick={() => {
+                      PaymentModal.onClose();
+                      setToggleAnual(true);
+                      setErrCoupon(false);
+                      setCoupon("");
+                      setValueCoupon("");
+                      setPlan("");
                       PlansModal.onOpen();
-                    }
-                  }}
-                >
-                  {t("username.changePlan")}
-                </BodyText>
+                    }}
+                  >
+                    {t("username.changePlan")}
+                  </BodyText>
+                )}
               </Box>
 
               <Box
