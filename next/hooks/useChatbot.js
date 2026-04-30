@@ -54,30 +54,41 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           headers: { Authorization: `Bearer ${accessToken}` }
         })
 
-        const formattedMessages = []
-        response.data.forEach(pair => {
-          formattedMessages.push({
-            id: `user-${pair.id}`,
-            role: 'user',
-            content: pair.user_message,
-            status: 'SUCCESS',
-            created_at: pair.created_at
-          })
+        const normalizeEvents = events => {
+          if (!events) return []
+          let list = events
+          if (typeof events === 'string') {
+            try {
+              list = JSON.parse(events)
+            } catch {
+              return []
+            }
+          }
+          if (!Array.isArray(list)) return []
+          return list
+            .filter(ev => ev && (ev.type === 'tool_output' || ev.type === 'tool_call'))
+            .map(ev => ({ ...(ev.data || {}), type: ev.type }))
+        }
 
-          const toolCalls = (pair.events || [])
-            .filter(ev => ev.type === 'tool_output' || ev.type === 'tool_call')
-            .map(ev => ({ ...ev.data, type: ev.type }))
+        const raw = response.data
+        const items = Array.isArray(raw) ? raw : raw && typeof raw === 'object' ? [raw] : []
 
-          formattedMessages.push({
-            id: pair.id,
-            role: 'assistant',
-            content: pair.assistant_message,
-            toolCalls: toolCalls,
+        const formattedMessages = items.map(msg => {
+          const isUser = String(msg.role || '').toUpperCase() === 'USER'
+          const base = {
+            id: isUser ? `user-${msg.id}` : msg.id,
+            role: isUser ? 'user' : 'assistant',
+            content: msg.content ?? '',
+            status: msg.status || 'SUCCESS',
+            created_at: msg.created_at
+          }
+          if (isUser) return base
+          return {
+            ...base,
+            toolCalls: normalizeEvents(msg.events),
             isLoading: false,
-            isTyping: false,
-            created_at: pair.created_at,
-            rating: pair.feedback?.rating
-          })
+            isTyping: false
+          }
         })
         setMessages(formattedMessages)
         lastFetchedThreadIdRef.current = id
@@ -294,6 +305,15 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         })
 
         if (!response.ok) {
+          let errorBody = null
+          try {
+            errorBody = await response.clone().json()
+          } catch {
+            try {
+              errorBody = await response.clone().text()
+            } catch {
+            }
+          }
           throw new Error('Erro na requisição')
         }
 
@@ -376,7 +396,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                   break
               }
             } catch (e) {
-              console.error('JSON Parse error', e)
+              console.error('Falha ao interpretar linha do stream', { line, err: e })
             }
           }
 
