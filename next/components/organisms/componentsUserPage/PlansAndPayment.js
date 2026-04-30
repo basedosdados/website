@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
 
 import {
   TitleTextForm,
@@ -50,6 +50,37 @@ function purchaseReflectedInUserData(user, expectChatbot) {
     const slug = (node?.stripeSubscription || "").toLowerCase()
     return slug.includes("bd_pro") || slug.includes("empresas")
   })
+}
+
+function trackOpenChatbotPaymentSuccess({ checkoutInfos, hasBdPro, pagePath }) {
+  if (typeof window === "undefined") return;
+  triggerGAEventWithData("open_chatbot", {
+    value: "payment_success_modal",
+    plan_interval: checkoutInfos?.interval,
+    product_slug: checkoutInfos?.productSlug,
+    has_chatbot_subscription: true,
+    has_bd_pro: Boolean(hasBdPro),
+    is_logged_in: true,
+    page_path: pagePath || window.location.pathname,
+  });
+}
+
+function trackOpenChatbotUserPlansSection({
+  hasBdPro,
+  chatbotPlanInterval,
+  chatbotCanceled,
+  pagePath,
+}) {
+  if (typeof window === "undefined") return;
+  triggerGAEventWithData("open_chatbot", {
+    value: "user_plans_section",
+    has_chatbot_subscription: true,
+    has_bd_pro: Boolean(hasBdPro),
+    is_logged_in: true,
+    plan_interval: chatbotPlanInterval,
+    chatbot_subscription_canceled: Boolean(chatbotCanceled),
+    page_path: pagePath || window.location.pathname,
+  });
 }
 
 export default function PlansAndPayment ({ userData }) {
@@ -639,32 +670,25 @@ export default function PlansAndPayment ({ userData }) {
                 <LabelText textTransform="capitalize">
                   {checkoutInfos?.productName}
                 </LabelText>
-                <BodyText
-                  cursor="pointer"
-                  color="#0068C5"
-                  _hover={{ color: "#0057A4" }}
-                  marginLeft="auto"
-                  onClick={() => {
-                    PaymentModal.onClose();
-                    setToggleAnual(true);
-                    setErrCoupon(false);
-                    setCoupon("");
-                    setValueCoupon("");
-                    setPlan("");
-                    const isChatbotType =
-                      checkoutInfos?.productName
-                        ?.toLowerCase()
-                        .includes("chatbot") ||
-                      checkoutInfos?.productSlug
-                        ?.toLowerCase()
-                        .includes("chatbot");
-                    if (!isChatbotType) {
+                {!isChatbotCheckout && (
+                  <BodyText
+                    cursor="pointer"
+                    color="#0068C5"
+                    _hover={{ color: "#0057A4" }}
+                    marginLeft="auto"
+                    onClick={() => {
+                      PaymentModal.onClose();
+                      setToggleAnual(true);
+                      setErrCoupon(false);
+                      setCoupon("");
+                      setValueCoupon("");
+                      setPlan("");
                       PlansModal.onOpen();
-                    }
-                  }}
-                >
-                  {t("username.changePlan")}
-                </BodyText>
+                    }}
+                  >
+                    {t("username.changePlan")}
+                  </BodyText>
+                )}
               </Box>
 
               <Box
@@ -1122,7 +1146,11 @@ export default function PlansAndPayment ({ userData }) {
                   setIsLoading(false);
                   setIsLoadingH(false);
                   SucessPaymentModal.onClose();
-                  triggerGAEvent("open_chatbot", "payment_success_modal");
+                  trackOpenChatbotPaymentSuccess({
+                    checkoutInfos,
+                    hasBdPro: planActive,
+                    pagePath: router.pathname,
+                  });
                 }}
                 isLoading={isLoading}
               >
@@ -1613,7 +1641,23 @@ export default function PlansAndPayment ({ userData }) {
               </Box>
             </Stack>
             <ExtraInfoTextForm margin="8px 0">
-              {t("username.chatbotSectionTagline")}
+              <Trans
+                t={t}
+                i18nKey="username.chatbotSectionTagline"
+                components={{
+                  1: (
+                    <Link
+                      display="inline"
+                      fontWeight="400"
+                      color="#0068C5"
+                      _hover={{
+                        color: "#0057A4",
+                      }}
+                      href="/blog/chatbot"
+                    />
+                  ),
+                }}
+              />
             </ExtraInfoTextForm>
             {hasChatbotActiveSubscription && (
               <Stack spacing="8px" marginTop="8px" marginBottom="16px">
@@ -1658,7 +1702,14 @@ export default function PlansAndPayment ({ userData }) {
                   href={getChatbotStreamlitAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => {}}
+                  onClick={() =>
+                    trackOpenChatbotUserPlansSection({
+                      hasBdPro: planActive,
+                      chatbotPlanInterval: chatbotSubscriptionInfo?.planInterval,
+                      chatbotCanceled: chatbotSubscriptionInfo?.canceledAt,
+                      pagePath: router.pathname,
+                    })
+                  }
                 >
                   {t("username.openChatbot")}
                 </Button>

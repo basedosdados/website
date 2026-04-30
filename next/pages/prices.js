@@ -24,7 +24,6 @@ import BodyText from "../components/atoms/Text/BodyText";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 import { triggerGAEvent, triggerGAEventWithData } from "../utils";
-import { has } from "lodash";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
