@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -49,6 +49,25 @@ function useIsMobileMod() {
   return useCheckMobile();
 }
 
+function trackMenuOpenChatbot({
+  menuPlacement,
+  hasChatbotSubscription,
+  isLoggedIn,
+  isUserPro,
+  pagePath,
+}) {
+  if (typeof window === "undefined") return;
+  triggerGAEventWithData("open_chatbot", {
+    value: "menu",
+    menu_placement: menuPlacement,
+    is_mobile: menuPlacement !== "desktop_header_right",
+    has_chatbot_subscription: Boolean(hasChatbotSubscription),
+    is_logged_in: Boolean(isLoggedIn),
+    is_bd_pro: Boolean(isUserPro),
+    page_path: pagePath || window.location.pathname,
+  });
+}
+
 function handleMenuLinkClick(href) {
   if (href === "/services") {
     triggerGAEvent("navigating_to_services", "menu");
@@ -58,10 +77,10 @@ function handleMenuLinkClick(href) {
   }
 }
 
-function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
+function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUserPro }) {
   const { t } = useTranslation('menu');
-  const { locale } = useRouter();
   const router = useRouter();
+  const { locale, pathname: pagePath } = router;
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
@@ -191,7 +210,13 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
                   "_blank",
                   "noopener,noreferrer"
                 );
-                triggerGAEvent("open_chatbot", "menu");
+                trackMenuOpenChatbot({
+                  menuPlacement: "mobile_drawer",
+                  hasChatbotSubscription: hasChatbotAccess,
+                  isLoggedIn: !!userData,
+                  isUserPro,
+                  pagePath,
+                });
               }
             }}
           >
@@ -247,7 +272,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
 function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePlan, hasChatbotAccess }) {
   const router = useRouter();
   const { t: tMenu } = useTranslation('menu');
-  const { locale } = useRouter();
+  const { locale, pathname: pagePath } = router;
 
   const links = [
     {name: tMenu('public_profile'), value: "profile"},
@@ -374,7 +399,13 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                       "_blank",
                       "noopener,noreferrer"
                     )
-                    triggerGAEvent("open_chatbot", "menu")
+                    trackMenuOpenChatbot({
+                      menuPlacement: "mobile_drawer_user",
+                      hasChatbotSubscription: hasChatbotAccess,
+                      isLoggedIn: !!userData,
+                      isUserPro,
+                      pagePath,
+                    })
                   }
                 }}
               >
@@ -740,7 +771,7 @@ function DesktopLinks({
   const isMobile = useIsMobileMod();
   const { t } = useTranslation('common', 'menu');
   const router = useRouter();
-  const { locale } = router;
+  const { locale, pathname: pagePath } = router;
 
   function LinkMenuDropDown ({ url, text, icon }) {
     const [flag, setFlag] = useBoolean()
@@ -953,7 +984,14 @@ function DesktopLinks({
                 href: getChatbotStreamlitAppUrl(),
                 target: "_blank",
                 rel: "noopener noreferrer",
-                onClick: () => triggerGAEvent("open_chatbot", "menu"),
+                onClick: () =>
+                  trackMenuOpenChatbot({
+                    menuPlacement: "desktop_header_right",
+                    hasChatbotSubscription: hasChatbotAccess,
+                    isLoggedIn: !!userData,
+                    isUserPro,
+                    pagePath,
+                  }),
               }
             : {
                 type: "button",
@@ -1211,6 +1249,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         userData={userData}
         links={links}
         hasChatbotAccess={hasChatbotAccess()}
+        isUserPro={isUserPro()}
         {...menuDisclosure}
       />
 

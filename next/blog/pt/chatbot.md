@@ -1,6 +1,5 @@
 ---
-title: Converse com Dados: Conheça o Chatbot da BD que vai transformar suas perguntas em análises
-
+title: "Converse com Dados: Conheça o Chatbot da BD que vai transformar suas perguntas em análises"
 description: Conheça como o Chatbot da BD cria análises em segundos com apenas umas pergunta
 date:
   created: '2026-04-29'
