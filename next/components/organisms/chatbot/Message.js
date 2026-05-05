@@ -27,7 +27,7 @@ import hljs from "highlight.js/lib/core";
 import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
 
-import remarkGfm from "remark-gfm";
+import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";

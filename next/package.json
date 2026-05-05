@@ -49,7 +49,8 @@
     "react-markdown": "^8.0.7",
     "react-paginate": "^8.2.0",
     "rehype-slug": "^6.0.0",
-    "remark-gfm": "^3.0.1",
+    "remark-gfm": "^4.0.0",
+    "remark-gfm-v3": "npm:remark-gfm@3.0.1",
     "swiper": "^8.4.5",
     "uuid": "^13.0.0"
   },
