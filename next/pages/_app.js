@@ -1,7 +1,7 @@
 import { appWithTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { ChakraProvider } from "@chakra-ui/react";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
 import "../styles/globals.css";
 
