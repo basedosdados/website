@@ -380,7 +380,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
                 case 'complete':
                   const completeId =
-                    event.data?.run_id || event.data?.id || event.data?.message_id || botMessageId
+                    event.data?.message_id || event.data?.id || event.data?.run_id || botMessageId
                   currentBotMessageIdRef.current = completeId
                   setMessages(prev =>
                     prev.map(msg =>

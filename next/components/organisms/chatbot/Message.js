@@ -10,7 +10,14 @@ import {
   UnorderedList,
   ListItem,
   OrderedList,
-  useClipboard
+  useClipboard,
+  Table,
+  TableContainer,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -143,6 +150,57 @@ const componentsMk = {
     >
       {children}
     </ListItem>
+  ),
+  table: ({ children }) => (
+    <TableContainer
+      marginY="16px"
+      maxWidth="100%"
+      overflowX="auto"
+      border="1px solid #DEDFE0"
+      borderRadius="20px"
+    >
+      <Table variant="simple" size="sm">
+        {children}
+      </Table>
+    </TableContainer>
+  ),
+  thead: ({ children }) => (
+    <Thead backgroundColor="#F7F7F7">{children}</Thead>
+  ),
+  tbody: ({ children }) => <Tbody>{children}</Tbody>,
+  tr: ({ children }) => <Tr>{children}</Tr>,
+  td: ({ children }) => (
+    <Td
+      padding="14px 22px"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#464A51"
+      backgroundColor="#FFF"
+      borderColor="#DEDFE0"
+      textTransform="none"
+      letterSpacing="inherit"
+      whiteSpace="break-spaces"
+    >
+      {children}
+    </Td>
+  ),
+  th: ({ children }) => (
+    <Th
+      padding="14px 22px"
+      textTransform="none"
+      letterSpacing="inherit"
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize="14px"
+      lineHeight="20px"
+      color="#252A32"
+      borderBottom="1px solid #DEDFE0 !important"
+      boxSizing="content-box"
+    >
+      {children}
+    </Th>
   ),
 }
 

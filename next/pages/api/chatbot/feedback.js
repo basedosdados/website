@@ -5,23 +5,31 @@ const API_URL = process.env.CHATBOT_URL
 export default async function handler(req, res) {
   const { method } = req
   const authHeader = req.headers.authorization
-  const { messageId } = req.query
+  const rawMessageId = req.query.messageId
+  const messageId = Array.isArray(rawMessageId) ? rawMessageId[0] : rawMessageId
+
+  if (!API_URL) {
+    return res.status(503).json({ error: 'Chatbot API URL is not configured' })
+  }
 
   if (!authHeader) {
     return res.status(401).json({ error: 'Missing authorization header' })
   }
 
-  if (!messageId) {
+  if (!messageId || typeof messageId !== 'string') {
     return res.status(400).json({ error: 'Missing messageId parameter' })
   }
 
   try {
     if (method === 'PUT') {
       const response = await axios.put(
-        `${API_URL}/api/v1/chatbot/messages/${messageId}/feedbacks`,
+        `${API_URL}/api/v1/chatbot/messages/${encodeURIComponent(messageId)}/feedback`,
         req.body,
         {
-          headers: { Authorization: authHeader }
+          headers: {
+            Authorization: authHeader,
+            'Content-Type': 'application/json'
+          }
         }
       )
       return res.status(200).json(response.data)
