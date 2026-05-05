@@ -70,7 +70,7 @@ async function getUserData(id, token) {
                       }
                     }
                   }
-                  internalSubscription (isActive: true, first: 1) {
+                  internalSubscription (isActive: true, first: 20) {
                     edges {
                       node {
                         canceledAt
@@ -123,7 +123,26 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "Failed to fetch user data" });
     }
 
-    const userData = userDataResponse.data?.allAccount?.edges[0]?.node;
+    const accountNode = userDataResponse.data?.allAccount?.edges?.[0]?.node;
+    const internalSubscriptions = accountNode?.internalSubscription?.edges || []
+    const sortedSubscriptions = [...internalSubscriptions].sort((a, b) => {
+      const aSlug = (a?.node?.stripeSubscription || "").toLowerCase()
+      const bSlug = (b?.node?.stripeSubscription || "").toLowerCase()
+      const aIsBDPro = aSlug.includes("bd_pro") || aSlug.includes("empresas")
+      const bIsBDPro = bSlug.includes("bd_pro") || bSlug.includes("empresas")
+
+      if (aIsBDPro && !bIsBDPro) return -1
+      if (!aIsBDPro && bIsBDPro) return 1
+      return 0
+    })
+
+    const userData = {
+      ...accountNode,
+      internalSubscription: {
+        ...accountNode?.internalSubscription,
+        edges: sortedSubscriptions
+      }
+    };
 
     const response = {
       authToken: token,

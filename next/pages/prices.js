@@ -4,6 +4,7 @@ import {
   Tooltip,
   Skeleton,
   SkeletonText,
+  Badge,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Head from "next/head";
@@ -23,6 +24,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 import { triggerGAEvent, triggerGAEventWithData } from "../utils";
+import { has } from "lodash";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -43,6 +45,7 @@ export const CardPrice = ({
   resources = [],
   button,
   locale,
+  isBeta = false,
 }) => {
   const { t } = useTranslation('prices');
   const router = useRouter();
@@ -61,16 +64,14 @@ export const CardPrice = ({
       display="flex"
       flexDirection="column"
       position="relative"
-      width={{base: "100%", lg: "272px"}}
-      boxSizing={{base: "inherit", lg: "content-box"}}
+      width={{ base: "100%", lg: "260px" }}
+      boxSizing={{ base: "inherit", lg: "content-box" }}
       borderRadius="16px"
       boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       padding="40px 24px"
       textAlign="center"
     >
-      <Box
-        height="fit-content"
-      >
+      <Box height="fit-content">
         <Box
           display="flex"
           flexDirection="row"
@@ -79,12 +80,25 @@ export const CardPrice = ({
           alignItems="center"
           marginBottom="8px"
         >
-          <TitleText
-            typography="large"
-            textAlign="center"
-          >
+          <TitleText typography="large" textAlign="center">
             {title}
           </TitleText>
+          <Badge
+            display={isBeta ? "block" : "none"}
+            width="fit-content"
+            padding="4px 12px"
+            textTransform="none"
+            borderRadius="6px"
+            backgroundColor="#E8F2FC"
+            color="#0068C5"
+            fontSize="16px"
+            lineHeight="24px"
+            fontFamily="Roboto"
+            fontWeight="500"
+            letterSpacing="0.1px"
+          >
+            {t("beta")}
+          </Badge>
         </Box>
 
         <LabelText
@@ -110,14 +124,18 @@ export const CardPrice = ({
             height="60px"
             alignItems="center"
           >
-            <Display textAlign="center">R$ {anualPlan ? Math.ceil(price/12) : price}</Display>
+            <Display textAlign="center">
+              R$ {anualPlan ? Math.ceil(price / 12) : price}
+            </Display>
             <TitleText
               typography="small"
               position="relative"
               top="16px"
               right="-4px"
               textAlign="center"
-            >{t('perMonth')}</TitleText>
+            >
+              {t("perMonth")}
+            </TitleText>
           </Box>
 
           <BodyText
@@ -125,9 +143,16 @@ export const CardPrice = ({
             color="#464A51"
             marginTop="24px"
             alignItems="center"
-          >{anualPlan && t('annualBillingMessage', {
-            price: price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 })
-          })}</BodyText>
+          >
+            {anualPlan &&
+              t("annualBillingMessage", {
+                price: price.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                  minimumFractionDigits: 0,
+                }),
+              })}
+          </BodyText>
         </Box>
       </Box>
 
@@ -139,11 +164,7 @@ export const CardPrice = ({
         justifyContent="space-between"
       >
         <Box marginBottom="24px">
-          <BodyText
-            color="#71757A"
-            alignItems="center"
-            marginBottom="16px"
-          >
+          <BodyText color="#71757A" alignItems="center" marginBottom="16px">
             {textResource}
           </BodyText>
 
@@ -156,20 +177,13 @@ export const CardPrice = ({
                 flexDirection="row"
                 alignItems="center"
                 gap="8px"
-                _last={{marginBottom:"0px !important"}}
+                _last={{ marginBottom: "0px !important" }}
               >
-                <CheckIcon 
-                  width="24px"
-                  height="24px"
-                  fill="#2B8C4D"
-                />
-                <BodyText
-                  alignItems="center"
-                  color="#464A51"
-                >
+                <CheckIcon width="24px" height="24px" fill="#2B8C4D" />
+                <BodyText alignItems="center" color="#464A51">
                   {elm.name}
                 </BodyText>
-                {elm.tooltip &&
+                {elm.tooltip && (
                   <Tooltip
                     label={elm.tooltip}
                     hasArrow
@@ -186,19 +200,21 @@ export const CardPrice = ({
                     color="#FFFFFF"
                     maxWidth="230px"
                   >
-                    <InfoIcon width="14px" height="14px" alt="tip" cursor="pointer" fill="#878A8E"/>
+                    <InfoIcon
+                      width="14px"
+                      height="14px"
+                      alt="tip"
+                      cursor="pointer"
+                      fill="#878A8E"
+                    />
                   </Tooltip>
-                }
+                )}
               </Box>
-            )
+            );
           })}
         </Box>
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          gap="16px"
-        >
+        <Box display="flex" flexDirection="column" gap="16px">
           {button.isCurrentPlan ? (
             <LabelText
               typography="x-large"
@@ -211,7 +227,7 @@ export const CardPrice = ({
               color="#7D7D7D"
               cursor="default"
             >
-              {t('currentPlan')}
+              {t("currentPlan")}
             </LabelText>
           ) : (
             <Box
@@ -231,21 +247,22 @@ export const CardPrice = ({
               lineHeight="36px"
               onClick={handleNavigation}
               _hover={{
-                backgroundColor: "#22703E"
+                backgroundColor: "#22703E",
               }}
             >
               {t(button.text)}
             </Box>
           )}
 
-          <BodyText 
+          <BodyText
             display="flex"
             flexDirection="row"
             justifyContent="center"
             textAlign="center"
             color="#71757A"
             height="24px"
-          >{t('readThe')}
+          >
+            {t("readThe")}
             <Link href="/terms?section=terms" locale={locale} passHref>
               <BodyText
                 as="span"
@@ -255,10 +272,10 @@ export const CardPrice = ({
                 alignItems="center"
                 color="#0068C5"
                 _hover={{
-                  color: "#0057A4"
+                  color: "#0057A4",
                 }}
               >
-                {t('termsOfService')}
+                {t("termsOfService")}
               </BodyText>
             </Link>
             .
@@ -266,11 +283,12 @@ export const CardPrice = ({
         </Box>
       </Box>
     </Box>
-  )
+  );
 }
 
 export function SectionPrice({
-  action = () => {}
+  action = () => {},
+  hasChatbot = true,
 }) {
   const { t, ready } = useTranslation('prices');
   const { locale } = useRouter();
@@ -279,6 +297,7 @@ export function SectionPrice({
   const [username, setUsername] = useState(null)
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
+  const [isBDChatbot, setIsBDChatbot] = useState({isCurrentPlan: false})
   const [hasSubscribed, setHasSubscribed] = useState(true)
   const [isLoading, setLoading] = useState(true)
 
@@ -312,11 +331,25 @@ export function SectionPrice({
           )
         }
 
+        function filterChatbot(interval, amount) {
+          return result.data.filter((item) => {
+            const name = item.node.productName?.toLowerCase() || ""
+            const slug = item.node.productSlug?.toLowerCase() || ""
+            const isChatbotProduct = name === "chatbot" || slug.includes("chatbot")
+            return isChatbotProduct &&
+              item.node.interval === interval &&
+              item.node.amount === amount &&
+              item.node.isActive === true
+          })
+        }
+
         const filteredPlans = {
           bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
           bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
           bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
-          bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node
+          bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node,
+          bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
+          bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
         }
 
         setPlans(filteredPlans)
@@ -350,13 +383,27 @@ export function SectionPrice({
       promises.push(fetchPlans())
 
       if(user != null) {
-        const stripeSubscription = {
-          stripeSubscription: user?.proSubscription,
-          planInterval: user?.internalSubscription?.edges?.[0]?.node?.planInterval || user?.subscriptionSet?.edges?.[0]?.node?.planInterval
-        }
+        const internalNodes = user?.internalSubscription?.edges?.map((e) => e?.node) || []
+        const nodeBDPro = internalNodes.find((n) => n?.stripeSubscription === "bd_pro")
+        const nodeBDEmp = internalNodes.find((n) => n?.stripeSubscription === "bd_pro_empresas")
+        const chatbotNode = internalNodes.find((n) =>
+          (n?.stripeSubscription || "").toLowerCase().includes("chatbot")
+        )
+        const planIntervalLegacy = user?.subscriptionSet?.edges?.[0]?.node?.planInterval
+
         setUsername(user?.username)
-        setIsBDPro({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro", planInterval: stripeSubscription?.planInterval})
-        setIsBDEmp({isCurrentPlan: stripeSubscription?.stripeSubscription === "bd_pro_empresas", planInterval: stripeSubscription?.planInterval})
+        setIsBDPro({
+          isCurrentPlan: user?.proSubscription === "bd_pro",
+          planInterval: (nodeBDPro?.planInterval ?? planIntervalLegacy),
+        })
+        setIsBDEmp({
+          isCurrentPlan: user?.proSubscription === "bd_pro_empresas",
+          planInterval: (nodeBDEmp?.planInterval ?? planIntervalLegacy),
+        })
+        setIsBDChatbot({
+          isCurrentPlan: !!chatbotNode,
+          planInterval: chatbotNode?.planInterval,
+        })
       }
 
       await Promise.all(promises)
@@ -367,19 +414,17 @@ export function SectionPrice({
     loadData()
   }, [])
 
-  function planIntervalPlan(toggleAnual) {
+  function planIntervalMatches(planState, toggleAnual) {
     const planInterval = toggleAnual ? "year" : "month"
+    return planState?.planInterval === planInterval
+  }
 
-    if(isBDPro?.planInterval === planInterval) return true
-    return false
+  const arrayCards = () => {
+    return hasChatbot ? [1, 2, 3, 4] : [1, 2, 3]
   }
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      gridGap="40px"
-    >
+    <Box display="flex" flexDirection="column" gridGap="40px" width="100%">
       <Box
         display="flex"
         width="100%"
@@ -404,7 +449,7 @@ export function SectionPrice({
           alignItems="center"
           textAlign="center"
         >
-          {t('annualDiscount')}
+          {t("annualDiscount")}
           <LabelText
             typography="large"
             as="span"
@@ -413,124 +458,262 @@ export function SectionPrice({
             padding="2px 4px"
             borderRadius="4px"
             height="32px"
-          >{t('save20')}</LabelText>
+          >
+            {t("save20")}
+          </LabelText>
         </LabelText>
       </Box>
 
       {isLoading ? (
         <Stack
-          display={{base: "flex", lg: "grid"}}
-          gridTemplateColumns="repeat(3, 320px)"
+          display={{ base: "flex", lg: "grid" }}
+          gridTemplateColumns={{ lg: "repeat(auto-fit, minmax(260px, 1fr))" }}
           gridTemplateRows="1fr"
           justifyContent="center"
           justifyItems="center"
           gap="20px"
+          maxWidth="100%"
           spacing={0}
         >
-          {[1, 2, 3].map((i) => (
+          {arrayCards().map((i) => (
             <Box
               key={i}
               display="flex"
               flexDirection="column"
-              width={{base: "100%", lg: "272px"}}
-              boxSizing={{base: "inherit", lg: "content-box"}}
+              width={{ base: "100%", lg: "260px" }}
+              boxSizing={{ base: "inherit", lg: "content-box" }}
               borderRadius="16px"
               boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
               padding="40px 24px"
               textAlign="center"
             >
-              <Skeleton height="32px" width="150px" margin="0 auto 8px" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
-              <Skeleton height="20px" width="200px" margin="0 auto 24px" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+              <Skeleton
+                height="32px"
+                width="150px"
+                margin="0 auto 8px"
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+                borderRadius="6px"
+              />
+              <Skeleton
+                height="20px"
+                width="200px"
+                margin="0 auto 24px"
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+                borderRadius="6px"
+              />
               <Box marginBottom="40px">
-                <Skeleton height="60px" width="120px" margin="0 auto" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+                <Skeleton
+                  height="60px"
+                  width="120px"
+                  margin="0 auto"
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                />
               </Box>
               <Box flex={1} textAlign="start">
-                <SkeletonText mt="4" noOfLines={6} spacing="4" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
-                <Skeleton height="48px" width="100%" borderRadius="8px" marginTop="40px" startColor="#F0F0F0" endColor="#F3F3F3"/>
-                <Skeleton height="20px" width="80%" margin="16px auto 0" startColor="#F0F0F0" endColor="#F3F3F3" borderRadius="6px"/>
+                <SkeletonText
+                  mt="4"
+                  noOfLines={6}
+                  spacing="4"
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                />
+                <Skeleton
+                  height="48px"
+                  width="100%"
+                  borderRadius="8px"
+                  marginTop="40px"
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                />
+                <Skeleton
+                  height="20px"
+                  width="80%"
+                  margin="16px auto 0"
+                  startColor="#F0F0F0"
+                  endColor="#F3F3F3"
+                  borderRadius="6px"
+                />
               </Box>
             </Box>
           ))}
         </Stack>
       ) : (
         <Stack
-          display={{base: "flex", lg: "grid"}}
-          gridTemplateColumns="repeat(3, 320px)"
+          display={{ base: "flex", lg: "grid" }}
+          gridTemplateColumns={{ lg: "repeat(auto-fit, minmax(260px, 1fr))" }}
           gridTemplateRows="1fr"
           justifyContent="center"
           justifyItems="center"
+          width="100%"
           gap="20px"
           spacing={0}
         >
           <CardPrice
-            title={t('plans.free.title')}
-            subTitle={t('plans.free.subtitle')}
+            title={t("plans.free.title")}
+            subTitle={t("plans.free.subtitle")}
             price="0"
-            textResource={t('features')}
-            resources={t('plans.free.features', { returnObjects: true }).map((feature, index) => ({
-              name: feature,
-              tooltip: index === 1 ? t('tooltips.integratedData') : (index === 6 ? t('tooltips.downloadLimit') : null)
-            }))}
+            textResource={t("features")}
+            resources={t("plans.free.features", { returnObjects: true }).map(
+              (feature, index) => ({
+                name: feature,
+                tooltip:
+                  index === 1
+                    ? t("tooltips.integratedData")
+                    : index === 6
+                      ? t("tooltips.downloadLimit")
+                      : null,
+              }),
+            )}
             button={{
-              text: t('exploreFeatures'),
+              text: t("exploreFeatures"),
               href: "/search",
-              onClick: () => triggerGAEvent("explore_features_card_price", "click"),
+              onClick: () =>
+                triggerGAEvent("explore_features_card_price", "click"),
             }}
             locale={locale}
           />
-
           <CardPrice
-            title={t('plans.pro.title')}
-            subTitle={t('plans.pro.subtitle')}
-            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444}
+            title={t("plans.pro.title")}
+            subTitle={t("plans.pro.subtitle")}
+            price={
+              plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444
+            }
             anualPlan={toggleAnual}
-            textResource={t('allFeaturesPlus', { plan: t('plans.free.title') })}
-            resources={t('plans.pro.features', { returnObjects: true }).map((feature, index) => ({
-              name: feature,
-              tooltip: index === 2 ? t('tooltips.downloadLimitPro') : null
-            }))}
+            textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
+            resources={t("plans.pro.features", { returnObjects: true }).map(
+              (feature, index) => ({
+                name: feature,
+                tooltip: index === 2 ? t("tooltips.downloadLimitPro") : null,
+              }),
+            )}
             button={{
-              text: isBDPro.isCurrentPlan && planIntervalPlan(toggleAnual) ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-              href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+              text:
+                isBDPro.isCurrentPlan &&
+                planIntervalMatches(isBDPro, toggleAnual)
+                  ? t("currentPlan")
+                  : hasSubscribed
+                    ? t("subscribe")
+                    : t("startFreeTrial"),
+              href:
+                username === null
+                  ? `/user/login`
+                  : `/user/${username}?plans_and_payment`,
               onClick: () => {
                 triggerGAEventWithData("bd_pro_card_price", {
-                  plan_interval: toggleAnual ? 'year' : 'month',
-                  is_free_trial: !hasSubscribed
-                })
-                cookies.set('plan_selected', plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
-                action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id)
+                  plan_interval: toggleAnual ? "year" : "month",
+                  is_free_trial: !hasSubscribed,
+                });
+                cookies.set(
+                  "plan_selected",
+                  plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id,
+                  { expires: 1, path: "/" },
+                );
+                action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id);
               },
-              isCurrentPlan: isBDPro.isCurrentPlan && planIntervalPlan(toggleAnual),
+              isCurrentPlan:
+                isBDPro.isCurrentPlan &&
+                planIntervalMatches(isBDPro, toggleAnual),
             }}
             locale={locale}
           />
-
           <CardPrice
-            title={t('plans.enterprise.title')}
-            subTitle={t('plans.enterprise.subtitle')}
-            price={plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?.amount || 3700}
+            title={t("plans.enterprise.title")}
+            subTitle={t("plans.enterprise.subtitle")}
+            price={
+              plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]
+                ?.amount || 3700
+            }
             anualPlan={toggleAnual}
-            textResource={t('allFeaturesPlus', { plan: t('plans.pro.title') })}
-            resources={t('plans.enterprise.features', { returnObjects: true }).map(feature => ({ name: feature }))}
+            textResource={t("allFeaturesPlus", { plan: t("plans.pro.title") })}
+            resources={t("plans.enterprise.features", {
+              returnObjects: true,
+            }).map((feature) => ({ name: feature }))}
             button={{
-              text: isBDEmp.isCurrentPlan && planIntervalPlan(toggleAnual) ? t('currentPlan') : hasSubscribed ? t('subscribe') : t('startFreeTrial'),
-              href: username === null ? `/user/login` :`/user/${username}?plans_and_payment`,
+              text:
+                isBDEmp.isCurrentPlan &&
+                planIntervalMatches(isBDEmp, toggleAnual)
+                  ? t("currentPlan")
+                  : hasSubscribed
+                    ? t("subscribe")
+                    : t("startFreeTrial"),
+              href:
+                username === null
+                  ? `/user/login`
+                  : `/user/${username}?plans_and_payment`,
               onClick: () => {
                 triggerGAEventWithData("bd_empresas_card_price", {
-                  plan_interval: toggleAnual ? 'year' : 'month',
-                  is_free_trial: !hasSubscribed
-                })
-                cookies.set('plan_selected', plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id, { expires: 1, path: '/' });
-                action(plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id)
+                  plan_interval: toggleAnual ? "year" : "month",
+                  is_free_trial: !hasSubscribed,
+                });
+                cookies.set(
+                  "plan_selected",
+                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id,
+                  { expires: 1, path: "/" },
+                );
+                action(
+                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id,
+                );
               },
-              isCurrentPlan: isBDEmp.isCurrentPlan && planIntervalPlan(toggleAnual),
+              isCurrentPlan:
+                isBDEmp.isCurrentPlan &&
+                planIntervalMatches(isBDEmp, toggleAnual),
             }}
             locale={locale}
           />
+          {hasChatbot && (
+            <CardPrice
+              isBeta={true}
+              title={t("plans.chatbot.title")}
+              subTitle={t("plans.chatbot.subtitle")}
+              price={
+                plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
+                (toggleAnual ? 326 : 30)
+              }
+              anualPlan={toggleAnual}
+              textResource={t("plans.chatbot.exclusiveFeaturesHeading")}
+              resources={t("plans.chatbot.features", { returnObjects: true }).map(
+                (feature) => ({ name: feature }),
+              )}
+              button={{
+                text:
+                  isBDChatbot.isCurrentPlan &&
+                  planIntervalMatches(isBDChatbot, toggleAnual)
+                    ? t("currentPlan")
+                    : hasSubscribed
+                      ? t("subscribe")
+                      : t("startFreeTrial"),
+                href:
+                  username === null
+                    ? `/user/login`
+                    : `/user/${username}?plans_and_payment`,
+                onClick: () => {
+                  triggerGAEventWithData("bd_chatbot_card_price", {
+                    plan_interval: toggleAnual ? "year" : "month",
+                    is_free_trial: !hasSubscribed,
+                  });
+                  const chatKey = `bd_chatbot_${toggleAnual ? "year" : "month"}`;
+                  cookies.set("plan_selected", plans?.[chatKey]?._id, {
+                    expires: 1,
+                    path: "/",
+                  });
+                  action(plans?.[chatKey]?._id);
+                },
+                isCurrentPlan:
+                  isBDChatbot.isCurrentPlan &&
+                  planIntervalMatches(isBDChatbot, toggleAnual),
+              }}
+              locale={locale}
+            />
+          )}
         </Stack>
       )}
     </Box>
-  )
+  );
 }
 
 export default function Price() {

@@ -28,7 +28,7 @@ import { ModalInitialTour, ModalSurveyTour, exploreTour } from "../../components
 import ServiceHighlightABTest from "../../components/molecules/ServiceHighlightABTest";
 import useABTestVariant from "../../hooks/useABTestVariant";
 import Banner from "../../components/molecules/Banner";
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription } from "../../utils";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -131,7 +131,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
     if(useCheckMobile()) cookies.set('tourBD', '{"state":"skip"}', { expires: 360 })
     const rawUser = cookies.get("userBD");
     const user = rawUser ? JSON.parse(rawUser) : null;
-    if (user?.isSubscriber) setIsSubscriber(true);
+    if (hasBDProSubscription(user)) setIsSubscriber(true);
   }, [])
 
   useEffect(() => {

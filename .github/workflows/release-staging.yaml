@@ -5,9 +5,9 @@ on:
     branches:
       - staging
     paths:
-      - ".github/workflows/release-staging.yaml"
-      - "next/**/*"
-      - "!next/cypress/**/*"
+      - '.github/workflows/release-staging.yaml'
+      - 'next/**/*'
+      - '!next/cypress/**/*'
   workflow_dispatch:
 
 jobs:
