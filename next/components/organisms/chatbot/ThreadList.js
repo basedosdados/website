@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   VStack,
@@ -30,6 +30,18 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
   const deleteModal = useDisclosure();
   const [threadToDelete, setThreadToDelete] = useState(null);
 
+  const sortedThreads = useMemo(() => {
+    if (!threads?.length) return [];
+    const toTime = (value) => {
+      if (value == null) return 0;
+      const t = new Date(value).getTime();
+      return Number.isFinite(t) ? t : 0;
+    };
+    return [...threads].sort(
+      (a, b) => toTime(b.created_at) - toTime(a.created_at)
+    );
+  }, [threads]);
+
   const handleSelectThread = (thread) => {
     if (isGenerating) return;
 
@@ -59,6 +71,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       }
     }
   };
+
+  const hasHistoryContent = Boolean(error) || sortedThreads.length > 0;
 
   if (isLoading) {
     return (
@@ -151,6 +165,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
         </Stack>
       </ModalGeneral>
 
+      {hasHistoryContent && (
       <Accordion
         display="flex"
         allowToggle={isSidebarOpen}
@@ -182,7 +197,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             >
               Conversas
             </BodyText>
-            {isSidebarOpen && threads.length > 0 && <AccordionIcon color="#252A32" />}
+            {isSidebarOpen && <AccordionIcon color="#252A32" />}
           </AccordionButton>
           <AccordionPanel padding="0">
             {error && isSidebarOpen && (
@@ -227,7 +242,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                 overflowY="auto"
                 maxHeight="100%"
               >
-              {threads?.map((thread) => (
+              {sortedThreads.map((thread) => (
                 <Box
                   position="relative"
                   role="group"
@@ -287,6 +302,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
+      )}
     </>
   );
 };
