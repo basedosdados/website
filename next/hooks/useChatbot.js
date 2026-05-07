@@ -5,6 +5,23 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useChatbotContext } from '../context/ChatbotContext'
 import useChatbotAuth from './useChatbotAuth'
 
+function messageSortTime(createdAt) {
+  if (createdAt == null) return null
+  const t = new Date(createdAt).getTime()
+  return Number.isFinite(t) ? t : null
+}
+
+function sortMessagesChronologically(list) {
+  return [...list].sort((a, b) => {
+    const ta = messageSortTime(a.created_at)
+    const tb = messageSortTime(b.created_at)
+    if (ta != null && tb != null && ta !== tb) return ta - tb
+    if (ta != null && tb == null) return -1
+    if (ta == null && tb != null) return 1
+    return String(a.id).localeCompare(String(b.id), undefined, { numeric: true })
+  })
+}
+
 export default function useChatbot(initialThreadId = null, options = {}) {
   const { onThreadCreated } = options
   const [messages, setMessages] = useState([])
@@ -75,12 +92,13 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
         const formattedMessages = items.map(msg => {
           const isUser = String(msg.role || '').toUpperCase() === 'USER'
+          const createdAt = msg.created_at ?? msg.createdAt
           const base = {
             id: isUser ? `user-${msg.id}` : msg.id,
             role: isUser ? 'user' : 'assistant',
             content: msg.content ?? '',
             status: msg.status || 'SUCCESS',
-            created_at: msg.created_at
+            created_at: createdAt
           }
           if (isUser) return base
           return {
@@ -90,7 +108,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             isTyping: false
           }
         })
-        setMessages(formattedMessages)
+        setMessages(sortMessagesChronologically(formattedMessages))
         lastFetchedThreadIdRef.current = id
       } catch (err) {
         console.error('Failed to fetch messages:', err)

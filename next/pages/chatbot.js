@@ -2,23 +2,43 @@ import {
   Flex,
   HStack,
   Stack,
-  Box
+  Box,
+  Text
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
+import Display from "../components/atoms/Text/Display";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
+
+function getGreetingFirstNameFromCookie() {
+  try {
+    const raw = cookies.get("userBD");
+    if (!raw) return null;
+    const user = JSON.parse(raw);
+    const name = user?.firstName;
+    return name || null;
+  } catch { 
+    return null;
+  }
+}
 
 function ChatbotContent() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
+  const normalizedThreadId = Array.isArray(threadIdFromUrl)
+    ? threadIdFromUrl[0]
+    : threadIdFromUrl;
   const [value, setValue] = useState("");
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const skipFetchRef = useRef(false);
+
+  const greetingFirstName = useMemo(() => getGreetingFirstNameFromCookie(), []);
   const {
     messages,
     isLoading,
@@ -28,7 +48,7 @@ function ChatbotContent() {
     fetchThreadMessages,
     sendFeedback,
     resetChat
-  } = useChatbot(threadIdFromUrl, {
+  } = useChatbot(normalizedThreadId ?? null, {
     onThreadCreated: (id) => {
       router.replace({
         pathname: router.pathname,
@@ -38,14 +58,14 @@ function ChatbotContent() {
   });
 
   useEffect(() => {
-    if (threadIdFromUrl && threadIdFromUrl !== threadId) {
+    if (normalizedThreadId && normalizedThreadId !== threadId) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
         return;
       }
-      fetchThreadMessages(threadIdFromUrl);
+      fetchThreadMessages(normalizedThreadId);
     }
-  }, [threadIdFromUrl, threadId, fetchThreadMessages]);
+  }, [normalizedThreadId, threadId, fetchThreadMessages]);
 
   useEffect(() => {
     const draftKey = `chatbot_draft_${threadId || 'new'}`;
@@ -89,12 +109,20 @@ function ChatbotContent() {
     }, undefined, { shallow: true });
   }, [resetChat, router]);
 
+  const showNewChatGreeting = !normalizedThreadId && messages.length === 0;
+
+  const searchField = (
+    <Search
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onSend={handleSend}
+      isLoading={isLoading}
+      isGenerating={isGenerating}
+    />
+  );
+
   return (
-    <HStack
-      width="100%"
-      minHeight="100vh"
-      spacing={0}
-    >
+    <HStack width="100%" minHeight="100vh" spacing={0}>
       <Head>
         <title>Chatbot - Basedosdados</title>
         <meta
@@ -115,9 +143,9 @@ function ChatbotContent() {
         height="100%"
         display="flex"
       >
-        <Sidebar 
-          onNewChat={handleNewChat} 
-          currentThreadId={threadIdFromUrl}
+        <Sidebar
+          onNewChat={handleNewChat}
+          currentThreadId={normalizedThreadId}
           isGenerating={isGenerating}
         />
         <Flex
@@ -127,7 +155,7 @@ function ChatbotContent() {
           padding="24px"
           overflow="hidden"
           justifyContent="center"
-          alignItems="center"
+          alignItems="stretch"
           position="relative"
         >
           <Stack
@@ -136,30 +164,55 @@ function ChatbotContent() {
             maxWidth="1440px"
             boxSizing="border-box"
             spacing={0}
-            justify="center"
+            flex={1}
+            minHeight={0}
           >
-            <Box flex={1} overflow="hidden" width="100%">
-              <ChatWindow
-                messages={messages}
-                onFeedback={sendFeedback}
-                scrollTrigger={scrollTrigger}
-              />
-            </Box>
-
-            <Box width="100%" paddingTop="24px">
-              <Search
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                onSend={handleSend}
-                isLoading={isLoading}
-                isGenerating={isGenerating}
-              />
-            </Box>
+            {showNewChatGreeting ? (
+              <Flex
+                flex={1}
+                width="100%"
+                minHeight={0}
+                direction="column"
+                align="center"
+                justify="center"
+                paddingX={{ base: "16px", md: "32px" }}
+                gap={{ base: "24px", md: "32px" }}
+              >
+                <Display as="h2" typography="small" textAlign="center">
+                  Olá,
+                  <Text
+                    as="span"
+                    textTransform="capitalize"
+                    marginLeft="8px"
+                  >
+                    {greetingFirstName
+                      ? greetingFirstName
+                      : "Como posso ajudar você hoje?"}
+                  </Text>
+                </Display>
+                <Box width="100%" flexShrink={0}>
+                  {searchField}
+                </Box>
+              </Flex>
+            ) : (
+              <>
+                <Box flex={1} overflow="hidden" width="100%" minHeight={0}>
+                  <ChatWindow
+                    messages={messages}
+                    onFeedback={sendFeedback}
+                    scrollTrigger={scrollTrigger}
+                  />
+                </Box>
+                <Box width="100%" paddingTop="24px" flexShrink={0}>
+                  {searchField}
+                </Box>
+              </>
+            )}
           </Stack>
         </Flex>
       </HStack>
     </HStack>
-  )
+  );
 }
 
 export default function Chatbot() {
@@ -167,5 +220,5 @@ export default function Chatbot() {
     <ChatbotProvider>
       <ChatbotContent />
     </ChatbotProvider>
-  )
+  );
 }
