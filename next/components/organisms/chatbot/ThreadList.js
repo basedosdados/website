@@ -178,20 +178,21 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
           <AccordionButton
             padding="8px"
             cursor={isSidebarOpen ? "pointer" : "default"}
-            _hover={{ backgroundColor: "transparent" }}
-            _focus={{ boxShadow: "none" }}
+            _hover={{ backgroundColor: "transparent"}}
+            _focus={{ boxShadow: "none"}}
+            color="#252A32"
             display="flex"
             justifyContent="space-between"
             width="100%"
             pointerEvents={isSidebarOpen ? "auto" : "none"}
           >
             <BodyText
-              typography="small"
               color="currentColor"
+              fontSize="12px"
+              lineHeight="18px"
               whiteSpace="nowrap"
               height="18px"
-              lineHeight="18px"
-              opacity={isSidebarOpen ? 1 : 0}
+              opacity={isSidebarOpen ? 0.9 : 0}
               transition="opacity 0.2s ease, transform 0.2s ease"
               transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
             >
@@ -238,7 +239,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             {!error && (
               <VStack
                 align="stretch"
-                spacing="0"
+                spacing="1px"
                 overflowY="auto"
                 maxHeight="100%"
               >
@@ -250,10 +251,9 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   key={thread.id}
                   display="flex"
                   alignItems="center"
-                  justifyContent="space-between"
                   padding="8px"
                   borderRadius="8px"
-                  gap={isSidebarOpen ? "4px" : "0"}
+                  gap={isSidebarOpen ? "8px" : "0"}
                   onClick={() => handleSelectThread(thread)}
                   backgroundColor={isSidebarOpen && currentThreadId === thread.id ? "#EEEEEE" : "transparent"}
                   pointerEvents={isSidebarOpen && !isGenerating ? "auto" : "none"}
@@ -265,6 +265,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                 >
                   <BodyText
                     typography="small"
+                    flex="1"
+                    minWidth="0"
                     color={currentThreadId === thread.id ? "#2B8C4D" : "currentColor"}
                     whiteSpace="nowrap"
                     overflow="hidden"
@@ -278,22 +280,28 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                     {thread.title}
                   </BodyText>
                   {isSidebarOpen && (
-                    <TrashIcon
-                      position="absolute"
-                      top="8px"
-                      right="8px"
-                      display="none"
-                      _groupHover={{ display: "block" }}
+                    <Box
+                      flexShrink={0}
                       width="18px"
                       height="18px"
-                      fill="#ACAEB1"
-                      cursor="pointer"
-                      onClick={(e) => handleDeleteClick(e, thread)}
-                      _hover={{
-                        color: "#BF3434",
-                        fill: "#BF3434",
-                      }}
-                    />
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      visibility="hidden"
+                      _groupHover={{ visibility: "visible" }}
+                    >
+                      <TrashIcon
+                        width="18px"
+                        height="18px"
+                        fill="#ACAEB1"
+                        cursor="pointer"
+                        onClick={(e) => handleDeleteClick(e, thread)}
+                        _hover={{
+                          color: "#BF3434",
+                          fill: "#BF3434",
+                        }}
+                      />
+                    </Box>
                   )}
                 </Box>
               ))}

@@ -216,8 +216,8 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         }
 
         const title = firstMessage
-          ? firstMessage.length > 30
-            ? `${firstMessage.substring(0, 30)}...`
+          ? firstMessage.length > 50
+            ? `${firstMessage.substring(0, 50)}`
             : firstMessage
           : 'Nova conversa'
 
