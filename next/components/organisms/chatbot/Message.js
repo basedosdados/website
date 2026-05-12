@@ -19,7 +19,8 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { keyframes } from "@emotion/react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import "highlight.js/styles/github.css";
@@ -38,6 +39,11 @@ import CrossIcon from "../../../public/img/icons/crossIcon";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
+
+const pensandoTextShimmer = keyframes`
+  0%, 100% { color: #6B7280; }
+  50% { color: #252A32; }
+`;
 
 function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
   const code = String(children).replace(/\n$/, "");
@@ -69,6 +75,10 @@ function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
       backgroundColor="#F9FAFB"
       overflow="hidden"
       border="1px solid #E5E7EB"
+      width="100%"
+      maxW="100%"
+      minW={0}
+      alignSelf="stretch"
     >
       <Box
         cursor="pointer"
@@ -93,16 +103,24 @@ function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
 
       <Box
         as="pre"
-        display="flex"
-        justifyContent="space-between"
+        display="block"
         width="100%"
+        maxW="100%"
+        minW={0}
         maxHeight="70vh"
         overflow="auto"
         fontSize="14px"
         backgroundColor="#F9FAFB"
+        margin={0}
+        padding="12px 40px 12px 12px"
+        boxSizing="border-box"
       >
         <Box
           as="code"
+          display="block"
+          width="max-content"
+          minW="100%"
+          boxSizing="border-box"
           className={`hljs hljs-chatbot language-${language}`}
           color="#1F2937"
           dangerouslySetInnerHTML={{ __html: highlighted.value }}
@@ -115,6 +133,11 @@ function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
 const componentsMk = {
   p: ({ children }) => (
     <BodyText as="p" color="#252A32" marginBottom="4px">
+      {children}
+    </BodyText>
+  ),
+  a: ({ children, href }) => (
+    <BodyText as="a" color="#0068C5" href={href} target="_blank" rel="noopener noreferrer">
       {children}
     </BodyText>
   ),
@@ -204,11 +227,87 @@ const componentsMk = {
   ),
 }
 
+function formatToolOutputText(output) {
+  if (!output) return "";
+  const toolResult = output.content ?? output.output ?? output.result;
+  if (typeof toolResult === "string") return toolResult;
+  if (toolResult != null) return JSON.stringify(toolResult, null, 2);
+  return "";
+}
+
+function buildToolSteps(toolCalls) {
+  if (!Array.isArray(toolCalls) || toolCalls.length === 0) return [];
+
+  const outputByCallId = new Map();
+  for (const ev of toolCalls) {
+    if (!ev || typeof ev !== "object" || ev.type !== "tool_output") continue;
+    if (!Array.isArray(ev.tool_outputs)) continue;
+    for (const o of ev.tool_outputs) {
+      if (o && o.tool_call_id != null) outputByCallId.set(o.tool_call_id, o);
+    }
+  }
+
+  const steps = [];
+  const consumedOutputIds = new Set();
+
+  for (const ev of toolCalls) {
+    if (!ev || typeof ev !== "object" || ev.type !== "tool_call") continue;
+
+    if (typeof ev.content === "string" && ev.content.trim()) {
+      steps.push({ kind: "reasoning", markdown: ev.content });
+    }
+
+    const calls = Array.isArray(ev.tool_calls) ? ev.tool_calls : [];
+    for (const call of calls) {
+      if (!call || call.id == null) continue;
+      const output = outputByCallId.get(call.id) ?? null;
+      if (output) consumedOutputIds.add(call.id);
+      steps.push({ kind: "tool", call, output });
+    }
+  }
+
+  for (const [callId, output] of outputByCallId) {
+    if (consumedOutputIds.has(callId) || !output) continue;
+    if (!formatToolOutputText(output)) continue;
+    steps.push({ kind: "orphan_output", callId, output });
+  }
+
+  return steps;
+}
+
 function Message({ message, onFeedback }) {
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(null);
   const [isThinkingOpen, setIsThinkingOpen] = useState(false);
   const toast = useToast();
+
+  const toolSteps = useMemo(
+    () => buildToolSteps(message.toolCalls),
+    [message.toolCalls]
+  );
+
+  const showThinkingSection =
+    !isUser && !message.isError && toolSteps.length > 0;
+
+  const showPensando =
+    !isUser &&
+    message.isLoading &&
+    !message.isError &&
+    !(message.content || "").trim() &&
+    toolSteps.length === 0;
+
+  const hasAutoOpenedThinkingRef = useRef(false);
+
+  useEffect(() => {
+    if (!message.isLoading) {
+      hasAutoOpenedThinkingRef.current = false;
+      return;
+    }
+    if (toolSteps.length > 0 && !hasAutoOpenedThinkingRef.current) {
+      setIsThinkingOpen(true);
+      hasAutoOpenedThinkingRef.current = true;
+    }
+  }, [message.isLoading, toolSteps.length]);
 
   const handleFeedback = async (rating) => {
     if (onFeedback) {
@@ -256,7 +355,7 @@ function Message({ message, onFeedback }) {
         backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
         color="#000"
       >
-        {!isUser && !message.isLoading && message.toolCalls && message.toolCalls.length > 0 && (
+        {showThinkingSection && (
           <VStack
             spacing={0}
             align="stretch"
@@ -289,76 +388,75 @@ function Message({ message, onFeedback }) {
               />
             </Box>
             <Collapse in={isThinkingOpen} animateOpacity>
-              <VStack spacing="12px" align="stretch" marginTop="16px">
-                {message.toolCalls.map((toolCall, index) => (
-                  <Box 
-                    key={index} 
-                    padding="12px" 
+              <VStack spacing="12px" align="stretch" marginTop="16px" width="100%">
+                {toolSteps.map((step, index) => (
+                  <Box
+                    key={
+                      step.kind === "tool"
+                        ? String(step.call.id)
+                        : step.kind === "orphan_output"
+                          ? `orphan-${String(step.callId)}`
+                          : `reasoning-${index}`
+                    }
+                    padding="12px"
                     borderRadius="12px"
                     border="1px solid #E5E7EB"
+                    width="100%"
+                    maxW="100%"
+                    minW={0}
                   >
-                    {toolCall.type === "tool_call" ? (
-                      <VStack align="stretch" spacing="12px">
-                        {toolCall.content && (
-                          <Box className="markdown-body" fontSize="14px">
-                            <ReactMarkdown
-                              remarkPlugins={[remarkGfm]}
-                              components={componentsMk}
-                            >
-                              {toolCall.content}
-                            </ReactMarkdown>
-                          </Box>
-                        )}
-                        {toolCall.tool_calls?.map((call, idx) => (
-                          <VStack key={idx} align="stretch" spacing="4px">
-                            <BodyText fontWeight="600" color="#374151">
-                              Executando ferramenta: <CodeBlock inline language="sql">{call.name}</CodeBlock>
-                            </BodyText>
-                            <BodyText typography="small" fontWeight="600" color="#6B7280">
-                              Solicitação:
-                            </BodyText>
-                            <CodeBlock 
-                              language="json" 
-                              marginY="8px"
-                            >
-                              {JSON.stringify(call.args, null, 2)}
-                            </CodeBlock>
-                          </VStack>
-                        ))}
-                      </VStack>
-                    ) : toolCall.type === "tool_output" ? (
-                      <VStack align="stretch" spacing="12px">
-                        {toolCall.tool_outputs?.map((output, idx) => (
-                          <VStack key={idx} align="stretch" spacing="4px">
+                    {step.kind === "reasoning" ? (
+                      <Box
+                        className="markdown-body"
+                        fontSize="14px"
+                        width="100%"
+                        minW={0}
+                      >
+                        <ReactMarkdown
+                          remarkPlugins={[remarkGfm]}
+                          components={componentsMk}
+                        >
+                          {step.markdown}
+                        </ReactMarkdown>
+                      </Box>
+                    ) : step.kind === "tool" ? (
+                      <VStack align="stretch" spacing="12px" width="100%" minW={0}>
+                        <BodyText fontWeight="600" color="#374151">
+                          Ferramenta:{" "}
+                          <CodeBlock inline language="sql">
+                            {step.call.name ?? "—"}
+                          </CodeBlock>
+                        </BodyText>
+                        <VStack align="stretch" spacing="4px" width="100%" minW={0}>
+                          <BodyText typography="small" fontWeight="600" color="#6B7280">
+                            Solicitação:
+                          </BodyText>
+                          <CodeBlock language="json" marginY="8px">
+                            {'streamArgsJson' in step.call
+                              ? step.call.streamArgsJson
+                              : JSON.stringify(step.call.args, null, 2)}
+                          </CodeBlock>
+                        </VStack>
+                        {step.output ? (
+                          <VStack align="stretch" spacing="4px" width="100%" minW={0}>
                             <BodyText typography="small" fontWeight="600" color="#6B7280">
                               Resultado:
                             </BodyText>
-                            <CodeBlock 
-                              language="json" 
-                              marginY="8px"
-                            >
-                              {typeof output.output === 'string' ? output.output : JSON.stringify(output.output, null, 2)}
+                            <CodeBlock language="json" marginY="8px">
+                              {formatToolOutputText(step.output)}
                             </CodeBlock>
                           </VStack>
-                        ))}
+                        ) : null}
                       </VStack>
                     ) : (
-                      <>
-                        <BodyText 
-                          fontWeight="600" 
-                          color="#374151" 
-                          marginBottom="8px"
-                          textTransform="capitalize"
-                        >
-                          {toolCall.type.replace(/_/g, " ")}
+                      <VStack align="stretch" spacing="4px" width="100%" minW={0}>
+                        <BodyText typography="small" fontWeight="600" color="#6B7280">
+                          Resultado:
                         </BodyText>
-                        <CodeBlock 
-                          language="json" 
-                          marginY="8px"
-                        >
-                          {JSON.stringify(toolCall, null, 2)}
+                        <CodeBlock language="json" marginY="8px">
+                          {formatToolOutputText(step.output)}
                         </CodeBlock>
-                      </>
+                      </VStack>
                     )}
                   </Box>
                 ))}
@@ -366,6 +464,20 @@ function Message({ message, onFeedback }) {
             </Collapse>
             <Divider borderColor="#DEDFE0" marginTop="16px"/>
           </VStack>
+        )}
+
+        {showPensando && (
+          <HStack spacing="12px" align="center" marginBottom="16px" width="100%">
+            <Text
+              fontFamily="Roboto"
+              fontSize="16px"
+              fontWeight="500"
+              lineHeight="24px"
+              animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
+            >
+              Pensando...
+            </Text>
+          </HStack>
         )}
 
         {isUser ? (

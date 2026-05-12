@@ -2,6 +2,7 @@ import axios from 'axios'
 import cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import { useChatbotContext } from '../context/ChatbotContext'
 import useChatbotAuth from './useChatbotAuth'
 
@@ -20,6 +21,80 @@ function sortMessagesChronologically(list) {
     if (ta == null && tb != null) return 1
     return String(a.id).localeCompare(String(b.id), undefined, { numeric: true })
   })
+}
+
+function patchToolCallEvent(msg, toolCallsIndex, patch) {
+  const toolCalls = [...(msg.toolCalls || [])]
+  const prevEv = toolCalls[toolCallsIndex]
+  if (!prevEv) return msg
+
+  if (patch.kind === 'callContent') {
+    toolCalls[toolCallsIndex] = { ...prevEv, content: patch.text }
+    return { ...msg, toolCalls }
+  }
+
+  if (patch.kind === 'callArgsJson') {
+    const list = [...(prevEv.tool_calls || [])]
+    const i = patch.callIndex
+    const call = list[i]
+    if (!call) return { ...msg, toolCalls }
+    list[i] = { ...call, streamArgsJson: patch.text }
+    toolCalls[toolCallsIndex] = { ...prevEv, tool_calls: list }
+    return { ...msg, toolCalls }
+  }
+
+  if (patch.kind === 'callArgsJsonFinalize') {
+    const list = [...(prevEv.tool_calls || [])]
+    const i = patch.callIndex
+    const call = list[i]
+    if (!call) return { ...msg, toolCalls }
+    const { streamArgsJson: _drop, ...rest } = call
+    list[i] = rest
+    toolCalls[toolCallsIndex] = { ...prevEv, tool_calls: list }
+    return { ...msg, toolCalls }
+  }
+
+  if (patch.kind === 'outputContent') {
+    const list = [...(prevEv.tool_outputs || [])]
+    const i = patch.outputIndex
+    const row = list[i]
+    if (!row) return { ...msg, toolCalls }
+    list[i] = { ...row, content: patch.text }
+    toolCalls[toolCallsIndex] = { ...prevEv, tool_outputs: list }
+    return { ...msg, toolCalls }
+  }
+
+  return msg
+}
+
+function stripForStreamingToolCall(data) {
+  return {
+    ...data,
+    type: 'tool_call',
+    content: '',
+    tool_calls: (data.tool_calls || []).map(c => ({ ...c, streamArgsJson: '' }))
+  }
+}
+
+function stripForStreamingToolOutput(data) {
+  return {
+    ...data,
+    type: 'tool_output',
+    tool_outputs: (data.tool_outputs || []).map(o => ({ ...o, content: '' }))
+  }
+}
+
+function formatStreamErrorDetails(data) {
+  const ed = data?.error_details
+  if (ed == null) return ''
+  if (typeof ed === 'string') return ed
+  if (typeof ed?.message === 'string') return ed.message
+  if (typeof ed?.detail === 'string') return ed.detail
+  try {
+    return JSON.stringify(ed, null, 2)
+  } catch {
+    return String(ed)
+  }
 }
 
 export default function useChatbot(initialThreadId = null, options = {}) {
@@ -47,6 +122,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const isTypingRef = useRef(false)
   const currentBotMessageIdRef = useRef(null)
   const animationFrameRef = useRef(null)
+  const toolStreamQueueRef = useRef([])
+  const toolStreamRafRef = useRef(null)
+  const toolStreamPumpRef = useRef(null)
 
   const { getAccessToken } = useChatbotAuth()
   const { refetch: refetchThreads } = useChatbotContext()
@@ -252,6 +330,124 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     [processQueue]
   )
 
+  const cancelToolStream = useCallback(() => {
+    toolStreamQueueRef.current = []
+    if (toolStreamRafRef.current != null) {
+      cancelAnimationFrame(toolStreamRafRef.current)
+      toolStreamRafRef.current = null
+    }
+  }, [])
+
+  const ensureToolStreamPump = useCallback(() => {
+    if (toolStreamRafRef.current != null) return
+    toolStreamRafRef.current = requestAnimationFrame(() => {
+      toolStreamPumpRef.current?.()
+    })
+  }, [])
+
+  const toolStreamPump = useCallback(() => {
+    const queue = toolStreamQueueRef.current
+    const job = queue[0]
+    if (!job) {
+      toolStreamRafRef.current = null
+      return
+    }
+
+    const nextPos = Math.min((job.pos || 0) + 12, job.fullText.length)
+    const slice = job.fullText.slice(0, nextPos)
+    job.pos = nextPos
+    const isDone = nextPos >= job.fullText.length
+
+    if (job.patchKind === 'callArgsJson') {
+      setMessages(prev =>
+        prev.map(msg => {
+          if (msg.id !== job.botMessageId) return msg
+          let next = patchToolCallEvent(msg, job.toolCallsIndex, {
+            kind: 'callArgsJson',
+            callIndex: job.callIndex,
+            text: slice
+          })
+          if (isDone) {
+            next = patchToolCallEvent(next, job.toolCallsIndex, {
+              kind: 'callArgsJsonFinalize',
+              callIndex: job.callIndex
+            })
+          }
+          return next
+        })
+      )
+    } else {
+      const patch =
+        job.patchKind === 'callContent'
+          ? { kind: 'callContent', text: slice }
+          : { kind: 'outputContent', outputIndex: job.outputIndex, text: slice }
+      setMessages(prev =>
+        prev.map(msg => {
+          if (msg.id !== job.botMessageId) return msg
+          return patchToolCallEvent(msg, job.toolCallsIndex, patch)
+        })
+      )
+    }
+
+    if (isDone) queue.shift()
+
+    if (toolStreamQueueRef.current.length > 0) {
+      toolStreamRafRef.current = requestAnimationFrame(() => {
+        toolStreamPumpRef.current?.()
+      })
+    } else {
+      toolStreamRafRef.current = null
+    }
+  }, [setMessages])
+
+  toolStreamPumpRef.current = toolStreamPump
+
+  const scheduleToolStreamForEvent = useCallback(
+    (botMessageId, toolCallsIndex, eventType, data) => {
+      const q = toolStreamQueueRef.current
+      if (eventType === 'tool_call') {
+        const content = data.content ?? ''
+        if (content.length > 0) {
+          q.push({
+            botMessageId,
+            toolCallsIndex,
+            patchKind: 'callContent',
+            fullText: content,
+            pos: 0
+          })
+        }
+        const calls = data.tool_calls || []
+        for (let i = 0; i < calls.length; i++) {
+          q.push({
+            botMessageId,
+            toolCallsIndex,
+            patchKind: 'callArgsJson',
+            callIndex: i,
+            fullText: JSON.stringify(calls[i]?.args ?? {}, null, 2),
+            pos: 0
+          })
+        }
+      } else if (eventType === 'tool_output') {
+        const outs = data.tool_outputs || []
+        for (let i = 0; i < outs.length; i++) {
+          const raw = outs[i]?.content ?? outs[i]?.output ?? outs[i]?.result
+          const text =
+            typeof raw === 'string' ? raw : raw != null ? JSON.stringify(raw, null, 2) : ''
+          q.push({
+            botMessageId,
+            toolCallsIndex,
+            patchKind: 'outputContent',
+            outputIndex: i,
+            fullText: text,
+            pos: 0
+          })
+        }
+      }
+      ensureToolStreamPump()
+    },
+    [ensureToolStreamPump]
+  )
+
   const sendMessage = useCallback(
     async content => {
       if (abortControllerRef.current) abortControllerRef.current.abort()
@@ -261,6 +457,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       setIsLoading(true)
       setIsGenerating(true)
       charQueueRef.current = []
+      cancelToolStream()
       let currentThreadId = threadId
 
       const userMessage = {
@@ -356,63 +553,65 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             if (!line.trim()) continue
             try {
               const event = JSON.parse(line)
-
-              switch (event.type) {
-                case 'tool_output':
-                case 'tool_call':
-                  setMessages(prev =>
-                    prev.map(msg =>
-                      msg.id === botMessageId
-                        ? {
-                            ...msg,
-                            toolCalls: [
-                              ...(msg.toolCalls || []),
-                              { ...event.data, type: event.type }
-                            ]
-                          }
-                        : msg
+              flushSync(() => {
+                switch (event.type) {
+                  case 'tool_output':
+                  case 'tool_call': {
+                    const payload = event.data || {}
+                    setMessages(prev =>
+                      prev.map(msg => {
+                        if (msg.id !== botMessageId) return msg
+                        const idx = (msg.toolCalls || []).length
+                        const partial =
+                          event.type === 'tool_call'
+                            ? stripForStreamingToolCall(payload)
+                            : stripForStreamingToolOutput(payload)
+                        scheduleToolStreamForEvent(botMessageId, idx, event.type, payload)
+                        return {
+                          ...msg,
+                          toolCalls: [...(msg.toolCalls || []), partial]
+                        }
+                      })
                     )
-                  )
-                  break
-
-                case 'final_answer':
-                  if (event.data?.content) {
-                    addToQueue(event.data.content)
+                    break
                   }
-                  break
 
-                case 'error':
-                  setMessages(prev =>
-                    prev.map(msg =>
-                      msg.id === botMessageId
-                        ? {
-                            ...msg,
-                            isError: true,
-                            isLoading: false,
-                            content: event.data?.error_details?.message
-                          }
-                        : msg
-                    )
-                  )
-                  break
+                  case 'final_answer':
+                    if (event.data?.content) {
+                      addToQueue(event.data.content)
+                    }
+                    break
 
-                case 'complete':
-                  const completeId =
-                    event.data?.message_id || event.data?.id || event.data?.run_id || botMessageId
-                  currentBotMessageIdRef.current = completeId
-                  setMessages(prev =>
-                    prev.map(msg =>
-                      msg.id === botMessageId
-                        ? {
-                            ...msg,
-                            id: completeId,
-                            isLoading: false
-                          }
-                        : msg
+                  case 'error': {
+                    const errText = formatStreamErrorDetails(event.data)
+                    if (errText) {
+                      addToQueue(errText)
+                    }
+                    break
+                  }
+
+                  case 'complete': {
+                    const completeId =
+                      event.data?.message_id || event.data?.id || event.data?.run_id || botMessageId
+                    for (const job of toolStreamQueueRef.current) {
+                      if (job.botMessageId === botMessageId) job.botMessageId = completeId
+                    }
+                    currentBotMessageIdRef.current = completeId
+                    setMessages(prev =>
+                      prev.map(msg =>
+                        msg.id === botMessageId
+                          ? {
+                              ...msg,
+                              id: completeId,
+                              isLoading: false
+                            }
+                          : msg
+                      )
                     )
-                  )
-                  break
-              }
+                    break
+                  }
+                }
+              })
             } catch (e) {
               console.error('Falha ao interpretar linha do stream', { line, err: e })
             }
@@ -421,6 +620,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           if (done) break
         }
       } catch (err) {
+        cancelToolStream()
         if (err.name === 'AbortError') return
         console.error(err)
         setMessages(prev =>
@@ -445,7 +645,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         )
       }
     },
-    [threadId, createThread, getAccessToken, addToQueue, handleAuthError]
+    [threadId, createThread, getAccessToken, addToQueue, handleAuthError, cancelToolStream, scheduleToolStreamForEvent]
   )
 
   const fetchThreadMessagesStable = useCallback(
@@ -469,6 +669,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
+      }
+      if (toolStreamRafRef.current) {
+        cancelAnimationFrame(toolStreamRafRef.current)
       }
     }
   }, [])
