@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -65,27 +65,27 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent padding="24px">
-        {locale === 'en' ? (
+        {locale === "en" ? (
           <DBLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
-            if(key === "Button") {
-              return elm.map(b => 
+            if (key === "Button") {
+              return elm.map((b) => (
                 <Button
                   key={b.name}
                   backgroundColor={b.color}
@@ -97,7 +97,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
                 >
                   {b.name}
                 </Button>
-              )
+              ));
             }
             if (typeof elm === "object") {
               return (
@@ -105,7 +105,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
                   <AccordionItem borderWidth="0 !important">
                     <AccordionButton
                       padding={0}
-                      _hover={{background: "none"}}
+                      _hover={{ background: "none" }}
                       justifyContent="space-between"
                     >
                       <Text
@@ -119,33 +119,35 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
                       </Text>
                       <AccordionIcon />
                     </AccordionButton>
-                  <AccordionPanel
-                    display="flex"
-                    flexDirection="column"
-                    gridGap="13px"
-                    padding="16px 0 2px"
-                  >
-                    {elm.map((c) => {
-                      if(c.name === undefined) return null
+                    <AccordionPanel
+                      display="flex"
+                      flexDirection="column"
+                      gridGap="13px"
+                      padding="16px 0 2px"
+                    >
+                      {elm.map((c) => {
+                        if (c.name === undefined) return null;
 
-                      return (
-                        <Link
-                          key={c.name}
-                          display="flex"
-                          gap="16px"
-                          fontSize="16px"
-                          fontFamily="Roboto"
-                          letterSpacing="0.1px"
-                          fontWeight="400"
-                          href={c.href}
-                          onClick={() => handleMenuLinkClick(c.href)}
-                        >{c.icon && c.icon} {c.name}</Link>
-                      )
-                    })}
-                  </AccordionPanel>
+                        return (
+                          <Link
+                            key={c.name}
+                            display="flex"
+                            gap="16px"
+                            fontSize="16px"
+                            fontFamily="Roboto"
+                            letterSpacing="0.1px"
+                            fontWeight="400"
+                            href={c.href}
+                            onClick={() => handleMenuLinkClick(c.href)}
+                          >
+                            {c.icon && c.icon} {c.name}
+                          </Link>
+                        );
+                      })}
+                    </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
-              )
+              );
             } else {
               return (
                 <Link
@@ -156,9 +158,10 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
                   fontWeight="400"
                   href={elm}
                   onClick={() => handleMenuLinkClick(elm)}
-                >{key}
+                >
+                  {key}
                 </Link>
-              )
+              );
             }
           })}
         </VStack>
@@ -181,16 +184,12 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
             fontSize="20px"
             fontFamily="Roboto"
             fontWeight="400"
-            href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+            href={hasChatbotAccess ? "/chatbot" : "/prices"}
             onClick={(e) => {
               onClose();
               if (hasChatbotAccess) {
                 e.preventDefault();
-                window.open(
-                  getChatbotStreamlitAppUrl(),
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                router.push("/chatbot");
                 triggerGAEvent("open_chatbot", "menu");
               }
             }}
@@ -217,24 +216,29 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess }) {
         {userData ? (
           <></>
         ) : (
-          <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
+          <Stack
+            spacing={0}
+            display={{ base: "flex", lg: "none" }}
+            marginTop="auto"
+            gap="16px"
+          >
             <Link
               href="/user/login"
               width="100%"
               onClick={() => {
-                if (typeof window !== 'undefined') {
-                  localStorage.setItem('previousPath', window.location.href)
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("previousPath", window.location.href);
                 }
               }}
             >
               <Button width="100%" justifyContent="center">
-                {t('enter', { ns: 'menu' })}
+                {t("enter", { ns: "menu" })}
               </Button>
             </Link>
 
             <Link href="/user/register" width="100%">
-              <Button isVariant  width="100%" justifyContent="center">
-                {t('register', { ns: 'menu' })}
+              <Button isVariant width="100%" justifyContent="center">
+                {t("register", { ns: "menu" })}
               </Button>
             </Link>
           </Stack>
@@ -364,16 +368,12 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                 gap="6px"
                 color="#71757A"
                 fontWeight="400"
-                href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+                href={hasChatbotAccess ? "/chatbot" : "/prices"}
                 onClick={(e) => {
                   onClose()
                   if (hasChatbotAccess) {
                     e.preventDefault()
-                    window.open(
-                      getChatbotStreamlitAppUrl(),
-                      "_blank",
-                      "noopener,noreferrer"
-                    )
+                    router.push("/chatbot")
                     triggerGAEvent("open_chatbot", "menu")
                   }
                 }}
@@ -949,11 +949,11 @@ function DesktopLinks({
           gap="8px"
           {...(hasChatbotAccess
             ? {
-                as: "a",
-                href: getChatbotStreamlitAppUrl(),
-                target: "_blank",
-                rel: "noopener noreferrer",
-                onClick: () => triggerGAEvent("open_chatbot", "menu"),
+                type: "button",
+                onClick: () => {
+                  triggerGAEvent("open_chatbot", "menu");
+                  router.push("/chatbot");
+                },
               }
             : {
                 type: "button",

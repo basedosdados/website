@@ -18,7 +18,9 @@ import {
   Tr,
   Th,
   Td,
+  Spinner,
 } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { keyframes } from "@emotion/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -304,7 +306,6 @@ function Message({ message, onFeedback }) {
       return;
     }
     if (toolSteps.length > 0 && !hasAutoOpenedThinkingRef.current) {
-      setIsThinkingOpen(true);
       hasAutoOpenedThinkingRef.current = true;
     }
   }, [message.isLoading, toolSteps.length]);
@@ -344,6 +345,8 @@ function Message({ message, onFeedback }) {
   return (
     <Flex
       width="100%"
+      maxWidth="760px"
+      margin="0 auto"
       justify={isUser ? "flex-end" : "flex-start"}
       paddingY="12px"
     >
@@ -356,39 +359,87 @@ function Message({ message, onFeedback }) {
         color="#000"
       >
         {showThinkingSection && (
-          <VStack
-            spacing={0}
-            align="stretch"
-            width="100%"
-            marginBottom="24px"
-          >
-            <Box
-              display="flex"
+          <VStack spacing={0} align="stretch" width="100%" marginBottom="24px">
+            <Flex
               cursor="pointer"
-              gap="20px"
-              justifyContent="space-between"
               alignItems="center"
-              padding="0 0 16px"
+              justifyContent="space-between"
+              gap="12px"
+              padding="12px 16px"
+              border="1px solid #E5E7EB"
+              borderRadius="12px"
+              width="100%"
+              minW={0}
               _hover={{
-                opacity: 0.9
+                opacity: 0.9,
               }}
               transition="opacity 0.2s ease"
               onClick={() => setIsThinkingOpen(!isThinkingOpen)}
             >
-              <LabelText typography="medium" color="#252A32" fontWeight="500">
-                Ver processo de pensamento
-              </LabelText>
-              <CrossIcon
-                alt={isThinkingOpen ? "ocultar processo" : "mostrar processo"}
+              <HStack
+                flex={1}
+                minWidth="0"
+                spacing="8px"
+                alignItems="center"
+              >
+                {message.isLoading ? (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexShrink={0}
+                    animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
+                  >
+                    <Spinner
+                      width="16px"
+                      height="16px"
+                      thickness="2px"
+                      color="currentColor"
+                    />
+                  </Box>
+                ) : (
+                  <Box
+                    as="span"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    flexShrink={0}
+                    color="#2B8C4D"
+                  >
+                    <CheckIcon width="16px" height="16px" />
+                  </Box>
+                )}
+                <LabelText
+                  typography="small"
+                  fontWeight="500"
+                  flex={1}
+                  minWidth="0"
+                  animation={
+                    message.isLoading
+                      ? `${pensandoTextShimmer} 2s ease-in-out infinite`
+                      : undefined
+                  }
+                >
+                  {message.isLoading
+                    ? "Consultando a Base dos Dados..."
+                    : "Concluído! Clique para ver os detalhes da consulta"}
+                </LabelText>
+              </HStack>
+              <ChevronDownIcon
+                boxSize="18px"
+                flexShrink={0}
                 color="#252A32"
-                transform={!isThinkingOpen && "rotate(45deg)"}
-                width="18px"
-                height="18px"
+                transform={isThinkingOpen ? "rotate(-180deg)" : undefined}
                 transition="transform 0.2s ease"
               />
-            </Box>
+            </Flex>
             <Collapse in={isThinkingOpen} animateOpacity>
-              <VStack spacing="12px" align="stretch" marginTop="16px" width="100%">
+              <VStack
+                spacing="12px"
+                align="stretch"
+                marginTop="16px"
+                width="100%"
+              >
                 {toolSteps.map((step, index) => (
                   <Box
                     key={
@@ -420,26 +471,49 @@ function Message({ message, onFeedback }) {
                         </ReactMarkdown>
                       </Box>
                     ) : step.kind === "tool" ? (
-                      <VStack align="stretch" spacing="12px" width="100%" minW={0}>
+                      <VStack
+                        align="stretch"
+                        spacing="12px"
+                        width="100%"
+                        minW={0}
+                      >
                         <BodyText fontWeight="600" color="#374151">
                           Ferramenta:{" "}
                           <CodeBlock inline language="sql">
                             {step.call.name ?? "—"}
                           </CodeBlock>
                         </BodyText>
-                        <VStack align="stretch" spacing="4px" width="100%" minW={0}>
-                          <BodyText typography="small" fontWeight="600" color="#6B7280">
+                        <VStack
+                          align="stretch"
+                          spacing="4px"
+                          width="100%"
+                          minW={0}
+                        >
+                          <BodyText
+                            typography="small"
+                            fontWeight="600"
+                            color="#6B7280"
+                          >
                             Solicitação:
                           </BodyText>
                           <CodeBlock language="json" marginY="8px">
-                            {'streamArgsJson' in step.call
+                            {"streamArgsJson" in step.call
                               ? step.call.streamArgsJson
                               : JSON.stringify(step.call.args, null, 2)}
                           </CodeBlock>
                         </VStack>
                         {step.output ? (
-                          <VStack align="stretch" spacing="4px" width="100%" minW={0}>
-                            <BodyText typography="small" fontWeight="600" color="#6B7280">
+                          <VStack
+                            align="stretch"
+                            spacing="4px"
+                            width="100%"
+                            minW={0}
+                          >
+                            <BodyText
+                              typography="small"
+                              fontWeight="600"
+                              color="#6B7280"
+                            >
                               Resultado:
                             </BodyText>
                             <CodeBlock language="json" marginY="8px">
@@ -449,8 +523,17 @@ function Message({ message, onFeedback }) {
                         ) : null}
                       </VStack>
                     ) : (
-                      <VStack align="stretch" spacing="4px" width="100%" minW={0}>
-                        <BodyText typography="small" fontWeight="600" color="#6B7280">
+                      <VStack
+                        align="stretch"
+                        spacing="4px"
+                        width="100%"
+                        minW={0}
+                      >
+                        <BodyText
+                          typography="small"
+                          fontWeight="600"
+                          color="#6B7280"
+                        >
                           Resultado:
                         </BodyText>
                         <CodeBlock language="json" marginY="8px">
@@ -462,30 +545,28 @@ function Message({ message, onFeedback }) {
                 ))}
               </VStack>
             </Collapse>
-            <Divider borderColor="#DEDFE0" marginTop="16px"/>
+            <Divider borderColor="#DEDFE0" marginTop="16px" />
           </VStack>
         )}
 
         {showPensando && (
-          <HStack spacing="12px" align="center" marginBottom="16px" width="100%">
-            <Text
-              fontFamily="Roboto"
-              fontSize="16px"
+          <HStack
+            spacing="12px"
+            align="center"
+            marginBottom="16px"
+            width="100%"
+          >
+            <LabelText
               fontWeight="500"
-              lineHeight="24px"
               animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
             >
               Pensando...
-            </Text>
+            </LabelText>
           </HStack>
         )}
 
         {isUser ? (
-          <BodyText
-            whiteSpace="pre-wrap"
-          >
-            {message.content}
-          </BodyText>
+          <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
         ) : (
           <Box className="markdown-body" fontSize="16px">
             <ReactMarkdown
@@ -497,28 +578,32 @@ function Message({ message, onFeedback }) {
           </Box>
         )}
 
-        {!isUser && !message.isLoading && !message.isTyping && !message.isError && message.id && (
-          <HStack spacing="8px" marginTop="8px" justify="flex-end">
-            <Box 
-              cursor="pointer" 
-              onClick={() => handleFeedback(1)}
-              pointerEvents={feedback === 1 ? "none" : "auto"}
-              opacity={feedback === 1 ? 1 : 0.5}
-              _hover={{ opacity: 1 }}
-            >
-              <ThumbUpIcon />
-            </Box>
-            <Box  
-              cursor="pointer" 
-              onClick={() => handleFeedback(0)}
-              pointerEvents={feedback === 0 ? "none" : "auto"}
-              opacity={feedback === 0 ? 1 : 0.5}
-              _hover={{ opacity: 1 }}
-            >
-              <ThumbDownIcon />
-            </Box>
-          </HStack>
-        )}
+        {!isUser &&
+          !message.isLoading &&
+          !message.isTyping &&
+          !message.isError &&
+          message.id && (
+            <HStack spacing="8px" marginTop="8px" justify="flex-end">
+              <Box
+                cursor="pointer"
+                onClick={() => handleFeedback(1)}
+                pointerEvents={feedback === 1 ? "none" : "auto"}
+                opacity={feedback === 1 ? 1 : 0.5}
+                _hover={{ opacity: 1 }}
+              >
+                <ThumbUpIcon />
+              </Box>
+              <Box
+                cursor="pointer"
+                onClick={() => handleFeedback(0)}
+                pointerEvents={feedback === 0 ? "none" : "auto"}
+                opacity={feedback === 0 ? 1 : 0.5}
+                _hover={{ opacity: 1 }}
+              >
+                <ThumbDownIcon />
+              </Box>
+            </HStack>
+          )}
       </Box>
     </Flex>
   );

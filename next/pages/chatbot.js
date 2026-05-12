@@ -28,6 +28,25 @@ function getGreetingFirstNameFromCookie() {
   }
 }
 
+function clearAuthCookiesAndRedirectLogin(router) {
+  cookies.remove("userBD", { path: "/" });
+  cookies.remove("token", { path: "/" });
+  router.replace("/user/login");
+}
+
+function hasCompleteAuthCookies() {
+  const token = cookies.get("token");
+  const userRaw = cookies.get("userBD");
+  if (!token || !String(token).trim()) return false;
+  if (!userRaw || userRaw === "undefined") return false;
+  try {
+    JSON.parse(userRaw);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function ChatbotContent() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
@@ -39,6 +58,14 @@ function ChatbotContent() {
   const skipFetchRef = useRef(false);
 
   const greetingFirstName = useMemo(() => getGreetingFirstNameFromCookie(), []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!hasCompleteAuthCookies()) {
+      clearAuthCookiesAndRedirectLogin(router);
+    }
+  }, [router]);
+
   const {
     messages,
     isLoading,
@@ -118,6 +145,7 @@ function ChatbotContent() {
       onSend={handleSend}
       isLoading={isLoading}
       isGenerating={isGenerating}
+      showDisclaimer={!showNewChatGreeting}
     />
   );
 

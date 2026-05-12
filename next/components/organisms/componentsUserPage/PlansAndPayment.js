@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
+import { triggerGAEvent, hasBDProSubscription, hasChatbotSubscription } from "../../../utils";
 
 import {
   TitleTextForm,
@@ -1110,9 +1110,7 @@ export default function PlansAndPayment ({ userData }) {
               </Button>
               <Button
                 as="a"
-                href={getChatbotStreamlitAppUrl()}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/chatbot"
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
                   successCheckoutKindRef.current = null;
@@ -1652,9 +1650,7 @@ export default function PlansAndPayment ({ userData }) {
               >
                 <Button
                   as="a"
-                  href={getChatbotStreamlitAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="/chatbot"
                   onClick={() => {}}
                 >
                   {t("username.openChatbot")}
