@@ -61,7 +61,11 @@ export default function Search({ value, onChange, onSend, isLoading, isGeneratin
           onKeyDown={(e) => {
             if (!isLoading && !isGenerating) handleKeyDown(e);
           }}
-          placeholder={isLoading || isGenerating ? "Aguarde a resposta..." : "Faça sua pergunta!"}
+          placeholder={
+            isLoading || isGenerating
+              ? "Aguarde a resposta..."
+              : "Faça sua pergunta!"
+          }
           variant="unstyled"
           width="100%"
           minHeight="24px"
