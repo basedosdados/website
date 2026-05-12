@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useLayoutEffect, useCallback, useState } from 'react';
 import {
   Flex,
   VStack,
@@ -7,6 +7,9 @@ import {
 } from "@chakra-ui/react";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
+
+const useIsoLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export default function Search({
   value,
@@ -52,7 +55,7 @@ export default function Search({
     }
   }, []);
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 

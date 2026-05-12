@@ -5,7 +5,7 @@ import {
   Box,
   Text
 } from "@chakra-ui/react";
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import cookies from "js-cookie";
@@ -57,7 +57,11 @@ function ChatbotContent() {
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const skipFetchRef = useRef(false);
 
-  const greetingFirstName = useMemo(() => getGreetingFirstNameFromCookie(), []);
+  const [greetingFirstName, setGreetingFirstName] = useState(null);
+
+  useEffect(() => {
+    setGreetingFirstName(getGreetingFirstNameFromCookie());
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
