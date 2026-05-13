@@ -232,9 +232,81 @@ const componentsMk = {
 function formatToolOutputText(output) {
   if (!output) return "";
   const toolResult = output.content ?? output.output ?? output.result;
-  if (typeof toolResult === "string") return toolResult;
+  if (typeof toolResult === "string") {
+    const trimmed = toolResult.trim();
+    if (!trimmed) return toolResult;
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (parsed !== null && typeof parsed === "object") {
+        return JSON.stringify(parsed, null, 2);
+      }
+      return toolResult;
+    } catch {
+      return toolResult;
+    }
+  }
   if (toolResult != null) return JSON.stringify(toolResult, null, 2);
   return "";
+}
+
+function SolicitationArgsBlocks({ call }) {
+  const rawStream =
+    call &&
+    typeof call.streamArgsJson === "string" &&
+    call.streamArgsJson.trim() !== ""
+      ? call.streamArgsJson
+      : null;
+
+  let parsed = null;
+
+  if (rawStream != null) {
+    try {
+      parsed = JSON.parse(rawStream);
+    } catch {
+      return (
+        <CodeBlock language="json" marginY="8px">
+          {rawStream}
+        </CodeBlock>
+      );
+    }
+  } else {
+    parsed = call.args ?? {};
+  }
+
+  if (parsed == null || typeof parsed !== "object" || Array.isArray(parsed)) {
+    return (
+      <CodeBlock language="json" marginY="8px">
+        {JSON.stringify(parsed ?? {}, null, 2)}
+      </CodeBlock>
+    );
+  }
+
+  const sql =
+    typeof parsed.sql_query === "string" && parsed.sql_query.trim()
+      ? parsed.sql_query.trim()
+      : null;
+
+  if (sql) {
+    const { sql_query: _omitSql, ...rest } = parsed;
+    return (
+      <>
+        <CodeBlock language="sql" marginY="8px">
+          {sql}
+        </CodeBlock>
+        {Object.keys(rest).length > 0 ? (
+          <CodeBlock language="json" marginY="8px">
+            {JSON.stringify(rest, null, 2)}
+          </CodeBlock>
+        ) : null}
+      </>
+    );
+  }
+
+  return (
+    <CodeBlock language="json" marginY="8px">
+      {JSON.stringify(parsed, null, 2)}
+    </CodeBlock>
+  );
 }
 
 function buildToolSteps(toolCalls) {
@@ -359,15 +431,19 @@ function Message({ message, onFeedback }) {
         color="#000"
       >
         {showThinkingSection && (
-          <VStack spacing={0} align="stretch" width="100%" marginBottom="24px">
+          <Box
+            width="100%"
+            marginBottom="24px"
+            border="1px solid #E5E7EB"
+            borderRadius="12px"
+            overflow="hidden"
+          >
             <Flex
               cursor="pointer"
               alignItems="center"
               justifyContent="space-between"
               gap="12px"
               padding="12px 16px"
-              border="1px solid #E5E7EB"
-              borderRadius="12px"
               width="100%"
               minW={0}
               _hover={{
@@ -434,75 +510,55 @@ function Message({ message, onFeedback }) {
               />
             </Flex>
             <Collapse in={isThinkingOpen} animateOpacity>
-              <VStack
-                spacing="12px"
-                align="stretch"
-                marginTop="16px"
+              <Box
+                padding="12px 16px 16px"
+                borderTop="1px solid #E5E7EB"
                 width="100%"
               >
-                {toolSteps.map((step, index) => (
-                  <Box
-                    key={
-                      step.kind === "tool"
-                        ? String(step.call.id)
-                        : step.kind === "orphan_output"
-                          ? `orphan-${String(step.callId)}`
-                          : `reasoning-${index}`
-                    }
-                    padding="12px"
-                    borderRadius="12px"
-                    border="1px solid #E5E7EB"
-                    width="100%"
-                    maxW="100%"
-                    minW={0}
-                  >
-                    {step.kind === "reasoning" ? (
-                      <Box
-                        className="markdown-body"
-                        fontSize="14px"
-                        width="100%"
-                        minW={0}
-                      >
-                        <ReactMarkdown
-                          remarkPlugins={[remarkGfm]}
-                          components={componentsMk}
-                        >
-                          {step.markdown}
-                        </ReactMarkdown>
-                      </Box>
-                    ) : step.kind === "tool" ? (
-                      <VStack
-                        align="stretch"
-                        spacing="12px"
-                        width="100%"
-                        minW={0}
-                      >
-                        <BodyText fontWeight="600" color="#374151">
-                          Ferramenta:{" "}
-                          <CodeBlock inline language="sql">
-                            {step.call.name ?? "—"}
-                          </CodeBlock>
-                        </BodyText>
-                        <VStack
-                          align="stretch"
-                          spacing="4px"
+                <VStack spacing="12px" align="stretch" width="100%">
+                  {toolSteps.map((step, index) => (
+                    <Box
+                      key={
+                        step.kind === "tool"
+                          ? String(step.call.id)
+                          : step.kind === "orphan_output"
+                            ? `orphan-${String(step.callId)}`
+                            : `reasoning-${index}`
+                      }
+                      padding="12px"
+                      borderRadius="12px"
+                      border="1px solid #E5E7EB"
+                      width="100%"
+                      maxW="100%"
+                      minW={0}
+                    >
+                      {step.kind === "reasoning" ? (
+                        <Box
+                          className="markdown-body"
+                          fontSize="14px"
                           width="100%"
                           minW={0}
                         >
-                          <BodyText
-                            typography="small"
-                            fontWeight="600"
-                            color="#6B7280"
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={componentsMk}
                           >
-                            Solicitação:
+                            {step.markdown}
+                          </ReactMarkdown>
+                        </Box>
+                      ) : step.kind === "tool" ? (
+                        <VStack
+                          align="stretch"
+                          spacing="12px"
+                          width="100%"
+                          minW={0}
+                        >
+                          <BodyText fontWeight="600" color="#374151">
+                            Ferramenta:{" "}
+                            <CodeBlock inline language="sql">
+                              {step.call.name ?? "—"}
+                            </CodeBlock>
                           </BodyText>
-                          <CodeBlock language="json" marginY="8px">
-                            {"streamArgsJson" in step.call
-                              ? step.call.streamArgsJson
-                              : JSON.stringify(step.call.args, null, 2)}
-                          </CodeBlock>
-                        </VStack>
-                        {step.output ? (
                           <VStack
                             align="stretch"
                             spacing="4px"
@@ -514,39 +570,55 @@ function Message({ message, onFeedback }) {
                               fontWeight="600"
                               color="#6B7280"
                             >
-                              Resultado:
+                              Solicitação:
                             </BodyText>
-                            <CodeBlock language="json" marginY="8px">
-                              {formatToolOutputText(step.output)}
-                            </CodeBlock>
+                            <SolicitationArgsBlocks call={step.call} />
                           </VStack>
-                        ) : null}
-                      </VStack>
-                    ) : (
-                      <VStack
-                        align="stretch"
-                        spacing="4px"
-                        width="100%"
-                        minW={0}
-                      >
-                        <BodyText
-                          typography="small"
-                          fontWeight="600"
-                          color="#6B7280"
+                          {step.output ? (
+                            <VStack
+                              align="stretch"
+                              spacing="4px"
+                              width="100%"
+                              minW={0}
+                            >
+                              <BodyText
+                                typography="small"
+                                fontWeight="600"
+                                color="#6B7280"
+                              >
+                                Resultado:
+                              </BodyText>
+                              <CodeBlock language="json" marginY="8px">
+                                {formatToolOutputText(step.output)}
+                              </CodeBlock>
+                            </VStack>
+                          ) : null}
+                        </VStack>
+                      ) : (
+                        <VStack
+                          align="stretch"
+                          spacing="4px"
+                          width="100%"
+                          minW={0}
                         >
-                          Resultado:
-                        </BodyText>
-                        <CodeBlock language="json" marginY="8px">
-                          {formatToolOutputText(step.output)}
-                        </CodeBlock>
-                      </VStack>
-                    )}
-                  </Box>
-                ))}
-              </VStack>
+                          <BodyText
+                            typography="small"
+                            fontWeight="600"
+                            color="#6B7280"
+                          >
+                            Resultado:
+                          </BodyText>
+                          <CodeBlock language="json" marginY="8px">
+                            {formatToolOutputText(step.output)}
+                          </CodeBlock>
+                        </VStack>
+                      )}
+                    </Box>
+                  ))}
+                </VStack>
+              </Box>
             </Collapse>
-            <Divider borderColor="#DEDFE0" marginTop="16px" />
-          </VStack>
+          </Box>
         )}
 
         {showPensando && (
@@ -591,7 +663,7 @@ function Message({ message, onFeedback }) {
                 opacity={feedback === 1 ? 1 : 0.5}
                 _hover={{ opacity: 1 }}
               >
-                <ThumbUpIcon />
+                <ThumbUpIcon width="18px" height="18px" />
               </Box>
               <Box
                 cursor="pointer"
@@ -600,7 +672,7 @@ function Message({ message, onFeedback }) {
                 opacity={feedback === 0 ? 1 : 0.5}
                 _hover={{ opacity: 1 }}
               >
-                <ThumbDownIcon />
+                <ThumbDownIcon width="18px" height="18px" />
               </Box>
             </HStack>
           )}

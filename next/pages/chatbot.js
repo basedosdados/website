@@ -15,6 +15,7 @@ import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import Display from "../components/atoms/Text/Display";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
+import { hasChatbotSubscription } from "../utils";
 
 function getGreetingFirstNameFromCookie() {
   try {
@@ -47,6 +48,33 @@ function hasCompleteAuthCookies() {
   }
 }
 
+function ChatbotAccessGate({ children }) {
+  const router = useRouter();
+  const [canEnter, setCanEnter] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!hasCompleteAuthCookies()) {
+      clearAuthCookiesAndRedirectLogin(router);
+      return;
+    }
+    try {
+      const user = JSON.parse(cookies.get("userBD"));
+      if (!hasChatbotSubscription(user)) {
+        router.replace("/prices");
+        return;
+      }
+    } catch {
+      clearAuthCookiesAndRedirectLogin(router);
+      return;
+    }
+    setCanEnter(true);
+  }, [router]);
+
+  if (!canEnter) return null;
+  return children;
+}
+
 function ChatbotContent() {
   const router = useRouter();
   const { t: threadIdFromUrl } = router.query;
@@ -62,13 +90,6 @@ function ChatbotContent() {
   useEffect(() => {
     setGreetingFirstName(getGreetingFirstNameFromCookie());
   }, []);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!hasCompleteAuthCookies()) {
-      clearAuthCookiesAndRedirectLogin(router);
-    }
-  }, [router]);
 
   const {
     messages,
@@ -87,6 +108,15 @@ function ChatbotContent() {
       }, undefined, { shallow: true });
     }
   });
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const busy = isLoading || isGenerating;
+    document.body.style.cursor = busy ? "wait" : "";
+    return () => {
+      document.body.style.cursor = "";
+    };
+  }, [isLoading, isGenerating]);
 
   useEffect(() => {
     if (normalizedThreadId && normalizedThreadId !== threadId) {
@@ -249,8 +279,10 @@ function ChatbotContent() {
 
 export default function Chatbot() {
   return (
-    <ChatbotProvider>
-      <ChatbotContent />
-    </ChatbotProvider>
+    <ChatbotAccessGate>
+      <ChatbotProvider>
+        <ChatbotContent />
+      </ChatbotProvider>
+    </ChatbotAccessGate>
   );
 }

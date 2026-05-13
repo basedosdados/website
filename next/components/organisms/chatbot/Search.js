@@ -3,7 +3,9 @@ import {
   Flex,
   VStack,
   Box,
-  Textarea
+  Textarea,
+  Spinner,
+  HStack,
 } from "@chakra-ui/react";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
@@ -66,34 +68,73 @@ export default function Search({
     }
   };
 
+  const isBusy = isLoading || isGenerating;
+
   return (
-    <VStack
-      width="100%"
-      maxWidth="760px"
-      margin="auto auto 0"
-      spacing="24px"
-    >
+    <VStack width="100%" maxWidth="760px" margin="auto auto 0" spacing="24px">
       <Flex
         width="100%"
         borderRadius="14px"
         backgroundColor="#EEEEEE"
         padding="12px 16px"
-        alignItems={isMultiLine ? 'flex-end' : 'center'}
+        alignItems={isMultiLine ? "flex-end" : "center"}
         border="2px solid transparent !important"
-        _hover={{
-          border: "2px solid transparent !important",
-          backgroundColor: "#DEDFE0",
-        }}
-        _focusWithin={{
-          border: "2px solid #0068C5 !important",
-          backgroundColor: "#FFF",
-        }}
+        cursor={isBusy ? "wait" : "text"}
+        transition="background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease"
+        aria-busy={isBusy}
+        _hover={
+          isBusy
+            ? undefined
+            : {
+                border: "2px solid transparent !important",
+                backgroundColor: "#DEDFE0",
+              }
+        }
+        _focusWithin={
+          isBusy
+            ? undefined
+            : {
+                border: "2px solid #0068C5 !important",
+                backgroundColor: "#FFF",
+              }
+        }
       >
-        <Box flex={1} minWidth={0}>
+        <Box flex={1} minWidth={0} position="relative">
+          {isBusy ? (
+            <HStack
+              position="absolute"
+              left={0}
+              top={isMultiLine ? "6px" : "50%"}
+              transform={isMultiLine ? undefined : "translateY(-50%)"}
+              spacing="10px"
+              alignItems="center"
+              pointerEvents="none"
+              zIndex={1}
+              maxWidth="calc(100% - 4px)"
+            >
+              <Spinner
+                flexShrink={0}
+                size="sm"
+                thickness="2px"
+                speed="0.7s"
+                color="#6B7280"
+                emptyColor="#DEDFE0"
+              />
+              <BodyText
+                typography="small"
+                color="#6B7280"
+                fontWeight="500"
+                lineHeight="1.3"
+                noOfLines={2}
+              >
+                Aguarde a resposta...
+              </BodyText>
+            </HStack>
+          ) : null}
           <Textarea
             id="search-chatbot"
             ref={textareaRef}
-            disabled={isLoading || isGenerating}
+            disabled={isBusy}
             value={value}
             width="100%"
             onChange={(e) => {
@@ -101,12 +142,16 @@ export default function Search({
               if (onChange) onChange(e);
             }}
             onKeyDown={(e) => {
-              if (!isLoading && !isGenerating) handleKeyDown(e);
+              if (!isBusy) handleKeyDown(e);
             }}
+            opacity={isBusy ? 0.22 : 1}
+            transition="opacity 0.2s ease"
             placeholder={
-              isLoading || isGenerating
-                ? "Aguarde a resposta..."
-                : !showDisclaimer ? "Como posso ajudar você hoje?" : "Faça sua pergunta..."
+              isBusy
+                ? ""
+                : !showDisclaimer
+                  ? "Como posso ajudar você hoje?"
+                  : "Faça uma pergunta..."
             }
             variant="unstyled"
             minHeight="38px"
@@ -114,11 +159,11 @@ export default function Search({
             resize="none"
             padding="0"
             fontSize="16px"
-            lineHeight={isMultiLine ? '26px' : '38px'}
+            lineHeight={isMultiLine ? "26px" : "38px"}
             fontFamily="Roboto"
             fontWeight="400"
             color="#464A51"
-            overflowY={isMultiLine ? 'auto' : 'hidden'}
+            overflowY={isMultiLine ? "auto" : "hidden"}
             _placeholder={{
               color: "#464A51",
               fontSize: "14px",
@@ -142,21 +187,25 @@ export default function Search({
         <Box
           flexShrink={0}
           marginLeft="8px"
-          cursor="pointer"
+          cursor={isBusy ? "wait" : "pointer"}
           onClick={onSend}
           color="#464A51"
-          opacity={isGenerating || !value ? 0.5 : 1}
+          opacity={isBusy || !value ? 0.5 : 1}
           minWidth="24px"
           minHeight="24px"
           display="flex"
           alignItems="center"
           justifyContent="center"
-          pointerEvents={isGenerating || !value ? "none" : "auto"}
-          transition="color 0.2s ease, fill 0.2s ease"
-          _hover={{
-            color: "#2B8C4D",
-            fill: "#2B8C4D"
-          }}
+          pointerEvents={isBusy || !value ? "none" : "auto"}
+          transition="color 0.2s ease, fill 0.2s ease, opacity 0.2s ease"
+          _hover={
+            isBusy
+              ? undefined
+              : {
+                  color: "#2B8C4D",
+                  fill: "#2B8C4D",
+                }
+          }
         >
           <SendIcon
             width="18px"
@@ -168,26 +217,17 @@ export default function Search({
       </Flex>
 
       {showDisclaimer && (
-        <VStack
-          width="100%"
-          spacing={0}
-          align="center"
-          textAlign="center"
-        >
-          <BodyText
-            typography="small"
-            color="#ACAEB1"
-          >
-            O chatbot pode cometer erros. Considere verificar informações importantes.
+        <VStack width="100%" spacing={0} align="center" textAlign="center">
+          <BodyText typography="small" color="#ACAEB1">
+            O chatbot pode cometer erros. Considere verificar informações
+            importantes.
           </BodyText>
-          <BodyText
-            typography="small"
-            color="#ACAEB1"
-          >
-            Todas as informações aqui enviadas são registradas para análise e melhoria do produto.
+          <BodyText typography="small" color="#ACAEB1">
+            Todas as informações aqui enviadas são registradas para análise e
+            melhoria do produto.
           </BodyText>
         </VStack>
       )}
     </VStack>
-  )
+  );
 }
