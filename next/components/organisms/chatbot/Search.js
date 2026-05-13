@@ -4,8 +4,6 @@ import {
   VStack,
   Box,
   Textarea,
-  Spinner,
-  HStack,
 } from "@chakra-ui/react";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
@@ -100,37 +98,6 @@ export default function Search({
         }
       >
         <Box flex={1} minWidth={0} position="relative">
-          {isBusy ? (
-            <HStack
-              position="absolute"
-              left={0}
-              top={isMultiLine ? "6px" : "50%"}
-              transform={isMultiLine ? undefined : "translateY(-50%)"}
-              spacing="10px"
-              alignItems="center"
-              pointerEvents="none"
-              zIndex={1}
-              maxWidth="calc(100% - 4px)"
-            >
-              <Spinner
-                flexShrink={0}
-                size="sm"
-                thickness="2px"
-                speed="0.7s"
-                color="#6B7280"
-                emptyColor="#DEDFE0"
-              />
-              <BodyText
-                typography="small"
-                color="#6B7280"
-                fontWeight="500"
-                lineHeight="1.3"
-                noOfLines={2}
-              >
-                Aguarde a resposta...
-              </BodyText>
-            </HStack>
-          ) : null}
           <Textarea
             id="search-chatbot"
             ref={textareaRef}
@@ -148,7 +115,7 @@ export default function Search({
             transition="opacity 0.2s ease"
             placeholder={
               isBusy
-                ? ""
+                ? "Faça uma pergunta..."
                 : !showDisclaimer
                   ? "Como posso ajudar você hoje?"
                   : "Faça uma pergunta..."

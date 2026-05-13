@@ -511,7 +511,7 @@ function Message({ message, onFeedback }) {
             </Flex>
             <Collapse in={isThinkingOpen} animateOpacity>
               <Box
-                padding="12px 16px 16px"
+                padding="16px"
                 borderTop="1px solid #E5E7EB"
                 width="100%"
               >
