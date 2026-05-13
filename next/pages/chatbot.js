@@ -30,6 +30,9 @@ function getGreetingFirstNameFromCookie() {
 }
 
 function clearAuthCookiesAndRedirectLogin(router) {
+  if (typeof window !== "undefined") {
+    localStorage.setItem("previousPath", window.location.href);
+  }
   cookies.remove("userBD", { path: "/" });
   cookies.remove("token", { path: "/" });
   router.replace("/user/login");
