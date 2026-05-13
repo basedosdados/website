@@ -15,7 +15,6 @@ import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import Display from "../components/atoms/Text/Display";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
-import { hasChatbotSubscription } from "../utils";
 
 function getGreetingFirstNameFromCookie() {
   try {
@@ -56,22 +55,40 @@ function ChatbotAccessGate({ children }) {
   const [canEnter, setCanEnter] = useState(false);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!hasCompleteAuthCookies()) {
-      clearAuthCookiesAndRedirectLogin(router);
-      return;
-    }
-    try {
-      const user = JSON.parse(cookies.get("userBD"));
-      if (!hasChatbotSubscription(user)) {
-        router.replace("/prices");
+    let cancelled = false;
+
+    async function checkAccess() {
+      if (typeof window === "undefined") return;
+      if (!hasCompleteAuthCookies()) {
+        clearAuthCookiesAndRedirectLogin(router);
         return;
       }
-    } catch {
-      clearAuthCookiesAndRedirectLogin(router);
-      return;
+      const token = cookies.get("token");
+      try {
+        const params = new URLSearchParams({ p: btoa(token) });
+        const res = await fetch(`/api/user/validateToken?${params}`, {
+          method: "GET"
+        });
+        const data = await res.json();
+        if (cancelled) return;
+        if (!res.ok || !data.success) {
+          clearAuthCookiesAndRedirectLogin(router);
+          return;
+        }
+        if (!data.has_chatbot_access) {
+          router.replace("/prices");
+          return;
+        }
+        setCanEnter(true);
+      } catch {
+        if (!cancelled) clearAuthCookiesAndRedirectLogin(router);
+      }
     }
-    setCanEnter(true);
+
+    checkAccess();
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   if (!canEnter) return null;
