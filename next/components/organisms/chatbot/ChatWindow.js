@@ -65,10 +65,10 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
       spacing={0}
       css={{
         "&::-webkit-scrollbar": {
-          width: "4px",
+          width: "6px",
         },
         "&::-webkit-scrollbar-track": {
-          width: "6px",
+          width: "8px",
         },
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",

@@ -115,7 +115,9 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
         propsModalContent={{ minWidth: { base: "", lg: "620px !important" } }}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText marginRight="20px">Confirmar exclusão de conversa</TitleText>
+          <TitleText marginRight="20px">
+            Confirmar exclusão de conversa
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -127,7 +129,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm>
-            Tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.
+            Tem certeza que deseja excluir esta conversa? Esta ação não pode ser
+            desfeita.
           </ExtraInfoTextForm>
         </Stack>
 
@@ -144,7 +147,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             backgroundColor="#fff"
             _hover={{
               color: "#992A2A",
-              borderColor: "#992A2A"
+              borderColor: "#992A2A",
             }}
             onClick={() => deleteModal.onClose()}
           >
@@ -166,150 +169,174 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       </ModalGeneral>
 
       {hasHistoryContent && (
-      <Accordion
-        display="flex"
-        allowToggle={isSidebarOpen}
-        index={isSidebarOpen ? undefined : [0]}
-        defaultIndex={[0]}
-        width="100%"
-        marginTop="16px"
-      >
-        <AccordionItem border="none" width="100%">
-          <AccordionButton
-            padding="8px"
-            cursor={isSidebarOpen ? "pointer" : "default"}
-            _hover={{ backgroundColor: "transparent"}}
-            _focus={{ boxShadow: "none"}}
-            color="#252A32"
-            display="flex"
-            justifyContent="space-between"
-            width="100%"
-            pointerEvents={isSidebarOpen ? "auto" : "none"}
-          >
-            <BodyText
-              color="currentColor"
-              fontSize="12px"
-              lineHeight="18px"
-              whiteSpace="nowrap"
-              height="18px"
-              opacity={isSidebarOpen ? 0.9 : 0}
-              transition="opacity 0.2s ease, transform 0.2s ease"
-              transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
+        <Accordion
+          display="flex"
+          allowToggle={isSidebarOpen}
+          index={isSidebarOpen ? undefined : [0]}
+          defaultIndex={[0]}
+          width="100%"
+          marginTop="16px"
+        >
+          <AccordionItem border="none" width="100%">
+            <AccordionButton
+              padding="8px"
+              cursor={isSidebarOpen ? "pointer" : "default"}
+              _hover={{ backgroundColor: "transparent" }}
+              _focus={{ boxShadow: "none" }}
+              color="#252A32"
+              display="flex"
+              justifyContent="space-between"
+              width="100%"
+              pointerEvents={isSidebarOpen ? "auto" : "none"}
             >
-              Conversas
-            </BodyText>
-            {isSidebarOpen && <AccordionIcon color="#252A32" />}
-          </AccordionButton>
-          <AccordionPanel padding="0">
-            {error && isSidebarOpen && (
-              <VStack
-                align="stretch"
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                spacing="0"
-                padding="8px"
-                maxHeight="100%"
+              <BodyText
+                color="currentColor"
+                fontSize="12px"
+                lineHeight="18px"
+                whiteSpace="nowrap"
+                height="18px"
+                opacity={isSidebarOpen ? 0.9 : 0}
+                transition="opacity 0.2s ease, transform 0.2s ease"
+                transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
               >
-                <BodyText
-                  display="flex"
-                  flexDirection="column"
-                  typography="small"
-                  color="#BF3434"
-                  opacity={isSidebarOpen ? 1 : 0}
-                  transition="opacity 0.2s ease, transform 0.2s ease"
-                  transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
-                >
-                  <span>Erro ao carregar histórico.</span>
-                  <span>Tente novamente.</span>
-                </BodyText>
-                <ReloadIcon
-                  cursor="pointer"
-                  width="20px"
-                  height="20px"
-                  _hover={{
-                    opacity: 0.8,
-                    transform: "rotate(360deg)",
-                    transition: "opacity 0.2s ease, transform 0.8s ease"
-                  }}
-                  onClick={() => refetch()}
-                />
-              </VStack>
-            )}
-            {!error && (
-              <VStack
-                align="stretch"
-                spacing="1px"
-                overflowY="auto"
-                maxHeight="100%"
-              >
-              {sortedThreads.map((thread) => (
-                <Box
-                  position="relative"
-                  role="group"
-                  cursor="pointer"
-                  key={thread.id}
-                  display="flex"
+                Conversas
+              </BodyText>
+              {isSidebarOpen && <AccordionIcon color="#252A32" />}
+            </AccordionButton>
+            <AccordionPanel padding="0">
+              {error && isSidebarOpen && (
+                <VStack
+                  align="stretch"
+                  flexDirection="row"
+                  justifyContent="space-between"
                   alignItems="center"
+                  spacing="0"
                   padding="8px"
-                  borderRadius="8px"
-                  gap={isSidebarOpen ? "8px" : "0"}
-                  onClick={() => handleSelectThread(thread)}
-                  backgroundColor={isSidebarOpen && currentThreadId === thread.id ? "#EEEEEE" : "transparent"}
-                  pointerEvents={isSidebarOpen && !isGenerating ? "auto" : "none"}
-                  _hover={{
-                    color: "#2B8C4D",
-                    fill: "#2B8C4D",
-                    backgroundColor: "#EEEEEE"
-                  }}
+                  maxHeight="100%"
                 >
                   <BodyText
+                    display="flex"
+                    flexDirection="column"
                     typography="small"
-                    flex="1"
-                    minWidth="0"
-                    color={currentThreadId === thread.id ? "#2B8C4D" : "currentColor"}
-                    whiteSpace="nowrap"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                    height="18px"
-                    lineHeight="18px"
+                    color="#BF3434"
                     opacity={isSidebarOpen ? 1 : 0}
                     transition="opacity 0.2s ease, transform 0.2s ease"
-                    transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
+                    transform={
+                      isSidebarOpen ? "translateX(0)" : "translateX(4px)"
+                    }
                   >
-                    {thread.title}
+                    <span>Erro ao carregar histórico.</span>
+                    <span>Tente novamente.</span>
                   </BodyText>
-                  {isSidebarOpen && (
+                  <ReloadIcon
+                    cursor="pointer"
+                    width="20px"
+                    height="20px"
+                    _hover={{
+                      opacity: 0.8,
+                      transform: "rotate(360deg)",
+                      transition: "opacity 0.2s ease, transform 0.8s ease",
+                    }}
+                    onClick={() => refetch()}
+                  />
+                </VStack>
+              )}
+              {!error && (
+                <VStack
+                  align="stretch"
+                  spacing="1px"
+                  overflowY={isSidebarOpen ? "auto" : "hidden"}
+                  maxHeight="100%"
+                  sx={{
+                    '&::-webkit-scrollbar': { width: '4px' },
+                    '&::-webkit-scrollbar-track': { background: 'transparent' },
+                    '&::-webkit-scrollbar-thumb': {
+                      background: '#C4C4C4',
+                      borderRadius: '24px',
+                    },
+                    scrollbarWidth: 'thin',
+                    scrollbarColor: '#C4C4C4 transparent',
+                  }}
+                >
+                  {sortedThreads.map((thread) => (
                     <Box
-                      flexShrink={0}
-                      width="18px"
-                      height="18px"
+                      position="relative"
+                      role="group"
+                      cursor="pointer"
+                      key={thread.id}
                       display="flex"
                       alignItems="center"
-                      justifyContent="center"
-                      visibility="hidden"
-                      _groupHover={{ visibility: "visible" }}
+                      padding="8px"
+                      borderRadius="8px"
+                      gap={isSidebarOpen ? "8px" : "0"}
+                      onClick={() => handleSelectThread(thread)}
+                      backgroundColor={
+                        isSidebarOpen && currentThreadId === thread.id
+                          ? "#EEEEEE"
+                          : "transparent"
+                      }
+                      pointerEvents={
+                        isSidebarOpen && !isGenerating ? "auto" : "none"
+                      }
+                      _hover={{
+                        color: "#2B8C4D",
+                        fill: "#2B8C4D",
+                        backgroundColor: "#EEEEEE",
+                      }}
                     >
-                      <TrashIcon
-                        width="18px"
+                      <BodyText
+                        typography="small"
+                        flex="1"
+                        minWidth="0"
+                        color={
+                          currentThreadId === thread.id
+                            ? "#2B8C4D"
+                            : "currentColor"
+                        }
+                        whiteSpace="nowrap"
+                        overflow="hidden"
+                        textOverflow="ellipsis"
                         height="18px"
-                        fill="#ACAEB1"
-                        cursor="pointer"
-                        onClick={(e) => handleDeleteClick(e, thread)}
-                        _hover={{
-                          color: "#BF3434",
-                          fill: "#BF3434",
-                        }}
-                      />
+                        lineHeight="18px"
+                        opacity={isSidebarOpen ? 1 : 0}
+                        transition="opacity 0.2s ease, transform 0.2s ease"
+                        transform={
+                          isSidebarOpen ? "translateX(0)" : "translateX(4px)"
+                        }
+                      >
+                        {thread.title}
+                      </BodyText>
+                      {isSidebarOpen && (
+                        <Box
+                          flexShrink={0}
+                          width="18px"
+                          height="18px"
+                          display="flex"
+                          alignItems="center"
+                          justifyContent="center"
+                          visibility="hidden"
+                          _groupHover={{ visibility: "visible" }}
+                        >
+                          <TrashIcon
+                            width="18px"
+                            height="18px"
+                            fill="#ACAEB1"
+                            cursor="pointer"
+                            onClick={(e) => handleDeleteClick(e, thread)}
+                            _hover={{
+                              color: "#BF3434",
+                              fill: "#BF3434",
+                            }}
+                          />
+                        </Box>
+                      )}
                     </Box>
-                  )}
-                </Box>
-              ))}
-              </VStack>
-            )}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+                  ))}
+                </VStack>
+              )}
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       )}
     </>
   );

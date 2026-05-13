@@ -122,9 +122,9 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
             isGenerating
               ? undefined
               : {
-                  '&:hover .new-chat-icon-surface': {
-                    backgroundColor: '#F4F4F4',
-                    borderColor: '#C8CACF',
+                  "&:hover .new-chat-icon-surface": {
+                    backgroundColor: "#F4F4F4",
+                    borderColor: "#C8CACF",
                   },
                 }
           }
@@ -132,7 +132,7 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
             isGenerating
               ? undefined
               : {
-                  color: '#2B8C4D',
+                  color: "#2B8C4D"
                 }
           }
         >
@@ -145,10 +145,9 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
             alignItems="center"
             justifyContent="center"
             borderRadius="50%"
-            backgroundColor="#FFFFFF"
+            backgroundColor="#DEDFE0"
             border="1px solid #DEDFE0"
             transform="rotate(45deg)"
-            color="inherit"
           >
             <CrossIcon
               width="12px"
@@ -173,7 +172,22 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
             Nova conversa
           </BodyText>
         </Box>
-        <Box flex={1} minHeight={0} overflowY="auto" overflowX="hidden">
+        <Box
+          flex={1}
+          minHeight={0}
+          overflowY={isOpen ? "auto" : "hidden"}
+          overflowX="hidden"
+          sx={{
+            "&::-webkit-scrollbar": { width: "4px" },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              background: "#C4C4C4",
+              borderRadius: "24px",
+            },
+            scrollbarWidth: "thin",
+            scrollbarColor: "#C4C4C4 transparent",
+          }}
+        >
           <ThreadList
             onSelectThread={onSelectThread}
             currentThreadId={currentThreadId}
@@ -183,43 +197,41 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
           />
         </Box>
       </Stack>
-      <Box flexShrink={0} paddingBottom="8px">
+      <Box flexShrink={0}>
         <Divider borderColor="#DEDFE0" />
-        <Box padding="8px">
-          <HStack
-            as="button"
-            type="button"
-            spacing="8px"
-            align="center"
-            justifyContent={isOpen ? "flex-start" : "center"}
-            width="100%"
-            padding="8px"
-            borderRadius="8px"
-            cursor="pointer"
-            background="transparent"
-            border="none"
-            color="#252A32"
-            fill="#D0D0D0"
-            onClick={handleLogout}
-            _hover={{
-              backgroundColor: "#EEEEEE",
-              opacity: 0.9,
-            }}
+        <HStack
+          as="button"
+          type="button"
+          spacing="8px"
+          align="center"
+          justifyContent={isOpen ? "flex-start" : "center"}
+          width="100%"
+          padding="16px"
+          borderRadius="8px"
+          cursor="pointer"
+          background="transparent"
+          border="none"
+          color="#252A32"
+          fill="#D0D0D0"
+          onClick={handleLogout}
+          _hover={{
+            backgroundColor: "#EEEEEE",
+            opacity: 0.9,
+          }}
+        >
+          <SignOutIcon width="18px" height="18px" fill="currentColor" />
+          <BodyText
+            typography="small"
+            color="currentColor"
+            opacity={isOpen ? 1 : 0}
+            width={isOpen ? "auto" : 0}
+            overflow="hidden"
+            whiteSpace="nowrap"
+            transition="opacity 0.2s ease, width 0.2s ease"
           >
-            <SignOutIcon width="18px" height="18px" fill="currentColor" />
-            <BodyText
-              typography="small"
-              color="currentColor"
-              opacity={isOpen ? 1 : 0}
-              width={isOpen ? "auto" : 0}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              transition="opacity 0.2s ease, width 0.2s ease"
-            >
-              Sair
-            </BodyText>
-          </HStack>
-        </Box>
+            Sair
+          </BodyText>
+        </HStack>
       </Box>
     </Box>
   );
