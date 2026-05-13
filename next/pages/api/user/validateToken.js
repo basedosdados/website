@@ -30,5 +30,15 @@ export default async function handler(req, res) {
   if(result === "err") return res.status(500).json({error: "err", success: false })
   if(result.verifyToken === null) return res.status(500).json({error: "err", success: false})
 
-  res.status(200).json({ success: true })
+  let payload = result.verifyToken?.payload;
+  if (typeof payload === 'string') {
+    try {
+      payload = JSON.parse(payload);
+    } catch {
+      payload = {};
+    }
+  }
+  const has_chatbot_access = payload?.has_chatbot_access === true;
+
+  res.status(200).json({ success: true, has_chatbot_access })
 }
