@@ -84,27 +84,27 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
 
   return (
     <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-      <DrawerOverlay backdropFilter="blur(2px)"/>
+      <DrawerOverlay backdropFilter="blur(2px)" />
       <DrawerContent padding="24px">
-        {locale === 'en' ? (
+        {locale === "en" ? (
           <DBLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         ) : (
           <BDLogoImage
             widthImage="65px"
             heightImage="30px"
             marginBottom="24px"
-            onClick={() => router.push('/')}
+            onClick={() => router.push("/")}
           />
         )}
         <VStack alignItems="flex-start" width="100%" spacing="16px">
           {Object.entries(links).map(([key, elm]) => {
-            if(key === "Button") {
-              return elm.map(b => 
+            if (key === "Button") {
+              return elm.map((b) => (
                 <Button
                   key={b.name}
                   backgroundColor={b.color}
@@ -116,7 +116,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                 >
                   {b.name}
                 </Button>
-              )
+              ));
             }
             if (typeof elm === "object") {
               return (
@@ -124,7 +124,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                   <AccordionItem borderWidth="0 !important">
                     <AccordionButton
                       padding={0}
-                      _hover={{background: "none"}}
+                      _hover={{ background: "none" }}
                       justifyContent="space-between"
                     >
                       <Text
@@ -138,33 +138,35 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                       </Text>
                       <AccordionIcon />
                     </AccordionButton>
-                  <AccordionPanel
-                    display="flex"
-                    flexDirection="column"
-                    gridGap="13px"
-                    padding="16px 0 2px"
-                  >
-                    {elm.map((c) => {
-                      if(c.name === undefined) return null
+                    <AccordionPanel
+                      display="flex"
+                      flexDirection="column"
+                      gridGap="13px"
+                      padding="16px 0 2px"
+                    >
+                      {elm.map((c) => {
+                        if (c.name === undefined) return null;
 
-                      return (
-                        <Link
-                          key={c.name}
-                          display="flex"
-                          gap="16px"
-                          fontSize="16px"
-                          fontFamily="Roboto"
-                          letterSpacing="0.1px"
-                          fontWeight="400"
-                          href={c.href}
-                          onClick={() => handleMenuLinkClick(c.href)}
-                        >{c.icon && c.icon} {c.name}</Link>
-                      )
-                    })}
-                  </AccordionPanel>
+                        return (
+                          <Link
+                            key={c.name}
+                            display="flex"
+                            gap="16px"
+                            fontSize="16px"
+                            fontFamily="Roboto"
+                            letterSpacing="0.1px"
+                            fontWeight="400"
+                            href={c.href}
+                            onClick={() => handleMenuLinkClick(c.href)}
+                          >
+                            {c.icon && c.icon} {c.name}
+                          </Link>
+                        );
+                      })}
+                    </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
-              )
+              );
             } else {
               return (
                 <Link
@@ -175,9 +177,10 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                   fontWeight="400"
                   href={elm}
                   onClick={() => handleMenuLinkClick(elm)}
-                >{key}
+                >
+                  {key}
                 </Link>
-              )
+              );
             }
           })}
         </VStack>
@@ -200,16 +203,12 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
             fontSize="20px"
             fontFamily="Roboto"
             fontWeight="400"
-            href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+            href={hasChatbotAccess ? "/chatbot" : "/prices"}
             onClick={(e) => {
               onClose();
               if (hasChatbotAccess) {
                 e.preventDefault();
-                window.open(
-                  getChatbotStreamlitAppUrl(),
-                  "_blank",
-                  "noopener,noreferrer"
-                );
+                router.push("/chatbot");
                 trackMenuOpenChatbot({
                   menuPlacement: "mobile_drawer",
                   hasChatbotSubscription: hasChatbotAccess,
@@ -242,24 +241,29 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
         {userData ? (
           <></>
         ) : (
-          <Stack spacing={0} display={{base: "flex", lg: "none"}} marginTop="auto" gap="16px">
+          <Stack
+            spacing={0}
+            display={{ base: "flex", lg: "none" }}
+            marginTop="auto"
+            gap="16px"
+          >
             <Link
               href="/user/login"
               width="100%"
               onClick={() => {
-                if (typeof window !== 'undefined') {
-                  localStorage.setItem('previousPath', window.location.href)
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("previousPath", window.location.href);
                 }
               }}
             >
               <Button width="100%" justifyContent="center">
-                {t('enter', { ns: 'menu' })}
+                {t("enter", { ns: "menu" })}
               </Button>
             </Link>
 
             <Link href="/user/register" width="100%">
-              <Button isVariant  width="100%" justifyContent="center">
-                {t('register', { ns: 'menu' })}
+              <Button isVariant width="100%" justifyContent="center">
+                {t("register", { ns: "menu" })}
               </Button>
             </Link>
           </Stack>
@@ -389,16 +393,12 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                 gap="6px"
                 color="#71757A"
                 fontWeight="400"
-                href={hasChatbotAccess ? getChatbotStreamlitAppUrl() : "/prices"}
+                href={hasChatbotAccess ? "/chatbot" : "/prices"}
                 onClick={(e) => {
                   onClose()
                   if (hasChatbotAccess) {
                     e.preventDefault()
-                    window.open(
-                      getChatbotStreamlitAppUrl(),
-                      "_blank",
-                      "noopener,noreferrer"
-                    )
+                    router.push("/chatbot")
                     trackMenuOpenChatbot({
                       menuPlacement: "mobile_drawer_user",
                       hasChatbotSubscription: hasChatbotAccess,
@@ -981,9 +981,8 @@ function DesktopLinks({
           {...(hasChatbotAccess
             ? {
                 as: "a",
-                href: getChatbotStreamlitAppUrl(),
+                href: "/chatbot",
                 target: "_blank",
-                rel: "noopener noreferrer",
                 onClick: () =>
                   trackMenuOpenChatbot({
                     menuPlacement: "desktop_header_right",
