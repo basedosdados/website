@@ -34,8 +34,8 @@ export default function ObservationLevel({ resource }) {
 
   sortedLevels.forEach((value) => {
     const valueEntity = () => {
-      if(value.entity[`name${capitalize(locale)}`]) return value.entity[`name${capitalize(locale)}`];
-      if(value.entity.name) return value.entity.name;
+      if(value?.entity?.[`name${capitalize(locale)}`]) return value?.entity?.[`name${capitalize(locale)}`];
+      if(value?.entity?.name) return value?.entity?.name;
       return t('observationLevelTable.notProvided');
     }
 

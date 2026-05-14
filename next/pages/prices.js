@@ -24,7 +24,6 @@ import BodyText from "../components/atoms/Text/BodyText";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 import { triggerGAEvent, triggerGAEventWithData } from "../utils";
-import { has } from "lodash";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -335,8 +334,10 @@ export function SectionPrice({
           return result.data.filter((item) => {
             const name = item.node.productName?.toLowerCase() || ""
             const slug = item.node.productSlug?.toLowerCase() || ""
-            const isChatbotProduct = name === "chatbot" || slug.includes("chatbot")
-            return isChatbotProduct &&
+            const isConsumerChatbot =
+              (name.includes("chatbot") || slug.includes("chatbot")) &&
+              !name.includes("empresas")
+            return isConsumerChatbot &&
               item.node.interval === interval &&
               item.node.amount === amount &&
               item.node.isActive === true
@@ -610,10 +611,10 @@ export function SectionPrice({
                 });
                 cookies.set(
                   "plan_selected",
-                  plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id,
+                  plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?._id,
                   { expires: 1, path: "/" },
                 );
-                action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]._id);
+                action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?._id);
               },
               isCurrentPlan:
                 isBDPro.isCurrentPlan &&
@@ -652,11 +653,11 @@ export function SectionPrice({
                 });
                 cookies.set(
                   "plan_selected",
-                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id,
+                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?._id,
                   { expires: 1, path: "/" },
                 );
                 action(
-                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]._id,
+                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?._id,
                 );
               },
               isCurrentPlan:
