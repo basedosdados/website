@@ -203,7 +203,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
             fontSize="20px"
             fontFamily="Roboto"
             fontWeight="400"
-            href={hasChatbotAccess ? "/chatbot-streamlit" : "/prices"}
+            href={hasChatbotAccess ? "/chatbot" : "/prices"}
             onClick={() => {
               onClose();
               if (hasChatbotAccess) {
@@ -391,7 +391,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                 gap="6px"
                 color="#71757A"
                 fontWeight="400"
-                href={hasChatbotAccess ? "/chatbot-streamlit" : "/prices"}
+                href={hasChatbotAccess ? "/chatbot" : "/prices"}
                 onClick={() => {
                   onClose()
                   if (hasChatbotAccess) {
@@ -977,7 +977,7 @@ function DesktopLinks({
           {...(hasChatbotAccess
             ? {
                 as: "a",
-                href: "/chatbot-streamlit",
+                href: "/chatbot",
                 target: "_blank",
                 onClick: () =>
                   trackMenuOpenChatbot({
