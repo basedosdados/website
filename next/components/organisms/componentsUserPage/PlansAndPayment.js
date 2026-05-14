@@ -1137,7 +1137,7 @@ export default function PlansAndPayment ({ userData }) {
               </Button>
               <Button
                 as="a"
-                href="/chatbot"
+                href="/chatbot-streamlit"
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
                   successCheckoutKindRef.current = null;
@@ -1697,7 +1697,7 @@ export default function PlansAndPayment ({ userData }) {
               >
                 <Button
                   as="a"
-                  href="/chatbot"
+                  href="/chatbot-streamlit"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() =>

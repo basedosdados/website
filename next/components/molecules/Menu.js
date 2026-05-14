@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -203,12 +203,10 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
             fontSize="20px"
             fontFamily="Roboto"
             fontWeight="400"
-            href={hasChatbotAccess ? "/chatbot" : "/prices"}
-            onClick={(e) => {
+            href={hasChatbotAccess ? "/chatbot-streamlit" : "/prices"}
+            onClick={() => {
               onClose();
               if (hasChatbotAccess) {
-                e.preventDefault();
-                router.push("/chatbot");
                 trackMenuOpenChatbot({
                   menuPlacement: "mobile_drawer",
                   hasChatbotSubscription: hasChatbotAccess,
@@ -393,12 +391,10 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                 gap="6px"
                 color="#71757A"
                 fontWeight="400"
-                href={hasChatbotAccess ? "/chatbot" : "/prices"}
-                onClick={(e) => {
+                href={hasChatbotAccess ? "/chatbot-streamlit" : "/prices"}
+                onClick={() => {
                   onClose()
                   if (hasChatbotAccess) {
-                    e.preventDefault()
-                    router.push("/chatbot")
                     trackMenuOpenChatbot({
                       menuPlacement: "mobile_drawer_user",
                       hasChatbotSubscription: hasChatbotAccess,
@@ -981,7 +977,7 @@ function DesktopLinks({
           {...(hasChatbotAccess
             ? {
                 as: "a",
-                href: "/chatbot",
+                href: "/chatbot-streamlit",
                 target: "_blank",
                 onClick: () =>
                   trackMenuOpenChatbot({
