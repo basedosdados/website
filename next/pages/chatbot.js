@@ -101,6 +101,8 @@ function ChatbotContent() {
   const normalizedThreadId = Array.isArray(threadIdFromUrl)
     ? threadIdFromUrl[0]
     : threadIdFromUrl;
+  const resolvedInitialThread =
+    router.isReady ? (normalizedThreadId ?? null) : undefined;
   const [value, setValue] = useState("");
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const skipFetchRef = useRef(false);
@@ -120,7 +122,7 @@ function ChatbotContent() {
     fetchThreadMessages,
     sendFeedback,
     resetChat
-  } = useChatbot(normalizedThreadId ?? null, {
+  } = useChatbot(resolvedInitialThread, {
     onThreadCreated: (id) => {
       router.replace({
         pathname: router.pathname,
@@ -139,6 +141,7 @@ function ChatbotContent() {
   }, [isLoading, isGenerating]);
 
   useEffect(() => {
+    if (!router.isReady) return;
     if (normalizedThreadId && normalizedThreadId !== threadId) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
@@ -146,7 +149,7 @@ function ChatbotContent() {
       }
       fetchThreadMessages(normalizedThreadId);
     }
-  }, [normalizedThreadId, threadId, fetchThreadMessages]);
+  }, [router.isReady, normalizedThreadId, threadId, fetchThreadMessages]);
 
   useEffect(() => {
     const draftKey = `chatbot_draft_${threadId || 'new'}`;
@@ -190,7 +193,8 @@ function ChatbotContent() {
     }, undefined, { shallow: true });
   }, [resetChat, router]);
 
-  const showNewChatGreeting = !normalizedThreadId && messages.length === 0;
+  const showNewChatGreeting =
+    router.isReady && !normalizedThreadId && messages.length === 0;
 
   const searchField = (
     <Search
@@ -227,8 +231,9 @@ function ChatbotContent() {
       >
         <Sidebar
           onNewChat={handleNewChat}
-          currentThreadId={normalizedThreadId}
-          isGenerating={isGenerating}
+          currentThreadId={
+            router.isReady ? normalizedThreadId : undefined
+          }
         />
         <Flex
           flex={1}
