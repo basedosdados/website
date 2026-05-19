@@ -119,7 +119,7 @@ function ChatbotContent() {
     isGenerating,
     threadId,
     sendMessage,
-    fetchThreadMessages,
+    syncThreadIdFromUrl,
     sendFeedback,
     resetChat
   } = useChatbot(resolvedInitialThread, {
@@ -141,15 +141,21 @@ function ChatbotContent() {
   }, [isLoading, isGenerating]);
 
   useEffect(() => {
+    if (!normalizedThreadId) {
+      skipFetchRef.current = false;
+    }
+  }, [normalizedThreadId]);
+
+  useEffect(() => {
     if (!router.isReady) return;
     if (normalizedThreadId && normalizedThreadId !== threadId) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
         return;
       }
-      fetchThreadMessages(normalizedThreadId);
+      syncThreadIdFromUrl(normalizedThreadId);
     }
-  }, [router.isReady, normalizedThreadId, threadId, fetchThreadMessages]);
+  }, [router.isReady, normalizedThreadId, threadId, syncThreadIdFromUrl]);
 
   useEffect(() => {
     const draftKey = `chatbot_draft_${threadId || 'new'}`;
