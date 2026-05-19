@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { pipeline } from 'stream/promises'
 
 const API_URL = process.env.CHATBOT_URL
 
@@ -67,9 +66,76 @@ export default async function handler(req, res) {
       }
 
       try {
-        await pipeline(response.data, res)
+        let skipWrite = false
+        const upstream = response.data
+
+        const onDrain = () => {
+          upstream.resume()
+        }
+
+        res.on('close', () => {
+          skipWrite = true
+          res.removeListener('drain', onDrain)
+          if (typeof upstream.isPaused === 'function' && upstream.isPaused()) {
+            upstream.resume()
+          }
+        })
+
+        await new Promise(resolve => {
+          const cleanup = () => {
+            upstream.removeListener('data', onData)
+            upstream.removeListener('end', onEnd)
+            upstream.removeListener('error', onError)
+            res.removeListener('drain', onDrain)
+          }
+
+          const onData = chunk => {
+            if (skipWrite || res.writableEnded) {
+              return
+            }
+            try {
+              const ok = res.write(chunk)
+              if (!ok) {
+                upstream.pause()
+                res.once('drain', onDrain)
+              }
+            } catch (writeErr) {
+              console.error('chatbot messages stream write:', writeErr)
+              skipWrite = true
+              res.removeListener('drain', onDrain)
+              if (typeof upstream.isPaused === 'function' && upstream.isPaused()) {
+                upstream.resume()
+              }
+            }
+          }
+
+          const onEnd = () => {
+            cleanup()
+            try {
+              if (!skipWrite && !res.writableEnded) {
+                res.end()
+              }
+            } catch (_) {}
+            resolve()
+          }
+
+          const onError = err => {
+            cleanup()
+            console.error('chatbot messages stream:', err)
+            if (!res.writableEnded) {
+              try {
+                res.destroy()
+              } catch (_) {}
+            }
+            resolve()
+          }
+
+          upstream.on('data', onData)
+          upstream.on('end', onEnd)
+          upstream.on('error', onError)
+        })
       } catch (streamErr) {
-        console.error('chatbot messages stream pipeline:', streamErr)
+        console.error('chatbot messages stream:', streamErr)
         if (!res.writableEnded) {
           try {
             res.destroy()

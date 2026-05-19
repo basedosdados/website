@@ -14,7 +14,7 @@ import BodyText from '../../atoms/Text/BodyText'
 import SignOutIcon from '../../../public/img/icons/signOutIcon'
 import ThreadList from './ThreadList'
 
-function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
+function Sidebar({ onNewChat, onSelectThread, currentThreadId }) {
   const [isOpen, setIsOpen] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -115,26 +115,16 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
           borderRadius="8px"
           gap={isOpen ? "10px" : "0"}
           color="#252A32"
-          opacity={isGenerating ? 0.5 : 1}
-          onClick={!isGenerating ? onNewChat : undefined}
-          pointerEvents={isGenerating ? "none" : "auto"}
-          sx={
-            isGenerating
-              ? undefined
-              : {
-                  "&:hover .new-chat-icon-surface": {
-                    backgroundColor: "#F4F4F4",
-                    borderColor: "#C8CACF",
-                  },
-                }
-          }
-          _hover={
-            isGenerating
-              ? undefined
-              : {
-                  color: "#2B8C4D"
-                }
-          }
+          onClick={onNewChat}
+          sx={{
+            "&:hover .new-chat-icon-surface": {
+              backgroundColor: "#F4F4F4",
+              borderColor: "#C8CACF",
+            },
+          }}
+          _hover={{
+            color: "#2B8C4D"
+          }}
         >
           <Box
             className="new-chat-icon-surface"
@@ -192,7 +182,6 @@ function Sidebar({ onNewChat, onSelectThread, currentThreadId, isGenerating }) {
             onSelectThread={onSelectThread}
             currentThreadId={currentThreadId}
             isSidebarOpen={isOpen}
-            isGenerating={isGenerating}
             onNewChat={onNewChat}
           />
         </Box>

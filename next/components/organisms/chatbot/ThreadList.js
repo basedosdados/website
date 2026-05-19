@@ -24,7 +24,7 @@ import { useChatbotContext } from '../../../context/ChatbotContext';
 import TrashIcon from '../../../public/img/icons/trashIcon';
 import ReloadIcon from '../../../public/img/icons/reloadIcon';
 
-export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, isGenerating, onNewChat }) {
+export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, onNewChat }) {
   const router = useRouter();
   const { threads, isLoading, error, refetch, deleteThread, isDeleting } = useChatbotContext();
   const deleteModal = useDisclosure();
@@ -43,8 +43,6 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
   }, [threads]);
 
   const handleSelectThread = (thread) => {
-    if (isGenerating) return;
-
     router.push({
       pathname: router.pathname,
       query: { ...router.query, t: thread.id }
@@ -276,7 +274,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                           : "transparent"
                       }
                       pointerEvents={
-                        isSidebarOpen && !isGenerating ? "auto" : "none"
+                        isSidebarOpen ? "auto" : "none"
                       }
                       _hover={{
                         color: "#2B8C4D",
