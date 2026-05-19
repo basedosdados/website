@@ -27,8 +27,13 @@ export default async function handler(req, res) {
   try {
     if (method === 'GET') {
       const response = await axios.get(`${API_URL}/api/v1/chatbot/threads/${threadId}/messages`, {
-        headers: { Authorization: authHeader }
+        headers: {
+          Authorization: authHeader,
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache'
+        }
       })
+      res.setHeader('Cache-Control', 'private, no-store, must-revalidate')
       return res.status(200).json(response.data)
     }
 
