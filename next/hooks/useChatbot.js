@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cookies from 'js-cookie'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { useChatbotContext } from '../context/ChatbotContext'
 import useChatbotAuth from './useChatbotAuth'
@@ -21,6 +21,13 @@ function sortMessagesChronologically(list) {
     if (ta == null && tb != null) return 1
     return String(a.id).localeCompare(String(b.id), undefined, { numeric: true })
   })
+}
+
+function normalizeMessagesApiPayload(raw) {
+  if (raw == null) return []
+  if (Array.isArray(raw)) return raw
+  if (typeof raw === 'object' && Array.isArray(raw.messages)) return raw.messages
+  return []
 }
 
 function patchToolCallEvent(msg, toolCallsIndex, patch) {
@@ -84,28 +91,46 @@ function stripForStreamingToolOutput(data) {
   }
 }
 
-function formatStreamErrorDetails(data) {
-  const ed = data?.error_details
-  if (ed == null) return ''
-  if (typeof ed === 'string') return ed
-  if (typeof ed?.message === 'string') return ed.message
-  if (typeof ed?.detail === 'string') return ed.detail
+function summarizeErrorPayload(body, maxLen = 600) {
+  if (body == null || body === '') return ''
   try {
-    return JSON.stringify(ed, null, 2)
+    const s = typeof body === 'string' ? body.trim() : JSON.stringify(body)
+    if (!s) return ''
+    return s.length > maxLen ? `${s.slice(0, maxLen)}…` : s
   } catch {
-    return String(ed)
+    const s = String(body).trim()
+    return s.length > maxLen ? `${s.slice(0, maxLen)}…` : s
   }
+}
+
+function chatbotError(message) {
+  return new Error(`[Chatbot] ${message}`)
 }
 
 export default function useChatbot(initialThreadId = null, options = {}) {
   const { onThreadCreated } = options
   const [messages, setMessages] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [threadId, setThreadId] = useState(initialThreadId)
-  const [isGenerating, setIsGenerating] = useState(false)
+  const [historyLoading, setHistoryLoading] = useState(false)
+  const [threadId, setThreadId] = useState(
+    initialThreadId === undefined ? null : initialThreadId
+  )
+  const [pendingStreams, setPendingStreams] = useState([])
+  const [newChatSending, setNewChatSending] = useState(false)
+  const messagesRef = useRef([])
 
   const router = useRouter()
   const lastFetchedThreadIdRef = useRef(null)
+  const fetchSeqRef = useRef(0)
+  const pendingHistoryLoadsRef = useRef(0)
+  const abortControllersByThreadRef = useRef(new Map())
+  const threadIdRef = useRef(
+    initialThreadId === undefined ? null : initialThreadId
+  )
+  const prevThreadIdRef = useRef(
+    initialThreadId === undefined ? undefined : initialThreadId
+  )
+  const pendingStreamsRef = useRef([])
+  const newChatSendingRef = useRef(false)
 
   const handleAuthError = useCallback(() => {
     cookies.remove('token')
@@ -114,10 +139,35 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   }, [router])
 
   useEffect(() => {
+    if (initialThreadId === undefined) return
     setThreadId(initialThreadId)
   }, [initialThreadId])
 
-  const abortControllerRef = useRef(null)
+  useEffect(() => {
+    messagesRef.current = messages
+  }, [messages])
+
+  useEffect(() => {
+    threadIdRef.current = threadId
+  }, [threadId])
+
+  const isGenerating = useMemo(() => {
+    if (newChatSending) return true
+    const tid = threadId
+    if (!tid) return false
+    return pendingStreams.some(s => s.threadId === tid)
+  }, [threadId, pendingStreams, newChatSending])
+
+  useEffect(() => {
+    pendingStreamsRef.current = pendingStreams
+  }, [pendingStreams])
+
+  useEffect(() => {
+    newChatSendingRef.current = newChatSending
+  }, [newChatSending])
+
+  const isLoading = historyLoading
+
   const charQueueRef = useRef([])
   const isTypingRef = useRef(false)
   const currentBotMessageIdRef = useRef(null)
@@ -129,14 +179,49 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const { getAccessToken } = useChatbotAuth()
   const { refetch: refetchThreads } = useChatbotContext()
 
+  const cancelToolStream = useCallback(targetThreadId => {
+    const q = toolStreamQueueRef.current
+    if (targetThreadId === undefined) {
+      toolStreamQueueRef.current = []
+    } else {
+      toolStreamQueueRef.current = q.filter(j => j.streamThreadId !== targetThreadId)
+    }
+    const remaining = toolStreamQueueRef.current.length
+    if (remaining === 0 && toolStreamRafRef.current != null) {
+      cancelAnimationFrame(toolStreamRafRef.current)
+      toolStreamRafRef.current = null
+    } else if (remaining > 0 && toolStreamRafRef.current == null) {
+      toolStreamRafRef.current = requestAnimationFrame(() => {
+        toolStreamPumpRef.current?.()
+      })
+    }
+  }, [])
+
+  const detachTypingAnimation = useCallback(() => {
+    charQueueRef.current = []
+    isTypingRef.current = false
+    currentBotMessageIdRef.current = null
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current)
+      animationFrameRef.current = null
+    }
+  }, [])
+
   const fetchThreadMessages = useCallback(
-    async id => {
+    async (id, opts = {}) => {
+      const silent = Boolean(opts?.silent)
       if (!id) {
-        setMessages([])
+        if (!silent) {
+          setMessages([])
+        }
         return
       }
 
-      setIsLoading(true)
+      const navGen = fetchSeqRef.current
+      if (!silent) {
+        pendingHistoryLoadsRef.current++
+        setHistoryLoading(true)
+      }
 
       try {
         const accessToken = await getAccessToken()
@@ -145,9 +230,15 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           return
         }
         const response = await axios.get('/api/chatbot/messages', {
-          params: { threadId: id },
-          headers: { Authorization: `Bearer ${accessToken}` }
+          params: { threadId: id, _ts: `${Date.now()}` },
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
         })
+
+        if (navGen !== fetchSeqRef.current) {
+          return
+        }
 
         const normalizeEvents = events => {
           if (!events) return []
@@ -166,7 +257,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         }
 
         const raw = response.data
-        const items = Array.isArray(raw) ? raw : raw && typeof raw === 'object' ? [raw] : []
+        const items = normalizeMessagesApiPayload(raw)
 
         const formattedMessages = items.map(msg => {
           const isUser = String(msg.role || '').toUpperCase() === 'USER'
@@ -186,25 +277,73 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             isTyping: false
           }
         })
+        if (silent && threadIdRef.current !== id) {
+          return
+        }
         setMessages(sortMessagesChronologically(formattedMessages))
         lastFetchedThreadIdRef.current = id
       } catch (err) {
         console.error('Failed to fetch messages:', err)
       } finally {
-        setIsLoading(false)
+        if (!silent) {
+          pendingHistoryLoadsRef.current = Math.max(0, pendingHistoryLoadsRef.current - 1)
+          if (pendingHistoryLoadsRef.current === 0) {
+            setHistoryLoading(false)
+          }
+        }
       }
     },
     [getAccessToken, handleAuthError]
   )
 
   useEffect(() => {
-    if (threadId && !isGenerating && threadId !== lastFetchedThreadIdRef.current) {
+    if (typeof window === 'undefined') return
+
+    const tick = () => {
+      const tid = threadIdRef.current
+      if (!tid) return
+
+      const streamingThisThread =
+        newChatSendingRef.current ||
+        pendingStreamsRef.current.some(s => s.threadId === tid)
+
+      const typingOrToolAnim =
+        charQueueRef.current.length > 0 ||
+        animationFrameRef.current != null ||
+        toolStreamQueueRef.current.length > 0 ||
+        toolStreamRafRef.current != null
+
+      const assistantUiBusy = messagesRef.current.some(
+        m => m.role === 'assistant' && (m.isLoading === true || m.isTyping === true)
+      )
+
+      if (streamingThisThread || typingOrToolAnim || assistantUiBusy) return
+
+      fetchThreadMessages(tid, { silent: true })
+    }
+
+    const intervalId = window.setInterval(tick, 60_000);
+    return () => window.clearInterval(intervalId)
+  }, [fetchThreadMessages])
+
+  useEffect(() => {
+    const prev = prevThreadIdRef.current
+    prevThreadIdRef.current = threadId
+    if (prev != null && prev !== threadId) {
+      fetchSeqRef.current++
+      lastFetchedThreadIdRef.current = null
+      detachTypingAnimation()
+    }
+  }, [threadId, detachTypingAnimation])
+
+  useEffect(() => {
+    if (threadId && threadId !== lastFetchedThreadIdRef.current) {
       fetchThreadMessages(threadId)
-    } else if (!threadId && !isGenerating) {
+    } else if (!threadId) {
       setMessages([])
       lastFetchedThreadIdRef.current = null
     }
-  }, [threadId, isGenerating, fetchThreadMessages])
+  }, [threadId, fetchThreadMessages])
 
   const createThread = useCallback(
     async firstMessage => {
@@ -212,7 +351,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const accessToken = await getAccessToken()
         if (!accessToken) {
           handleAuthError()
-          throw new Error('Unauthorized')
+          throw chatbotError(
+            'Sessão não autorizada ou token indisponível. Faça login novamente.'
+          )
         }
 
         const title = firstMessage
@@ -250,7 +391,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const accessToken = await getAccessToken()
         if (!accessToken) {
           handleAuthError()
-          throw new Error('Unauthorized')
+          throw chatbotError(
+            'Sessão não autorizada ou token indisponível. Faça login novamente.'
+          )
         }
 
         await axios.put(
@@ -298,10 +441,12 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   }, [])
 
   const addToQueue = useCallback(
-    text => {
-      if (!text) return
+    (text, streamThreadId) => {
+      const normalized =
+        typeof text === 'string' ? text : text != null ? String(text) : ''
+      if (!normalized || threadIdRef.current !== streamThreadId) return
 
-      const lineCount = text.split('\n').length
+      const lineCount = normalized.split('\n').length
       const botId = currentBotMessageIdRef.current
 
       if (lineCount > 40) {
@@ -309,7 +454,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           prev.map(msg => {
             if (msg.id !== botId) return msg
             const prefix = msg.content ? '\n\n' : ''
-            return { ...msg, content: (msg.content || '') + prefix + text }
+            return { ...msg, content: (msg.content || '') + prefix + normalized }
           })
         )
 
@@ -319,7 +464,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         return
       }
 
-      charQueueRef.current.push(...text.split(''))
+      charQueueRef.current.push(...normalized.split(''))
 
       if (!isTypingRef.current) {
         isTypingRef.current = true
@@ -329,14 +474,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     },
     [processQueue]
   )
-
-  const cancelToolStream = useCallback(() => {
-    toolStreamQueueRef.current = []
-    if (toolStreamRafRef.current != null) {
-      cancelAnimationFrame(toolStreamRafRef.current)
-      toolStreamRafRef.current = null
-    }
-  }, [])
 
   const ensureToolStreamPump = useCallback(() => {
     if (toolStreamRafRef.current != null) return
@@ -350,6 +487,19 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     const job = queue[0]
     if (!job) {
       toolStreamRafRef.current = null
+      return
+    }
+
+    const jobThreadId = job.streamThreadId
+    if (!jobThreadId || threadIdRef.current !== jobThreadId) {
+      queue.shift()
+      if (queue.length > 0) {
+        toolStreamRafRef.current = requestAnimationFrame(() => {
+          toolStreamPumpRef.current?.()
+        })
+      } else {
+        toolStreamRafRef.current = null
+      }
       return
     }
 
@@ -403,7 +553,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   toolStreamPumpRef.current = toolStreamPump
 
   const scheduleToolStreamForEvent = useCallback(
-    (botMessageId, toolCallsIndex, eventType, data) => {
+    (botMessageId, toolCallsIndex, eventType, data, streamThreadId) => {
       const q = toolStreamQueueRef.current
       if (eventType === 'tool_call') {
         const content = data.content ?? ''
@@ -411,6 +561,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           q.push({
             botMessageId,
             toolCallsIndex,
+            streamThreadId,
             patchKind: 'callContent',
             fullText: content,
             pos: 0
@@ -421,6 +572,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           q.push({
             botMessageId,
             toolCallsIndex,
+            streamThreadId,
             patchKind: 'callArgsJson',
             callIndex: i,
             fullText: JSON.stringify(calls[i]?.args ?? {}, null, 2),
@@ -436,6 +588,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           q.push({
             botMessageId,
             toolCallsIndex,
+            streamThreadId,
             patchKind: 'outputContent',
             outputIndex: i,
             fullText: text,
@@ -450,15 +603,19 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
   const sendMessage = useCallback(
     async content => {
-      if (abortControllerRef.current) abortControllerRef.current.abort()
-      const controller = new AbortController()
-      abortControllerRef.current = controller
+      const viewThreadSnapshot = threadId
+      const hadThreadInitially = Boolean(viewThreadSnapshot)
+      if (!hadThreadInitially) {
+        setNewChatSending(true)
+      }
 
-      setIsLoading(true)
-      setIsGenerating(true)
-      charQueueRef.current = []
-      cancelToolStream()
-      let currentThreadId = threadId
+      let currentThreadId = viewThreadSnapshot
+      let controller = null
+      const botMessageId = crypto.randomUUID()
+      const streamSessionId = crypto.randomUUID()
+      let streamThreadId = null
+
+      currentBotMessageIdRef.current = botMessageId
 
       const userMessage = {
         id: `user-${crypto.randomUUID()}`,
@@ -466,42 +623,52 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         content: content,
         status: 'SUCCESS'
       }
-      setMessages(prev => [...prev, userMessage])
 
-      const botMessageId = crypto.randomUUID()
-      currentBotMessageIdRef.current = botMessageId
-      setMessages(prev => [
-        ...prev,
-        {
-          id: botMessageId,
-          role: 'assistant',
-          content: '',
-          isLoading: true,
-          isTyping: false,
-          toolCalls: []
-        }
-      ])
+      let streamCompletedOk = false
 
       try {
+        setMessages(prev => [...prev, userMessage])
+        setMessages(prev => [
+          ...prev,
+          {
+            id: botMessageId,
+            role: 'assistant',
+            content: '',
+            isLoading: true,
+            isTyping: false,
+            toolCalls: []
+          }
+        ])
+
         if (!currentThreadId) {
           currentThreadId = await createThread(content)
         }
         if (!currentThreadId) {
-          setMessages(prev =>
-            prev.map(msg =>
-              msg.id === botMessageId
-                ? {
-                    ...msg,
-                    isLoading: false,
-                    isError: true,
-                    content:
-                      'Não foi possível iniciar uma conversa com o chatbot. Por favor, tente novamente.'
-                  }
-                : msg
+          if (threadIdRef.current === viewThreadSnapshot) {
+            setMessages(prev =>
+              prev.map(msg =>
+                msg.id === botMessageId
+                  ? {
+                      ...msg,
+                      isLoading: false,
+                      isError: true,
+                      content:
+                        'Não foi possível iniciar uma conversa com o chatbot. Por favor, tente novamente.'
+                    }
+                  : msg
+              )
             )
-          )
+          }
           return
         }
+
+        if (!hadThreadInitially) {
+          setNewChatSending(false)
+        }
+
+        streamThreadId = currentThreadId
+
+        const streamMatchesView = () => threadIdRef.current === streamThreadId
 
         const accessToken = await getAccessToken()
         if (!accessToken) {
@@ -509,7 +676,19 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           return
         }
 
-        const response = await fetch(`/api/chatbot/messages?threadId=${currentThreadId}`, {
+        const existingCtl = abortControllersByThreadRef.current.get(streamThreadId)
+        if (existingCtl) {
+          existingCtl.abort()
+          cancelToolStream(streamThreadId)
+          detachTypingAnimation()
+        }
+
+        controller = new AbortController()
+        abortControllersByThreadRef.current.set(streamThreadId, controller)
+
+        setPendingStreams(prev => [...prev, { id: streamSessionId, threadId: streamThreadId }])
+
+        const response = await fetch(`/api/chatbot/messages?threadId=${streamThreadId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -529,11 +708,18 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             } catch {
             }
           }
-          throw new Error('Erro na requisição')
+          const detail = summarizeErrorPayload(errorBody)
+          throw chatbotError(
+            detail
+              ? `Não foi possível enviar a mensagem ao chatbot (HTTP ${response.status}): ${detail}`
+              : `Não foi possível enviar a mensagem ao chatbot (HTTP ${response.status}).`
+          )
         }
 
         if (!response.body) {
-          throw new Error('Sem corpo na resposta')
+          throw chatbotError(
+            'O servidor respondeu sem corpo na resposta (streaming indisponível). Tente novamente em instantes.'
+          )
         }
 
         const reader = response.body.getReader()
@@ -557,6 +743,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                 switch (event.type) {
                   case 'tool_output':
                   case 'tool_call': {
+                    if (!streamMatchesView()) break
                     const payload = event.data || {}
                     setMessages(prev =>
                       prev.map(msg => {
@@ -566,7 +753,13 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                           event.type === 'tool_call'
                             ? stripForStreamingToolCall(payload)
                             : stripForStreamingToolOutput(payload)
-                        scheduleToolStreamForEvent(botMessageId, idx, event.type, payload)
+                        scheduleToolStreamForEvent(
+                          botMessageId,
+                          idx,
+                          event.type,
+                          payload,
+                          streamThreadId
+                        )
                         return {
                           ...msg,
                           toolCalls: [...(msg.toolCalls || []), partial]
@@ -577,20 +770,15 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                   }
 
                   case 'final_answer':
+                  case 'model_call_limit':
+                  case 'error':
                     if (event.data?.content) {
-                      addToQueue(event.data.content)
+                      addToQueue(event.data.content, streamThreadId)
                     }
                     break
-
-                  case 'error': {
-                    const errText = formatStreamErrorDetails(event.data)
-                    if (errText) {
-                      addToQueue(errText)
-                    }
-                    break
-                  }
 
                   case 'complete': {
+                    if (!streamMatchesView()) break
                     const completeId =
                       event.data?.message_id || event.data?.id || event.data?.run_id || botMessageId
                     for (const job of toolStreamQueueRef.current) {
@@ -619,33 +807,84 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
           if (done) break
         }
+
+        streamCompletedOk = true
       } catch (err) {
-        cancelToolStream()
+        const tid =
+          typeof streamThreadId === 'string' && streamThreadId ? streamThreadId : currentThreadId
+        if (err.name !== 'AbortError' && tid) {
+          cancelToolStream(tid)
+        }
         if (err.name === 'AbortError') return
         console.error(err)
-        setMessages(prev =>
-          prev.map(msg =>
-            msg.id === currentBotMessageIdRef.current
-              ? {
-                  ...msg,
-                  isLoading: false,
-                  isError: true,
-                  content: 'Ocorreu um erro. Por favor, tente novamente.'
-                }
-              : msg
+        const errBotId = currentBotMessageIdRef.current || botMessageId
+        if (threadIdRef.current === tid) {
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === errBotId
+                ? {
+                    ...msg,
+                    isLoading: false,
+                    isError: true,
+                    content: 'Ocorreu um erro. Por favor, tente novamente.'
+                  }
+                : msg
+            )
           )
-        )
+        }
       } finally {
-        setIsLoading(false)
-        setIsGenerating(false)
+        setNewChatSending(false)
 
-        const finalBotId = currentBotMessageIdRef.current || botMessageId
-        setMessages(prev =>
-          prev.map(msg => (msg.id === finalBotId ? { ...msg, isLoading: false } : msg))
-        )
+        if (typeof streamSessionId === 'string' && streamSessionId) {
+          setPendingStreams(prev => prev.filter(s => s.id !== streamSessionId))
+        }
+
+        const tid =
+          typeof streamThreadId === 'string' && streamThreadId ? streamThreadId : currentThreadId
+
+        if (tid && controller) {
+          const mapCtl = abortControllersByThreadRef.current.get(tid)
+          if (mapCtl === controller) {
+            abortControllersByThreadRef.current.delete(tid)
+          }
+        }
+
+        if (tid && threadIdRef.current === tid) {
+          const finalBotId = currentBotMessageIdRef.current || botMessageId
+          setMessages(prev =>
+            prev.map(msg => (msg.id === finalBotId ? { ...msg, isLoading: false } : msg))
+          )
+        }
+
+        if (tid && streamCompletedOk) {
+          (async () => {
+            const viewingThisThread = () => threadIdRef.current === tid
+            const deadline = Date.now() + 120_000
+
+            while (
+              viewingThisThread() &&
+              (charQueueRef.current.length > 0 || animationFrameRef.current != null) &&
+              Date.now() < deadline
+            ) {
+              await new Promise(r => requestAnimationFrame(r))
+            }
+
+            await fetchThreadMessages(tid, { silent: true })
+          })()
+        }
       }
     },
-    [threadId, createThread, getAccessToken, addToQueue, handleAuthError, cancelToolStream, scheduleToolStreamForEvent]
+    [
+      threadId,
+      createThread,
+      getAccessToken,
+      addToQueue,
+      handleAuthError,
+      cancelToolStream,
+      scheduleToolStreamForEvent,
+      detachTypingAnimation,
+      fetchThreadMessages
+    ]
   )
 
   const fetchThreadMessagesStable = useCallback(
@@ -658,12 +897,12 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   )
 
   const resetChat = useCallback(() => {
+    fetchSeqRef.current++
+    detachTypingAnimation()
     setThreadId(null)
     setMessages([])
-    setIsLoading(false)
-    setIsGenerating(false)
     lastFetchedThreadIdRef.current = null
-  }, [])
+  }, [detachTypingAnimation])
 
   useEffect(() => {
     return () => {
@@ -673,8 +912,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       if (toolStreamRafRef.current) {
         cancelAnimationFrame(toolStreamRafRef.current)
       }
+      cancelToolStream()
     }
-  }, [])
+  }, [cancelToolStream])
 
   return {
     messages,
@@ -683,6 +923,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     threadId,
     sendMessage,
     createThread,
+    syncThreadIdFromUrl: fetchThreadMessagesStable,
     fetchThreadMessages: fetchThreadMessagesStable,
     sendFeedback,
     resetChat
