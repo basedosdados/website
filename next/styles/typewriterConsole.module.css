@@ -1,0 +1,52 @@
+.console {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: 14px;
+  background-color: #FFFFFF;
+  padding: 32px 32px 70px;
+  box-shadow: 0px 1.6px 16px rgba(100, 96, 103, 0.16);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  min-height: 38px;
+  font-size: 16px;
+  line-height: 24px;
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
+  color: #252A32;
+  text-align: left;
+}
+
+.cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: #252A32;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .text {
+    font-size: 14px;
+    line-height: 20px;
+    min-height: 26px;
+    text-align: left;
+    white-space: normal;
+  }
+}
