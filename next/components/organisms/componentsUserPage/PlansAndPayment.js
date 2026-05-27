@@ -226,6 +226,17 @@ export default function PlansAndPayment ({ userData }) {
   }, [plan, plans, userData, chatbotSubscriptionInfo])
 
   useEffect(() => {
+    if (!plans || plan !== "") return
+    if (query.checkout !== "chatbot") return
+    if (hasChatbotSubscription(userData)) return
+
+    const planId = plans.bd_chatbot_year?._id
+    if (planId) {
+      setPlan(planId)
+    }
+  }, [query.checkout, plans, userData, plan])
+
+  useEffect(() => {
     const planSelected = cookies.get('plan_selected');
     if (planSelected && plans) {
       const monthId = plans.bd_chatbot_month?._id

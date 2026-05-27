@@ -15,6 +15,7 @@ import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import Display from "../components/atoms/Text/Display";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
+import { redirectToChatbotCheckout } from "../utils";
 
 function getGreetingFirstNameFromCookie() {
   try {
@@ -76,7 +77,7 @@ function ChatbotAccessGate({ children }) {
           return;
         }
         if (!data.has_chatbot_access) {
-          router.replace("/prices");
+          await redirectToChatbotCheckout(router);
           return;
         }
         setCanEnter(true);

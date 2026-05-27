@@ -33,7 +33,8 @@
             "publicDatalake": "Public datalake",
             "dataPackages": "Packages",
             "DBPro": "DB Pro",
-            "DBEdu": "DB Edu"
+            "DBEdu": "DB Edu",
+            "chatbot": "Chatbot"
         },
         "services": {
             "title": "SERVICES",

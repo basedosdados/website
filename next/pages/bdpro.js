@@ -481,10 +481,10 @@ function PricingSection({ t }) {
         textAlign="center"
         margin="0 auto"
       >
-        {t('prices:comparePlans')}
+        {t("prices:comparePlans")}
       </Display>
-      <Box width="100%" maxWidth="1264px" margin="0 auto">
-        <SectionPrice/>
+      <Box width="100%" maxWidth="960px" margin="0 auto">
+        <SectionPrice hasChatbot={false} />
       </Box>
     </VStack>
   );
