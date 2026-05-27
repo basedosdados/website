@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, redirectToChatbotCheckout } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -203,8 +203,8 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
             fontSize="20px"
             fontFamily="Roboto"
             fontWeight="400"
-            href={hasChatbotAccess ? "/chatbot" : "/prices"}
-            onClick={() => {
+            href={hasChatbotAccess ? "/chatbot" : "#"}
+            onClick={(e) => {
               onClose();
               if (hasChatbotAccess) {
                 trackMenuOpenChatbot({
@@ -214,6 +214,9 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                   isUserPro,
                   pagePath,
                 });
+              } else {
+                e.preventDefault();
+                redirectToChatbotCheckout(router);
               }
             }}
           >
@@ -391,8 +394,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                 gap="6px"
                 color="#71757A"
                 fontWeight="400"
-                href={hasChatbotAccess ? "/chatbot" : "/prices"}
-                onClick={() => {
+                href={hasChatbotAccess ? "/chatbot" : "#"}
+                onClick={(e) => {
                   onClose()
                   if (hasChatbotAccess) {
                     trackMenuOpenChatbot({
@@ -402,6 +405,9 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                       isUserPro,
                       pagePath,
                     })
+                  } else {
+                    e.preventDefault()
+                    redirectToChatbotCheckout(router)
                   }
                 }}
               >
@@ -991,7 +997,7 @@ function DesktopLinks({
             : {
                 type: "button",
                 onClick: () => {
-                  router.push("/prices");
+                  redirectToChatbotCheckout(router);
                 },
               })}
           minWidth="auto"
@@ -1153,6 +1159,10 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
           href: "/bdpro"
         },
         {
+          name: [t('chatbot_lp')],
+          href: "/chatbot-lp"
+        },
+        {
           name: [t('courses')],
           href: "https://info.basedosdados.org/bd-edu-cursos"
         }
@@ -1180,6 +1190,10 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         {
           name: [t('exclusive_data')],
           href: "/en/bdpro"
+        },
+        {
+          name: [t('chatbot_lp')],
+          href: "/chatbot-lp"
         }
       ],
       [t('resources')]: [
@@ -1202,6 +1216,10 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
         {
           name: [t('exclusive_data')],
           href: "/es/bdpro"
+        },
+        {
+          name: [t('chatbot_lp')],
+          href: "/chatbot-lp"
         }
       ],
       [t('resources')]: [

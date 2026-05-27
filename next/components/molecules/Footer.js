@@ -216,6 +216,9 @@ export default function Footer({ template, ocult = false }) {
                                 "/bdpro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
+              <FooterLink href="/chatbot-lp">
+                {t('footer.products.chatbot')}
+              </FooterLink>
               {locale === 'pt' && (
                 <FooterLink href="https://info.basedosdados.org/bd-edu-cursos">
                   {t('footer.products.DBEdu')}
