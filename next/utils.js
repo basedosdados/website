@@ -220,6 +220,31 @@ export function triggerGAEventWithData(category, data) {
   window.dataLayer.push(eventData);
 }
 
+const CHATBOT_LP_DESKTOP_PLACEMENTS = new Set([
+  "desktop_header_right",
+  "desktop_solutions_dropdown",
+]);
+
+export function trackNavigateToChatbotLp({
+  value,
+  placement,
+  pagePath,
+  isMobile,
+}) {
+  if (typeof window === "undefined") return;
+
+  const user = getUserFromCookie();
+
+  triggerGAEventWithData("navigating_to_chatbot_lp", {
+    value,
+    menu_placement: placement,
+    is_mobile: isMobile ?? !CHATBOT_LP_DESKTOP_PLACEMENTS.has(placement),
+    is_logged_in: Boolean(user?.username),
+    is_bd_pro: hasBDProSubscription(user),
+    page_path: pagePath || window.location.pathname,
+  });
+}
+
 export function cleanString(string) {
   const newString = string.trim()
   const returnString = newString.replace(/\s+/g, ' ')

@@ -8,7 +8,7 @@ import Link from "../atoms/Link";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, trackNavigateToChatbotLp } from "../../utils";
 import Display from "../atoms/Text/Display";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -84,7 +84,7 @@ function TextFooterSimple({children, ...props}) {
 
 export default function Footer({ template, ocult = false }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
+  const { locale, pathname: pagePath } = useRouter();
 
   function handlerTriggerEvent(event, value) {
     triggerGAEvent(event, value)
@@ -216,7 +216,15 @@ export default function Footer({ template, ocult = false }) {
                                 "/bdpro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
-              <FooterLink href="/chatbot-lp">
+              <FooterLink
+                href="/chatbot-lp"
+                onClick={() => trackNavigateToChatbotLp({
+                  value: "footer",
+                  placement: "footer_products",
+                  pagePath,
+                  isMobile: isMobileMod(),
+                })}
+              >
                 {t('footer.products.chatbot')}
               </FooterLink>
               {locale === 'pt' && (

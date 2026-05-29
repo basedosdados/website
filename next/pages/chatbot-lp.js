@@ -19,7 +19,7 @@ import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { triggerGAEventWithData } from "../utils";
+import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription } from "../utils";
 
 import { getAllFAQs } from "./api/faqs";
 
@@ -537,7 +537,12 @@ function WhyChatbotSection() {
         flexDirection={{ base: "column", lg: "row" }}
         spacing={0}
       >
-        <Box flex={1} maxWidth={{ base: "100%", lg: "624px" }} width="100%" alignSelf="stretch">
+        <Box
+          flex={1}
+          maxWidth={{ base: "100%", lg: "624px" }}
+          width="100%"
+          alignSelf="stretch"
+        >
           <Accordion
             index={activeIndex}
             onChange={(index) => setActiveIndex(index)}
@@ -589,6 +594,8 @@ function WhyChatbotSection() {
         </Box>
 
         <Box
+          id="chatbot-pricing"
+          scrollMargin="100px"
           width={{ base: "100%", lg: "400px" }}
           maxWidth="100%"
           flexShrink={0}
@@ -620,6 +627,13 @@ function scrollToPresentation() {
   window.history.replaceState(null, "", `#${"presentation"}`);
 
   window.setTimeout(clearPresentationHashFromUrl, 1500);
+}
+
+function scrollToPricing() {
+  const el = document.getElementById("chatbot-pricing");
+  if (!el) return;
+
+  el.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function VideoPlayer({ src }) {
@@ -674,6 +688,61 @@ function VideoPlayer({ src }) {
 function Hero({ t }) {
   const router = useRouter();
   const prompts = t("hero.prompts", { returnObjects: true });
+  const [hasChatbotAccess, setHasChatbotAccess] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkAccess() {
+      const token = cookies.get("token");
+      const userRaw = cookies.get("userBD");
+
+      if (!token || !userRaw || userRaw === "undefined") {
+        if (!cancelled) setHasChatbotAccess(false);
+        return;
+      }
+
+      try {
+        JSON.parse(userRaw);
+      } catch {
+        if (!cancelled) setHasChatbotAccess(false);
+        return;
+      }
+
+      try {
+        const params = new URLSearchParams({ p: btoa(token) });
+        const res = await fetch(`/api/user/validateToken?${params}`);
+        const data = await res.json();
+
+        if (!cancelled) {
+          setHasChatbotAccess(Boolean(res.ok && data.success && data.has_chatbot_access));
+        }
+      } catch {
+        if (!cancelled) {
+          setHasChatbotAccess(hasChatbotSubscription(getUserFromCookie()));
+        }
+      }
+    }
+
+    checkAccess();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const heroPromptButtonText = hasChatbotAccess
+    ? t("hero.buttonPrompt.textStart")
+    : t("hero.buttonPrompt.textSubscribe");
+
+  const handleHeroPromptClick = () => {
+    if (hasChatbotAccess) {
+      router.push("/chatbot");
+      return;
+    }
+
+    scrollToPricing();
+  };
 
   return (
     <Box
@@ -726,9 +795,9 @@ function Hero({ t }) {
         </Display>
         <TypewriterConsole
           messages={prompts}
-          textBtn={t("hero.buttonPrompt.text")}
-          onClickBtn={() => router.push("/chatbot")}
-          targetBtn="_blank"
+          textBtn={heroPromptButtonText}
+          onClickBtn={handleHeroPromptClick}
+          targetBtn={hasChatbotAccess ? "_blank" : "_self"}
         />
         <Button
           marginTop="32px !important"

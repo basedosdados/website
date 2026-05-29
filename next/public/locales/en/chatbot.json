@@ -18,7 +18,8 @@
       "Who received the most votes for president in the Itaquera neighborhood in 2022?"
     ],
     "buttonPrompt": {
-      "text": "Get started"
+      "textSubscribe": "Subscribe now",
+      "textStart": "Get started"
     },
     "buttonScroll": {
       "text": "Demo"
