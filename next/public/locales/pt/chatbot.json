@@ -18,7 +18,8 @@
       "Quem teve mais votos para presidente no bairro de Itaquera em 2022?"
     ],
     "buttonPrompt": {
-      "text": "Começar já"
+      "textSubscribe": "Assine já",
+      "textStart": "Comece já"
     },
     "buttonScroll": {
       "text": "Demonstração"

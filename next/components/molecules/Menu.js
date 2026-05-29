@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, redirectToChatbotCheckout } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -68,12 +68,28 @@ function trackMenuOpenChatbot({
   });
 }
 
-function handleMenuLinkClick(href) {
+function navigateToChatbotLp(router, { menuPlacement, pagePath }) {
+  trackNavigateToChatbotLp({
+    value: "menu",
+    placement: menuPlacement,
+    pagePath,
+  });
+  router.push("/chatbot-lp");
+}
+
+function handleMenuLinkClick(href, { pagePath, placement } = {}) {
   if (href === "/services") {
     triggerGAEvent("navigating_to_services", "menu");
   }
   if (href === "/search") {
     triggerGAEvent("navigating_to_data", "menu");
+  }
+  if (href === "/chatbot-lp") {
+    trackNavigateToChatbotLp({
+      value: "menu",
+      placement,
+      pagePath,
+    });
   }
 }
 
@@ -157,7 +173,10 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                             letterSpacing="0.1px"
                             fontWeight="400"
                             href={c.href}
-                            onClick={() => handleMenuLinkClick(c.href)}
+                            onClick={() => handleMenuLinkClick(c.href, {
+                              pagePath,
+                              placement: "mobile_drawer_solutions",
+                            })}
                           >
                             {c.icon && c.icon} {c.name}
                           </Link>
@@ -176,7 +195,7 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                   letterSpacing="0.1px"
                   fontWeight="400"
                   href={elm}
-                  onClick={() => handleMenuLinkClick(elm)}
+                  onClick={() => handleMenuLinkClick(elm, { pagePath, placement: "mobile_drawer" })}
                 >
                   {key}
                 </Link>
@@ -216,7 +235,10 @@ function MenuDrawer({ userData, isOpen, onClose, links, hasChatbotAccess, isUser
                 });
               } else {
                 e.preventDefault();
-                redirectToChatbotCheckout(router);
+                navigateToChatbotLp(router, {
+                  menuPlacement: "mobile_drawer",
+                  pagePath,
+                });
               }
             }}
           >
@@ -407,7 +429,10 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                     })
                   } else {
                     e.preventDefault()
-                    redirectToChatbotCheckout(router)
+                    navigateToChatbotLp(router, {
+                      menuPlacement: "mobile_drawer_user",
+                      pagePath,
+                    })
                   }
                 }}
               >
@@ -790,7 +815,10 @@ function DesktopLinks({
         href={url}
         padding="10px 0"
         gap="16px"
-        onClick={() => handleMenuLinkClick(url)}
+        onClick={() => handleMenuLinkClick(url, {
+          pagePath,
+          placement: "desktop_solutions_dropdown",
+        })}
         onMouseEnter={setFlag.on}
         onMouseLeave={setFlag.off}
       > 
@@ -873,7 +901,7 @@ function DesktopLinks({
               fontWeight="400"
               href={v}
               target={v.startsWith("https") ? "_blank" : null}
-              onClick={() => handleMenuLinkClick(v)}
+              onClick={() => handleMenuLinkClick(v, { pagePath, placement: "desktop" })}
             >
               {k}
             </Link>
@@ -997,7 +1025,10 @@ function DesktopLinks({
             : {
                 type: "button",
                 onClick: () => {
-                  redirectToChatbotCheckout(router);
+                  navigateToChatbotLp(router, {
+                    menuPlacement: "desktop_header_right",
+                    pagePath,
+                  });
                 },
               })}
           minWidth="auto"
