@@ -43,7 +43,6 @@ export async function getStaticProps({ locale }) {
 export default function Login() {
   const router = useRouter();
   const { t } = useTranslation('user');
-  const { query } = useRouter()
   const [formData, setFormData] = useState({ email: "", password: "" })
   const [errors, setErrors] = useState({ email: "", password: "", login: ""})
   const [showPassword, setShowPassword] = useState(true)

@@ -220,6 +220,31 @@ export function triggerGAEventWithData(category, data) {
   window.dataLayer.push(eventData);
 }
 
+const CHATBOT_LP_DESKTOP_PLACEMENTS = new Set([
+  "desktop_header_right",
+  "desktop_solutions_dropdown",
+]);
+
+export function trackNavigateToChatbotLp({
+  value,
+  placement,
+  pagePath,
+  isMobile,
+}) {
+  if (typeof window === "undefined") return;
+
+  const user = getUserFromCookie();
+
+  triggerGAEventWithData("navigating_to_chatbot_lp", {
+    value,
+    menu_placement: placement,
+    is_mobile: isMobile ?? !CHATBOT_LP_DESKTOP_PLACEMENTS.has(placement),
+    is_logged_in: Boolean(user?.username),
+    is_bd_pro: hasBDProSubscription(user),
+    page_path: pagePath || window.location.pathname,
+  });
+}
+
 export function cleanString(string) {
   const newString = string.trim()
   const returnString = newString.replace(/\s+/g, ' ')
@@ -272,4 +297,73 @@ export function getSubscriptionType(user) {
   if (hasChatbotSubscription(user)) return "chatbot"
   if (user?.isSubscriber) return "unknown"
   return "none"
+}
+
+function filterConsumerChatbotPlans(edges) {
+  return (edges || []).filter((item) => {
+    const name = item?.node?.productName?.toLowerCase() || ""
+    const slug = item?.node?.productSlug?.toLowerCase() || ""
+    const isConsumerChatbot =
+      (name.includes("chatbot") || slug.includes("chatbot")) &&
+      !name.includes("empresas")
+    return isConsumerChatbot && item?.node?.isActive === true
+  })
+}
+
+export async function fetchChatbotPlan(interval = "year") {
+  const amounts = { month: 30, year: 326 }
+  const amount = amounts[interval] || amounts.year
+
+  try {
+    const result = await fetch("/api/stripe/getPlans", { method: "GET" }).then((res) =>
+      res.json()
+    )
+    if (!result?.success) return null
+
+    const chatbotPlans = filterConsumerChatbotPlans(result.data)
+    return (
+      chatbotPlans.find(
+        (item) => item?.node?.interval === interval && item?.node?.amount === amount
+      )?.node ?? null
+    )
+  } catch {
+    return null
+  }
+}
+
+export function getUserFromCookie() {
+  try {
+    const raw = cookies.get("userBD")
+    if (!raw || raw === "undefined") return null
+    return JSON.parse(raw)
+  } catch {
+    return null
+  }
+}
+
+export async function redirectToChatbotCheckout(router, { interval = "year" } = {}) {
+  const plan = await fetchChatbotPlan(interval)
+
+  if (plan?._id) {
+    cookies.set("plan_selected", plan._id, { expires: 1, path: "/" })
+  }
+
+  const user = getUserFromCookie()
+
+  if (!user?.username) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("previousPath", window.location.href)
+    }
+    return router.push("/user/login")
+  }
+
+  const query = { plans_and_payment: "" }
+  if (!plan?._id) {
+    query.checkout = "chatbot"
+  }
+
+  return router.push({
+    pathname: `/user/${user.username}`,
+    query,
+  })
 }

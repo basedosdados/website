@@ -33,7 +33,8 @@
             "publicDatalake": "Public datalake",
             "dataPackages": "Packages",
             "DBPro": "DB Pro",
-            "DBEdu": "DB Edu"
+            "DBEdu": "DB Edu",
+            "chatbot": "Chatbot"
         },
         "services": {
             "title": "SERVICES",
@@ -41,7 +42,7 @@
             "arquiteturaDeDados": "Data Architecture",
             "portalDeDados": "Data Portal",
             "painelGerencial": "Management Panel",
-            "chatbot": "Chatbot",
+            "chatbot": "Custom Chatbot",
             "formacao": "Training"
         },
         "resources": {

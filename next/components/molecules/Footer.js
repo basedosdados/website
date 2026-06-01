@@ -8,7 +8,7 @@ import Link from "../atoms/Link";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, trackNavigateToChatbotLp } from "../../utils";
 import Display from "../atoms/Text/Display";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -54,18 +54,21 @@ function SocialLink({ href, icon }) {
   )
 }
 
-function FooterLink(props) {
+function FooterLink({ href, onClick, children, ...rest }) {
   return (
     <Link
       fontWeight="500"
       fontSize="16px"
       lineHeight="24px"
       color="#464A51"
-      target={props.href.startsWith("http") ? "_blank" : "_self"}
-      href={props.href}
+      target={href?.startsWith("http") ? "_blank" : "_self"}
+      href={href}
       _hover={{ opacity: 0.8 }}
-      {...props}
-    />
+      onClick={onClick}
+      {...rest}
+    >
+      {children}
+    </Link>
   )
 }
 
@@ -84,7 +87,8 @@ function TextFooterSimple({children, ...props}) {
 
 export default function Footer({ template, ocult = false }) {
   const { t } = useTranslation('common');
-  const { locale } = useRouter();
+  const { locale, pathname: pagePath } = useRouter();
+  const isMobile = isMobileMod();
 
   function handlerTriggerEvent(event, value) {
     triggerGAEvent(event, value)
@@ -216,6 +220,17 @@ export default function Footer({ template, ocult = false }) {
                                 "/bdpro"}>
                 {t('footer.products.DBPro')}
               </FooterLink>
+              <FooterLink
+                href="/chatbot-lp"
+                onClick={() => trackNavigateToChatbotLp({
+                  value: "footer",
+                  placement: "footer_products",
+                  pagePath,
+                  isMobile,
+                })}
+              >
+                {t('footer.products.chatbot')}
+              </FooterLink>
               {locale === 'pt' && (
                 <FooterLink href="https://info.basedosdados.org/bd-edu-cursos">
                   {t('footer.products.DBEdu')}
@@ -224,7 +239,7 @@ export default function Footer({ template, ocult = false }) {
             </SectionCategories>
             
             {locale === 'pt' && (
-              <SectionCategories title={t('footer.services.title')} marginBottom={isMobileMod() && "24px !important"}>
+              <SectionCategories title={t('footer.services.title')} marginBottom={isMobile && "24px !important"}>
                 <FooterLink
                   href="/services#diagnostico-de-maturidade"
                   onClick={() => handlerTriggerEvent("navigating_to_services", "footer")}
@@ -264,7 +279,7 @@ export default function Footer({ template, ocult = false }) {
               </SectionCategories>
             )}
 
-            <SectionCategories title={t('footer.resources.title')} marginBottom={isMobileMod() && "24px !important"}>
+            <SectionCategories title={t('footer.resources.title')} marginBottom={isMobile && "24px !important"}>
               <FooterLink href={
                             locale === "en" ? "/en/docs/home" :
                             locale === "es" ? "/es/docs/home" :
@@ -292,7 +307,7 @@ export default function Footer({ template, ocult = false }) {
               </FooterLink>
             </SectionCategories>
 
-            <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobileMod() && "24px !important"}>
+            <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobile && "24px !important"}>
               <FooterLink href="/about-us">
                 {t('footer.institutional.aboutUs')}
               </FooterLink>

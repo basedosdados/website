@@ -1,0 +1,62 @@
+{
+  "head": {
+    "pageTitle": "Chatbot – Base de los Datos",
+    "metaTitle": "Chatbot – Base de los Datos"
+  },
+  "hero": {
+    "title": {
+      "prefix": "Conversa con el",
+      "highlight1": "mayor acervo",
+      "middle": "de",
+      "highlight2": "datos públicos",
+      "suffix": "de Brasil."
+    },
+    "prompts": [
+      "¿Cuál es la disparidad salarial por género en São Paulo?",
+      "Ayúdame con ideas de análisis con los datos del SAEB",
+      "¿Cuántas empresas activas hay en Serra da Saudade (MG)?",
+      "¿Quién recibió más votos para presidente en el barrio de Itaquera en 2022?"
+    ],
+    "buttonPrompt": {
+      "textSubscribe": "Suscríbete ya",
+      "textStart": "Empieza ya"
+    },
+    "buttonScroll": {
+      "text": "Demostración"
+    }
+  },
+  "presentation": {
+    "title": "¿Cómo funciona nuestro producto?",
+    "description": "Conoce la herramienta de IA que te ayudará a crear análisis en segundos y te guiará por todo el datalake público de Base de los Datos"
+  },
+  "why": {
+    "title": "¿Por qué el Chatbot de Base de los Datos revolucionará tu trabajo con datos?",
+    "items": [
+      {
+        "title": "Acceso al mayor datalake público de Brasil",
+        "content": "Navega por terabytes de datos en más de 740 tablas sobre diversos temas (educación, economía, salud, mercado de trabajo, demografía, medio ambiente).",
+        "highlightFeature": 0
+      },
+      {
+        "title": "Motor de IA avanzado con preguntas ilimitadas",
+        "content": "Utiliza Gemini, el modelo de inteligencia artificial de última generación de Google, para transformar todas las preguntas que quieras en consultas precisas.",
+        "highlightFeature": 1
+      },
+      {
+        "title": "Interfaz de lenguaje natural",
+        "content": "Permite que cualquier persona explore el datalake público de Base de los Datos mediante preguntas simples, sin lenguaje de programación."
+      },
+      {
+        "title": "Transparencia y flexibilidad",
+        "content": "La inclusión de la consulta SQL permite validar los insights y descargar los datos para crear tus propias visualizaciones e informes en otras herramientas.",
+        "highlightFeature": 2
+      }
+    ]
+  },
+  "pricingCard": {
+    "title": "Pruébalo gratis y crea análisis en segundos con el poder de la IA"
+  },
+  "faq": {
+    "title": "Preguntas frecuentes – FAQ"
+  }
+}

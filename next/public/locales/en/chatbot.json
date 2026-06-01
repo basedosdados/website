@@ -1,0 +1,62 @@
+{
+  "head": {
+    "pageTitle": "Chatbot – Data Basis",
+    "metaTitle": "Chatbot – Data Basis"
+  },
+  "hero": {
+    "title": {
+      "prefix": "Talk to",
+      "highlight1": "the largest collection",
+      "middle": "of",
+      "highlight2": "public data",
+      "suffix": "in Brazil."
+    },
+    "prompts": [
+      "What is the gender pay gap in São Paulo?",
+      "Help me with analysis ideas using SAEB data",
+      "How many active companies are there in Serra da Saudade (MG)?",
+      "Who received the most votes for president in the Itaquera neighborhood in 2022?"
+    ],
+    "buttonPrompt": {
+      "textSubscribe": "Subscribe now",
+      "textStart": "Get started"
+    },
+    "buttonScroll": {
+      "text": "Demo"
+    }
+  },
+  "presentation": {
+    "title": "How does our product work?",
+    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire Data Basis public datalake"
+  },
+  "why": {
+    "title": "Why will the Data Basis Chatbot revolutionize the way you work with data?",
+    "items": [
+      {
+        "title": "Access to Brazil's Largest Public Datalake",
+        "content": "Browse terabytes of data across more than 740 tables on diverse topics (education, economy, health, labor market, demography, environment).",
+        "highlightFeature": 0
+      },
+      {
+        "title": "Advanced AI Engine with Unlimited Questions",
+        "content": "Powered by Gemini, Google's state-of-the-art AI model, to turn as many questions as you want into precise queries.",
+        "highlightFeature": 1
+      },
+      {
+        "title": "Natural Language Interface",
+        "content": "Lets anyone explore the Data Basis public datalake through simple questions, with no programming required."
+      },
+      {
+        "title": "Transparency and Flexibility",
+        "content": "Including the SQL query lets you validate insights and download data to build your own visualizations and reports in other tools.",
+        "highlightFeature": 2
+      }
+    ]
+  },
+  "pricingCard": {
+    "title": "Try it free and create analyses in seconds with the power of AI"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions – FAQ"
+  }
+}

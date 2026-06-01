@@ -1,0 +1,62 @@
+{
+  "head": {
+    "pageTitle": "Chatbot LP - Base dos Dados",
+    "metaTitle": "Chatbot LP - Base dos Dados"
+  },
+  "hero": {
+    "title": {
+      "prefix": "Converse com o",
+      "highlight1": "maior acervo",
+      "middle": "de",
+      "highlight2": "dados públicos",
+      "suffix": "do Brasil."
+    },
+    "prompts": [
+      "Qual é a disparidade salarial por gênero em São Paulo?",
+      "Me ajude com ideias de análises com os dados do SAEB",
+      "Quantas empresas ativas existem em Serra da Saudade (MG)?",
+      "Quem teve mais votos para presidente no bairro de Itaquera em 2022?"
+    ],
+    "buttonPrompt": {
+      "textSubscribe": "Assine já",
+      "textStart": "Comece já"
+    },
+    "buttonScroll": {
+      "text": "Demonstração"
+    }
+  },
+  "presentation": {
+    "title": "Como funciona nosso produto?",
+    "description": "Conheça a ferramenta de IA que vai te ajudar a criar análises em segundos e te guiar por todo o datalake público da BD"
+  },
+  "why": {
+    "title": "Por que o Chatbot da BD vai revolucionar seu trabalho com dados?",
+    "items": [
+      {
+        "title": "Acesso ao Maior Datalake Público do Brasil",
+        "content": "Navega por terabytes de dados em mais de 740 tabelas sobre diversos temas (educação, economia, saúde, mercado de trabalho, demografia, meio ambiente).",
+        "highlightFeature": 0
+      },
+      {
+        "title": "Motor de IA Avançado com perguntas ilimitadas",
+        "content": "Utiliza o Gemini, modelo de inteligência artificial de última geração do Google, para transformar quantas perguntas quiser em consultas precisas.",
+        "highlightFeature": 1
+      },
+      {
+        "title": "Interface de Linguagem Natural",
+        "content": "Permite que qualquer pessoa explore o datalake público da BD Brasil através de perguntas simples, sem linguagem de programação."
+      },
+      {
+        "title": "Transparência e Flexibilidade",
+        "content": "A inclusão da consulta SQL permite que o usuário valide os insights e baixe os dados para criar suas próprias visualizações e relatórios em outras ferramentas.",
+        "highlightFeature": 2
+      }
+    ]
+  },
+  "pricingCard": {
+    "title": "Teste gratuitamente e crie análises em segundos com o poder da IA"
+  },
+  "faq": {
+    "title": "Dúvidas Frequentes - FAQ"
+  }
+}
