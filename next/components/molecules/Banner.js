@@ -14,6 +14,7 @@ export default function Banner({
   href,
   onClick,
   imageSrc,
+  imageProps = {},
   ...props
 }) {
   return (
@@ -24,7 +25,7 @@ export default function Banner({
       flexDirection={{ base: 'column', md: 'row' }}
       justifyContent="space-between" 
       gap="40px"
-      padding="16px"
+      padding="32px"
       margin="24px auto !important"
       borderRadius="16px"
       boxSizing="border-box"
@@ -32,14 +33,16 @@ export default function Banner({
       alignItems="center"
       {...props}
     >
-      <Stack width="100%" maxWidth="560px" padding="16px" spacing={0}>
+      <Stack width="100%" maxWidth="540px" spacing={0}>
         <TitleText>{title}</TitleText>
-        <BodyText
-          typography="small"
-          marginTop="16px !important"
-        >
-          {description}
-        </BodyText>
+        {description && (
+          <BodyText
+            typography="small"
+            marginTop="16px !important"
+          >
+            {description}
+          </BodyText>
+        )}
 
         <Link href={href} target="_blank">
           <Button
@@ -63,6 +66,7 @@ export default function Banner({
         width="220px"
         height={{ base: '100%', md: '225px' }}
         borderRadius="16px"
+        {...imageProps}
       />
     </Box>
   )

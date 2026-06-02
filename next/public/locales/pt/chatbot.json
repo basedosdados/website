@@ -58,5 +58,9 @@
   },
   "faq": {
     "title": "Dúvidas Frequentes - FAQ"
+  },
+  "banner": {
+    "title": "Crie análises em segundos com o poder da IA e o Datalake da Base dos Dados",
+    "button": "Teste já o chatbot da BD"
   }
 }

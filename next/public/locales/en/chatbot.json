@@ -58,5 +58,9 @@
   },
   "faq": {
     "title": "Frequently Asked Questions – FAQ"
+  },
+  "banner": {
+    "title": "Create analyses in seconds with the power of AI and Base dos Dados' Datalake",
+    "button": "Try the BD chatbot now"
   }
 }
