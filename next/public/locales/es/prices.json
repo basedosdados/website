@@ -1,7 +1,7 @@
 {
     "pageTitle": "Precios – Base de los Datos",
     "ogTitle": "Precio – Base de los Datos",
-    "ogDescription": "Compare los planes de Base de los Datos: Gratis, Pro, Empresas y Chatbot. Con BD Pro, cuenta con funciones avanzadas de nuestra plataforma, datos de alta frecuencia y conjuntos exclusivos desde R$47/mes.",
+    "ogDescription": "Compare los planes de Base de los Datos: Gratis, Pro, Orgs y Chatbot. Con BD Pro, cuenta con funciones avanzadas de nuestra plataforma, datos de alta frecuencia y conjuntos exclusivos desde R$47/mes.",
     "comparePlans": "Comparar planes",
     "annualDiscount": "Descuento anual",
     "annualBillingMessage": "{{price}} cobrado una vez al año",
@@ -14,9 +14,12 @@
     "allFeaturesPlus": "Todas las características de {{plan}}, más:",
     "currentPlan": "Plan actual",
     "subscribe": "Suscribirse",
+    "contactUs": "Contáctenos",
     "startFreeTrial": "Iniciar prueba gratuita",
     "exploreFeatures": "Explorar características",
     "beta": "Beta",
+    "priceOnRequest": "Bajo consulta",
+    "priceOnRequestSubtitle": "plan personalizado para su organización",
     "plans": {
       "free": {
         "title": "BD Gratis",
@@ -42,11 +45,19 @@
         ]
       },
       "enterprise": {
-        "title": "BD Empresas",
-        "subtitle": "Para que tu empresa gane tiempo y calidad en las decisiones",
+        "title": "BD Orgs",
+        "subtitle": "Para que tu organización gane tiempo y calidad en las decisiones",
         "features": [
-          "Acceso para 10 cuentas",
-          "Soporte prioritario por correo electrónico y Discord"
+          "A partir de 10 accesos a BD Pro",
+          "Soporte prioritario",
+          "Chatbot",
+          "Infraestructura segmentada para uso",
+          "Facturación unificada de accesos, licencias y consumo en la nube",
+          {
+            "text": "Servicios especializados de carga de datos y analytics",
+            "linkText": "saber más",
+            "linkHref": "/services"
+          }
         ]
       },
       "chatbot": {
@@ -54,7 +65,7 @@
         "subtitle": "Para crear análisis en segundos con el poder de la IA",
         "exclusiveFeaturesHeading": "Recursos exclusivos:",
         "features": [
-          "Chatbot conectado a 741 tablas de datos públicos",
+          "Chatbot conectado a +700 tablas de datos públicos",
           "Preguntas ilimitadas",
           "Códigos listos para extracción de datos",
           "Soporte prioritario por correo electrónico y Discord"

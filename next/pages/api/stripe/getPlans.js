@@ -40,5 +40,11 @@ export default async function handler(req, res) {
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
 
-  res.status(200).json({data: result?.data?.allStripePrice?.edges, success: true})
+  const edges = (result?.data?.allStripePrice?.edges ?? []).filter(({ node }) => {
+    const name = node.productName?.toLowerCase() || ""
+    const slug = node.productSlug?.toLowerCase() || ""
+    return !name.includes("empresas") && !slug.includes("empresas")
+  })
+
+  res.status(200).json({ data: edges, success: true })
 }

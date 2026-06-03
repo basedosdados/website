@@ -175,8 +175,6 @@ export default function PlansAndPayment ({ userData }) {
           const filteredPlans = {
             bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
             bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-            bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
-            bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node,
             bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
             bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
           }
@@ -347,7 +345,15 @@ export default function PlansAndPayment ({ userData }) {
       }],
       resources : [
         {name: t('username.accessFor10Accounts')},
-        {name: t('username.prioritySupport')}
+        {name: t('username.prioritySupport')},
+        {name: t('username.bdOrgsChatbot'), hideInListFeature: true},
+        {name: t('username.bdOrgsSegmentedInfrastructure')},
+        {name: t('username.bdOrgsUnifiedBilling')},
+        {
+          name: t('username.bdOrgsSpecializedServices'),
+          linkText: t('username.bdOrgsLearnMore'),
+          linkHref: '/services',
+        },
       ]}
   }
 
@@ -361,6 +367,8 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   const ListFeature = ({ elm, index, notIncludes = false }) => {
+    if (!elm || elm === "" || elm.hideInListFeature) return null;
+
     return (
       <Box key={index} display="flex" alignItems="center">
         {notIncludes ?
@@ -371,7 +379,24 @@ export default function PlansAndPayment ({ userData }) {
         <BodyText
           typography="small"
           color="#464A51"
-        >{elm.name}</BodyText>
+        >
+          {elm.linkHref ? (
+            <>
+              {elm.name}{" "}
+              <Link
+                href={elm.linkHref}
+                color="#0068C5"
+                _hover={{ color: "#0057A4" }}
+                fontSize="14px"
+                fontWeight="400"
+              >
+                {elm.linkText}
+              </Link>
+            </>
+          ) : (
+            elm.name
+          )}
+        </BodyText>
         {elm.tooltip &&
           <Tooltip
             label={elm.tooltip}

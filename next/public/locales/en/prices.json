@@ -1,7 +1,7 @@
 {
     "pageTitle": "Prices – Data Basis",
     "ogTitle": "Price – Data Basis",
-    "ogDescription": "Compare Data Basis plans: Free, Pro, Enterprise, and Chatbot. With DB Pro, you get advanced features of our platform, high-frequency data, and exclusive datasets starting at R$47/month.",
+    "ogDescription": "Compare Data Basis plans: Free, Pro, Orgs, and Chatbot. With DB Pro, you get advanced features of our platform, high-frequency data, and exclusive datasets starting at R$47/month.",
     "comparePlans": "Compare plans",
     "annualDiscount": "Annual discount",
     "annualBillingMessage": "{{price}} charged once a year",
@@ -14,9 +14,12 @@
     "allFeaturesPlus": "All features of {{plan}}, plus:",
     "currentPlan": "Current plan",
     "subscribe": "Subscribe",
+    "contactUs": "Contact us",
     "startFreeTrial": "Start free trial",
     "exploreFeatures": "Explore features",
     "beta": "Beta",
+    "priceOnRequest": "On request",
+    "priceOnRequestSubtitle": "custom plan for your organization",
     "plans": {
       "free": {
         "title": "DB Free",
@@ -42,11 +45,19 @@
         ]
       },
       "enterprise": {
-        "title": "DB Enterprise",
-        "subtitle": "For your company to save time and improve decision quality",
+        "title": "DB Orgs",
+        "subtitle": "For your organization to save time and improve decision quality",
         "features": [
-          "Access for 10 accounts",
-          "Priority support via email and Discord"
+          "Starting from 10 BD Pro accesses",
+          "Priority support",
+          "Chatbot",
+          "Segmented infrastructure for your use",
+          "Unified billing for accesses, licenses and cloud consumption",
+          {
+            "text": "Specialized data upload and analytics services",
+            "linkText": "learn more",
+            "linkHref": "/services"
+          }
         ]
       },
       "chatbot": {
@@ -54,7 +65,7 @@
         "subtitle": "Create analyses in seconds with the power of AI",
         "exclusiveFeaturesHeading": "Exclusive features:",
         "features": [
-          "Chatbot connected to 741 tables of public data",
+          "Chatbot connected to +700 tables of public data",
           "Unlimited questions",
           "Ready-to-use code for data extraction",
           "Priority support via email and Discord"
