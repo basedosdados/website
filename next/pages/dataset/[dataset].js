@@ -28,7 +28,12 @@ import { ModalInitialTour, ModalSurveyTour, exploreTour } from "../../components
 import ServiceHighlightABTest from "../../components/molecules/ServiceHighlightABTest";
 import useABTestVariant from "../../hooks/useABTestVariant";
 import Banner from "../../components/molecules/Banner";
-import { triggerGAEvent, hasBDProSubscription } from "../../utils";
+import {
+  triggerGAEvent,
+  hasBDProSubscription,
+  hasChatbotSubscription,
+  trackNavigateToChatbotLp,
+} from "../../utils";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
 import BookIcon from "../../public/img/icons/bookIcon";
@@ -65,7 +70,7 @@ export async function getStaticProps(context) {
   }
 
   const props = {
-    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices', 'tour', 'bdpro'])),
+    ...(await serverSideTranslations(locale, ['dataset', 'common', 'menu', 'prices', 'tour', 'bdpro', 'chatbot'])),
     dataset: dataset || null,
     userGuide: userGuide || null,
     hiddenDataset,
@@ -89,7 +94,7 @@ export async function getStaticPaths(context) {
 }
 
 export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
-  const { t } = useTranslation('dataset', 'common', 'bdpro');
+  const { t } = useTranslation('dataset', 'common', 'bdpro', 'chatbot');
   const router = useRouter();
   const { locale, query } = router;
   const [tabIndex, setTabIndex] = useState(0);
@@ -99,7 +104,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const modalTourInitial = useDisclosure();
   const modalSurveyTour = useDisclosure();
   const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
+  const bannerVariant = useABTestVariant('dataset-banner-ab', ['bdpro', 'chatbot'], 1);
   const [isSubscriber, setIsSubscriber] = useState(false);
+  const [hasChatbotSubscriber, setHasChatbotSubscriber] = useState(false);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
@@ -132,7 +139,16 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
     const rawUser = cookies.get("userBD");
     const user = rawUser ? JSON.parse(rawUser) : null;
     if (hasBDProSubscription(user)) setIsSubscriber(true);
+    if (hasChatbotSubscription(user)) setHasChatbotSubscriber(true);
   }, [])
+
+  const showSubscriptionBanner = hasPaidTables && !isSubscriber;
+
+  const effectiveBannerVariant = useMemo(() => {
+    if (!showSubscriptionBanner || !bannerVariant) return null;
+    if (bannerVariant === 'chatbot' && hasChatbotSubscriber) return 'bdpro';
+    return bannerVariant;
+  }, [showSubscriptionBanner, bannerVariant, hasChatbotSubscriber]);
 
   useEffect(() => {
     if (isDatasetEmpty) {
@@ -312,7 +328,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}</title>
+        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}</title>
 
         <link
           rel="image_src"
@@ -330,12 +346,14 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
         />
         <meta
           property="og:title"
-          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t('dataBasis')}`}
+          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={dataset[`description${capitalize(locale)}`] || dataset.description}
+          content={
+            dataset[`description${capitalize(locale)}`] || dataset.description
+          }
           key="ogdesc"
         />
       </Head>
@@ -359,7 +377,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
         />
 
         <Stack
-          display={{base: "none", md: "flex"}}
+          display={{ base: "none", md: "flex" }}
           width="100%"
           spacing="0"
           gap="8px"
@@ -367,14 +385,11 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           flexDirection="row"
           alignItems="flex-start"
         >
-          <Link
-            target="_self"
-            href="/search"
-          >
+          <Link target="_self" href="/search">
             <BodyText
               color="#0068C5"
               _hover={{
-                color: "#0057A4"
+                color: "#0057A4",
               }}
             >
               {t("data")}
@@ -382,7 +397,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </Link>
           <BodyText>/</BodyText>
           <BodyText>
-            {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
+            {dataset[`name${capitalize(locale)}`] ||
+              dataset.name ||
+              t("noName")}
           </BodyText>
         </Stack>
 
@@ -400,7 +417,11 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             borderRadius="16px"
           >
             <Image
-              src={dataset?.organizations?.edges?.[0]?.node?.picture ? dataset?.organizations?.edges?.[0]?.node?.picture : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`}
+              src={
+                dataset?.organizations?.edges?.[0]?.node?.picture
+                  ? dataset?.organizations?.edges?.[0]?.node?.picture
+                  : `https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png`
+              }
               objectFit="contain"
               width="295px"
               height="252px"
@@ -409,59 +430,52 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </GridItem>
 
           <GridItem>
-            <Grid
-              templateColumns="1fr 1fr 1fr 1fr 1fr"
-              gap="8px"
-            >
+            <Grid templateColumns="1fr 1fr 1fr 1fr 1fr" gap="8px">
               <GridItem colSpan={5}>
                 <TitleText
                   typography="large"
                   width="100%"
                   overflow="hidden"
                   textOverflow="ellipsis"
-                  whiteSpace={{base: "inherit", lg:"nowrap"}}
+                  whiteSpace={{ base: "inherit", lg: "nowrap" }}
                 >
-                  {dataset[`name${capitalize(locale)}`] || dataset.name || t('noName')}
+                  {dataset[`name${capitalize(locale)}`] ||
+                    dataset.name ||
+                    t("noName")}
                 </TitleText>
               </GridItem>
 
               <GridItem colSpan={5} minHeight="60px" marginBottom="8px">
                 <ReadMore id="readLessDataset">
-                  {dataset[`description${capitalize(locale)}`] || dataset.description || t('noDescription')}
+                  {dataset[`description${capitalize(locale)}`] ||
+                    dataset.description ||
+                    t("noDescription")}
                 </ReadMore>
               </GridItem>
 
               <GridItem colSpan={5} marginBottom="8px">
-                <LabelText
-                  typography="large"
-                  marginBottom="8px"
-                >
-                  {t('organization')}
+                <LabelText typography="large" marginBottom="8px">
+                  {t("organization")}
                 </LabelText>
                 <Link
                   href={`/search?organization=${dataset?.organizations?.edges?.[0]?.node?.slug || ""}`}
                 >
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
-                    {dataset.organizations?.edges?.[0]?.node?.[`name${capitalize(locale)}`] || dataset.organizations?.edges?.[0]?.node?.name || t('noOrganization')}
+                  <BodyText typography="small" color="#464A51">
+                    {dataset.organizations?.edges?.[0]?.node?.[
+                      `name${capitalize(locale)}`
+                    ] ||
+                      dataset.organizations?.edges?.[0]?.node?.name ||
+                      t("noOrganization")}
                   </BodyText>
                 </Link>
               </GridItem>
 
               <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
-                <LabelText
-                  typography="large"
-                  marginBottom="8px"
-                >
-                  {t('temporalCoverage')}
+                <LabelText typography="large" marginBottom="8px">
+                  {t("temporalCoverage")}
                 </LabelText>
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {dataset.temporalCoverage || t('notProvided')}
+                <BodyText typography="small" color="#464A51">
+                  {dataset.temporalCoverage || t("notProvided")}
                 </BodyText>
               </GridItem>
 
@@ -491,83 +505,106 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           </GridItem>
         </Grid>
 
-        {(hasPaidTables && !isSubscriber) ? (
+        {effectiveBannerVariant === "bdpro" && ( 
           <Banner
-            title={t('banner.title', { ns: 'bdpro' })}
-            description={t('banner.description', { ns: 'bdpro' })}
-            buttonText={t('banner.button', { ns: 'bdpro' })}
+            title={t("banner.title", { ns: "bdpro" })}
+            description={t("banner.description", { ns: "bdpro" })}
+            buttonText={t("banner.button", { ns: "bdpro" })}
             href="/bdpro"
             onClick={() => triggerGAEvent("button_banner_bdpro_lp", "click")}
             imageSrc="/img/banner_bd_pro.svg"
           />
-        ) : (
-          abVariant && (
-            <ServiceHighlightABTest {...abTestContent[abVariant]} />
-          )
+        )}
+        {effectiveBannerVariant === "chatbot" && (
+          <Banner
+            title={t("banner.title", { ns: "chatbot" })}
+            buttonText={t("banner.button", { ns: "chatbot" })}
+            href="/chatbot-lp"
+            onClick={() =>
+              trackNavigateToChatbotLp({
+                value: "dataset_banner",
+                placement: "dataset_page_banner",
+                pagePath: router.pathname,
+                isMobile: useCheckMobile(),
+              })
+            }
+            imageSrc="https://storage.googleapis.com/basedosdados-website/images/image-servicos-chatbot.svg"
+            imageProps={{
+              width: "474px",
+              height: "198px",
+            }}
+          />
+        )}
+        {!showSubscriptionBanner && abVariant && (
+          <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 
         <Stack spacing={0} width="100%" height="100%">
-          <Stack spacing={0} flexDirection="row" borderBottom="1px solid #DEDFE0">
+          <Stack
+            spacing={0}
+            flexDirection="row"
+            borderBottom="1px solid #DEDFE0"
+          >
             <Stack id="tab_database_dataset">
               <TabSelect
                 index={0}
                 onClick={() => {
-                  setTabIndex(0)
-                  datasetTab()
+                  setTabIndex(0);
+                  datasetTab();
                 }}
               >
                 <DataBaseIcon
-                  alt={t('dataAlt')}
+                  alt={t("dataAlt")}
                   width="18px"
                   height="18px"
                   marginRight="6px"
                 />
-                {t('data')}
+                {t("data")}
               </TabSelect>
             </Stack>
 
             <TabSelect
               index={1}
               onClick={() => {
-                setTabIndex(1)
-                router.replace({
-                  pathname: `/dataset/${query.dataset}`,
-                  query: { tab: "userGuide" }
-                },
-                  undefined, { shallow: true }
-                )
+                setTabIndex(1);
+                router.replace(
+                  {
+                    pathname: `/dataset/${query.dataset}`,
+                    query: { tab: "userGuide" },
+                  },
+                  undefined,
+                  { shallow: true },
+                );
               }}
             >
               <BookIcon
-                alt={t('userGuideAlt')}
+                alt={t("userGuideAlt")}
                 width="24px"
                 height="16px"
                 marginRight="6px"
               />
-              {t('userGuide')}
+              {t("userGuide")}
             </TabSelect>
           </Stack>
 
-          {tabIndex === 0 &&
+          {tabIndex === 0 && (
             <DatasetResource
               dataset={dataset}
               isBDSudo={isBDSudo}
               tourBegin={tourBegin}
             />
-          }
-          {tabIndex === 1 &&
+          )}
+          {tabIndex === 1 && (
             <DatasetUserGuide
               data={userGuide}
               locale={locale}
               slug={dataset?.usageGuide}
             />
-          }
+          )}
         </Stack>
       </VStack>
 
-      {isBDSudo === true &&
-        <AdminEdit/>
-      }
+      {isBDSudo === true && <AdminEdit />}
     </MainPageTemplate>
-  )
+  );
 }
