@@ -104,7 +104,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const modalTourInitial = useDisclosure();
   const modalSurveyTour = useDisclosure();
   const abVariant = useABTestVariant('service-highlight-ab', ['A', 'B']);
-  const bannerVariant = useABTestVariant('dataset-banner-ab', ['bdpro', 'chatbot']);
+  const bannerVariant = useABTestVariant('dataset-banner-ab', ['bdpro', 'chatbot'], 1);
   const [isSubscriber, setIsSubscriber] = useState(false);
   const [hasChatbotSubscriber, setHasChatbotSubscriber] = useState(false);
 
