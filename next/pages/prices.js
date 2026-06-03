@@ -40,6 +40,7 @@ export const CardPrice = ({
   subTitle,
   price,
   anualPlan = false,
+  hidePrice = false,
   textResource,
   resources = [],
   button,
@@ -116,42 +117,47 @@ export const CardPrice = ({
           flexDirection="column"
           alignItems="center"
           marginBottom="40px"
+          minHeight={hidePrice ? "108px" : undefined}
         >
-          <Box
-            display="flex"
-            flexDirection="row"
-            height="60px"
-            alignItems="center"
-          >
-            <Display textAlign="center">
-              R$ {anualPlan ? Math.ceil(price / 12) : price}
-            </Display>
-            <TitleText
-              typography="small"
-              position="relative"
-              top="16px"
-              right="-4px"
-              textAlign="center"
-            >
-              {t("perMonth")}
-            </TitleText>
-          </Box>
+          {!hidePrice && (
+            <>
+              <Box
+                display="flex"
+                flexDirection="row"
+                height="60px"
+                alignItems="center"
+              >
+                <Display textAlign="center">
+                  R$ {anualPlan ? Math.ceil(price / 12) : price}
+                </Display>
+                <TitleText
+                  typography="small"
+                  position="relative"
+                  top="16px"
+                  right="-4px"
+                  textAlign="center"
+                >
+                  {t("perMonth")}
+                </TitleText>
+              </Box>
 
-          <BodyText
-            height="24px"
-            color="#464A51"
-            marginTop="24px"
-            alignItems="center"
-          >
-            {anualPlan &&
-              t("annualBillingMessage", {
-                price: price.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                  minimumFractionDigits: 0,
-                }),
-              })}
-          </BodyText>
+              <BodyText
+                height="24px"
+                color="#464A51"
+                marginTop="24px"
+                alignItems="center"
+              >
+                {anualPlan &&
+                  t("annualBillingMessage", {
+                    price: price.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 0,
+                    }),
+                  })}
+              </BodyText>
+            </>
+          )}
         </Box>
       </Box>
 
@@ -180,7 +186,24 @@ export const CardPrice = ({
               >
                 <CheckIcon width="24px" height="24px" fill="#2B8C4D" />
                 <BodyText alignItems="center" color="#464A51">
-                  {elm.name}
+                  {elm.linkHref ? (
+                    <>
+                      {elm.name}{" "}
+                      <Link href={elm.linkHref} locale={locale} passHref>
+                        <BodyText
+                          as="span"
+                          alignItems="center"
+                          color="#0068C5"
+                          cursor="pointer"
+                          _hover={{ color: "#0057A4" }}
+                        >
+                          {elm.linkText}
+                        </BodyText>
+                      </Link>
+                    </>
+                  ) : (
+                    elm.name
+                  )}
                 </BodyText>
                 {elm.tooltip && (
                   <Tooltip
@@ -347,8 +370,6 @@ export function SectionPrice({
         const filteredPlans = {
           bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
           bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-          bd_empresas_month : filterData("BD Empresas", "month", true, 385)[0].node,
-          bd_empresas_year : filterData("BD Empresas", "year", true, 3700)[0].node,
           bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
           bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
         }
@@ -625,40 +646,30 @@ export function SectionPrice({
           <CardPrice
             title={t("plans.enterprise.title")}
             subTitle={t("plans.enterprise.subtitle")}
-            price={
-              plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]
-                ?.amount || 3700
-            }
-            anualPlan={toggleAnual}
+            hidePrice
             textResource={t("allFeaturesPlus", { plan: t("plans.pro.title") })}
             resources={t("plans.enterprise.features", {
               returnObjects: true,
-            }).map((feature) => ({ name: feature }))}
+            }).map((feature) =>
+              typeof feature === "string"
+                ? { name: feature }
+                : {
+                    name: feature.text,
+                    linkText: feature.linkText,
+                    linkHref: feature.linkHref,
+                  },
+            )}
             button={{
               text:
                 isBDEmp.isCurrentPlan &&
                 planIntervalMatches(isBDEmp, toggleAnual)
                   ? t("currentPlan")
-                  : hasSubscribed
-                    ? t("subscribe")
-                    : t("startFreeTrial"),
-              href:
-                username === null
-                  ? `/user/login`
-                  : `/user/${username}?plans_and_payment`,
+                  : t("contactUs"),
+              href: "/bd-orgs",
               onClick: () => {
                 triggerGAEventWithData("bd_empresas_card_price", {
                   plan_interval: toggleAnual ? "year" : "month",
-                  is_free_trial: !hasSubscribed,
                 });
-                cookies.set(
-                  "plan_selected",
-                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?._id,
-                  { expires: 1, path: "/" },
-                );
-                action(
-                  plans?.[`bd_empresas_${toggleAnual ? "year" : "month"}`]?._id,
-                );
               },
               isCurrentPlan:
                 isBDEmp.isCurrentPlan &&
