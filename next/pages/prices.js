@@ -119,7 +119,27 @@ export const CardPrice = ({
           marginBottom="40px"
           minHeight={hidePrice ? "108px" : undefined}
         >
-          {!hidePrice && (
+          {hidePrice ? (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              height="60px"
+            >
+              <TitleText typography="large" textAlign="center" color="#252A32">
+                {t("priceOnRequest")}
+              </TitleText>
+              <BodyText
+                typography="small"
+                textAlign="center"
+                color="#71757A"
+                marginTop="8px"
+              >
+                {t("priceOnRequestSubtitle")}
+              </BodyText>
+            </Box>
+          ) : (
             <>
               <Box
                 display="flex"
@@ -599,6 +619,51 @@ export function SectionPrice({
             }}
             locale={locale}
           />
+          {hasChatbot && (
+            <CardPrice
+              isBeta={true}
+              title={t("plans.chatbot.title")}
+              subTitle={t("plans.chatbot.subtitle")}
+              price={
+                plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
+                (toggleAnual ? 326 : 30)
+              }
+              anualPlan={toggleAnual}
+              textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
+              resources={t("plans.chatbot.features", { returnObjects: true }).map(
+                (feature) => ({ name: feature }),
+              )}
+              button={{
+                text:
+                  isBDChatbot.isCurrentPlan &&
+                  planIntervalMatches(isBDChatbot, toggleAnual)
+                    ? t("currentPlan")
+                    : hasSubscribed
+                      ? t("subscribe")
+                      : t("startFreeTrial"),
+                href:
+                  username === null
+                    ? `/user/login`
+                    : `/user/${username}?plans_and_payment`,
+                onClick: () => {
+                  triggerGAEventWithData("bd_chatbot_card_price", {
+                    plan_interval: toggleAnual ? "year" : "month",
+                    is_free_trial: !hasSubscribed,
+                  });
+                  const chatKey = `bd_chatbot_${toggleAnual ? "year" : "month"}`;
+                  cookies.set("plan_selected", plans?.[chatKey]?._id, {
+                    expires: 1,
+                    path: "/",
+                  });
+                  action(plans?.[chatKey]?._id);
+                },
+                isCurrentPlan:
+                  isBDChatbot.isCurrentPlan &&
+                  planIntervalMatches(isBDChatbot, toggleAnual),
+              }}
+              locale={locale}
+            />
+          )}
           <CardPrice
             title={t("plans.pro.title")}
             subTitle={t("plans.pro.subtitle")}
@@ -647,7 +712,7 @@ export function SectionPrice({
             title={t("plans.enterprise.title")}
             subTitle={t("plans.enterprise.subtitle")}
             hidePrice
-            textResource={t("allFeaturesPlus", { plan: t("plans.pro.title") })}
+            textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
             resources={t("plans.enterprise.features", {
               returnObjects: true,
             }).map((feature) =>
@@ -677,51 +742,6 @@ export function SectionPrice({
             }}
             locale={locale}
           />
-          {hasChatbot && (
-            <CardPrice
-              isBeta={true}
-              title={t("plans.chatbot.title")}
-              subTitle={t("plans.chatbot.subtitle")}
-              price={
-                plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
-                (toggleAnual ? 326 : 30)
-              }
-              anualPlan={toggleAnual}
-              textResource={t("plans.chatbot.exclusiveFeaturesHeading")}
-              resources={t("plans.chatbot.features", { returnObjects: true }).map(
-                (feature) => ({ name: feature }),
-              )}
-              button={{
-                text:
-                  isBDChatbot.isCurrentPlan &&
-                  planIntervalMatches(isBDChatbot, toggleAnual)
-                    ? t("currentPlan")
-                    : hasSubscribed
-                      ? t("subscribe")
-                      : t("startFreeTrial"),
-                href:
-                  username === null
-                    ? `/user/login`
-                    : `/user/${username}?plans_and_payment`,
-                onClick: () => {
-                  triggerGAEventWithData("bd_chatbot_card_price", {
-                    plan_interval: toggleAnual ? "year" : "month",
-                    is_free_trial: !hasSubscribed,
-                  });
-                  const chatKey = `bd_chatbot_${toggleAnual ? "year" : "month"}`;
-                  cookies.set("plan_selected", plans?.[chatKey]?._id, {
-                    expires: 1,
-                    path: "/",
-                  });
-                  action(plans?.[chatKey]?._id);
-                },
-                isCurrentPlan:
-                  isBDChatbot.isCurrentPlan &&
-                  planIntervalMatches(isBDChatbot, toggleAnual),
-              }}
-              locale={locale}
-            />
-          )}
         </Stack>
       )}
     </Box>

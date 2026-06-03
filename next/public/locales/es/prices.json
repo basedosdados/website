@@ -18,6 +18,8 @@
     "startFreeTrial": "Iniciar prueba gratuita",
     "exploreFeatures": "Explorar características",
     "beta": "Beta",
+    "priceOnRequest": "Bajo consulta",
+    "priceOnRequestSubtitle": "plan personalizado para su organización",
     "plans": {
       "free": {
         "title": "BD Gratis",
@@ -63,7 +65,7 @@
         "subtitle": "Para crear análisis en segundos con el poder de la IA",
         "exclusiveFeaturesHeading": "Recursos exclusivos:",
         "features": [
-          "Chatbot conectado a 741 tablas de datos públicos",
+          "Chatbot conectado a +700 tablas de datos públicos",
           "Preguntas ilimitadas",
           "Códigos listos para extracción de datos",
           "Soporte prioritario por correo electrónico y Discord"

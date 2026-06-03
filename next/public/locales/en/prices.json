@@ -18,6 +18,8 @@
     "startFreeTrial": "Start free trial",
     "exploreFeatures": "Explore features",
     "beta": "Beta",
+    "priceOnRequest": "On request",
+    "priceOnRequestSubtitle": "custom plan for your organization",
     "plans": {
       "free": {
         "title": "DB Free",
@@ -63,7 +65,7 @@
         "subtitle": "Create analyses in seconds with the power of AI",
         "exclusiveFeaturesHeading": "Exclusive features:",
         "features": [
-          "Chatbot connected to 741 tables of public data",
+          "Chatbot connected to +700 tables of public data",
           "Unlimited questions",
           "Ready-to-use code for data extraction",
           "Priority support via email and Discord"
