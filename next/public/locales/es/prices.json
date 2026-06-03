@@ -14,6 +14,7 @@
     "allFeaturesPlus": "Todas las características de {{plan}}, más:",
     "currentPlan": "Plan actual",
     "subscribe": "Suscribirse",
+    "contactUs": "Contáctenos",
     "startFreeTrial": "Iniciar prueba gratuita",
     "exploreFeatures": "Explorar características",
     "beta": "Beta",
@@ -42,11 +43,19 @@
         ]
       },
       "enterprise": {
-        "title": "BD Empresas",
-        "subtitle": "Para que tu empresa gane tiempo y calidad en las decisiones",
+        "title": "BD Orgs",
+        "subtitle": "Para que tu organización gane tiempo y calidad en las decisiones",
         "features": [
-          "Acceso para 10 cuentas",
-          "Soporte prioritario por correo electrónico y Discord"
+          "A partir de 10 accesos a BD Pro",
+          "Soporte prioritario",
+          "Chatbot",
+          "Infraestructura segmentada para uso",
+          "Facturación unificada de accesos, licencias y consumo en la nube",
+          {
+            "text": "Servicios especializados de carga de datos y analytics",
+            "linkText": "saber más",
+            "linkHref": "/services"
+          }
         ]
       },
       "chatbot": {

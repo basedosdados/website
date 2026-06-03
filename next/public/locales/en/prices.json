@@ -14,6 +14,7 @@
     "allFeaturesPlus": "All features of {{plan}}, plus:",
     "currentPlan": "Current plan",
     "subscribe": "Subscribe",
+    "contactUs": "Contact us",
     "startFreeTrial": "Start free trial",
     "exploreFeatures": "Explore features",
     "beta": "Beta",
@@ -42,11 +43,19 @@
         ]
       },
       "enterprise": {
-        "title": "DB Enterprise",
-        "subtitle": "For your company to save time and improve decision quality",
+        "title": "DB Orgs",
+        "subtitle": "For your organization to save time and improve decision quality",
         "features": [
-          "Access for 10 accounts",
-          "Priority support via email and Discord"
+          "Starting from 10 BD Pro accesses",
+          "Priority support",
+          "Chatbot",
+          "Segmented infrastructure for your use",
+          "Unified billing for accesses, licenses and cloud consumption",
+          {
+            "text": "Specialized data upload and analytics services",
+            "linkText": "learn more",
+            "linkHref": "/services"
+          }
         ]
       },
       "chatbot": {
