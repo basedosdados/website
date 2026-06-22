@@ -115,6 +115,7 @@ export default function PlansAndPayment ({ userData }) {
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
   const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
+  const [checkoutStep, setCheckoutStep] = useState("plan")
   const successCheckoutKindRef = useRef(null)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
@@ -216,7 +217,7 @@ export default function PlansAndPayment ({ userData }) {
     const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
     if (!checkoutAlreadyVisible) {
       if (isChatbotType) {
-        PaymentModal.onOpen()
+        openCheckoutPlanStep()
       } else {
         EmailModal.onOpen()
       }
@@ -273,6 +274,37 @@ export default function PlansAndPayment ({ userData }) {
   const planActive = hasBDProSubscription(userData)
   const hasChatbotActiveSubscription = hasChatbotSubscription(userData)
   const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+
+  function getCheckoutStepLabel() {
+    if (checkoutStep === "plan") {
+      return isChatbotCheckout ? t("username.step1of2") : t("username.step2of3")
+    }
+    return isChatbotCheckout ? t("username.step2of2") : t("username.step3of3")
+  }
+
+  function resetCheckoutState() {
+    setCheckoutStep("plan")
+    setToggleAnual(true)
+    setValueCoupon("")
+    setErrCoupon(false)
+    setCoupon("")
+    setCouponInfos({})
+    setPlan("")
+  }
+
+  function openCheckoutPlanStep() {
+    setCheckoutStep("plan")
+    PaymentModal.onOpen()
+  }
+
+  function goBackFromPlanStep() {
+    PaymentModal.onClose()
+    if (isChatbotCheckout) {
+      resetCheckoutState()
+      return
+    }
+    EmailModal.onOpen()
+  }
 
   const resources = {
     "BD Gratis" : {
@@ -600,7 +632,7 @@ export default function PlansAndPayment ({ userData }) {
           }
         }
         setIsLoadingEmailChange(false)
-        PaymentModal.onOpen()
+        openCheckoutPlanStep()
         EmailModal.onClose()
       } else {
         setErrEmailGCP(true)
@@ -653,9 +685,7 @@ export default function PlansAndPayment ({ userData }) {
         classNameBody={stylesPS.modal}
         isOpen={PaymentModal.isOpen}
         onClose={() => {
-          setToggleAnual(true);
-          setValueCoupon("");
-          setPlan("");
+          resetCheckoutState();
           if (query.i)
             return window.open(
               `/user/${userData.username}?plans_and_payment`,
@@ -665,26 +695,20 @@ export default function PlansAndPayment ({ userData }) {
         }}
         propsModalContent={{
           width: "100%",
-          maxWidth: "1008px",
+          maxWidth: checkoutStep === "plan" ? "656px" : "560px",
           margin: "24px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0} marginBottom="40px">
-          <BodyText
-            display={
-              checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
-              checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
-                ? "none"
-                : "flex"
-            }
-            typography="small"
-            width="100%"
-            color="#2B8C4D"
-          >
-            {t("username.step2of2")}
+          <BodyText typography="small" width="100%" color="#2B8C4D">
+            {getCheckoutStepLabel()}
           </BodyText>
-          <TitleText width="100%">{t("username.payment")}</TitleText>
+          <TitleText width="100%">
+            {checkoutStep === "plan"
+              ? t("username.confirmPlan")
+              : t("username.payment")}
+          </TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -693,272 +717,244 @@ export default function PlansAndPayment ({ userData }) {
           />
         </Stack>
 
-        <Stack
-          display="flex"
-          flexDirection={{ base: "column", lg: "row" }}
-          gap="80px"
-          spacing={0}
-          pointerEvents={isLoadingClientSecret ? "none" : "default"}
-        >
-          <Stack flex={1} spacing="32px">
-            <Stack flexDirection="column" spacing={0} gap="16px">
-              <Box display="flex" flexDirection="row" gap="8px" width="100%">
-                <LabelText textTransform="capitalize">
-                  {checkoutInfos?.productName}
-                </LabelText>
-                {!isChatbotCheckout && (
-                  <BodyText
-                    cursor="pointer"
-                    color="#0068C5"
-                    _hover={{ color: "#0057A4" }}
-                    marginLeft="auto"
-                    onClick={() => {
-                      PaymentModal.onClose();
-                      setToggleAnual(true);
-                      setErrCoupon(false);
-                      setCoupon("");
-                      setValueCoupon("");
-                      setPlan("");
-                      PlansModal.onOpen();
-                    }}
-                  >
-                    {t("username.changePlan")}
-                  </BodyText>
-                )}
-              </Box>
-
-              <Box
-                display="flex"
-                flexDirection={{ base: "column", lg: "row" }}
-                gap="8px"
-                alignItems={{ base: "start", lg: "center" }}
-              >
-                <Box
-                  display="flex"
-                  flexDirection="row"
-                  gap="8px"
-                  alignItems="center"
-                >
-                  {toggleAnual ? (
-                    <Toggle
-                      id="toggle-prices-modal-checkout"
-                      defaultChecked
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
-                  ) : (
-                    <Toggle
-                      id="toggle-prices-modal-checkout"
-                      value={toggleAnual}
-                      onChange={() => changeIntervalPlanCheckout()}
-                    />
+        <Stack>
+          {checkoutStep === "plan" && (
+            <Stack spacing="32px">
+              <Stack flexDirection="column" spacing={0} gap="16px">
+                <Box display="flex" flexDirection="row" gap="8px" width="100%">
+                  <LabelText textTransform="capitalize">
+                    {checkoutInfos?.productName}
+                  </LabelText>
+                  {!isChatbotCheckout && (
+                    <BodyText
+                      cursor="pointer"
+                      color="#0068C5"
+                      _hover={{ color: "#0057A4" }}
+                      marginLeft="auto"
+                      onClick={() => {
+                        PaymentModal.onClose();
+                        resetCheckoutState();
+                        PlansModal.onOpen();
+                      }}
+                    >
+                      {t("username.changePlan")}
+                    </BodyText>
                   )}
-                  <BodyText>{t("username.annualDiscount")}</BodyText>
                 </Box>
 
-                <TitleText
-                  typography="small"
-                  as="span"
-                  color="#2B8C4D"
-                  backgroundColor="#D5E8DB"
-                  padding="2px 4px"
-                  borderRadius="4px"
-                  height="32px"
-                >
-                  {t("username.save20")}
-                </TitleText>
-              </Box>
-            </Stack>
-
-            <Stack flexDirection="column" spacing={0} gap="8px">
-              <LabelText>{t("username.discountCoupon")}</LabelText>
-
-              <Box
-                display="flex"
-                flexDirection={{ base: "column", lg: "row" }}
-                alignItems="center"
-                gap="8px"
-              >
-                <Stack spacing={0} width="100%" position="relative">
-                  <ControlledInputSimple
-                    value={valueCoupon}
-                    onChange={setValueCoupon}
-                    inputFocus={couponInputFocus}
-                    changeInputFocus={setCouponInputFocus}
-                    width="100%"
-                    placeholder={t("username.enterCoupon")}
-                    inputElementStyle={{
-                      display: "none",
-                    }}
-                    inputStyle={{
-                      paddingLeft: "16px !important",
-                      paddingRight: "40px !important",
-                      borderRadius: "8px",
-                      height: "44px",
-                    }}
-                  />
-                  {valueCoupon && (
-                    <CrossIcon
-                      position="absolute"
-                      top="10px"
-                      right="12px"
-                      alt={t("username.clear")}
-                      width="24px"
-                      height="24px"
-                      fill="#878A8E"
-                      cursor="pointer"
-                      onClick={() => setValueCoupon("")}
-                    />
-                  )}
-                </Stack>
-
-                <Button
-                  isVariant
-                  width={{ base: "100%", lg: "fit-content" }}
-                  onClick={() => validateStripeCoupon()}
-                >
-                  {t("username.apply")}
-                </Button>
-              </Box>
-
-              {errCoupon && (
-                <BodyText
-                  typography="small"
+                <Box
                   display="flex"
-                  flexDirection="row"
-                  color="#BF3434"
+                  flexDirection={{ base: "column", lg: "row" }}
                   gap="8px"
-                  height="24px"
-                  alignItems="center"
+                  alignItems={{ base: "start", lg: "center" }}
                 >
-                  <Exclamation width="21px" height="21px" fill="#BF3434" />{" "}
-                  {t("username.enterValidCoupon")}
-                </BodyText>
-              )}
-            </Stack>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    gap="8px"
+                    alignItems="center"
+                  >
+                    {toggleAnual ? (
+                      <Toggle
+                        id="toggle-prices-modal-checkout"
+                        defaultChecked
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                    ) : (
+                      <Toggle
+                        id="toggle-prices-modal-checkout"
+                        value={toggleAnual}
+                        onChange={() => changeIntervalPlanCheckout()}
+                      />
+                    )}
+                    <BodyText>{t("username.annualDiscount")}</BodyText>
+                  </Box>
 
-            <BodyText
-              display={hasSubscribed ? "none" : "flex"}
-              fontFamily="Roboto"
-              color="#464A51"
-            >
-              {t("username.trialPeriod")}
-            </BodyText>
+                  <TitleText
+                    typography="small"
+                    as="span"
+                    color="#2B8C4D"
+                    backgroundColor="#D5E8DB"
+                    padding="2px 4px"
+                    borderRadius="4px"
+                    height="32px"
+                  >
+                    {t("username.save20")}
+                  </TitleText>
+                </Box>
+              </Stack>
 
-            <Divider borderColor="#DEDFE0" />
+              <Stack flexDirection="column" spacing={0} gap="8px">
+                <LabelText>{t("username.discountCoupon")}</LabelText>
 
-            <Grid
-              templateColumns="4fr 2fr"
-              width="100%"
-              gap="8px"
-              alignItems="center"
-              fontFamily="Roboto"
-              fontWeight="400"
-              fontSize="16px"
-              lineHeight="24px"
-              color="#464A51"
-            >
-              <GridItem>
-                <Text>{t("username.subtotal")}</Text>
-              </GridItem>
-              <GridItem textAlign="end">
-                <Text>
+                <Box
+                  display="flex"
+                  flexDirection={{ base: "column", lg: "row" }}
+                  alignItems="center"
+                  gap="8px"
+                >
+                  <Stack
+                    spacing={0}
+                    width="100%"
+                    maxWidth="300px"
+                    position="relative"
+                  >
+                    <ControlledInputSimple
+                      value={valueCoupon}
+                      onChange={setValueCoupon}
+                      inputFocus={couponInputFocus}
+                      changeInputFocus={setCouponInputFocus}
+                      width="100%"
+                      placeholder={t("username.enterCoupon")}
+                      inputElementStyle={{
+                        display: "none",
+                      }}
+                      inputStyle={{
+                        paddingLeft: "16px !important",
+                        paddingRight: "40px !important",
+                        borderRadius: "8px",
+                        height: "44px",
+                      }}
+                    />
+                    {valueCoupon && (
+                      <CrossIcon
+                        position="absolute"
+                        top="10px"
+                        right="12px"
+                        alt={t("username.clear")}
+                        width="24px"
+                        height="24px"
+                        fill="#878A8E"
+                        cursor="pointer"
+                        onClick={() => setValueCoupon("")}
+                      />
+                    )}
+                  </Stack>
+
+                  <Button
+                    isVariant
+                    width={{ base: "100%", lg: "fit-content" }}
+                    onClick={() => validateStripeCoupon()}
+                  >
+                    {t("username.apply")}
+                  </Button>
+                </Box>
+
+                {errCoupon && (
+                  <BodyText
+                    typography="small"
+                    display="flex"
+                    flexDirection="row"
+                    color="#BF3434"
+                    gap="8px"
+                    height="24px"
+                    alignItems="center"
+                  >
+                    <Exclamation width="21px" height="21px" fill="#BF3434" />{" "}
+                    {t("username.enterValidCoupon")}
+                  </BodyText>
+                )}
+              </Stack>
+
+              <BodyText
+                display={hasSubscribed ? "none" : "flex"}
+                fontFamily="Roboto"
+                color="#464A51"
+              >
+                {t("username.trialPeriod")}
+              </BodyText>
+
+              <Divider borderColor="#DEDFE0" />
+
+              <Grid
+                templateColumns="4fr 2fr"
+                width="100%"
+                gap="8px"
+                alignItems="center"
+                fontFamily="Roboto"
+                fontWeight="400"
+                fontSize="16px"
+                lineHeight="24px"
+                color="#464A51"
+              >
+                <GridItem>
+                  <Text>{t("username.subtotal")}</Text>
+                </GridItem>
+                <GridItem textAlign="end">
+                  <Text>
+                    {checkoutInfos?.amount?.toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                      minimumFractionDigits: 2,
+                    })}
+                    /{formattedPlanInterval(checkoutInfos?.interval, true)}
+                  </Text>
+                </GridItem>
+
+                {couponInfos?.isValid && <CouponDisplay />}
+                <TotalToPayDisplay />
+              </Grid>
+
+              {(couponInfos?.duration === "once" ||
+                couponInfos?.duration === "repeating") && (
+                <BodyText color="#464A51">
+                  {t("username.couponDuration", { returnObjects: true })[0]}
+                  {couponInfos?.duration === "once" && 2}{" "}
+                  {couponInfos?.duration === "repeating" &&
+                    couponInfos?.durationInMonths + 1}
+                  º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
+                  {!hasSubscribed && "e 7º dia"}
+                  {t("username.couponDuration", { returnObjects: true })[1]}
                   {checkoutInfos?.amount?.toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
                     minimumFractionDigits: 2,
                   })}
-                  /{formattedPlanInterval(checkoutInfos?.interval, true)}
-                </Text>
-              </GridItem>
+                  /{formattedPlanInterval(checkoutInfos?.interval, true)}.
+                </BodyText>
+              )}
 
-              {couponInfos?.isValid && <CouponDisplay />}
-              <TotalToPayDisplay />
-            </Grid>
-
-            {(couponInfos?.duration === "once" ||
-              couponInfos?.duration === "repeating") && (
-              <BodyText color="#464A51">
-                {t("username.couponDuration", { returnObjects: true })[0]}
-                {couponInfos?.duration === "once" && 2}{" "}
-                {couponInfos?.duration === "repeating" &&
-                  couponInfos?.durationInMonths + 1}
-                º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
-                {!hasSubscribed && "e 7º dia"}
-                {t("username.couponDuration", { returnObjects: true })[1]}
-                {checkoutInfos?.amount?.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                  minimumFractionDigits: 2,
-                })}
-                /{formattedPlanInterval(checkoutInfos?.interval, true)}.
-              </BodyText>
-            )}
-
-            <Box
-              display={{ base: "none", lg: "flex" }}
-              marginTop="auto !important"
-            >
-              <Button
-                marginTop="24px"
-                isVariant
-                width={{ base: "100%", lg: "fit-content" }}
-                onClick={() => {
-                  PaymentModal.onClose();
-                  setPlan("");
-                  const isChatbotType =
-                    checkoutInfos?.productName
-                      ?.toLowerCase()
-                      .includes("chatbot") ||
-                    checkoutInfos?.productSlug
-                      ?.toLowerCase()
-                      .includes("chatbot");
-                  if (!isChatbotType) {
-                    EmailModal.onOpen();
-                  }
-                }}
+              <Stack
+                width="100%"
+                spacing={0}
+                gap="16px"
+                justifyContent="end"
+                flexDirection={{ base: "column-reverse", lg: "row" }}
               >
-                {t("username.back")}
-              </Button>
-            </Box>
-          </Stack>
+                <Button
+                  isVariant
+                  width={{ base: "100%", lg: "fit-content" }}
+                  onClick={() => goBackFromPlanStep()}
+                >
+                  {t("username.back")}
+                </Button>
+                <Button
+                  width={{ base: "100%", lg: "fit-content" }}
+                  onClick={() => setCheckoutStep("payment")}
+                >
+                  {t("username.next")}
+                </Button>
+              </Stack>
+            </Stack>
+          )}
 
-          <Box display="flex" flexDirection="column" gap="24px" flex={1}>
-            <LabelText>{t("username.paymentDetails")}</LabelText>
-            <PaymentSystem
-              userData={userData}
-              plan={plan}
-              coupon={coupon}
-              onSucess={() => openModalSucess()}
-              onErro={() => openModalErro()}
-              isLoading={(e) => setIsLoadingClientSecret(e)}
-            />
-
-            <Box
-              display={{ base: "flex", lg: "none" }}
-              marginTop="auto !important"
+          {checkoutStep === "payment" && (
+            <Stack
+              spacing="24px"
+              pointerEvents={isLoadingClientSecret ? "none" : "default"}
             >
-              <Button
-                width={{ base: "100%", lg: "fit-content" }}
-                onClick={() => {
-                  PaymentModal.onClose();
-                  setPlan("");
-                  const isChatbotType =
-                    checkoutInfos?.productName
-                      ?.toLowerCase()
-                      .includes("chatbot") ||
-                    checkoutInfos?.productSlug
-                      ?.toLowerCase()
-                      .includes("chatbot");
-                  if (!isChatbotType) {
-                    EmailModal.onOpen();
-                  }
-                }}
-              >
-                {t("username.back")}
-              </Button>
-            </Box>
-          </Box>
+              <LabelText>{t("username.paymentDetails")}</LabelText>
+              <PaymentSystem
+                userData={userData}
+                plan={plan}
+                coupon={coupon}
+                onSucess={() => openModalSucess()}
+                onErro={() => openModalErro()}
+                isLoading={(e) => setIsLoadingClientSecret(e)}
+              />
+            </Stack>
+          )}
         </Stack>
       </ModalGeneral>
 
@@ -974,14 +970,14 @@ export default function PlansAndPayment ({ userData }) {
         }}
         propsModalContent={{
           width: "100%",
-          maxWidth: "1008px",
+          maxWidth: "656px",
           margin: "24px",
         }}
         isCentered={isMobileMod() ? false : true}
       >
         <Stack spacing={0}>
           <BodyText typography="small" width="100%" color="#2B8C4D">
-            {t("username.step1of2")}
+            {t("username.step1of3")}
           </BodyText>
           <ModalCloseButton
             fontSize="14px"
@@ -1739,7 +1735,8 @@ export default function PlansAndPayment ({ userData }) {
                   onClick={() =>
                     trackOpenChatbotUserPlansSection({
                       hasBdPro: planActive,
-                      chatbotPlanInterval: chatbotSubscriptionInfo?.planInterval,
+                      chatbotPlanInterval:
+                        chatbotSubscriptionInfo?.planInterval,
                       chatbotCanceled: chatbotSubscriptionInfo?.canceledAt,
                       pagePath: router.pathname,
                     })
