@@ -4,30 +4,9 @@
     "metaTitle": "Chatbot LP - Base dos Dados"
   },
   "hero": {
-    "title": {
-      "prefix": "Converse com o",
-      "highlight1": "maior acervo",
-      "middle": "de",
-      "highlight2": "dados públicos",
-      "suffix": "do Brasil."
-    },
-    "prompts": [
-      "Qual é a disparidade salarial por gênero em São Paulo?",
-      "Me ajude com ideias de análises com os dados do SAEB",
-      "Quantas empresas ativas existem em Serra da Saudade (MG)?",
-      "Quem teve mais votos para presidente no bairro de Itaquera em 2022?"
-    ],
-    "buttonPrompt": {
-      "textSubscribe": "Assine já",
-      "textStart": "Comece já"
-    },
-    "buttonScroll": {
-      "text": "Demonstração"
-    }
-  },
-  "presentation": {
-    "title": "Como funciona nosso produto?",
-    "description": "Conheça a ferramenta de IA que vai te ajudar a criar análises em segundos e te guiar por todo o datalake público da BD"
+    "title": "Converse com o maior acervo de dados públicos do Brasil",
+    "description": "Conheça a ferramenta de IA que vai te ajudar a criar análises em segundos e te guiar por todo o datalake público da BD",
+    "button": "Experimente o Chatbot"
   },
   "why": {
     "title": "Por que o Chatbot da BD vai revolucionar seu trabalho com dados?",
