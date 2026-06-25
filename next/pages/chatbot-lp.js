@@ -221,8 +221,7 @@ function ChatbotPricingCard() {
     : totalPrice;
 
   const planInterval = toggleAnual ? "year" : "month";
-  const isCurrentPlan =
-    isBDChatbot.isCurrentPlan && isBDChatbot.planInterval === planInterval;
+  const isCurrentPlan = isBDChatbot.isCurrentPlan;
 
   useEffect(() => {
     async function loadData() {

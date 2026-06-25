@@ -456,11 +456,6 @@ export function SectionPrice({
     loadData()
   }, [])
 
-  function planIntervalMatches(planState, toggleAnual) {
-    const planInterval = toggleAnual ? "year" : "month"
-    return planState?.planInterval === planInterval
-  }
-
   const arrayCards = () => {
     return hasChatbot ? [1, 2, 3, 4] : [1, 2, 3]
   }
@@ -634,9 +629,7 @@ export function SectionPrice({
                 (feature) => ({ name: feature }),
               )}
               button={{
-                text:
-                  isBDChatbot.isCurrentPlan &&
-                  planIntervalMatches(isBDChatbot, toggleAnual)
+                text: isBDChatbot.isCurrentPlan
                     ? t("currentPlan")
                     : hasSubscribed
                       ? t("subscribe")
@@ -657,9 +650,7 @@ export function SectionPrice({
                   });
                   action(plans?.[chatKey]?._id);
                 },
-                isCurrentPlan:
-                  isBDChatbot.isCurrentPlan &&
-                  planIntervalMatches(isBDChatbot, toggleAnual),
+                isCurrentPlan: isBDChatbot.isCurrentPlan,
               }}
               locale={locale}
             />
@@ -679,9 +670,7 @@ export function SectionPrice({
               }),
             )}
             button={{
-              text:
-                isBDPro.isCurrentPlan &&
-                planIntervalMatches(isBDPro, toggleAnual)
+              text: isBDPro.isCurrentPlan
                   ? t("currentPlan")
                   : hasSubscribed
                     ? t("subscribe")
@@ -702,9 +691,7 @@ export function SectionPrice({
                 );
                 action(plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?._id);
               },
-              isCurrentPlan:
-                isBDPro.isCurrentPlan &&
-                planIntervalMatches(isBDPro, toggleAnual),
+              isCurrentPlan: isBDPro.isCurrentPlan,
             }}
             locale={locale}
           />
@@ -725,9 +712,7 @@ export function SectionPrice({
                   },
             )}
             button={{
-              text:
-                isBDEmp.isCurrentPlan &&
-                planIntervalMatches(isBDEmp, toggleAnual)
+              text: isBDEmp.isCurrentPlan
                   ? t("currentPlan")
                   : t("contactUs"),
               href: "/bd-orgs",
@@ -736,9 +721,7 @@ export function SectionPrice({
                   plan_interval: toggleAnual ? "year" : "month",
                 });
               },
-              isCurrentPlan:
-                isBDEmp.isCurrentPlan &&
-                planIntervalMatches(isBDEmp, toggleAnual),
+              isCurrentPlan: isBDEmp.isCurrentPlan,
             }}
             locale={locale}
           />
