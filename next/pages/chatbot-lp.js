@@ -6,11 +6,6 @@ import {
   Box,
   Stack,
   VStack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  Text,
   Skeleton,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -28,7 +23,6 @@ import TitleText from "../components/atoms/Text/TitleText";
 import BodyText from "../components/atoms/Text/BodyText";
 import LabelText from "../components/atoms/Text/LabelText";
 import QuestionsBox from "../components/molecules/QuestionsBox";
-import TypewriterConsole from "../components/atoms/TypewriterConsole";
 import Button from "../components/atoms/Button";
 import Toggle from "../components/atoms/Toggle";
 import CheckIcon from "../public/img/icons/checkIcon";
@@ -97,10 +91,9 @@ function ChatbotPricingCardSkeleton() {
       display="flex"
       flexDirection="column"
       width="100%"
+      maxWidth="600px"
+      margin="0 auto"
       height="100%"
-      minHeight={{ base: "auto", lg: "480px" }}
-      borderRadius="16px"
-      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       padding="40px 24px"
       backgroundColor="#FFFFFF"
     >
@@ -204,7 +197,7 @@ function ChatbotPricingCardSkeleton() {
   );
 }
 
-function ChatbotPricingCard({ highlightedFeature }) {
+function ChatbotPricingCard() {
   const { t } = useTranslation(["chatbot", "prices"]);
   const router = useRouter();
   const { locale } = router;
@@ -228,8 +221,7 @@ function ChatbotPricingCard({ highlightedFeature }) {
     : totalPrice;
 
   const planInterval = toggleAnual ? "year" : "month";
-  const isCurrentPlan =
-    isBDChatbot.isCurrentPlan && isBDChatbot.planInterval === planInterval;
+  const isCurrentPlan = isBDChatbot.isCurrentPlan;
 
   useEffect(() => {
     async function loadData() {
@@ -311,12 +303,14 @@ function ChatbotPricingCard({ highlightedFeature }) {
 
   return (
     <Box
+      id="chatbot-pricing"
+      scrollMargin="100px"
       display="flex"
       flexDirection="column"
       width="100%"
+      maxWidth="600px"
+      margin="0 auto"
       height="100%"
-      borderRadius="16px"
-      boxShadow="0 2px 16px 0 rgba(100, 96, 103, 0.16)"
       padding="40px 24px"
       backgroundColor="#FFFFFF"
     >
@@ -406,32 +400,21 @@ function ChatbotPricingCard({ highlightedFeature }) {
       </Box>
 
       <VStack align="stretch" spacing="8px" flex={1} marginBottom="32px">
-        {features.map((feature, index) => {
-          const isHighlighted = highlightedFeature === index;
-
-          return (
-            <Box
-              key={feature}
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              gap="8px"
-              padding="8px"
-              borderRadius="8px"
-              backgroundColor={isHighlighted ? "#E8F5EC" : "transparent"}
-              transition="background-color 0.25s ease"
-            >
-              <CheckIcon width="24px" height="24px" fill="#2B8C4D" />
-              <BodyText
-                alignItems="center"
-                color={isHighlighted ? "#252A32" : "#464A51"}
-                fontWeight={isHighlighted ? "500" : "400"}
-              >
-                {feature}
-              </BodyText>
-            </Box>
-          );
-        })}
+        {features.map((feature) => (
+          <Box
+            key={feature}
+            display="flex"
+            flexDirection="row"
+            alignItems="center"
+            gap="8px"
+            padding="8px"
+          >
+            <CheckIcon width="24px" height="24px" fill="#2B8C4D" />
+            <BodyText alignItems="center" color="#464A51">
+              {feature}
+            </BodyText>
+          </Box>
+        ))}
       </VStack>
 
       <Box marginTop="auto" width="100%">
@@ -499,7 +482,6 @@ function ChatbotPricingCard({ highlightedFeature }) {
 
 function WhyChatbotSection() {
   const { t, ready } = useTranslation("chatbot");
-  const [activeIndex, setActiveIndex] = useState(0);
   const isMobile = isMobileMod();
 
   if (!ready) return null;
@@ -534,77 +516,46 @@ function WhyChatbotSection() {
         justifyContent="space-between"
         alignItems={{ base: "center", lg: "stretch" }}
         gap="40px"
-        flexDirection={{ base: "column", lg: "row" }}
+        flexDirection="column"
         spacing={0}
       >
         <Box
           flex={1}
-          maxWidth={{ base: "100%", lg: "624px" }}
+          maxWidth="100%"
           width="100%"
           alignSelf="stretch"
+          display="grid"
+          gridTemplateColumns={{ base: "1fr", lg: "1fr 1fr" }}
+          gap="40px"
         >
-          <Accordion
-            index={activeIndex}
-            onChange={(index) => setActiveIndex(index)}
-            width="100%"
-          >
-            {items.map((elm, index) => (
-              <AccordionItem
-                key={elm.title}
-                borderTopWidth="0"
-                borderBottomWidth="1px"
-                padding="10px 0"
+          {items.map((elm) => (
+            <Box key={elm.title}>
+              <TitleText
+                typography={isMobile ? "small" : "medium"}
+                textAlign="left"
+                color="#252A32"
+                marginBottom="8px"
               >
-                <AccordionButton
-                  padding={index === activeIndex ? "24px 0 0" : "24px 0"}
-                  _hover={{ backgroundColor: "transparent" }}
-                >
-                  <TitleText
-                    typography={isMobile ? "small" : "medium"}
-                    display="flex"
-                    width="100%"
-                    flexDirection="row"
-                    justifyContent="space-between"
-                    textAlign="left"
-                    color={index === activeIndex ? "#252A32" : "#71757A"}
-                    _hover={{ color: "#252A32" }}
-                  >
-                    {elm.title}
-                    <Text
-                      display={activeIndex === index ? "none" : "flex"}
-                      fontSize="32px"
-                      fontWeight="300"
-                      color="#2B8C4D"
-                    >
-                      +
-                    </Text>
-                  </TitleText>
-                </AccordionButton>
-                <AccordionPanel padding="8px 0 24px">
-                  <BodyText
-                    typography={isMobile ? "medium" : "large"}
-                    color="#464A51"
-                  >
-                    {elm.content}
-                  </BodyText>
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                {elm.title}
+              </TitleText>
+              <BodyText
+                typography={isMobile ? "medium" : "large"}
+                color="#464A51"
+              >
+                {elm.content}
+              </BodyText>
+            </Box>
+          ))}
         </Box>
 
         <Box
-          id="chatbot-pricing"
-          scrollMargin="100px"
-          width={{ base: "100%", lg: "400px" }}
+          width="100%"
           maxWidth="100%"
           flexShrink={0}
           display="flex"
-          alignSelf={{ base: "center", lg: "stretch" }}
+          alignSelf="stretch"
         >
-          <ChatbotPricingCard
-            highlightedFeature={items[activeIndex]?.highlightFeature}
-          />
+          <ChatbotPricingCard />
         </Box>
       </Stack>
     </VStack>
@@ -687,7 +638,6 @@ function VideoPlayer({ src }) {
 
 function Hero({ t }) {
   const router = useRouter();
-  const prompts = t("hero.prompts", { returnObjects: true });
   const [hasChatbotAccess, setHasChatbotAccess] = useState(false);
 
   useEffect(() => {
@@ -731,11 +681,7 @@ function Hero({ t }) {
     };
   }, []);
 
-  const heroPromptButtonText = hasChatbotAccess
-    ? t("hero.buttonPrompt.textStart")
-    : t("hero.buttonPrompt.textSubscribe");
-
-  const handleHeroPromptClick = () => {
+  const handleHeroButtonClick = () => {
     if (hasChatbotAccess) {
       router.push("/chatbot");
       return;
@@ -755,6 +701,7 @@ function Hero({ t }) {
       minHeight={{ base: "800px", lg: "700px" }}
       backgroundColor="#FFFFFF"
       padding="40px 24px"
+      marginTop={{ base: "0", lg:"50px"}}
       overflow="hidden"
     >
       <Box
@@ -776,93 +723,56 @@ function Hero({ t }) {
             "radial-gradient(ellipse 95% 95% at 50% 50%, #fff 0%, rgba(255,255,255,0.45) 45%, transparent 72%)",
         }}
       />
-      <VStack gap="32px" spacing="0" textAlign="center" zIndex="2">
+      <VStack spacing="0" textAlign="center" zIndex="2">
         <Display
           as="h1"
-          typography={isMobileMod() ? "small" : "medium"}
-          maxWidth="700px"
+          typography={isMobileMod() ? "small" : "large"}
+          maxWidth="1000px"
           textAlign="center"
         >
-          {t("hero.title.prefix")}{" "}
-          <Box as="span" color="#2B8C4D" fontStyle="italic" display="inline">
-            {t("hero.title.highlight1")}
-          </Box>{" "}
-          {t("hero.title.middle")}{" "}
-          <Box as="span" color="#2B8C4D" fontStyle="italic" display="inline">
-            {t("hero.title.highlight2")}
-          </Box>{" "}
-          {t("hero.title.suffix")}
+          {t("hero.title")}
         </Display>
-        <TypewriterConsole
-          messages={prompts}
-          textBtn={heroPromptButtonText}
-          onClickBtn={handleHeroPromptClick}
-          targetBtn={hasChatbotAccess ? "_blank" : "_self"}
-        />
-        <Button
-          marginTop="32px !important"
-          width="160px !important"
-          justifyContent="center"
-          alignItems="center"
-          display="flex"
-          height="40px !important"
-          backgroundColor="#464A51"
-          _hover={{
-            backgroundColor: "#71757A",
-          }}
-          onClick={scrollToPresentation}
+        <TitleText
+          as="h2"
+          maxWidth="1440px"
+          color="#71757A"
+          paddingTop="16px"
+          typography={isMobileMod() ? "small" : "medium"}
         >
-          {t("hero.buttonScroll.text")}
+          {t("hero.description")}
+        </TitleText>
+        <Button
+          height="54px"
+          width={isMobileMod() ? "100%" : "fit-content"}
+          margin="32px 0 !important"
+          justifyContent={{ base: "center", md: "flex-start" }}
+          onClick={handleHeroButtonClick}
+        >
+          <LabelText
+            typography={isMobileMod() ? "medium" : "x-large"}
+            color="currentColor"
+          >
+            {t("hero.button")}
+          </LabelText>
         </Button>
       </VStack>
-    </Box>
-  );
-}
-
-function Presentation({ t }) {
-  const isMobile = isMobileMod();
-
-  return (
-    <VStack width="100%" padding="80px 24px" spacing="24px">
-      <Display
-        as="h2"
-        typography={isMobile ? "small" : "medium"}
-        width="100%"
-        maxWidth="800px"
-        textAlign="center"
-        margin="0 auto"
-      >
-        {t("presentation.title")}
-      </Display>
-
-      <TitleText
-        as="h3"
-        maxWidth="1000px"
-        typography={isMobileMod() ? "small" : "small"}
-        fontWeight="400"
-        color="#464A51"
-      >
-        {t("presentation.description")}
-      </TitleText>
-
       <Box
-        id="presentation"
-        scrollMargin={isMobile ? "320px" : "250px"}
         display="flex"
         alignItems="center"
         justifyContent="center"
-        width="fit-content"
-        maxWidth="800px"
-        height={{ base: "auto", md: "450px" }}
-        minHeight={{ base: "250px", md: "450px" }}
-        backgroundColor="#F9F9F9"
+        width="100%"
+        height="100%"
+        maxWidth="1200px"
+        margin="40px 0"
+        backgroundColor="#FFF"
         boxShadow="0px 1.6px 16px rgba(100, 96, 103, 0.16)"
         borderRadius="16px"
         overflow="hidden"
+        zIndex="2"
       >
         <VideoPlayer src="https://storage.googleapis.com/basedosdados-website/video/modo_de_usar_chatbot.mp4" />
       </Box>
-    </VStack>
+    </Box>
   );
 }
 
@@ -935,7 +845,6 @@ export default function ChatbotLPPage({ faqs }) {
         <meta property="og:title" content={t('head.metaTitle')} key="ogtitle" />
       </Head>
       <Hero t={t} />
-      <Presentation t={t} />
       <WhyChatbotSection />
       <FAQ t={t} faqs={faqs} />
     </MainPageTemplate>

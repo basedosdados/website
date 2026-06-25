@@ -1,33 +1,12 @@
 {
   "head": {
-    "pageTitle": "Chatbot – Data Basis",
-    "metaTitle": "Chatbot – Data Basis"
+    "pageTitle": "Chatbot LP - Data Basis",
+    "metaTitle": "Chatbot LP - Data Basis"
   },
   "hero": {
-    "title": {
-      "prefix": "Talk to",
-      "highlight1": "the largest collection",
-      "middle": "of",
-      "highlight2": "public data",
-      "suffix": "in Brazil."
-    },
-    "prompts": [
-      "What is the gender pay gap in São Paulo?",
-      "Help me with analysis ideas using SAEB data",
-      "How many active companies are there in Serra da Saudade (MG)?",
-      "Who received the most votes for president in the Itaquera neighborhood in 2022?"
-    ],
-    "buttonPrompt": {
-      "textSubscribe": "Subscribe now",
-      "textStart": "Get started"
-    },
-    "buttonScroll": {
-      "text": "Demo"
-    }
-  },
-  "presentation": {
-    "title": "How does our product work?",
-    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire Data Basis public datalake"
+    "title": "Talk to the largest collection of public data in Brazil",
+    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire BD public datalake",
+    "button": "Try the Chatbot"
   },
   "why": {
     "title": "Why will the Data Basis Chatbot revolutionize the way you work with data?",
