@@ -90,6 +90,10 @@ export default function PaymentSystem({
 }) {
   const [clientSecret, setClientSecret] = useState("")
 
+  useEffect(() => {
+    if (clientSecret === null) onSucess()
+  }, [clientSecret])
+
   const appearance = {
     theme: "stripe",
     variables: {
@@ -148,6 +152,14 @@ export default function PaymentSystem({
   }
 
   const customerCreatPost = async (id, coupon) => {
+    const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(id)}`, {method: "GET"})
+      .then(res => res.json())
+
+    if (trial?.started) {
+      setClientSecret(null)
+      return isLoading(false)
+    }
+
     const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon)}`, {method: "GET"})
       .then(res => res.json())
 
@@ -172,7 +184,9 @@ export default function PaymentSystem({
     if(type === "bnt") return <Skeleton height="40px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>
   }
 
-  if(!clientSecret) return (
+  if(clientSecret === null) return null
+
+  if(clientSecret === "") return (
     <Stack flex={1}>
       <Stack width="100%" flexDirection="row" spacing={0} gap="8px" marginBottom="16px !important">
         <Stack width="100%"  spacing={0} gap="8px">

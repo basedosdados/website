@@ -292,6 +292,16 @@ export function hasChatbotSubscription(user) {
   )
 }
 
+export function isSubscriptionTrialing(subscription) {
+  return (subscription?.stripeSubscriptionStatus || "").toLowerCase() === "trialing"
+}
+
+export function getSubscriptionStatusKey(subscription) {
+  if (isSubscriptionTrialing(subscription)) return "trial"
+  if (subscription?.canceledAt) return "canceled"
+  return "active"
+}
+
 export function getSubscriptionType(user) {
   if (hasBDProSubscription(user)) return "bd_pro"
   if (hasChatbotSubscription(user)) return "chatbot"

@@ -240,7 +240,7 @@ function ChatbotPricingCard() {
         if (match) {
           const [id] = match;
           promises.push(
-            fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+            fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}&type=chatbot`)
               .then((res) => res.json())
               .then(setHasSubscribed)
               .catch(() => setHasSubscribed(false))

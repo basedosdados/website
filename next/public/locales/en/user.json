@@ -241,6 +241,8 @@
         "allDBFreeResources": "All DB Free resources, plus:",
         "allDBProResources": "All DB Pro resources, plus:",
         "active": "Active",
+        "trial": "Free trial",
+        "canceled": "Canceled",
         "DBFree": "DB Free",
         "DBFreeSubtitle": "For you to discover the potential of the data platform",
         "DBPro": "DB Pro",

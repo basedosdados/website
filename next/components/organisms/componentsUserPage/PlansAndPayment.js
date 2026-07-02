@@ -23,7 +23,36 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+
+const SubscriptionBadgeStyles = {
+  active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
+  canceled: { backgroundColor: "#F6E3E3", color: "#BF3434" },
+  trial: { backgroundColor: "#E8F2FC", color: "#0068C5" },
+}
+
+function SubscriptionStatusBadge({ subscription, t, fallbackStatus = "active" }) {
+  const statusKey = subscription ? getSubscriptionStatusKey(subscription) : fallbackStatus
+  const badgeStyle = SubscriptionBadgeStyles[statusKey] || SubscriptionBadgeStyles.active;
+
+  return (
+    <Badge
+      width="fit-content"
+      padding="2px 4px"
+      textTransform="none"
+      borderRadius="6px"
+      backgroundColor={badgeStyle.backgroundColor}
+      color={badgeStyle.color}
+      fontSize="12px"
+      lineHeight="18px"
+      fontFamily="Roboto"
+      fontWeight="500"
+      letterSpacing="0.1px"
+    >
+      {t(`username.${statusKey}`)}
+    </Badge>
+  )
+}
 
 import {
   TitleTextForm,
@@ -111,7 +140,9 @@ export default function PlansAndPayment ({ userData }) {
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
   const [isLoadingClientSecret, setIsLoadingClientSecret] = useState(true)
-  const [hasSubscribed, setHasSubscribed] = useState(true)
+  const [hasSubscribedBDPro, setHasSubscribedBDPro] = useState(true)
+  const [hasSubscribedChatbot, setHasSubscribedChatbot] = useState(true)
+  const [hasSubscribedLoaded, setHasSubscribedLoaded] = useState(false)
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
   const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
@@ -129,16 +160,32 @@ export default function PlansAndPayment ({ userData }) {
   }) || null
 
   async function alreadySubscribed(id) {
-    const result = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
-      .then(res => res.json())
-    setHasSubscribed(result)
+    try {
+      const [bdPro, chatbot] = await Promise.all([
+        fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}&type=bd_pro`).then(res => res.json()),
+        fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}&type=chatbot`).then(res => res.json()),
+      ])
+      setHasSubscribedBDPro(bdPro)
+      setHasSubscribedChatbot(chatbot)
+    } catch (error) {
+      console.error(error)
+      setHasSubscribedBDPro(false)
+      setHasSubscribedChatbot(false)
+    } finally {
+      setHasSubscribedLoaded(true)
+    }
   }
 
   useEffect(() => {
     const reg = new RegExp("(?<=:).*")
-    const [ id ] = reg.exec(userData.id)
+    const match = reg.exec(userData.id)
 
-    alreadySubscribed(id)
+    if (!match) {
+      setHasSubscribedLoaded(true)
+      return
+    }
+
+    alreadySubscribed(match[0])
   }, [userData?.id])
 
   useEffect(() => {
@@ -193,6 +240,7 @@ export default function PlansAndPayment ({ userData }) {
   useEffect(() => {
     if(plans === null) return
     if(plan === "") return
+    if(!hasSubscribedLoaded) return
 
     const value = Object.values(plans).find(elm => elm?._id === plan)
     if (!value) return
@@ -217,12 +265,16 @@ export default function PlansAndPayment ({ userData }) {
     const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
     if (!checkoutAlreadyVisible) {
       if (isChatbotType) {
-        openCheckoutPlanStep()
+        if (!hasSubscribedChatbot) {
+          openCheckoutPaymentStep()
+        } else {
+          openCheckoutPlanStep()
+        }
       } else {
         EmailModal.onOpen()
       }
     }
-  }, [plan, plans, userData, chatbotSubscriptionInfo])
+  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot])
 
   useEffect(() => {
     if (!plans || plan !== "") return
@@ -273,7 +325,9 @@ export default function PlansAndPayment ({ userData }) {
 
   const planActive = hasBDProSubscription(userData)
   const hasChatbotActiveSubscription = hasChatbotSubscription(userData)
+  const isChatbotTrial = isSubscriptionTrialing(chatbotSubscriptionInfo)
   const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+  const hasSubscribed = isChatbotCheckout ? hasSubscribedChatbot : hasSubscribedBDPro
 
   function getCheckoutStepLabel() {
     if (checkoutStep === "plan") {
@@ -294,6 +348,12 @@ export default function PlansAndPayment ({ userData }) {
 
   function openCheckoutPlanStep() {
     setCheckoutStep("plan")
+    PaymentModal.onOpen()
+  }
+
+  function openCheckoutPaymentStep() {
+    setCheckoutStep("payment")
+    setIsLoadingClientSecret(true)
     PaymentModal.onOpen()
   }
 
@@ -391,7 +451,6 @@ export default function PlansAndPayment ({ userData }) {
 
   const defaultResource = resources["BD Gratis"]
   const planResource = resources[userData?.proSubscription]
-  const planCanceled = bdProSubscriptionInfo?.canceledAt
 
   const controlResource  = () => {
     if (!planActive || !planResource) return defaultResource
@@ -1428,29 +1487,12 @@ export default function PlansAndPayment ({ userData }) {
           justifyContent="space-between"
         >
           <Stack spacing="8px" marginBottom={{ base: "16px", lg: "0" }}>
-            <Badge
-              width="fit-content"
-              padding="2px 4px"
-              textTransform="none"
-              borderRadius="6px"
-              backgroundColor={
-                planActive ? (planCanceled ? "#F6E3E3" : "#D5E8DB") : "#D5E8DB"
-              }
-              color={
-                planActive ? (planCanceled ? "#BF3434" : "#2B8C4D") : "#2B8C4D"
-              }
-              fontSize="12px"
-              lineHeight="18px"
-              fontFamily="Roboto"
-              fontWeight="500"
-              letterSpacing="0.1px"
-            >
-              {planActive
-                ? planCanceled
-                  ? t("username.canceled")
-                  : t("username.active")
-                : t("username.active")}
-            </Badge>
+            {planActive && (
+              <SubscriptionStatusBadge
+                subscription={bdProSubscriptionInfo}
+                t={t}
+              />
+            )}
 
             <Box
               display="flex"
@@ -1614,27 +1656,10 @@ export default function PlansAndPayment ({ userData }) {
               marginTop="8px"
             >
               {hasChatbotActiveSubscription && (
-                <Badge
-                  width="fit-content"
-                  padding="2px 4px"
-                  textTransform="none"
-                  borderRadius="6px"
-                  backgroundColor={
-                    chatbotSubscriptionInfo?.canceledAt ? "#F6E3E3" : "#D5E8DB"
-                  }
-                  color={
-                    chatbotSubscriptionInfo?.canceledAt ? "#BF3434" : "#2B8C4D"
-                  }
-                  fontSize="12px"
-                  lineHeight="18px"
-                  fontFamily="Roboto"
-                  fontWeight="500"
-                  letterSpacing="0.1px"
-                >
-                  {chatbotSubscriptionInfo?.canceledAt
-                    ? t("username.canceled")
-                    : t("username.active")}
-                </Badge>
+                <SubscriptionStatusBadge
+                  subscription={chatbotSubscriptionInfo}
+                  t={t}
+                />
               )}
               <Box
                 display="flex"
@@ -1661,7 +1686,7 @@ export default function PlansAndPayment ({ userData }) {
                 >
                   {t("username.chatbotNewBadge")}
                 </Badge>
-                {chatbotSubscriptionInfo?.planInterval && (
+                {chatbotSubscriptionInfo?.planInterval && !isChatbotTrial && (
                   <LabelText typography="x-small" color="#71757A">
                     {formattedPlanInterval(
                       chatbotSubscriptionInfo?.planInterval,
