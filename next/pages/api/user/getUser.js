@@ -42,6 +42,7 @@ async function getUser(id, token) {
                         canceledAt
                         createdAt
                         planInterval
+                        stripeSubscriptionStatus
                       }
                     }
                   }
@@ -52,6 +53,7 @@ async function getUser(id, token) {
                         createdAt
                         isActive
                         stripeSubscription
+                        stripeSubscriptionStatus
                         planInterval
                         nextBillingCycle
                       }

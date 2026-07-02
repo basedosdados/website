@@ -340,19 +340,22 @@ export function SectionPrice({
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [isBDChatbot, setIsBDChatbot] = useState({isCurrentPlan: false})
-  const [hasSubscribed, setHasSubscribed] = useState(true)
+  const [hasSubscribedBDPro, setHasSubscribedBDPro] = useState(true)
+  const [hasSubscribedChatbot, setHasSubscribedChatbot] = useState(true)
   const [isLoading, setLoading] = useState(true)
 
   if (!ready) return null
 
-  async function fetchAlreadySubscribed(id) {
+  async function fetchAlreadySubscribed(id, type) {
     try {
-      const res = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}`)
+      const res = await fetch(`/api/user/getAlreadySubscribed?p=${btoa(id)}&type=${type}`)
       const result = await res.json()
-      setHasSubscribed(result)
+      if (type === "bd_pro") setHasSubscribedBDPro(result)
+      if (type === "chatbot") setHasSubscribedChatbot(result)
     } catch (e) {
       console.error(e)
-      setHasSubscribed(false)
+      if (type === "bd_pro") setHasSubscribedBDPro(false)
+      if (type === "chatbot") setHasSubscribedChatbot(false)
     }
   }
 
@@ -414,12 +417,15 @@ export function SectionPrice({
         const match = reg.exec(user.id)
         if (match) {
           const [id] = match
-          promises.push(fetchAlreadySubscribed(id))
+          promises.push(fetchAlreadySubscribed(id, "bd_pro"))
+          promises.push(fetchAlreadySubscribed(id, "chatbot"))
         } else {
-          setHasSubscribed(false)
+          setHasSubscribedBDPro(false)
+          setHasSubscribedChatbot(false)
         }
       } else {
-        setHasSubscribed(false)
+        setHasSubscribedBDPro(false)
+        setHasSubscribedChatbot(false)
       }
 
       promises.push(fetchPlans())
@@ -631,7 +637,7 @@ export function SectionPrice({
               button={{
                 text: isBDChatbot.isCurrentPlan
                     ? t("currentPlan")
-                    : hasSubscribed
+                    : hasSubscribedChatbot
                       ? t("subscribe")
                       : t("startFreeTrial"),
                 href:
@@ -641,7 +647,7 @@ export function SectionPrice({
                 onClick: () => {
                   triggerGAEventWithData("bd_chatbot_card_price", {
                     plan_interval: toggleAnual ? "year" : "month",
-                    is_free_trial: !hasSubscribed,
+                    is_free_trial: !hasSubscribedChatbot,
                   });
                   const chatKey = `bd_chatbot_${toggleAnual ? "year" : "month"}`;
                   cookies.set("plan_selected", plans?.[chatKey]?._id, {
@@ -672,7 +678,7 @@ export function SectionPrice({
             button={{
               text: isBDPro.isCurrentPlan
                   ? t("currentPlan")
-                  : hasSubscribed
+                  : hasSubscribedBDPro
                     ? t("subscribe")
                     : t("startFreeTrial"),
               href:
@@ -682,7 +688,7 @@ export function SectionPrice({
               onClick: () => {
                 triggerGAEventWithData("bd_pro_card_price", {
                   plan_interval: toggleAnual ? "year" : "month",
-                  is_free_trial: !hasSubscribed,
+                  is_free_trial: !hasSubscribedBDPro,
                 });
                 cookies.set(
                   "plan_selected",
