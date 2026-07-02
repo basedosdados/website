@@ -91,7 +91,7 @@ export default function PaymentSystem({
   const [clientSecret, setClientSecret] = useState("")
 
   useEffect(() => {
-    if (clientSecret === null) onSucess()
+    if (clientSecret === null) onSucess(true)
   }, [clientSecret])
 
   const appearance = {
