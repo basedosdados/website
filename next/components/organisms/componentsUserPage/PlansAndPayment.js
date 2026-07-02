@@ -147,6 +147,8 @@ export default function PlansAndPayment ({ userData }) {
   const [toggleAnual, setToggleAnual] = useState(true)
   const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
   const [checkoutStep, setCheckoutStep] = useState("plan")
+  const [isChatbotTrialSuccess, setIsChatbotTrialSuccess] = useState(false)
+  const [isStartingChatbotTrial, setIsStartingChatbotTrial] = useState(false)
   const successCheckoutKindRef = useRef(null)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
@@ -266,7 +268,7 @@ export default function PlansAndPayment ({ userData }) {
     if (!checkoutAlreadyVisible) {
       if (isChatbotType) {
         if (!hasSubscribedChatbot) {
-          openCheckoutPaymentStep()
+          startChatbotTrialFlow()
         } else {
           openCheckoutPlanStep()
         }
@@ -355,6 +357,30 @@ export default function PlansAndPayment ({ userData }) {
     setCheckoutStep("payment")
     setIsLoadingClientSecret(true)
     PaymentModal.onOpen()
+  }
+
+  async function startChatbotTrialFlow() {
+    setIsStartingChatbotTrial(true)
+
+    try {
+      const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(plan)}`, {
+        method: "GET",
+      }).then((res) => res.json())
+
+      if (trial?.started) {
+        successCheckoutKindRef.current = "chatbot"
+        setIsChatbotTrialSuccess(true)
+        SucessPaymentModal.onOpen()
+        return
+      }
+
+      openCheckoutPaymentStep()
+    } catch (error) {
+      console.error(error)
+      openCheckoutPaymentStep()
+    } finally {
+      setIsStartingChatbotTrial(false)
+    }
   }
 
   function goBackFromPlanStep() {
@@ -512,11 +538,12 @@ export default function PlansAndPayment ({ userData }) {
     )
   }
 
-  const openModalSucess = () => {
+  const openModalSucess = (isTrial = false) => {
     const isChatbotPurchase =
       checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
       checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
     successCheckoutKindRef.current = isChatbotPurchase ? "chatbot" : "bd_pro"
+    setIsChatbotTrialSuccess(isTrial)
     PaymentModal.onClose()
     SucessPaymentModal.onOpen()
   }
@@ -571,6 +598,7 @@ export default function PlansAndPayment ({ userData }) {
     }
 
     successCheckoutKindRef.current = null
+    setIsChatbotTrialSuccess(false)
 
     if(isLoadingH === true) return window.open("/", "_self")
     window.open(`/user/${userData.username}?plans_and_payment`, "_self")
@@ -718,6 +746,7 @@ export default function PlansAndPayment ({ userData }) {
   useEffect(() => {
     const onPopState = () => {
       successCheckoutKindRef.current = null
+      setIsChatbotTrialSuccess(false)
       setIsLoading(false)
       setIsLoadingH(false)
       SucessPaymentModal.onClose()
@@ -729,7 +758,7 @@ export default function PlansAndPayment ({ userData }) {
   return (
     <Stack spacing={0}>
       <Box
-        display={isLoading || isLoadingH ? "flex" : "none"}
+        display={isLoading || isLoadingH || isStartingChatbotTrial ? "flex" : "none"}
         position="fixed"
         top="0"
         left="0"
@@ -1008,7 +1037,7 @@ export default function PlansAndPayment ({ userData }) {
                 userData={userData}
                 plan={plan}
                 coupon={coupon}
-                onSucess={() => openModalSucess()}
+                onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
               />
@@ -1166,27 +1195,35 @@ export default function PlansAndPayment ({ userData }) {
           <SuccessIcon width="90px" height="64px" fill="#34A15A" />
           <TitleText>
             {isChatbotCheckout
-              ? t("username.chatbotSubscriptionSuccessTitle")
+              ? isChatbotTrialSuccess
+                ? t("username.chatbotTrialSuccessTitle")
+                : t("username.chatbotSubscriptionSuccessTitle")
               : t("username.congratulations")}
           </TitleText>
           {isChatbotCheckout ? (
-            <BodyText color="#464A51">
-              <Trans
-                t={t}
-                i18nKey="username.chatbotSubscriptionSuccessDescription"
-                components={{
-                  1: (
-                    <Text
-                      as="a"
-                      href="/contact"
-                      target="_self"
-                      color="#0068C5"
-                      _hover={{ color: "#0057A4" }}
-                    />
-                  ),
-                }}
-              />
-            </BodyText>
+            isChatbotTrialSuccess ? (
+              <BodyText color="#464A51">
+                {t("username.chatbotTrialSuccessDescription")}
+              </BodyText>
+            ) : (
+              <BodyText color="#464A51">
+                <Trans
+                  t={t}
+                  i18nKey="username.chatbotSubscriptionSuccessDescription"
+                  components={{
+                    1: (
+                      <Text
+                        as="a"
+                        href="/contact"
+                        target="_self"
+                        color="#0068C5"
+                        _hover={{ color: "#0057A4" }}
+                      />
+                    ),
+                  }}
+                />
+              </BodyText>
+            )
           ) : (
             <BodyText color="#464A51">
               {t("username.BQEmailDescription4")}{" "}
@@ -1232,6 +1269,7 @@ export default function PlansAndPayment ({ userData }) {
                 width={{ base: "100%", lg: "50%" }}
                 onClick={() => {
                   successCheckoutKindRef.current = null;
+                  setIsChatbotTrialSuccess(false);
                   setIsLoading(false);
                   setIsLoadingH(false);
                   SucessPaymentModal.onClose();
