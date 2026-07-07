@@ -67,11 +67,28 @@ export default async function handler(req, res) {
     }
 
     const accountNode = result?.data?.allAccount?.edges[0]?.node;
+    const subscriptionType = req.query.type;
+    const internalSubs = accountNode?.internalSubscription?.edges || [];
 
-    const hasSubscriptionSet = accountNode?.subscriptionSet?.edges?.length > 0;
-    const hasInternalSubscription = accountNode?.internalSubscription?.edges?.length > 0;
-    
-    const isSubscriber = hasSubscriptionSet || hasInternalSubscription;
+    const hadBDProSubscription =
+      (accountNode?.subscriptionSet?.edges?.length > 0) ||
+      internalSubs.some((edge) => {
+        const slug = (edge?.node?.stripeSubscription || "").toLowerCase();
+        return slug.includes("bd_pro") || slug.includes("empresas");
+      });
+
+    const hadChatbotSubscription = internalSubs.some((edge) =>
+      (edge?.node?.stripeSubscription || "").toLowerCase().includes("chatbot")
+    );
+
+    let isSubscriber;
+    if (subscriptionType === "bd_pro") {
+      isSubscriber = hadBDProSubscription;
+    } else if (subscriptionType === "chatbot") {
+      isSubscriber = hadChatbotSubscription;
+    } else {
+      isSubscriber = hadBDProSubscription || hadChatbotSubscription;
+    }
 
     res.status(200).json(isSubscriber);
   } catch (error) {
