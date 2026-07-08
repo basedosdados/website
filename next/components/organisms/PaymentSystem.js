@@ -86,7 +86,8 @@ export default function PaymentSystem({
   coupon,
   onSucess,
   onErro,
-  isLoading
+  isLoading,
+  onClientSecretReady,
 }) {
   const [clientSecret, setClientSecret] = useState("")
 
@@ -157,6 +158,7 @@ export default function PaymentSystem({
 
     if (trial?.started) {
       setClientSecret(null)
+      onClientSecretReady?.({ isSetupIntent: false, isTrialStarted: true })
       return isLoading(false)
     }
 
@@ -165,6 +167,10 @@ export default function PaymentSystem({
 
     if (clientSecret) {
       setClientSecret(clientSecret)
+      onClientSecretReady?.({
+        isSetupIntent: clientSecret.startsWith("seti_"),
+        isTrialStarted: false,
+      })
       return isLoading(false)
     }
   }
@@ -172,6 +178,7 @@ export default function PaymentSystem({
   useEffect(() => {
     setClientSecret("")
     isLoading(true)
+    onClientSecretReady?.({ isSetupIntent: false, isLoading: true })
     if(plan) {
       customerCreatPost(plan, coupon)
     }

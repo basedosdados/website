@@ -149,6 +149,7 @@ export default function PlansAndPayment ({ userData }) {
   const [checkoutStep, setCheckoutStep] = useState("plan")
   const [isChatbotTrialSuccess, setIsChatbotTrialSuccess] = useState(false)
   const [isStartingChatbotTrial, setIsStartingChatbotTrial] = useState(false)
+  const [isSetupIntentCheckout, setIsSetupIntentCheckout] = useState(false)
   const successCheckoutKindRef = useRef(null)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
@@ -346,6 +347,7 @@ export default function PlansAndPayment ({ userData }) {
     setCoupon("")
     setCouponInfos({})
     setPlan("")
+    setIsSetupIntentCheckout(false)
   }
 
   function openCheckoutPlanStep() {
@@ -356,6 +358,7 @@ export default function PlansAndPayment ({ userData }) {
   function openCheckoutPaymentStep() {
     setCheckoutStep("payment")
     setIsLoadingClientSecret(true)
+    setIsSetupIntentCheckout(false)
     PaymentModal.onOpen()
   }
 
@@ -672,14 +675,23 @@ export default function PlansAndPayment ({ userData }) {
     )
   }
 
-  const TotalToPayDisplay = () => {
-    let value
-
-    if(couponInfos?.discountAmount) {
-      value = (checkoutInfos?.amount-couponInfos?.discountAmount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
-    } else {
-      value = checkoutInfos?.amount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })
+  function getCheckoutTotalAmount() {
+    if (couponInfos?.discountAmount) {
+      return checkoutInfos?.amount - couponInfos.discountAmount
     }
+    return checkoutInfos?.amount
+  }
+
+  function formatCheckoutAmount(amount) {
+    return amount?.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+    })
+  }
+
+  const TotalToPayDisplay = () => {
+    const value = formatCheckoutAmount(getCheckoutTotalAmount())
 
     return (
       <>
@@ -692,6 +704,11 @@ export default function PlansAndPayment ({ userData }) {
       </>
     ) 
   }
+
+  const showPaymentSummary =
+    checkoutStep === "payment" &&
+    !isLoadingClientSecret &&
+    (!isSetupIntentCheckout || !isChatbotCheckout)
 
   async function handlerEmailGcp() {
     setErrEmailGCP(false)
@@ -1019,7 +1036,11 @@ export default function PlansAndPayment ({ userData }) {
                 </Button>
                 <Button
                   width={{ base: "100%", lg: "fit-content" }}
-                  onClick={() => setCheckoutStep("payment")}
+                  onClick={() => {
+                    setIsSetupIntentCheckout(false)
+                    setIsLoadingClientSecret(true)
+                    setCheckoutStep("payment")
+                  }}
                 >
                   {t("username.next")}
                 </Button>
@@ -1032,6 +1053,32 @@ export default function PlansAndPayment ({ userData }) {
               spacing="24px"
               pointerEvents={isLoadingClientSecret ? "none" : "default"}
             >
+              {showPaymentSummary && (
+                <Stack
+                  spacing="8px"
+                  padding="16px"
+                  backgroundColor="#F7F7F7"
+                  borderRadius="12px"
+                >
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap="16px"
+                  >
+                    <LabelText textTransform="capitalize">
+                      {checkoutInfos?.productName}
+                    </LabelText>
+                    <BodyText typography="small" color="#71757A">
+                      {formattedPlanInterval(checkoutInfos?.interval)}
+                    </BodyText>
+                  </Box>
+                  <TitleText typography="small">
+                    {formatCheckoutAmount(getCheckoutTotalAmount())}/
+                    {formattedPlanInterval(checkoutInfos?.interval, true)}
+                  </TitleText>
+                </Stack>
+              )}
               <LabelText>{t("username.paymentDetails")}</LabelText>
               <PaymentSystem
                 userData={userData}
@@ -1040,6 +1087,13 @@ export default function PlansAndPayment ({ userData }) {
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
+                onClientSecretReady={({ isSetupIntent, isLoading: loadingSecret }) => {
+                  if (loadingSecret) {
+                    setIsSetupIntentCheckout(false)
+                    return
+                  }
+                  setIsSetupIntentCheckout(Boolean(isSetupIntent))
+                }}
               />
             </Stack>
           )}
