@@ -33,6 +33,7 @@ import {
   hasBDProSubscription,
   hasChatbotSubscription,
   trackNavigateToChatbotLp,
+  isBasedosdadosDomain,
 } from "../../utils";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
@@ -479,7 +480,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                 </BodyText>
               </GridItem>
 
-              {/* {locale !== 'pt' ?
+              {locale !== 'pt' &&
                 <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
                   <LabelText
                     typography="large"
@@ -498,9 +499,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                       : t('notProvided')}
                   </BodyText>
                 </GridItem>
-                :
-                <></>
-              } */}
+              }
             </Grid>
           </GridItem>
         </Grid>
@@ -535,7 +534,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             }}
           />
         )}
-        {!showSubscriptionBanner && abVariant && (
+        {isBasedosdadosDomain() && !showSubscriptionBanner && abVariant && (
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 

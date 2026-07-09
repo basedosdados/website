@@ -29,7 +29,7 @@ import GreenTab from "../atoms/GreenTab";
 import Toggle from "../atoms/Toggle";
 import TableColumns from "./TableColumns";
 import { AlertDiscalimerBox} from "./DisclaimerBox";
-import { triggerGAEvent, triggerGAEventWithData, formatBytes, hasBDProSubscription } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, formatBytes, hasBDProSubscription, localizeQueryTableAlias } from "../../utils";
 
 import {
   getBigTableQuery
@@ -233,14 +233,14 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
   const SqlCodeString = useCallback(async () => {
     const result = await getBigTableQuery(resource?._id, checkedColumns, includeTranslation);
     if(result === null) return;
-    setSqlCode(result.trim());
+    setSqlCode(localizeQueryTableAlias(result.trim(), locale));
     setIsLoadingCode(false);
     setIsLoadingSpin(false);
     const tourBD = getTourBD();
     if(tourBD && tourBD.state === 'begin') {
       cookies.set('tourBD', '{"state":"table"}', { expires: 360 });
     }
-  }, [resource?._id, checkedColumns, includeTranslation, getTourBD]);
+  }, [resource?._id, checkedColumns, includeTranslation, getTourBD, locale]);
 
   const handleAccessIndexes = useCallback((index) => {
     const categoryValues = [t('table.bigQueryAndPackages'), t('table.download')];
