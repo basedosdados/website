@@ -1,10 +1,10 @@
 {
   "organized_data": "Organized data.",
   "reliable_analysis": "Reliable analysis.",
-  "description_organized_data": "Data Basis is an NGO that maintains the largest public data platform in Brazil and offers specialized services in data engineering, analysis, and training.",
+  "description_organized_data": "Data Basis is an NGO that maintains a large public data platform and offers specialized services in data engineering, analysis, and training.",
   "organized_data_first_button": "Access the data platform",
   "organized_data_second_button": "Learn about consulting services",
-  "socioeconomic_data": "The main socioeconomic data from Brazil, in one place.",
+  "socioeconomic_data": "The main socioeconomic data, in one place.",
   "productivity_data_analysis": {
     "title": "Gain productivity in your data analysis",
     "subtitle": "Treated tables and standardized variables to easily cross datasets"
@@ -46,7 +46,7 @@
     },
     {
       "title": "Automate the translation of institutional codes",
-      "content": "Save time with automated code translation, such as the 7-digit IBGE identifiers for Brazilian municipalities."
+      "content": "Save time with automated code translation, such as standardized geographic identifiers for municipalities and regions."
     },
     {
       "title": "Build analyses with the support of user guides",

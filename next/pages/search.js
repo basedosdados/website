@@ -154,6 +154,11 @@ function DatasetCard({ data, locale, index, page }) {
         themes={data?.themes}
         name={data?.name || t('noName')}
         temporalCoverageText={(data?.temporal_coverage && data.temporal_coverage[0]) || ""}
+        spatialCoverage={(data?.spatial_coverage || [])
+          .map(coverage => coverage.name)
+          .filter(Boolean)
+          .sort((a, b) => a.localeCompare(b, locale))
+          .join(', ')}
         organizations={data.organizations}
         tables={{
           id: data?.first_table_id,
@@ -237,6 +242,7 @@ export default function SearchDatasetPage() {
     return {
       themes: aggregations?.themes || [],
       organizations: aggregations?.organizations || [],
+      spatialCoverages: aggregations?.spatial_coverages || [],
       tags: aggregations?.tags || [],
       observationLevels: aggregations?.observation_levels || []
     }
@@ -697,6 +703,24 @@ export default function SearchDatasetPage() {
           />
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+
+          {locale !== 'pt' && (
+            <>
+              <CheckboxFilterAccordion
+                isActive={validateActiveFilterAccordin("spatial_coverage")}
+                choices={memoizedFilters.spatialCoverages}
+                valueField="key"
+                displayField="name"
+                fieldName={t('spatialCoverage')}
+                valuesChecked={valuesCheckedFilter("spatial_coverage")}
+                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
+                isLoading={!isLoading}
+                facet="spatial_coverage"
+              />
+
+              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
+            </>
+          )}
 
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("organization")}
