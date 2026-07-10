@@ -6,4 +6,4 @@ order: 7
 id: how-to-use-python-r-stata
 ---
 
-See the [full documentation](/docs/access_data_packages) on how to use the Data Basis packages to access BD Pro data.
+See the [full documentation](/docs/access_data_packages) on how to use the Data Basis packages to access DB Pro data.
