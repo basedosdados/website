@@ -17,4 +17,4 @@ To do so, follow these steps:
 5. Paste the query provided by the chatbot and run it.
 6. After running it, you can save the results in your preferred format or open them with other Google tools for visualization.
 
-If you run into trouble with this flow, our team and community can help on the [Data Basis Discord](https://discord.gg/huKWpsVYx4).
+If you run into trouble with this flow, our team and community can help on the [Data Basis Discord](https://discord.gg/tx57ek6zqQ).

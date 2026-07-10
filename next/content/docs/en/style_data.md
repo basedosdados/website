@@ -281,4 +281,4 @@ The field refers to the data in the raw data source, which has not yet passed th
 
 ## **Thought of improvements for the standards defined?**
 
-Open an [issue on our Github](https://github.com/basedosdados/sdk/labels/docs) or send a message on [Discord](https://discord.gg/huKWpsVYx4) to talk to us :)
+Open an [issue on our Github](https://github.com/basedosdados/sdk/labels/docs) or send a message on [Discord](https://discord.gg/tx57ek6zqQ) to talk to us :)
