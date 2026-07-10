@@ -366,7 +366,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
 
   const repository = () => {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
-    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
+    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "staging"
     if (baseUrl === "https://staging.basedosdados.org") return "staging"
     if (baseUrl === "https://basedosdados.org") return "main" 
     return null
