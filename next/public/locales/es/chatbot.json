@@ -4,7 +4,7 @@
     "metaTitle": "Chatbot LP - Base de los Datos"
   },
   "hero": {
-    "title": "Conversa con el mayor acervo de datos públicos de Brasil",
+    "title": "Conversa con un gran acervo de datos públicos",
     "description": "Conoce la herramienta de IA que te ayudará a crear análisis en segundos y te guiará por todo el datalake público de BD",
     "button": "Prueba el Chatbot"
   },
@@ -12,7 +12,7 @@
     "title": "¿Por qué el Chatbot de Base de los Datos revolucionará tu trabajo con datos?",
     "items": [
       {
-        "title": "Acceso al mayor datalake público de Brasil",
+        "title": "Acceso a un gran datalake público",
         "content": "Navega por terabytes de datos en más de 740 tablas sobre diversos temas (educación, economía, salud, mercado de trabajo, demografía, medio ambiente).",
         "highlightFeature": 0
       },
