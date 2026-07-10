@@ -1220,7 +1220,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "/en/bdpro"
+          href: "/bdpro"
         },
         {
           name: [t('chatbot_lp')],
@@ -1246,7 +1246,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "/es/bdpro"
+          href: "/bdpro"
         },
         {
           name: [t('chatbot_lp')],
