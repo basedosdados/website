@@ -231,7 +231,7 @@ OPTIONS (Description='Description of the table')
 
 - BigQuery accepts up to 4,000 partitions per table.
 
-- In our BD, tables are usually partitioned by: `year`, `month`, `quarter`, and `state_code`.
+- In our DB, tables are usually partitioned by: `year`, `month`, `quarter`, and `state_code`.
 
 - Note that when partitioning a table, it is necessary to exclude the corresponding column. Example: it is necessary to exclude the `year` column when partitioning by `year`.
 

@@ -1,5 +1,5 @@
 ---
-question: What technologies does BD typically use for this type of service?
+question: What technologies does DB typically use for this type of service?
 categories: [Painel Gerencial]
 id: dashboard_technologies
 order: 3

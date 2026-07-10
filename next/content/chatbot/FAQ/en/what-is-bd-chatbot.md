@@ -1,5 +1,5 @@
 ---
-question: What is the BD Chatbot?
+question: What is the DB Chatbot?
 categories: []
 keywords: []
 order: 1

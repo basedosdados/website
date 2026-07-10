@@ -15,7 +15,7 @@ The service includes:\
 **Processing**:  
 - Development of a Style Manual to standardize data and metadata throughout the data lifecycle  
 - Implementation of tools to ensure data quality, following business rules  
-- Planning processes to maintain and expand infrastructure, with the option to train your team or rely on BD's services  
+- Planning processes to maintain and expand infrastructure, with the option to train your team or rely on DB's services  
 
 **Availability**:  
 - Integration with applications, chatbots, and other tools  
