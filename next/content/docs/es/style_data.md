@@ -313,4 +313,4 @@ El campo se refiere a los datos en la fuente original, que aún no han pasado po
 
 ## **¿Pensaste en mejoras para los estándares definidos?**
 
-Abre un [issue en nuestro Github](https://github.com/basedosdados/sdk/labels/docs) o envía un mensaje en [Discord](https://discord.gg/huKWpsVYx4) para conversar :)
+Abre un [issue en nuestro Github](https://github.com/basedosdados/sdk/labels/docs) o envía un mensaje en [Discord](https://discord.gg/nNfQYcmrvM) para conversar :)

@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import { getDiscordUrl } from "../utils";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -471,7 +472,7 @@ export default function AboutUs() {
         >
           <XIcon alt="twitter basedosdados" {...keyIcon("https://x.com/basedosdados")} borderTop="1px solid #0000001a"/>
           <BlueskyIcon alt="bluesky basedosdados" {...keyIcon("https://bsky.app/profile/basedosdados.bsky.social")}/>
-          <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
+          <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon(getDiscordUrl(locale))}/>
           <GithubIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>

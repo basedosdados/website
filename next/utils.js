@@ -23,6 +23,18 @@ export function isBasedosdadosDomain() {
   return getDomain() === "basedosdados.org";
 }
 
+// Community Discord invite per interface language. Each locale has its own
+// server, so links must follow the site language rather than always pointing
+// at the Portuguese community.
+export function getDiscordUrl(locale) {
+  const byLocale = {
+    pt: "https://discord.gg/huKWpsVYx4",
+    en: "https://discord.gg/tx57ek6zqQ",
+    es: "https://discord.gg/nNfQYcmrvM",
+  };
+  return byLocale[locale] || byLocale.pt;
+}
+
 // The backend query generator (getTableOneBigTableQuery) always aliases the
 // table as `dados`. Rename that alias to match the interface language so the
 // generated SQL reads naturally per site: pt -> dados, en -> data, es -> datos.
