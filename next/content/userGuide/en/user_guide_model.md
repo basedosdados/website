@@ -89,7 +89,7 @@ The partners' CPF data are made available in anonymized form. The identified dat
 
 # Processing done by DB:
 <!-- Here we describe the processing steps in more direct language, so that even users without programming knowledge know what processing was done. It is still necessary to leave links for anyone who wants to verify the process. If needed, the processing steps can be split across tables-->
-In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) and the [modifications made in BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_cnpj) are available in the GitHub repository for reference.
+In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) and the [modifications made in BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_cnpj) are available in the GitHub repository for reference.
 
 ## Companies table
 - Replacement of ',' with '.' in the `capital_social` column

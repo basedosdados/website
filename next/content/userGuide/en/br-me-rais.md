@@ -70,7 +70,7 @@ The data have a partial and a complete update. The partial update occurs in Sept
 The data are anonymized and do not contain CNPJs or CPFs. To obtain identified RAIS data, you must submit a request to the MTE. The process can be lengthy, and there is no guarantee of approval.
 
 # Processing performed by DB
-In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code) and the [modifications made in BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais) are available in the GitHub repository for reference. 
+In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/pipelines/tree/main/models/br_me_rais/code) and the [modifications made in BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_rais) are available in the GitHub repository for reference. 
 The processing steps performed were: 
 * Standardizing the columns that identify municipalities to the IBGE Municipality ID format (7 digits);
 * Standardizing the columns that identify Federative Units to the state abbreviation (UF) standard;
