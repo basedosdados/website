@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": "Talk to a large collection of public data",
-    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire BD public datalake",
+    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire DB public datalake",
     "button": "Try the Chatbot"
   },
   "why": {
@@ -40,6 +40,6 @@
   },
   "banner": {
     "title": "Create analyses in seconds with the power of AI and Base dos Dados' Datalake",
-    "button": "Try the BD chatbot now"
+    "button": "Try the DB chatbot now"
   }
 }

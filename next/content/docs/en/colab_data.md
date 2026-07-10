@@ -115,7 +115,7 @@ The RAIS architecture tables [can be found here](https://docs.google.com/spreads
 
 #### To fill in each table in your set, follow these steps:
 
-<Tip caption="A each beginning and end of step, consult our [style guide](style_data) to ensure you're following the BD standardization"/>
+<Tip caption="A each beginning and end of step, consult our [style guide](style_data) to ensure you're following the DB standardization"/>
 
 1. List all data variables in the `original_name` column
 - Note: If the database changes the names of variables over the years (such as RAIS), it is necessary to make all variables compatible between years by filling in the `original_name_YYYY` column for each available year or month

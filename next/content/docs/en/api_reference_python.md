@@ -137,7 +137,7 @@ Raises
 
 - `Exception`: If either `table_id`, `dataset_id` or `query` are empty.
 
-Functions to get metadata from BD's API.
+Functions to get metadata from DB's API.
 
 ## get_datasets
 

@@ -86,9 +86,9 @@ Just click **Run** and you're done!
 
 ## Understanding BigQuery's Free Usage
 
-This section is dedicated to presenting tips on how to reduce processing costs to maximize the data from BD! 
+This section is dedicated to presenting tips on how to reduce processing costs to maximize the data from DB! 
 
-For users who access data in public projects like the BD, the only type of cost associated is the cost of **processing queries**. The good news, as mentioned above, is that every user gets *1 TB free per month for querying data*. If you still don't have a project in BQ, consult [the section above](#getting-started) to create one.
+For users who access data in public projects like the DB, the only type of cost associated is the cost of **processing queries**. The good news, as mentioned above, is that every user gets *1 TB free per month for querying data*. If you still don't have a project in BQ, consult [the section above](#getting-started) to create one.
 
 - Knowing the basics of the BQ interface is important for understanding the article. If you don't have familiariadade or want to revisit the interface, we recommend 3 tracks:
 1. Our guide using the [RAIS - Annual Relation of Information Society](https://dev.to/basedosdados/bigquery-101-45pk) tables 
@@ -98,7 +98,7 @@ For users who access data in public projects like the BD, the only type of cost 
 
 ### See how to maximize the benefits of free queries
 
-In this section, we present some simple tips to reduce the costs of queries in Big Query and maximize the data from BD! Before moving on to the examples, we'll introduce the basic mechanism for predicting query processing costs in Big Query (BQ). 
+In this section, we present some simple tips to reduce the costs of queries in Big Query and maximize the data from DB! Before moving on to the examples, we'll introduce the basic mechanism for predicting query processing costs in Big Query (BQ). 
 
 <Tip caption="Cost estimates"/>
   In the upper right corner of the BQ interface, there's a notice with an estimate of the processing cost that will be charged to your project after the query execution.
@@ -106,7 +106,7 @@ In this section, we present some simple tips to reduce the costs of queries in B
 <Image src="/docs/bq_query_estimated_costs.png"/>
 
 
-- This is the basic and readily accessible mechanism for predictability of processing costs. Unfortunately, it doesn't work for all tables. Due to limitations within Big Query itself, queries to specific tables don't display cost estimates. This is the case of tables with **Row Access Policy**. This means that the number of accessible rows is limited depending on the user. This is the case of tables that are part of the [BD Pro](https://info.basedosdados.org/en/bd-pro) service
+- This is the basic and readily accessible mechanism for predictability of processing costs. Unfortunately, it doesn't work for all tables. Due to limitations within Big Query itself, queries to specific tables don't display cost estimates. This is the case of tables with **Row Access Policy**. This means that the number of accessible rows is limited depending on the user. This is the case of tables that are part of the [DB Pro](https://info.basedosdados.org/en/bd-pro) service
 
 - Example of the `agencia` table from the `br_bcb_estban` dataset. 
 
@@ -148,7 +148,7 @@ SELECT sequencial_obito, tipo_obito, data_obito FROM `basedosdados.br_ms_sim.mic
 
 - How to know which column was used to partition and cluster a specific table?
 
-  1. By the metadata on the table page on the BD website
+  1. By the metadata on the table page on the DB website
 
 <Image src="/docs/website_metadata_table_partitions.gif"/>
 

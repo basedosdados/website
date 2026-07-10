@@ -138,7 +138,7 @@
                 ]
             },
             {
-                "question": "What is your main goal with BD?",
+                "question": "What is your main goal with DB?",
                 "options": [
                     "Market analysis",
                     "Competition monitoring",
@@ -151,7 +151,7 @@
                 ]
             },
             {
-                "question": "How did you hear about BD?",
+                "question": "How did you hear about DB?",
                 "options": [
                     "Social media",
                     "Recommendation",
