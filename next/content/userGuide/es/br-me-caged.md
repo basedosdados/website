@@ -121,7 +121,7 @@ Los datos están anonimizados y no contienen CNPJ ni CPF. Para obtener datos ide
 
 # Tratamientos realizados por BD:
 
-En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, [los códigos de extracción y tratamiento](https://github.com/basedosdados/queries-basedosdados-dev/blob/main/models/br_me_caged/code/crawler_caged.py) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_caged) están disponibles en el repositorio de GitHub para consulta.
+En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, [los códigos de extracción y tratamiento](https://github.com/basedosdados/pipelines/blob/main/models/br_me_caged/code/crawler_caged.py) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_caged) están disponibles en el repositorio de GitHub para consulta.
 Los tratamientos realizados fueron:
 
 - Cambio de nombre de las columnas para adecuarlas al manual de estilo;

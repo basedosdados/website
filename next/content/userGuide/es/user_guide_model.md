@@ -89,7 +89,7 @@ Los datos de CPF de los socios se ponen a disposición de forma anonimizada. No 
 
 # Tratamientos realizados por BD:
 <!-- Aquí describimos los tratamientos de manera más directa, para que incluso quien no sabe programar entienda cuáles fueron los tratamientos realizados. Aun así, es necesario dejar los enlaces para quienes quieran verificar el proceso. Si es necesario, los tratamientos pueden separarse en tablas-->
-En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, los [códigos de tratamiento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_cnpj) están disponibles en el repositorio de GitHub para consulta.
+En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, los [códigos de tratamiento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_cnpj) están disponibles en el repositorio de GitHub para consulta.
 
 ## Tabla Empresas
 - Sustitución de ',' por '.' en la columna `capital_social`

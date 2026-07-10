@@ -62,7 +62,7 @@ These tables have been consistent since 2000; we have no record of changes to th
 The data are updated at the original source every hour. At Data Basis, we update this information monthly.
 
 # Treatments applied by DB:
-In this guide, the treatments are described in more accessible language. In addition, [the extraction and treatment code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_inmet_bdmep/flows.py) and the [modifications made in BigQuery](https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_inmet_bdmep/br_inmet_bdmep__microdados.sql) are available in the GitHub repository for reference.
+In this guide, the treatments are described in more accessible language. In addition, [the extraction and treatment code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_inmet_bdmep/flows.py) and the [modifications made in BigQuery](https://github.com/basedosdados/pipelines/blob/main/models/br_inmet_bdmep/br_inmet_bdmep__microdados.sql) are available in the GitHub repository for reference.
 The treatments applied to the microdata table were:
 * Renaming columns to conform to DB's style manual.
 * Replacing invalid codes ("-9999") with null values.

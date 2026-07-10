@@ -68,7 +68,7 @@ Los datos se actualizan después del día 15 de cada mes. Nuestra plataforma rea
 Los datos de CPF de los socios se ponen a disposición de forma anonimizada. No es posible obtener la base identificada. 
 
 # Tratamientos realizados por BD:
-En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, los [códigos de tratamiento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_cnpj) están disponibles en el repositorio de GitHub para consulta.
+En esta guía, los tratamientos se describen en un lenguaje más accesible. De manera complementaria, los [códigos de tratamiento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) y las [modificaciones realizadas en BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_cnpj) están disponibles en el repositorio de GitHub para consulta.
 
 ## Tabla Empresas
 - Sustitución de ',' por '.' en la columna `capital_social`

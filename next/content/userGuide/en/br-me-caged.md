@@ -121,7 +121,7 @@ The data are anonymized and contain no CNPJs or CPFs. To obtain identified data,
 
 # Processing done by DB:
 
-In this guide, the processing steps are described in more accessible language. In addition, the [extraction and processing code](https://github.com/basedosdados/queries-basedosdados-dev/blob/main/models/br_me_caged/code/crawler_caged.py) and the [modifications made in BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_caged) are available in the GitHub repository for reference.
+In this guide, the processing steps are described in more accessible language. In addition, the [extraction and processing code](https://github.com/basedosdados/pipelines/blob/main/models/br_me_caged/code/crawler_caged.py) and the [modifications made in BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_caged) are available in the GitHub repository for reference.
 The processing steps performed were:
 
 - Renaming columns to conform to the style manual;
