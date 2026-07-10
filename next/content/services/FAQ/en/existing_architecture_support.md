@@ -5,4 +5,4 @@ id: existing_architecture_support
 order: 5
 ---
 
-Yes! Our team can work with different technology stacks, always following BD's best practices for data governance.
+Yes! Our team can work with different technology stacks, always following DB's best practices for data governance.

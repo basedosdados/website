@@ -5,4 +5,4 @@ id: target_institutions_data_architecture
 order: 2
 ---
 
-BD's data architecture service is useful for any institution, but we primarily focus on public agencies and third-sector organizations.
+DB's data architecture service is useful for any institution, but we primarily focus on public agencies and third-sector organizations.
