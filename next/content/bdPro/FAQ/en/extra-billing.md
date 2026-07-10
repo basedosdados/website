@@ -1,5 +1,5 @@
 ---
-question: Can I incur extra charges for using BD Pro data?
+question: Can I incur extra charges for using DB Pro data?
 categories: []
 keywords: []
 id: extra-billing
