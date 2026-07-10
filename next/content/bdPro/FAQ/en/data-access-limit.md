@@ -1,5 +1,5 @@
 ---
-question: Is there a usage limit for BD Pro data?
+question: Is there a usage limit for DB Pro data?
 categories: []
 keywords: []
 order: 8
