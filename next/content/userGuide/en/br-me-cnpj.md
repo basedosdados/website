@@ -68,7 +68,7 @@ The data are updated after the 15th of each month. Our platform runs automatic d
 The partners' CPF data are made available in anonymized form. The identified database cannot be obtained. 
 
 # Processing done by DB:
-In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) and the [modifications made in BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_cnpj) are available in the GitHub repository for reference.
+In this guide, the processing steps are described in more accessible language. In addition, the [processing code](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_me_cnpj/tasks.py#L50C1-L50C74) and the [modifications made in BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_cnpj) are available in the GitHub repository for reference.
 
 ## Companies table
 - Replacement of ',' with '.' in the `capital_social` column
