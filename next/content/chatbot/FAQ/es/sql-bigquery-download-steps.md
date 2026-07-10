@@ -17,4 +17,4 @@ Para ello, sigue estos pasos:
 5. Pega la consulta proporcionada por el chatbot y ejecútala.
 6. Tras ejecutarla, puedes guardar los resultados en el formato que prefieras o abrirlos con otras herramientas de Google para visualización.
 
-Si tienes problemas con este flujo, nuestro equipo y comunidad pueden ayudarte en el [Discord de Base de los Datos](https://discord.gg/huKWpsVYx4).
+Si tienes problemas con este flujo, nuestro equipo y comunidad pueden ayudarte en el [Discord de Base de los Datos](https://discord.gg/nNfQYcmrvM).
