@@ -152,7 +152,9 @@ function Toc({ allDocs, headings, slug, locale }) {
     'Docs',
     'APIs',
     translations[locale] || translations.default,
-    'Guia Central de Identidade Verbal'
+    // Verbal identity guide only exists in Portuguese; omit its (otherwise
+    // empty) header on other locales.
+    ...(locale === 'pt' ? ['Guia Central de Identidade Verbal'] : [])
   ]
 
   const groupedDocs = allDocs.reduce((acc, doc) => {
