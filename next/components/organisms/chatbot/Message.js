@@ -19,8 +19,13 @@ import {
   Th,
   Td,
   Spinner,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ArrowForwardIcon } from "@chakra-ui/icons";
 import { keyframes } from "@emotion/react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -33,11 +38,16 @@ import json from "highlight.js/lib/languages/json";
 import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
+import Link from "../../atoms/Link";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import CrossIcon from "../../../public/img/icons/crossIcon";
+import FeedbackModal from "./FeedbackModal";
+import LinkIcon from "../../../public/img/icons/redirectIcon";
+import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
+import { CalendarComunIcon } from "../../../public/img/icons/calendarIcon";
+import { CodeIcon } from "../../../public/img/icons/codeIcon";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
@@ -47,9 +57,14 @@ const pensandoTextShimmer = keyframes`
   50% { color: #252A32; }
 `;
 
-function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
+function CodeBlock({ inline, children, language = "sql", marginY = "24px", raw = false }) {
   const code = String(children).replace(/\n$/, "");
   const { hasCopied, onCopy } = useClipboard(code);
+
+  const highlighted = useMemo(
+    () => (inline || raw ? null : hljs.highlight(code, { language })),
+    [inline, raw, code, language]
+  );
 
   if (inline) {
     return (
@@ -66,8 +81,6 @@ function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
       </Text>
     );
   }
-
-  const highlighted = hljs.highlight(code, { language });
 
   return (
     <Box
@@ -117,20 +130,36 @@ function CodeBlock({ inline, children, language = "sql", marginY = "24px" }) {
         padding="12px 40px 12px 12px"
         boxSizing="border-box"
       >
-        <Box
-          as="code"
-          display="block"
-          width="max-content"
-          minW="100%"
-          boxSizing="border-box"
-          className={`hljs hljs-chatbot language-${language}`}
-          color="#1F2937"
-          dangerouslySetInnerHTML={{ __html: highlighted.value }}
-        />
+        {raw ? (
+          <Box
+            as="code"
+            display="block"
+            width="max-content"
+            minW="100%"
+            boxSizing="border-box"
+            className={`hljs-chatbot language-${language}`}
+            color="#1F2937"
+          >
+            {code}
+          </Box>
+        ) : (
+          <Box
+            as="code"
+            display="block"
+            width="max-content"
+            minW="100%"
+            boxSizing="border-box"
+            className={`hljs hljs-chatbot language-${language}`}
+            color="#1F2937"
+            dangerouslySetInnerHTML={{ __html: highlighted.value }}
+          />
+        )}
       </Box>
     </Box>
   );
 }
+
+const MemoCodeBlock = React.memo(CodeBlock);
 
 const componentsMk = {
   p: ({ children }) => (
@@ -153,7 +182,7 @@ const componentsMk = {
       {children}
     </Text>
   ),
-  code: ({ children, inline }) => <CodeBlock inline={inline} children={children} />,
+  code: ({ children, inline }) => <MemoCodeBlock inline={inline} children={children} />,
   ul: ({ children }) => (
     <UnorderedList margin="8px 0 8px 20px">
       {children}
@@ -233,6 +262,7 @@ function formatToolOutputText(output) {
   if (!output) return "";
   const toolResult = output.content ?? output.output ?? output.result;
   if (typeof toolResult === "string") {
+    if (output.streaming) return toolResult;
     const trimmed = toolResult.trim();
     if (!trimmed) return toolResult;
     try {
@@ -257,27 +287,21 @@ function SolicitationArgsBlocks({ call }) {
       ? call.streamArgsJson
       : null;
 
-  let parsed = null;
-
   if (rawStream != null) {
-    try {
-      parsed = JSON.parse(rawStream);
-    } catch {
-      return (
-        <CodeBlock language="json" marginY="8px">
-          {rawStream}
-        </CodeBlock>
-      );
-    }
-  } else {
-    parsed = call.args ?? {};
+    return (
+      <MemoCodeBlock language="json" marginY="8px" raw>
+        {rawStream}
+      </MemoCodeBlock>
+    );
   }
+
+  const parsed = call.args ?? {};
 
   if (parsed == null || typeof parsed !== "object" || Array.isArray(parsed)) {
     return (
-      <CodeBlock language="json" marginY="8px">
+      <MemoCodeBlock language="json" marginY="8px">
         {JSON.stringify(parsed ?? {}, null, 2)}
-      </CodeBlock>
+      </MemoCodeBlock>
     );
   }
 
@@ -290,24 +314,221 @@ function SolicitationArgsBlocks({ call }) {
     const { sql_query: _omitSql, ...rest } = parsed;
     return (
       <>
-        <CodeBlock language="sql" marginY="8px">
+        <MemoCodeBlock language="sql" marginY="8px">
           {sql}
-        </CodeBlock>
+        </MemoCodeBlock>
         {Object.keys(rest).length > 0 ? (
-          <CodeBlock language="json" marginY="8px">
+          <MemoCodeBlock language="json" marginY="8px">
             {JSON.stringify(rest, null, 2)}
-          </CodeBlock>
+          </MemoCodeBlock>
         ) : null}
       </>
     );
   }
 
   return (
-    <CodeBlock language="json" marginY="8px">
+    <MemoCodeBlock language="json" marginY="8px">
       {JSON.stringify(parsed, null, 2)}
-    </CodeBlock>
+    </MemoCodeBlock>
   );
 }
+
+const GRANULARITY_LABEL = {
+  day: "dia",
+  month: "mês",
+  year: "ano",
+};
+
+function getDatasetTableUrl(source) {
+  const datasetId = source?.dataset_id ?? source?.datasetId;
+  const tableId = source?.table_id ?? source?.tableId;
+  if (!datasetId) return null;
+  const base = `/dataset/${datasetId}`;
+  return tableId ? `${base}?table=${tableId}` : base;
+}
+
+function formatPeriodDate(date) {
+  if (!date || typeof date !== "string") return date;
+  return date.replace(/-/g, "/");
+}
+
+function StructuredSectionHeader({ icon, title }) {
+  return (
+    <HStack spacing="8px" alignItems="center" flex={1} minW={0}>
+      <Box
+        as="span"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        flexShrink={0}
+        color="#6B7280"
+      >
+        {icon}
+      </Box>
+      <BodyText typography="small" fontWeight="600" color="#6B7280">
+        {title}
+      </BodyText>
+    </HStack>
+  );
+}
+
+const DataSourcesList = React.memo(function DataSourcesList({ dataSources }) {
+  if (!Array.isArray(dataSources) || dataSources.length === 0) return null;
+
+  return (
+    <Box>
+      <StructuredSectionHeader
+        title="Fontes dos dados"
+        icon={<DataBaseIcon width="16px" height="16px" fill="#6B7280"/>}
+      />
+      <VStack align="stretch" spacing="4px" marginTop="4px">
+        {dataSources.map((source, index) => {
+          const href = getDatasetTableUrl(source);
+          const label = source?.name ?? "—";
+
+          return (
+            <Box
+              key={source?.table_id ?? index}
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="14px"
+              lineHeight="20px"
+              color="#252A32"
+            >
+              {href ? (
+                <Link
+                  display="inline-flex"
+                  alignItems="center"
+                  gap="6px"
+                  href={href}
+                  target="_blank"
+                  color="#0068C5"
+                  fill="#0068C5"
+                  fontWeight="400"
+                  _hover={{
+                    color: "#0057A4",
+                    fill: "#0057A4",
+                    textDecoration: "underline",
+                  }}
+                >
+                  <Text as="span">{label}</Text>
+                  <LinkIcon width="14px" height="14px" />
+                </Link>
+              ) : (
+                label
+              )}
+            </Box>
+          );
+        })}
+      </VStack>
+    </Box>
+  );
+});
+
+const TemporalCoverageInfo = React.memo(function TemporalCoverageInfo({ temporalCoverage }) {
+  if (!temporalCoverage) return null;
+
+  const { period_start, period_end, granularity } = temporalCoverage;
+  const granularityLabel = GRANULARITY_LABEL[granularity] ?? granularity;
+  const formattedStart = formatPeriodDate(period_start);
+  const formattedEnd = formatPeriodDate(period_end);
+
+  return (
+    <Box>
+      <StructuredSectionHeader
+        title="Período consultado"
+        icon={<CalendarComunIcon width="16px" height="16px" fill="#6B7280" />}
+      />
+      <BodyText typography="small" color="#252A32" marginTop="4px">
+        {period_start === period_end
+          ? `${formattedStart} (${granularityLabel})`
+          : `${formattedStart} a ${formattedEnd} (${granularityLabel})`}
+      </BodyText>
+    </Box>
+  );
+});
+
+const SqlQueriesList = React.memo(function SqlQueriesList({ sqlQueries }) {
+  if (!Array.isArray(sqlQueries) || sqlQueries.length === 0) return null;
+
+  return (
+    <Box width="100%" maxW="100%" minW={0} overflow="hidden">
+      <Accordion allowToggle width="100%">
+        <AccordionItem border="none" width="100%" minW={0}>
+          <AccordionButton
+            padding="0"
+            width="100%"
+            minW={0}
+            _hover={{ background: "transparent" }}
+            _expanded={{ background: "transparent" }}
+          >
+            <StructuredSectionHeader
+              title="Consultas SQL"
+              icon={<CodeIcon width="16px" height="16px" fill="#6B7280"/>}
+            />
+            <AccordionIcon color="#6B7280" marginLeft="8px" flexShrink={0} />
+          </AccordionButton>
+          <AccordionPanel
+            padding="8px 0 0 0"
+            width="100%"
+            maxW="100%"
+            minW={0}
+            overflow="hidden"
+          >
+            {sqlQueries.map((query, index) => (
+              <MemoCodeBlock key={index} language="sql" marginY="8px">
+                {query}
+              </MemoCodeBlock>
+            ))}
+          </AccordionPanel>
+        </AccordionItem>
+      </Accordion>
+    </Box>
+  );
+});
+
+const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({ followUpQuestions, onQuestionClick }) {
+  if (!Array.isArray(followUpQuestions) || followUpQuestions.length === 0) return null;
+
+  return (
+    <Box marginTop="16px">
+      <BodyText typography="small" fontWeight="600" color="#6B7280" marginBottom="8px">
+        Perguntas sugeridas
+      </BodyText>
+      <VStack align="stretch" spacing="4px">
+        {followUpQuestions.map((question, index) => (
+          <HStack
+            key={index}
+            as="button"
+            type="button"
+            width="100%"
+            spacing="8px"
+            align="flex-start"
+            textAlign="left"
+            padding="6px 0"
+            background="transparent"
+            border="none"
+            cursor="pointer"
+            color="#464A51"
+            transition="color 0.2s ease"
+            _hover={{ color: "#0068C5" }}
+            onClick={() => onQuestionClick?.(question)}
+          >
+            <ArrowForwardIcon
+              boxSize="14px"
+              flexShrink={0}
+              marginTop="3px"
+              color="currentColor"
+            />
+            <BodyText typography="small" color="inherit" flex={1}>
+              {question}
+            </BodyText>
+          </HStack>
+        ))}
+      </VStack>
+    </Box>
+  );
+});
 
 function buildToolSteps(toolCalls) {
   if (!Array.isArray(toolCalls) || toolCalls.length === 0) return [];
@@ -349,9 +570,12 @@ function buildToolSteps(toolCalls) {
   return steps;
 }
 
-function Message({ message, onFeedback }) {
+function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowUpClick }) {
   const isUser = message.role === "user";
-  const [feedback, setFeedback] = useState(null);
+  const [feedback, setFeedback] = useState(message.rating ?? null);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [pendingRating, setPendingRating] = useState(null);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
   const [isThinkingOpen, setIsThinkingOpen] = useState(false);
   const toast = useToast();
 
@@ -382,35 +606,64 @@ function Message({ message, onFeedback }) {
     }
   }, [message.isLoading, toolSteps.length]);
 
-  const handleFeedback = async (rating) => {
-    if (onFeedback) {
-      const success = await onFeedback(message.id, rating);
+  useEffect(() => {
+    if (message.rating != null) {
+      setFeedback(message.rating);
+    }
+  }, [message.rating]);
+
+  const showFeedbackToast = () => {
+    toast({
+      duration: 3000,
+      position: "bottom",
+      render: () => (
+        <Box
+          width="fit-content"
+          display="flex"
+          flexDirection="row"
+          gap="8px"
+          padding="12px 16px"
+          backgroundColor="#252A32"
+          borderRadius="8px"
+          color="#FFF"
+          fill="#FFF"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+        >
+          Obrigado pelo seu feedback!
+        </Box>
+      ),
+    });
+  };
+
+  const openFeedbackModal = (rating) => {
+    if (feedback != null) return;
+    setPendingRating(rating);
+    setIsFeedbackModalOpen(true);
+  };
+
+  const closeFeedbackModal = () => {
+    if (isSubmittingFeedback) return;
+    setIsFeedbackModalOpen(false);
+    setPendingRating(null);
+  };
+
+  const handleFeedbackSubmit = async (content) => {
+    if (!onFeedback || pendingRating == null) return;
+
+    setIsSubmittingFeedback(true);
+    try {
+      const success = await onFeedback(message.id, pendingRating, content);
       if (success) {
-        setFeedback(rating);
-        toast({
-          duration: 3000,
-          position: "bottom",
-          render: () => (
-            <Box
-              width="fit-content"
-              display="flex"
-              flexDirection="row"
-              gap="8px"
-              padding="12px 16px"
-              backgroundColor="#252A32"
-              borderRadius="8px"
-              color="#FFF"
-              fill="#FFF"
-              fontFamily="Roboto"
-              fontWeight="500"
-              fontSize="14px"
-              lineHeight="20px"
-            >
-              Obrigado pelo seu feedback!
-            </Box>
-          ),
-        });
+        setFeedback(pendingRating);
+        setIsFeedbackModalOpen(false);
+        setPendingRating(null);
+        showFeedbackToast();
       }
+    } finally {
+      setIsSubmittingFeedback(false);
     }
   };
 
@@ -420,11 +673,11 @@ function Message({ message, onFeedback }) {
       maxWidth="760px"
       margin="0 auto"
       justify={isUser ? "flex-end" : "flex-start"}
-      paddingY="12px"
     >
       <Box
         maxWidth={isUser ? "80%" : "100%"}
         width={isUser ? "fit-content" : "100%"}
+        minW={isUser ? undefined : 0}
         borderRadius="12px"
         padding="16px"
         backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
@@ -555,9 +808,9 @@ function Message({ message, onFeedback }) {
                         >
                           <BodyText fontWeight="600" color="#374151">
                             Ferramenta:{" "}
-                            <CodeBlock inline language="sql">
+                            <MemoCodeBlock inline language="sql">
                               {step.call.name ?? "—"}
-                            </CodeBlock>
+                            </MemoCodeBlock>
                           </BodyText>
                           <VStack
                             align="stretch"
@@ -588,9 +841,13 @@ function Message({ message, onFeedback }) {
                               >
                                 Resultado:
                               </BodyText>
-                              <CodeBlock language="json" marginY="8px">
+                              <MemoCodeBlock
+                                language="json"
+                                marginY="8px"
+                                raw={Boolean(step.output?.streaming)}
+                              >
                                 {formatToolOutputText(step.output)}
-                              </CodeBlock>
+                              </MemoCodeBlock>
                             </VStack>
                           ) : null}
                         </VStack>
@@ -608,9 +865,13 @@ function Message({ message, onFeedback }) {
                           >
                             Resultado:
                           </BodyText>
-                          <CodeBlock language="json" marginY="8px">
+                          <MemoCodeBlock
+                            language="json"
+                            marginY="8px"
+                            raw={Boolean(step.output?.streaming)}
+                          >
                             {formatToolOutputText(step.output)}
-                          </CodeBlock>
+                          </MemoCodeBlock>
                         </VStack>
                       )}
                     </Box>
@@ -637,6 +898,14 @@ function Message({ message, onFeedback }) {
           </HStack>
         )}
 
+        {!isUser && !message.isLoading && message.structuredResponse && (
+          <VStack spacing="16px" width="100%" maxW="100%" minW={0} alignItems="stretch" margin="16px 0">
+            <DataSourcesList dataSources={message.structuredResponse.data_sources} />
+            <TemporalCoverageInfo temporalCoverage={message.structuredResponse.temporal_coverage} />
+            <SqlQueriesList sqlQueries={message.structuredResponse.sql_queries} />
+          </VStack>
+        )}
+
         {isUser ? (
           <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
         ) : (
@@ -650,6 +919,13 @@ function Message({ message, onFeedback }) {
           </Box>
         )}
 
+        {!isUser && !message.isLoading && !message.isTyping && message.structuredResponse && showFollowUpQuestions ? (
+          <FollowUpQuestionsList
+            followUpQuestions={message.structuredResponse.follow_up_questions}
+            onQuestionClick={onFollowUpClick}
+          />
+        ) : null}
+
         {!isUser &&
           !message.isLoading &&
           !message.isTyping &&
@@ -657,25 +933,33 @@ function Message({ message, onFeedback }) {
           message.id && (
             <HStack spacing="8px" marginTop="8px" justify="flex-end">
               <Box
-                cursor="pointer"
-                onClick={() => handleFeedback(1)}
-                pointerEvents={feedback === 1 ? "none" : "auto"}
+                cursor={feedback != null ? "default" : "pointer"}
+                onClick={() => openFeedbackModal(1)}
+                pointerEvents={feedback != null ? "none" : "auto"}
                 opacity={feedback === 1 ? 1 : 0.5}
-                _hover={{ opacity: 1 }}
+                _hover={{ opacity: feedback != null ? undefined : 1 }}
               >
                 <ThumbUpIcon width="18px" height="18px" />
               </Box>
               <Box
-                cursor="pointer"
-                onClick={() => handleFeedback(0)}
-                pointerEvents={feedback === 0 ? "none" : "auto"}
+                cursor={feedback != null ? "default" : "pointer"}
+                onClick={() => openFeedbackModal(0)}
+                pointerEvents={feedback != null ? "none" : "auto"}
                 opacity={feedback === 0 ? 1 : 0.5}
-                _hover={{ opacity: 1 }}
+                _hover={{ opacity: feedback != null ? undefined : 1 }}
               >
                 <ThumbDownIcon width="18px" height="18px" />
               </Box>
             </HStack>
           )}
+
+        <FeedbackModal
+          isOpen={isFeedbackModalOpen}
+          onClose={closeFeedbackModal}
+          rating={pendingRating}
+          onSubmit={handleFeedbackSubmit}
+          isSubmitting={isSubmittingFeedback}
+        />
       </Box>
     </Flex>
   );

@@ -1,4 +1,12 @@
-import { useRef, useEffect, useLayoutEffect, useCallback, useState } from 'react';
+import {
+  forwardRef,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useState,
+  useImperativeHandle,
+} from 'react';
 import {
   Flex,
   VStack,
@@ -11,16 +19,48 @@ import SendIcon from "../../../public/img/icons/sendIcon";
 const useIsoLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-export default function Search({
-  value,
-  onChange,
+function draftKeyFor(threadId) {
+  return `chatbot_draft_${threadId || 'new'}`;
+}
+
+const Search = forwardRef(function Search({
+  threadId,
   onSend,
   isLoading,
   isGenerating,
   showDisclaimer = true,
-}) {
+}, ref) {
   const textareaRef = useRef(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(draftKeyFor(threadId));
+    setValue(savedDraft || "");
+  }, [threadId]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const key = draftKeyFor(threadId);
+      if (value) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [value, threadId]);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      localStorage.removeItem(draftKeyFor(threadId));
+      setValue("");
+    },
+    focus: () => {
+      textareaRef.current?.focus();
+    },
+  }), [threadId]);
 
   const adjustTextareaSizing = useCallback((el, rawText) => {
     if (!el) return;
@@ -59,14 +99,23 @@ export default function Search({
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 
+  const isBusy = isLoading || isGenerating;
+
+  const triggerSend = useCallback(() => {
+    if (isBusy) return;
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    localStorage.removeItem(draftKeyFor(threadId));
+    setValue("");
+    onSend?.(trimmed);
+  }, [isBusy, value, onSend, threadId]);
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (onSend) onSend();
+      triggerSend();
     }
   };
-
-  const isBusy = isLoading || isGenerating;
 
   return (
     <VStack width="100%" maxWidth="760px" margin="auto auto 0" spacing="24px">
@@ -105,8 +154,7 @@ export default function Search({
             value={value}
             width="100%"
             onChange={(e) => {
-              adjustTextareaSizing(e.target, e.target.value);
-              if (onChange) onChange(e);
+              setValue(e.target.value);
             }}
             onKeyDown={(e) => {
               if (!isBusy) handleKeyDown(e);
@@ -155,7 +203,7 @@ export default function Search({
           flexShrink={0}
           marginLeft="8px"
           cursor={isBusy ? "wait" : "pointer"}
-          onClick={onSend}
+          onClick={triggerSend}
           color="#464A51"
           opacity={isBusy || !value ? 0.5 : 1}
           minWidth="24px"
@@ -197,4 +245,6 @@ export default function Search({
       )}
     </VStack>
   );
-}
+});
+
+export default Search;
