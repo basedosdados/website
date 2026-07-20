@@ -13,7 +13,7 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js/lib/core";
@@ -275,11 +275,92 @@ function formatCellValue(value) {
 
 const MAX_TABLE_ROWS = 50;
 const TOOL_RESULT_TABLE_MAX_HEIGHT = "70vh";
+const TOOL_RESULT_CELL_MAX_CHARS = 120;
 const LONG_TEXT_THRESHOLD = 100;
 const MEDIUM_TEXT_THRESHOLD = 40;
 const CELL_MIN_WIDTH_SHORT = "120px";
 const CELL_MIN_WIDTH_MEDIUM = "280px";
 const CELL_MIN_WIDTH_LONG = "420px";
+
+function getDisplayTextLength(text, truncateMaxChars) {
+  if (!truncateMaxChars || text.length <= truncateMaxChars) return text.length;
+  return truncateMaxChars + 12;
+}
+
+function orderEntriesWithIdLast(entries, moveIdToEnd) {
+  if (!moveIdToEnd) return entries;
+  const rest = [];
+  let idEntry = null;
+  for (const entry of entries) {
+    if (entry[0] === "id") idEntry = entry;
+    else rest.push(entry);
+  }
+  if (idEntry) rest.push(idEntry);
+  return rest;
+}
+
+function orderColumnsWithIdLast(columns, moveIdToEnd) {
+  if (!moveIdToEnd || !columns.includes("id")) return columns;
+  return [...columns.filter((col) => col !== "id"), "id"];
+}
+
+function TruncatableCellContent({ text, maxChars }) {
+  const [expanded, setExpanded] = useState(false);
+
+  if (!maxChars || text.length <= maxChars) {
+    return text;
+  }
+
+  if (expanded) {
+    return (
+      <>
+        {text}{" "}
+        <Text
+          as="button"
+          type="button"
+          display="inline"
+          fontFamily="inherit"
+          fontSize="inherit"
+          lineHeight="inherit"
+          color="#0068C5"
+          fontWeight="500"
+          background="transparent"
+          border="none"
+          padding={0}
+          cursor="pointer"
+          _hover={{ textDecoration: "underline" }}
+          onClick={() => setExpanded(false)}
+        >
+          ver menos
+        </Text>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {text.slice(0, maxChars).trimEnd()}…{" "}
+      <Text
+        as="button"
+        type="button"
+        display="inline"
+        fontFamily="inherit"
+        fontSize="inherit"
+        lineHeight="inherit"
+        color="#0068C5"
+        fontWeight="500"
+        background="transparent"
+        border="none"
+        padding={0}
+        cursor="pointer"
+        _hover={{ textDecoration: "underline" }}
+        onClick={() => setExpanded(true)}
+      >
+        ver mais
+      </Text>
+    </>
+  );
+}
 
 function getCellMinWidth(textLength) {
   if (textLength >= LONG_TEXT_THRESHOLD) return CELL_MIN_WIDTH_LONG;
@@ -300,20 +381,22 @@ const toolResultTdBaseProps = {
   verticalAlign: "top",
 };
 
-function getValueTdProps(value) {
+function getValueTdProps(value, truncateMaxChars) {
   const text = formatCellValue(value);
-  const minW = getCellMinWidth(text.length);
+  const displayLen = getDisplayTextLength(text, truncateMaxChars);
+  const minW = getCellMinWidth(displayLen);
 
   return {
     ...toolResultTdBaseProps,
     minW,
-    width: text.length >= LONG_TEXT_THRESHOLD ? minW : undefined,
+    width: displayLen >= LONG_TEXT_THRESHOLD ? minW : undefined,
   };
 }
 
-function getColumnTdProps(records, column) {
+function getColumnTdProps(records, column, truncateMaxChars) {
   const maxLen = records.reduce((max, row) => {
-    const len = formatCellValue(row[column]).length;
+    const text = formatCellValue(row[column]);
+    const len = getDisplayTextLength(text, truncateMaxChars);
     return Math.max(max, len);
   }, column.length);
   const minW = getCellMinWidth(maxLen);
@@ -341,42 +424,59 @@ function ToolResultTableContainer({ children }) {
   return <Box {...toolResultTableContainerProps}>{children}</Box>;
 }
 
-function RecordTable({ record }) {
-  const entries = Object.entries(record);
+export function RecordTable({
+  record,
+  moveIdToEnd = false,
+  truncateCellMaxChars,
+}) {
+  const entries = orderEntriesWithIdLast(
+    Object.entries(record),
+    moveIdToEnd
+  );
 
   return (
     <ToolResultTableContainer>
       <Table variant="simple" size="sm" width="max-content" minW="100%">
         <Tbody>
-          {entries.map(([key, value]) => (
-            <Tr key={key}>
-              <Th
-                padding="10px 16px"
-                textTransform="none"
-                letterSpacing="inherit"
-                fontFamily="Roboto"
-                fontWeight="600"
-                fontSize="13px"
-                lineHeight="18px"
-                color="#252A32"
-                backgroundColor="#F7F7F7"
-                borderColor="#DEDFE0"
-                whiteSpace="nowrap"
-              >
-                {key}
-              </Th>
-              <Td {...getValueTdProps(value)}>
-                {formatCellValue(value)}
-              </Td>
-            </Tr>
-          ))}
+          {entries.map(([key, value]) => {
+            const cellText = formatCellValue(value);
+            return (
+              <Tr key={key}>
+                <Th
+                  padding="10px 16px"
+                  textTransform="none"
+                  letterSpacing="inherit"
+                  fontFamily="Roboto"
+                  fontWeight="600"
+                  fontSize="13px"
+                  lineHeight="18px"
+                  color="#252A32"
+                  backgroundColor="#F7F7F7"
+                  borderColor="#DEDFE0"
+                  whiteSpace="nowrap"
+                >
+                  {key}
+                </Th>
+                <Td {...getValueTdProps(value, truncateCellMaxChars)}>
+                  <TruncatableCellContent
+                    text={cellText}
+                    maxChars={truncateCellMaxChars}
+                  />
+                </Td>
+              </Tr>
+            );
+          })}
         </Tbody>
       </Table>
     </ToolResultTableContainer>
   );
 }
 
-function RecordsTable({ records }) {
+function RecordsTable({
+  records,
+  moveIdToEnd = false,
+  truncateCellMaxChars,
+}) {
   const columns = [];
   const seen = new Set();
   for (const row of records) {
@@ -387,10 +487,14 @@ function RecordsTable({ records }) {
       }
     }
   }
+  const orderedColumns = orderColumnsWithIdLast(columns, moveIdToEnd);
 
   const visibleRows = records.slice(0, MAX_TABLE_ROWS);
   const columnTdPropsByCol = Object.fromEntries(
-    columns.map((col) => [col, getColumnTdProps(visibleRows, col)])
+    orderedColumns.map((col) => [
+      col,
+      getColumnTdProps(visibleRows, col, truncateCellMaxChars),
+    ])
   );
 
   return (
@@ -399,7 +503,7 @@ function RecordsTable({ records }) {
         <Table variant="simple" size="sm" width="max-content" minW="100%">
           <Thead backgroundColor="#F7F7F7" position="sticky" top={0} zIndex={1}>
             <Tr>
-              {columns.map((col) => (
+              {orderedColumns.map((col) => (
                 <Th
                   key={col}
                   padding="10px 16px"
@@ -421,11 +525,17 @@ function RecordsTable({ records }) {
           <Tbody>
             {visibleRows.map((row, index) => (
               <Tr key={index}>
-                {columns.map((col) => (
-                  <Td key={col} {...columnTdPropsByCol[col]}>
-                    {formatCellValue(row[col])}
-                  </Td>
-                ))}
+                {orderedColumns.map((col) => {
+                  const cellText = formatCellValue(row[col]);
+                  return (
+                    <Td key={col} {...columnTdPropsByCol[col]}>
+                      <TruncatableCellContent
+                        text={cellText}
+                        maxChars={truncateCellMaxChars}
+                      />
+                    </Td>
+                  );
+                })}
               </Tr>
             ))}
           </Tbody>
@@ -447,12 +557,17 @@ export function ToolResultView({ output }) {
     Array.isArray(parsed) && parsed.length > 0 && parsed.every(isPlainObject);
   const isSingleRecord = isPlainObject(parsed) && Object.keys(parsed).length > 0;
 
+  const resultTableProps = {
+    moveIdToEnd: true,
+    truncateCellMaxChars: TOOL_RESULT_CELL_MAX_CHARS,
+  };
+
   if (isRecordsArray) {
-    return <RecordsTable records={parsed} />;
+    return <RecordsTable records={parsed} {...resultTableProps} />;
   }
 
   if (isSingleRecord) {
-    return <RecordTable record={parsed} />;
+    return <RecordTable record={parsed} {...resultTableProps} />;
   }
 
   const text = formatToolOutputText(output);

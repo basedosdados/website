@@ -17,18 +17,40 @@ import CheckIcon from "../../../public/img/icons/checkIcon";
 import SearchIcon from "../../../public/img/icons/searchIcon";
 import FilterIcon from "../../../public/img/icons/filterIcon";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
+import { DataBaseSolidIcon } from "../../../public/img/icons/databaseIcon";
 import { CalendarComunIcon } from "../../../public/img/icons/calendarIcon";
 import { CodeIcon } from "../../../public/img/icons/codeIcon";
-import { componentsMk, MemoCodeBlock, formatToolOutputText, ToolResultView } from "./markdown";
+import {
+  componentsMk,
+  MemoCodeBlock,
+  formatToolOutputText,
+  ToolResultView,
+  RecordTable,
+} from "./markdown";
 import { pensandoTextShimmer } from "./shimmer";
 
 const TOOL_STEP_PATTERNS = [
-  { test: /search|busca|find/i, label: "Buscando conjuntos de dados", Icon: SearchIcon },
-  { test: /coverage|temporal|period|date/i, label: "Verificando cobertura temporal", Icon: CalendarComunIcon },
+  {
+    test: /search|busca|find/i,
+    label: "Buscando conjuntos de dados",
+    Icon: SearchIcon,
+  },
+  {
+    test: /coverage|temporal|period|date/i,
+    label: "Verificando cobertura temporal",
+    Icon: CalendarComunIcon,
+  },
   { test: /filter/i, label: "Filtrando resultados", Icon: FilterIcon },
-  { test: /table|dataset|schema|structure/i, label: "Explorando estrutura dos dados", Icon: DataStructureIcon },
-  { test: /sql|query|execute|database/i, label: "Consultando o banco de dados", Icon: DataBaseIcon },
+  {
+    test: /table|dataset|schema|structure/i,
+    label: "Explorando estrutura dos dados",
+    Icon: DataStructureIcon,
+  },
+  {
+    test: /sql|query|execute|database/i,
+    label: "Consultando o banco de dados",
+    Icon: DataBaseSolidIcon,
+  },
 ];
 
 function getToolStepMeta(name) {
@@ -38,6 +60,10 @@ function getToolStepMeta(name) {
     label: name ? `Executando ferramenta: ${name}` : "Executando ferramenta",
     Icon: CodeIcon,
   };
+}
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
 function SolicitationArgsBlocks({ call }) {
@@ -58,38 +84,30 @@ function SolicitationArgsBlocks({ call }) {
 
   const parsed = call.args ?? {};
 
-  if (parsed == null || typeof parsed !== "object" || Array.isArray(parsed)) {
-    return (
-      <MemoCodeBlock language="json" marginY="8px">
-        {JSON.stringify(parsed ?? {}, null, 2)}
-      </MemoCodeBlock>
-    );
-  }
+  if (isPlainObject(parsed) && Object.keys(parsed).length > 0) {
+    const sqlQuery =
+      typeof parsed.sql_query === "string" && parsed.sql_query.trim()
+        ? parsed.sql_query.trim()
+        : null;
 
-  const sqlQuery =
-    typeof parsed.sql_query === "string" && parsed.sql_query.trim()
-      ? parsed.sql_query.trim()
-      : null;
-
-  if (sqlQuery) {
-    const { sql_query: _omitSql, ...rest } = parsed;
-    return (
-      <>
-        <MemoCodeBlock language="sql" marginY="8px">
-          {sqlQuery}
-        </MemoCodeBlock>
-        {Object.keys(rest).length > 0 ? (
-          <MemoCodeBlock language="json" marginY="8px">
-            {JSON.stringify(rest, null, 2)}
+    if (sqlQuery) {
+      const { sql_query: _omitSql, ...rest } = parsed;
+      return (
+        <>
+          <MemoCodeBlock language="sql" marginY="8px">
+            {sqlQuery}
           </MemoCodeBlock>
-        ) : null}
-      </>
-    );
+          {Object.keys(rest).length > 0 ? <RecordTable record={rest} /> : null}
+        </>
+      );
+    }
+
+    return <RecordTable record={parsed} />;
   }
 
   return (
     <MemoCodeBlock language="json" marginY="8px">
-      {JSON.stringify(parsed, null, 2)}
+      {JSON.stringify(parsed ?? {}, null, 2)}
     </MemoCodeBlock>
   );
 }

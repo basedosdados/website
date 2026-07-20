@@ -15,7 +15,7 @@ import React from "react";
 import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
 import LinkIcon from "../../../public/img/icons/redirectIcon";
-import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
+import { DataBaseSolidIcon } from "../../../public/img/icons/databaseIcon";
 import { CalendarComunIcon } from "../../../public/img/icons/calendarIcon";
 import { CodeIcon } from "../../../public/img/icons/codeIcon";
 import { MemoCodeBlock } from "./markdown";
@@ -66,7 +66,7 @@ export const DataSourcesList = React.memo(function DataSourcesList({ dataSources
     <Box>
       <StructuredSectionHeader
         title="Fontes dos dados"
-        icon={<DataBaseIcon width="16px" height="16px" fill="#6B7280"/>}
+        icon={<DataBaseSolidIcon width="16px" height="16px" fill="#6B7280" />}
       />
       <VStack align="stretch" spacing="4px" marginTop="4px">
         {dataSources.map((source, index) => {

@@ -6,7 +6,7 @@ export const CodeIcon = createIcon({
   path: (
     <path
       fill="current-color"
-      d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"
+      d="M6.5 3L0 12l6.5 9 3-3L2.5 12 9.5 6 6.5 3zm11 0L24 12l-6.5 9-3-3L21.5 12 14.5 6 17.5 3z"
     />
   )
 })
