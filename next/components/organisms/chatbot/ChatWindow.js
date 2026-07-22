@@ -112,7 +112,6 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
             left={0}
             width="100%"
             transform={`translateY(${virtualRow.start}px)`}
-            paddingBottom="16px"
           >
             <Message
               message={messages[virtualRow.index]}

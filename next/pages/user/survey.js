@@ -227,21 +227,26 @@ export default function Survey() {
     <MainPageTemplate
       display="flex"
       justifyContent="center"
-      paddingTop="70px"
-      paddingX="24px"
+      paddingTop={{ base: "24px", md: "70px" }}
+      paddingX={{ base: "16px", md: "24px" }}
+      paddingBottom={{ base: "32px", md: "50px" }}
       cleanTemplate
     >
       <Stack
-        width="800px"
-        maxWidth="1440px"
-        maxHeight="575px"
+        width="100%"
+        maxWidth="800px"
+        minHeight={{ base: "calc(100dvh - 120px)", md: "auto" }}
+        maxHeight={{ base: "none", md: "575px" }}
         margin="0 auto"
         spacing={0}
-        marginY="40px"
+        marginY={{ base: "16px", md: "40px" }}
+        flex="1"
       >
         <Display
           typography="small"
-          marginY="64px"
+          marginY={{ base: "24px", md: "64px" }}
+          fontSize={{ base: "24px", md: "36px" }}
+          lineHeight={{ base: "32px", md: "48px" }}
         >
           {question[index].question}
         </Display>
@@ -261,9 +266,9 @@ export default function Survey() {
         <Stack
           flexDirection="row"
           flexWrap="wrap"
-          width="700px"
-          marginBottom="40px !important"
-          gap="16px"
+          width="100%"
+          marginBottom={{ base: "24px", md: "40px" }}
+          gap="12px"
           spacing={0}
         >
           {question[index].options.map((elm, i) => 
@@ -276,12 +281,13 @@ export default function Survey() {
               cursor="pointer"
               border={selectedValueStage(elm[1], index) ? "2px solid #2B8C4D" : "1px solid #DEDFE0"}
               backgroundColor={selectedValueStage(elm[1], index) ? "#D5E8DB" : "#FFF"}
-              width="fit-content"
+              width={{ base: "100%", sm: "fit-content" }}
+              maxWidth="100%"
               padding={selectedValueStage(elm[1], index) ? "11px" : "12px"}
               fontFamily="Roboto"
               fontWeight="500"
-              fontSize="18px"
-              lineHeight="28px"
+              fontSize={{ base: "16px", md: "18px" }}
+              lineHeight={{ base: "24px", md: "28px" }}
               color={selectedValueStage(elm[1], index) ? "#2B8C4D" : "#464A51"}
             >
               {elm[0]}
@@ -291,14 +297,17 @@ export default function Survey() {
 
         <Stack
           marginTop="auto !important"
-          flexDirection="row"
+          paddingTop={{ base: "24px", md: 0 }}
+          flexDirection={{ base: "column", md: "row" }}
           width="100%"
-          height="60px"
-          alignItems="center"
+          height={{ base: "auto", md: "60px" }}
+          alignItems={{ base: "stretch", md: "center" }}
           justifyContent="space-between"
+          gap={{ base: "24px", md: 0 }}
         >
           <Progress
-            width="200px"
+            width={{ base: "100%", md: "200px" }}
+            flexShrink={0}
             height="12px"
             borderRadius="100px"
             backgroundColor="#DEDFE0"
@@ -311,9 +320,10 @@ export default function Survey() {
           />
 
           <Stack
-            flexDirection="row"
-            alignItems="center"
-            height="100%"
+            flexDirection={{ base: "column-reverse", sm: "row" }}
+            alignItems={{ base: "stretch", sm: "center" }}
+            width={{ base: "100%", md: "auto" }}
+            height={{ base: "auto", md: "100%" }}
             gap="16px"
             spacing={0}
           >
@@ -321,9 +331,11 @@ export default function Survey() {
               <Button
                 key={i}
                 onClick={elm.function}
-                height="100%"
-                fontSize="20px"
-                lineHeight="30px"
+                width={{ base: "100%", sm: "fit-content" }}
+                height={{ base: "48px", md: "100%" }}
+                justifyContent="center"
+                fontSize={{ base: "18px", md: "20px" }}
+                lineHeight={{ base: "28px", md: "30px" }}
                 fontFamily="Roboto"
                 fontWeight="500"
                 pointerEvents={isLoading ? "none" : "default"}

@@ -32,30 +32,50 @@ import { pensandoTextShimmer } from "./shimmer";
 const TOOL_STEP_PATTERNS = [
   {
     test: /search|busca|find/i,
-    label: "Buscando conjuntos de dados",
+    labelActive: "Buscando conjuntos de dados",
+    labelDone: "Conjuntos de dados encontrados",
     Icon: SearchIcon,
   },
   {
     test: /coverage|temporal|period|date/i,
-    label: "Verificando cobertura temporal",
+    labelActive: "Verificando cobertura temporal",
+    labelDone: "Cobertura temporal verificada",
     Icon: CalendarComunIcon,
   },
-  { test: /filter/i, label: "Filtrando resultados", Icon: FilterIcon },
+  {
+    test: /filter/i,
+    labelActive: "Filtrando resultados",
+    labelDone: "Resultados filtrados",
+    Icon: FilterIcon,
+  },
   {
     test: /table|dataset|schema|structure/i,
-    label: "Explorando estrutura dos dados",
+    labelActive: "Explorando estrutura dos dados",
+    labelDone: "Estrutura dos dados explorada",
     Icon: DataStructureIcon,
   },
   {
     test: /sql|query|execute|database/i,
-    label: "Consultando o banco de dados",
+    labelActive: "Consultando o banco de dados",
+    labelDone: "Consulta ao banco concluída",
     Icon: DataBaseSolidIcon,
   },
 ];
 
-function getToolStepMeta(name) {
+function getToolStepMeta(name, { done = false } = {}) {
   const match = TOOL_STEP_PATTERNS.find(({ test }) => test.test(name || ""));
-  if (match) return { label: match.label, Icon: match.Icon };
+  if (match) {
+    return {
+      label: done ? match.labelDone : match.labelActive,
+      Icon: match.Icon,
+    };
+  }
+  if (done) {
+    return {
+      label: name ? `Ferramenta concluída: ${name}` : "Ferramenta concluída",
+      Icon: CodeIcon,
+    };
+  }
   return {
     label: name ? `Executando ferramenta: ${name}` : "Executando ferramenta",
     Icon: CodeIcon,
@@ -166,17 +186,16 @@ function TimelineIcon({ status, Icon }) {
       alignItems="center"
       justifyContent="center"
       flexShrink={0}
-      width="24px"
+      width="16px"
       height="24px"
       borderRadius="full"
       backgroundColor="#FFFFFF"
-      border="1px solid #E5E7EB"
       zIndex={1}
     >
       {status === "loading" ? (
-        <Spinner width="12px" height="12px" thickness="2px" color="#6B7280" />
+        <Spinner width="12px" height="12px" thickness="2px" color="#71757A" />
       ) : (
-        <Icon width="13px" height="13px" fill="#464A51" />
+        <Icon width="13px" height="13px" fill="#71757A" />
       )}
     </Box>
   );
@@ -186,16 +205,15 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
   const [isOpen, setIsOpen] = useState(false);
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
+  const status = isLoadingStep ? "loading" : "done";
   const { label, Icon } = isOrphan
     ? { label: "Resultado adicional", Icon: CodeIcon }
-    : getToolStepMeta(call?.name);
-
-  const status = isLoadingStep ? "loading" : "done";
+    : getToolStepMeta(call?.name, { done: status === "done" });
   const hasOutput = Boolean(formatToolOutputText(step.output));
 
   return (
     <Flex width="100%" position="relative">
-      <Box width="24px" position="relative" flexShrink={0}>
+      <Box width="16px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
             position="absolute"
@@ -218,22 +236,32 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
             backgroundColor="#E5E7EB"
           />
         )}
-        <TimelineIcon status={status} Icon={Icon}/>
+        <TimelineIcon status={status} Icon={Icon} />
       </Box>
 
-      <Box flex={1} minW={0} minH={0} paddingLeft="12px" paddingBottom={isLast ? 0 : "16px"}>
+      <Box
+        flex={1}
+        minWidth={0}
+        minHeight={0}
+        paddingLeft="4px"
+        paddingBottom={isLast ? 0 : "8px"}
+      >
         <Flex
           cursor="pointer"
           alignItems="center"
+          width="fit-content"
           gap="8px"
-          minH="24px"
+          minHeight="24px"
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
-            typography="small"
-            fontWeight="500"
-            color={status === "loading" ? "#6B7280" : "#252A32"}
-            animation={status === "loading" ? `${pensandoTextShimmer} 2s ease-in-out infinite` : undefined}
+            typography="x-small"
+            color={status === "loading" ? undefined : "#71757A"}
+            animation={
+              status === "loading"
+                ? `${pensandoTextShimmer} 2s ease-in-out infinite`
+                : undefined
+            }
             flex={1}
             minWidth="0"
           >
@@ -262,15 +290,21 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
           >
             {call && (
               <VStack align="stretch" spacing="4px" width="100%" minW={0}>
-                <BodyText typography="small" fontWeight="600" color="#6B7280">
+                <BodyText typography="small" fontWeight="600" color="#464A51">
                   Solicitação:
                 </BodyText>
                 <SolicitationArgsBlocks call={call} />
               </VStack>
             )}
             {hasOutput && (
-              <VStack align="stretch" spacing="4px" width="100%" minW={0} minH={0}>
-                <BodyText typography="small" fontWeight="600" color="#6B7280">
+              <VStack
+                align="stretch"
+                spacing="4px"
+                width="100%"
+                minWidth={0}
+                minHeight={0}
+              >
+                <BodyText typography="small" fontWeight="600" color="#464A51">
                   Resultado:
                 </BodyText>
                 <ToolResultView output={step.output} />
@@ -319,7 +353,12 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
           height="24px"
           zIndex={1}
         >
-          <Box width="6px" height="6px" borderRadius="full" backgroundColor="#9CA3AF" />
+          <Box
+            width="6px"
+            height="6px"
+            borderRadius="full"
+            backgroundColor="#9CA3AF"
+          />
         </Box>
       </Box>
       <Box
@@ -329,7 +368,7 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
         paddingBottom={isLast ? 0 : "16px"}
         className="markdown-body"
         fontSize="14px"
-        color="#6B7280"
+        color="#71757A"
         fontStyle="italic"
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={componentsMk}>
@@ -346,54 +385,9 @@ export default function ThinkingSection({ toolSteps, isLoading }) {
   return (
     <Box
       width="100%"
-      marginBottom="24px"
-      border="1px solid #E5E7EB"
-      borderRadius="12px"
       overflow="hidden"
     >
-      <Flex
-        alignItems="center"
-        gap="12px"
-        padding="12px 16px"
-        width="100%"
-        minW={0}
-        borderBottom="1px solid #E5E7EB"
-      >
-        <HStack flex={1} minWidth="0" spacing="8px" alignItems="center">
-          {isLoading ? (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexShrink={0}
-              animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
-            >
-              <Spinner width="16px" height="16px" thickness="2px" color="currentColor" />
-            </Box>
-          ) : (
-            <Box
-              as="span"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexShrink={0}
-              color="#2B8C4D"
-            >
-              <CheckIcon width="16px" height="16px" />
-            </Box>
-          )}
-          <LabelText
-            typography="small"
-            fontWeight="500"
-            flex={1}
-            minWidth="0"
-            animation={isLoading ? `${pensandoTextShimmer} 2s ease-in-out infinite` : undefined}
-          >
-            {isLoading ? "Consultando a Base dos Dados..." : "Consulta concluída"}
-          </LabelText>
-        </HStack>
-      </Flex>
-      <Box padding="16px" width="100%">
+      <Box width="100%">
         <VStack spacing="0" align="stretch" width="100%">
           {toolSteps.map((step, index) => {
             const key = stepKey(step, index);

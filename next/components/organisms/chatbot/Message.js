@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
-import LabelText from "../../atoms/Text/LabelText";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
 import FeedbackModal from "./FeedbackModal";
@@ -12,11 +11,10 @@ import { componentsMk } from "./markdown";
 import {
   DataSourcesList,
   TemporalCoverageInfo,
-  SqlQueriesList,
   FollowUpQuestionsList,
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
-import { pensandoTextShimmer } from "./shimmer";
+import RollingDiceLoader from "./RollingDiceLoader";
 
 function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowUpClick }) {
   const isUser = message.role === "user";
@@ -34,12 +32,12 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
   const showThinkingSection =
     !isUser && !message.isError && toolSteps.length > 0;
 
-  const showPensando =
+  const showDiceLoader =
     !isUser &&
     message.isLoading &&
     !message.isError &&
-    !(message.content || "").trim() &&
-    toolSteps.length === 0;
+    !message.isTyping &&
+    !(message.content || "").trim();
 
   React.useEffect(() => {
     if (message.rating != null) {
@@ -118,31 +116,34 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
         backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
         color="#000"
       >
-        {showThinkingSection && (
-          <ThinkingSection toolSteps={toolSteps} isLoading={message.isLoading} />
-        )}
+        {(showThinkingSection || showDiceLoader) && (
+          <Box marginBottom="16px">
+            {showThinkingSection && (
+              <ThinkingSection
+                toolSteps={toolSteps}
+                isLoading={message.isLoading}
+              />
+            )}
 
-        {showPensando && (
-          <HStack
-            spacing="12px"
-            align="center"
-            marginBottom="16px"
-            width="100%"
-          >
-            <LabelText
-              fontWeight="500"
-              animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
-            >
-              Pensando...
-            </LabelText>
-          </HStack>
+            {showDiceLoader && <RollingDiceLoader marginBottom="0" />}
+          </Box>
         )}
 
         {!isUser && !message.isLoading && message.structuredResponse && (
-          <VStack spacing="16px" width="100%" maxW="100%" minW={0} alignItems="stretch" margin="16px 0">
-            <DataSourcesList dataSources={message.structuredResponse.data_sources} />
-            <TemporalCoverageInfo temporalCoverage={message.structuredResponse.temporal_coverage} />
-            <SqlQueriesList sqlQueries={message.structuredResponse.sql_queries} />
+          <VStack
+            spacing="16px"
+            width="100%"
+            maxW="100%"
+            minW={0}
+            alignItems="stretch"
+            margin="16px 0"
+          >
+            <DataSourcesList
+              dataSources={message.structuredResponse.data_sources}
+            />
+            <TemporalCoverageInfo
+              temporalCoverage={message.structuredResponse.temporal_coverage}
+            />
           </VStack>
         )}
 
@@ -159,7 +160,11 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
           </Box>
         )}
 
-        {!isUser && !message.isLoading && !message.isTyping && message.structuredResponse && showFollowUpQuestions ? (
+        {!isUser &&
+        !message.isLoading &&
+        !message.isTyping &&
+        message.structuredResponse &&
+        showFollowUpQuestions ? (
           <FollowUpQuestionsList
             followUpQuestions={message.structuredResponse.follow_up_questions}
             onQuestionClick={onFollowUpClick}
