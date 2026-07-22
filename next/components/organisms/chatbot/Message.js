@@ -12,7 +12,6 @@ import { componentsMk } from "./markdown";
 import {
   DataSourcesList,
   TemporalCoverageInfo,
-  SqlQueriesList,
   FollowUpQuestionsList,
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
@@ -142,7 +141,6 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
           <VStack spacing="16px" width="100%" maxW="100%" minW={0} alignItems="stretch" margin="16px 0">
             <DataSourcesList dataSources={message.structuredResponse.data_sources} />
             <TemporalCoverageInfo temporalCoverage={message.structuredResponse.temporal_coverage} />
-            <SqlQueriesList sqlQueries={message.structuredResponse.sql_queries} />
           </VStack>
         )}
 

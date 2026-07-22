@@ -1,13 +1,7 @@
 import {
   Box,
-  Text,
   HStack,
   VStack,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";
@@ -17,8 +11,7 @@ import Link from "../../atoms/Link";
 import LinkIcon from "../../../public/img/icons/redirectIcon";
 import { DataBaseSolidIcon } from "../../../public/img/icons/databaseIcon";
 import { CalendarComunIcon } from "../../../public/img/icons/calendarIcon";
-import { CodeIcon } from "../../../public/img/icons/codeIcon";
-import { MemoCodeBlock } from "./markdown";
+import MessageBubbleIcon from "../../../public/img/icons/messageBubbleIcon";
 
 const GRANULARITY_LABEL = {
   day: "dia",
@@ -39,23 +32,11 @@ function formatPeriodDate(date) {
   return date.replace(/-/g, "/");
 }
 
-export function StructuredSectionHeader({ icon, title }) {
+export function StructuredSectionHeader({ title }) {
   return (
-    <HStack spacing="8px" alignItems="center" flex={1} minW={0}>
-      <Box
-        as="span"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        flexShrink={0}
-        color="#6B7280"
-      >
-        {icon}
-      </Box>
-      <BodyText typography="small" fontWeight="600" color="#6B7280">
-        {title}
-      </BodyText>
-    </HStack>
+    <BodyText fontWeight="600">
+      {title}
+    </BodyText>
   );
 }
 
@@ -64,47 +45,72 @@ export const DataSourcesList = React.memo(function DataSourcesList({ dataSources
 
   return (
     <Box>
-      <StructuredSectionHeader
-        title="Fontes dos dados"
-        icon={<DataBaseSolidIcon width="16px" height="16px" fill="#6B7280" />}
-      />
+      <StructuredSectionHeader title="Fontes dos Dados" />
       <VStack align="stretch" spacing="4px" marginTop="4px">
         {dataSources.map((source, index) => {
           const href = getDatasetTableUrl(source);
           const label = source?.name ?? "—";
+          const rowKey = source?.table_id ?? index;
+
+          const icon = (
+            <Box
+              as="span"
+              display="flex"
+              flexShrink={0}
+              alignItems="center"
+              justifyContent="center"
+              width="16px"
+              height="16px"
+              color="currentColor"
+            >
+              <DataBaseSolidIcon width="14px" height="14px" fill="currentColor" />
+            </Box>
+          );
+
+          if (!href) {
+            return (
+              <HStack
+                key={rowKey}
+                spacing="8px"
+                align="center"
+                padding="6px 12px"
+                color="#464A51"
+              >
+                {icon}
+                <BodyText typography="small" color="inherit" flex={1}>
+                  {label}
+                </BodyText>
+              </HStack>
+            );
+          }
 
           return (
-            <Box
-              key={source?.table_id ?? index}
-              fontFamily="Roboto"
+            <Link
+              key={rowKey}
+              href={href}
+              target="_blank"
+              width="100%"
+              gap="8px"
+              padding="6px 12px"
+              borderRadius="8px"
+              color="#464A51"
               fontWeight="400"
-              fontSize="14px"
-              lineHeight="20px"
-              color="#252A32"
+              textDecoration="none"
+              transition="color 0.2s ease, background-color 0.2s ease"
+              _hover={{
+                color: "#FFFFFF",
+                backgroundColor: "#55A371",
+                textDecoration: "none",
+              }}
             >
-              {href ? (
-                <Link
-                  display="inline-flex"
-                  alignItems="center"
-                  gap="6px"
-                  href={href}
-                  target="_blank"
-                  color="#0068C5"
-                  fill="#0068C5"
-                  fontWeight="400"
-                  _hover={{
-                    color: "#0057A4",
-                    fill: "#0057A4",
-                    textDecoration: "underline",
-                  }}
-                >
-                  <Text as="span">{label}</Text>
-                  <LinkIcon width="14px" height="14px" />
-                </Link>
-              ) : (
-                label
-              )}
-            </Box>
+              {icon}
+              <BodyText as="span" typography="small" color="inherit" flex={1}>
+                {label}
+              </BodyText>
+              <Box as="span" display="flex" flexShrink={0} color="currentColor">
+                <LinkIcon width="14px" height="14px" fill="currentColor" />
+              </Box>
+            </Link>
           );
         })}
       </VStack>
@@ -122,54 +128,17 @@ export const TemporalCoverageInfo = React.memo(function TemporalCoverageInfo({ t
 
   return (
     <Box>
-      <StructuredSectionHeader
-        title="Período consultado"
-        icon={<CalendarComunIcon width="16px" height="16px" fill="#6B7280" />}
-      />
-      <BodyText typography="small" color="#252A32" marginTop="4px">
-        {period_start === period_end
-          ? `${formattedStart} (${granularityLabel})`
-          : `${formattedStart} a ${formattedEnd} (${granularityLabel})`}
-      </BodyText>
-    </Box>
-  );
-});
-
-export const SqlQueriesList = React.memo(function SqlQueriesList({ sqlQueries }) {
-  if (!Array.isArray(sqlQueries) || sqlQueries.length === 0) return null;
-
-  return (
-    <Box width="100%" maxW="100%" minW={0} overflow="hidden">
-      <Accordion allowToggle width="100%">
-        <AccordionItem border="none" width="100%" minW={0}>
-          <AccordionButton
-            padding="0"
-            width="100%"
-            minW={0}
-            _hover={{ background: "transparent" }}
-            _expanded={{ background: "transparent" }}
-          >
-            <StructuredSectionHeader
-              title="Consultas SQL"
-              icon={<CodeIcon width="16px" height="16px" fill="#6B7280"/>}
-            />
-            <AccordionIcon color="#6B7280" marginLeft="8px" flexShrink={0} />
-          </AccordionButton>
-          <AccordionPanel
-            padding="8px 0 0 0"
-            width="100%"
-            maxW="100%"
-            minW={0}
-            overflow="hidden"
-          >
-            {sqlQueries.map((query, index) => (
-              <MemoCodeBlock key={index} language="sql" marginY="8px">
-                {query}
-              </MemoCodeBlock>
-            ))}
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+      <StructuredSectionHeader title="Período Consultado" />
+      <HStack spacing="8px" align="flex-start" marginTop="4px">
+        <Box as="span" display="flex" flexShrink={0} alignItems="center" marginTop="2px">
+          <CalendarComunIcon width="16px" height="16px" fill="#6B7280" />
+        </Box>
+        <BodyText typography="small" color="#252A32">
+          {period_start === period_end
+            ? `${formattedStart} (${granularityLabel})`
+            : `${formattedStart} a ${formattedEnd} (${granularityLabel})`}
+        </BodyText>
+      </HStack>
     </Box>
   );
 });
@@ -179,8 +148,8 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
 
   return (
     <Box marginTop="16px">
-      <BodyText typography="small" fontWeight="600" color="#6B7280" marginBottom="8px">
-        Perguntas sugeridas
+      <BodyText fontWeight="600" marginBottom="8px">
+        Perguntas Sugeridas
       </BodyText>
       <VStack align="stretch" spacing="4px">
         {followUpQuestions.map((question, index) => (
@@ -190,26 +159,31 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
             type="button"
             width="100%"
             spacing="8px"
-            align="flex-start"
+            align="center"
             textAlign="left"
             padding="6px 0"
             background="transparent"
             border="none"
             cursor="pointer"
             color="#464A51"
+            padding="6px 12px"
+            borderRadius="8px"
             transition="color 0.2s ease"
-            _hover={{ color: "#0068C5" }}
+            _hover={{
+              color: "#FFFFFF",
+              backgroundColor: "#55A371",
+            }}
             onClick={() => onQuestionClick?.(question)}
           >
-            <ArrowForwardIcon
-              boxSize="14px"
-              flexShrink={0}
-              marginTop="3px"
-              color="currentColor"
-            />
+            <MessageBubbleIcon width="14px" height="14px" />
             <BodyText typography="small" color="inherit" flex={1}>
               {question}
             </BodyText>
+            <ArrowForwardIcon
+              boxSize="14px"
+              flexShrink={0}
+              color="currentColor"
+            />
           </HStack>
         ))}
       </VStack>

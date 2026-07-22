@@ -166,17 +166,16 @@ function TimelineIcon({ status, Icon }) {
       alignItems="center"
       justifyContent="center"
       flexShrink={0}
-      width="24px"
+      width="16px"
       height="24px"
       borderRadius="full"
       backgroundColor="#FFFFFF"
-      border="1px solid #E5E7EB"
       zIndex={1}
     >
       {status === "loading" ? (
         <Spinner width="12px" height="12px" thickness="2px" color="#6B7280" />
       ) : (
-        <Icon width="13px" height="13px" fill="#464A51" />
+        <Icon width="13px" height="13px" fill="#6B7280" />
       )}
     </Box>
   );
@@ -195,7 +194,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
 
   return (
     <Flex width="100%" position="relative">
-      <Box width="24px" position="relative" flexShrink={0}>
+      <Box width="16px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
             position="absolute"
@@ -218,22 +217,32 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
             backgroundColor="#E5E7EB"
           />
         )}
-        <TimelineIcon status={status} Icon={Icon}/>
+        <TimelineIcon status={status} Icon={Icon} />
       </Box>
 
-      <Box flex={1} minW={0} minH={0} paddingLeft="12px" paddingBottom={isLast ? 0 : "16px"}>
+      <Box
+        flex={1}
+        minWidth={0}
+        minHeight={0}
+        paddingLeft="4px"
+        paddingBottom={isLast ? 0 : "8px"}
+      >
         <Flex
           cursor="pointer"
           alignItems="center"
+          width="fit-content"
           gap="8px"
-          minH="24px"
+          minHeight="24px"
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
-            typography="small"
-            fontWeight="500"
-            color={status === "loading" ? "#6B7280" : "#252A32"}
-            animation={status === "loading" ? `${pensandoTextShimmer} 2s ease-in-out infinite` : undefined}
+            typography="x-small"
+            color={status === "loading" ? undefined : "#6B7280"}
+            animation={
+              status === "loading"
+                ? `${pensandoTextShimmer} 2s ease-in-out infinite`
+                : undefined
+            }
             flex={1}
             minWidth="0"
           >
@@ -269,7 +278,13 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
               </VStack>
             )}
             {hasOutput && (
-              <VStack align="stretch" spacing="4px" width="100%" minW={0} minH={0}>
+              <VStack
+                align="stretch"
+                spacing="4px"
+                width="100%"
+                minWidth={0}
+                minHeight={0}
+              >
                 <BodyText typography="small" fontWeight="600" color="#6B7280">
                   Resultado:
                 </BodyText>
@@ -347,53 +362,9 @@ export default function ThinkingSection({ toolSteps, isLoading }) {
     <Box
       width="100%"
       marginBottom="24px"
-      border="1px solid #E5E7EB"
-      borderRadius="12px"
       overflow="hidden"
     >
-      <Flex
-        alignItems="center"
-        gap="12px"
-        padding="12px 16px"
-        width="100%"
-        minW={0}
-        borderBottom="1px solid #E5E7EB"
-      >
-        <HStack flex={1} minWidth="0" spacing="8px" alignItems="center">
-          {isLoading ? (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexShrink={0}
-              animation={`${pensandoTextShimmer} 2s ease-in-out infinite`}
-            >
-              <Spinner width="16px" height="16px" thickness="2px" color="currentColor" />
-            </Box>
-          ) : (
-            <Box
-              as="span"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              flexShrink={0}
-              color="#2B8C4D"
-            >
-              <CheckIcon width="16px" height="16px" />
-            </Box>
-          )}
-          <LabelText
-            typography="small"
-            fontWeight="500"
-            flex={1}
-            minWidth="0"
-            animation={isLoading ? `${pensandoTextShimmer} 2s ease-in-out infinite` : undefined}
-          >
-            {isLoading ? "Consultando a Base dos Dados..." : "Consulta concluída"}
-          </LabelText>
-        </HStack>
-      </Flex>
-      <Box padding="16px" width="100%">
+      <Box width="100%">
         <VStack spacing="0" align="stretch" width="100%">
           {toolSteps.map((step, index) => {
             const key = stepKey(step, index);
