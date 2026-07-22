@@ -45,8 +45,8 @@ export const DataSourcesList = React.memo(function DataSourcesList({ dataSources
 
   return (
     <Box>
-      <StructuredSectionHeader title="Fontes dos Dados" />
-      <VStack align="stretch" spacing="4px" marginTop="4px">
+      <StructuredSectionHeader title="Fontes dos Dados"/>
+      <VStack align="stretch" spacing={0} marginTop="4px">
         {dataSources.map((source, index) => {
           const href = getDatasetTableUrl(source);
           const label = source?.name ?? "—";
@@ -129,9 +129,15 @@ export const TemporalCoverageInfo = React.memo(function TemporalCoverageInfo({ t
   return (
     <Box>
       <StructuredSectionHeader title="Período Consultado" />
-      <HStack spacing="8px" align="flex-start" marginTop="4px">
-        <Box as="span" display="flex" flexShrink={0} alignItems="center" marginTop="2px">
-          <CalendarComunIcon width="16px" height="16px" fill="#6B7280" />
+      <HStack spacing="8px" align="flex-start" padding="8px 12px">
+        <Box
+          as="span"
+          display="flex"
+          flexShrink={0}
+          alignItems="center"
+          marginTop="2px"
+        >
+          <CalendarComunIcon width="16px" height="16px" fill="#71757A" />
         </Box>
         <BodyText typography="small" color="#252A32">
           {period_start === period_end
@@ -151,7 +157,7 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
       <BodyText fontWeight="600" marginBottom="8px">
         Perguntas Sugeridas
       </BodyText>
-      <VStack align="stretch" spacing="4px">
+      <VStack align="stretch" spacing={0}>
         {followUpQuestions.map((question, index) => (
           <HStack
             key={index}

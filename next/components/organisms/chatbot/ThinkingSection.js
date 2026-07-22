@@ -32,30 +32,50 @@ import { pensandoTextShimmer } from "./shimmer";
 const TOOL_STEP_PATTERNS = [
   {
     test: /search|busca|find/i,
-    label: "Buscando conjuntos de dados",
+    labelActive: "Buscando conjuntos de dados",
+    labelDone: "Conjuntos de dados encontrados",
     Icon: SearchIcon,
   },
   {
     test: /coverage|temporal|period|date/i,
-    label: "Verificando cobertura temporal",
+    labelActive: "Verificando cobertura temporal",
+    labelDone: "Cobertura temporal verificada",
     Icon: CalendarComunIcon,
   },
-  { test: /filter/i, label: "Filtrando resultados", Icon: FilterIcon },
+  {
+    test: /filter/i,
+    labelActive: "Filtrando resultados",
+    labelDone: "Resultados filtrados",
+    Icon: FilterIcon,
+  },
   {
     test: /table|dataset|schema|structure/i,
-    label: "Explorando estrutura dos dados",
+    labelActive: "Explorando estrutura dos dados",
+    labelDone: "Estrutura dos dados explorada",
     Icon: DataStructureIcon,
   },
   {
     test: /sql|query|execute|database/i,
-    label: "Consultando o banco de dados",
+    labelActive: "Consultando o banco de dados",
+    labelDone: "Consulta ao banco concluída",
     Icon: DataBaseSolidIcon,
   },
 ];
 
-function getToolStepMeta(name) {
+function getToolStepMeta(name, { done = false } = {}) {
   const match = TOOL_STEP_PATTERNS.find(({ test }) => test.test(name || ""));
-  if (match) return { label: match.label, Icon: match.Icon };
+  if (match) {
+    return {
+      label: done ? match.labelDone : match.labelActive,
+      Icon: match.Icon,
+    };
+  }
+  if (done) {
+    return {
+      label: name ? `Ferramenta concluída: ${name}` : "Ferramenta concluída",
+      Icon: CodeIcon,
+    };
+  }
   return {
     label: name ? `Executando ferramenta: ${name}` : "Executando ferramenta",
     Icon: CodeIcon,
@@ -173,9 +193,9 @@ function TimelineIcon({ status, Icon }) {
       zIndex={1}
     >
       {status === "loading" ? (
-        <Spinner width="12px" height="12px" thickness="2px" color="#6B7280" />
+        <Spinner width="12px" height="12px" thickness="2px" color="#71757A" />
       ) : (
-        <Icon width="13px" height="13px" fill="#6B7280" />
+        <Icon width="13px" height="13px" fill="#71757A" />
       )}
     </Box>
   );
@@ -185,11 +205,10 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
   const [isOpen, setIsOpen] = useState(false);
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
+  const status = isLoadingStep ? "loading" : "done";
   const { label, Icon } = isOrphan
     ? { label: "Resultado adicional", Icon: CodeIcon }
-    : getToolStepMeta(call?.name);
-
-  const status = isLoadingStep ? "loading" : "done";
+    : getToolStepMeta(call?.name, { done: status === "done" });
   const hasOutput = Boolean(formatToolOutputText(step.output));
 
   return (
@@ -237,7 +256,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
         >
           <LabelText
             typography="x-small"
-            color={status === "loading" ? undefined : "#6B7280"}
+            color={status === "loading" ? undefined : "#71757A"}
             animation={
               status === "loading"
                 ? `${pensandoTextShimmer} 2s ease-in-out infinite`
@@ -271,7 +290,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
           >
             {call && (
               <VStack align="stretch" spacing="4px" width="100%" minW={0}>
-                <BodyText typography="small" fontWeight="600" color="#6B7280">
+                <BodyText typography="small" fontWeight="600" color="#464A51">
                   Solicitação:
                 </BodyText>
                 <SolicitationArgsBlocks call={call} />
@@ -285,7 +304,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
                 minWidth={0}
                 minHeight={0}
               >
-                <BodyText typography="small" fontWeight="600" color="#6B7280">
+                <BodyText typography="small" fontWeight="600" color="#464A51">
                   Resultado:
                 </BodyText>
                 <ToolResultView output={step.output} />
@@ -334,7 +353,12 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
           height="24px"
           zIndex={1}
         >
-          <Box width="6px" height="6px" borderRadius="full" backgroundColor="#9CA3AF" />
+          <Box
+            width="6px"
+            height="6px"
+            borderRadius="full"
+            backgroundColor="#9CA3AF"
+          />
         </Box>
       </Box>
       <Box
@@ -344,7 +368,7 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
         paddingBottom={isLast ? 0 : "16px"}
         className="markdown-body"
         fontSize="14px"
-        color="#6B7280"
+        color="#71757A"
         fontStyle="italic"
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={componentsMk}>
@@ -361,7 +385,6 @@ export default function ThinkingSection({ toolSteps, isLoading }) {
   return (
     <Box
       width="100%"
-      marginBottom="24px"
       overflow="hidden"
     >
       <Box width="100%">

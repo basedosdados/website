@@ -542,7 +542,7 @@ function RecordsTable({
         </Table>
       </ToolResultTableContainer>
       {records.length > MAX_TABLE_ROWS && (
-        <Text fontSize="12px" color="#6B7280" marginTop="4px">
+        <Text fontSize="12px" color="#71757A" marginTop="4px">
           Mostrando {MAX_TABLE_ROWS} de {records.length} resultados
         </Text>
       )}
