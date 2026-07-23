@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, VStack, useToast } from "@chakra-ui/react";
+import { Box, Flex, HStack, VStack, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
+import { CopySolidIcon } from "../../../public/img/icons/copyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
 import {
@@ -69,6 +70,14 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
         </Box>
       ),
     });
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(message.content || "");
+    } catch (error) {
+      console.error("Erro ao copiar resposta:", error);
+    }
   };
 
   const openFeedbackModal = (rating) => {
@@ -176,25 +185,54 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
           !message.isTyping &&
           !message.isError &&
           message.id && (
-            <HStack spacing="8px" marginTop="8px" justify="flex-end">
-              <Box
-                cursor={feedback != null ? "default" : "pointer"}
-                onClick={() => openFeedbackModal(1)}
-                pointerEvents={feedback != null ? "none" : "auto"}
-                opacity={feedback === 1 ? 1 : 0.5}
-                _hover={{ opacity: feedback != null ? undefined : 1 }}
+            <HStack spacing="8px" marginTop="8px" width="100%">
+              <Tooltip
+                label="Copiar resposta"
+                hasArrow
+                fontSize="12px"
+                backgroundColor="#252A32"
+                borderRadius="8px"
+                letterSpacing="0.1px"
+                lineHeight="18px"
+                fontWeight="400"
+                fontSize="12px"
+                fontFamily="Roboto"
+                color="#FFFFFF"
+                padding="8px 12px"
+                boxShadow="0 2px 16px rgba(0, 0, 0, 0.16)"
+                placement="top-start"
               >
-                <ThumbUpIcon width="18px" height="18px" />
-              </Box>
-              <Box
-                cursor={feedback != null ? "default" : "pointer"}
-                onClick={() => openFeedbackModal(0)}
-                pointerEvents={feedback != null ? "none" : "auto"}
-                opacity={feedback === 0 ? 1 : 0.5}
-                _hover={{ opacity: feedback != null ? undefined : 1 }}
-              >
-                <ThumbDownIcon width="18px" height="18px" />
-              </Box>
+                <Box
+                  cursor="pointer"
+                  onClick={handleCopy}
+                  opacity={0.5}
+                  _hover={{ opacity: 1 }}
+                >
+                  <CopySolidIcon width="18px" height="18px" />
+                </Box>
+              </Tooltip>
+
+              <Flex marginLeft="auto" gap="8px">
+                <Box
+                  cursor={feedback != null ? "default" : "pointer"}
+                  onClick={() => openFeedbackModal(1)}
+                  pointerEvents={feedback != null ? "none" : "auto"}
+                  opacity={feedback === 1 ? 1 : 0.5}
+                  _hover={{ opacity: feedback != null ? undefined : 1 }}
+                  marginLeft="auto"
+                >
+                  <ThumbUpIcon width="18px" height="18px" />
+                </Box>
+                <Box
+                  cursor={feedback != null ? "default" : "pointer"}
+                  onClick={() => openFeedbackModal(0)}
+                  pointerEvents={feedback != null ? "none" : "auto"}
+                  opacity={feedback === 0 ? 1 : 0.5}
+                  _hover={{ opacity: feedback != null ? undefined : 1 }}
+                >
+                  <ThumbDownIcon width="18px" height="18px" />
+                </Box>
+              </Flex>
             </HStack>
           )}
 
