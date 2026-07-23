@@ -284,12 +284,17 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
             minW={0}
             minH={0}
             marginTop="8px"
-            padding="12px"
-            borderRadius="12px"
-            border="1px solid #E5E7EB"
           >
             {call && (
-              <VStack align="stretch" spacing="4px" width="100%" minW={0}>
+              <VStack
+                align="stretch"
+                spacing="4px"
+                width="100%"
+                minW={0}
+                padding="12px"
+                borderRadius="12px"
+                border="1px solid #E5E7EB"
+              >
                 <BodyText typography="small" fontWeight="600" color="#464A51">
                   Solicitação:
                 </BodyText>
@@ -303,6 +308,9 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
                 width="100%"
                 minWidth={0}
                 minHeight={0}
+                padding="12px"
+                borderRadius="12px"
+                border="1px solid #E5E7EB"
               >
                 <BodyText typography="small" fontWeight="600" color="#464A51">
                   Resultado:
