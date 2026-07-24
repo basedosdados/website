@@ -15,10 +15,8 @@ import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import SearchIcon from "../../../public/img/icons/searchIcon";
-import FilterIcon from "../../../public/img/icons/filterIcon";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
 import { DataBaseSolidIcon } from "../../../public/img/icons/databaseIcon";
-import { CalendarComunIcon } from "../../../public/img/icons/calendarIcon";
 import { CodeIcon } from "../../../public/img/icons/codeIcon";
 import {
   componentsMk,
@@ -29,57 +27,43 @@ import {
 } from "./markdown";
 import { pensandoTextShimmer } from "./shimmer";
 
-const TOOL_STEP_PATTERNS = [
-  {
-    test: /search|busca|find/i,
-    labelActive: "Buscando conjuntos de dados",
-    labelDone: "Conjuntos de dados encontrados",
+const TOOL_PHRASES = {
+  search_datasets: {
+    running: "Buscando conjuntos de dados",
+    done: "Conjuntos de dados encontrados",
     Icon: SearchIcon,
   },
-  {
-    test: /coverage|temporal|period|date/i,
-    labelActive: "Verificando cobertura temporal",
-    labelDone: "Cobertura temporal verificada",
-    Icon: CalendarComunIcon,
-  },
-  {
-    test: /filter/i,
-    labelActive: "Filtrando resultados",
-    labelDone: "Resultados filtrados",
-    Icon: FilterIcon,
-  },
-  {
-    test: /table|dataset|schema|structure/i,
-    labelActive: "Explorando estrutura dos dados",
-    labelDone: "Estrutura dos dados explorada",
-    Icon: DataStructureIcon,
-  },
-  {
-    test: /sql|query|execute|database/i,
-    labelActive: "Consultando o banco de dados",
-    labelDone: "Consulta ao banco concluída",
+  get_dataset_details: {
+    running: "Explorando conjunto de dados",
+    done: "Conjunto de dados explorado",
     Icon: DataBaseSolidIcon,
   },
-];
+  get_table_details: {
+    running: "Explorando estrutura da tabela",
+    done: "Estrutura da tabela explorada",
+    Icon: DataStructureIcon,
+  },
+  execute_bigquery_sql: {
+    running: "Consultando o BigQuery",
+    done: "Consulta ao BigQuery concluída",
+    Icon: CodeIcon,
+  },
+  decode_table_values: {
+    running: "Decodificando valores da tabela",
+    done: "Valores da tabela decodificados",
+    Icon: DataStructureIcon,
+  },
+};
+
+const FALLBACK_TOOL_PHRASES = {
+  running: "Executando ferramenta",
+  done: "Ferramenta executada",
+  Icon: CodeIcon,
+};
 
 function getToolStepMeta(name, { done = false } = {}) {
-  const match = TOOL_STEP_PATTERNS.find(({ test }) => test.test(name || ""));
-  if (match) {
-    return {
-      label: done ? match.labelDone : match.labelActive,
-      Icon: match.Icon,
-    };
-  }
-  if (done) {
-    return {
-      label: name ? `Ferramenta concluída: ${name}` : "Ferramenta concluída",
-      Icon: CodeIcon,
-    };
-  }
-  return {
-    label: name ? `Executando ferramenta: ${name}` : "Executando ferramenta",
-    Icon: CodeIcon,
-  };
+  const phrases = TOOL_PHRASES[name] ?? FALLBACK_TOOL_PHRASES;
+  return { label: done ? phrases.done : phrases.running, Icon: phrases.Icon };
 }
 
 function isPlainObject(value) {
