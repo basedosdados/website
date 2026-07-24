@@ -185,7 +185,7 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
           !message.isTyping &&
           !message.isError &&
           message.id && (
-            <HStack spacing="8px" marginTop="8px" width="100%">
+            <HStack spacing="8px" marginTop="8px" width="100%" justifyContent="space-between">
               <Tooltip
                 label="Copiar resposta"
                 hasArrow

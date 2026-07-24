@@ -34,7 +34,7 @@ function formatPeriodDate(date) {
 
 export function StructuredSectionHeader({ title }) {
   return (
-    <BodyText fontWeight="600">
+    <BodyText fontWeight="600" color="#2B8C4D">
       {title}
     </BodyText>
   );
@@ -154,7 +154,7 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
 
   return (
     <Box marginTop="16px">
-      <BodyText fontWeight="600" marginBottom="8px">
+      <BodyText fontWeight="600" marginBottom="8px" color="#2B8C4D">
         Perguntas Sugeridas
       </BodyText>
       <VStack align="stretch" spacing={0}>
