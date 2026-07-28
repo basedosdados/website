@@ -117,7 +117,7 @@ export default function LanguageSelector({ theme = "light" }) {
             borderRadius="8px"
             zIndex="11"
             color="#252A32"
-            minW="100px"
+            minWidth="100px"
           >
             <MenuItem 
               onClick={() => changeLanguage('pt')}

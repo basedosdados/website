@@ -104,9 +104,9 @@ function ChatbotContent() {
     : threadIdFromUrl;
   const resolvedInitialThread =
     router.isReady ? (normalizedThreadId ?? null) : undefined;
-  const [value, setValue] = useState("");
   const [scrollTrigger, setScrollTrigger] = useState(0);
   const skipFetchRef = useRef(false);
+  const searchRef = useRef(null);
 
   const [greetingFirstName, setGreetingFirstName] = useState(null);
 
@@ -158,38 +158,23 @@ function ChatbotContent() {
     }
   }, [router.isReady, normalizedThreadId, threadId, syncThreadIdFromUrl]);
 
-  useEffect(() => {
-    const draftKey = `chatbot_draft_${threadId || 'new'}`;
-    const savedDraft = localStorage.getItem(draftKey);
-    if (savedDraft) {
-      setValue(savedDraft);
-    } else {
-      setValue("");
-    }
-  }, [threadId]);
+  const handleSend = useCallback((text) => {
+    sendMessage(text);
+    setScrollTrigger(prev => prev + 1);
+  }, [sendMessage]);
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      const draftKey = `chatbot_draft_${threadId || 'new'}`;
-      if (value) {
-        localStorage.setItem(draftKey, value);
-      } else {
-        localStorage.removeItem(draftKey);
-      }
-    }, 500);
+  const handleFollowUpClick = useCallback((question) => {
+    const trimmed = String(question || "").trim();
+    if (!trimmed || isLoading || isGenerating) return;
 
-    return () => clearTimeout(timeoutId);
-  }, [value, threadId]);
+    sendMessage(trimmed);
+    setScrollTrigger(prev => prev + 1);
+    searchRef.current?.clear();
 
-  const handleSend = useCallback(() => {
-    if (value.trim() !== "") {
-      sendMessage(value);
-      setScrollTrigger(prev => prev + 1);
-      setValue("");
-      const draftKey = `chatbot_draft_${threadId || 'new'}`;
-      localStorage.removeItem(draftKey);
-    }
-  }, [value, sendMessage, threadId]);
+    requestAnimationFrame(() => {
+      searchRef.current?.focus();
+    });
+  }, [sendMessage, isLoading, isGenerating]);
 
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
@@ -205,8 +190,8 @@ function ChatbotContent() {
 
   const searchField = (
     <Search
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
+      ref={searchRef}
+      threadId={threadId}
       onSend={handleSend}
       isLoading={isLoading}
       isGenerating={isGenerating}
@@ -294,10 +279,17 @@ function ChatbotContent() {
                   <ChatWindow
                     messages={messages}
                     onFeedback={sendFeedback}
+                    onFollowUpClick={handleFollowUpClick}
                     scrollTrigger={scrollTrigger}
                   />
                 </Box>
-                <Box width="100%" paddingTop="24px" flexShrink={0}>
+                <Box
+                  width="100%"
+                  paddingTop="24px"
+                  flexShrink={0}
+                  overflowY="auto"
+                  sx={{ scrollbarGutter: "stable" }}
+                >
                   {searchField}
                 </Box>
               </>
