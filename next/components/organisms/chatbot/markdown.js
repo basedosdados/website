@@ -22,7 +22,7 @@ import json from "highlight.js/lib/languages/json";
 
 import BodyText from "../../atoms/Text/BodyText";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
-import CheckIcon from "../../../public/img/icons/checkIcon";
+import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
@@ -61,8 +61,8 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
       overflow="hidden"
       border="1px solid #E5E7EB"
       width="100%"
-      maxW="100%"
-      minW={0}
+      maxWidth="100%"
+      minWidth={0}
       alignSelf="stretch"
     >
       <Box
@@ -79,19 +79,15 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
         zIndex="1"
         backgroundColor="transparent"
       >
-        {hasCopied ? (
-          <CheckIcon width="16px" height="16px"/>
-        ) : (
-          <CopyIcon width="16px" height="16px" _hover={{ opacity: 0.7 }}/>
-        )}
+        <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="16px" height="16px" />
       </Box>
 
       <Box
         as="pre"
         display="block"
         width="100%"
-        maxW="100%"
-        minW={0}
+        maxWidth="100%"
+        minWidth={0}
         maxHeight="70vh"
         overflow="auto"
         fontSize="14px"
@@ -105,7 +101,7 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
             as="code"
             display="block"
             width="max-content"
-            minW="100%"
+            minWidth="100%"
             boxSizing="border-box"
             className={`hljs-chatbot language-${language}`}
             color="#1F2937"
@@ -117,7 +113,7 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
             as="code"
             display="block"
             width="max-content"
-            minW="100%"
+            minWidth="100%"
             boxSizing="border-box"
             className={`hljs hljs-chatbot language-${language}`}
             color="#1F2937"
@@ -273,14 +269,14 @@ function formatCellValue(value) {
   return String(value);
 }
 
-const MAX_TABLE_ROWS = 50;
-const TOOL_RESULT_TABLE_MAX_HEIGHT = "70vh";
-const TOOL_RESULT_CELL_MAX_CHARS = 120;
-const LONG_TEXT_THRESHOLD = 100;
-const MEDIUM_TEXT_THRESHOLD = 40;
-const CELL_MIN_WIDTH_SHORT = "120px";
-const CELL_MIN_WIDTH_MEDIUM = "280px";
-const CELL_MIN_WIDTH_LONG = "420px";
+const MaxTableRows = 50;
+const ToolResultTableMaxHeight = "70vh";
+const ToolResultCellMaxChars = 120;
+const LongTextThreshold = 100;
+const MediumTextThreshold = 40;
+const CellMinWidthShort = "120px";
+const CellMinWidthMedium = "280px";
+const CellMinWidthLong = "420px";
 
 function getDisplayTextLength(text, truncateMaxChars) {
   if (!truncateMaxChars || text.length <= truncateMaxChars) return text.length;
@@ -363,9 +359,9 @@ function TruncatableCellContent({ text, maxChars }) {
 }
 
 function getCellMinWidth(textLength) {
-  if (textLength >= LONG_TEXT_THRESHOLD) return CELL_MIN_WIDTH_LONG;
-  if (textLength >= MEDIUM_TEXT_THRESHOLD) return CELL_MIN_WIDTH_MEDIUM;
-  return CELL_MIN_WIDTH_SHORT;
+  if (textLength >= LongTextThreshold) return CellMinWidthLong;
+  if (textLength >= MediumTextThreshold) return CellMinWidthMedium;
+  return CellMinWidthShort;
 }
 
 const toolResultTdBaseProps = {
@@ -384,12 +380,12 @@ const toolResultTdBaseProps = {
 function getValueTdProps(value, truncateMaxChars) {
   const text = formatCellValue(value);
   const displayLen = getDisplayTextLength(text, truncateMaxChars);
-  const minW = getCellMinWidth(displayLen);
+  const minWidth = getCellMinWidth(displayLen);
 
   return {
     ...toolResultTdBaseProps,
-    minW,
-    width: displayLen >= LONG_TEXT_THRESHOLD ? minW : undefined,
+    minWidth,
+    width: displayLen >= LongTextThreshold ? minWidth : undefined,
   };
 }
 
@@ -399,21 +395,20 @@ function getColumnTdProps(records, column, truncateMaxChars) {
     const len = getDisplayTextLength(text, truncateMaxChars);
     return Math.max(max, len);
   }, column.length);
-  const minW = getCellMinWidth(maxLen);
+  const minWidth = getCellMinWidth(maxLen);
 
   return {
     ...toolResultTdBaseProps,
-    minW,
-    width: maxLen >= LONG_TEXT_THRESHOLD ? minW : undefined,
+    minWidth,
+    width: maxLen >= LongTextThreshold ? minWidth : undefined,
   };
 }
 
 const toolResultTableContainerProps = {
-  marginY: "8px",
   width: "100%",
   maxWidth: "100%",
-  maxHeight: TOOL_RESULT_TABLE_MAX_HEIGHT,
-  minH: 0,
+  maxHeight: ToolResultTableMaxHeight,
+  minHeight: 0,
   overflowY: "auto",
   overflowX: "auto",
   border: "1px solid #E5E7EB",
@@ -436,7 +431,7 @@ export function RecordTable({
 
   return (
     <ToolResultTableContainer>
-      <Table variant="simple" size="sm" width="max-content" minW="100%">
+      <Table variant="simple" size="sm" width="max-content" minWidth="100%">
         <Tbody>
           {entries.map(([key, value]) => {
             const cellText = formatCellValue(value);
@@ -489,7 +484,7 @@ function RecordsTable({
   }
   const orderedColumns = orderColumnsWithIdLast(columns, moveIdToEnd);
 
-  const visibleRows = records.slice(0, MAX_TABLE_ROWS);
+  const visibleRows = records.slice(0, MaxTableRows);
   const columnTdPropsByCol = Object.fromEntries(
     orderedColumns.map((col) => [
       col,
@@ -498,9 +493,9 @@ function RecordsTable({
   );
 
   return (
-    <Box minH={0} width="100%">
+    <Box minHeight={0} width="100%">
       <ToolResultTableContainer>
-        <Table variant="simple" size="sm" width="max-content" minW="100%">
+        <Table variant="simple" size="sm" width="max-content" minWidth="100%">
           <Thead backgroundColor="#F7F7F7" position="sticky" top={0} zIndex={1}>
             <Tr>
               {orderedColumns.map((col) => (
@@ -541,9 +536,9 @@ function RecordsTable({
           </Tbody>
         </Table>
       </ToolResultTableContainer>
-      {records.length > MAX_TABLE_ROWS && (
+      {records.length > MaxTableRows && (
         <Text fontSize="12px" color="#71757A" marginTop="4px">
-          Mostrando {MAX_TABLE_ROWS} de {records.length} resultados
+          Mostrando {MaxTableRows} de {records.length} resultados
         </Text>
       )}
     </Box>
@@ -559,7 +554,7 @@ export function ToolResultView({ output }) {
 
   const resultTableProps = {
     moveIdToEnd: true,
-    truncateCellMaxChars: TOOL_RESULT_CELL_MAX_CHARS,
+    truncateCellMaxChars: ToolResultCellMaxChars,
   };
 
   if (isRecordsArray) {
@@ -574,7 +569,7 @@ export function ToolResultView({ output }) {
   if (!text) return null;
 
   return (
-    <MemoCodeBlock language="json" marginY="8px" raw={Boolean(output?.streaming)}>
+    <MemoCodeBlock language="json" raw={Boolean(output?.streaming)}>
       {text}
     </MemoCodeBlock>
   );

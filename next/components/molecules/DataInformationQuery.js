@@ -39,7 +39,7 @@ import { CopySolidIcon } from "../../public/img/icons/copyIcon";
 import DownloadIcon from "../../public/img/icons/downloadIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
 import ChevronIcon from "../../public/img/icons/chevronIcon";
-import CheckIcon from "../../public/img/icons/checkIcon";
+import AnimatedCopyIcon from "../atoms/AnimatedCopyIcon";
 import Link from "../atoms/Link";
 
 const CodeHighlight = memo(({ language, children }) => {
@@ -119,21 +119,13 @@ const CodeHighlight = memo(({ language, children }) => {
           }}
         >
           {hasCopied ? t('table.copied') : t('table.copy')}
-          {hasCopied ? 
-            <CheckIcon
-              alt="copied"
-              width="24px"
-              height="24px"
-              marginLeft="5px"
-            />
-          :
-            <CopySolidIcon
-              alt="copy"
-              width="24px"
-              height="24px"
-              marginLeft="5px"
-            />
-          }
+          <AnimatedCopyIcon
+            copied={hasCopied}
+            icon={CopySolidIcon}
+            width="24px"
+            height="24px"
+            marginLeft="5px"
+          />
         </Box>
       </Box>
 

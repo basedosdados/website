@@ -11,4 +11,22 @@ export const MessageBubbleIcon = createIcon({
   ),
 });
 
+export const MessageBubbleCleanIcon = createIcon({
+  displayName: "messageBubbleClean",
+  viewBox: "0 0 24 24",
+  path: (
+    <>
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M8 2h8a6 6 0 0 1 6 6v4a6 6 0 0 1-6 6h-2.172l-3.414 3.414A1 1 0 0 1 8 20.586V18a6 6 0 0 1-6-6V8a6 6 0 0 1 6-6zm8 2H8a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4h2a1 1 0 0 1 1 1v1.586L13.586 16H16a4 4 0 0 0 4-4V8a4 4 0 0 0-4-4z"
+      />
+      <circle cx="8.5" cy="10" r="1.25" fill="currentColor" />
+      <circle cx="12" cy="10" r="1.25" fill="currentColor" />
+      <circle cx="15.5" cy="10" r="1.25" fill="currentColor" />
+    </>
+  ),
+});
+
 export default MessageBubbleIcon;

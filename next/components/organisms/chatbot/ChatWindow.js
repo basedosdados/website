@@ -77,12 +77,12 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
       width="100%"
       height="100%"
       overflowY="auto"
-      paddingX={{ base: "16px", md: "32px" }}
       paddingBottom="24px"
       align="stretch"
       spacing={0}
       css={{
         overflowAnchor: "none",
+        scrollbarGutter: "stable",
         "&::-webkit-scrollbar": {
           width: "6px",
         },

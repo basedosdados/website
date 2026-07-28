@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, VStack, Tooltip, useToast } from "@chakra-ui/react";
+import { Box, Flex, HStack, Tooltip, useToast } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
@@ -6,16 +6,43 @@ import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import { CopySolidIcon } from "../../../public/img/icons/copyIcon";
+import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
 import {
   DataSourcesList,
-  TemporalCoverageInfo,
   FollowUpQuestionsList,
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
-import RollingDiceLoader from "./RollingDiceLoader";
+import PulseDotLoader from "./PulseDotLoader";
+
+const ActionTooltipProps = {
+  hasArrow: true,
+  backgroundColor: "#252A32",
+  borderRadius: "8px",
+  letterSpacing: "0.1px",
+  lineHeight: "18px",
+  fontWeight: "400",
+  fontSize: "12px",
+  fontFamily: "Roboto",
+  color: "#FFFFFF",
+  padding: "8px 12px",
+  boxShadow: "0 2px 16px rgba(0, 0, 0, 0.16)",
+  placement: "top-start",
+};
+
+const ActionButtonProps = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "8px",
+  padding: "8px",
+  minWidth: "34px",
+  minHeight: "34px",
+  boxSizing: "border-box",
+  fill: "#464A51",
+};
 
 function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowUpClick }) {
   const isUser = message.role === "user";
@@ -23,6 +50,7 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [pendingRating, setPendingRating] = useState(null);
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [isCopied, setIsCopied] = useState(false);
   const toast = useToast();
 
   const toolSteps = useMemo(
@@ -75,6 +103,8 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message.content || "");
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 1500);
     } catch (error) {
       console.error("Erro ao copiar resposta:", error);
     }
@@ -109,141 +139,141 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
     }
   };
 
+  const showFollowUps =
+    !isUser &&
+    !message.isLoading &&
+    !message.isTyping &&
+    message.structuredResponse &&
+    showFollowUpQuestions;
+
   return (
-    <Flex
-      width="100%"
-      maxWidth="760px"
-      margin="0 auto"
-      justify={isUser ? "flex-end" : "flex-start"}
-    >
+    <Flex width="100%" direction="column" align="stretch">
       <Box
-        maxWidth={isUser ? "80%" : "100%"}
-        width={isUser ? "fit-content" : "100%"}
-        minW={isUser ? undefined : 0}
-        borderRadius="12px"
-        padding="16px"
-        backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
-        color="#000"
+        width="100%"
+        maxWidth="760px"
+        margin="0 auto"
+        display="flex"
+        justifyContent={isUser ? "flex-end" : "flex-start"}
       >
-        {(showThinkingSection || showDiceLoader) && (
-          <Box marginBottom="16px">
-            {showThinkingSection && (
-              <ThinkingSection
-                toolSteps={toolSteps}
-                isLoading={message.isLoading}
-              />
+        <Box
+          maxWidth={isUser ? "80%" : "100%"}
+          width={isUser ? "fit-content" : "100%"}
+          minWidth={isUser ? undefined : 0}
+          borderRadius="12px"
+          padding="16px"
+          margin={isUser ? "32px 0 16px" : 0}
+          backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
+          color="#000"
+        >
+          {(showThinkingSection || showDiceLoader) && (
+            <Box marginBottom="16px">
+              {showThinkingSection && (
+                <ThinkingSection
+                  toolSteps={toolSteps}
+                  isLoading={message.isLoading}
+                />
+              )}
+              {showDiceLoader && <PulseDotLoader marginBottom="0" />}
+            </Box>
+          )}
+
+          {isUser ? (
+            <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
+          ) : (
+            <Box className="markdown-body" fontSize="16px">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={componentsMk}
+              >
+                {message.content}
+              </ReactMarkdown>
+            </Box>
+          )}
+
+          {!isUser &&
+            !message.isLoading &&
+            !message.isTyping &&
+            !message.isError &&
+            message.id && (
+              <HStack
+                spacing="8px"
+                marginTop="16px"
+                width="100%"
+                justifyContent="space-between"
+              >
+                <Tooltip
+                  {...ActionTooltipProps}
+                  label={isCopied ? "Copiado!" : "Copiar resposta"}
+                >
+                  <Box
+                    {...ActionButtonProps}
+                    cursor="pointer"
+                    onClick={handleCopy}
+                    _hover={{
+                      backgroundColor: "#EEEEEE",
+                    }}
+                  >
+                    <AnimatedCopyIcon copied={isCopied} icon={CopyIcon} width="18px" height="18px" />
+                  </Box>
+                </Tooltip>
+
+                <Flex marginLeft="auto" gap="8px">
+                  <Tooltip {...ActionTooltipProps} label="Boa resposta">
+                    <Box
+                      {...ActionButtonProps}
+                      cursor={feedback != null ? "default" : "pointer"}
+                      onClick={() => openFeedbackModal(1)}
+                      pointerEvents={feedback != null ? "none" : "auto"}
+                      _hover={{
+                        backgroundColor: feedback != null ? undefined : "#EEEEEE",
+                      }}
+                    >
+                      <ThumbUpIcon width="18px" height="18px" />
+                    </Box>
+                  </Tooltip>
+                  <Tooltip {...ActionTooltipProps} label="Resposta ruim">
+                    <Box
+                      {...ActionButtonProps}
+                      cursor={feedback != null ? "default" : "pointer"}
+                      onClick={() => openFeedbackModal(0)}
+                      pointerEvents={feedback != null ? "none" : "auto"}
+                      _hover={{
+                        backgroundColor: feedback != null ? undefined : "#EEEEEE",
+                      }}
+                    >
+                      <ThumbDownIcon width="18px" height="18px" />
+                    </Box>
+                  </Tooltip>
+                </Flex>
+              </HStack>
             )}
+        </Box>
+      </Box>
 
-            {showDiceLoader && <RollingDiceLoader marginBottom="0" />}
-          </Box>
-        )}
+      {!isUser && !message.isLoading && message.structuredResponse ? (
+        <Box width="100%" maxWidth="760px" margin="0 auto">
+          <DataSourcesList
+            dataSources={message.structuredResponse.data_sources}
+          />
+        </Box>
+      ) : null}
 
-        {!isUser && !message.isLoading && message.structuredResponse && (
-          <VStack
-            spacing="16px"
-            width="100%"
-            maxW="100%"
-            minW={0}
-            alignItems="stretch"
-            margin="16px 0"
-          >
-            <DataSourcesList
-              dataSources={message.structuredResponse.data_sources}
-            />
-            <TemporalCoverageInfo
-              temporalCoverage={message.structuredResponse.temporal_coverage}
-            />
-          </VStack>
-        )}
-
-        {isUser ? (
-          <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
-        ) : (
-          <Box className="markdown-body" fontSize="16px">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={componentsMk}
-            >
-              {message.content}
-            </ReactMarkdown>
-          </Box>
-        )}
-
-        {!isUser &&
-        !message.isLoading &&
-        !message.isTyping &&
-        message.structuredResponse &&
-        showFollowUpQuestions ? (
+      {showFollowUps ? (
+        <Box width="100%" maxWidth="760px" margin="0 auto">
           <FollowUpQuestionsList
             followUpQuestions={message.structuredResponse.follow_up_questions}
             onQuestionClick={onFollowUpClick}
           />
-        ) : null}
+        </Box>
+      ) : null}
 
-        {!isUser &&
-          !message.isLoading &&
-          !message.isTyping &&
-          !message.isError &&
-          message.id && (
-            <HStack spacing="8px" marginTop="8px" width="100%" justifyContent="space-between">
-              <Tooltip
-                label="Copiar resposta"
-                hasArrow
-                fontSize="12px"
-                backgroundColor="#252A32"
-                borderRadius="8px"
-                letterSpacing="0.1px"
-                lineHeight="18px"
-                fontWeight="400"
-                fontSize="12px"
-                fontFamily="Roboto"
-                color="#FFFFFF"
-                padding="8px 12px"
-                boxShadow="0 2px 16px rgba(0, 0, 0, 0.16)"
-                placement="top-start"
-              >
-                <Box
-                  cursor="pointer"
-                  onClick={handleCopy}
-                  opacity={0.5}
-                  _hover={{ opacity: 1 }}
-                >
-                  <CopySolidIcon width="18px" height="18px" />
-                </Box>
-              </Tooltip>
-
-              <Flex marginLeft="auto" gap="8px">
-                <Box
-                  cursor={feedback != null ? "default" : "pointer"}
-                  onClick={() => openFeedbackModal(1)}
-                  pointerEvents={feedback != null ? "none" : "auto"}
-                  opacity={feedback === 1 ? 1 : 0.5}
-                  _hover={{ opacity: feedback != null ? undefined : 1 }}
-                  marginLeft="auto"
-                >
-                  <ThumbUpIcon width="18px" height="18px" />
-                </Box>
-                <Box
-                  cursor={feedback != null ? "default" : "pointer"}
-                  onClick={() => openFeedbackModal(0)}
-                  pointerEvents={feedback != null ? "none" : "auto"}
-                  opacity={feedback === 0 ? 1 : 0.5}
-                  _hover={{ opacity: feedback != null ? undefined : 1 }}
-                >
-                  <ThumbDownIcon width="18px" height="18px" />
-                </Box>
-              </Flex>
-            </HStack>
-          )}
-
-        <FeedbackModal
-          isOpen={isFeedbackModalOpen}
-          onClose={closeFeedbackModal}
-          rating={pendingRating}
-          onSubmit={handleFeedbackSubmit}
-          isSubmitting={isSubmittingFeedback}
-        />
-      </Box>
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={closeFeedbackModal}
+        rating={pendingRating}
+        onSubmit={handleFeedbackSubmit}
+        isSubmitting={isSubmittingFeedback}
+      />
     </Flex>
   );
 }
