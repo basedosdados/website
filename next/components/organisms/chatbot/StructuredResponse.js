@@ -38,7 +38,7 @@ export const DataSourcesList = React.memo(function DataSourcesList({ dataSources
   if (!Array.isArray(dataSources) || dataSources.length === 0) return null;
 
   return (
-    <Box marginTop="24px">
+    <Box marginTop="8px">
       <Box paddingX="16px">
         <StructuredSectionHeader title="Fontes dos Dados" />
       </Box>
