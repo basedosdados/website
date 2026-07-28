@@ -1,4 +1,5 @@
 import { Box, Flex, HStack, Tooltip, useToast } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import React, { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
@@ -16,6 +17,17 @@ import {
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
 import PulseDotLoader from "./PulseDotLoader";
+
+const sectionFadeIn = keyframes`
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+const SectionFadeInProps = {
+  sx: {
+    animation: `${sectionFadeIn} 0.4s ease-out both`,
+  },
+};
 
 const ActionTooltipProps = {
   hasArrow: true,
@@ -139,11 +151,20 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
     }
   };
 
-  const showFollowUps =
+  const responseComplete =
     !isUser &&
     !message.isLoading &&
     !message.isTyping &&
-    message.structuredResponse &&
+    !!message.structuredResponse;
+
+  const dataSources = message.structuredResponse?.data_sources;
+  const hasDataSources =
+    Array.isArray(dataSources) && dataSources.length > 0;
+
+  const showDataSources = responseComplete && hasDataSources;
+
+  const showFollowUps =
+    responseComplete &&
     showFollowUpQuestions;
 
   return (
@@ -173,7 +194,7 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                   isLoading={message.isLoading}
                 />
               )}
-              {showDiceLoader && <PulseDotLoader marginBottom="0" />}
+              {showDiceLoader && <PulseDotLoader margin="8px 0 0 4px" />}
             </Box>
           )}
 
@@ -213,7 +234,12 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                       backgroundColor: "#EEEEEE",
                     }}
                   >
-                    <AnimatedCopyIcon copied={isCopied} icon={CopyIcon} width="18px" height="18px" />
+                    <AnimatedCopyIcon
+                      copied={isCopied}
+                      icon={CopyIcon}
+                      width="18px"
+                      height="18px"
+                    />
                   </Box>
                 </Tooltip>
 
@@ -225,7 +251,8 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                       onClick={() => openFeedbackModal(1)}
                       pointerEvents={feedback != null ? "none" : "auto"}
                       _hover={{
-                        backgroundColor: feedback != null ? undefined : "#EEEEEE",
+                        backgroundColor:
+                          feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
                       <ThumbUpIcon width="18px" height="18px" />
@@ -238,7 +265,8 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                       onClick={() => openFeedbackModal(0)}
                       pointerEvents={feedback != null ? "none" : "auto"}
                       _hover={{
-                        backgroundColor: feedback != null ? undefined : "#EEEEEE",
+                        backgroundColor:
+                          feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
                       <ThumbDownIcon width="18px" height="18px" />
@@ -250,16 +278,28 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
         </Box>
       </Box>
 
-      {!isUser && !message.isLoading && message.structuredResponse ? (
-        <Box width="100%" maxWidth="760px" margin="0 auto">
-          <DataSourcesList
-            dataSources={message.structuredResponse.data_sources}
-          />
+      {showDataSources ? (
+        <Box
+          width="100%"
+          maxWidth="760px"
+          margin="0 auto"
+          {...SectionFadeInProps}
+        >
+          <DataSourcesList dataSources={dataSources} />
         </Box>
       ) : null}
 
       {showFollowUps ? (
-        <Box width="100%" maxWidth="760px" margin="0 auto">
+        <Box
+          width="100%"
+          maxWidth="760px"
+          margin="0 auto"
+          sx={{
+            animation: `${sectionFadeIn} 0.4s ease-out ${
+              showDataSources ? "0.28s" : "0s"
+            } both`,
+          }}
+        >
           <FollowUpQuestionsList
             followUpQuestions={message.structuredResponse.follow_up_questions}
             onQuestionClick={onFollowUpClick}

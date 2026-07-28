@@ -70,6 +70,13 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
+  const totalSize = rowVirtualizer.getTotalSize();
+  useEffect(() => {
+    if (!shouldAutoScrollRef.current) return;
+
+    scrollToBottom();
+  }, [totalSize, scrollToBottom]);
+
   return (
     <VStack
       ref={scrollContainerRef}
@@ -118,7 +125,8 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
               onFeedback={onFeedback}
               showFollowUpQuestions={
                 messages[virtualRow.index]?.id === lastAssistantMessageId &&
-                !messages[virtualRow.index]?.isLoading
+                !messages[virtualRow.index]?.isLoading &&
+                !messages[virtualRow.index]?.isTyping
               }
               onFollowUpClick={onFollowUpClick}
             />
