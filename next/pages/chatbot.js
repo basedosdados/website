@@ -283,7 +283,13 @@ function ChatbotContent() {
                     scrollTrigger={scrollTrigger}
                   />
                 </Box>
-                <Box width="100%" paddingTop="24px" flexShrink={0}>
+                <Box
+                  width="100%"
+                  paddingTop="24px"
+                  flexShrink={0}
+                  overflowY="auto"
+                  sx={{ scrollbarGutter: "stable" }}
+                >
                   {searchField}
                 </Box>
               </>

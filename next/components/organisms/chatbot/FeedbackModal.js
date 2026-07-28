@@ -108,7 +108,6 @@ export default function FeedbackModal({
           minWidth="120px"
           onClick={handleSubmit}
           isLoading={isSubmitting}
-          isDisabled={!isPositive && feedbackText.trim() === ""}
         >
           Enviar
         </Button>

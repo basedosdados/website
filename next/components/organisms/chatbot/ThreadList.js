@@ -277,8 +277,6 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                         isSidebarOpen ? "auto" : "none"
                       }
                       _hover={{
-                        color: "#2B8C4D",
-                        fill: "#2B8C4D",
                         backgroundColor: "#EEEEEE",
                       }}
                     >
@@ -286,11 +284,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                         typography="small"
                         flex="1"
                         minWidth="0"
-                        color={
-                          currentThreadId === thread.id
-                            ? "#2B8C4D"
-                            : "currentColor"
-                        }
+                        color="#464A51"
                         whiteSpace="nowrap"
                         overflow="hidden"
                         textOverflow="ellipsis"

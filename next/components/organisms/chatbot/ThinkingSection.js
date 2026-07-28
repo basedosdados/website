@@ -16,7 +16,7 @@ import LabelText from "../../atoms/Text/LabelText";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import SearchIcon from "../../../public/img/icons/searchIcon";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import { DataBaseSolidIcon } from "../../../public/img/icons/databaseIcon";
+import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
 import { CodeIcon } from "../../../public/img/icons/codeIcon";
 import {
   componentsMk,
@@ -36,7 +36,7 @@ const TOOL_PHRASES = {
   get_dataset_details: {
     running: "Explorando conjunto de dados",
     done: "Conjunto de dados explorado",
-    Icon: DataBaseSolidIcon,
+    Icon: DataBaseIcon,
   },
   get_table_details: {
     running: "Explorando estrutura da tabela",
@@ -80,7 +80,7 @@ function SolicitationArgsBlocks({ call }) {
 
   if (rawStream != null) {
     return (
-      <MemoCodeBlock language="json" marginY="8px" raw>
+      <MemoCodeBlock language="json" raw>
         {rawStream}
       </MemoCodeBlock>
     );
@@ -98,7 +98,7 @@ function SolicitationArgsBlocks({ call }) {
       const { sql_query: _omitSql, ...rest } = parsed;
       return (
         <>
-          <MemoCodeBlock language="sql" marginY="8px">
+          <MemoCodeBlock language="sql">
             {sqlQuery}
           </MemoCodeBlock>
           {Object.keys(rest).length > 0 ? <RecordTable record={rest} /> : null}
@@ -110,7 +110,7 @@ function SolicitationArgsBlocks({ call }) {
   }
 
   return (
-    <MemoCodeBlock language="json" marginY="8px">
+    <MemoCodeBlock language="json">
       {JSON.stringify(parsed ?? {}, null, 2)}
     </MemoCodeBlock>
   );
@@ -162,7 +162,10 @@ function stepKey(step, index) {
   return `reasoning-${index}`;
 }
 
-function TimelineIcon({ status, Icon }) {
+function TimelineIcon({ status, Icon, fill }) {
+  const isCodeIcon = Icon === CodeIcon;
+  const iconSize = isCodeIcon ? "18px" : "14px";
+
   return (
     <Box
       position="relative"
@@ -177,9 +180,14 @@ function TimelineIcon({ status, Icon }) {
       zIndex={1}
     >
       {status === "loading" ? (
-        <Spinner width="12px" height="12px" thickness="2px" color="#71757A" />
+        <Spinner width="12px" height="12px" thickness="2px" color={fill} />
       ) : (
-        <Icon width="13px" height="13px" fill="#71757A" />
+        <Icon
+          width={iconSize}
+          height={iconSize}
+          fill={fill}
+          margin={isCodeIcon ? undefined : "2px"}
+        />
       )}
     </Box>
   );
@@ -196,7 +204,14 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
   const hasOutput = Boolean(formatToolOutputText(step.output));
 
   return (
-    <Flex width="100%" position="relative">
+    <Flex
+      width="100%"
+      position="relative"
+      color="#71757A"
+      _hover={{
+        color: "#464A51",
+      }}
+    >
       <Box width="16px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
@@ -220,27 +235,29 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
             backgroundColor="#E5E7EB"
           />
         )}
-        <TimelineIcon status={status} Icon={Icon} />
+        <TimelineIcon status={status} Icon={Icon} fill="currentColor"/>
       </Box>
 
       <Box
         flex={1}
         minWidth={0}
         minHeight={0}
-        paddingLeft="4px"
+        paddingLeft="8px"
+        transition="color 0.2s ease"
         paddingBottom={isLast ? 0 : "8px"}
       >
         <Flex
           cursor="pointer"
           alignItems="center"
           width="fit-content"
+          color="currentColor"
           gap="8px"
           minHeight="24px"
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
-            typography="x-small"
-            color={status === "loading" ? undefined : "#71757A"}
+            typography="small"
+            color={status === "loading" ? undefined : "currentColor"}
             animation={
               status === "loading"
                 ? `${pensandoTextShimmer} 2s ease-in-out infinite`
@@ -254,7 +271,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
           <ChevronDownIcon
             boxSize="16px"
             flexShrink={0}
-            color="#9CA3AF"
+            color="currentColor"
             transform={isOpen ? "rotate(-180deg)" : undefined}
             transition="transform 0.2s ease"
           />
@@ -265,30 +282,14 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
             align="stretch"
             spacing="8px"
             width="100%"
-            minW={0}
-            minH={0}
+            minWidth={0}
+            minHeight={0}
             marginTop="8px"
           >
             {call && (
               <VStack
                 align="stretch"
-                spacing="4px"
-                width="100%"
-                minW={0}
-                padding="12px"
-                borderRadius="12px"
-                border="1px solid #E5E7EB"
-              >
-                <BodyText typography="small" fontWeight="600" color="#464A51">
-                  Solicitação:
-                </BodyText>
-                <SolicitationArgsBlocks call={call} />
-              </VStack>
-            )}
-            {hasOutput && (
-              <VStack
-                align="stretch"
-                spacing="4px"
+                spacing="8px"
                 width="100%"
                 minWidth={0}
                 minHeight={0}
@@ -296,8 +297,39 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
                 borderRadius="12px"
                 border="1px solid #E5E7EB"
               >
-                <BodyText typography="small" fontWeight="600" color="#464A51">
-                  Resultado:
+                <BodyText
+                  typography="small"
+                  fontSize="12px"
+                  fontWeight="600"
+                  color="#464A51"
+                  textTransform="uppercase"
+                  letterSpacing="5%"
+                >
+                  Solicitação
+                </BodyText>
+                <SolicitationArgsBlocks call={call} />
+              </VStack>
+            )}
+            {hasOutput && (
+              <VStack
+                align="stretch"
+                spacing="8px"
+                width="100%"
+                minWidth={0}
+                minHeight={0}
+                padding="12px"
+                borderRadius="12px"
+                border="1px solid #E5E7EB"
+              >
+                <BodyText
+                  typography="small"
+                  fontSize="12px"
+                  fontWeight="600"
+                  color="#464A51"
+                  textTransform="uppercase"
+                  letterSpacing="5%"
+                >
+                  Resultado
                 </BodyText>
                 <ToolResultView output={step.output} />
               </VStack>
@@ -355,7 +387,7 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
       </Box>
       <Box
         flex={1}
-        minW={0}
+        minWidth={0}
         paddingLeft="12px"
         paddingBottom={isLast ? 0 : "16px"}
         className="markdown-body"
