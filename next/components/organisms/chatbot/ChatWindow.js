@@ -7,6 +7,7 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
   const isProgrammaticScrollRef = useRef(false);
+  const touchStartYRef = useRef(null);
   const bottomThreshold = 80;
 
   const lastAssistantMessageId = useMemo(() => {
@@ -57,6 +58,27 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
     shouldAutoScrollRef.current = distanceFromBottom < bottomThreshold;
   }, []);
 
+  const handleWheel = useCallback((e) => {
+    if (e.deltaY < 0) {
+      shouldAutoScrollRef.current = false;
+    }
+  }, []);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartYRef.current = e.touches?.[0]?.clientY ?? null;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    const startY = touchStartYRef.current;
+    const currentY = e.touches?.[0]?.clientY;
+    if (startY == null || currentY == null) return;
+
+    if (currentY - startY > 0) {
+      shouldAutoScrollRef.current = false;
+    }
+    touchStartYRef.current = currentY;
+  }, []);
+
   useEffect(() => {
     if (!messages.length) return;
 
@@ -81,6 +103,9 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
     <VStack
       ref={scrollContainerRef}
       onScroll={handleScroll}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       width="100%"
       height="100%"
       overflowY="auto"
