@@ -153,9 +153,9 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
               type="button"
               width="100%"
               spacing="8px"
-              align="center"
+              align="flex-start"
               textAlign="left"
-              padding="8px 16px"
+              padding={{ base: "10px 12px", md: "8px 16px" }}
               background="transparent"
               border="none"
               cursor="pointer"
@@ -167,20 +167,22 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
               }}
               onClick={() => onQuestionClick?.(question)}
             >
-              <MessageBubbleCleanIcon
-                width="16px"
-                height="16px"
-                fill="currentColor"
-                flexShrink={0}
-              />
-              <BodyText color="inherit" flex={1}>
+              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
+                <MessageBubbleCleanIcon
+                  width="16px"
+                  height="16px"
+                  fill="currentColor"
+                />
+              </Box>
+              <BodyText color="inherit" flex={1} minWidth={0}>
                 {question}
               </BodyText>
-              <ArrowForwardIcon
-                boxSize="16px"
-                flexShrink={0}
-                color="currentColor"
-              />
+              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
+                <ArrowForwardIcon
+                  boxSize="16px"
+                  color="currentColor"
+                />
+              </Box>
             </HStack>
           </Box>
         ))}

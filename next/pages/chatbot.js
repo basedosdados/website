@@ -13,6 +13,9 @@ import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import Display from "../components/atoms/Text/Display";
+import SidebarIcon from "../public/img/icons/sidebarIcon";
+import CrossIcon from "../public/img/icons/crossIcon";
+import BDLogoImage from "../public/img/logos/bd_logo";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import { redirectToChatbotCheckout } from "../utils";
@@ -105,6 +108,7 @@ function ChatbotContent() {
   const resolvedInitialThread =
     router.isReady ? (normalizedThreadId ?? null) : undefined;
   const [scrollTrigger, setScrollTrigger] = useState(0);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const skipFetchRef = useRef(false);
   const searchRef = useRef(null);
 
@@ -113,6 +117,16 @@ function ChatbotContent() {
   useEffect(() => {
     setGreetingFirstName(getGreetingFirstNameFromCookie());
   }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    if (!isMobileSidebarOpen) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [isMobileSidebarOpen]);
 
   const {
     messages,
@@ -180,6 +194,7 @@ function ChatbotContent() {
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
+    setIsMobileSidebarOpen(false);
     router.push({
       pathname: router.pathname,
       query: {}
@@ -200,8 +215,69 @@ function ChatbotContent() {
     />
   );
 
+  const mobileHeader = (
+    <Flex
+      display={{ base: "flex", md: "none" }}
+      alignItems="center"
+      justifyContent="space-between"
+      width="100%"
+      flexShrink={0}
+      paddingBottom="12px"
+      gap="8px"
+    >
+      <Box
+        as="button"
+        type="button"
+        aria-label="Abrir menu"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        width="40px"
+        height="40px"
+        borderRadius="8px"
+        color="#252A32"
+        flexShrink={0}
+        onClick={() => setIsMobileSidebarOpen(true)}
+        _hover={{ backgroundColor: "#EEEEEE", color: "#2B8C4D" }}
+      >
+        <SidebarIcon width="20px" height="20px" />
+      </Box>
+
+      <BDLogoImage widthImage="48px" heightImage="21px" />
+
+      <Box
+        as="button"
+        type="button"
+        aria-label="Nova conversa"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        width="40px"
+        height="40px"
+        borderRadius="8px"
+        color="#252A32"
+        flexShrink={0}
+        onClick={handleNewChat}
+        _hover={{ backgroundColor: "#EEEEEE", color: "#2B8C4D" }}
+      >
+        <Box
+          width="22px"
+          height="22px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          borderRadius="50%"
+          backgroundColor="#DEDFE0"
+          transform="rotate(45deg)"
+        >
+          <CrossIcon width="11px" height="11px" fill="currentColor" aria-hidden />
+        </Box>
+      </Box>
+    </Flex>
+  );
+
   return (
-    <HStack width="100%" minHeight="100vh" spacing={0}>
+    <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
         <title>Chatbot - Basedosdados</title>
         <meta
@@ -219,25 +295,35 @@ function ChatbotContent() {
         spacing={0}
         width="100%"
         backgroundColor="#FFFFFF"
-        height="100%"
+        minHeight="100dvh"
+        height="100dvh"
+        maxHeight="100dvh"
         display="flex"
+        align="stretch"
+        overflow="hidden"
       >
         <Sidebar
           onNewChat={handleNewChat}
           currentThreadId={
             router.isReady ? normalizedThreadId : undefined
           }
+          isMobileOpen={isMobileSidebarOpen}
+          onMobileClose={() => setIsMobileSidebarOpen(false)}
         />
         <Flex
           flex={1}
           width="100%"
-          height="100vh"
-          padding="24px"
+          minWidth={0}
+          height="100%"
+          maxHeight="100dvh"
+          padding={{ base: "12px 12px 16px", md: "24px" }}
           overflow="hidden"
           justifyContent="center"
           alignItems="stretch"
           position="relative"
+          direction="column"
         >
+          {mobileHeader}
           <Stack
             width={{ base: "100%", md: "800px" }}
             height="100%"
@@ -246,6 +332,8 @@ function ChatbotContent() {
             spacing={0}
             flex={1}
             minHeight={0}
+            minWidth={0}
+            marginX="auto"
           >
             {showNewChatGreeting ? (
               <Flex
@@ -255,10 +343,17 @@ function ChatbotContent() {
                 direction="column"
                 align="center"
                 justify="center"
-                paddingX={{ base: "16px", md: "32px" }}
-                gap={{ base: "24px", md: "32px" }}
+                paddingX={{ base: "0", md: "32px" }}
+                gap={{ base: "20px", md: "32px" }}
               >
-                <Display as="h2" typography="small" textAlign="center">
+                <Display
+                  as="h2"
+                  typography="small"
+                  textAlign="center"
+                  fontSize={{ base: "28px", md: "36px" }}
+                  lineHeight={{ base: "36px", md: "48px" }}
+                  paddingX={{ base: "8px", md: 0 }}
+                >
                   Olá,
                   <Text
                     as="span"
@@ -276,7 +371,7 @@ function ChatbotContent() {
               </Flex>
             ) : (
               <>
-                <Box flex={1} overflow="hidden" width="100%" minHeight={0}>
+                <Box flex={1} overflow="hidden" width="100%" minHeight={0} minWidth={0}>
                   <ChatWindow
                     messages={messages}
                     onFeedback={sendFeedback}
@@ -287,10 +382,15 @@ function ChatbotContent() {
                 </Box>
                 <Box
                   width="100%"
-                  paddingTop="24px"
+                  paddingTop={{ base: "12px", md: "24px" }}
                   flexShrink={0}
                   overflowY="auto"
-                  sx={{ scrollbarGutter: "stable" }}
+                  sx={{
+                    scrollbarGutter: "stable",
+                    "@media (max-width: 767px)": {
+                      scrollbarGutter: "auto",
+                    },
+                  }}
                 >
                   {searchField}
                 </Box>

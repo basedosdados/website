@@ -108,13 +108,16 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
       onTouchMove={handleTouchMove}
       width="100%"
       height="100%"
+      minWidth={0}
       overflowY="auto"
-      paddingBottom="24px"
+      overflowX="hidden"
+      paddingBottom={{ base: "12px", md: "24px" }}
       align="stretch"
       spacing={0}
       css={{
         overflowAnchor: "none",
         scrollbarGutter: "stable",
+        WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           width: "6px",
         },
@@ -124,6 +127,9 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",
           borderRadius: "24px",
+        },
+        "@media (max-width: 767px)": {
+          scrollbarGutter: "auto",
         },
       }}
     >

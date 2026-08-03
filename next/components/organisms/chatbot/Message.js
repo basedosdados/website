@@ -191,23 +191,26 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     showFollowUpQuestions;
 
   return (
-    <Flex width="100%" direction="column" align="stretch">
+    <Flex width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
         width="100%"
         maxWidth="760px"
         margin="0 auto"
         display="flex"
         justifyContent={isUser ? "flex-end" : "flex-start"}
+        minWidth={0}
+        paddingX={{ base: "0", md: 0 }}
       >
         <Box
-          maxWidth={isUser ? "80%" : "100%"}
+          maxWidth={isUser ? { base: "90%", md: "80%" } : "100%"}
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
           borderRadius="12px"
-          padding="16px"
-          margin={isUser ? "32px 0 16px" : 0}
+          padding={{ base: "12px", md: "16px" }}
+          margin={isUser ? { base: "16px 0 8px", md: "32px 0 16px" } : 0}
           backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
           color="#000"
+          overflow="hidden"
         >
           {(showThinkingSection || showDiceLoader) && (
             <Box marginBottom="16px">
@@ -224,9 +227,24 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           )}
 
           {isUser ? (
-            <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
+            <BodyText
+              whiteSpace="pre-wrap"
+              wordBreak="break-word"
+              overflowWrap="anywhere"
+            >
+              {message.content}
+            </BodyText>
           ) : (
-            <Box className="markdown-body" fontSize="16px">
+            <Box
+              className="markdown-body"
+              fontSize={{ base: "15px", md: "16px" }}
+              overflowX="auto"
+              maxWidth="100%"
+              sx={{
+                wordBreak: "break-word",
+                overflowWrap: "anywhere",
+              }}
+            >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={componentsMk}

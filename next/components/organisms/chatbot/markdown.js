@@ -264,10 +264,10 @@ export const componentsMk = {
   tr: ({ children }) => <Tr>{children}</Tr>,
   td: ({ children }) => (
     <Td
-      padding="14px 22px"
+      padding={{ base: "10px 12px", md: "14px 22px" }}
       fontFamily="Roboto"
       fontWeight="400"
-      fontSize="14px"
+      fontSize={{ base: "13px", md: "14px" }}
       lineHeight="20px"
       color="#464A51"
       backgroundColor="#FFF"
@@ -281,12 +281,12 @@ export const componentsMk = {
   ),
   th: ({ children }) => (
     <Th
-      padding="14px 22px"
+      padding={{ base: "10px 12px", md: "14px 22px" }}
       textTransform="none"
       letterSpacing="inherit"
       fontFamily="Roboto"
       fontWeight="400"
-      fontSize="14px"
+      fontSize={{ base: "13px", md: "14px" }}
       lineHeight="20px"
       color="#252A32"
       borderBottom="1px solid #DEDFE0 !important"

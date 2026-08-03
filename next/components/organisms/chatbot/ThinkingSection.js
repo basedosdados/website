@@ -272,10 +272,12 @@ function ToolStepItem({
         <Flex
           cursor="pointer"
           alignItems="center"
-          width="fit-content"
+          width="100%"
+          maxWidth="100%"
           color="currentColor"
           gap="8px"
           minHeight="24px"
+          minWidth={0}
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
