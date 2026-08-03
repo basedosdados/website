@@ -3,10 +3,11 @@ import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
-function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
+function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger }) {
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
   const isProgrammaticScrollRef = useRef(false);
+  const touchStartYRef = useRef(null);
   const bottomThreshold = 80;
 
   const lastAssistantMessageId = useMemo(() => {
@@ -57,6 +58,27 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
     shouldAutoScrollRef.current = distanceFromBottom < bottomThreshold;
   }, []);
 
+  const handleWheel = useCallback((e) => {
+    if (e.deltaY < 0) {
+      shouldAutoScrollRef.current = false;
+    }
+  }, []);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartYRef.current = e.touches?.[0]?.clientY ?? null;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    const startY = touchStartYRef.current;
+    const currentY = e.touches?.[0]?.clientY;
+    if (startY == null || currentY == null) return;
+
+    if (currentY - startY > 0) {
+      shouldAutoScrollRef.current = false;
+    }
+    touchStartYRef.current = currentY;
+  }, []);
+
   useEffect(() => {
     if (!messages.length) return;
 
@@ -81,15 +103,21 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
     <VStack
       ref={scrollContainerRef}
       onScroll={handleScroll}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       width="100%"
       height="100%"
+      minWidth={0}
       overflowY="auto"
-      paddingBottom="24px"
+      overflowX="hidden"
+      paddingBottom={{ base: "12px", md: "24px" }}
       align="stretch"
       spacing={0}
       css={{
         overflowAnchor: "none",
         scrollbarGutter: "stable",
+        WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           width: "6px",
         },
@@ -99,6 +127,9 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",
           borderRadius: "24px",
+        },
+        "@media (max-width: 767px)": {
+          scrollbarGutter: "auto",
         },
       }}
     >
@@ -123,6 +154,7 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
             <Message
               message={messages[virtualRow.index]}
               onFeedback={onFeedback}
+              onExport={onExport}
               showFollowUpQuestions={
                 messages[virtualRow.index]?.id === lastAssistantMessageId &&
                 !messages[virtualRow.index]?.isLoading &&

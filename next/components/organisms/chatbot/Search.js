@@ -85,9 +85,13 @@ const Search = forwardRef(function Search({
     if (multi) {
       el.style.lineHeight = '26px';
       el.style.height = 'auto';
-      const fullH = Math.min(el.scrollHeight, 400);
+      const maxH =
+        typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+          ? 160
+          : 400;
+      const fullH = Math.min(el.scrollHeight, maxH);
       el.style.height = `${fullH}px`;
-      el.style.overflowY = fullH >= 400 ? 'scroll' : 'auto';
+      el.style.overflowY = fullH >= maxH ? 'scroll' : 'auto';
     } else {
       el.style.lineHeight = '38px';
       el.style.height = '38px';
@@ -118,12 +122,18 @@ const Search = forwardRef(function Search({
   };
 
   return (
-    <VStack width="100%" maxWidth="760px" margin="auto auto 0" spacing="24px">
+    <VStack
+      width="100%"
+      maxWidth="760px"
+      margin="auto auto 0"
+      spacing={{ base: "12px", md: "24px" }}
+      minWidth={0}
+    >
       <Flex
         width="100%"
-        borderRadius="14px"
+        borderRadius={{ base: "12px", md: "14px" }}
         backgroundColor="#EEEEEE"
-        padding="12px 16px"
+        padding={{ base: "10px 12px", md: "12px 16px" }}
         alignItems={isMultiLine ? "flex-end" : "center"}
         border="2px solid transparent !important"
         cursor={isBusy ? "wait" : "text"}
@@ -170,7 +180,7 @@ const Search = forwardRef(function Search({
             }
             variant="unstyled"
             minHeight="38px"
-            maxHeight="400px"
+            maxHeight={{ base: "160px", md: "400px" }}
             resize="none"
             padding="0"
             fontSize="16px"
@@ -181,7 +191,7 @@ const Search = forwardRef(function Search({
             overflowY={isMultiLine ? "auto" : "hidden"}
             _placeholder={{
               color: "#464A51",
-              fontSize: "14px",
+              fontSize: { base: "14px", md: "14px" },
               opacity: 1,
               lineHeight: isMultiLine ? "26px" : "38px",
             }}
@@ -206,8 +216,8 @@ const Search = forwardRef(function Search({
           onClick={triggerSend}
           color="#464A51"
           opacity={isBusy || !value ? 0.5 : 1}
-          minWidth="24px"
-          minHeight="24px"
+          minWidth="40px"
+          minHeight="40px"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -232,7 +242,13 @@ const Search = forwardRef(function Search({
       </Flex>
 
       {showDisclaimer && (
-        <VStack width="100%" spacing={0} align="center" textAlign="center">
+        <VStack
+          display={{ base: "none", md: "flex" }}
+          width="100%"
+          spacing={0}
+          align="center"
+          textAlign="center"
+        >
           <BodyText typography="small" color="#ACAEB1">
             O chatbot pode cometer erros. Considere verificar informações
             importantes.

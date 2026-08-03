@@ -656,8 +656,8 @@ read_sql(query, billing_project_id = get_billing_id())`, [sqlCode]);
                 pointerEvents={downloadWarning !== "biggest1gb" ? "default" : "none"}
               >
                 <DownloadIcon
-                  width="16px"
-                  height="16px"
+                  width="18px"
+                  height="18px"
                 />
                   {t('table.downloadTable')} {downloadWarning !== "biggest1gb" && `(${formatBytes(resource?.uncompressedFileSize)})`}
               </Button>

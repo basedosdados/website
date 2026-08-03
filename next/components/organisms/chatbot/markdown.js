@@ -1,5 +1,6 @@
 import {
   Box,
+  Flex,
   Text,
   UnorderedList,
   ListItem,
@@ -12,6 +13,7 @@ import {
   Tr,
   Th,
   Td,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
 
@@ -23,13 +25,38 @@ import json from "highlight.js/lib/languages/json";
 import BodyText from "../../atoms/Text/BodyText";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
+import { DownloadResultButton } from "./DownloadResults";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
 
-export function CodeBlock({ inline, children, language = "sql", marginY = "24px", raw = false }) {
+const ActionTooltipProps = {
+  hasArrow: true,
+  backgroundColor: "#252A32",
+  borderRadius: "8px",
+  letterSpacing: "0.1px",
+  lineHeight: "18px",
+  fontWeight: "400",
+  fontSize: "12px",
+  fontFamily: "Roboto",
+  color: "#FFFFFF",
+  padding: "8px 12px",
+  boxShadow: "0 2px 16px rgba(0, 0, 0, 0.16)",
+  placement: "top-start",
+};
+
+export function CodeBlock({
+  inline,
+  children,
+  language = "sql",
+  marginY = "24px",
+  raw = false,
+  downloadProps = null,
+  title = null,
+}) {
   const code = String(children).replace(/\n$/, "");
   const { hasCopied, onCopy } = useClipboard(code);
+  const hasHeader = title != null;
 
   const highlighted = useMemo(
     () => (inline || raw ? null : hljs.highlight(code, { language })),
@@ -52,6 +79,29 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
     );
   }
 
+  const actionButtons = (
+    <Flex alignItems="center" gap="8px" flexShrink={0}>
+      <Tooltip
+        {...ActionTooltipProps}
+        label={hasCopied ? "Copiado!" : "Copiar"}
+      >
+        <Box
+          cursor="pointer"
+          display="flex"
+          alignItems="center"
+          width="16px"
+          height="16px"
+          fill="#252A32"
+          onClick={onCopy}
+          backgroundColor="transparent"
+        >
+          <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="16px" height="16px" />
+        </Box>
+      </Tooltip>
+      {downloadProps && <DownloadResultButton {...downloadProps} />}
+    </Flex>
+  );
+
   return (
     <Box
       position="relative"
@@ -65,22 +115,39 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
       minWidth={0}
       alignSelf="stretch"
     >
-      <Box
-        cursor="pointer"
-        position="absolute"
-        top="12px"
-        right="12px"
-        display="flex"
-        alignItems="center"
-        width="16px"
-        height="16px"
-        fill="#252A32"
-        onClick={onCopy}
-        zIndex="1"
-        backgroundColor="transparent"
-      >
-        <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="16px" height="16px" />
-      </Box>
+      {hasHeader ? (
+        <Flex
+          alignItems="center"
+          justifyContent="space-between"
+          gap="12px"
+          padding="12px 16px"
+          backgroundColor="#F7F7F7"
+          borderBottom="1px solid #E5E7EB"
+          minWidth={0}
+        >
+          <BodyText
+            typography="small"
+            fontWeight="500"
+            color="#252A32"
+            noOfLines={1}
+            minWidth={0}
+          >
+            {title}
+          </BodyText>
+          {actionButtons}
+        </Flex>
+      ) : (
+        <Flex
+          position="absolute"
+          top="12px"
+          right="12px"
+          alignItems="center"
+          gap="8px"
+          zIndex="1"
+        >
+          {actionButtons}
+        </Flex>
+      )}
 
       <Box
         as="pre"
@@ -93,7 +160,13 @@ export function CodeBlock({ inline, children, language = "sql", marginY = "24px"
         fontSize="14px"
         backgroundColor="#F9FAFB"
         margin={0}
-        padding="12px 40px 12px 12px"
+        padding={
+          hasHeader
+            ? "0"
+            : downloadProps
+              ? "12px 64px 12px 12px"
+              : "12px 40px 12px 12px"
+        }
         boxSizing="border-box"
       >
         {raw ? (
@@ -191,10 +264,10 @@ export const componentsMk = {
   tr: ({ children }) => <Tr>{children}</Tr>,
   td: ({ children }) => (
     <Td
-      padding="14px 22px"
+      padding={{ base: "10px 12px", md: "14px 22px" }}
       fontFamily="Roboto"
       fontWeight="400"
-      fontSize="14px"
+      fontSize={{ base: "13px", md: "14px" }}
       lineHeight="20px"
       color="#464A51"
       backgroundColor="#FFF"
@@ -208,12 +281,12 @@ export const componentsMk = {
   ),
   th: ({ children }) => (
     <Th
-      padding="14px 22px"
+      padding={{ base: "10px 12px", md: "14px 22px" }}
       textTransform="none"
       letterSpacing="inherit"
       fontFamily="Roboto"
       fontWeight="400"
-      fontSize="14px"
+      fontSize={{ base: "13px", md: "14px" }}
       lineHeight="20px"
       color="#252A32"
       borderBottom="1px solid #DEDFE0 !important"
