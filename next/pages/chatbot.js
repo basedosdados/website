@@ -122,6 +122,7 @@ function ChatbotContent() {
     sendMessage,
     syncThreadIdFromUrl,
     sendFeedback,
+    exportQueryResult,
     resetChat
   } = useChatbot(resolvedInitialThread, {
     onThreadCreated: (id) => {
@@ -279,6 +280,7 @@ function ChatbotContent() {
                   <ChatWindow
                     messages={messages}
                     onFeedback={sendFeedback}
+                    onExport={exportQueryResult}
                     onFollowUpClick={handleFollowUpClick}
                     scrollTrigger={scrollTrigger}
                   />

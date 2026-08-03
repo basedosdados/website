@@ -1,4 +1,10 @@
-import { Box, Flex, HStack, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import React, { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +17,7 @@ import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
+import { DownloadResultsButton } from "./DownloadResults";
 import {
   DataSourcesList,
   FollowUpQuestionsList,
@@ -51,12 +58,14 @@ const ActionButtonProps = {
   borderRadius: "8px",
   padding: "8px",
   minWidth: "34px",
+  maxWidth: "34px",
   minHeight: "34px",
+  maxHeight: "34px",
   boxSizing: "border-box",
   fill: "#464A51",
 };
 
-function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowUpClick }) {
+function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -69,6 +78,20 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
     () => buildToolSteps(message.toolCalls),
     [message.toolCalls]
   );
+
+  const downloadableResults = useMemo(() => {
+    if (Array.isArray(message.downloads) && message.downloads.length > 0) {
+      return message.downloads;
+    }
+
+    return toolSteps
+      .filter(
+        (step) =>
+          step.kind === "tool" &&
+          step.output?.artifact?.type === "query_result"
+      )
+      .map((step) => step.output.artifact);
+  }, [message.downloads, toolSteps]);
 
   const showThinkingSection =
     !isUser && !message.isError && toolSteps.length > 0;
@@ -192,6 +215,8 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                 <ThinkingSection
                   toolSteps={toolSteps}
                   isLoading={message.isLoading}
+                  messageId={message.id}
+                  onExport={onExport}
                 />
               )}
               {showDiceLoader && <PulseDotLoader margin="8px 0 0 4px" />}
@@ -222,28 +247,36 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                 width="100%"
                 justifyContent="space-between"
               >
-                <Tooltip
-                  {...ActionTooltipProps}
-                  label={isCopied ? "Copiado!" : "Copiar resposta"}
-                >
-                  <Box
-                    {...ActionButtonProps}
-                    cursor="pointer"
-                    onClick={handleCopy}
-                    _hover={{
-                      backgroundColor: "#EEEEEE",
-                    }}
+                <Flex gap="8px" alignItems="center">
+                  <Tooltip
+                    {...ActionTooltipProps}
+                    label={isCopied ? "Copiado!" : "Copiar resposta"}
                   >
-                    <AnimatedCopyIcon
-                      copied={isCopied}
-                      icon={CopyIcon}
-                      width="18px"
-                      height="18px"
-                    />
-                  </Box>
-                </Tooltip>
+                    <Box
+                      {...ActionButtonProps}
+                      cursor="pointer"
+                      onClick={handleCopy}
+                      _hover={{
+                        backgroundColor: "#EEEEEE",
+                      }}
+                    >
+                      <AnimatedCopyIcon
+                        copied={isCopied}
+                        icon={CopyIcon}
+                        width="18px"
+                        height="18px"
+                      />
+                    </Box>
+                  </Tooltip>
 
-                <Flex marginLeft="auto" gap="8px">
+                  <DownloadResultsButton
+                    messageId={message.id}
+                    downloads={downloadableResults}
+                    onExport={onExport}
+                  />
+                </Flex>
+
+                <Flex gap="8px">
                   <Tooltip {...ActionTooltipProps} label="Boa resposta">
                     <Box
                       {...ActionButtonProps}

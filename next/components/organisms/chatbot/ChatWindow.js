@@ -3,7 +3,7 @@ import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
-function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
+function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger }) {
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
   const isProgrammaticScrollRef = useRef(false);
@@ -148,6 +148,7 @@ function ChatWindow({ messages, onFeedback, onFollowUpClick, scrollTrigger }) {
             <Message
               message={messages[virtualRow.index]}
               onFeedback={onFeedback}
+              onExport={onExport}
               showFollowUpQuestions={
                 messages[virtualRow.index]?.id === lastAssistantMessageId &&
                 !messages[virtualRow.index]?.isLoading &&
