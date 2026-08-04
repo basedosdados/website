@@ -873,8 +873,8 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
               >
                 {t('table.downloadFiles')}
                 <DownloadIcon
-                  width="16px"
-                  height="16px"
+                  width="18px"
+                  height="18px"
                 />
               </Link>
             :

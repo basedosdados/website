@@ -286,6 +286,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             ...base,
             structuredResponse,
             toolCalls: normalizeEvents(msg.events),
+            downloads: Array.isArray(msg.downloads) ? msg.downloads : [],
             isLoading: false,
             isTyping: false
           }
@@ -435,6 +436,26 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         console.error('Failed to send feedback:', err)
         return false
       }
+    },
+    [getAccessToken, handleAuthError]
+  )
+
+  const exportQueryResult = useCallback(
+    async (messageId, queryRef, format = 'CSV') => {
+      const accessToken = await getAccessToken()
+      if (!accessToken) {
+        handleAuthError()
+        throw chatbotError(
+          'Sessão não autorizada ou token indisponível. Faça login novamente.'
+        )
+      }
+
+      const response = await axios.post('/api/chatbot/exports', null, {
+        params: { messageId, queryRef, format },
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+
+      return response.data?.url ?? null
     },
     [getAccessToken, handleAuthError]
   )
@@ -983,6 +1004,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     syncThreadIdFromUrl: fetchThreadMessagesStable,
     fetchThreadMessages: fetchThreadMessagesStable,
     sendFeedback,
+    exportQueryResult,
     resetChat
   }
 }

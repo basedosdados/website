@@ -306,7 +306,12 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                           display="flex"
                           alignItems="center"
                           justifyContent="center"
-                          visibility="hidden"
+                          visibility="visible"
+                          sx={{
+                            "@media (hover: hover) and (pointer: fine)": {
+                              visibility: "hidden",
+                            },
+                          }}
                           _groupHover={{ visibility: "visible" }}
                         >
                           <TrashIcon

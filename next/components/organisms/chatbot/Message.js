@@ -1,4 +1,10 @@
-import { Box, Flex, HStack, Tooltip, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  Tooltip,
+  useToast,
+} from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import React, { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -11,6 +17,7 @@ import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
+import { DownloadResultsButton } from "./DownloadResults";
 import {
   DataSourcesList,
   FollowUpQuestionsList,
@@ -51,12 +58,14 @@ const ActionButtonProps = {
   borderRadius: "8px",
   padding: "8px",
   minWidth: "34px",
+  maxWidth: "34px",
   minHeight: "34px",
+  maxHeight: "34px",
   boxSizing: "border-box",
   fill: "#464A51",
 };
 
-function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowUpClick }) {
+function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -69,6 +78,20 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
     () => buildToolSteps(message.toolCalls),
     [message.toolCalls]
   );
+
+  const downloadableResults = useMemo(() => {
+    if (Array.isArray(message.downloads) && message.downloads.length > 0) {
+      return message.downloads;
+    }
+
+    return toolSteps
+      .filter(
+        (step) =>
+          step.kind === "tool" &&
+          step.output?.artifact?.type === "query_result"
+      )
+      .map((step) => step.output.artifact);
+  }, [message.downloads, toolSteps]);
 
   const showThinkingSection =
     !isUser && !message.isError && toolSteps.length > 0;
@@ -168,23 +191,26 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
     showFollowUpQuestions;
 
   return (
-    <Flex width="100%" direction="column" align="stretch">
+    <Flex width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
         width="100%"
         maxWidth="760px"
         margin="0 auto"
         display="flex"
         justifyContent={isUser ? "flex-end" : "flex-start"}
+        minWidth={0}
+        paddingX={{ base: "0", md: 0 }}
       >
         <Box
-          maxWidth={isUser ? "80%" : "100%"}
+          maxWidth={isUser ? { base: "90%", md: "80%" } : "100%"}
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
           borderRadius="12px"
-          padding="16px"
-          margin={isUser ? "32px 0 16px" : 0}
+          padding={{ base: "12px", md: "16px" }}
+          margin={isUser ? { base: "16px 0 8px", md: "32px 0 16px" } : 0}
           backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
           color="#000"
+          overflow="hidden"
         >
           {(showThinkingSection || showDiceLoader) && (
             <Box marginBottom="16px">
@@ -192,6 +218,8 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                 <ThinkingSection
                   toolSteps={toolSteps}
                   isLoading={message.isLoading}
+                  messageId={message.id}
+                  onExport={onExport}
                 />
               )}
               {showDiceLoader && <PulseDotLoader margin="8px 0 0 4px" />}
@@ -199,9 +227,24 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
           )}
 
           {isUser ? (
-            <BodyText whiteSpace="pre-wrap">{message.content}</BodyText>
+            <BodyText
+              whiteSpace="pre-wrap"
+              wordBreak="break-word"
+              overflowWrap="anywhere"
+            >
+              {message.content}
+            </BodyText>
           ) : (
-            <Box className="markdown-body" fontSize="16px">
+            <Box
+              className="markdown-body"
+              fontSize={{ base: "15px", md: "16px" }}
+              overflowX="auto"
+              maxWidth="100%"
+              sx={{
+                wordBreak: "break-word",
+                overflowWrap: "anywhere",
+              }}
+            >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={componentsMk}
@@ -222,28 +265,36 @@ function Message({ message, onFeedback, showFollowUpQuestions = false, onFollowU
                 width="100%"
                 justifyContent="space-between"
               >
-                <Tooltip
-                  {...ActionTooltipProps}
-                  label={isCopied ? "Copiado!" : "Copiar resposta"}
-                >
-                  <Box
-                    {...ActionButtonProps}
-                    cursor="pointer"
-                    onClick={handleCopy}
-                    _hover={{
-                      backgroundColor: "#EEEEEE",
-                    }}
+                <Flex gap="8px" alignItems="center">
+                  <Tooltip
+                    {...ActionTooltipProps}
+                    label={isCopied ? "Copiado!" : "Copiar resposta"}
                   >
-                    <AnimatedCopyIcon
-                      copied={isCopied}
-                      icon={CopyIcon}
-                      width="18px"
-                      height="18px"
-                    />
-                  </Box>
-                </Tooltip>
+                    <Box
+                      {...ActionButtonProps}
+                      cursor="pointer"
+                      onClick={handleCopy}
+                      _hover={{
+                        backgroundColor: "#EEEEEE",
+                      }}
+                    >
+                      <AnimatedCopyIcon
+                        copied={isCopied}
+                        icon={CopyIcon}
+                        width="18px"
+                        height="18px"
+                      />
+                    </Box>
+                  </Tooltip>
 
-                <Flex marginLeft="auto" gap="8px">
+                  <DownloadResultsButton
+                    messageId={message.id}
+                    downloads={downloadableResults}
+                    onExport={onExport}
+                  />
+                </Flex>
+
+                <Flex gap="8px">
                   <Tooltip {...ActionTooltipProps} label="Boa resposta">
                     <Box
                       {...ActionButtonProps}

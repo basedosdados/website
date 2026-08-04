@@ -27,7 +27,7 @@ import {
 } from "./markdown";
 import { pensandoTextShimmer } from "./shimmer";
 
-const TOOL_PHRASES = {
+const ToolPhrases = {
   search_datasets: {
     running: "Buscando conjuntos de dados",
     done: "Conjuntos de dados encontrados",
@@ -55,14 +55,14 @@ const TOOL_PHRASES = {
   },
 };
 
-const FALLBACK_TOOL_PHRASES = {
+const FallbackToolPhrases = {
   running: "Executando ferramenta",
   done: "Ferramenta executada",
   Icon: CodeIcon,
 };
 
 function getToolStepMeta(name, { done = false } = {}) {
-  const phrases = TOOL_PHRASES[name] ?? FALLBACK_TOOL_PHRASES;
+  const phrases = ToolPhrases[name] ?? FallbackToolPhrases;
   return { label: done ? phrases.done : phrases.running, Icon: phrases.Icon };
 }
 
@@ -70,7 +70,7 @@ function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-function SolicitationArgsBlocks({ call }) {
+function SolicitationArgsBlocks({ call, downloadProps }) {
   const rawStream =
     call &&
     typeof call.streamArgsJson === "string" &&
@@ -88,29 +88,34 @@ function SolicitationArgsBlocks({ call }) {
 
   const parsed = call.args ?? {};
 
-  if (isPlainObject(parsed) && Object.keys(parsed).length > 0) {
+  if (call?.name === "execute_bigquery_sql" && isPlainObject(parsed)) {
     const sqlQuery =
       typeof parsed.sql_query === "string" && parsed.sql_query.trim()
         ? parsed.sql_query.trim()
-        : null;
+        : "";
+    const slug =
+      typeof parsed.slug === "string" && parsed.slug.trim()
+        ? parsed.slug.trim()
+        : "";
 
-    if (sqlQuery) {
-      const { sql_query: _omitSql, ...rest } = parsed;
-      return (
-        <>
-          <MemoCodeBlock language="sql">
-            {sqlQuery}
-          </MemoCodeBlock>
-          {Object.keys(rest).length > 0 ? <RecordTable record={rest} /> : null}
-        </>
-      );
-    }
+    return (
+      <MemoCodeBlock
+        language="sql"
+        marginY={0}
+        title={slug}
+        downloadProps={downloadProps}
+      >
+        {sqlQuery}
+      </MemoCodeBlock>
+    );
+  }
 
+  if (isPlainObject(parsed) && Object.keys(parsed).length > 0) {
     return <RecordTable record={parsed} />;
   }
 
   return (
-    <MemoCodeBlock language="json">
+    <MemoCodeBlock language="json" marginY={0}>
       {JSON.stringify(parsed ?? {}, null, 2)}
     </MemoCodeBlock>
   );
@@ -193,7 +198,16 @@ function TimelineIcon({ status, Icon, fill }) {
   );
 }
 
-function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
+function ToolStepItem({
+  step,
+  index,
+  isFirst,
+  isLast,
+  isLoadingStep,
+  messageId,
+  messageLoading,
+  onExport,
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
@@ -202,6 +216,15 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
     ? { label: "Resultado adicional", Icon: CodeIcon }
     : getToolStepMeta(call?.name, { done: status === "done" });
   const hasOutput = Boolean(formatToolOutputText(step.output));
+  const downloadProps =
+    step.output?.artifact?.type === "query_result"
+      ? {
+          messageId,
+          artifact: step.output.artifact,
+          onExport,
+          disabled: messageLoading,
+        }
+      : null;
 
   return (
     <Flex
@@ -249,13 +272,16 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
         <Flex
           cursor="pointer"
           alignItems="center"
-          width="fit-content"
+          display="inline-flex"
+          maxWidth="100%"
           color="currentColor"
           gap="8px"
           minHeight="24px"
+          minWidth={0}
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
+            as="span"
             typography="small"
             color={status === "loading" ? undefined : "currentColor"}
             animation={
@@ -263,7 +289,6 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
                 ? `${pensandoTextShimmer} 2s ease-in-out infinite`
                 : undefined
             }
-            flex={1}
             minWidth="0"
           >
             {label}
@@ -307,7 +332,7 @@ function ToolStepItem({ step, index, isFirst, isLast, isLoadingStep }) {
                 >
                   Solicitação
                 </BodyText>
-                <SolicitationArgsBlocks call={call} />
+                <SolicitationArgsBlocks call={call} downloadProps={downloadProps} />
               </VStack>
             )}
             {hasOutput && (
@@ -403,7 +428,12 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
   );
 }
 
-export default function ThinkingSection({ toolSteps, isLoading }) {
+export default function ThinkingSection({
+  toolSteps,
+  isLoading,
+  messageId,
+  onExport,
+}) {
   if (toolSteps.length === 0) return null;
 
   return (
@@ -434,6 +464,9 @@ export default function ThinkingSection({ toolSteps, isLoading }) {
                 isFirst={isFirst}
                 isLast={isLast}
                 isLoadingStep={isLoadingStep}
+                messageId={messageId}
+                messageLoading={isLoading}
+                onExport={onExport}
               />
             );
           })}
