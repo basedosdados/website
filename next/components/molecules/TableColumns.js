@@ -392,7 +392,7 @@ export default function TableColumns({
           }}
         >
           {t('column.downloadTranslationTable')}
-          <DownloadIcon width="14px" height="16px"/>
+          <DownloadIcon width="18px" height="18px"/>
         </Text>
         <Text>{t('column.dictionary')}</Text>
       </Box>
@@ -463,7 +463,7 @@ export default function TableColumns({
                 :
                 <>
                   {t('column.downloadTranslationTable')}
-                  <DownloadIcon width="14px" height="16px"/>
+                  <DownloadIcon width="18px" height="18px"/>
                 </>
               }
             </Text>

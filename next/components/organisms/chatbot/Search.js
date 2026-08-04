@@ -1,4 +1,12 @@
-import { useRef, useEffect, useLayoutEffect, useCallback, useState } from 'react';
+import {
+  forwardRef,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  useCallback,
+  useState,
+  useImperativeHandle,
+} from 'react';
 import {
   Flex,
   VStack,
@@ -11,16 +19,48 @@ import SendIcon from "../../../public/img/icons/sendIcon";
 const useIsoLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-export default function Search({
-  value,
-  onChange,
+function draftKeyFor(threadId) {
+  return `chatbot_draft_${threadId || 'new'}`;
+}
+
+const Search = forwardRef(function Search({
+  threadId,
   onSend,
   isLoading,
   isGenerating,
   showDisclaimer = true,
-}) {
+}, ref) {
   const textareaRef = useRef(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem(draftKeyFor(threadId));
+    setValue(savedDraft || "");
+  }, [threadId]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      const key = draftKeyFor(threadId);
+      if (value) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [value, threadId]);
+
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      localStorage.removeItem(draftKeyFor(threadId));
+      setValue("");
+    },
+    focus: () => {
+      textareaRef.current?.focus();
+    },
+  }), [threadId]);
 
   const adjustTextareaSizing = useCallback((el, rawText) => {
     if (!el) return;
@@ -45,9 +85,13 @@ export default function Search({
     if (multi) {
       el.style.lineHeight = '26px';
       el.style.height = 'auto';
-      const fullH = Math.min(el.scrollHeight, 400);
+      const maxH =
+        typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+          ? 160
+          : 400;
+      const fullH = Math.min(el.scrollHeight, maxH);
       el.style.height = `${fullH}px`;
-      el.style.overflowY = fullH >= 400 ? 'scroll' : 'auto';
+      el.style.overflowY = fullH >= maxH ? 'scroll' : 'auto';
     } else {
       el.style.lineHeight = '38px';
       el.style.height = '38px';
@@ -59,22 +103,37 @@ export default function Search({
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 
+  const isBusy = isLoading || isGenerating;
+
+  const triggerSend = useCallback(() => {
+    if (isBusy) return;
+    const trimmed = value.trim();
+    if (!trimmed) return;
+    localStorage.removeItem(draftKeyFor(threadId));
+    setValue("");
+    onSend?.(trimmed);
+  }, [isBusy, value, onSend, threadId]);
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (onSend) onSend();
+      triggerSend();
     }
   };
 
-  const isBusy = isLoading || isGenerating;
-
   return (
-    <VStack width="100%" maxWidth="760px" margin="auto auto 0" spacing="24px">
+    <VStack
+      width="100%"
+      maxWidth="760px"
+      margin="auto auto 0"
+      spacing={{ base: "12px", md: "24px" }}
+      minWidth={0}
+    >
       <Flex
         width="100%"
-        borderRadius="14px"
+        borderRadius={{ base: "12px", md: "14px" }}
         backgroundColor="#EEEEEE"
-        padding="12px 16px"
+        padding={{ base: "10px 12px", md: "12px 16px" }}
         alignItems={isMultiLine ? "flex-end" : "center"}
         border="2px solid transparent !important"
         cursor={isBusy ? "wait" : "text"}
@@ -105,8 +164,7 @@ export default function Search({
             value={value}
             width="100%"
             onChange={(e) => {
-              adjustTextareaSizing(e.target, e.target.value);
-              if (onChange) onChange(e);
+              setValue(e.target.value);
             }}
             onKeyDown={(e) => {
               if (!isBusy) handleKeyDown(e);
@@ -122,7 +180,7 @@ export default function Search({
             }
             variant="unstyled"
             minHeight="38px"
-            maxHeight="400px"
+            maxHeight={{ base: "160px", md: "400px" }}
             resize="none"
             padding="0"
             fontSize="16px"
@@ -133,7 +191,7 @@ export default function Search({
             overflowY={isMultiLine ? "auto" : "hidden"}
             _placeholder={{
               color: "#464A51",
-              fontSize: "14px",
+              fontSize: { base: "14px", md: "14px" },
               opacity: 1,
               lineHeight: isMultiLine ? "26px" : "38px",
             }}
@@ -155,11 +213,11 @@ export default function Search({
           flexShrink={0}
           marginLeft="8px"
           cursor={isBusy ? "wait" : "pointer"}
-          onClick={onSend}
+          onClick={triggerSend}
           color="#464A51"
           opacity={isBusy || !value ? 0.5 : 1}
-          minWidth="24px"
-          minHeight="24px"
+          minWidth="40px"
+          minHeight="40px"
           display="flex"
           alignItems="center"
           justifyContent="center"
@@ -184,7 +242,13 @@ export default function Search({
       </Flex>
 
       {showDisclaimer && (
-        <VStack width="100%" spacing={0} align="center" textAlign="center">
+        <VStack
+          display={{ base: "none", md: "flex" }}
+          width="100%"
+          spacing={0}
+          align="center"
+          textAlign="center"
+        >
           <BodyText typography="small" color="#ACAEB1">
             O chatbot pode cometer erros. Considere verificar informações
             importantes.
@@ -197,4 +261,6 @@ export default function Search({
       )}
     </VStack>
   );
-}
+});
+
+export default Search;

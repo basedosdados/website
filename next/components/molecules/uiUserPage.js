@@ -206,11 +206,12 @@ export function ErrorMessage({ children }) {
   )
 }
 
-export function Button ({ children, onClick, isLoading, isVariant = false, ...props }) {
+export function Button ({ children, onClick, isLoading, isVariant = false, isDisabled = false, ...props }) {
   return (
     <Box
       as="button"
-      onClick={() => onClick()}
+      disabled={isDisabled}
+      onClick={() => !isDisabled && onClick()}
       display="flex"
       justifyContent="center"
       alignItems="center"
@@ -219,7 +220,8 @@ export function Button ({ children, onClick, isLoading, isVariant = false, ...pr
       borderRadius="8px"
       backgroundColor={isVariant ? "#FFF" : "#2B8C4D"}
       padding="8px 16px"
-      cursor="pointer"
+      cursor={isDisabled ? "not-allowed" : "pointer"}
+      opacity={isDisabled ? 0.5 : 1}
       color={isVariant ? "#2B8C4D" : "#FFF"}
       fill={isVariant ? "#2B8C4D" : "#FFF"}
       border={isVariant ? "1px solid #2B8C4D" : ""}
@@ -232,11 +234,11 @@ export function Button ({ children, onClick, isLoading, isVariant = false, ...pr
       _hover={{
         color: isVariant ? "#22703E" : "#FFF",
         borderColor: isVariant ? "#22703E" : "",
-        backgroundColor: isVariant ? "#FFF" : "#22703E"
+        backgroundColor: isDisabled ? undefined : (isVariant ? "#FFF" : "#22703E")
       }}
       {...props}
     >
-      {isLoading ? 
+      {isLoading ?
         <Spinner width="16px" height="16px"/>
         :
         children

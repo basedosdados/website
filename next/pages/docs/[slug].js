@@ -30,8 +30,8 @@ import BodyText from '../../components/atoms/Text/BodyText'
 import LabelText from '../../components/atoms/Text/LabelText'
 import TitleText from '../../components/atoms/Text/TitleText'
 import { MainPageTemplate } from '../../components/templates/main'
-import CheckIcon from '../../public/img/icons/checkIcon'
 import { CopyIcon } from '../../public/img/icons/copyIcon'
+import AnimatedCopyIcon from '../../components/atoms/AnimatedCopyIcon'
 import InfoIcon from '../../public/img/icons/infoIcon'
 import WarningIcon from '../../public/img/icons/warningIcon'
 
@@ -315,11 +315,7 @@ function CodeBlock({ children }) {
             color: '#9D9FA3'
           }}
           righticon={
-            hasCopied ? (
-              <CheckIcon alt="copiado conteúdo" width="24px" height="24px" />
-            ) : (
-              <CopyIcon alt="copiar conteúdo" width="24px" height="24px" />
-            )
+            <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="24px" height="24px" />
           }
         >
           {hasCopied ? 'Copiado' : 'Copiar'}

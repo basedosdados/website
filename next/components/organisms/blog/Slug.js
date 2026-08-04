@@ -38,7 +38,7 @@ import FacebookIcon from "../../../public/img/icons/facebookIcon";
 import LinkedInIcon from "../../../public/img/icons/linkedinIcon";
 import XIcon from "../../../public/img/icons/xIcon";
 import ShareIcon from "../../../public/img/icons/shareIcon";
-import CheckIcon from "../../../public/img/icons/checkIcon";
+import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 
 const LANGS_SUPPORTED = [
   "sql",
@@ -103,11 +103,7 @@ function CodeBlock({ children }) {
             color: "#9D9FA3",
           }}
           rightIcon={
-            hasCopied ? (
-              <CheckIcon alt="copiado conteúdo" width="24px" height="24px" />
-            ) : (
-              <CopyIcon alt="copiar conteúdo" width="24px" height="24px" />
-            )
+            <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="24px" height="24px" />
           }
         >
           {hasCopied ? "Copiado" : "Copiar"}
@@ -170,10 +166,8 @@ function NativeShare({ url, title, description }) {
     >
       {nagivatorAvailable ? (
         <ShareIcon width="22px" />
-      ) : hasCopied ? (
-        <CheckIcon width="22px" height="22px" alt="copiado conteúdo" />
       ) : (
-        <CopyIcon width="22px" height="22px" alt="copiar conteúdo" />
+        <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="22px" height="22px" />
       )}
     </Box>
   );

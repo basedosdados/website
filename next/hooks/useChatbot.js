@@ -6,6 +6,14 @@ import { flushSync } from 'react-dom'
 import { useChatbotContext } from '../context/ChatbotContext'
 import useChatbotAuth from './useChatbotAuth'
 
+const TYPEWRITER_FRAME_INTERVAL_MS = 1000 / 30
+const TYPEWRITER_MIN_CHARS_PER_FRAME = 3
+const TYPEWRITER_DECAY_DIVISOR = 18
+
+const TOOL_STREAM_FRAME_INTERVAL_MS = 1000 / 24
+const TOOL_STREAM_MIN_CHARS_PER_FRAME = 20
+const TOOL_STREAM_DECAY_DIVISOR = 20
+
 function messageSortTime(createdAt) {
   if (createdAt == null) return null
   const t = new Date(createdAt).getTime()
@@ -66,7 +74,7 @@ function patchToolCallEvent(msg, toolCallsIndex, patch) {
     const i = patch.outputIndex
     const row = list[i]
     if (!row) return { ...msg, toolCalls }
-    list[i] = { ...row, content: patch.text }
+    list[i] = { ...row, content: patch.text, streaming: !patch.done }
     toolCalls[toolCallsIndex] = { ...prevEv, tool_outputs: list }
     return { ...msg, toolCalls }
   }
@@ -172,9 +180,11 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const isTypingRef = useRef(false)
   const currentBotMessageIdRef = useRef(null)
   const animationFrameRef = useRef(null)
+  const typewriterLastFlushRef = useRef(0)
   const toolStreamQueueRef = useRef([])
   const toolStreamRafRef = useRef(null)
   const toolStreamPumpRef = useRef(null)
+  const toolStreamLastFlushRef = useRef(0)
 
   const { getAccessToken } = useChatbotAuth()
   const { refetch: refetchThreads } = useChatbotContext()
@@ -201,6 +211,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     charQueueRef.current = []
     isTypingRef.current = false
     currentBotMessageIdRef.current = null
+    typewriterLastFlushRef.current = 0
     if (animationFrameRef.current) {
       cancelAnimationFrame(animationFrameRef.current)
       animationFrameRef.current = null
@@ -262,17 +273,20 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const formattedMessages = items.map(msg => {
           const isUser = String(msg.role || '').toUpperCase() === 'USER'
           const createdAt = msg.created_at ?? msg.createdAt
+          const structuredResponse = isUser ? null : (msg.structured_response ?? null)
           const base = {
             id: isUser ? `user-${msg.id}` : msg.id,
             role: isUser ? 'user' : 'assistant',
-            content: msg.content ?? '',
+            content: structuredResponse?.response ?? msg.content ?? '',
             status: msg.status || 'SUCCESS',
             created_at: createdAt
           }
           if (isUser) return base
           return {
             ...base,
+            structuredResponse,
             toolCalls: normalizeEvents(msg.events),
+            downloads: Array.isArray(msg.downloads) ? msg.downloads : [],
             isLoading: false,
             isTyping: false
           }
@@ -386,7 +400,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   )
 
   const sendFeedback = useCallback(
-    async (id, rating) => {
+    async (id, rating, comments = '') => {
       try {
         const accessToken = await getAccessToken()
         if (!accessToken) {
@@ -396,10 +410,13 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           )
         }
 
+        const normalizedComments = comments?.trim() ? comments.trim() : null
+
         await axios.put(
           '/api/chatbot/feedback',
           {
-            rating: rating
+            rating,
+            comments: normalizedComments,
           },
           {
             params: { messageId: id },
@@ -407,7 +424,13 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           }
         )
 
-        setMessages(prev => prev.map(msg => (msg.id === id ? { ...msg, rating: rating } : msg)))
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === id
+              ? { ...msg, rating, comments: normalizedComments }
+              : msg
+          )
+        )
         return true
       } catch (err) {
         console.error('Failed to send feedback:', err)
@@ -417,9 +440,41 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     [getAccessToken, handleAuthError]
   )
 
-  const processQueue = useCallback(() => {
+  const exportQueryResult = useCallback(
+    async (messageId, queryRef, format = 'CSV') => {
+      const accessToken = await getAccessToken()
+      if (!accessToken) {
+        handleAuthError()
+        throw chatbotError(
+          'Sessão não autorizada ou token indisponível. Faça login novamente.'
+        )
+      }
+
+      const response = await axios.post('/api/chatbot/exports', null, {
+        params: { messageId, queryRef, format },
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+
+      return response.data?.url ?? null
+    },
+    [getAccessToken, handleAuthError]
+  )
+
+  const processQueue = useCallback(timestamp => {
+    const now = typeof timestamp === 'number' ? timestamp : performance.now()
+    if (now - typewriterLastFlushRef.current < TYPEWRITER_FRAME_INTERVAL_MS) {
+      animationFrameRef.current = requestAnimationFrame(processQueue)
+      return
+    }
+    typewriterLastFlushRef.current = now
+
     if (charQueueRef.current.length > 0) {
-      const charsToAppend = charQueueRef.current.splice(0, 5).join('')
+      const remaining = charQueueRef.current.length
+      const charsPerFrame = Math.max(
+        TYPEWRITER_MIN_CHARS_PER_FRAME,
+        Math.ceil(remaining / TYPEWRITER_DECAY_DIVISOR)
+      )
+      const charsToAppend = charQueueRef.current.splice(0, charsPerFrame).join('')
       const botId = currentBotMessageIdRef.current
 
       setMessages(prev =>
@@ -432,6 +487,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       animationFrameRef.current = requestAnimationFrame(processQueue)
     } else {
       isTypingRef.current = false
+      typewriterLastFlushRef.current = 0
       const botId = currentBotMessageIdRef.current
       if (botId) {
         setMessages(prev => prev.map(msg => (msg.id === botId ? { ...msg, isTyping: false } : msg)))
@@ -482,7 +538,16 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     })
   }, [])
 
-  const toolStreamPump = useCallback(() => {
+  const toolStreamPump = useCallback(timestamp => {
+    const now = typeof timestamp === 'number' ? timestamp : performance.now()
+    if (now - toolStreamLastFlushRef.current < TOOL_STREAM_FRAME_INTERVAL_MS) {
+      toolStreamRafRef.current = requestAnimationFrame(ts => {
+        toolStreamPumpRef.current?.(ts)
+      })
+      return
+    }
+    toolStreamLastFlushRef.current = now
+
     const queue = toolStreamQueueRef.current
     const job = queue[0]
     if (!job) {
@@ -494,8 +559,8 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     if (!jobThreadId || threadIdRef.current !== jobThreadId) {
       queue.shift()
       if (queue.length > 0) {
-        toolStreamRafRef.current = requestAnimationFrame(() => {
-          toolStreamPumpRef.current?.()
+        toolStreamRafRef.current = requestAnimationFrame(ts => {
+          toolStreamPumpRef.current?.(ts)
         })
       } else {
         toolStreamRafRef.current = null
@@ -503,7 +568,12 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       return
     }
 
-    const nextPos = Math.min((job.pos || 0) + 12, job.fullText.length)
+    const remaining = job.fullText.length - (job.pos || 0)
+    const charsPerFrame = Math.max(
+      TOOL_STREAM_MIN_CHARS_PER_FRAME,
+      Math.ceil(remaining / TOOL_STREAM_DECAY_DIVISOR)
+    )
+    const nextPos = Math.min((job.pos || 0) + charsPerFrame, job.fullText.length)
     const slice = job.fullText.slice(0, nextPos)
     job.pos = nextPos
     const isDone = nextPos >= job.fullText.length
@@ -530,7 +600,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       const patch =
         job.patchKind === 'callContent'
           ? { kind: 'callContent', text: slice }
-          : { kind: 'outputContent', outputIndex: job.outputIndex, text: slice }
+          : { kind: 'outputContent', outputIndex: job.outputIndex, text: slice, done: isDone }
       setMessages(prev =>
         prev.map(msg => {
           if (msg.id !== job.botMessageId) return msg
@@ -542,8 +612,8 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     if (isDone) queue.shift()
 
     if (toolStreamQueueRef.current.length > 0) {
-      toolStreamRafRef.current = requestAnimationFrame(() => {
-        toolStreamPumpRef.current?.()
+      toolStreamRafRef.current = requestAnimationFrame(ts => {
+        toolStreamPumpRef.current?.(ts)
       })
     } else {
       toolStreamRafRef.current = null
@@ -772,6 +842,14 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                   case 'final_answer':
                   case 'model_call_limit':
                   case 'error':
+                    if (event.type === 'final_answer' && event.data?.structured_response) {
+                      const structuredResponse = event.data.structured_response
+                      setMessages(prev =>
+                        prev.map(msg =>
+                          msg.id === botMessageId ? { ...msg, structuredResponse } : msg
+                        )
+                      )
+                    }
                     if (event.data?.content) {
                       addToQueue(event.data.content, streamThreadId)
                     }
@@ -926,6 +1004,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     syncThreadIdFromUrl: fetchThreadMessagesStable,
     fetchThreadMessages: fetchThreadMessagesStable,
     sendFeedback,
+    exportQueryResult,
     resetChat
   }
 }

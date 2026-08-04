@@ -1,12 +1,24 @@
-import React, { useRef, useCallback, useEffect } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo } from 'react';
 import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
-function ChatWindow({ messages, onFeedback, scrollTrigger }) {
+function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger }) {
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
+  const isProgrammaticScrollRef = useRef(false);
+  const touchStartYRef = useRef(null);
   const bottomThreshold = 80;
+
+  const lastAssistantMessageId = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i -= 1) {
+      const msg = messages[i];
+      if (msg?.role === 'assistant') {
+        return msg.id;
+      }
+    }
+    return null;
+  }, [messages]);
 
   const rowVirtualizer = useVirtualizer({
     count: messages.length,
@@ -25,11 +37,18 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
     if (!el) return;
 
     requestAnimationFrame(() => {
-      el.scrollTop = el.scrollHeight;
+      if (!scrollContainerRef.current) return;
+      isProgrammaticScrollRef.current = true;
+      scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
+      requestAnimationFrame(() => {
+        isProgrammaticScrollRef.current = false;
+      });
     });
   }, []);
 
   const handleScroll = useCallback(() => {
+    if (isProgrammaticScrollRef.current) return;
+
     const el = scrollContainerRef.current;
     if (!el) return;
 
@@ -37,6 +56,27 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
       el.scrollHeight - el.scrollTop - el.clientHeight;
 
     shouldAutoScrollRef.current = distanceFromBottom < bottomThreshold;
+  }, []);
+
+  const handleWheel = useCallback((e) => {
+    if (e.deltaY < 0) {
+      shouldAutoScrollRef.current = false;
+    }
+  }, []);
+
+  const handleTouchStart = useCallback((e) => {
+    touchStartYRef.current = e.touches?.[0]?.clientY ?? null;
+  }, []);
+
+  const handleTouchMove = useCallback((e) => {
+    const startY = touchStartYRef.current;
+    const currentY = e.touches?.[0]?.clientY;
+    if (startY == null || currentY == null) return;
+
+    if (currentY - startY > 0) {
+      shouldAutoScrollRef.current = false;
+    }
+    touchStartYRef.current = currentY;
   }, []);
 
   useEffect(() => {
@@ -52,18 +92,32 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
+  const totalSize = rowVirtualizer.getTotalSize();
+  useEffect(() => {
+    if (!shouldAutoScrollRef.current) return;
+
+    scrollToBottom();
+  }, [totalSize, scrollToBottom]);
+
   return (
     <VStack
       ref={scrollContainerRef}
       onScroll={handleScroll}
+      onWheel={handleWheel}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       width="100%"
       height="100%"
+      minWidth={0}
       overflowY="auto"
-      paddingX={{ base: "16px", md: "32px" }}
-      paddingBottom="24px"
+      overflowX="hidden"
+      paddingBottom={{ base: "12px", md: "24px" }}
       align="stretch"
       spacing={0}
       css={{
+        overflowAnchor: "none",
+        scrollbarGutter: "stable",
+        WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           width: "6px",
         },
@@ -73,6 +127,9 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",
           borderRadius: "24px",
+        },
+        "@media (max-width: 767px)": {
+          scrollbarGutter: "auto",
         },
       }}
     >
@@ -93,11 +150,17 @@ function ChatWindow({ messages, onFeedback, scrollTrigger }) {
             left={0}
             width="100%"
             transform={`translateY(${virtualRow.start}px)`}
-            paddingBottom="16px"
           >
-            <Message 
-              message={messages[virtualRow.index]} 
-              onFeedback={onFeedback} 
+            <Message
+              message={messages[virtualRow.index]}
+              onFeedback={onFeedback}
+              onExport={onExport}
+              showFollowUpQuestions={
+                messages[virtualRow.index]?.id === lastAssistantMessageId &&
+                !messages[virtualRow.index]?.isLoading &&
+                !messages[virtualRow.index]?.isTyping
+              }
+              onFollowUpClick={onFollowUpClick}
             />
           </Box>
         ))}
