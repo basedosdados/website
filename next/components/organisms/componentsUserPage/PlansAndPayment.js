@@ -332,6 +332,13 @@ export default function PlansAndPayment ({ userData }) {
   const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
   const hasSubscribed = isChatbotCheckout ? hasSubscribedChatbot : hasSubscribedBDPro
 
+  // Stripe product names are stored with the Portuguese brand ("BD Pro"). The English
+  // brand is "DB", so swap the brand token when rendering the product name in English.
+  const localizedProductName = (name) =>
+    router.locale === "en" && typeof name === "string"
+      ? name.replace(/\bBD\b/g, "DB")
+      : name
+
   function getCheckoutStepLabel() {
     if (checkoutStep === "plan") {
       return isChatbotCheckout ? t("username.step1of2") : t("username.step2of3")
@@ -828,7 +835,7 @@ export default function PlansAndPayment ({ userData }) {
               <Stack flexDirection="column" spacing={0} gap="16px">
                 <Box display="flex" flexDirection="row" gap="8px" width="100%">
                   <LabelText textTransform="capitalize">
-                    {checkoutInfos?.productName}
+                    {localizedProductName(checkoutInfos?.productName)}
                   </LabelText>
                   {!isChatbotCheckout && (
                     <BodyText
@@ -1067,7 +1074,7 @@ export default function PlansAndPayment ({ userData }) {
                     gap="16px"
                   >
                     <LabelText textTransform="capitalize">
-                      {checkoutInfos?.productName}
+                      {localizedProductName(checkoutInfos?.productName)}
                     </LabelText>
                     <BodyText typography="small" color="#71757A">
                       {formattedPlanInterval(checkoutInfos?.interval)}
