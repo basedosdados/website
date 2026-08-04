@@ -12,6 +12,7 @@ import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
+import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuestions";
 import Display from "../components/atoms/Text/Display";
 import SidebarIcon from "../public/img/icons/sidebarIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
@@ -368,6 +369,10 @@ function ChatbotContent() {
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
+                <OnboardingQuestions
+                  onQuestionClick={handleFollowUpClick}
+                  isDisabled={isLoading || isGenerating}
+                />
               </Flex>
             ) : (
               <>

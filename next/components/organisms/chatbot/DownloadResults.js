@@ -299,11 +299,12 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
               as={Box}
               {...ActionButtonProps}
               cursor="pointer"
+              position="relative"
               _hover={{
                 backgroundColor: "#EEEEEE",
               }}
             >
-              <DownloadIcon width="18px" height="18px" />
+              <DownloadIcon width="18px" height="18px" position="absolute" top="8px"/>
             </MenuButton>
           </Tooltip>
           <MenuList {...MenuListProps}>
