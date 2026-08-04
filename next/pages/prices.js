@@ -24,6 +24,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 import { triggerGAEvent, triggerGAEventWithData } from "../utils";
+import { selectPlans } from "../constants/stripePlans";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -365,39 +366,7 @@ export function SectionPrice({
         .then(res => res.json())
 
       if(result.success === true) {
-        function filterData(productName, interval, isActive, amount) {
-          let array = result.data
-
-          return array.filter(item => 
-            (productName ? item.node.productName === productName : true) &&
-            (interval ? item.node.interval === interval : true) &&
-            (amount ? item.node.amount === amount : true) &&
-            (isActive !== undefined ? item.node.isActive === isActive : true)
-          )
-        }
-
-        function filterChatbot(interval, amount) {
-          return result.data.filter((item) => {
-            const name = item.node.productName?.toLowerCase() || ""
-            const slug = item.node.productSlug?.toLowerCase() || ""
-            const isConsumerChatbot =
-              (name.includes("chatbot") || slug.includes("chatbot")) &&
-              !name.includes("empresas")
-            return isConsumerChatbot &&
-              item.node.interval === interval &&
-              item.node.amount === amount &&
-              item.node.isActive === true
-          })
-        }
-
-        const filteredPlans = {
-          bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-          bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-          bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
-          bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
-        }
-
-        setPlans(filteredPlans)
+        setPlans(selectPlans(result.data))
       }
     } catch (error) {
       console.error(error)
