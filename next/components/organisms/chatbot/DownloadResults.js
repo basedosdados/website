@@ -3,15 +3,17 @@ import {
   Flex,
   Menu,
   MenuButton,
+  MenuDivider,
   MenuItem,
   MenuList,
   Spinner,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import DownloadIcon from "../../../public/img/icons/downloadIcon";
+import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
 
 const ActionTooltipProps = {
   hasArrow: true,
@@ -45,22 +47,22 @@ const ActionButtonProps = {
 const MenuListProps = {
   boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16)",
   _focus: { boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important" },
-  padding: "16px 0 6px",
+  padding: "8px 0",
   borderRadius: "8px",
   zIndex: "11",
   color: "#252A32",
-  minWidth: "180px",
+  minWidth: "220px",
 };
 
 const MenuItemProps = {
   letterSpacing: "0.1px",
-  lineHeight: "18px",
-  fontWeight: "400",
-  fontSize: "12px",
+  lineHeight: "20px",
+  fontWeight: "500",
+  fontSize: "14px",
   fontFamily: "Roboto",
   color: "#252A32",
   backgroundColor: "#FFF",
-  padding: "0 16px 10px",
+  padding: "8px 16px",
   _focus: { backgroundColor: "transparent" },
   _hover: { backgroundColor: "transparent", opacity: "0.7" },
 };
@@ -308,34 +310,48 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
             </MenuButton>
           </Tooltip>
           <MenuList {...MenuListProps}>
-            {downloads.map((artifact) => {
+            {downloads.map((artifact, index) => {
               const status = statusByRef[artifact.query_ref];
+              const format = (artifact.formats?.[0] || "CSV").toLowerCase();
+              const fileName = `${artifact.slug || "resultado"}.${format}`;
               return (
-                <MenuItem
-                  key={artifact.query_ref}
-                  {...MenuItemProps}
-                  onClick={() => handleDownload(artifact)}
-                  isDisabled={status === "loading"}
-                >
-                  <Flex
-                    alignItems="center"
-                    justifyContent="space-between"
-                    width="100%"
-                    gap="8px"
+                <Fragment key={artifact.query_ref}>
+                  {index > 0 && (
+                    <MenuDivider margin="0" borderColor="#DEDFE0" />
+                  )}
+                  <MenuItem
+                    {...MenuItemProps}
+                    onClick={() => handleDownload(artifact)}
+                    isDisabled={status === "loading"}
                   >
-                    <Box as="span" noOfLines={1}>
-                      {artifact.slug || "resultado"}
-                    </Box>
-                    {status === "loading" && (
-                      <Spinner width="12px" height="12px" thickness="2px" />
-                    )}
-                    {status === "error" && (
-                      <Box as="span" color="#E53E3E">
-                        Erro
-                      </Box>
-                    )}
-                  </Flex>
-                </MenuItem>
+                    <Flex
+                      alignItems="center"
+                      justifyContent="space-between"
+                      width="100%"
+                      gap="8px"
+                    >
+                      <Flex alignItems="center" gap="8px" minWidth={0} flex={1}>
+                        <TableChartViewIcon
+                          width="16px"
+                          height="16px"
+                          flexShrink={0}
+                          color="#464A51"
+                        />
+                        <Box as="span" noOfLines={1} color="#252A32">
+                          {fileName}
+                        </Box>
+                      </Flex>
+                      {status === "loading" && (
+                        <Spinner width="12px" height="12px" thickness="2px" />
+                      )}
+                      {status === "error" && (
+                        <Box as="span" color="#E53E3E">
+                          Erro
+                        </Box>
+                      )}
+                    </Flex>
+                  </MenuItem>
+                </Fragment>
               );
             })}
           </MenuList>

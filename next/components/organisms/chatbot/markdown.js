@@ -282,6 +282,7 @@ export const componentsMk = {
   th: ({ children }) => (
     <Th
       padding={{ base: "10px 12px", md: "14px 22px" }}
+      minWidth="40px"
       textTransform="none"
       letterSpacing="inherit"
       fontFamily="Roboto"

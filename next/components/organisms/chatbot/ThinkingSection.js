@@ -272,7 +272,7 @@ function ToolStepItem({
         <Flex
           cursor="pointer"
           alignItems="center"
-          width="100%"
+          display="inline-flex"
           maxWidth="100%"
           color="currentColor"
           gap="8px"
@@ -281,6 +281,7 @@ function ToolStepItem({
           onClick={() => setIsOpen((v) => !v)}
         >
           <LabelText
+            as="span"
             typography="small"
             color={status === "loading" ? undefined : "currentColor"}
             animation={
@@ -288,7 +289,6 @@ function ToolStepItem({
                 ? `${pensandoTextShimmer} 2s ease-in-out infinite`
                 : undefined
             }
-            flex={1}
             minWidth="0"
           >
             {label}
