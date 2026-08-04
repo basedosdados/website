@@ -326,9 +326,8 @@ function ChatbotContent() {
         >
           {mobileHeader}
           <Stack
-            width={{ base: "100%", md: "800px" }}
+            width="100%"
             height="100%"
-            maxWidth="1440px"
             boxSizing="border-box"
             spacing={0}
             flex={1}
