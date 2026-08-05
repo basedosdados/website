@@ -19,6 +19,7 @@ async function getPlans() {
                 productName
                 productSlug
                 interval
+                region
                 isActive
               }
             }
