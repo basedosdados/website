@@ -16,6 +16,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import "highlight.js/styles/github.css";
 import hljs from "highlight.js/lib/core";
@@ -54,6 +55,7 @@ export function CodeBlock({
   downloadProps = null,
   title = null,
 }) {
+  const { t } = useTranslation("chatbot");
   const code = String(children).replace(/\n$/, "");
   const { hasCopied, onCopy } = useClipboard(code);
   const hasHeader = title != null;
@@ -83,7 +85,7 @@ export function CodeBlock({
     <Flex alignItems="center" gap="8px" flexShrink={0}>
       <Tooltip
         {...ActionTooltipProps}
-        label={hasCopied ? "Copiado!" : "Copiar"}
+        label={hasCopied ? t("ui.copied") : t("ui.copy")}
       >
         <Box
           cursor="pointer"
@@ -375,6 +377,7 @@ function orderColumnsWithIdLast(columns, moveIdToEnd) {
 }
 
 function TruncatableCellContent({ text, maxChars }) {
+  const { t } = useTranslation("chatbot");
   const [expanded, setExpanded] = useState(false);
 
   if (!maxChars || text.length <= maxChars) {
@@ -401,7 +404,7 @@ function TruncatableCellContent({ text, maxChars }) {
           _hover={{ textDecoration: "underline" }}
           onClick={() => setExpanded(false)}
         >
-          ver menos
+          {t("ui.table.seeLess")}
         </Text>
       </>
     );
@@ -426,7 +429,7 @@ function TruncatableCellContent({ text, maxChars }) {
         _hover={{ textDecoration: "underline" }}
         onClick={() => setExpanded(true)}
       >
-        ver mais
+        {t("ui.table.seeMore")}
       </Text>
     </>
   );
@@ -546,6 +549,7 @@ function RecordsTable({
   moveIdToEnd = false,
   truncateCellMaxChars,
 }) {
+  const { t } = useTranslation("chatbot");
   const columns = [];
   const seen = new Set();
   for (const row of records) {
@@ -612,7 +616,7 @@ function RecordsTable({
       </ToolResultTableContainer>
       {records.length > MaxTableRows && (
         <Text fontSize="12px" color="#71757A" marginTop="4px">
-          Mostrando {MaxTableRows} de {records.length} resultados
+          {t("ui.table.showingRows", { shown: MaxTableRows, total: records.length })}
         </Text>
       )}
     </Box>

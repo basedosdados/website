@@ -11,6 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Fragment, useState } from "react";
+import { useTranslation } from "next-i18next";
 
 import DownloadIcon from "../../../public/img/icons/downloadIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
@@ -67,7 +68,7 @@ const MenuItemProps = {
   _hover: { backgroundColor: "transparent", opacity: "0.7" },
 };
 
-function getExportErrorInfo(error) {
+function getExportErrorInfo(error, t) {
   const status = error?.response?.status;
   const data = error?.response?.data;
   const detail =
@@ -79,9 +80,8 @@ function getExportErrorInfo(error) {
 
   if (status === 410) {
     return {
-      title: "Resultado expirado",
-      description:
-        detail || "Estes resultados não estão mais disponíveis para download.",
+      title: t("ui.download.errors.expiredTitle"),
+      description: detail || t("ui.download.errors.expiredDescription"),
     };
   }
 
@@ -89,20 +89,21 @@ function getExportErrorInfo(error) {
     const isTooLarge =
       typeof detail === "string" && detail.toLowerCase().includes("grandes demais");
     return {
-      title: isTooLarge ? "Resultado muito grande" : "Formato não suportado",
+      title: isTooLarge
+        ? t("ui.download.errors.tooLargeTitle")
+        : t("ui.download.errors.unsupportedTitle"),
       description:
         detail ||
         (isTooLarge
-          ? "Estes resultados são grandes demais para baixar em um único arquivo."
-          : "O formato solicitado não está disponível para download."),
+          ? t("ui.download.errors.tooLargeDescription")
+          : t("ui.download.errors.unsupportedDescription")),
     };
   }
 
   if (status === 404) {
     return {
-      title: "Resultado não encontrado",
-      description:
-        "Não encontramos esse resultado. Ele pode ter expirado ou pertencer a outra conversa.",
+      title: t("ui.download.errors.notFoundTitle"),
+      description: t("ui.download.errors.notFoundDescription"),
     };
   }
 
@@ -110,8 +111,8 @@ function getExportErrorInfo(error) {
     typeof error?.message === "string" ? error.message.replace(/^\[Chatbot\]\s*/, "") : "";
 
   return {
-    title: "Falha ao baixar",
-    description: message || "Não foi possível baixar o resultado. Tente novamente.",
+    title: t("ui.download.errors.genericTitle"),
+    description: message || t("ui.download.errors.genericDescription"),
   };
 }
 
@@ -166,7 +167,7 @@ function DownloadToastContent({ status, title, description }) {
   );
 }
 
-async function downloadQueryResult({ toast, onExport, messageId, artifact }) {
+async function downloadQueryResult({ toast, onExport, messageId, artifact, t }) {
   if (!artifact?.query_ref) {
     console.error("downloadQueryResult: artifact sem query_ref", artifact);
     return false;
@@ -184,7 +185,10 @@ async function downloadQueryResult({ toast, onExport, messageId, artifact }) {
     duration: null,
     position: "bottom",
     render: () => (
-      <DownloadToastContent status="loading" title="Preparando o download..." />
+      <DownloadToastContent
+        status="loading"
+        title={t("ui.download.preparing")}
+      />
     ),
   });
 
@@ -201,13 +205,15 @@ async function downloadQueryResult({ toast, onExport, messageId, artifact }) {
 
     toast.update(toastId, {
       duration: 2500,
-      render: () => <DownloadToastContent status="success" title="Download iniciado" />,
+      render: () => (
+        <DownloadToastContent status="success" title={t("ui.download.started")} />
+      ),
     });
 
     return true;
   } catch (error) {
     console.error("Erro ao exportar resultado da consulta:", error);
-    const { title, description } = getExportErrorInfo(error);
+    const { title, description } = getExportErrorInfo(error, t);
 
     toast.update(toastId, {
       duration: 6000,
@@ -222,6 +228,7 @@ async function downloadQueryResult({ toast, onExport, messageId, artifact }) {
 }
 
 export function DownloadResultButton({ messageId, artifact, onExport, disabled }) {
+  const { t } = useTranslation("chatbot");
   const [status, setStatus] = useState("idle");
   const toast = useToast();
 
@@ -230,7 +237,7 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
     if (disabled || status === "loading" || !onExport || !messageId || !artifact) return;
 
     setStatus("loading");
-    const success = await downloadQueryResult({ toast, onExport, messageId, artifact });
+    const success = await downloadQueryResult({ toast, onExport, messageId, artifact, t });
     setStatus(success ? "idle" : "error");
     if (!success) {
       setTimeout(() => setStatus("idle"), 2000);
@@ -238,10 +245,10 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
   };
 
   const label = disabled
-    ? "Disponível assim que a resposta terminar"
+    ? t("ui.download.availableWhenDone")
     : status === "error"
-    ? "Falha ao baixar. Tente novamente."
-    : "Baixar CSV";
+    ? t("ui.download.retry")
+    : t("ui.download.csv");
 
   return (
     <Tooltip {...ActionTooltipProps} label={label}>
@@ -268,6 +275,7 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
 }
 
 export function DownloadResultsButton({ messageId, downloads, onExport }) {
+  const { t } = useTranslation("chatbot");
   const [statusByRef, setStatusByRef] = useState({});
   const toast = useToast();
 
@@ -279,7 +287,7 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
     }
 
     setStatusByRef((prev) => ({ ...prev, [artifact.query_ref]: "loading" }));
-    const success = await downloadQueryResult({ toast, onExport, messageId, artifact });
+    const success = await downloadQueryResult({ toast, onExport, messageId, artifact, t });
     setStatusByRef((prev) => ({ ...prev, [artifact.query_ref]: success ? null : "error" }));
     if (!success) {
       setTimeout(() => {
@@ -294,7 +302,7 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
         <>
           <Tooltip
             {...ActionTooltipProps}
-            label="Baixar resultados"
+            label={t("ui.download.label")}
             isDisabled={isOpen}
           >
             <MenuButton
@@ -346,7 +354,7 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
                       )}
                       {status === "error" && (
                         <Box as="span" color="#E53E3E">
-                          Erro
+                          {t("ui.error")}
                         </Box>
                       )}
                     </Flex>
