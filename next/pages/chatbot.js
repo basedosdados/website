@@ -8,6 +8,8 @@ import {
 import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
@@ -98,6 +100,7 @@ function ChatbotAccessGate({ children }) {
 
 function ChatbotContent() {
   const router = useRouter();
+  const { t } = useTranslation("chatbot");
   const { t: threadIdFromUrl } = router.query;
   const normalizedThreadId = Array.isArray(threadIdFromUrl)
     ? threadIdFromUrl[0]
@@ -225,7 +228,7 @@ function ChatbotContent() {
       <Box
         as="button"
         type="button"
-        aria-label="Abrir menu"
+        aria-label={t("ui.openMenu")}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -245,7 +248,7 @@ function ChatbotContent() {
       <Box
         as="button"
         type="button"
-        aria-label="Nova conversa"
+        aria-label={t("ui.newChat")}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -350,7 +353,7 @@ function ChatbotContent() {
                   lineHeight={{ base: "36px", md: "48px" }}
                   paddingX={{ base: "8px", md: 0 }}
                 >
-                  Olá,
+                  {t("ui.greetingPrefix")}
                   <Text
                     as="span"
                     textTransform="capitalize"
@@ -358,7 +361,7 @@ function ChatbotContent() {
                   >
                     {greetingFirstName
                       ? greetingFirstName
-                      : "Como posso ajudar você hoje?"}
+                      : t("ui.helpQuestion")}
                   </Text>
                 </Display>
                 <Box width="100%" flexShrink={0}>
@@ -401,6 +404,14 @@ function ChatbotContent() {
       </HStack>
     </HStack>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "menu", "chatbot"])),
+    },
+  };
 }
 
 export default function Chatbot() {

@@ -68,7 +68,12 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleGoogleLogin = () => {
-    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/`;
+    // Tell the backend which domain to return to after Google OAuth, so a login
+    // started on data-basis.org (en) or basedelosdatos.org (es) comes back to
+    // the same domain instead of the pt default. The backend allowlists it.
+    const redirectOrigin =
+      typeof window !== "undefined" ? window.location.origin : "";
+    window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/?redirect_origin=${encodeURIComponent(redirectOrigin)}`;
   };
 
   const handleInputChange = (e, field) => {

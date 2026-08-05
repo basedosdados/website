@@ -7,6 +7,7 @@ import {
   HStack,
   useMediaQuery,
 } from '@chakra-ui/react'
+import { useTranslation } from 'next-i18next'
 import BDLogoImage from '../../../public/img/logos/bd_logo'
 import { clearClientSession } from '../../../utils'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
@@ -22,6 +23,7 @@ function Sidebar({
   isMobileOpen = false,
   onMobileClose,
 }) {
+  const { t } = useTranslation('chatbot')
   const [isExpanded, setIsExpanded] = useState(true)
   const [isHovering, setIsHovering] = useState(false)
   const [isMobile] = useMediaQuery("(max-width: 767px)")
@@ -147,7 +149,7 @@ function Sidebar({
               backgroundColor: "#EEEEEE",
             }}
             onClick={handleToggle}
-            aria-label={isMobile ? "Fechar menu" : isExpanded ? "Recolher menu" : "Expandir menu"}
+            aria-label={isMobile ? t("ui.sidebar.closeMenu") : isExpanded ? t("ui.sidebar.collapseMenu") : t("ui.sidebar.expandMenu")}
           >
             <SidebarIcon
               width="18px"
@@ -219,7 +221,7 @@ function Sidebar({
               transition="opacity 0.2s ease, transform 0.2s ease, width 0.2s ease"
               transform={isOpen ? "translateX(0)" : "translateX(4px)"}
             >
-              Nova conversa
+              {t("ui.newChat")}
             </BodyText>
           </Box>
           <Box
@@ -278,7 +280,7 @@ function Sidebar({
               whiteSpace="nowrap"
               transition="opacity 0.2s ease, width 0.2s ease"
             >
-              Sair
+              {t("ui.signOut")}
             </BodyText>
           </HStack>
         </Box>
