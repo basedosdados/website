@@ -18,7 +18,7 @@ import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuest
 import Display from "../components/atoms/Text/Display";
 import SidebarIcon from "../public/img/icons/sidebarIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
-import BDLogoImage from "../public/img/logos/bd_logo";
+import BrandLogo from "../components/organisms/chatbot/BrandLogo";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import { redirectToChatbotCheckout } from "../utils";
@@ -247,7 +247,7 @@ function ChatbotContent() {
         <SidebarIcon width="20px" height="20px" />
       </Box>
 
-      <BDLogoImage widthImage="48px" heightImage="21px" />
+      <BrandLogo widthImage="48px" heightImage="21px" />
 
       <Box
         as="button"

@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react'
 import cookies from 'js-cookie'
 import { useTranslation } from 'next-i18next'
-import BDLogoImage from '../../../public/img/logos/bd_logo'
+import BrandLogo from './BrandLogo'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import CrossIcon from '../../../public/img/icons/crossIcon'
 import BodyText from '../../atoms/Text/BodyText'
@@ -120,11 +120,11 @@ function Sidebar({
             position="relative"
             left="-2px"
           >
-            <BDLogoImage widthImage="58px" heightImage="25px" />
+            <BrandLogo widthImage="58px" heightImage="25px" />
           </Box>
 
           {!isOpen && !isHovering && (
-            <BDLogoImage
+            <BrandLogo
               display={{ base: "none", md: "block" }}
               widthImage="34px"
               heightImage="34px"
