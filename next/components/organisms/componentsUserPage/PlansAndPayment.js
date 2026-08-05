@@ -24,7 +24,7 @@ import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
-import { selectPlans } from "../../../constants/stripePlans";
+import { selectPlans, localeToRegion, formatCurrency } from "../../../constants/stripePlans";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -199,7 +199,7 @@ export default function PlansAndPayment ({ userData }) {
           .then(res => res.json())
 
         if(result.success === true) {
-          setPlans(selectPlans(result.data))
+          setPlans(selectPlans(result.data, localeToRegion(router.locale)))
         }
       } catch (error) {
         console.error(error)
@@ -645,7 +645,7 @@ export default function PlansAndPayment ({ userData }) {
           <Text>{t('username.coupon')} {coupon.toUpperCase()} {limitText}</Text>
         </GridItem>
         <GridItem textAlign="end">
-          <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+          <Text>- {formatCheckoutAmount(couponInfos?.discountAmount)}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
         </GridItem>
       </>
     )
@@ -659,11 +659,9 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatCheckoutAmount(amount) {
-    return amount?.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      minimumFractionDigits: 2,
-    })
+    // Currency follows the selected plan's region (br → BRL, latam/intl → USD),
+    // matching what the storefront showed and what the backend webhook charges.
+    return formatCurrency(amount, checkoutInfos?.region)
   }
 
   const TotalToPayDisplay = () => {
@@ -964,11 +962,7 @@ export default function PlansAndPayment ({ userData }) {
                 </GridItem>
                 <GridItem textAlign="end">
                   <Text>
-                    {checkoutInfos?.amount?.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                      minimumFractionDigits: 2,
-                    })}
+                    {formatCheckoutAmount(checkoutInfos?.amount)}
                     /{formattedPlanInterval(checkoutInfos?.interval, true)}
                   </Text>
                 </GridItem>
@@ -987,11 +981,7 @@ export default function PlansAndPayment ({ userData }) {
                   º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
                   {!hasSubscribed && "e 7º dia"}
                   {t("username.couponDuration", { returnObjects: true })[1]}
-                  {checkoutInfos?.amount?.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                    minimumFractionDigits: 2,
-                  })}
+                  {formatCheckoutAmount(checkoutInfos?.amount)}
                   /{formattedPlanInterval(checkoutInfos?.interval, true)}.
                 </BodyText>
               )}
