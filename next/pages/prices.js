@@ -599,7 +599,7 @@ export function SectionPrice({
                 plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
                 (toggleAnual ? 326 : 30)
               }
-              region={plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.region}
+              region={plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`] ? localeToRegion(locale) : "br"}
               anualPlan={toggleAnual}
               textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
               resources={t("plans.chatbot.features", { returnObjects: true }).map(
@@ -638,7 +638,7 @@ export function SectionPrice({
             price={
               plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444
             }
-            region={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.region}
+            region={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`] ? localeToRegion(locale) : "br"}
             anualPlan={toggleAnual}
             textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
             resources={t("plans.pro.features", { returnObjects: true }).map(
