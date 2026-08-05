@@ -279,15 +279,15 @@ function ChatbotContent() {
   return (
     <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
-        <title>Chatbot - Basedosdados</title>
+        <title>{t("head.pageTitle")}</title>
         <meta
           property="og:title"
-          content="Chatbot - Basedosdados"
+          content={t("head.pageTitle")}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Chatbot - Basedosdados"
+          content={t("head.pageTitle")}
           key="ogdesc"
         />
       </Head>
