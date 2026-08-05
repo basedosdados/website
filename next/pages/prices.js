@@ -636,7 +636,8 @@ export function SectionPrice({
             title={t("plans.pro.title")}
             subTitle={t("plans.pro.subtitle")}
             price={
-              plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444
+              plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount ||
+              (toggleAnual ? 444 : 47)
             }
             region={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`] ? localeToRegion(locale) : "br"}
             anualPlan={toggleAnual}
