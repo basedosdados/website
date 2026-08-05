@@ -41,5 +41,95 @@
   "banner": {
     "title": "Crea análisis en segundos con el poder de la IA y el Datalake de Base de los Datos",
     "button": "Prueba ya el chatbot de BD"
+  },
+  "ui": {
+    "newChat": "Nueva conversación",
+    "openMenu": "Abrir menú",
+    "signOut": "Cerrar sesión",
+    "greetingPrefix": "Hola,",
+    "helpQuestion": "¿Cómo puedo ayudarte hoy?",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "copyResponse": "Copiar respuesta",
+    "goodResponse": "Buena respuesta",
+    "badResponse": "Mala respuesta",
+    "cancel": "Cancelar",
+    "send": "Enviar",
+    "delete": "Eliminar",
+    "error": "Error",
+    "thinkingAria": "Pensando",
+    "suggestedQuestions": "Preguntas Sugeridas",
+    "search": {
+      "placeholder": "Haz una pregunta...",
+      "disclaimer": "El chatbot puede cometer errores. Considera verificar la información importante.",
+      "disclaimerPrivacy": "Toda la información enviada aquí se registra para análisis y mejora del producto."
+    },
+    "sidebar": {
+      "closeMenu": "Cerrar menú",
+      "collapseMenu": "Contraer menú",
+      "expandMenu": "Expandir menú"
+    },
+    "sources": {
+      "title": "Fuentes de Datos"
+    },
+    "feedback": {
+      "title": "Comentarios",
+      "thanks": "¡Gracias por tu comentario!",
+      "detailsLabel": "Añade detalles: (opcional)",
+      "positivePlaceholder": "¿Qué te resultó satisfactorio de la respuesta?",
+      "negativePlaceholder": "¿Qué te resultó insatisfactorio de la respuesta?"
+    },
+    "download": {
+      "label": "Descargar resultados",
+      "csv": "Descargar CSV",
+      "preparing": "Preparando la descarga...",
+      "started": "Descarga iniciada",
+      "availableWhenDone": "Disponible cuando termine la respuesta",
+      "retry": "Error al descargar. Inténtalo de nuevo.",
+      "errors": {
+        "expiredTitle": "Resultado caducado",
+        "expiredDescription": "Estos resultados ya no están disponibles para descargar.",
+        "tooLargeTitle": "Resultado demasiado grande",
+        "tooLargeDescription": "Estos resultados son demasiado grandes para descargarlos en un solo archivo.",
+        "unsupportedTitle": "Formato no compatible",
+        "unsupportedDescription": "El formato solicitado no está disponible para descargar.",
+        "notFoundTitle": "Resultado no encontrado",
+        "notFoundDescription": "No encontramos ese resultado. Puede haber caducado o pertenecer a otra conversación.",
+        "genericTitle": "Error al descargar",
+        "genericDescription": "No se pudo descargar el resultado. Inténtalo de nuevo."
+      }
+    },
+    "thinking": {
+      "request": "Solicitud",
+      "result": "Resultado",
+      "additionalResult": "Resultado adicional",
+      "tools": {
+        "search_datasets": { "running": "Buscando conjuntos de datos", "done": "Conjuntos de datos encontrados" },
+        "get_dataset_details": { "running": "Explorando conjunto de datos", "done": "Conjunto de datos explorado" },
+        "get_table_details": { "running": "Explorando la estructura de la tabla", "done": "Estructura de la tabla explorada" },
+        "execute_bigquery_sql": { "running": "Consultando BigQuery", "done": "Consulta a BigQuery completada" },
+        "decode_table_values": { "running": "Decodificando valores de la tabla", "done": "Valores de la tabla decodificados" },
+        "fallback": { "running": "Ejecutando herramienta", "done": "Herramienta ejecutada" }
+      }
+    },
+    "thread": {
+      "historyTitle": "Conversaciones",
+      "deleteTitle": "Confirmar eliminación de la conversación",
+      "deleteConfirm": "¿Seguro que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
+      "loadError": "Error al cargar el historial.",
+      "tryAgain": "Inténtalo de nuevo."
+    },
+    "table": {
+      "seeMore": "ver más",
+      "seeLess": "ver menos",
+      "showingRows": "Mostrando {{shown}} de {{total}} resultados"
+    },
+    "onboarding": {
+      "items": [
+        { "eyebrow": "Datos", "question": "¿Cuál fue la evolución del número de alcaldías conquistadas por cada partido en Brasil entre 2012 y 2020, destacando los 5 partidos que más crecieron en ese período?" },
+        { "eyebrow": "Análisis", "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?" },
+        { "eyebrow": "Documentos", "question": "Necesito un csv que cruce los datos del precio medio de la gasolina común con el PIB de los 10 municipios con el mayor PIB de Brasil" }
+      ]
+    }
   }
 }
