@@ -378,7 +378,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
         const response = await axios.post(
           '/api/chatbot/threads',
-          { title },
+          // Send the site's active locale (pt/en/es, derived from the domain) so the
+          // chatbot backend persists the thread's language and answers accordingly.
+          { title, language: router.locale || 'pt' },
           {
             headers: { Authorization: `Bearer ${accessToken}` }
           }
@@ -396,7 +398,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         throw err
       }
     },
-    [getAccessToken, handleAuthError, refetchThreads, onThreadCreated]
+    [getAccessToken, handleAuthError, refetchThreads, onThreadCreated, router]
   )
 
   const sendFeedback = useCallback(
