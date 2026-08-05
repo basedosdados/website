@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import { useTranslation } from "next-i18next";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
 import DocIcon from "../../../public/img/icons/docIcon";
@@ -9,26 +10,7 @@ const fadeInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-export const OnboardingSuggestedQuestions = [
-  {
-    eyebrow: "Dados",
-    Icon: DataStructureIcon,
-    question:
-      "Qual foi a evolução do número de prefeituras conquistadas por cada partido no Brasil entre 2012 e 2020, destacando os 5 partidos que mais cresceram nesse período?",
-  },
-  {
-    eyebrow: "Análises",
-    Icon: TableChartViewIcon,
-    question:
-      "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?",
-  },
-  {
-    eyebrow: "Documentos",
-    Icon: DocIcon,
-    question:
-      "Preciso de um csv que cruze os dados de preço médio da gasolina comum com o PIB dos 10 municípios com o maior PIB do Brasil",
-  },
-];
+const OnboardingIcons = [DataStructureIcon, TableChartViewIcon, DocIcon];
 
 const QuestionChipProps = {
   as: "button",
@@ -71,11 +53,15 @@ const QuestionChipProps = {
 };
 
 export default function OnboardingQuestions({ onQuestionClick, isDisabled }) {
-  const items = Array.isArray(OnboardingSuggestedQuestions)
-    ? OnboardingSuggestedQuestions.filter((item) =>
-        String(item?.question || "").trim()
-      )
-    : [];
+  const { t } = useTranslation("chatbot");
+  const rawItems = t("ui.onboarding.items", { returnObjects: true });
+  const items = (Array.isArray(rawItems) ? rawItems : [])
+    .map((item, index) => ({
+      eyebrow: item?.eyebrow,
+      question: item?.question,
+      Icon: OnboardingIcons[index] ?? DocIcon,
+    }))
+    .filter((item) => String(item?.question || "").trim());
 
   if (items.length === 0) return null;
 
