@@ -41,5 +41,95 @@
   "banner": {
     "title": "Create analyses in seconds with the power of AI and Base dos Dados' Datalake",
     "button": "Try the DB chatbot now"
+  },
+  "ui": {
+    "newChat": "New chat",
+    "openMenu": "Open menu",
+    "signOut": "Sign out",
+    "greetingPrefix": "Hello,",
+    "helpQuestion": "How can I help you today?",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyResponse": "Copy response",
+    "goodResponse": "Good response",
+    "badResponse": "Bad response",
+    "cancel": "Cancel",
+    "send": "Send",
+    "delete": "Delete",
+    "error": "Error",
+    "thinkingAria": "Thinking",
+    "suggestedQuestions": "Suggested Questions",
+    "search": {
+      "placeholder": "Ask a question...",
+      "disclaimer": "The chatbot can make mistakes. Consider verifying important information.",
+      "disclaimerPrivacy": "All information submitted here is recorded for analysis and product improvement."
+    },
+    "sidebar": {
+      "closeMenu": "Close menu",
+      "collapseMenu": "Collapse menu",
+      "expandMenu": "Expand menu"
+    },
+    "sources": {
+      "title": "Data Sources"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "thanks": "Thank you for your feedback!",
+      "detailsLabel": "Add details: (optional)",
+      "positivePlaceholder": "What was satisfactory about the response?",
+      "negativePlaceholder": "What was unsatisfactory about the response?"
+    },
+    "download": {
+      "label": "Download results",
+      "csv": "Download CSV",
+      "preparing": "Preparing download...",
+      "started": "Download started",
+      "availableWhenDone": "Available once the response finishes",
+      "retry": "Download failed. Please try again.",
+      "errors": {
+        "expiredTitle": "Result expired",
+        "expiredDescription": "These results are no longer available for download.",
+        "tooLargeTitle": "Result too large",
+        "tooLargeDescription": "These results are too large to download in a single file.",
+        "unsupportedTitle": "Unsupported format",
+        "unsupportedDescription": "The requested format is not available for download.",
+        "notFoundTitle": "Result not found",
+        "notFoundDescription": "We couldn't find that result. It may have expired or belong to another conversation.",
+        "genericTitle": "Download failed",
+        "genericDescription": "The result could not be downloaded. Please try again."
+      }
+    },
+    "thinking": {
+      "request": "Request",
+      "result": "Result",
+      "additionalResult": "Additional result",
+      "tools": {
+        "search_datasets": { "running": "Searching datasets", "done": "Datasets found" },
+        "get_dataset_details": { "running": "Exploring dataset", "done": "Dataset explored" },
+        "get_table_details": { "running": "Exploring table structure", "done": "Table structure explored" },
+        "execute_bigquery_sql": { "running": "Querying BigQuery", "done": "BigQuery query completed" },
+        "decode_table_values": { "running": "Decoding table values", "done": "Table values decoded" },
+        "fallback": { "running": "Running tool", "done": "Tool executed" }
+      }
+    },
+    "thread": {
+      "historyTitle": "Conversations",
+      "deleteTitle": "Confirm conversation deletion",
+      "deleteConfirm": "Are you sure you want to delete this conversation? This action cannot be undone.",
+      "loadError": "Error loading history.",
+      "tryAgain": "Please try again."
+    },
+    "table": {
+      "seeMore": "see more",
+      "seeLess": "see less",
+      "showingRows": "Showing {{shown}} of {{total}} results"
+    },
+    "onboarding": {
+      "items": [
+        { "eyebrow": "Data", "question": "What was the evolution of the number of city halls won by each party in Brazil between 2012 and 2020, highlighting the 5 parties that grew the most in that period?" },
+        { "eyebrow": "Analyses", "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?" },
+        { "eyebrow": "Documents", "question": "I need a CSV that cross-references the average price of regular gasoline with the GDP of the 10 municipalities with the highest GDP in Brazil" }
+      ]
+    }
   }
 }

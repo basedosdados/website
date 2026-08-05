@@ -4,6 +4,7 @@ import {
   Stack,
   Textarea,
 } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import TitleText from "../../atoms/Text/TitleText";
 import {
   ModalGeneral,
@@ -18,6 +19,7 @@ export default function FeedbackModal({
   onSubmit,
   isSubmitting,
 }) {
+  const { t } = useTranslation("chatbot");
   const [feedbackText, setFeedbackText] = useState("");
   const isPositive = rating === 1;
 
@@ -41,7 +43,7 @@ export default function FeedbackModal({
       }}
     >
       <Stack spacing={0} marginBottom="16px">
-        <TitleText marginRight="24px">Feedback</TitleText>
+        <TitleText marginRight="24px">{t("ui.feedback.title")}</TitleText>
         <ModalCloseButton
           fontSize="14px"
           top="34px"
@@ -53,7 +55,7 @@ export default function FeedbackModal({
 
       <Stack spacing="16px" marginBottom="24px">
         <ExtraInfoTextForm marginBottom="0">
-          Dê os detalhes: (opcional)
+          {t("ui.feedback.detailsLabel")}
         </ExtraInfoTextForm>
 
         <Textarea
@@ -61,8 +63,8 @@ export default function FeedbackModal({
           onChange={(e) => setFeedbackText(e.target.value)}
           placeholder={
             isPositive
-              ? "O que foi satisfatório na resposta?"
-              : "O que foi insatisfatório na resposta?"
+              ? t("ui.feedback.positivePlaceholder")
+              : t("ui.feedback.negativePlaceholder")
           }
           minHeight="120px"
           resize="vertical"
@@ -100,7 +102,7 @@ export default function FeedbackModal({
           minWidth="120px"
           onClick={onClose}
         >
-          Cancelar
+          {t("ui.cancel")}
         </Button>
 
         <Button
@@ -109,7 +111,7 @@ export default function FeedbackModal({
           onClick={handleSubmit}
           isLoading={isSubmitting}
         >
-          Enviar
+          {t("ui.send")}
         </Button>
       </Stack>
     </ModalGeneral>

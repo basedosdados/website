@@ -1,5 +1,6 @@
 import { Box } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import { useTranslation } from "next-i18next";
 
 const dotSize = 8;
 const dotColor = "#2B8C4D";
@@ -10,12 +11,13 @@ const breathe = keyframes`
 `;
 
 export default function PulseDotLoader({ ...props }) {
+  const { t } = useTranslation("chatbot");
   return (
     <Box
       width={`${dotSize}px`}
       height={`${dotSize}px`}
       role="status"
-      aria-label="Pensando"
+      aria-label={t("ui.thinkingAria")}
       {...props}
     >
       <Box
