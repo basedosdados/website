@@ -659,9 +659,9 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatCheckoutAmount(amount) {
-    // Currency follows the selected plan's region (br → BRL, latam/intl → USD),
-    // matching what the storefront showed and what the backend webhook charges.
-    return formatCurrency(amount, checkoutInfos?.region)
+    // Currency follows the domain (br → BRL, latam/intl → USD), matching the region whose price
+    // ids the storefront selected and what the backend webhook charges.
+    return formatCurrency(amount, localeToRegion(router.locale))
   }
 
   const TotalToPayDisplay = () => {
