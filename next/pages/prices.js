@@ -24,7 +24,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
 import { triggerGAEvent, triggerGAEventWithData } from "../utils";
-import { selectPlans } from "../constants/stripePlans";
+import { selectPlans, localeToRegion, regionCurrency, formatCurrency } from "../constants/stripePlans";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -40,6 +40,7 @@ export const CardPrice = ({
   title,
   subTitle,
   price,
+  region,
   anualPlan = false,
   hidePrice = false,
   textResource,
@@ -48,6 +49,7 @@ export const CardPrice = ({
   locale,
   isBeta = false,
 }) => {
+  const { symbol: currencySymbol } = regionCurrency(region);
   const { t } = useTranslation('prices');
   const router = useRouter();
 
@@ -149,7 +151,7 @@ export const CardPrice = ({
                 alignItems="center"
               >
                 <Display textAlign="center">
-                  R$ {anualPlan ? Math.ceil(price / 12) : price}
+                  {currencySymbol} {anualPlan ? Math.ceil(price / 12) : price}
                 </Display>
                 <TitleText
                   typography="small"
@@ -170,9 +172,7 @@ export const CardPrice = ({
               >
                 {anualPlan &&
                   t("annualBillingMessage", {
-                    price: price.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
+                    price: formatCurrency(price, region, {
                       minimumFractionDigits: 0,
                     }),
                   })}
@@ -366,7 +366,7 @@ export function SectionPrice({
         .then(res => res.json())
 
       if(result.success === true) {
-        setPlans(selectPlans(result.data))
+        setPlans(selectPlans(result.data, localeToRegion(locale)))
       }
     } catch (error) {
       console.error(error)
@@ -569,6 +569,7 @@ export function SectionPrice({
             title={t("plans.free.title")}
             subTitle={t("plans.free.subtitle")}
             price="0"
+            region={localeToRegion(locale)}
             textResource={t("features")}
             resources={t("plans.free.features", { returnObjects: true }).map(
               (feature, index) => ({
@@ -598,6 +599,7 @@ export function SectionPrice({
                 plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
                 (toggleAnual ? 326 : 30)
               }
+              region={plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.region}
               anualPlan={toggleAnual}
               textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
               resources={t("plans.chatbot.features", { returnObjects: true }).map(
@@ -636,6 +638,7 @@ export function SectionPrice({
             price={
               plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount || 444
             }
+            region={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.region}
             anualPlan={toggleAnual}
             textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
             resources={t("plans.pro.features", { returnObjects: true }).map(
