@@ -368,10 +368,10 @@ function ChatbotContent() {
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
-                {/* <OnboardingQuestions
+                <OnboardingQuestions
                   onQuestionClick={handleFollowUpClick}
                   isDisabled={isLoading || isGenerating}
-                /> */}
+                />
               </Flex>
             ) : (
               <>

@@ -11,14 +11,14 @@ const fadeInUp = keyframes`
 
 export const OnboardingSuggestedQuestions = [
   {
-    eyebrow: "Dados",
-    Icon: DataStructureIcon,
-    question:
-      "Qual foi a evolução do número de prefeituras conquistadas por cada partido no Brasil entre 2012 e 2020, destacando os 5 partidos que mais cresceram nesse período?",
-  },
-  {
     eyebrow: "Análises",
     Icon: TableChartViewIcon,
+    question:
+      "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025",
+  },
+  {
+    eyebrow: "Dados",
+    Icon: DataStructureIcon,
     question:
       "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?",
   },
@@ -26,7 +26,7 @@ export const OnboardingSuggestedQuestions = [
     eyebrow: "Documentos",
     Icon: DocIcon,
     question:
-      "Preciso de um csv que cruze os dados de preço médio da gasolina comum com o PIB dos 10 municípios com o maior PIB do Brasil",
+      "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?",
   },
 ];
 
@@ -82,6 +82,8 @@ export default function OnboardingQuestions({ onQuestionClick, isDisabled }) {
   return (
     <Box
       width="100%"
+      maxWidth="760px"
+      margin="0 auto"
       display="grid"
       gridTemplateColumns={{
         base: "1fr",
