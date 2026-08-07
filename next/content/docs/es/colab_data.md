@@ -33,7 +33,7 @@ Para facilitar la explicación, seguiremos un ejemplo ya preparado con datos de 
 
 <Tip caption="Puede navegar por los pasos en el menú de la izquierda">
 
- ¡Le recomendamos encarecidamente que se una a nuestro [canal en Discord](https://discord.gg/huKWpsVYx4) para resolver dudas e interactuar con el equipo y otros colaboradores! 😉
+ ¡Le recomendamos encarecidamente que se una a nuestro [canal en Discord](https://discord.gg/nNfQYcmrvM) para resolver dudas e interactuar con el equipo y otros colaboradores! 😉
 </Tip>
 
 ### Antes de empezar
@@ -48,7 +48,7 @@ Para llevar a cabo este proceso, es necesario tener algunos conocimientos:
 
 <Tip caption="¿No tienes ninguna de estas habilidades, pero quieres colaborar?">
 
-Tenemos un equipo de datos que puede ayudarte, solo tienes que entrar en [nuestro Discord](https://discord.gg/huKWpsVYx4) y enviar un mensaje a #quiero-contribuir.
+Tenemos un equipo de datos que puede ayudarte, solo tienes que entrar en [nuestro Discord](https://discord.gg/nNfQYcmrvM) y enviar un mensaje a #quiero-contribuir.
 </Tip>
 
 ### ¿Cómo funciona el proceso?
@@ -184,7 +184,7 @@ El diccionario completo [se puede consultar aquí](https://docs.google.com/sprea
 
 ¡Todo listo! Ahora solo falta subirlo a Google Cloud y enviarlo para su revisión. Para ello, utilizaremos el cliente `basedosdados` (disponible en Python), que facilita la configuración y los pasos del proceso.
 
-<Tip caption="Dado que el almacenamiento tiene un coste, para finalizar este paso necesitaremos proporcionarte una api_key específica para voluntarios para subir los datos a nuestro entorno de desarrollo. Para ello, entra en nuestro [canal de Discord](https://discord.gg/huKWpsVYx4), envíanos un mensaje con «quiero-contribuir» y etiqueta a `@equipe_dados`."/>
+<Tip caption="Dado que el almacenamiento tiene un coste, para finalizar este paso necesitaremos proporcionarte una api_key específica para voluntarios para subir los datos a nuestro entorno de desarrollo. Para ello, entra en nuestro [canal de Discord](https://discord.gg/nNfQYcmrvM), envíanos un mensaje con «quiero-contribuir» y etiqueta a `@equipe_dados`."/>
 
 
 #### Configure sus credenciales localmente

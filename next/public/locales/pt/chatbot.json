@@ -1,7 +1,7 @@
 {
   "head": {
-    "pageTitle": "Chatbot LP - Base dos Dados",
-    "metaTitle": "Chatbot LP - Base dos Dados"
+    "pageTitle": "Chatbot - Base dos Dados",
+    "metaTitle": "Chatbot - Base dos Dados"
   },
   "hero": {
     "title": "Converse com o maior acervo de dados públicos do Brasil",
@@ -41,5 +41,95 @@
   "banner": {
     "title": "Crie análises em segundos com o poder da IA e o Datalake da Base dos Dados",
     "button": "Teste já o chatbot da BD"
+  },
+  "ui": {
+    "newChat": "Nova conversa",
+    "openMenu": "Abrir menu",
+    "signOut": "Sair",
+    "greetingPrefix": "Olá,",
+    "helpQuestion": "Como posso ajudar você hoje?",
+    "copy": "Copiar",
+    "copied": "Copiado!",
+    "copyResponse": "Copiar resposta",
+    "goodResponse": "Boa resposta",
+    "badResponse": "Resposta ruim",
+    "cancel": "Cancelar",
+    "send": "Enviar",
+    "delete": "Excluir",
+    "error": "Erro",
+    "thinkingAria": "Pensando",
+    "suggestedQuestions": "Perguntas Sugeridas",
+    "search": {
+      "placeholder": "Faça uma pergunta...",
+      "disclaimer": "O chatbot pode cometer erros. Considere verificar informações importantes.",
+      "disclaimerPrivacy": "Todas as informações aqui enviadas são registradas para análise e melhoria do produto."
+    },
+    "sidebar": {
+      "closeMenu": "Fechar menu",
+      "collapseMenu": "Recolher menu",
+      "expandMenu": "Expandir menu"
+    },
+    "sources": {
+      "title": "Fontes dos Dados"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "thanks": "Obrigado pelo seu feedback!",
+      "detailsLabel": "Dê os detalhes: (opcional)",
+      "positivePlaceholder": "O que foi satisfatório na resposta?",
+      "negativePlaceholder": "O que foi insatisfatório na resposta?"
+    },
+    "download": {
+      "label": "Baixar resultados",
+      "csv": "Baixar CSV",
+      "preparing": "Preparando o download...",
+      "started": "Download iniciado",
+      "availableWhenDone": "Disponível assim que a resposta terminar",
+      "retry": "Falha ao baixar. Tente novamente.",
+      "errors": {
+        "expiredTitle": "Resultado expirado",
+        "expiredDescription": "Estes resultados não estão mais disponíveis para download.",
+        "tooLargeTitle": "Resultado muito grande",
+        "tooLargeDescription": "Estes resultados são grandes demais para baixar em um único arquivo.",
+        "unsupportedTitle": "Formato não suportado",
+        "unsupportedDescription": "O formato solicitado não está disponível para download.",
+        "notFoundTitle": "Resultado não encontrado",
+        "notFoundDescription": "Não encontramos esse resultado. Ele pode ter expirado ou pertencer a outra conversa.",
+        "genericTitle": "Falha ao baixar",
+        "genericDescription": "Não foi possível baixar o resultado. Tente novamente."
+      }
+    },
+    "thinking": {
+      "request": "Solicitação",
+      "result": "Resultado",
+      "additionalResult": "Resultado adicional",
+      "tools": {
+        "search_datasets": { "running": "Buscando conjuntos de dados", "done": "Conjuntos de dados encontrados" },
+        "get_dataset_details": { "running": "Explorando conjunto de dados", "done": "Conjunto de dados explorado" },
+        "get_table_details": { "running": "Explorando estrutura da tabela", "done": "Estrutura da tabela explorada" },
+        "execute_bigquery_sql": { "running": "Consultando o BigQuery", "done": "Consulta ao BigQuery concluída" },
+        "decode_table_values": { "running": "Decodificando valores da tabela", "done": "Valores da tabela decodificados" },
+        "fallback": { "running": "Executando ferramenta", "done": "Ferramenta executada" }
+      }
+    },
+    "thread": {
+      "historyTitle": "Conversas",
+      "deleteTitle": "Confirmar exclusão de conversa",
+      "deleteConfirm": "Tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.",
+      "loadError": "Erro ao carregar histórico.",
+      "tryAgain": "Tente novamente."
+    },
+    "table": {
+      "seeMore": "ver mais",
+      "seeLess": "ver menos",
+      "showingRows": "Mostrando {{shown}} de {{total}} resultados"
+    },
+    "onboarding": {
+      "items": [
+        { "eyebrow": "Dados", "question": "Qual foi a evolução do número de prefeituras conquistadas por cada partido no Brasil entre 2012 e 2020, destacando os 5 partidos que mais cresceram nesse período?" },
+        { "eyebrow": "Análises", "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?" },
+        { "eyebrow": "Documentos", "question": "Preciso de um csv que cruze os dados de preço médio da gasolina comum com o PIB dos 10 municípios com o maior PIB do Brasil" }
+      ]
+    }
   }
 }

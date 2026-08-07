@@ -86,7 +86,7 @@ export default function FAQ({ faqs }) {
     setQuestions(categorySelected ? filterByCategory(categorySelected) : allQuestions);
   }
 
-  const CategoryText = ({ category }) => {
+  const CategoryText = ({ category, label }) => {
     function handlerClick() {
       if(category === categorySelected) {
         setCategorySelected("")
@@ -109,7 +109,7 @@ export default function FAQ({ faqs }) {
         }}
         onClick={handlerClick}
       >
-        {category}
+        {label || category}
       </LabelText>
     )
   }
@@ -188,12 +188,12 @@ export default function FAQ({ faqs }) {
             position={{base: "relative", lg: "sticky"}}
             top={{base: "0", lg: "120px"}}
           >
-            <CategoryText category="Dados"/>
-            <CategoryText category="Planos Pagos"/>
-            <CategoryText category="BigQuery"/>
-            <CategoryText category="BD Lab"/>
-            <CategoryText category="BD Edu"/>
-            <CategoryText category="Institucional"/>
+            <CategoryText category="Dados" label={t('categories.data')}/>
+            <CategoryText category="Planos Pagos" label={t('categories.paidPlans')}/>
+            <CategoryText category="BigQuery" label={t('categories.bigQuery')}/>
+            <CategoryText category="BD Lab" label={t('categories.bdLab')}/>
+            <CategoryText category="BD Edu" label={t('categories.bdEdu')}/>
+            <CategoryText category="Institucional" label={t('categories.institutional')}/>
           </Box>
 
           <Stack

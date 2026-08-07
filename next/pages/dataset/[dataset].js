@@ -33,6 +33,7 @@ import {
   hasBDProSubscription,
   hasChatbotSubscription,
   trackNavigateToChatbotLp,
+  isBasedosdadosDomain,
 } from "../../utils";
 
 import { DataBaseIcon } from "../../public/img/icons/databaseIcon";
@@ -470,7 +471,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                 </Link>
               </GridItem>
 
-              <GridItem colSpan={{ base: 5, lg: 2 }} marginBottom="8px">
+              <GridItem colSpan={{ base: 5, lg: 1 }} marginBottom="8px">
                 <LabelText typography="large" marginBottom="8px">
                   {t("temporalCoverage")}
                 </LabelText>
@@ -479,8 +480,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                 </BodyText>
               </GridItem>
 
-              {/* {locale !== 'pt' ?
-                <GridItem colSpan={{ base: 5, lg: 3 }} marginBottom="8px">
+              {locale !== 'pt' &&
+                <GridItem colSpan={{ base: 5, lg: 4 }} marginBottom="8px">
                   <LabelText
                     typography="large"
                     marginBottom="8px"
@@ -498,9 +499,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                       : t('notProvided')}
                   </BodyText>
                 </GridItem>
-                :
-                <></>
-              } */}
+              }
             </Grid>
           </GridItem>
         </Grid>
@@ -535,7 +534,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             }}
           />
         )}
-        {!showSubscriptionBanner && abVariant && (
+        {isBasedosdadosDomain() && !showSubscriptionBanner && abVariant && (
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 

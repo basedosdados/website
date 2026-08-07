@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import { useTranslation } from "next-i18next";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
 import DocIcon from "../../../public/img/icons/docIcon";
@@ -71,11 +72,15 @@ const QuestionChipProps = {
 };
 
 export default function OnboardingQuestions({ onQuestionClick, isDisabled }) {
-  const items = Array.isArray(OnboardingSuggestedQuestions)
-    ? OnboardingSuggestedQuestions.filter((item) =>
-        String(item?.question || "").trim()
-      )
-    : [];
+  const { t } = useTranslation("chatbot");
+  const rawItems = t("ui.onboarding.items", { returnObjects: true });
+  const items = (Array.isArray(rawItems) ? rawItems : [])
+    .map((item, index) => ({
+      eyebrow: item?.eyebrow,
+      question: item?.question,
+      Icon: OnboardingIcons[index] ?? DocIcon,
+    }))
+    .filter((item) => String(item?.question || "").trim());
 
   if (items.length === 0) return null;
 

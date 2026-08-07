@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState, useEffect } from "react";
+import { getDiscordUrl } from "../utils";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { MainPageTemplate } from "../components/templates/main";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -164,6 +165,27 @@ function getTeamScore(slug) {
   }
 }
 
+// A career is "active" while it has no end date. A person is shown only if
+// they hold at least one active role, and only their active roles are listed.
+function isActiveCareer(careerNode) {
+  return !careerNode.endAt
+}
+
+function hasActiveRole(node) {
+  const careers = node?.careers?.edges || []
+  return careers.some((edge) => edge.node.role && isActiveCareer(edge.node))
+}
+
+// True when the person holds an active (not ended) career in the given team.
+// Used by the team filter so a person whose only tie to a team is an ended
+// role is not listed under that team.
+function hasActiveRoleInTeam(node, teamSlug) {
+  const careers = node?.careers?.edges || []
+  return careers.some(
+    (edge) => isActiveCareer(edge.node) && edge.node.team?.slug === teamSlug
+  )
+}
+
 const TeamBox = ({
   index,
   name,
@@ -182,6 +204,7 @@ const TeamBox = ({
   const role = () => {
     const roles = []
     careers.map((elm) => {
+      if (!isActiveCareer(elm.node)) return
       const roleData = elm.node.role
       if (!roleData) return
       const roleName = roleData[`name${capitalize(locale)}`]
@@ -364,13 +387,13 @@ export default function AboutUs() {
     const sortPeopleArray = array
 
     function compareByRole(a, b) {
-      const rolesA = a.node.careers.edges.map(edge => {
+      const rolesA = a.node.careers.edges.filter(edge => isActiveCareer(edge.node)).map(edge => {
         const roleData = edge.node.role
         if (!roleData) return ''
         return roleData.slug || ''
       }).filter(Boolean)
 
-      const rolesB = b.node.careers.edges.map(edge => {
+      const rolesB = b.node.careers.edges.filter(edge => isActiveCareer(edge.node)).map(edge => {
         const roleData = edge.node.role
         if (!roleData) return ''
         return roleData.slug || ''
@@ -405,7 +428,9 @@ export default function AboutUs() {
       })
     }
 
-    return removeDuplicates(data).filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
+    return removeDuplicates(data)
+      .filter(obj => obj.node.firstName !== "API User" && obj.node.firstName !== "Staging")
+      .filter(obj => hasActiveRole(obj.node))
   }
 
   const keyIcon = (url) => {
@@ -439,7 +464,8 @@ export default function AboutUs() {
         return setPeople(allPeople)
       }
       setIsLoading(true)
-      setPeople(sortPeople(result))
+      const activeInTeam = result.filter((obj) => hasActiveRoleInTeam(obj.node, elm))
+      setPeople(sortPeople(activeInTeam))
     }
   }
 
@@ -471,7 +497,7 @@ export default function AboutUs() {
         >
           <XIcon alt="twitter basedosdados" {...keyIcon("https://x.com/basedosdados")} borderTop="1px solid #0000001a"/>
           <BlueskyIcon alt="bluesky basedosdados" {...keyIcon("https://bsky.app/profile/basedosdados.bsky.social")}/>
-          <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon("https://discord.gg/huKWpsVYx4")}/>
+          <DiscordIcon alt="comunidade do discord basedosdados" {...keyIcon(getDiscordUrl(locale))}/>
           <GithubIcon alt="repositório github" {...keyIcon("https://github.com/basedosdados")}/>
           <LinkedinIcon alt="linkedin basedosdados" {...keyIcon("https://www.linkedin.com/company/base-dos-dados/mycompany/")}/>
         </Stack>

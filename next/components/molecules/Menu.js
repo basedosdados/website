@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp, getDiscordUrl } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -990,7 +990,7 @@ function DesktopLinks({
                 {},
                 {
                   name: t("tooltip.discordCommunity"),
-                  url: "https://discord.gg/huKWpsVYx4",
+                  url: getDiscordUrl(locale),
                 },
                 {
                   name: t("tooltip.contactUs"),
@@ -1220,7 +1220,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "/en/bdpro"
+          href: "/bdpro"
         },
         {
           name: [t('chatbot_lp')],
@@ -1246,7 +1246,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "/es/bdpro"
+          href: "/bdpro"
         },
         {
           name: [t('chatbot_lp')],
