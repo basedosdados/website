@@ -354,7 +354,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           }}
         >
           <FollowUpQuestionsList
-            followUpQuestions={message.structuredResponse.follow_up_questions}
+            followUpQuestions={message.structuredResponse.follow_up_prompts}
             onQuestionClick={onFollowUpClick}
           />
         </Box>

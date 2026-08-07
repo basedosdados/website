@@ -38,6 +38,15 @@ function normalizeMessagesApiPayload(raw) {
   return []
 }
 
+function normalizeStructuredResponse(structuredResponse) {
+  if (!structuredResponse || typeof structuredResponse !== 'object') return structuredResponse
+  if (structuredResponse.follow_up_prompts !== undefined) return structuredResponse
+  if (structuredResponse.follow_up_questions !== undefined) {
+    return { ...structuredResponse, follow_up_prompts: structuredResponse.follow_up_questions }
+  }
+  return structuredResponse
+}
+
 function patchToolCallEvent(msg, toolCallsIndex, patch) {
   const toolCalls = [...(msg.toolCalls || [])]
   const prevEv = toolCalls[toolCallsIndex]
@@ -273,7 +282,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const formattedMessages = items.map(msg => {
           const isUser = String(msg.role || '').toUpperCase() === 'USER'
           const createdAt = msg.created_at ?? msg.createdAt
-          const structuredResponse = isUser ? null : (msg.structured_response ?? null)
+          const structuredResponse = isUser ? null : normalizeStructuredResponse(msg.structured_response ?? null)
           const base = {
             id: isUser ? `user-${msg.id}` : msg.id,
             role: isUser ? 'user' : 'assistant',
@@ -845,7 +854,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                   case 'model_call_limit':
                   case 'error':
                     if (event.type === 'final_answer' && event.data?.structured_response) {
-                      const structuredResponse = event.data.structured_response
+                      const structuredResponse = normalizeStructuredResponse(event.data.structured_response)
                       setMessages(prev =>
                         prev.map(msg =>
                           msg.id === botMessageId ? { ...msg, structuredResponse } : msg
