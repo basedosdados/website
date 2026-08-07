@@ -10,26 +10,7 @@ const fadeInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-export const OnboardingSuggestedQuestions = [
-  {
-    eyebrow: "Análises",
-    Icon: TableChartViewIcon,
-    question:
-      "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025",
-  },
-  {
-    eyebrow: "Dados",
-    Icon: DataStructureIcon,
-    question:
-      "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?",
-  },
-  {
-    eyebrow: "Documentos",
-    Icon: DocIcon,
-    question:
-      "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?",
-  },
-];
+const OnboardingIcons = [TableChartViewIcon, DataStructureIcon, DocIcon];
 
 const QuestionChipProps = {
   as: "button",

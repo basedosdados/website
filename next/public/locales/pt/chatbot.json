@@ -126,9 +126,9 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Dados", "question": "Qual foi a evolução do número de prefeituras conquistadas por cada partido no Brasil entre 2012 e 2020, destacando os 5 partidos que mais cresceram nesse período?" },
-        { "eyebrow": "Análises", "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?" },
-        { "eyebrow": "Documentos", "question": "Preciso de um csv que cruze os dados de preço médio da gasolina comum com o PIB dos 10 municípios com o maior PIB do Brasil" }
+        { "eyebrow": "Análises", "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025" },
+        { "eyebrow": "Dados", "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?" },
+        { "eyebrow": "Documentos", "question": "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?" }
       ]
     }
   }
