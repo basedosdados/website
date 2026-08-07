@@ -126,9 +126,9 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Datos", "question": "¿Cuál fue la evolución del número de alcaldías conquistadas por cada partido en Brasil entre 2012 y 2020, destacando los 5 partidos que más crecieron en ese período?" },
-        { "eyebrow": "Análisis", "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?" },
-        { "eyebrow": "Documentos", "question": "Necesito un csv que cruce los datos del precio medio de la gasolina común con el PIB de los 10 municipios con el mayor PIB de Brasil" }
+        { "eyebrow": "Análisis", "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025" },
+        { "eyebrow": "Datos", "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?" },
+        { "eyebrow": "Documentos", "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?" }
       ]
     }
   }

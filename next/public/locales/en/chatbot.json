@@ -126,9 +126,9 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Data", "question": "What was the evolution of the number of city halls won by each party in Brazil between 2012 and 2020, highlighting the 5 parties that grew the most in that period?" },
-        { "eyebrow": "Analyses", "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?" },
-        { "eyebrow": "Documents", "question": "I need a CSV that cross-references the average price of regular gasoline with the GDP of the 10 municipalities with the highest GDP in Brazil" }
+        { "eyebrow": "Analyses", "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025" },
+        { "eyebrow": "Data", "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?" },
+        { "eyebrow": "Documents", "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?" }
       ]
     }
   }

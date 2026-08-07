@@ -10,7 +10,7 @@ const fadeInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-const OnboardingIcons = [DataStructureIcon, TableChartViewIcon, DocIcon];
+const OnboardingIcons = [TableChartViewIcon, DataStructureIcon, DocIcon];
 
 const QuestionChipProps = {
   as: "button",
