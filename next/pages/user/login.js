@@ -55,10 +55,25 @@ export default function Login() {
     if (loginSuccess === 'success') {
       setIsLoading(true)
       const token = urlParams.get('token')
-      if(token) {
-        cookies.set('token', token, { expires: 7, path: '/' })
+      const userId = urlParams.get('id')
+
+      const finishGoogleLogin = async () => {
+        if (token) {
+          try {
+            await fetch('/api/user/setSession', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ token }),
+            })
+          } catch (_) {}
+          urlParams.delete('token')
+          const cleaned = `${window.location.pathname}${urlParams.toString() ? `?${urlParams}` : ''}`
+          window.history.replaceState({}, '', cleaned)
+        }
+        fetchUser(userId)
       }
-      fetchUser(urlParams.get('id'));
+
+      finishGoogleLogin()
     }
 
     const error = urlParams.get('error');

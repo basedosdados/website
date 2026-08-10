@@ -21,7 +21,7 @@ import CrossIcon from "../public/img/icons/crossIcon";
 import BrandLogo from "../components/organisms/chatbot/BrandLogo";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
-import { redirectToChatbotCheckout } from "../utils";
+import { redirectToChatbotCheckout, clearClientSession } from "../utils";
 
 function getGreetingFirstNameFromCookie() {
   try {
@@ -35,19 +35,16 @@ function getGreetingFirstNameFromCookie() {
   }
 }
 
-function clearAuthCookiesAndRedirectLogin(router) {
+async function clearAuthCookiesAndRedirectLogin(router) {
   if (typeof window !== "undefined") {
     localStorage.setItem("previousPath", window.location.href);
   }
-  cookies.remove("userBD", { path: "/" });
-  cookies.remove("token", { path: "/" });
+  await clearClientSession();
   router.replace("/user/login");
 }
 
-function hasCompleteAuthCookies() {
-  const token = cookies.get("token");
+function hasUserCookie() {
   const userRaw = cookies.get("userBD");
-  if (!token || !String(token).trim()) return false;
   if (!userRaw || userRaw === "undefined") return false;
   try {
     JSON.parse(userRaw);
@@ -66,20 +63,19 @@ function ChatbotAccessGate({ children }) {
 
     async function checkAccess() {
       if (typeof window === "undefined") return;
-      if (!hasCompleteAuthCookies()) {
-        clearAuthCookiesAndRedirectLogin(router);
+      if (!hasUserCookie()) {
+        await clearAuthCookiesAndRedirectLogin(router);
         return;
       }
-      const token = cookies.get("token");
       try {
-        const params = new URLSearchParams({ p: btoa(token) });
-        const res = await fetch(`/api/user/validateToken?${params}`, {
-          method: "GET"
+        const res = await fetch("/api/user/validateToken", {
+          method: "GET",
+          credentials: "same-origin"
         });
         const data = await res.json();
         if (cancelled) return;
         if (!res.ok || !data.success) {
-          clearAuthCookiesAndRedirectLogin(router);
+          await clearAuthCookiesAndRedirectLogin(router);
           return;
         }
         if (!data.has_chatbot_access) {
@@ -88,7 +84,7 @@ function ChatbotAccessGate({ children }) {
         }
         setCanEnter(true);
       } catch {
-        if (!cancelled) clearAuthCookiesAndRedirectLogin(router);
+        if (!cancelled) await clearAuthCookiesAndRedirectLogin(router);
       }
     }
 

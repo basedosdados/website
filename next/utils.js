@@ -1,5 +1,12 @@
 import cookies from 'js-cookie';
 
+export async function clearClientSession() {
+  cookies.remove('userBD', { path: '/' });
+  try {
+    await fetch('/api/user/clearSession', { method: 'POST', credentials: 'same-origin' });
+  } catch (_) {}
+}
+
 // Returns the brand domain this build is serving. Prefers the build-time
 // NEXT_PUBLIC_DOMAIN (baked per Docker image: basedosdados.org, data-basis.org,
 // basedelosdatos.org) so it is correct on the server and under Docker, where the

@@ -1,42 +1,39 @@
-import cookies from "js-cookie";
+import { serializeClearedTokenCookie } from "../lib/authCookie";
 
-async function isJWTInvalid() {
+async function isJWTInvalid(cookieHeader = "") {
   try {
-    const decoded = await fetch(`/api/user/validateToken`, {method: "GET"})
-      .then(res => res.json())
+    const decoded = await fetch(`/api/user/validateToken`, {
+      method: "GET",
+      headers: cookieHeader ? { Cookie: cookieHeader } : {},
+    }).then((res) => res.json());
 
-    return decoded.success
+    return !decoded.success;
   } catch (error) {
-    console.error(error)
-    return true
+    console.error(error);
+    return true;
   }
 }
 
-
 export default async function authUser(context, destiny) {
-  const { req, res } = context
+  const { req, res } = context;
 
-  const invalidToken = await isJWTInvalid()
+  const invalidToken = await isJWTInvalid(req.headers.cookie || "");
 
   if (invalidToken) {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
-
-    res.setHeader('Set-Cookie', [
+    res.setHeader("Set-Cookie", [
+      serializeClearedTokenCookie(),
       `userBD=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`,
-      `token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`
-    ])
+    ]);
 
     return {
       redirect: {
         destination: destiny,
         permanent: false,
       },
-    }
+    };
   }
 
   return {
-    props: {
-    }
-  }
+    props: {},
+  };
 }

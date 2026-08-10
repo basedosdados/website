@@ -1,19 +1,16 @@
 import { useCallback } from 'react';
 import axios from 'axios';
-import cookies from 'js-cookie';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function useChatbotAuth() {
   const queryClient = useQueryClient();
 
-  const validateToken = useCallback(async (token) => {
+  const validateToken = useCallback(async () => {
     try {
       const data = await queryClient.fetchQuery({
-        queryKey: ['validateToken', token],
+        queryKey: ['validateToken'],
         queryFn: async () => {
-          const response = await axios.get('/api/user/validateToken', {
-            params: { p: btoa(token) }
-          });
+          const response = await axios.get('/api/user/validateToken');
           return response.data.success;
         },
         staleTime: 5 * 60 * 1000,
@@ -25,11 +22,9 @@ export default function useChatbotAuth() {
     }
   }, [queryClient]);
 
-  const refreshToken = useCallback(async (token) => {
+  const refreshToken = useCallback(async () => {
     try {
-      const response = await axios.get('/api/user/refreshToken', {
-        params: { p: btoa(token) }
-      });
+      const response = await axios.get('/api/user/refreshToken');
       return response.data.success;
     } catch (e) {
       console.error('Token refresh failed:', e);
@@ -37,21 +32,23 @@ export default function useChatbotAuth() {
     }
   }, []);
 
-  const getAccessToken = useCallback(async () => {
-    const token = cookies.get('token');
+  const ensureSession = useCallback(async () => {
+    const isValid = await validateToken();
+    if (isValid) return true;
 
-    if (!token) return null;
-
-    const isValid = await validateToken(token);
-    if (isValid) return token;
-
-    const refreshed = await refreshToken(token);
+    const refreshed = await refreshToken();
     if (refreshed) {
-      return cookies.get('token');
+      queryClient.removeQueries({ queryKey: ['validateToken'] });
+      return validateToken();
     }
 
-    return null;
-  }, [validateToken, refreshToken]);
+    return false;
+  }, [validateToken, refreshToken, queryClient]);
 
-  return { getAccessToken };
+  const getAccessToken = useCallback(async () => {
+    const ok = await ensureSession();
+    return ok ? true : null;
+  }, [ensureSession]);
+
+  return { getAccessToken, ensureSession, validateToken, refreshToken };
 }

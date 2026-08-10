@@ -7,8 +7,8 @@ import {
   HStack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import cookies from 'js-cookie'
 import { useTranslation } from 'next-i18next'
+import { clearClientSession } from '../../../utils'
 import BrandLogo from './BrandLogo'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import CrossIcon from '../../../public/img/icons/crossIcon'
@@ -30,9 +30,8 @@ function Sidebar({
 
   const isOpen = isMobile ? true : isExpanded
 
-  const handleLogout = useCallback(() => {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
+  const handleLogout = useCallback(async () => {
+    await clearClientSession()
     if (typeof window === 'undefined') return
     if (window.location.pathname.includes('/user/')) {
       window.location.href = '/'
