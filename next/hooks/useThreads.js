@@ -15,11 +15,10 @@ export default function useThreads() {
     queryKey: ['chatbotThreads'],
     queryFn: async () => {
       const accessToken = await getAccessToken();
-      const { data } = await axios.get('/api/chatbot/threads', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      if (!accessToken) {
+        throw new Error('Sessão não autorizada');
+      }
+      const { data } = await axios.get('/api/chatbot/threads');
       return data;
     },
     staleTime: 1000 * 60 * 5,
@@ -28,11 +27,11 @@ export default function useThreads() {
   const deleteMutation = useMutation({
     mutationFn: async (threadId) => {
       const accessToken = await getAccessToken();
+      if (!accessToken) {
+        throw new Error('Sessão não autorizada');
+      }
       await axios.delete(`/api/chatbot/threads`, {
         params: { id: threadId },
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
     },
     onSuccess: () => {

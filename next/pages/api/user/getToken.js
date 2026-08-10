@@ -1,5 +1,5 @@
 import axios from "axios";
-import { serialize } from 'cookie';
+import { serializeTokenCookie } from '../../../lib/authCookie';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
@@ -40,10 +40,7 @@ export default async function handler(req, res) {
   if(result.data.authToken === null) return res.status(500).json({error: "err"})
 
   if(simple === false) {
-    res.setHeader('Set-Cookie', serialize('token', result.data.authToken.token, {
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/'
-    }))
+    res.setHeader('Set-Cookie', serializeTokenCookie(result.data.authToken.token))
   }
 
   res.status(200).json(result.data.authToken.user)

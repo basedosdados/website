@@ -14,7 +14,7 @@ import Link from "../../atoms/Link";
 import TitleText from "../../atoms/Text/TitleText";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import WarningIcon from "../../../public/img/icons/warningIcon";
-import { hasBDProSubscription } from "../../../utils";
+import { hasBDProSubscription, clearClientSession } from "../../../utils";
 
 import {
   LabelTextForm,
@@ -136,10 +136,9 @@ export default function Account({ userInfo }) {
     }
   }
 
-  function handleCloseSucessEraseAccount() {
+  async function handleCloseSucessEraseAccount() {
     setIsLoading(true)
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
+    await clearClientSession()
     sucessEraseModalAccount.onClose()
     return window.open("/", "_self")
   }

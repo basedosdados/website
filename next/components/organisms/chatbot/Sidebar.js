@@ -7,8 +7,8 @@ import {
   HStack,
   useMediaQuery,
 } from '@chakra-ui/react'
-import cookies from 'js-cookie'
 import BDLogoImage from '../../../public/img/logos/bd_logo'
+import { clearClientSession } from '../../../utils'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import CrossIcon from '../../../public/img/icons/crossIcon'
 import BodyText from '../../atoms/Text/BodyText'
@@ -28,9 +28,8 @@ function Sidebar({
 
   const isOpen = isMobile ? true : isExpanded
 
-  const handleLogout = useCallback(() => {
-    cookies.remove('userBD', { path: '/' })
-    cookies.remove('token', { path: '/' })
+  const handleLogout = useCallback(async () => {
+    await clearClientSession()
     if (typeof window === 'undefined') return
     if (window.location.pathname.includes('/user/')) {
       window.location.href = '/'
