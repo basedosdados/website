@@ -112,24 +112,75 @@ export function formatCurrency(amount, region, { minimumFractionDigits = 2 } = {
   })
 }
 
+const STRIPE_PRICE_ID_RE = /^price_[A-Za-z0-9]+$/
+
+function isPlainObject(value) {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+/**
+ * Keep only known plan keys whose value looks like a Stripe price id (`price_…`).
+ * Invalid entries are dropped so they cannot blank out or replace a default.
+ *
+ * @param {unknown} regionOverrides
+ * @param {string} region
+ * @returns {Record<string, string>}
+ */
+function sanitizeRegionOverrides(regionOverrides, region) {
+  if (!isPlainObject(regionOverrides)) {
+    if (regionOverrides !== undefined) {
+      console.error(
+        `NEXT_PUBLIC_STRIPE_PRICE_IDS["${region}"] must be an object; ignoring it.`
+      )
+    }
+    return {}
+  }
+
+  const sanitized = {}
+  for (const key of PLAN_KEYS) {
+    const value = regionOverrides[key]
+    if (value === undefined) continue
+    if (typeof value === "string" && STRIPE_PRICE_ID_RE.test(value)) {
+      sanitized[key] = value
+      continue
+    }
+    console.error(
+      `NEXT_PUBLIC_STRIPE_PRICE_IDS["${region}"]["${key}"] is not a valid Stripe price id; keeping default.`
+    )
+  }
+  return sanitized
+}
+
 /**
  * Resolve the pinned price ids for a region, applying any environment override.
  *
  * NEXT_PUBLIC_STRIPE_PRICE_IDS, when set, is a JSON object shaped like DEFAULT_PRICE_IDS
- * (region → plan key → id). Only the given region's entries override; the rest fall back to the
- * defaults above.
+ * (region → plan key → id). Only valid overrides for known plan keys are applied; malformed JSON,
+ * non-objects, unknown keys, and non-`price_…` values are ignored so defaults (especially `br`)
+ * stay intact.
  *
  * @param {"br"|"latam"|"intl"} region
  * @returns {Record<string, string>} plan key → Stripe price id for this region.
  */
 function priceIds(region) {
-  let overrides = {}
+  const defaults = DEFAULT_PRICE_IDS[region] || DEFAULT_PRICE_IDS[DEFAULT_REGION]
+  const raw = process.env.NEXT_PUBLIC_STRIPE_PRICE_IDS
+  if (!raw) return { ...defaults }
+
+  let overrides
   try {
-    overrides = JSON.parse(process.env.NEXT_PUBLIC_STRIPE_PRICE_IDS || "{}")
+    overrides = JSON.parse(raw)
   } catch (e) {
     console.error("Invalid NEXT_PUBLIC_STRIPE_PRICE_IDS JSON; ignoring it.", e)
+    return { ...defaults }
   }
-  return { ...DEFAULT_PRICE_IDS[region], ...(overrides[region] || {}) }
+
+  if (!isPlainObject(overrides)) {
+    console.error("NEXT_PUBLIC_STRIPE_PRICE_IDS must be a JSON object; ignoring it.")
+    return { ...defaults }
+  }
+
+  return { ...defaults, ...sanitizeRegionOverrides(overrides[region], region) }
 }
 
 /**
