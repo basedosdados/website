@@ -165,8 +165,6 @@ function getTeamScore(slug) {
   }
 }
 
-// A career is "active" while it has no end date. A person is shown only if
-// they hold at least one active role, and only their active roles are listed.
 function isActiveCareer(careerNode) {
   return !careerNode.endAt
 }
@@ -176,9 +174,6 @@ function hasActiveRole(node) {
   return careers.some((edge) => edge.node.role && isActiveCareer(edge.node))
 }
 
-// True when the person holds an active (not ended) career in the given team.
-// Used by the team filter so a person whose only tie to a team is an ended
-// role is not listed under that team.
 function hasActiveRoleInTeam(node, teamSlug) {
   const careers = node?.careers?.edges || []
   return careers.some(
@@ -399,7 +394,6 @@ export default function AboutUs() {
         return roleData.slug || ''
       }).filter(Boolean)
 
-      // If no valid roles found, sort to end
       if (!rolesA.length) return 1
       if (!rolesB.length) return -1
 

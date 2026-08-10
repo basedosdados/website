@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
 import { selectPlans, localeToRegion, formatCurrency } from "../../../constants/stripePlans";
 
 const SubscriptionBadgeStyles = {
@@ -301,8 +301,6 @@ export default function PlansAndPayment ({ userData }) {
   const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
   const hasSubscribed = isChatbotCheckout ? hasSubscribedChatbot : hasSubscribedBDPro
 
-  // Stripe product names are stored with the Portuguese brand ("BD Pro"). The English
-  // brand is "DB", so swap the brand token when rendering the product name in English.
   const localizedProductName = (name) =>
     router.locale === "en" && typeof name === "string"
       ? name.replace(/\bBD\b/g, "DB")
@@ -659,8 +657,6 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatCheckoutAmount(amount) {
-    // Currency follows the domain (br → BRL, latam/intl → USD), matching the region whose price
-    // ids the storefront selected and what the backend webhook charges.
     return formatCurrency(amount, localeToRegion(router.locale))
   }
 

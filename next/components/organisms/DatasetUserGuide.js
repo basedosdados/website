@@ -225,8 +225,6 @@ export const mdxComponents = {
   a: (props) => {
     const { locale } = useRouter();
     const { href = "", ...rest } = props;
-    // Root-relative internal links (e.g. /faq) must carry the current locale;
-    // skip if already locale-prefixed or an external/anchor/mailto link.
     const isInternal =
       typeof href === "string" &&
       href.startsWith("/") &&
