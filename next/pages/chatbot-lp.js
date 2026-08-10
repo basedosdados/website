@@ -644,10 +644,9 @@ function Hero({ t }) {
     let cancelled = false;
 
     async function checkAccess() {
-      const token = cookies.get("token");
       const userRaw = cookies.get("userBD");
 
-      if (!token || !userRaw || userRaw === "undefined") {
+      if (!userRaw || userRaw === "undefined") {
         if (!cancelled) setHasChatbotAccess(false);
         return;
       }
@@ -660,8 +659,10 @@ function Hero({ t }) {
       }
 
       try {
-        const params = new URLSearchParams({ p: btoa(token) });
-        const res = await fetch(`/api/user/validateToken?${params}`);
+        const res = await fetch("/api/user/validateToken", {
+          method: "GET",
+          credentials: "same-origin",
+        });
         const data = await res.json();
 
         if (!cancelled) {

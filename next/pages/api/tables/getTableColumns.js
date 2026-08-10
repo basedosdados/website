@@ -13,10 +13,6 @@ async function getTableColumns(id) {
   return res?.data;
 }
 
-// The REST endpoint above only exposes the Portuguese `description`/`observations`.
-// Fetch the localized fields from GraphQL so the columns table can render English and
-// Spanish descriptions on data-basis.org / basedelosdatos.org (the frontend reads
-// `description${Locale}` with a fallback to `description`).
 async function getLocalizedColumns(id) {
   const res = await axios({
     url: GRAPHQL_URL,
@@ -64,8 +60,6 @@ export default async function handler(req, res) {
 
   let resource = columnsResult.value;
 
-  // Enrich with localized descriptions/observations. If the GraphQL call fails, fall
-  // back to the REST payload (Portuguese only) rather than breaking the columns table.
   if (localizedResult.status === "fulfilled" && Array.isArray(resource)) {
     const localizedById = {};
     const localizedByName = {};

@@ -19,9 +19,34 @@ import cookies from 'js-cookie';
 import { useTranslation } from "react-i18next";
 import { Button } from './uiUserPage';
 
-import updatePictureProfile from '../../pages/api/user/updatePictureProfile'
 import 'react-image-crop/dist/ReactCrop.css';
 import styles from "../../styles/imgCrop.module.css";
+
+async function fileToBase64(file) {
+  const buffer = await file.arrayBuffer()
+  const bytes = new Uint8Array(buffer)
+  let binary = ''
+  for (let i = 0; i < bytes.length; i++) {
+    binary += String.fromCharCode(bytes[i])
+  }
+  return btoa(binary)
+}
+
+async function updatePictureProfile(id, file) {
+  const fileBase64 = await fileToBase64(file)
+  const response = await fetch('/api/user/updatePictureProfile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
+    body: JSON.stringify({
+      id,
+      fileBase64,
+      fileName: file.name,
+      contentType: file.type || 'image/jpeg',
+    }),
+  })
+  return { status: response.status, data: await response.json().catch(() => null) }
+}
 
 export default function CropImage ({
   isOpen,

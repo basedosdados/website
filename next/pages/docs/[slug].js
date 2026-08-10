@@ -152,8 +152,6 @@ function Toc({ allDocs, headings, slug, locale }) {
     'Docs',
     'APIs',
     translations[locale] || translations.default,
-    // Verbal identity guide only exists in Portuguese; omit its (otherwise
-    // empty) header on other locales.
     ...(locale === 'pt' ? ['Guia Central de Identidade Verbal'] : [])
   ]
 

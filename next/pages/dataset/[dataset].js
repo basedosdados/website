@@ -197,7 +197,10 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
       if (userBD?.isAdmin) {
         const id = userBD.id.split(":").pop();
         if (id) {
-          const response = await fetch(`/api/user/getUser?p=${btoa(id)}&q=${btoa(cookies.get("token"))}`, { method: "GET" });
+          const response = await fetch(`/api/user/getUser?p=${btoa(id)}`, {
+            method: "GET",
+            credentials: "same-origin",
+          });
           const userData = await response.json();
           newPermission.isAdmin = !!userData?.isAdmin;
           newPermission.email = userData?.email || "undefined";

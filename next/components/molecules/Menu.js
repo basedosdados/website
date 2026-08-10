@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp, getDiscordUrl } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp, getDiscordUrl, clearClientSession } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -471,9 +471,8 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
           _hover={{
             opacity: 0.7
           }}
-          onClick={() => {
-            cookies.remove('userBD', { path: '/' })
-            cookies.remove('token', { path: '/' })
+          onClick={async () => {
+            await clearClientSession()
             if(window.location.pathname.includes('/user/')) return window.location.href = "/"
             window.location.reload()
           }}
@@ -646,9 +645,8 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             gap="8px"
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
-            onClick={() => {
-              cookies.remove('userBD', { path: '/' })
-              cookies.remove('token', { path: '/' })
+            onClick={async () => {
+              await clearClientSession()
               if(window.location.pathname.includes('/user/')) return window.location.href = "/"
               window.location.reload()
             }}

@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { getAuthorizationHeader } from '../../../lib/authCookie'
 
 const API_URL = process.env.CHATBOT_URL
 
 export default async function handler(req, res) {
   const { method } = req
-  const authHeader = req.headers.authorization
+  const authHeader = getAuthorizationHeader(req)
   const rawMessageId = req.query.messageId
   const messageId = Array.isArray(rawMessageId) ? rawMessageId[0] : rawMessageId
   const rawQueryRef = req.query.queryRef
@@ -17,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   if (!authHeader) {
-    return res.status(401).json({ error: 'Missing authorization header' })
+    return res.status(401).json({ error: 'Missing authentication token' })
   }
 
   if (!messageId || typeof messageId !== 'string') {

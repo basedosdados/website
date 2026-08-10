@@ -1,9 +1,9 @@
 import axios from 'axios'
-import cookies from 'js-cookie'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import { useChatbotContext } from '../context/ChatbotContext'
+import { clearClientSession } from '../utils'
 import useChatbotAuth from './useChatbotAuth'
 
 const TYPEWRITER_FRAME_INTERVAL_MS = 1000 / 30
@@ -149,9 +149,8 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const pendingStreamsRef = useRef([])
   const newChatSendingRef = useRef(false)
 
-  const handleAuthError = useCallback(() => {
-    cookies.remove('token')
-    cookies.remove('userBD')
+  const handleAuthError = useCallback(async () => {
+    await clearClientSession()
     router.push('/user/login')
   }, [router])
 
@@ -250,10 +249,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           return
         }
         const response = await axios.get('/api/chatbot/messages', {
-          params: { threadId: id, _ts: `${Date.now()}` },
-          headers: {
-            Authorization: `Bearer ${accessToken}`
-          }
+          params: { threadId: id, _ts: `${Date.now()}` }
         })
 
         if (navGen !== fetchSeqRef.current) {
@@ -387,12 +383,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
         const response = await axios.post(
           '/api/chatbot/threads',
-          // Send the site's active locale (pt/en/es, derived from the domain) so the
-          // chatbot backend persists the thread's language and answers accordingly.
-          { title, language: router.locale || 'pt' },
-          {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          }
+          { title, language: router.locale || 'pt' }
         )
 
         const newThreadId = response.data.id
@@ -430,8 +421,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             comments: normalizedComments,
           },
           {
-            params: { messageId: id },
-            headers: { Authorization: `Bearer ${accessToken}` }
+            params: { messageId: id }
           }
         )
 
@@ -462,8 +452,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       }
 
       const response = await axios.post('/api/chatbot/exports', null, {
-        params: { messageId, queryRef, format },
-        headers: { Authorization: `Bearer ${accessToken}` }
+        params: { messageId, queryRef, format }
       })
 
       return response.data?.url ?? null
@@ -772,11 +761,11 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const response = await fetch(`/api/chatbot/messages?threadId=${streamThreadId}`, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ content, stream: true }),
-          signal: controller.signal
+          signal: controller.signal,
+          credentials: 'same-origin'
         })
 
         if (!response.ok) {
