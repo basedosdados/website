@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { getAuthorizationHeader } from '../../../lib/authCookie'
+import { requireChatbotAuth } from '../../../lib/requireChatbotAuth'
 
 const API_URL = process.env.CHATBOT_URL
 
 export default async function handler(req, res) {
   const { method } = req
-  const authHeader = getAuthorizationHeader(req)
+  const auth = await requireChatbotAuth(req)
   const rawMessageId = req.query.messageId
   const messageId = Array.isArray(rawMessageId) ? rawMessageId[0] : rawMessageId
 
@@ -13,13 +13,15 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'Chatbot API URL is not configured' })
   }
 
-  if (!authHeader) {
-    return res.status(401).json({ error: 'Missing authentication token' })
+  if (!auth.ok) {
+    return res.status(auth.status).json({ error: auth.error })
   }
 
   if (!messageId || typeof messageId !== 'string') {
     return res.status(400).json({ error: 'Missing messageId parameter' })
   }
+
+  const authHeader = auth.authHeader
 
   try {
     if (method === 'PUT') {

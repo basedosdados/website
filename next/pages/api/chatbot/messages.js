@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getAuthorizationHeader } from '../../../lib/authCookie'
+import { requireChatbotAuth } from '../../../lib/requireChatbotAuth'
 
 const API_URL = process.env.CHATBOT_URL
 
@@ -14,12 +14,14 @@ function bufferStreamToString(stream) {
 
 export default async function handler(req, res) {
   const { method } = req
-  const authHeader = getAuthorizationHeader(req)
+  const auth = await requireChatbotAuth(req)
   const { threadId } = req.query
 
-  if (!authHeader) {
-    return res.status(401).json({ error: 'Missing authentication token' })
+  if (!auth.ok) {
+    return res.status(auth.status).json({ error: auth.error })
   }
+
+  const authHeader = auth.authHeader
 
   if (!threadId) {
     return res.status(400).json({ error: 'Missing threadId parameter' })

@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 import axios from 'axios';
 import { useQueryClient } from '@tanstack/react-query';
 
+const ValidateTokenStaleTimeMs = 60 * 1000;
+
 export default function useChatbotAuth() {
   const queryClient = useQueryClient();
 
@@ -13,7 +15,7 @@ export default function useChatbotAuth() {
           const response = await axios.get('/api/user/validateToken');
           return response.data.success;
         },
-        staleTime: 5 * 60 * 1000,
+        staleTime: ValidateTokenStaleTimeMs,
       });
       return data;
     } catch (e) {
@@ -32,23 +34,35 @@ export default function useChatbotAuth() {
     }
   }, []);
 
+  const invalidateSessionCache = useCallback(() => {
+    queryClient.removeQueries({ queryKey: ['validateToken'] });
+    queryClient.removeQueries({ queryKey: ['chatbotThreads'] });
+  }, [queryClient]);
+
   const ensureSession = useCallback(async () => {
     const isValid = await validateToken();
     if (isValid) return true;
 
     const refreshed = await refreshToken();
     if (refreshed) {
-      queryClient.removeQueries({ queryKey: ['validateToken'] });
+      invalidateSessionCache();
       return validateToken();
     }
 
+    invalidateSessionCache();
     return false;
-  }, [validateToken, refreshToken, queryClient]);
+  }, [validateToken, refreshToken, invalidateSessionCache]);
 
   const getAccessToken = useCallback(async () => {
     const ok = await ensureSession();
     return ok ? true : null;
   }, [ensureSession]);
 
-  return { getAccessToken, ensureSession, validateToken, refreshToken };
+  return {
+    getAccessToken,
+    ensureSession,
+    validateToken,
+    refreshToken,
+    invalidateSessionCache,
+  };
 }
