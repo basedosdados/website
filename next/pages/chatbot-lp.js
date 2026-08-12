@@ -15,6 +15,13 @@ import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
 import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription } from "../utils";
+import {
+  findPlan,
+  planFilters,
+  localeToRegion,
+  regionCurrency,
+  formatCurrency,
+} from "../constants/stripePlans";
 
 import { getAllFAQs } from "./api/faqs";
 
@@ -40,42 +47,16 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-function filterChatbotPlans(edges) {
-  return edges.filter((item) => {
-    const name = item.node.productName?.toLowerCase() || "";
-    const slug = item.node.productSlug?.toLowerCase() || "";
-    const isConsumerChatbot =
-      (name.includes("chatbot") || slug.includes("chatbot")) &&
-      !name.includes("empresas");
-    return (
-      isConsumerChatbot &&
-      item.node.isActive === true
-    );
-  });
-}
-
-async function fetchChatbotPlans() {
+async function fetchChatbotPlans(region) {
   const result = await fetch("/api/stripe/getPlans", { method: "GET" }).then(
     (res) => res.json()
   );
 
   if (!result.success) return null;
 
-  const chatbotPlans = filterChatbotPlans(result.data);
-
-  function findByInterval(interval, amount) {
-    return (
-      chatbotPlans.find(
-        (item) =>
-          item.node.interval === interval &&
-          item.node.amount === amount
-      )?.node ?? null
-    );
-  }
-
   return {
-    month: findByInterval("month", 30),
-    year: findByInterval("year", 326),
+    month: findPlan(result.data, planFilters.bd_chatbot_month, region, "bd_chatbot_month") ?? null,
+    year: findPlan(result.data, planFilters.bd_chatbot_year, region, "bd_chatbot_year") ?? null,
   };
 }
 
@@ -201,6 +182,8 @@ function ChatbotPricingCard() {
   const { t } = useTranslation(["chatbot", "prices"]);
   const router = useRouter();
   const { locale } = router;
+  const region = localeToRegion(locale);
+  const { symbol: currencySymbol } = regionCurrency(region);
 
   const [toggleAnual, setToggleAnual] = useState(true);
   const [plans, setPlans] = useState(null);
@@ -215,10 +198,13 @@ function ChatbotPricingCard() {
   });
 
   const selectedPlan = toggleAnual ? plans?.year : plans?.month;
-  const totalPrice = selectedPlan?.amount ?? (toggleAnual ? 326 : 30);
-  const displayPrice = toggleAnual
-    ? Math.ceil(totalPrice / 12)
-    : totalPrice;
+  const totalPrice = selectedPlan?.amount;
+  const priceUnavailable = totalPrice === null || totalPrice === undefined;
+  const displayPrice = priceUnavailable
+    ? undefined
+    : toggleAnual
+      ? Math.ceil(totalPrice / 12)
+      : totalPrice;
 
   const planInterval = toggleAnual ? "year" : "month";
   const isCurrentPlan = isBDChatbot.isCurrentPlan;
@@ -232,7 +218,7 @@ function ChatbotPricingCard() {
         user = JSON.parse(cookies.get("userBD"));
       }
 
-      const promises = [fetchChatbotPlans()];
+      const promises = [];
 
       if (user) {
         const reg = new RegExp("(?<=:).*");
@@ -264,13 +250,22 @@ function ChatbotPricingCard() {
         setHasSubscribed(false);
       }
 
-      const [chatbotPlans] = await Promise.all(promises);
-      if (chatbotPlans) setPlans(chatbotPlans);
+      await Promise.all(promises);
       setIsLoading(false);
     }
 
     loadData();
   }, []);
+
+  useEffect(() => {
+    async function loadPlans() {
+      setPlans(null);
+      const chatbotPlans = await fetchChatbotPlans(localeToRegion(locale));
+      setPlans(chatbotPlans ?? { month: null, year: null });
+    }
+
+    loadPlans();
+  }, [locale]);
 
   const handleSubscribe = () => {
     triggerGAEventWithData("bd_chatbot_card_price", {
@@ -297,7 +292,7 @@ function ChatbotPricingCard() {
       ? t("subscribe", { ns: "prices" })
       : t("startFreeTrial", { ns: "prices" });
 
-  if (isLoading) {
+  if (isLoading || plans === null) {
     return <ChatbotPricingCardSkeleton />;
   }
 
@@ -364,39 +359,62 @@ function ChatbotPricingCard() {
         alignItems="center"
         marginBottom="32px"
       >
-        <Box
-          display="flex"
-          flexDirection="row"
-          height="60px"
-          alignItems="center"
-        >
-          <Display textAlign="center">R$ {displayPrice}</Display>
-          <TitleText
-            typography="small"
-            position="relative"
-            top="16px"
-            right="-4px"
-            textAlign="center"
-          >
-            {t("perMonth", { ns: "prices" })}
-          </TitleText>
-        </Box>
-        <BodyText
-          height="24px"
-          color="#464A51"
-          marginTop="16px"
-          textAlign="center"
-        >
-          {toggleAnual &&
-            t("annualBillingMessage", {
-              ns: "prices",
-              price: totalPrice.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-                minimumFractionDigits: 0,
-              }),
-            })}
-        </BodyText>
+        {priceUnavailable ? (
+          <>
+            <Skeleton
+              height="60px"
+              width="120px"
+              margin="0 auto"
+              borderRadius="6px"
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+            />
+            <Skeleton
+              height="24px"
+              width="200px"
+              marginTop="16px"
+              borderRadius="6px"
+              startColor="#F0F0F0"
+              endColor="#F3F3F3"
+            />
+          </>
+        ) : (
+          <>
+            <Box
+              display="flex"
+              flexDirection="row"
+              height="60px"
+              alignItems="center"
+            >
+              <Display textAlign="center">
+                {currencySymbol} {displayPrice}
+              </Display>
+              <TitleText
+                typography="small"
+                position="relative"
+                top="16px"
+                right="-4px"
+                textAlign="center"
+              >
+                {t("perMonth", { ns: "prices" })}
+              </TitleText>
+            </Box>
+            <BodyText
+              height="24px"
+              color="#464A51"
+              marginTop="16px"
+              textAlign="center"
+            >
+              {toggleAnual &&
+                t("annualBillingMessage", {
+                  ns: "prices",
+                  price: formatCurrency(totalPrice, region, {
+                    minimumFractionDigits: 0,
+                  }),
+                })}
+            </BodyText>
+          </>
+        )}
       </Box>
 
       <VStack align="stretch" spacing="8px" flex={1} marginBottom="32px">

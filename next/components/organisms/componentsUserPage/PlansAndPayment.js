@@ -194,20 +194,24 @@ export default function PlansAndPayment ({ userData }) {
 
   useEffect(() => {
     async function fecthPlans() {
+      setPlans(null)
       try {
         const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
           .then(res => res.json())
 
         if(result.success === true) {
           setPlans(selectPlans(result.data, localeToRegion(router.locale)))
+        } else {
+          setPlans({})
         }
       } catch (error) {
         console.error(error)
+        setPlans({})
       }
     }
 
     fecthPlans()
-  }, [])
+  }, [router.locale])
 
   useEffect(() => {
     if(plans === null) return
@@ -347,6 +351,7 @@ export default function PlansAndPayment ({ userData }) {
       if (trial?.started) {
         successCheckoutKindRef.current = "chatbot"
         setIsChatbotTrialSuccess(true)
+        setPlan("")
         SucessPaymentModal.onOpen()
         return
       }
@@ -521,11 +526,13 @@ export default function PlansAndPayment ({ userData }) {
       checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
     successCheckoutKindRef.current = isChatbotPurchase ? "chatbot" : "bd_pro"
     setIsChatbotTrialSuccess(isTrial)
+    setPlan("")
     PaymentModal.onClose()
     SucessPaymentModal.onOpen()
   }
 
   const openModalErro = () => {
+    setPlan("")
     PaymentModal.onClose()
     ErroPaymentModal.onOpen()
   }
@@ -545,7 +552,8 @@ export default function PlansAndPayment ({ userData }) {
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    // Full reload so getServerSideProps picks up the updated userBD cookie.
+    window.location.assign(`/user/${userData.username}?plans_and_payment`)
   }
 
   async function closeModalSucess() {
@@ -577,8 +585,9 @@ export default function PlansAndPayment ({ userData }) {
     successCheckoutKindRef.current = null
     setIsChatbotTrialSuccess(false)
 
-    if(isLoadingH === true) return window.open("/", "_self")
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    if(isLoadingH === true) return router.push("/")
+    // Full reload so getServerSideProps picks up the updated userBD cookie.
+    window.location.assign(`/user/${userData.username}?plans_and_payment`)
   }
 
   function formatTimeStamp (value) {
@@ -762,10 +771,7 @@ export default function PlansAndPayment ({ userData }) {
         onClose={() => {
           resetCheckoutState();
           if (query.i)
-            return window.open(
-              `/user/${userData.username}?plans_and_payment`,
-              "_self",
-            );
+            return router.push(`/user/${userData.username}?plans_and_payment`);
           PaymentModal.onClose();
         }}
         propsModalContent={{
@@ -1310,7 +1316,7 @@ export default function PlansAndPayment ({ userData }) {
                   setIsLoading(false);
                   setIsLoadingH(false);
                   SucessPaymentModal.onClose();
-                  window.open(`/user/${userData?.username}?big_query`, "_self");
+                  router.push(`/user/${userData?.username}?big_query`);
                 }}
                 isLoading={isLoading}
               >
@@ -1471,7 +1477,7 @@ export default function PlansAndPayment ({ userData }) {
             width={{ base: "100%", lg: "fit-content" }}
             onClick={() => {
               AlertChangePlanModal.onClose();
-              window.open("/contact", "_self");
+              router.push("/contact");
             }}
           >
             {t("username.contactUs")}

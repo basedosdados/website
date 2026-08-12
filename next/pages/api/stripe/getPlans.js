@@ -14,10 +14,10 @@ async function getPlans() {
             edges {
               node {
                 _id
-                stripePriceId
                 amount
                 productName
                 productSlug
+                region
                 interval
                 isActive
               }

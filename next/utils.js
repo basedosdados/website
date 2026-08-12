@@ -1,4 +1,5 @@
 import cookies from 'js-cookie';
+import { findPlan, planFilters, localeToRegion } from "./constants/stripePlans";
 
 export async function clearClientSession() {
   cookies.remove('userBD', { path: '/' });
@@ -359,20 +360,8 @@ export function getSubscriptionType(user) {
   return "none"
 }
 
-function filterConsumerChatbotPlans(edges) {
-  return (edges || []).filter((item) => {
-    const name = item?.node?.productName?.toLowerCase() || ""
-    const slug = item?.node?.productSlug?.toLowerCase() || ""
-    const isConsumerChatbot =
-      (name.includes("chatbot") || slug.includes("chatbot")) &&
-      !name.includes("empresas")
-    return isConsumerChatbot && item?.node?.isActive === true
-  })
-}
-
-export async function fetchChatbotPlan(interval = "year") {
-  const amounts = { month: 30, year: 326 }
-  const amount = amounts[interval] || amounts.year
+export async function fetchChatbotPlan(interval = "year", region = "br") {
+  const filterKey = interval === "month" ? "bd_chatbot_month" : "bd_chatbot_year"
 
   try {
     const result = await fetch("/api/stripe/getPlans", { method: "GET" }).then((res) =>
@@ -380,12 +369,9 @@ export async function fetchChatbotPlan(interval = "year") {
     )
     if (!result?.success) return null
 
-    const chatbotPlans = filterConsumerChatbotPlans(result.data)
     return (
-      chatbotPlans.find(
-        (item) => item?.node?.interval === interval && item?.node?.amount === amount
-      )?.node ?? null
-    )
+      findPlan(result.data, planFilters[filterKey], region, filterKey) ?? null
+    );
   } catch {
     return null
   }
@@ -402,7 +388,7 @@ export function getUserFromCookie() {
 }
 
 export async function redirectToChatbotCheckout(router, { interval = "year" } = {}) {
-  const plan = await fetchChatbotPlan(interval)
+  const plan = await fetchChatbotPlan(interval, localeToRegion(router?.locale))
 
   if (plan?._id) {
     cookies.set("plan_selected", plan._id, { expires: 1, path: "/" })

@@ -1,20 +1,16 @@
-// The exact Stripe prices the site sells, pinned by their stable Stripe price id ("price_…",
-// verifiable in the Stripe dashboard) for each plan AND region. Selecting by id is deterministic:
-// a new, edited, or mis-tagged price in Stripe is simply ignored until its id is added here and the
-// site is redeployed. Nothing is inferred from price metadata, amounts, or intervals.
+// The Stripe prices the site sells are identified by three explicit fields — the product's
+// `code` metadata (exposed as `productSlug`), the price's billing `interval`, and the price's
+// `region` metadata ("br" | "latam" | "intl") — instead of by amount (ambiguous: BD Pro LatAm and
+// International both bill in USD but at different amounts, and amounts change on repricing) or by
+// pinning a hardcoded Stripe price id (breaks across Stripe accounts/modes, e.g. staging's test
+// mode has different — or missing — ids than production's live mode).
 //
-// Only the *selection* is pinned. The amount shown for each plan still comes live from the getPlans
-// GraphQL query, so a price change in Stripe reflects on the site automatically; only adding or
-// swapping which price is sold requires updating this map and redeploying.
+// `region` must be set as metadata on each Stripe Price object (both live mode and test mode) for
+// this matching to work. A price missing that metadata simply won't be selected, logging a warning
+// instead of silently showing the wrong plan.
 //
 // Currency follows the domain (see localeToRegion / regionCurrency): basedosdados.org bills BRL,
-// data-basis.org and basedelosdatos.org bill USD. The backend checkout webhook independently
-// enforces the region-correct price from the card's country (arbitrage guard), so what the visitor
-// sees here is what they are charged.
-//
-// The ids below are the production Stripe account's (staging shares the same account). Any
-// environment on a different Stripe account can override them via NEXT_PUBLIC_STRIPE_PRICE_IDS,
-// a JSON object shaped like DEFAULT_PRICE_IDS below (keyed by region, then plan key).
+// data-basis.org and basedelosdatos.org bill USD.
 
 export const PLAN_KEYS = [
   "bd_pro_month",
@@ -26,27 +22,12 @@ export const PLAN_KEYS = [
 // The three pricing regions the site sells in.
 const DEFAULT_REGION = "br"
 
-// Exact price id per region and plan. Amounts in the comments are for human reference only —
-// the live amount is read from getPlans, never from here.
-const DEFAULT_PRICE_IDS = {
-  br: {
-    bd_pro_month: "price_1OcrtHCKkCLMrYWYcxJtHMMa", // BD Pro — R$47/month
-    bd_pro_year: "price_1PWlKQCKkCLMrYWYxV3xodMC", // BD Pro — R$444/year
-    bd_chatbot_month: "price_1TCkdbCKkCLMrYWYFgOfi2cc", // Chatbot — R$30/month
-    bd_chatbot_year: "price_1TCkdwCKkCLMrYWYXQlflpIn", // Chatbot — R$326/year
-  },
-  latam: {
-    bd_pro_month: "price_1U0yCrCKkCLMrYWY2piPpKCg", // BD Pro — US$12/month
-    bd_pro_year: "price_1U0yE4CKkCLMrYWYsVrOB3i5", // BD Pro — US$115/year
-    bd_chatbot_month: "price_1U0yJSCKkCLMrYWYj2DSeGa8", // Chatbot — US$8/month
-    bd_chatbot_year: "price_1U0yJtCKkCLMrYWYOs7xvfpL", // Chatbot — US$77/year
-  },
-  intl: {
-    bd_pro_month: "price_1U0dw1CKkCLMrYWYUkFlGyHA", // BD Pro — US$19/month
-    bd_pro_year: "price_1U0yBTCKkCLMrYWYDXo7NRwV", // BD Pro — US$180/year
-    bd_chatbot_month: "price_1U0yHZCKkCLMrYWYR4KtKTSQ", // Chatbot — US$15/month
-    bd_chatbot_year: "price_1U0yIGCKkCLMrYWYrE2FzOLt", // Chatbot — US$144/year
-  },
+// Plan key -> the productSlug + interval that identify it, region-independent.
+export const planFilters = {
+  bd_pro_month: { productSlug: "bd_pro", interval: "month" },
+  bd_pro_year: { productSlug: "bd_pro", interval: "year" },
+  bd_chatbot_month: { productSlug: "chatbot", interval: "month" },
+  bd_chatbot_year: { productSlug: "chatbot", interval: "year" },
 }
 
 /**
@@ -112,105 +93,64 @@ export function formatCurrency(amount, region, { minimumFractionDigits = 2 } = {
   })
 }
 
-const STRIPE_PRICE_ID_RE = /^price_[A-Za-z0-9]+$/
-
-function isPlainObject(value) {
-  return value !== null && typeof value === "object" && !Array.isArray(value)
-}
-
 /**
- * Keep only known plan keys whose value looks like a Stripe price id (`price_…`).
- * Invalid entries are dropped so they cannot blank out or replace a default.
+ * Find the single active price matching a productSlug + interval + region combination among the
+ * getPlans edges.
  *
- * @param {unknown} regionOverrides
- * @param {string} region
- * @returns {Record<string, string>}
+ * Logs a warning and returns undefined if no price matches (metadata missing or price inactive).
+ * Logs a warning and returns the first match if more than one price matches (duplicate/misconfigured
+ * region metadata in the Stripe dashboard) rather than picking arbitrarily without surfacing it.
+ *
+ * @param {Array<{node: object}>} edges - getPlans result data (array of { node }).
+ * @param {{productSlug: string, interval: string}} filter
+ * @param {"br"|"latam"|"intl"} region
+ * @param {string} label - identifies the plan in warning messages (e.g. "bd_pro_month").
+ * @returns {object|undefined} the matching price node, if exactly one (or the first of several).
  */
-function sanitizeRegionOverrides(regionOverrides, region) {
-  if (!isPlainObject(regionOverrides)) {
-    if (regionOverrides !== undefined) {
-      console.error(
-        `NEXT_PUBLIC_STRIPE_PRICE_IDS["${region}"] must be an object; ignoring it.`
-      )
-    }
-    return {}
+export function findPlan(edges, { productSlug, interval }, region, label) {
+  const wantedSlug = productSlug?.toLowerCase()
+  const wantedInterval = interval?.toLowerCase()
+  const wantedRegion = region?.toLowerCase()
+
+  const matches = edges.filter(({ node }) => {
+    return (
+      node.productSlug?.toLowerCase() === wantedSlug &&
+      node.interval?.toLowerCase() === wantedInterval &&
+      node.region?.toLowerCase() === wantedRegion
+    )
+  })
+
+  if (matches.length === 0) {
+    console.warn(
+      `Stripe price "${label}" for region "${region}" not found among active prices from ` +
+        "getPlans — check that a price has productSlug/interval/region metadata matching and is active."
+    )
+    return undefined
   }
 
-  const sanitized = {}
-  for (const key of PLAN_KEYS) {
-    const value = regionOverrides[key]
-    if (value === undefined) continue
-    if (typeof value === "string" && STRIPE_PRICE_ID_RE.test(value)) {
-      sanitized[key] = value
-      continue
-    }
-    console.error(
-      `NEXT_PUBLIC_STRIPE_PRICE_IDS["${region}"]["${key}"] is not a valid Stripe price id; keeping default.`
+  if (matches.length > 1) {
+    console.warn(
+      `Stripe price "${label}" for region "${region}" matched ${matches.length} active prices — ` +
+        "check for duplicate region metadata in the Stripe dashboard. Using the first match."
     )
   }
-  return sanitized
+
+  return matches[0].node
 }
 
 /**
- * Resolve the pinned price ids for a region, applying any environment override.
- *
- * NEXT_PUBLIC_STRIPE_PRICE_IDS, when set, is a JSON object shaped like DEFAULT_PRICE_IDS
- * (region → plan key → id). Only valid overrides for known plan keys are applied; malformed JSON,
- * non-objects, unknown keys, and non-`price_…` values are ignored so defaults (especially `br`)
- * stay intact.
- *
- * @param {"br"|"latam"|"intl"} region
- * @returns {Record<string, string>} plan key → Stripe price id for this region.
- */
-function priceIds(region) {
-  const defaults = DEFAULT_PRICE_IDS[region] || DEFAULT_PRICE_IDS[DEFAULT_REGION]
-  const raw = process.env.NEXT_PUBLIC_STRIPE_PRICE_IDS
-  if (!raw) return { ...defaults }
-
-  let overrides
-  try {
-    overrides = JSON.parse(raw)
-  } catch (e) {
-    console.error("Invalid NEXT_PUBLIC_STRIPE_PRICE_IDS JSON; ignoring it.", e)
-    return { ...defaults }
-  }
-
-  if (!isPlainObject(overrides)) {
-    console.error("NEXT_PUBLIC_STRIPE_PRICE_IDS must be a JSON object; ignoring it.")
-    return { ...defaults }
-  }
-
-  return { ...defaults, ...sanitizeRegionOverrides(overrides[region], region) }
-}
-
-/**
- * Resolve the plan nodes the site sells from the getPlans edges, by exact Stripe price id.
- *
- * Each plan is matched to the pinned id for the given region. No inference from amount, product, or
- * interval, and no cross-region fallback: if a region's id is not among the active prices returned
- * by getPlans, that plan resolves to undefined (and a warning is logged).
+ * Resolve the plan nodes the site sells from the getPlans edges, by productSlug + interval +
+ * region.
  *
  * @param {Array<{node: object}>} edges - getPlans result data (array of { node }).
  * @param {"br"|"latam"|"intl"} [region="br"] - pricing region for the current domain.
- * @returns {Record<string, object|undefined>} plan key → price node (undefined if the pinned id
- *   isn't among the active prices returned by getPlans).
+ * @returns {Record<string, object|undefined>} plan key → price node (undefined if not found).
  */
 export function selectPlans(edges = [], region = DEFAULT_REGION) {
-  const ids = priceIds(region)
   const plans = {}
 
   for (const key of PLAN_KEYS) {
-    const wantedId = ids[key]
-    const match = edges.find(({ node }) => node.stripePriceId === wantedId)
-
-    if (!match) {
-      console.warn(
-        `Stripe price "${key}" for region "${region}" (${wantedId}) not found among active prices ` +
-          "from getPlans — check the id and that the price is active."
-      )
-    }
-
-    plans[key] = match?.node
+    plans[key] = findPlan(edges, planFilters[key], region, key)
   }
 
   return plans

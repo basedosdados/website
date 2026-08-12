@@ -52,6 +52,7 @@ export const CardPrice = ({
   const { symbol: currencySymbol } = regionCurrency(region);
   const { t } = useTranslation('prices');
   const router = useRouter();
+  const priceUnavailable = !hidePrice && (price === null || price === undefined);
 
   const handleNavigation = () => {
     if (button.onClick) {
@@ -142,6 +143,25 @@ export const CardPrice = ({
                 {t("priceOnRequestSubtitle")}
               </BodyText>
             </Box>
+          ) : priceUnavailable ? (
+            <>
+              <Skeleton
+                height="60px"
+                width="120px"
+                margin="0 auto"
+                borderRadius="6px"
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+              />
+              <Skeleton
+                height="24px"
+                width="200px"
+                marginTop="24px"
+                borderRadius="6px"
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+              />
+            </>
           ) : (
             <>
               <Box
@@ -361,15 +381,19 @@ export function SectionPrice({
   }
 
   async function fetchPlans() {
+    setPlans(null)
     try {
       const result = await fetch(`/api/stripe/getPlans`, { method: "GET" })
         .then(res => res.json())
 
       if(result.success === true) {
         setPlans(selectPlans(result.data, localeToRegion(locale)))
+      } else {
+        setPlans({})
       }
     } catch (error) {
       console.error(error)
+      setPlans({})
     }
   }
 
@@ -396,8 +420,6 @@ export function SectionPrice({
         setHasSubscribedBDPro(false)
         setHasSubscribedChatbot(false)
       }
-
-      promises.push(fetchPlans())
 
       if(user != null) {
         const internalNodes = user?.internalSubscription?.edges?.map((e) => e?.node) || []
@@ -430,6 +452,10 @@ export function SectionPrice({
     setToggleAnual(true)
     loadData()
   }, [])
+
+  useEffect(() => {
+    fetchPlans()
+  }, [locale])
 
   const arrayCards = () => {
     return hasChatbot ? [1, 2, 3, 4] : [1, 2, 3]
@@ -476,7 +502,7 @@ export function SectionPrice({
         </LabelText>
       </Box>
 
-      {isLoading ? (
+      {isLoading || plans === null ? (
         <Stack
           display={{ base: "flex", lg: "grid" }}
           gridTemplateColumns={{ lg: "repeat(auto-fit, minmax(260px, 1fr))" }}
@@ -595,11 +621,8 @@ export function SectionPrice({
               isBeta={true}
               title={t("plans.chatbot.title")}
               subTitle={t("plans.chatbot.subtitle")}
-              price={
-                plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount ??
-                (toggleAnual ? 326 : 30)
-              }
-              region={plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`] ? localeToRegion(locale) : "br"}
+              price={plans?.[`bd_chatbot_${toggleAnual ? "year" : "month"}`]?.amount}
+              region={localeToRegion(locale)}
               anualPlan={toggleAnual}
               textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
               resources={t("plans.chatbot.features", { returnObjects: true }).map(
@@ -635,11 +658,8 @@ export function SectionPrice({
           <CardPrice
             title={t("plans.pro.title")}
             subTitle={t("plans.pro.subtitle")}
-            price={
-              plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount ||
-              (toggleAnual ? 444 : 47)
-            }
-            region={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`] ? localeToRegion(locale) : "br"}
+            price={plans?.[`bd_pro_${toggleAnual ? "year" : "month"}`]?.amount}
+            region={localeToRegion(locale)}
             anualPlan={toggleAnual}
             textResource={t("allFeaturesPlus", { plan: t("plans.free.title") })}
             resources={t("plans.pro.features", { returnObjects: true }).map(
