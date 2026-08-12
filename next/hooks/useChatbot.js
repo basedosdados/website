@@ -14,6 +14,14 @@ const TOOL_STREAM_FRAME_INTERVAL_MS = 1000 / 24
 const TOOL_STREAM_MIN_CHARS_PER_FRAME = 20
 const TOOL_STREAM_DECAY_DIVISOR = 20
 
+function isAuthFailure(errorOrStatus) {
+  const status =
+    typeof errorOrStatus === 'number'
+      ? errorOrStatus
+      : errorOrStatus?.response?.status
+  return status === 401 || status === 403
+}
+
 function messageSortTime(createdAt) {
   if (createdAt == null) return null
   const t = new Date(createdAt).getTime()
@@ -149,10 +157,14 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const pendingStreamsRef = useRef([])
   const newChatSendingRef = useRef(false)
 
+  const { getAccessToken, invalidateSessionCache } = useChatbotAuth()
+  const { refetch: refetchThreads } = useChatbotContext()
+
   const handleAuthError = useCallback(async () => {
+    invalidateSessionCache()
     await clearClientSession()
     router.push('/user/login')
-  }, [router])
+  }, [invalidateSessionCache, router])
 
   useEffect(() => {
     if (initialThreadId === undefined) return
@@ -193,9 +205,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const toolStreamRafRef = useRef(null)
   const toolStreamPumpRef = useRef(null)
   const toolStreamLastFlushRef = useRef(0)
-
-  const { getAccessToken } = useChatbotAuth()
-  const { refetch: refetchThreads } = useChatbotContext()
 
   const cancelToolStream = useCallback(targetThreadId => {
     const q = toolStreamQueueRef.current
@@ -303,6 +312,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         lastFetchedThreadIdRef.current = id
       } catch (err) {
         console.error('Failed to fetch messages:', err)
+        if (isAuthFailure(err)) {
+          handleAuthError()
+        }
       } finally {
         if (!silent) {
           pendingHistoryLoadsRef.current = Math.max(0, pendingHistoryLoadsRef.current - 1)
@@ -395,6 +407,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         return newThreadId
       } catch (err) {
         console.error('Failed to create thread:', err)
+        if (isAuthFailure(err)) {
+          handleAuthError()
+        }
         throw err
       }
     },
@@ -435,6 +450,9 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         return true
       } catch (err) {
         console.error('Failed to send feedback:', err)
+        if (isAuthFailure(err)) {
+          handleAuthError()
+        }
         return false
       }
     },
@@ -451,11 +469,17 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         )
       }
 
-      const response = await axios.post('/api/chatbot/exports', null, {
-        params: { messageId, queryRef, format }
-      })
-
-      return response.data?.url ?? null
+      try {
+        const response = await axios.post('/api/chatbot/exports', null, {
+          params: { messageId, queryRef, format }
+        })
+        return response.data?.url ?? null
+      } catch (err) {
+        if (isAuthFailure(err)) {
+          handleAuthError()
+        }
+        throw err
+      }
     },
     [getAccessToken, handleAuthError]
   )
@@ -769,6 +793,10 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         })
 
         if (!response.ok) {
+          if (isAuthFailure(response.status)) {
+            handleAuthError()
+            return
+          }
           let errorBody = null
           try {
             errorBody = await response.clone().json()
