@@ -23,7 +23,8 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+import { selectPlans, localeToRegion, formatCurrency } from "../../../constants/stripePlans";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -198,39 +199,7 @@ export default function PlansAndPayment ({ userData }) {
           .then(res => res.json())
 
         if(result.success === true) {
-          function filterData(productName, interval, isActive, amount) {
-            let array = result.data
-
-            return array.filter(item => 
-              (productName ? item.node.productName === productName : true) &&
-              (interval ? item.node.interval === interval : true) &&
-              (amount ? item.node.amount === amount : true) &&
-              (isActive !== undefined ? item.node.isActive === isActive : true)
-            )
-          }
-
-          function filterChatbot(interval, amount) {
-            return result.data.filter((item) => {
-              const name = item.node.productName?.toLowerCase() || ""
-              const slug = item.node.productSlug?.toLowerCase() || ""
-              const isConsumerChatbot =
-                (name.includes("chatbot") || slug.includes("chatbot")) &&
-                !name.includes("empresas")
-              return isConsumerChatbot &&
-                item.node.interval === interval &&
-                item.node.amount === amount &&
-                item.node.isActive === true
-            })
-          }
-
-          const filteredPlans = {
-            bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-            bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-            bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
-            bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
-          }
-
-          setPlans(filteredPlans)
+          setPlans(selectPlans(result.data, localeToRegion(router.locale)))
         }
       } catch (error) {
         console.error(error)
@@ -331,6 +300,11 @@ export default function PlansAndPayment ({ userData }) {
   const isChatbotTrial = isSubscriptionTrialing(chatbotSubscriptionInfo)
   const isChatbotCheckout = checkoutInfos?.productName?.toLowerCase().includes("chatbot") || checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
   const hasSubscribed = isChatbotCheckout ? hasSubscribedChatbot : hasSubscribedBDPro
+
+  const localizedProductName = (name) =>
+    router.locale === "en" && typeof name === "string"
+      ? name.replace(/\bBD\b/g, "DB")
+      : name
 
   function getCheckoutStepLabel() {
     if (checkoutStep === "plan") {
@@ -669,7 +643,7 @@ export default function PlansAndPayment ({ userData }) {
           <Text>{t('username.coupon')} {coupon.toUpperCase()} {limitText}</Text>
         </GridItem>
         <GridItem textAlign="end">
-          <Text>- {couponInfos?.discountAmount?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 })}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
+          <Text>- {formatCheckoutAmount(couponInfos?.discountAmount)}/{formattedPlanInterval(checkoutInfos?.interval, true)}</Text>
         </GridItem>
       </>
     )
@@ -683,11 +657,7 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   function formatCheckoutAmount(amount) {
-    return amount?.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      minimumFractionDigits: 2,
-    })
+    return formatCurrency(amount, localeToRegion(router.locale))
   }
 
   const TotalToPayDisplay = () => {
@@ -828,7 +798,7 @@ export default function PlansAndPayment ({ userData }) {
               <Stack flexDirection="column" spacing={0} gap="16px">
                 <Box display="flex" flexDirection="row" gap="8px" width="100%">
                   <LabelText textTransform="capitalize">
-                    {checkoutInfos?.productName}
+                    {localizedProductName(checkoutInfos?.productName)}
                   </LabelText>
                   {!isChatbotCheckout && (
                     <BodyText
@@ -988,11 +958,7 @@ export default function PlansAndPayment ({ userData }) {
                 </GridItem>
                 <GridItem textAlign="end">
                   <Text>
-                    {checkoutInfos?.amount?.toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                      minimumFractionDigits: 2,
-                    })}
+                    {formatCheckoutAmount(checkoutInfos?.amount)}
                     /{formattedPlanInterval(checkoutInfos?.interval, true)}
                   </Text>
                 </GridItem>
@@ -1011,11 +977,7 @@ export default function PlansAndPayment ({ userData }) {
                   º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
                   {!hasSubscribed && "e 7º dia"}
                   {t("username.couponDuration", { returnObjects: true })[1]}
-                  {checkoutInfos?.amount?.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                    minimumFractionDigits: 2,
-                  })}
+                  {formatCheckoutAmount(checkoutInfos?.amount)}
                   /{formattedPlanInterval(checkoutInfos?.interval, true)}.
                 </BodyText>
               )}
@@ -1067,7 +1029,7 @@ export default function PlansAndPayment ({ userData }) {
                     gap="16px"
                   >
                     <LabelText textTransform="capitalize">
-                      {checkoutInfos?.productName}
+                      {localizedProductName(checkoutInfos?.productName)}
                     </LabelText>
                     <BodyText typography="small" color="#71757A">
                       {formattedPlanInterval(checkoutInfos?.interval)}
