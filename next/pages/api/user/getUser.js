@@ -75,12 +75,12 @@ async function getUser(id, token) {
 }
 
 export default async function handler(req, res) {
-  const token = () => {
-    if(req.query.q) return atob(req.query.q)
-    return req.cookies.token
+  const token = req.cookies.token
+  if (!token) {
+    return res.status(401).json({ error: 'Missing authentication token' })
   }
 
-  const result = await getUser(atob(req.query.p), token())
+  const result = await getUser(atob(req.query.p), token)
 
   if(result.errors) return res.status(500).json({error: result.errors})
   if(result === "err") return res.status(500).json({error: "err"})

@@ -1,5 +1,12 @@
 import cookies from 'js-cookie';
 
+export async function clearClientSession() {
+  cookies.remove('userBD', { path: '/' });
+  try {
+    await fetch('/api/user/clearSession', { method: 'POST', credentials: 'same-origin' });
+  } catch (_) {}
+}
+
 export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
     ([k, v]) =>

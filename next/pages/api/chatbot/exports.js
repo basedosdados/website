@@ -1,10 +1,11 @@
 import axios from 'axios'
+import { requireChatbotAuth } from '../../../lib/requireChatbotAuth'
 
 const API_URL = process.env.CHATBOT_URL
 
 export default async function handler(req, res) {
   const { method } = req
-  const authHeader = req.headers.authorization
+  const auth = await requireChatbotAuth(req)
   const rawMessageId = req.query.messageId
   const messageId = Array.isArray(rawMessageId) ? rawMessageId[0] : rawMessageId
   const rawQueryRef = req.query.queryRef
@@ -16,8 +17,8 @@ export default async function handler(req, res) {
     return res.status(503).json({ error: 'Chatbot API URL is not configured' })
   }
 
-  if (!authHeader) {
-    return res.status(401).json({ error: 'Missing authorization header' })
+  if (!auth.ok) {
+    return res.status(auth.status).json({ error: auth.error })
   }
 
   if (!messageId || typeof messageId !== 'string') {
@@ -27,6 +28,8 @@ export default async function handler(req, res) {
   if (!queryRef || typeof queryRef !== 'string') {
     return res.status(400).json({ error: 'Missing queryRef parameter' })
   }
+
+  const authHeader = auth.authHeader
 
   try {
     if (method === 'POST') {

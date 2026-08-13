@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
 import { hasBDProSubscription } from "../../utils";
+import { serializeClearedTokenCookie } from "../../lib/authCookie";
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
 
@@ -29,7 +30,7 @@ export async function getServerSideProps(context) {
   if(req.cookies.userBD) user = JSON.parse(req.cookies.userBD)
 
   if (user === null || Object.keys(user).length < 0) {
-    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
+    res.setHeader('Set-Cookie', serializeClearedTokenCookie())
 
     return {
       redirect: {
@@ -39,16 +40,30 @@ export async function getServerSideProps(context) {
     }
   }
 
-  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+  const cookieHeader = req.headers.cookie || ''
+  const validateTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/validateToken`, {
+    method: "GET",
+    headers: { Cookie: cookieHeader },
+  })
   const validateToken = await validateTokenResponse.json()
 
-  if(validateToken.error) {
-    const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken?p=${btoa(req.cookies.token)}`, {method: "GET"})
+  if(validateToken.error || !validateToken.success) {
+    const refreshTokenResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/refreshToken`, {
+      method: "GET",
+      headers: { Cookie: cookieHeader },
+    })
     const refreshToken = await refreshTokenResponse.json()
 
-    if(refreshToken.error) {
-      res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
-      res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
+    const refreshedCookie = refreshTokenResponse.headers.get('set-cookie')
+    if (refreshedCookie) {
+      res.setHeader('Set-Cookie', refreshedCookie)
+    }
+
+    if(refreshToken.error || !refreshToken.success) {
+      res.setHeader('Set-Cookie', [
+        serializeClearedTokenCookie(),
+        serialize('userBD', '', { maxAge: -1, path: '/' }),
+      ])
 
       return {
         redirect: {
@@ -62,12 +77,17 @@ export async function getServerSideProps(context) {
   const reg = new RegExp("(?<=:).*")
   const [ id ] = reg.exec(user.id)
 
-  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/getUser?p=${btoa(id)}&q=${btoa(req.cookies.token)}`, {method: "GET"})
+  const getUserResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL_FRONTEND}/api/user/getUser?p=${btoa(id)}`, {
+    method: "GET",
+    headers: { Cookie: cookieHeader },
+  })
   const getUser = await getUserResponse.json()
 
   if(getUser.errors) {
-    res.setHeader('Set-Cookie', serialize('token', '', {maxAge: -1, path: '/', }))
-    res.setHeader('Set-Cookie', serialize('userBD', '', { maxAge: -1, path: '/', }))
+    res.setHeader('Set-Cookie', [
+      serializeClearedTokenCookie(),
+      serialize('userBD', '', { maxAge: -1, path: '/' }),
+    ])
 
     return {
       redirect: {
