@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React from "react";
+import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
@@ -35,12 +36,13 @@ export function StructuredSectionHeader({ title }) {
 }
 
 export const DataSourcesList = React.memo(function DataSourcesList({ dataSources }) {
+  const { t } = useTranslation("chatbot");
   if (!Array.isArray(dataSources) || dataSources.length === 0) return null;
 
   return (
     <Box marginTop="8px">
       <Box paddingX="16px">
-        <StructuredSectionHeader title="Fontes dos Dados" />
+        <StructuredSectionHeader title={t("ui.sources.title")} />
       </Box>
       <VStack align="stretch" spacing={0} marginTop="4px" width="100%">
         {dataSources.map((source, index) => {
@@ -130,12 +132,13 @@ export const DataSourcesList = React.memo(function DataSourcesList({ dataSources
 });
 
 export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({ followUpQuestions, onQuestionClick }) {
+  const { t } = useTranslation("chatbot");
   if (!Array.isArray(followUpQuestions) || followUpQuestions.length === 0) return null;
 
   return (
     <Box marginTop="24px">
       <Box paddingX="16px">
-        <StructuredSectionHeader title="Perguntas Sugeridas" />
+        <StructuredSectionHeader title={t("ui.suggestedQuestions")} />
       </Box>
       <VStack
         align="stretch"

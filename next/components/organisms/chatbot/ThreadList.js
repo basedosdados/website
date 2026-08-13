@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import {
   VStack,
   Box,
@@ -25,6 +26,7 @@ import TrashIcon from '../../../public/img/icons/trashIcon';
 import ReloadIcon from '../../../public/img/icons/reloadIcon';
 
 export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, onNewChat }) {
+  const { t } = useTranslation('chatbot');
   const router = useRouter();
   const { threads, isLoading, error, refetch, deleteThread, isDeleting } = useChatbotContext();
   const deleteModal = useDisclosure();
@@ -114,7 +116,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       >
         <Stack spacing={0} marginBottom="16px">
           <TitleText marginRight="20px">
-            Confirmar exclusão de conversa
+            {t('ui.thread.deleteTitle')}
           </TitleText>
           <ModalCloseButton
             fontSize="14px"
@@ -127,8 +129,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
 
         <Stack spacing="24px" marginBottom="16px">
           <ExtraInfoTextForm>
-            Tem certeza que deseja excluir esta conversa? Esta ação não pode ser
-            desfeita.
+            {t('ui.thread.deleteConfirm')}
           </ExtraInfoTextForm>
         </Stack>
 
@@ -149,7 +150,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             }}
             onClick={() => deleteModal.onClose()}
           >
-            Cancelar
+            {t('ui.cancel')}
           </Button>
 
           <Button
@@ -161,7 +162,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
             onClick={() => confirmDelete()}
             isLoading={isDeleting}
           >
-            Excluir
+            {t('ui.delete')}
           </Button>
         </Stack>
       </ModalGeneral>
@@ -197,7 +198,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                 transition="opacity 0.2s ease, transform 0.2s ease"
                 transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
               >
-                Conversas
+                {t('ui.thread.historyTitle')}
               </BodyText>
               {isSidebarOpen && <AccordionIcon color="#252A32" />}
             </AccordionButton>
@@ -223,8 +224,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                       isSidebarOpen ? "translateX(0)" : "translateX(4px)"
                     }
                   >
-                    <span>Erro ao carregar histórico.</span>
-                    <span>Tente novamente.</span>
+                    <span>{t('ui.thread.loadError')}</span>
+                    <span>{t('ui.thread.tryAgain')}</span>
                   </BodyText>
                   <ReloadIcon
                     cursor="pointer"

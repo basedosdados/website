@@ -35,7 +35,7 @@
             "termsLink": "Terms of Service",
             "part2": " and ",
             "privacyLink": "Privacy Policy",
-            "part3": " of Base dos Dados."
+            "part3": " of Data Basis."
         },
         "placeholders": {
             "firstName": "Enter your first name",
@@ -138,7 +138,7 @@
                 ]
             },
             {
-                "question": "What is your main goal with BD?",
+                "question": "What is your main goal with DB?",
                 "options": [
                     "Market analysis",
                     "Competition monitoring",
@@ -151,7 +151,7 @@
                 ]
             },
             {
-                "question": "How did you hear about BD?",
+                "question": "How did you hear about DB?",
                 "options": [
                     "Social media",
                     "Recommendation",
@@ -311,7 +311,7 @@
         "account": "Account",
         "changePassword": "Password",
         "plansAndPayment": "Plans and payment",
-        "accessFor10Accounts": "Starting from 10 BD Pro accesses",
+        "accessFor10Accounts": "Starting from 10 DB Pro accesses",
         "prioritySupport": "Priority support",
         "bdOrgsChatbot": "Chatbot",
         "bdOrgsSegmentedInfrastructure": "Segmented infrastructure for your use",

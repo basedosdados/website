@@ -62,7 +62,7 @@ Essas tabelas são consistentes desde 2000, não temos registro de alterações 
 A atualização dos dados na fonte original é a cada hora. Na Base dos Dados atualizamos essas informações mensalmente
 
 # Tratamentos feitos pela BD:
-Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, [os códigos de extração e tratamento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_inmet_bdmep/flows.py) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_inmet_bdmep/br_inmet_bdmep__microdados.sql) estão disponíveis no repositório do GitHub para consulta.
+Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, [os códigos de extração e tratamento](https://github.com/basedosdados/pipelines/blob/main/pipelines/datasets/br_inmet_bdmep/flows.py) e as [modificações feitas no BigQuery](https://github.com/basedosdados/pipelines/blob/main/models/br_inmet_bdmep/br_inmet_bdmep__microdados.sql) estão disponíveis no repositório do GitHub para consulta.
 Os tratamentos realizados na tabela de microdados foram:
 * Renomeação das colunas para adequação ao manual de estilo da BD.
 * Substituição de códigos inválidos (“-9999”) por valores nulos.
