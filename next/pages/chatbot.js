@@ -8,6 +8,8 @@ import {
 import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
@@ -17,9 +19,10 @@ import Display from "../components/atoms/Text/Display";
 import SidebarIcon from "../public/img/icons/sidebarIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
 import BDLogoImage from "../public/img/logos/bd_logo";
+import HelpContent from "../components/organisms/chatbot/HelpContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
-import { redirectToChatbotCheckout, clearClientSession } from "../utils";
+import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
 
 function getGreetingFirstNameFromCookie() {
   try {
@@ -33,71 +36,9 @@ function getGreetingFirstNameFromCookie() {
   }
 }
 
-async function clearAuthCookiesAndRedirectLogin(router) {
-  if (typeof window !== "undefined") {
-    localStorage.setItem("previousPath", window.location.href);
-  }
-  await clearClientSession();
-  router.replace("/user/login");
-}
-
-function hasUserCookie() {
-  const userRaw = cookies.get("userBD");
-  if (!userRaw || userRaw === "undefined") return false;
-  try {
-    JSON.parse(userRaw);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function ChatbotAccessGate({ children }) {
-  const router = useRouter();
-  const [canEnter, setCanEnter] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function checkAccess() {
-      if (typeof window === "undefined") return;
-      if (!hasUserCookie()) {
-        await clearAuthCookiesAndRedirectLogin(router);
-        return;
-      }
-      try {
-        const res = await fetch("/api/user/validateToken", {
-          method: "GET",
-          credentials: "same-origin"
-        });
-        const data = await res.json();
-        if (cancelled) return;
-        if (!res.ok || !data.success) {
-          await clearAuthCookiesAndRedirectLogin(router);
-          return;
-        }
-        if (!data.has_chatbot_access) {
-          await redirectToChatbotCheckout(router);
-          return;
-        }
-        setCanEnter(true);
-      } catch {
-        if (!cancelled) await clearAuthCookiesAndRedirectLogin(router);
-      }
-    }
-
-    checkAccess();
-    return () => {
-      cancelled = true;
-    };
-  }, [router]);
-
-  if (!canEnter) return null;
-  return children;
-}
-
 function ChatbotContent() {
   const router = useRouter();
+  const { t } = useTranslation("chatbot");
   const { t: threadIdFromUrl } = router.query;
   const normalizedThreadId = Array.isArray(threadIdFromUrl)
     ? threadIdFromUrl[0]
@@ -110,6 +51,7 @@ function ChatbotContent() {
   const searchRef = useRef(null);
 
   const [greetingFirstName, setGreetingFirstName] = useState(null);
+  const [showHelp, setShowHelp] = useState(false);
 
   useEffect(() => {
     setGreetingFirstName(getGreetingFirstNameFromCookie());
@@ -191,12 +133,21 @@ function ChatbotContent() {
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
+    setShowHelp(false);
     setIsMobileSidebarOpen(false);
     router.push({
       pathname: router.pathname,
       query: {}
     }, undefined, { shallow: true });
   }, [resetChat, router]);
+
+  const handleSelectThread = useCallback(() => {
+    setShowHelp(false);
+  }, []);
+
+  const handleHelp = useCallback(() => {
+    setShowHelp(true);
+  }, []);
 
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
@@ -276,15 +227,15 @@ function ChatbotContent() {
   return (
     <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
-        <title>Chatbot - Basedosdados</title>
+        <title>{showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}</title>
         <meta
           property="og:title"
-          content="Chatbot - Basedosdados"
+          content={showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content="Chatbot - Basedosdados"
+          content={showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}
           key="ogdesc"
         />
       </Head>
@@ -301,6 +252,8 @@ function ChatbotContent() {
       >
         <Sidebar
           onNewChat={handleNewChat}
+          onSelectThread={handleSelectThread}
+          onHelp={handleHelp}
           currentThreadId={
             router.isReady ? normalizedThreadId : undefined
           }
@@ -331,7 +284,9 @@ function ChatbotContent() {
             minWidth={0}
             marginX="auto"
           >
-            {showNewChatGreeting ? (
+            {showHelp ? (
+              <HelpContent />
+            ) : showNewChatGreeting ? (
               <Flex
                 flex={1}
                 width="100%"
@@ -401,6 +356,14 @@ function ChatbotContent() {
       </HStack>
     </HStack>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ["common", "menu", "chatbot"])),
+    },
+  };
 }
 
 export default function Chatbot() {

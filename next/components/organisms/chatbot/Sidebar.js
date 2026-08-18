@@ -4,20 +4,19 @@ import {
   Stack,
   Flex,
   Divider,
-  HStack,
   useMediaQuery,
 } from '@chakra-ui/react'
 import BDLogoImage from '../../../public/img/logos/bd_logo'
-import { clearClientSession } from '../../../utils'
 import SidebarIcon from '../../../public/img/icons/sidebarIcon'
 import CrossIcon from '../../../public/img/icons/crossIcon'
 import BodyText from '../../atoms/Text/BodyText'
-import SignOutIcon from '../../../public/img/icons/signOutIcon'
 import ThreadList from './ThreadList'
+import UserMenu from './UserMenu'
 
 function Sidebar({
   onNewChat,
   onSelectThread,
+  onHelp,
   currentThreadId,
   isMobileOpen = false,
   onMobileClose,
@@ -27,20 +26,6 @@ function Sidebar({
   const [isMobile] = useMediaQuery("(max-width: 767px)")
 
   const isOpen = isMobile ? true : isExpanded
-
-  const handleLogout = useCallback(async () => {
-    await clearClientSession()
-    if (typeof window === 'undefined') return
-    if (window.location.pathname.includes('/user/')) {
-      window.location.href = '/'
-      return
-    }
-    if (window.location.pathname.includes('/chatbot')) {
-      window.location.href = '/user/login'
-      return
-    }
-    window.location.reload()
-  }, [])
 
   const handleToggle = useCallback(() => {
     if (isMobile) {
@@ -248,39 +233,11 @@ function Sidebar({
         </Stack>
         <Box flexShrink={0}>
           <Divider borderColor="#DEDFE0" />
-          <HStack
-            as="button"
-            type="button"
-            spacing="8px"
-            align="center"
-            justifyContent={isOpen ? "flex-start" : "center"}
-            width="100%"
-            padding="16px"
-            borderRadius="8px"
-            cursor="pointer"
-            background="transparent"
-            border="none"
-            color="#252A32"
-            fill="#D0D0D0"
-            onClick={handleLogout}
-            _hover={{
-              backgroundColor: "#EEEEEE",
-              opacity: 0.9,
-            }}
-          >
-            <SignOutIcon width="18px" height="18px" fill="currentColor" />
-            <BodyText
-              typography="small"
-              color="currentColor"
-              opacity={isOpen ? 1 : 0}
-              width={isOpen ? "auto" : 0}
-              overflow="hidden"
-              whiteSpace="nowrap"
-              transition="opacity 0.2s ease, width 0.2s ease"
-            >
-              Sair
-            </BodyText>
-          </HStack>
+          <UserMenu
+            isSidebarOpen={isOpen}
+            onHelp={onHelp}
+            onMobileClose={onMobileClose}
+          />
         </Box>
       </Box>
     </>
