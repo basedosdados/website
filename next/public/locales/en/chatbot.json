@@ -41,5 +41,42 @@
   "banner": {
     "title": "Create analyses in seconds with the power of AI and Base dos Dados' Datalake",
     "button": "Try the BD chatbot now"
+  },
+  "ui": {
+    "newChat": "New chat",
+    "openMenu": "Open menu",
+    "signOut": "Sign out",
+    "help": "Help",
+    "userMenu": "Account menu"
+  },
+  "help": {
+    "head": {
+      "pageTitle": "Help - Chatbot"
+    },
+    "title": "DB Chatbot",
+    "subtitle": "To analyze public data using natural language",
+    "welcomeTitle": "Welcome! 👋",
+    "welcomeP1": "Welcome to the Data Basis chatbot. It helps you talk to your data so you can understand it better and extract valuable insights.",
+    "welcomeP2": "To get started, go to the chat page in the left menu and start a new conversation.",
+    "welcomeP3": "Why not ask it what data is available on your research topic?",
+    "welcomeP4": "It can also help you with exploratory analysis, understand how tables are organized, and query and download data from our public datalake.",
+    "downloadHint": "To download the data the chatbot queried, click the icon (<download></download>) and choose the table you would like to download as a .csv file.",
+    "welcomeP5": "All you need is a good question!",
+    "modelTitle": "Model 🧠",
+    "modelText": "The model behind the chatbot is GPT-5.6 Luna, from OpenAI.",
+    "featuresTitle": "Features 🛠️",
+    "feedback": "Feedback (<up></up> or <down></down>): Click the feedback buttons to rate the responses, with optional comments.",
+    "deleteThread": "Delete conversation (<trash></trash>): Click the delete conversation button to delete the conversation with the chatbot. Messages will remain stored in our database for analysis and product improvement.",
+    "contact": "Have questions or need help? You can reach us by email at <email>suporte.bdpro@basedosdados.org</email> or through our community on <discord>Discord</discord> and <whatsapp>WhatsApp</whatsapp>.",
+    "promptGuideTitle": "Prompt Guide 📋",
+    "promptGuideIntro": "How you talk to the chatbot can affect the quality of the answers! Below are some tips to help you write your questions. They can be useful if the answers are incorrect or not good enough.",
+    "promptTips": [
+      "Try asking one question at a time. If your question is too complex, or is actually several questions, try splitting it into smaller, simpler questions.",
+      "Try using terms like \"by\" or \"total\" when you need information aggregated by some variable.",
+      "If you know the table column names, try mentioning them in your questions. For example, if you know a table has a \"municipality\" column, try using municipality instead of \"city\". You can still use similar words, but using the column names helps!",
+      "If the chatbot cannot find an answer to your question and you know which table has the data needed to answer it, you can explicitly ask it to look in that specific table."
+    ],
+    "importantTitle": "Important 📌",
+    "importantText": "⏳ After sending a question to the chatbot, wait for the complete answer before changing pages or clicking buttons. You can switch browser tabs as usual."
   }
 }
