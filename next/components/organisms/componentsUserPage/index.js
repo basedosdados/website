@@ -4,6 +4,7 @@ import NewPassword from "./NewPassword";
 import PlansAndPayment from "./PlansAndPayment";
 import BigQuery from "./BigQuery";
 import Accesses from "./Accesses";
+import DataAPI from "./DataAPI";
 
 export {
   ProfileConfiguration,
@@ -11,5 +12,6 @@ export {
   NewPassword,
   PlansAndPayment,
   BigQuery,
-  Accesses
+  Accesses,
+  DataAPI
 }
