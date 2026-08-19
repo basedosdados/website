@@ -23,7 +23,7 @@ Nuestra infraestructura se compone de 3 frentes principales:
 Actualmente es posible colaborar en todos los frentes, con énfasis en el
 desarrollo de los pesos y contrapesos y la actualización del sitio.
 
-<Tip caption="¡Sugerimos que te unas a nuestro [canal de Discord](https://discord.gg/huKWpsVYx4) para resolver dudas e interactuar con otros(as) colaboradores(as)! :)"/>
+<Tip caption="¡Sugerimos que te unas a nuestro [canal de Discord](https://discord.gg/nNfQYcmrvM) para resolver dudas e interactuar con otros(as) colaboradores(as)! :)"/>
 
 ## Sistema de ingestión de datos
 

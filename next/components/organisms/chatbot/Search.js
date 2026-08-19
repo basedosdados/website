@@ -13,6 +13,7 @@ import {
   Box,
   Textarea,
 } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
 import SendIcon from "../../../public/img/icons/sendIcon";
 
@@ -30,6 +31,7 @@ const Search = forwardRef(function Search({
   isGenerating,
   showDisclaimer = true,
 }, ref) {
+  const { t } = useTranslation("chatbot");
   const textareaRef = useRef(null);
   const [isMultiLine, setIsMultiLine] = useState(false);
   const [value, setValue] = useState("");
@@ -173,10 +175,10 @@ const Search = forwardRef(function Search({
             transition="opacity 0.2s ease"
             placeholder={
               isBusy
-                ? "Faça uma pergunta..."
+                ? t("ui.search.placeholder")
                 : !showDisclaimer
-                  ? "Como posso ajudar você hoje?"
-                  : "Faça uma pergunta..."
+                  ? t("ui.helpQuestion")
+                  : t("ui.search.placeholder")
             }
             variant="unstyled"
             minHeight="38px"
@@ -250,12 +252,10 @@ const Search = forwardRef(function Search({
           textAlign="center"
         >
           <BodyText typography="small" color="#ACAEB1">
-            O chatbot pode cometer erros. Considere verificar informações
-            importantes.
+            {t("ui.search.disclaimer")}
           </BodyText>
           <BodyText typography="small" color="#ACAEB1">
-            Todas as informações aqui enviadas são registradas para análise e
-            melhoria do produto.
+            {t("ui.search.disclaimerPrivacy")}
           </BodyText>
         </VStack>
       )}

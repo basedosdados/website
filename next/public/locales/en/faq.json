@@ -1,15 +1,15 @@
 {
     "pageTitle": "Frequently Asked Questions – Data Basis",
     "pageDescription": "Here you can find answers to your questions about Data Basis. Learn more about our data, how to access it using SQL with BigQuery or with the Python and R packages now.",
-    "title": "Frequently Asked Questions (in Portuguese)",
+    "title": "Frequently Asked Questions",
     "searchPlaceholder": "Search",
     "categories": {
-        "data": "Dados",
-        "paidPlans": "Planos Pagos",
+        "data": "Data",
+        "paidPlans": "Paid Plans",
         "bigQuery": "BigQuery",
-        "bdLab": "BD Lab",
-        "bdEdu": "BD Edu",
-        "institutional": "Institucional"
+        "bdLab": "DB Lab",
+        "bdEdu": "DB Edu",
+        "institutional": "Institutional"
     },
     "noQuestionsFound": "Unfortunately, we couldn't find any questions related to your search.",
     "contactText": "Didn't find your question? ",

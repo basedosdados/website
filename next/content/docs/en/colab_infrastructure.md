@@ -18,7 +18,7 @@ Our infrastructure consists of 3 main fronts:
 
 Currently, it's possible to collaborate on all fronts, with emphasis on developing checks and balances and website updates.
 
-<Tip caption="We suggest joining our [Discord channel](https://discord.gg/huKWpsVYx4) to ask questions and interact with other contributors! :)"/>
+<Tip caption="We suggest joining our [Discord channel](https://discord.gg/tx57ek6zqQ) to ask questions and interact with other contributors! :)"/>
 
 
 ## Data ingestion system

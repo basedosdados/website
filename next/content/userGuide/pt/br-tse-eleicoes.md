@@ -129,5 +129,5 @@ Os tratamentos realizados foram:
 * [Notícia do TSE sobre as eleições suplementares](https://www.tse.jus.br/comunicacao/noticias/2025/Fevereiro/voce-sabe-o-que-e-uma-eleicao-suplementar)
 
 [code-pipeline]: https://github.com/basedosdados/pipelines/tree/main/pipelines/utils/crawler_tse_eleicoes
-[code-notebook]: https://github.com/basedosdados/queries-basedosdados/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
-[queries-dir]: https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_tse_eleicoes
+[code-notebook]: https://github.com/basedosdados/pipelines/blob/main/models/br_tse_eleicoes/code/%5Bdbt%5Dbr_tse_eleicoes.ipynb
+[queries-dir]: https://github.com/basedosdados/pipelines/tree/main/models/br_tse_eleicoes

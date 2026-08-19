@@ -1,10 +1,10 @@
 {
   "organized_data": "Datos organizados.",
   "reliable_analysis": "Análisis confiables.",
-  "description_organized_data": "Base de los Datos es una ONG que mantiene la mayor plataforma de datos públicos de Brasil y ofrece servicios especializados en ingeniería, análisis y capacitación de datos.",
+  "description_organized_data": "Base de los Datos es una ONG que mantiene una gran plataforma de datos públicos y ofrece servicios especializados en ingeniería, análisis y capacitación de datos.",
   "organized_data_first_button": "Accede a la plataforma de datos",
   "organized_data_second_button": "Conoce los servicios de consultoría",
-  "socioeconomic_data": "Los principales datos socioeconómicos de Brasil, en un solo lugar.",
+  "socioeconomic_data": "Los principales datos socioeconómicos, en un solo lugar.",
   "productivity_data_analysis": {
     "title": "Gana productividad en tu análisis de datos",
     "subtitle": "Tablas tratadas y variables estandarizadas para cruzar conjuntos de datos con facilidad"
@@ -46,7 +46,7 @@
     },
     {
       "title": "Automatiza la traducción de códigos institucionales",
-      "content": "Ahorra tiempo con la traducción automatizada de códigos, como los identificadores de 7 dígitos del IBGE para los municipios brasileños."
+      "content": "Ahorra tiempo con la traducción automatizada de códigos, como identificadores geográficos estandarizados para municipios y regiones."
     },
     {
       "title": "Construye análisis con el apoyo de las guías de uso",

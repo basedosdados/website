@@ -48,7 +48,7 @@ Some knowledge is required to perform this process:
 
 <Tip caption="Don't have any of these skills, but want to collaborate?">
 
-We have a data team that can help you. Just join [our Discord](https://discord.gg/huKWpsVYx4) and send a message to #quero-contribuir.
+We have a data team that can help you. Just join [our Discord](https://discord.gg/tx57ek6zqQ) and send a message to #quero-contribuir.
 </Tip>
 
 ### How does the process work?
@@ -115,7 +115,7 @@ The RAIS architecture tables [can be found here](https://docs.google.com/spreads
 
 #### To fill in each table in your set, follow these steps:
 
-<Tip caption="A each beginning and end of step, consult our [style guide](style_data) to ensure you're following the BD standardization"/>
+<Tip caption="A each beginning and end of step, consult our [style guide](style_data) to ensure you're following the DB standardization"/>
 
 1. List all data variables in the `original_name` column
 - Note: If the database changes the names of variables over the years (such as RAIS), it is necessary to make all variables compatible between years by filling in the `original_name_YYYY` column for each available year or month
@@ -191,7 +191,7 @@ It already has the standard structure we use for dictionaries.
 All done! Now all that's left is to upload it to Google Cloud and send it for review.
 To do this, we will use the `basedosdados` client (available in Python), which facilitates the settings and steps of the process.
 
-<Tip caption="Since there is a cost for storage, to complete this step we will need to provide you with a specific api_key for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/huKWpsVYx4), call us at ‘quero-contribuir’ and tag `@equipe_dados`"/>
+<Tip caption="Since there is a cost for storage, to complete this step we will need to provide you with a specific api_key for volunteers to upload the data to our development environment. So, join our [Discord channel](https://discord.gg/tx57ek6zqQ), call us at ‘quero-contribuir’ and tag `@equipe_dados`"/>
 
 #### Configure your credentials locally
 **7.1** Install our client on your terminal: `pip install basedosdados`.

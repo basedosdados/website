@@ -1,5 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
+import { useTranslation } from "next-i18next";
 import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
 import DocIcon from "../../../public/img/icons/docIcon";
@@ -9,26 +10,7 @@ const fadeInUp = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `;
 
-export const OnboardingSuggestedQuestions = [
-  {
-    eyebrow: "Análises",
-    Icon: TableChartViewIcon,
-    question:
-      "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025",
-  },
-  {
-    eyebrow: "Dados",
-    Icon: DataStructureIcon,
-    question:
-      "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?",
-  },
-  {
-    eyebrow: "Documentos",
-    Icon: DocIcon,
-    question:
-      "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?",
-  },
-];
+const OnboardingIcons = [DataStructureIcon, TableChartViewIcon, DocIcon];
 
 const QuestionChipProps = {
   as: "button",
@@ -71,11 +53,15 @@ const QuestionChipProps = {
 };
 
 export default function OnboardingQuestions({ onQuestionClick, isDisabled }) {
-  const items = Array.isArray(OnboardingSuggestedQuestions)
-    ? OnboardingSuggestedQuestions.filter((item) =>
-        String(item?.question || "").trim()
-      )
-    : [];
+  const { t } = useTranslation("chatbot");
+  const rawItems = t("ui.onboarding.items", { returnObjects: true });
+  const items = (Array.isArray(rawItems) ? rawItems : [])
+    .map((item, index) => ({
+      eyebrow: item?.eyebrow,
+      question: item?.question,
+      Icon: OnboardingIcons[index] ?? DocIcon,
+    }))
+    .filter((item) => String(item?.question || "").trim());
 
   if (items.length === 0) return null;
 

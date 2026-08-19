@@ -18,6 +18,8 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
 import Button from "../atoms/Button";
 import TitleText from "../atoms/Text/TitleText";
@@ -220,17 +222,40 @@ export const mdxComponents = {
       </Stack>
     </Box>
   ),
-  a: (props) => (
-  <BodyText
-    typography="small"
-    as="a"
-    color="#0068C5"
-    _hover={{
-      color: "#0057A4"
-    }}
-    {...props} 
-  />
-  ),
+  a: (props) => {
+    const { locale } = useRouter();
+    const { href = "", ...rest } = props;
+    // Root-relative internal links (e.g. /faq) must carry the current locale;
+    // skip if already locale-prefixed or an external/anchor/mailto link.
+    const isInternal =
+      typeof href === "string" &&
+      href.startsWith("/") &&
+      !/^\/(pt|en|es)(\/|$)/.test(href);
+
+    const anchor = (
+      <BodyText
+        typography="small"
+        as="a"
+        color="#0068C5"
+        _hover={{ color: "#0057A4" }}
+        {...props}
+      />
+    );
+
+    if (!isInternal) return anchor;
+
+    return (
+      <NextLink href={href} locale={locale} passHref legacyBehavior>
+        <BodyText
+          typography="small"
+          as="a"
+          color="#0068C5"
+          _hover={{ color: "#0057A4" }}
+          {...rest}
+        />
+      </NextLink>
+    );
+  },
   hr: (props) => (
     <Divider
       borderWidth="0px"
@@ -341,7 +366,7 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
 
   const repository = () => {
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
-    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "development" 
+    if (baseUrl === "http://localhost:3000" || baseUrl === "https://development.basedosdados.org") return "staging"
     if (baseUrl === "https://staging.basedosdados.org") return "staging"
     if (baseUrl === "https://basedosdados.org") return "main" 
     return null
