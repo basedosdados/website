@@ -59,24 +59,26 @@
     "welcomeP1": "Bienvenido(a) al chatbot de BD, te ayudará a conversar con tus datos para entenderlos mejor y extraer insights valiosos.",
     "welcomeP2": "Para empezar, entra en la página de chat en el menú de la izquierda y comienza una nueva conversación.",
     "welcomeP3": "¿Qué tal preguntarle qué datos hay disponibles sobre el tema de tu investigación?",
-    "welcomeP4": "También puede ayudarte con un análisis exploratorio y a entender mejor cómo están organizadas las tablas, además de consultar y descargar los datos de nuestro datalake público.",
-    "downloadHint": "Para descargar los datos que el chatbot consultó, haz clic en el icono (<download></download>) y elige la tabla que te gustaría descargar en .csv.",
+    "welcomeP4": "El chatbot también puede ayudarte con:",
+    "capabilities": [
+      "Análisis exploratorios",
+      "Entendimiento de la organización de las tablas",
+      "Consultas y descarga de datos de nuestro datalake público"
+    ],
     "welcomeP5": "¡Todo lo que necesitas es una buena pregunta!",
-    "modelTitle": "Modelo 🧠",
-    "modelText": "El modelo detrás del chatbot es GPT-5.6 Luna, de OpenAI.",
-    "featuresTitle": "Funcionalidades 🛠️",
-    "feedback": "Comentarios (<up></up> o <down></down>): Haz clic en los botones de comentarios para evaluar las respuestas, con comentarios opcionales.",
-    "deleteThread": "Eliminar conversación (<trash></trash>): Haz clic en el botón de eliminar conversación para eliminar la conversación con el chatbot. Los mensajes permanecerán guardados en nuestra base de datos para análisis y mejora del producto.",
     "contact": "¿Tienes dudas o necesitas ayuda? Puedes escribirnos al correo <email>suporte.bdpro@basedosdados.org</email> o a través de nuestra comunidad en <discord>Discord</discord> y <whatsapp>WhatsApp</whatsapp>.",
-    "promptGuideTitle": "Guía de Prompt 📋",
+    "featuresTitle": "Funcionalidades 🛠️",
+    "dataSources": "Fuentes de Datos: Haz clic en los elementos del campo \"Fuentes de Datos\" para ver los conjuntos de datos utilizados en cada respuesta.",
+    "suggestedQuestions": "Preguntas Sugeridas: Haz clic en los elementos de \"Preguntas Sugeridas\" para profundizar tu análisis con prompts sugeridos por el propio chatbot.",
+    "download": "Descargar datos: Haz clic en el icono (<download></download>) y elige la tabla que te gustaría descargar en .csv.",
+    "copyResults": "Copiar resultados: Haz clic en el icono (<copy></copy>) para copiar la respuesta del chatbot en tu Portapapeles.",
+    "feedback": "Comentarios (<up></up> o <down></down>): Haz clic en los botones de comentarios para evaluar las respuestas, con comentarios opcionales.",
+    "promptGuideTitle": "Consejos de Prompt 📋",
     "promptGuideIntro": "¡La forma en que conversas con el chatbot puede influir en la calidad de las respuestas! Por eso, a continuación hay algunos consejos para ayudarte a elaborar tus preguntas. Pueden ser útiles si las respuestas son incorrectas o no son lo suficientemente buenas.",
     "promptTips": [
       "Intenta hacer una pregunta a la vez. Si tu pregunta es muy compleja, o es un conjunto de varias preguntas, intenta separarla en preguntas más pequeñas y simples.",
-      "Intenta utilizar términos como \"por\" o \"total\" cuando necesites información agregada según alguna variable.",
-      "Si conoces los nombres de las columnas de las tablas, intenta mencionarlos en tus preguntas. Por ejemplo, si sabes que una tabla tiene la columna \"municipio\", intenta usar la palabra municipio en lugar de \"ciudad\". Esto no significa que no puedas usar palabras parecidas, pero usar los nombres de las columnas ayuda.",
+      "En caso de duda, pide ayuda al propio chatbot. Te ayuda a entender mejor qué datos están disponibles, qué líneas de análisis puedes seguir o pídele que explique mejor alguna respuesta.",
       "Si el chatbot no encuentra una respuesta a tu pregunta y sabes en qué tabla están los datos necesarios para responderla, puedes pedirle explícitamente que busque en esa tabla específica."
-    ],
-    "importantTitle": "Importante 📌",
-    "importantText": "⏳ Después de enviar una pregunta al chatbot, espera la respuesta completa antes de cambiar de página o hacer clic en botones. Puedes cambiar de pestaña del navegador con normalidad."
+    ]
   }
 }

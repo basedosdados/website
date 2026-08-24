@@ -7,7 +7,7 @@ import LabelText from "../../atoms/Text/LabelText";
 import DownloadIcon from "../../../public/img/icons/downloadIcon";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import TrashIcon from "../../../public/img/icons/trashIcon";
+import { CopyIcon } from "../../../public/img/icons/copyIcon";
 
 const DiscordUrlByLocale = {
   pt: "https://discord.gg/huKWpsVYx4",
@@ -61,11 +61,25 @@ function HelpSection({ title, children }) {
   );
 }
 
+function HelpList({ items }) {
+  return (
+    <UnorderedList spacing="10px" paddingLeft="8px" margin={0}>
+      {items.map((item) => (
+        <ListItem key={item}>
+          <BodyText as="span">{item}</BodyText>
+        </ListItem>
+      ))}
+    </UnorderedList>
+  );
+}
+
 export default function HelpContent() {
   const { t } = useTranslation("chatbot");
   const { locale } = useRouter();
   const promptTips = t("help.promptTips", { returnObjects: true });
   const tips = Array.isArray(promptTips) ? promptTips : [];
+  const capabilitiesRaw = t("help.capabilities", { returnObjects: true });
+  const capabilities = Array.isArray(capabilitiesRaw) ? capabilitiesRaw : [];
 
   return (
     <Box
@@ -111,42 +125,10 @@ export default function HelpContent() {
           <BodyText marginBottom="12px">{t("help.welcomeP2")}</BodyText>
           <BodyText marginBottom="12px">{t("help.welcomeP3")}</BodyText>
           <BodyText marginBottom="12px">{t("help.welcomeP4")}</BodyText>
-          <BodyText marginBottom="12px">
-            <Trans
-              i18nKey="help.downloadHint"
-              ns="chatbot"
-              components={{
-                download: <InlineIcon icon={DownloadIcon} />,
-              }}
-            />
-          </BodyText>
-          <BodyText>{t("help.welcomeP5")}</BodyText>
-        </HelpSection>
-
-        <HelpSection title={t("help.modelTitle")}>
-          <BodyText>{t("help.modelText")}</BodyText>
-        </HelpSection>
-
-        <HelpSection title={t("help.featuresTitle")}>
-          <BodyText marginBottom="12px">
-            <Trans
-              i18nKey="help.feedback"
-              ns="chatbot"
-              components={{
-                up: <InlineIcon icon={ThumbUpIcon} />,
-                down: <InlineIcon icon={ThumbDownIcon} />,
-              }}
-            />
-          </BodyText>
-          <BodyText marginBottom="12px">
-            <Trans
-              i18nKey="help.deleteThread"
-              ns="chatbot"
-              components={{
-                trash: <InlineIcon icon={TrashIcon} />,
-              }}
-            />
-          </BodyText>
+          <Box marginBottom="12px">
+            <HelpList items={capabilities} />
+          </Box>
+          <BodyText marginBottom="12px">{t("help.welcomeP5")}</BodyText>
           <BodyText>
             <Trans
               i18nKey="help.contact"
@@ -177,32 +159,43 @@ export default function HelpContent() {
           </BodyText>
         </HelpSection>
 
-        <HelpSection title={t("help.promptGuideTitle")}>
-          <BodyText marginBottom="12px">{t("help.promptGuideIntro")}</BodyText>
-          <UnorderedList spacing="10px" paddingLeft="8px" margin={0}>
-            {tips.map((tip) => (
-              <ListItem key={tip}>
-                <BodyText as="span">{tip}</BodyText>
-              </ListItem>
-            ))}
-          </UnorderedList>
+        <HelpSection title={t("help.featuresTitle")}>
+          <BodyText marginBottom="12px">{t("help.dataSources")}</BodyText>
+          <BodyText marginBottom="12px">{t("help.suggestedQuestions")}</BodyText>
+          <BodyText marginBottom="12px">
+            <Trans
+              i18nKey="help.download"
+              ns="chatbot"
+              components={{
+                download: <InlineIcon icon={DownloadIcon} />,
+              }}
+            />
+          </BodyText>
+          <BodyText marginBottom="12px">
+            <Trans
+              i18nKey="help.copyResults"
+              ns="chatbot"
+              components={{
+                copy: <InlineIcon icon={CopyIcon} />,
+              }}
+            />
+          </BodyText>
+          <BodyText>
+            <Trans
+              i18nKey="help.feedback"
+              ns="chatbot"
+              components={{
+                up: <InlineIcon icon={ThumbUpIcon} />,
+                down: <InlineIcon icon={ThumbDownIcon} />,
+              }}
+            />
+          </BodyText>
         </HelpSection>
 
-        <Box
-          backgroundColor="#F7F7F7"
-          border="1px solid #DEDFE0"
-          borderRadius="8px"
-          padding="16px"
-        >
-          <LabelText
-            as="h2"
-            typography="medium"
-            marginBottom="8px"
-          >
-            {t("help.importantTitle")}
-          </LabelText>
-          <BodyText>{t("help.importantText")}</BodyText>
-        </Box>
+        <HelpSection title={t("help.promptGuideTitle")}>
+          <BodyText marginBottom="12px">{t("help.promptGuideIntro")}</BodyText>
+          <HelpList items={tips} />
+        </HelpSection>
       </Box>
     </Box>
   );
