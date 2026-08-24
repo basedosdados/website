@@ -70,7 +70,7 @@ Os dados têm atualização parcial e completa. A atualização parcial ocorre e
 Os dados são anonimizados, não contendo CNPJs nem CPFs. Para obter dados identificados da RAIS, é necessário solicitar ao MTE. O processo pode ser demorado e não há garantia de aprovação.
 
 # Tratamentos feitos pela BD
-Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, os [códigos de tratamento](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais/code) e as [modificações feitas no BigQuery](https://github.com/basedosdados/queries-basedosdados/tree/main/models/br_me_rais) estão disponíveis no repositório do GitHub para consulta. 
+Neste guia, os tratamentos são descritos em uma linguagem mais acessível. De maneira complementar, os [códigos de tratamento](https://github.com/basedosdados/pipelines/tree/main/models/br_me_rais/code) e as [modificações feitas no BigQuery](https://github.com/basedosdados/pipelines/tree/main/models/br_me_rais) estão disponíveis no repositório do GitHub para consulta. 
 Os tratamentos realizados foram: 
 * Adequação das colunas que identificam municípios ao formato ID Município IBGE (7 dígitos);
 * Adequação das colunas que identificam Unidades Federativas ao padrão de sigla UF;

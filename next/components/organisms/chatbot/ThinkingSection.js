@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
+import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
@@ -27,43 +28,20 @@ import {
 } from "./markdown";
 import { pensandoTextShimmer } from "./shimmer";
 
-const ToolPhrases = {
-  search_datasets: {
-    running: "Buscando conjuntos de dados",
-    done: "Conjuntos de dados encontrados",
-    Icon: SearchIcon,
-  },
-  get_dataset_details: {
-    running: "Explorando conjunto de dados",
-    done: "Conjunto de dados explorado",
-    Icon: DataBaseIcon,
-  },
-  get_table_details: {
-    running: "Explorando estrutura da tabela",
-    done: "Estrutura da tabela explorada",
-    Icon: DataStructureIcon,
-  },
-  execute_bigquery_sql: {
-    running: "Consultando o BigQuery",
-    done: "Consulta ao BigQuery concluída",
-    Icon: CodeIcon,
-  },
-  decode_table_values: {
-    running: "Decodificando valores da tabela",
-    done: "Valores da tabela decodificados",
-    Icon: DataStructureIcon,
-  },
+const ToolIcons = {
+  search_datasets: SearchIcon,
+  get_dataset_details: DataBaseIcon,
+  get_table_details: DataStructureIcon,
+  execute_bigquery_sql: CodeIcon,
+  decode_table_values: DataStructureIcon,
 };
 
-const FallbackToolPhrases = {
-  running: "Executando ferramenta",
-  done: "Ferramenta executada",
-  Icon: CodeIcon,
-};
-
-function getToolStepMeta(name, { done = false } = {}) {
-  const phrases = ToolPhrases[name] ?? FallbackToolPhrases;
-  return { label: done ? phrases.done : phrases.running, Icon: phrases.Icon };
+function getToolStepMeta(name, { done = false, t } = {}) {
+  const Icon = ToolIcons[name] ?? CodeIcon;
+  const keyBase = ToolIcons[name]
+    ? `ui.thinking.tools.${name}`
+    : "ui.thinking.tools.fallback";
+  return { label: t(`${keyBase}.${done ? "done" : "running"}`), Icon };
 }
 
 function isPlainObject(value) {
@@ -208,13 +186,14 @@ function ToolStepItem({
   messageLoading,
   onExport,
 }) {
+  const { t } = useTranslation("chatbot");
   const [isOpen, setIsOpen] = useState(false);
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
   const status = isLoadingStep ? "loading" : "done";
   const { label, Icon } = isOrphan
-    ? { label: "Resultado adicional", Icon: CodeIcon }
-    : getToolStepMeta(call?.name, { done: status === "done" });
+    ? { label: t("ui.thinking.additionalResult"), Icon: CodeIcon }
+    : getToolStepMeta(call?.name, { done: status === "done", t });
   const hasOutput = Boolean(formatToolOutputText(step.output));
   const downloadProps =
     step.output?.artifact?.type === "query_result"
@@ -330,7 +309,7 @@ function ToolStepItem({
                   textTransform="uppercase"
                   letterSpacing="5%"
                 >
-                  Solicitação
+                  {t("ui.thinking.request")}
                 </BodyText>
                 <SolicitationArgsBlocks call={call} downloadProps={downloadProps} />
               </VStack>
@@ -354,7 +333,7 @@ function ToolStepItem({
                   textTransform="uppercase"
                   letterSpacing="5%"
                 >
-                  Resultado
+                  {t("ui.thinking.result")}
                 </BodyText>
                 <ToolResultView output={step.output} />
               </VStack>

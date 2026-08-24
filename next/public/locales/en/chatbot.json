@@ -1,18 +1,18 @@
 {
   "head": {
-    "pageTitle": "Chatbot LP - Data Basis",
-    "metaTitle": "Chatbot LP - Data Basis"
+    "pageTitle": "Chatbot - Data Basis",
+    "metaTitle": "Chatbot - Data Basis"
   },
   "hero": {
-    "title": "Talk to the largest collection of public data in Brazil",
-    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire BD public datalake",
+    "title": "Talk to a large collection of public data",
+    "description": "Discover the AI tool that helps you create analyses in seconds and guides you through the entire DB public datalake",
     "button": "Try the Chatbot"
   },
   "why": {
     "title": "Why will the Data Basis Chatbot revolutionize the way you work with data?",
     "items": [
       {
-        "title": "Access to Brazil's Largest Public Datalake",
+        "title": "Access to a Large Public Datalake",
         "content": "Browse terabytes of data across more than 740 tables on diverse topics (education, economy, health, labor market, demography, environment).",
         "highlightFeature": 0
       },
@@ -40,6 +40,96 @@
   },
   "banner": {
     "title": "Create analyses in seconds with the power of AI and Base dos Dados' Datalake",
-    "button": "Try the BD chatbot now"
+    "button": "Try the DB chatbot now"
+  },
+  "ui": {
+    "newChat": "New chat",
+    "openMenu": "Open menu",
+    "signOut": "Sign out",
+    "greetingPrefix": "Hello,",
+    "helpQuestion": "How can I help you today?",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyResponse": "Copy response",
+    "goodResponse": "Good response",
+    "badResponse": "Bad response",
+    "cancel": "Cancel",
+    "send": "Send",
+    "delete": "Delete",
+    "error": "Error",
+    "thinkingAria": "Thinking",
+    "suggestedQuestions": "Suggested Questions",
+    "search": {
+      "placeholder": "Ask a question...",
+      "disclaimer": "The chatbot can make mistakes. Consider verifying important information.",
+      "disclaimerPrivacy": "All information submitted here is recorded for analysis and product improvement."
+    },
+    "sidebar": {
+      "closeMenu": "Close menu",
+      "collapseMenu": "Collapse menu",
+      "expandMenu": "Expand menu"
+    },
+    "sources": {
+      "title": "Data Sources"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "thanks": "Thank you for your feedback!",
+      "detailsLabel": "Add details: (optional)",
+      "positivePlaceholder": "What was satisfactory about the response?",
+      "negativePlaceholder": "What was unsatisfactory about the response?"
+    },
+    "download": {
+      "label": "Download results",
+      "csv": "Download CSV",
+      "preparing": "Preparing download...",
+      "started": "Download started",
+      "availableWhenDone": "Available once the response finishes",
+      "retry": "Download failed. Please try again.",
+      "errors": {
+        "expiredTitle": "Result expired",
+        "expiredDescription": "These results are no longer available for download.",
+        "tooLargeTitle": "Result too large",
+        "tooLargeDescription": "These results are too large to download in a single file.",
+        "unsupportedTitle": "Unsupported format",
+        "unsupportedDescription": "The requested format is not available for download.",
+        "notFoundTitle": "Result not found",
+        "notFoundDescription": "We couldn't find that result. It may have expired or belong to another conversation.",
+        "genericTitle": "Download failed",
+        "genericDescription": "The result could not be downloaded. Please try again."
+      }
+    },
+    "thinking": {
+      "request": "Request",
+      "result": "Result",
+      "additionalResult": "Additional result",
+      "tools": {
+        "search_datasets": { "running": "Searching datasets", "done": "Datasets found" },
+        "get_dataset_details": { "running": "Exploring dataset", "done": "Dataset explored" },
+        "get_table_details": { "running": "Exploring table structure", "done": "Table structure explored" },
+        "execute_bigquery_sql": { "running": "Querying BigQuery", "done": "BigQuery query completed" },
+        "decode_table_values": { "running": "Decoding table values", "done": "Table values decoded" },
+        "fallback": { "running": "Running tool", "done": "Tool executed" }
+      }
+    },
+    "thread": {
+      "historyTitle": "Conversations",
+      "deleteTitle": "Confirm conversation deletion",
+      "deleteConfirm": "Are you sure you want to delete this conversation? This action cannot be undone.",
+      "loadError": "Error loading history.",
+      "tryAgain": "Please try again."
+    },
+    "table": {
+      "seeMore": "see more",
+      "seeLess": "see less",
+      "showingRows": "Showing {{shown}} of {{total}} results"
+    },
+    "onboarding": {
+      "items": [
+        { "eyebrow": "Analyses", "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025" },
+        { "eyebrow": "Data", "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?" },
+        { "eyebrow": "Documents", "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?" }
+      ]
+    }
   }
 }

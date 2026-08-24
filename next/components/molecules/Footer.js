@@ -8,7 +8,7 @@ import Link from "../atoms/Link";
 import { isMobileMod } from "../../hooks/useCheckMobile.hook"
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-import { triggerGAEvent, trackNavigateToChatbotLp } from "../../utils";
+import { triggerGAEvent, trackNavigateToChatbotLp, getDiscordUrl } from "../../utils";
 import Display from "../atoms/Text/Display";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -421,7 +421,7 @@ export default function Footer({ template, ocult = false }) {
               locale === 'es' ? "https://bsky.app/profile/basedelosdatos" :
               "https://bsky.app/profile/basedosdados"
             } icon={<BlueskyIcon alt="bluesky" {...IconKey}/>}/>
-            <SocialLink title="Discord" href="https://discord.gg/huKWpsVYx4" icon={<DiscordIcon alt="discord" {...IconKey}/>}/>
+            <SocialLink title="Discord" href={getDiscordUrl(locale)} icon={<DiscordIcon alt="discord" {...IconKey}/>}/>
             <SocialLink title="GitHub" href="https://github.com/basedosdados" icon={<GithubIcon alt="github" {...IconKey}/>}/>
             <SocialLink title="LinkedIn" href="https://www.linkedin.com/company/base-dos-dados/mycompany/" icon={<LinkedinIcon alt="linkedin" {...IconKey}/>}/>
             <SocialLink title="YouTube" href="https://www.youtube.com/basedosdados" icon={<YoutubeIcon alt="youtube" {...IconKey}/>}/>
