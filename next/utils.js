@@ -259,6 +259,33 @@ export function cleanString(string) {
   return returnString
 }
 
+// Descrições vêm do backend em markdown. Crawlers de redes sociais exibem o
+// conteúdo de og:description como texto puro e cortam por volta de 200
+// caracteres, então removemos a marcação e truncamos numa fronteira de palavra.
+export function formatMetaDescription(string, maxLength = 200) {
+  if (!string) return ""
+
+  const plain = String(string)
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/^[ \t]{0,3}#{1,6}[ \t]+/gm, "")
+    .replace(/^[ \t]{0,3}>[ \t]?/gm, "")
+    .replace(/^[ \t]{0,3}(?:[-*+]|\d+\.)[ \t]+/gm, "")
+    .replace(/(\*\*|__)(.*?)\1/g, "$2")
+    .replace(/(\*|_)(.*?)\1/g, "$2")
+
+  const cleaned = cleanString(plain)
+  if (cleaned.length <= maxLength) return cleaned
+
+  const truncated = cleaned.slice(0, maxLength - 1)
+  const lastSpace = truncated.lastIndexOf(" ")
+  const cut = lastSpace > maxLength * 0.6 ? truncated.slice(0, lastSpace) : truncated
+
+  return `${cut.trimEnd().replace(/[,;:.\-–—]$/, "")}…`
+}
+
 export function formatBytes(bytes) {
   if (bytes < 1024) {
     return `${bytes} B`

@@ -677,8 +677,8 @@ export default function Docs({ allDocs, slug, locale, mdxSource, headings }) {
           content={`${frontmatter.title} – ${t('pageTitle')}`}
           key="ogtitle"
         />
-        <meta property="og:type" content="article" />
-        <meta property="og:url" content={`https://basedosdados.org/docs/${slug}`} />
+        <meta property="og:type" content="article" key="ogtype" />
+        <meta property="og:url" content={`https://basedosdados.org/docs/${slug}`} key="ogurl" />
       </Head>
 
       <Box
