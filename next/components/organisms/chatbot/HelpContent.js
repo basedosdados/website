@@ -38,6 +38,13 @@ const HelpLinkProps = {
   _hover: { opacity: 0.8 },
 };
 
+const HelpListProps = {
+  spacing: "12px",
+  margin: "0 0 0 20px",
+  paddingLeft: "0",
+  stylePosition: "outside",
+};
+
 function InlineIcon({ icon: Icon }) {
   return (
     <Box {...InlineIconProps}>
@@ -63,7 +70,7 @@ function HelpSection({ title, children }) {
 
 function HelpList({ items }) {
   return (
-    <UnorderedList spacing="10px" paddingLeft="8px" margin={0}>
+    <UnorderedList {...HelpListProps}>
       {items.map((item) => (
         <ListItem key={item}>
           <BodyText as="span">{item}</BodyText>
