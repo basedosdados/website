@@ -23,7 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, getUserPageHref } from "../../../utils";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -571,7 +571,7 @@ export default function PlansAndPayment ({ userData }) {
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open(getUserPageHref("plans_and_payment"), "_self")
   }
 
   async function closeModalSucess() {
@@ -604,7 +604,7 @@ export default function PlansAndPayment ({ userData }) {
     setIsChatbotTrialSuccess(false)
 
     if(isLoadingH === true) return window.open("/", "_self")
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open(getUserPageHref("plans_and_payment"), "_self")
   }
 
   function formatTimeStamp (value) {
@@ -793,7 +793,7 @@ export default function PlansAndPayment ({ userData }) {
           resetCheckoutState();
           if (query.i)
             return window.open(
-              `/user/${userData.username}?plans_and_payment`,
+              `/user?plans_and_payment`,
               "_self",
             );
           PaymentModal.onClose();
@@ -1348,7 +1348,7 @@ export default function PlansAndPayment ({ userData }) {
                   setIsLoading(false);
                   setIsLoadingH(false);
                   SucessPaymentModal.onClose();
-                  window.open(`/user/${userData?.username}?big_query`, "_self");
+                  window.open(getUserPageHref("big_query"), "_self");
                 }}
                 isLoading={isLoading}
               >

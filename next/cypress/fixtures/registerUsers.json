@@ -2,21 +2,14 @@
   "validUser": {
     "firstName": "Test",
     "lastName": "User",
-    "username": "testuser",
+    "phone": "11999999999",
     "email": "test@example.com",
     "password": "ValidPass123!",
     "confirmPassword": "ValidPass123!"
   },
   "existingEmail": {
     "firstName": "Test",
-    "username": "testuser",
-    "email": "exists@example.com",
-    "password": "AnyPass123!",
-    "confirmPassword": "AnyPass123!"
-  },
-  "existingUsername": {
-    "firstName": "Test",
-    "username": "takenusername",
+    "phone": "11988888888",
     "email": "exists@example.com",
     "password": "AnyPass123!",
     "confirmPassword": "AnyPass123!"

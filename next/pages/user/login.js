@@ -29,6 +29,7 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
+import { getUserPageHref } from "../../utils";
 
 export async function getStaticProps({ locale }) {
   const pages = await withPages();
@@ -144,13 +145,7 @@ export default function Login() {
     const postAuthPlanId = cookies.get('plan_selected');
 
     if(postAuthPlanId) {
-      return router.push({
-        pathname: '/user/[username]',
-        query: { 
-          username: userData.username,
-          plans_and_payment: '',
-        }
-      })
+      return router.push(getUserPageHref("plans_and_payment"))
     }
 
     if(userData.workDataTool === null) {

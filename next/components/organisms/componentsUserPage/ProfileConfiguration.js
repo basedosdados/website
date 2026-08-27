@@ -202,7 +202,6 @@ export default function ProfileConfiguration({ userInfo }) {
         onClose={pictureModal.onClose}
         src={picture}
         id={userInfo.id}
-        username={userInfo.username}
         email={userInfo.email}
       />
 

@@ -1,6 +1,4 @@
 describe('Área do Usuário e Sistema de pagamento', () => {
-  const username = 'cypress_test';
-
   function getSafeUserBdCookie() {
     return cy.getCookie('userBD').then(cookie => {
       if (!cookie?.value) throw new Error('Cookie userBD não encontrado');
@@ -28,19 +26,19 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
     cy.intercept('GET', '/api/stripe/getPlans').as('getPlans');
 
-    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.visit(`/user?plans_and_payment`);
 
     cy.wait('@getPlans', { timeout: 15000 });
   });
 
   it('Não deve acessar sem autenticação', () => {
     cy.clearCookies();
-    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.visit(`/user?plans_and_payment`);
     cy.url().should('include', '/user/login');
   });
 
   it('Deve acessar a página do usuário com autenticação', () => {
-    cy.url().should('include', `/user/${username}`);
+    cy.location('pathname').should('eq', '/user');
     cy.url().should('include', 'plans_and_payment');
   });
 
@@ -317,7 +315,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
             expect(response.body).to.have.property('success', true);
             cy.wait(60000);
 
-            cy.visit(`/user/${username}?plans_and_payment`);
+            cy.visit(`/user?plans_and_payment`);
 
             cy.contains('p', 'BD Grátis', { timeout: 10000 })
               .should('be.visible');
@@ -443,7 +441,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
             expect(response.body).to.have.property('success', true);
             cy.wait(60000);
 
-            cy.visit(`/user/${username}?plans_and_payment`);
+            cy.visit(`/user?plans_and_payment`);
 
             cy.contains('p', 'BD Grátis', { timeout: 10000 })
               .should('be.visible');

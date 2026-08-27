@@ -24,7 +24,9 @@
         "firstName": "First name",
         "lastName": "Last name",
         "email": "Email",
-        "username": "Username",
+        "phone": "Mobile number",
+        "phoneCallingCode": "Country code",
+        "optionalParenthetical": "(optional)",
         "password": "Password",
         "confirmPassword": "Confirm password",
         "register": "Sign up",
@@ -41,17 +43,14 @@
             "firstName": "Enter your first name",
             "lastName": "Enter your last name (optional)",
             "email": "Enter your email",
-            "username": "Enter your username",
             "password": "Create a password",
             "confirmPassword": "Enter password again"
         },
         "errors": {
             "firstName": "Please enter your first name.",
-            "username": {
-                "invalid": "Invalid username or an account with this username already exists.",
-                "noSpaces": "Username cannot contain spaces.",
-                "noAccents": "Username cannot contain accents.",
-                "exists": "An account with this username already exists."
+            "phone": {
+                "invalid": "Enter a valid mobile number.",
+                "exists": "An account with this mobile number already exists."
             },
             "email": {
                 "invalid": "Invalid email address or an account with this email already exists.",
@@ -72,7 +71,7 @@
             },
             "register": "Error while trying to register, please try again later!",
             "registerEmail": "Error while trying to register: user already exists!",
-            "registerUsername": "Error while trying to register: username already exists!"
+            "registerPhone": "Error while trying to register: this mobile number is already in use!"
         }
     },
     "survey": {
@@ -193,7 +192,7 @@
         "removeAllMembers": "Remove all members",
         "removeAllMembersInfo": "By removing all members, all accesses will be removed and you will need to register again to access the platform.",
         "modalRemoveMember": "Are you sure you want to remove the user?",
-        "invalidUsername": "Invalid username",
+        "invalidPhone": "Enter a valid mobile number.",
         "noSpacesInUsername": "Username cannot contain spaces",
         "invalidOrExistingUsername": "Invalid or already existing username",
         "deleteAccount": "Delete account",
@@ -202,8 +201,11 @@
         "confirmEmail": "Confirm your email",
         "emailSentTo": "We've sent an email to:",
         "checkInbox": "Check your inbox and follow the instructions sent in the email to complete the change.",
-        "username": "Username",
-        "enterUsername": "Enter your username",
+        "phone": "Mobile number",
+        "enterPhone": "(11) 9 9999-9999",
+        "phoneHint": "International format, for example +5511999999999. Optional field.",
+        "phoneNotSet": "No mobile number registered",
+        "addPhone": "Add mobile number",
         "currentPassword": "Current password",
         "enterCurrentPassword": "Enter your current password",
         "newPassword": "New password",
@@ -228,11 +230,10 @@
         "planChange": "Plan change",
         "planChangeInstructions": "To change your plan, contact us:",
         "contactUs": "Contact us",
-        "changeUsername": "Change username",
-        "newUsername": "New username",
-        "changeUsernameInput": "Enter your username",
-        "updateUsername": "Update username",
-        "usernameAlreadyExists": "Username already exists",
+        "changePhone": "Change mobile number",
+        "newPhone": "New mobile number",
+        "updatePhone": "Update mobile number",
+        "phoneAlreadyExists": "This mobile number is already in use",
         "confirmDeleteAccount": "Are you sure you want to delete your account?",
         "deleteAccountWarning": "This action cannot be undone. This will permanently delete your account and remove all your data from our servers.",
         "confirmDeleteInstructions": "Type 'delete account' to confirm",

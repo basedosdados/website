@@ -24,7 +24,9 @@
         "firstName": "Nombre",
         "lastName": "Apellido",
         "email": "Correo electrónico",
-        "username": "Nombre de usuario",
+        "phone": "Celular",
+        "phoneCallingCode": "Código de país",
+        "optionalParenthetical": "(opcional)",
         "password": "Contraseña",
         "confirmPassword": "Confirme la contraseña",
         "register": "Registrarse",
@@ -41,17 +43,14 @@
             "firstName": "Ingrese su nombre",
             "lastName": "Ingrese su apellido (opcional)",
             "email": "Ingrese su correo electrónico",
-            "username": "Ingrese su nombre de usuario",
             "password": "Cree una contraseña",
             "confirmPassword": "Ingrese la contraseña nuevamente"
         },
         "errors": {
             "firstName": "Por favor, ingrese su nombre.",
-            "username": {
-                "invalid": "Nombre de usuario inválido o ya existe una cuenta con este nombre de usuario.",
-                "noSpaces": "El nombre de usuario no puede tener espacios.",
-                "noAccents": "El nombre de usuario no puede contener acentos.",
-                "exists": "Ya existe una cuenta con este nombre de usuario."
+            "phone": {
+                "invalid": "Ingrese un número de celular válido.",
+                "exists": "Ya existe una cuenta con este celular."
             },
             "email": {
                 "invalid": "Dirección de correo electrónico inválida o ya existe una cuenta con este correo electrónico.",
@@ -72,7 +71,7 @@
             },
             "register": "Error al intentar registrarse, ¡intente nuevamente más tarde!",
             "registerEmail": "Error al intentar registrarse: ¡el usuario ya existe!",
-            "registerUsername": "Error al intentar registrarse: ¡el nombre de usuario ya existe!"
+            "registerPhone": "Error al intentar registrarse: ¡el celular ya está en uso!"
         }
     },
     "username": {
@@ -105,7 +104,7 @@
         "removeAllMembers": "Eliminar todos los miembros",
         "removeAllMembersInfo": "Al eliminar todos los miembros, todos los accesos serán eliminados.",
         "modalRemoveMember": "¿Está seguro de que desea eliminar el usuario?",
-        "invalidUsername": "Nombre de usuario inválido",
+        "invalidPhone": "Ingrese un número de celular válido.",
         "noSpacesInUsername": "El nombre de usuario no puede contener espacios",
         "invalidOrExistingUsername": "Nombre de usuario inválido o ya existente",
         "deleteAccount": "Eliminar cuenta",
@@ -114,8 +113,11 @@
         "confirmEmail": "Confirme su correo electrónico",
         "emailSentTo": "Hemos enviado un correo electrónico a:",
         "checkInbox": "Revise su bandeja de entrada y siga las instrucciones enviadas en el correo electrónico para completar el cambio.",
-        "username": "Nombre de usuario",
-        "enterUsername": "Ingrese su nombre de usuario",
+        "phone": "Celular",
+        "enterPhone": "(11) 9 9999-9999",
+        "phoneHint": "Formato internacional, por ejemplo +5511999999999. Campo opcional.",
+        "phoneNotSet": "Ningún celular registrado",
+        "addPhone": "Agregar celular",
         "currentPassword": "Contraseña actual",
         "enterCurrentPassword": "Ingrese su contraseña actual",
         "newPassword": "Nueva contraseña",
@@ -141,13 +143,12 @@
         "planChangeInstructions": "Para cambiar su plan, contáctenos:",
         "contactUs": "Contáctenos",
         "errorEraseAccountTitle": "Error al eliminar la cuenta",
-        "changeUsername": "Cambiar nombre de usuario",
+        "changePhone": "Cambiar celular",
         "errorEraseAccountText": "No se pudo eliminar su cuenta, ya que tiene un plan activo con suscripción recurrente.",
         "errorEraseAccountMembers": "No se puede eliminar la cuenta mientras haya miembros vinculados a su suscripción.",
-        "newUsername": "Nuevo nombre de usuario",
-        "changeUsernameInput": "Ingrese su nombre de usuario",
-        "updateUsername": "Actualizar nombre de usuario",
-        "usernameAlreadyExists": "El nombre de usuario ya existe",
+        "newPhone": "Nuevo celular",
+        "updatePhone": "Actualizar celular",
+        "phoneAlreadyExists": "Este celular ya está en uso",
         "confirmDeleteAccount": "¿Está seguro de que desea eliminar su cuenta?",
         "deleteAccountWarning": "Esta acción no se puede deshacer. Esto eliminará permanentemente su cuenta y eliminará todos sus datos de nuestros servidores.",
         "confirmDeleteInstructions": "Escriba 'eliminar cuenta' para confirmar",

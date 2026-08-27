@@ -7,8 +7,8 @@ describe('Fluxo de Registro', () => {
     cy.contains('h1', 'Cadastre-se').should('be.visible');
     cy.get('input[name="firstName"]').should('exist');
     cy.get('input[name="lastName"]').should('exist');
-    cy.get('input[name="user"]').should('exist');
     cy.get('input[name="username"]').should('exist');
+    cy.get('input[name="phone"]').should('exist');
     cy.get('input[id="password"]').should('exist');
     cy.get('input[id="confirmPassword"]').should('exist');
     cy.contains('button', 'Cadastrar').should('be.visible');
@@ -19,7 +19,6 @@ describe('Fluxo de Registro', () => {
 
     cy.contains('Por favor, insira seu nome.').should('be.visible');
     cy.contains('Endereço de e-mail inválido ou já existe uma conta com este e-mail.').should('be.visible');
-    cy.contains('Nome de usuário inválido ou já existe uma conta com este nome de usuário.').should('be.visible');
     cy.contains('Por favor, insira a senha.').should('be.visible');
   });
 
@@ -102,24 +101,10 @@ describe('Fluxo de Registro', () => {
     });
   });
 
-  it('Deve mostrar erro para username já existente', () => {
-    cy.fixture('registerUsers').then((users) => {
-      const existingUser = users.existingUsername;
-
-      cy.mockRegisterApi({
-        statusCode: 200,
-        body: {
-          success: false,
-          errors: [{ field: "username" }]
-        }
-      });
-
-      cy.fillRegisterForm(existingUser);
-      cy.contains('button', 'Cadastrar').click();
-
-      cy.contains('Conta com este nome de usuário já existe.').should('be.visible');
-      cy.contains('Erro ao tentar se cadastrar: o nome de usuário já existe!').should('be.visible');
-    });
+  it('Deve validar formato de celular quando informado', () => {
+    cy.get('input[name="phone"]').type('123');
+    cy.contains('button', 'Cadastrar').click();
+    cy.contains('Informe um número de celular válido.').should('be.visible');
   });
 
   it('Deve alternar visibilidade da senha', () => {

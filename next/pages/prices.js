@@ -23,7 +23,7 @@ import BodyText from "../components/atoms/Text/BodyText";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
-import { triggerGAEvent, triggerGAEventWithData } from "../utils";
+import { triggerGAEvent, triggerGAEventWithData, getUserPageHref, isUserLoggedIn } from "../utils";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -336,7 +336,7 @@ export function SectionPrice({
   const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
-  const [username, setUsername] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [isBDChatbot, setIsBDChatbot] = useState({isCurrentPlan: false})
@@ -439,7 +439,7 @@ export function SectionPrice({
         )
         const planIntervalLegacy = user?.subscriptionSet?.edges?.[0]?.node?.planInterval
 
-        setUsername(user?.username)
+        setIsLoggedIn(isUserLoggedIn(user))
         setIsBDPro({
           isCurrentPlan: user?.proSubscription === "bd_pro",
           planInterval: (nodeBDPro?.planInterval ?? planIntervalLegacy),
@@ -641,9 +641,9 @@ export function SectionPrice({
                       ? t("subscribe")
                       : t("startFreeTrial"),
                 href:
-                  username === null
-                    ? `/user/login`
-                    : `/user/${username}?plans_and_payment`,
+                  isLoggedIn
+                    ? getUserPageHref("plans_and_payment")
+                    : `/user/login`,
                 onClick: () => {
                   triggerGAEventWithData("bd_chatbot_card_price", {
                     plan_interval: toggleAnual ? "year" : "month",
@@ -682,9 +682,9 @@ export function SectionPrice({
                     ? t("subscribe")
                     : t("startFreeTrial"),
               href:
-                username === null
-                  ? `/user/login`
-                  : `/user/${username}?plans_and_payment`,
+                isLoggedIn
+                  ? getUserPageHref("plans_and_payment")
+                  : `/user/login`,
               onClick: () => {
                 triggerGAEventWithData("bd_pro_card_price", {
                   plan_interval: toggleAnual ? "year" : "month",
