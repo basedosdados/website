@@ -270,6 +270,72 @@ export function triggerGAEventWithData(category, data) {
   window.dataLayer.push(eventData);
 }
 
+const UtmParamKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]
+const ChatbotTrialFollowupCampaign = "chatbot_trial_followup"
+
+let chatbotTrialFollowupTracked = false
+
+function readQueryParam(source, key) {
+  const value = source?.[key]
+  if (value == null || value === "") return null
+  return Array.isArray(value) ? value[0] : String(value)
+}
+
+function getUtmQueryParams(query) {
+  const windowQuery =
+    typeof window === "undefined"
+      ? {}
+      : Object.fromEntries(new URLSearchParams(window.location.search))
+  const source = { ...windowQuery, ...(query || {}) }
+  const utm = {}
+
+  for (const key of UtmParamKeys) {
+    const value = readQueryParam(source, key)
+    if (value) utm[key] = value
+  }
+
+  return utm
+}
+
+function stripUtmQueryParams(router) {
+  const query = { ...(router?.query || {}) }
+  let changed = false
+
+  for (const key of UtmParamKeys) {
+    if (key in query) {
+      delete query[key]
+      changed = true
+    }
+  }
+
+  if (!changed) return Promise.resolve()
+
+  return router.replace(
+    { pathname: router.pathname, query },
+    undefined,
+    { shallow: true }
+  )
+}
+
+export async function consumeChatbotTrialFollowup(router) {
+  if (typeof window === "undefined" || !router) return
+
+  const utm = getUtmQueryParams(router.query)
+  if (utm.utm_campaign !== ChatbotTrialFollowupCampaign) return
+
+  if (!chatbotTrialFollowupTracked) {
+    chatbotTrialFollowupTracked = true
+    const user = getUserFromCookie()
+    triggerGAEventWithData("chatbot_trial_followup", {
+      value: "email",
+      ...utm,
+      is_logged_in: Boolean(user?.username),
+    })
+  }
+
+  await stripUtmQueryParams(router)
+}
+
 const CHATBOT_LP_DESKTOP_PLACEMENTS = new Set([
   "desktop_header_right",
   "desktop_solutions_dropdown",
