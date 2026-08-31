@@ -23,6 +23,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
+import ChatbotTrialSurveyModal from "./ChatbotTrialSurveyModal";
 import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
 import { selectPlans, localeToRegion, formatCurrency } from "../../../constants/stripePlans";
 
@@ -131,6 +132,7 @@ export default function PlansAndPayment ({ userData }) {
 
   const PaymentModal = useDisclosure()
   const EmailModal = useDisclosure()
+  const TrialSurveyModal = useDisclosure()
   const SucessPaymentModal = useDisclosure()
   const ErroPaymentModal = useDisclosure()
   const PlansModal = useDisclosure()
@@ -152,6 +154,7 @@ export default function PlansAndPayment ({ userData }) {
   const [isStartingChatbotTrial, setIsStartingChatbotTrial] = useState(false)
   const [isSetupIntentCheckout, setIsSetupIntentCheckout] = useState(false)
   const successCheckoutKindRef = useRef(null)
+  const trialSurveyFinishedRef = useRef(false)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
   const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
@@ -345,9 +348,7 @@ export default function PlansAndPayment ({ userData }) {
       }).then((res) => res.json())
 
       if (trial?.started) {
-        successCheckoutKindRef.current = "chatbot"
-        setIsChatbotTrialSuccess(true)
-        SucessPaymentModal.onOpen()
+        openChatbotTrialSuccessFlow()
         return
       }
 
@@ -515,10 +516,32 @@ export default function PlansAndPayment ({ userData }) {
     )
   }
 
+  function openChatbotTrialSuccessFlow() {
+    successCheckoutKindRef.current = "chatbot"
+    trialSurveyFinishedRef.current = false
+    setIsChatbotTrialSuccess(true)
+    PaymentModal.onClose()
+    TrialSurveyModal.onOpen()
+  }
+
+  function finishChatbotTrialSurvey(source) {
+    if (trialSurveyFinishedRef.current) return
+    trialSurveyFinishedRef.current = true
+    triggerGAEventWithData("chatbot_trial_survey", {
+      value: source || "skipped",
+    })
+    TrialSurveyModal.onClose()
+    SucessPaymentModal.onOpen()
+  }
+
   const openModalSucess = (isTrial = false) => {
     const isChatbotPurchase =
       checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
       checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
+    if (isTrial && isChatbotPurchase) {
+      openChatbotTrialSuccessFlow()
+      return
+    }
     successCheckoutKindRef.current = isChatbotPurchase ? "chatbot" : "bd_pro"
     setIsChatbotTrialSuccess(isTrial)
     PaymentModal.onClose()
@@ -1176,6 +1199,12 @@ export default function PlansAndPayment ({ userData }) {
           </Button>
         </Stack>
       </ModalGeneral>
+
+      <ChatbotTrialSurveyModal
+        isOpen={TrialSurveyModal.isOpen}
+        onSubmit={finishChatbotTrialSurvey}
+        onSkip={() => finishChatbotTrialSurvey("skipped")}
+      />
 
       {/* success */}
       <ModalGeneral
