@@ -197,6 +197,21 @@
         "chatbotSubscriptionSuccessDescription": "Su pago fue aprobado y su plan de Chatbot ya está activo. Si necesita ayuda para configurar o usar el producto, <1>contacte al soporte</1>.",
         "chatbotTrialSuccessTitle": "Ya puedes usar el chatbot",
         "chatbotTrialSuccessDescription": "Aprovecha el período de prueba gratuito para experimentar todas las funcionalidades del chatbot.",
+        "chatbotTrialSurvey": {
+            "title": "¿Cómo llegaste al chatbot?",
+            "description": "Tu respuesta nos ayuda a entender qué canales funcionan mejor.",
+            "options": {
+                "alreadyKnewBd": "Ya conocía Base de los Datos",
+                "instagramAds": "Anuncio en Instagram",
+                "facebookAds": "Anuncio en Facebook",
+                "googleAds": "Anuncio en Google",
+                "googleSearch": "Búsqueda en Google",
+                "linkedin": "LinkedIn",
+                "referral": "Me lo recomendaron",
+                "newsletter": "Correo o newsletter",
+                "other": "Otro"
+            }
+        },
         "viewChatbotSubscription": "Ver suscripción",
         "paymentFailed": "Pago fallido",
         "paymentError": "Ocurrió un error al procesar su pago. Por favor, intente nuevamente o contacte al soporte:",
