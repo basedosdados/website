@@ -46,6 +46,8 @@
     "newChat": "Nueva conversación",
     "openMenu": "Abrir menú",
     "signOut": "Cerrar sesión",
+    "help": "Ayuda",
+    "userMenu": "Menú de la cuenta",
     "greetingPrefix": "Hola,",
     "helpQuestion": "¿Cómo puedo ayudarte hoy?",
     "copy": "Copiar",
@@ -104,12 +106,30 @@
       "result": "Resultado",
       "additionalResult": "Resultado adicional",
       "tools": {
-        "search_datasets": { "running": "Buscando conjuntos de datos", "done": "Conjuntos de datos encontrados" },
-        "get_dataset_details": { "running": "Explorando conjunto de datos", "done": "Conjunto de datos explorado" },
-        "get_table_details": { "running": "Explorando la estructura de la tabla", "done": "Estructura de la tabla explorada" },
-        "execute_bigquery_sql": { "running": "Consultando BigQuery", "done": "Consulta a BigQuery completada" },
-        "decode_table_values": { "running": "Decodificando valores de la tabla", "done": "Valores de la tabla decodificados" },
-        "fallback": { "running": "Ejecutando herramienta", "done": "Herramienta ejecutada" }
+        "search_datasets": {
+          "running": "Buscando conjuntos de datos",
+          "done": "Conjuntos de datos encontrados"
+        },
+        "get_dataset_details": {
+          "running": "Explorando conjunto de datos",
+          "done": "Conjunto de datos explorado"
+        },
+        "get_table_details": {
+          "running": "Explorando la estructura de la tabla",
+          "done": "Estructura de la tabla explorada"
+        },
+        "execute_bigquery_sql": {
+          "running": "Consultando BigQuery",
+          "done": "Consulta a BigQuery completada"
+        },
+        "decode_table_values": {
+          "running": "Decodificando valores de la tabla",
+          "done": "Valores de la tabla decodificados"
+        },
+        "fallback": {
+          "running": "Ejecutando herramienta",
+          "done": "Herramienta ejecutada"
+        }
       }
     },
     "thread": {
@@ -126,10 +146,51 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Análisis", "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025" },
-        { "eyebrow": "Datos", "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?" },
-        { "eyebrow": "Documentos", "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?" }
+        {
+          "eyebrow": "Análisis",
+          "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025"
+        },
+        {
+          "eyebrow": "Datos",
+          "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?"
+        },
+        {
+          "eyebrow": "Documentos",
+          "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?"
+        }
       ]
     }
+  },
+  "help": {
+    "head": {
+      "pageTitle": "Ayuda - Chatbot"
+    },
+    "title": "Chatbot BD",
+    "subtitle": "Para analizar datos públicos utilizando lenguaje natural",
+    "welcomeTitle": "¡Bienvenido(a)! 👋",
+    "welcomeP1": "Bienvenido(a) al chatbot de BD, te ayudará a conversar con tus datos para entenderlos mejor y extraer insights valiosos.",
+    "welcomeP2": "Para empezar, entra en la página de chat en el menú de la izquierda y comienza una nueva conversación.",
+    "welcomeP3": "¿Qué tal preguntarle qué datos hay disponibles sobre el tema de tu investigación?",
+    "welcomeP4": "El chatbot también puede ayudarte con:",
+    "capabilities": [
+      "Análisis exploratorios",
+      "Entendimiento de la organización de las tablas",
+      "Consultas y descarga de datos de nuestro datalake público"
+    ],
+    "welcomeP5": "¡Todo lo que necesitas es una buena pregunta!",
+    "contact": "¿Tienes dudas o necesitas ayuda? Puedes escribirnos al correo <email>suporte.bdpro@basedosdados.org</email> o a través de nuestra comunidad en <discord>Discord</discord> y <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Funcionalidades 🛠️",
+    "dataSources": "Fuentes de Datos: Haz clic en los elementos del campo \"Fuentes de Datos\" para ver los conjuntos de datos utilizados en cada respuesta.",
+    "suggestedQuestions": "Preguntas Sugeridas: Haz clic en los elementos de \"Preguntas Sugeridas\" para profundizar tu análisis con prompts sugeridos por el propio chatbot.",
+    "download": "Descargar datos: Haz clic en el icono (<download></download>) y elige la tabla que te gustaría descargar en .csv.",
+    "copyResults": "Copiar resultados: Haz clic en el icono (<copy></copy>) para copiar la respuesta del chatbot en tu Portapapeles.",
+    "feedback": "Comentarios (<up></up> o <down></down>): Haz clic en los botones de comentarios para evaluar las respuestas, con comentarios opcionales.",
+    "promptGuideTitle": "Consejos de Prompt 📋",
+    "promptGuideIntro": "¡La forma en que conversas con el chatbot puede influir en la calidad de las respuestas! Por eso, a continuación hay algunos consejos para ayudarte a elaborar tus preguntas. Pueden ser útiles si las respuestas son incorrectas o no son lo suficientemente buenas.",
+    "promptTips": [
+      "Intenta hacer una pregunta a la vez. Si tu pregunta es muy compleja, o es un conjunto de varias preguntas, intenta separarla en preguntas más pequeñas y simples.",
+      "En caso de duda, pide ayuda al propio chatbot. Te ayuda a entender mejor qué datos están disponibles, qué líneas de análisis puedes seguir o pídele que explique mejor alguna respuesta.",
+      "Si el chatbot no encuentra una respuesta a tu pregunta y sabes en qué tabla están los datos necesarios para responderla, puedes pedirle explícitamente que busque en esa tabla específica."
+    ]
   }
 }

@@ -46,6 +46,8 @@
     "newChat": "Nova conversa",
     "openMenu": "Abrir menu",
     "signOut": "Sair",
+    "help": "Ajuda",
+    "userMenu": "Menu da conta",
     "greetingPrefix": "Olá,",
     "helpQuestion": "Como posso ajudar você hoje?",
     "copy": "Copiar",
@@ -104,12 +106,30 @@
       "result": "Resultado",
       "additionalResult": "Resultado adicional",
       "tools": {
-        "search_datasets": { "running": "Buscando conjuntos de dados", "done": "Conjuntos de dados encontrados" },
-        "get_dataset_details": { "running": "Explorando conjunto de dados", "done": "Conjunto de dados explorado" },
-        "get_table_details": { "running": "Explorando estrutura da tabela", "done": "Estrutura da tabela explorada" },
-        "execute_bigquery_sql": { "running": "Consultando o BigQuery", "done": "Consulta ao BigQuery concluída" },
-        "decode_table_values": { "running": "Decodificando valores da tabela", "done": "Valores da tabela decodificados" },
-        "fallback": { "running": "Executando ferramenta", "done": "Ferramenta executada" }
+        "search_datasets": {
+          "running": "Buscando conjuntos de dados",
+          "done": "Conjuntos de dados encontrados"
+        },
+        "get_dataset_details": {
+          "running": "Explorando conjunto de dados",
+          "done": "Conjunto de dados explorado"
+        },
+        "get_table_details": {
+          "running": "Explorando estrutura da tabela",
+          "done": "Estrutura da tabela explorada"
+        },
+        "execute_bigquery_sql": {
+          "running": "Consultando o BigQuery",
+          "done": "Consulta ao BigQuery concluída"
+        },
+        "decode_table_values": {
+          "running": "Decodificando valores da tabela",
+          "done": "Valores da tabela decodificados"
+        },
+        "fallback": {
+          "running": "Executando ferramenta",
+          "done": "Ferramenta executada"
+        }
       }
     },
     "thread": {
@@ -126,10 +146,51 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Análises", "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025" },
-        { "eyebrow": "Dados", "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?" },
-        { "eyebrow": "Documentos", "question": "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?" }
+        {
+          "eyebrow": "Análises",
+          "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025"
+        },
+        {
+          "eyebrow": "Dados",
+          "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?"
+        },
+        {
+          "eyebrow": "Documentos",
+          "question": "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?"
+        }
       ]
     }
+  },
+  "help": {
+    "head": {
+      "pageTitle": "Ajuda - Chatbot"
+    },
+    "title": "Chatbot BD",
+    "subtitle": "Para analisar dados públicos utilizando linguagem natural",
+    "welcomeTitle": "Bem-vindo(a)! 👋",
+    "welcomeP1": "Bem-vindo(a) ao chatbot da BD, ele vai te ajudar a conversar com seus dados para você entendê-los melhor e extrair insights valiosos.",
+    "welcomeP2": "Para começar, basta entrar na página de chat no menu à esquerda e começar uma nova conversa.",
+    "welcomeP3": "Que tal perguntar para ele quais são os dados disponíveis sobre o tema da sua pesquisa?",
+    "welcomeP4": "O chatbot também pode te ajudar com:",
+    "capabilities": [
+      "Análises exploratórias",
+      "Entendimento da organização das tabelas",
+      "Consultas e download de dados do nosso datalake público"
+    ],
+    "welcomeP5": "Tudo que você precisa é de uma boa pergunta!",
+    "contact": "Teve dúvidas ou precisa de ajuda? Você pode falar conosco pelo email <email>suporte.bdpro@basedosdados.org</email> ou pela nossa comunidade no <discord>Discord</discord> e <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Funcionalidades 🛠️",
+    "dataSources": "Fontes de Dados: Clique nos itens do campo \"Fontes dos Dados\" para conferir os conjuntos de dados utilizados em cada resposta.",
+    "suggestedQuestions": "Perguntas Sugeridas: Clique nos itens em \"Perguntas Sugeridas\" para aprofundar sua análise com prompts sugeridos pelo próprio chatbot.",
+    "download": "Baixar dados: Clique no ícone (<download></download>) e escolha a tabela que você gostaria de fazer download em .csv.",
+    "copyResults": "Copiar resultados: Clique no ícone (<copy></copy>) para copiar a resposta do chatbot na sua Área de Transferência.",
+    "feedback": "Feedback (<up></up> ou <down></down>): Clique nos botões de feedback para avaliar as respostas, com comentários opcionais.",
+    "promptGuideTitle": "Dicas de Prompt 📋",
+    "promptGuideIntro": "A forma como você conversa com o chatbot pode influenciar na qualidade das respostas! Por isso, abaixo estão listadas algumas dicas para te ajudar a elaborar suas perguntas. Elas podem ser úteis caso as respostas fornecidas estejam incorretas ou não sejam boas o suficiente!",
+    "promptTips": [
+      "Tente fazer uma pergunta por vez. Caso sua pergunta seja muito complexa, ou talvez seja um conjunto de várias perguntas, tente separá-la em perguntas menores e mais simples.",
+      "Na dúvida, peça uma ajuda para o próprio chatbot. Ele te ajuda a entender melhor quais dados estão disponíveis, quais linhas de análises possíveis você pode seguir ou peça para ele explicar melhor alguma resposta.",
+      "Caso o chatbot não esteja encontrando uma resposta para a sua pergunta e você saiba em qual tabela estão os dados necessários para respondê-la, você pode tentar pedir explicitamente para procurar nesta tabela específica."
+    ]
   }
 }

@@ -46,6 +46,8 @@
     "newChat": "New chat",
     "openMenu": "Open menu",
     "signOut": "Sign out",
+    "help": "Help",
+    "userMenu": "Account menu",
     "greetingPrefix": "Hello,",
     "helpQuestion": "How can I help you today?",
     "copy": "Copy",
@@ -104,12 +106,30 @@
       "result": "Result",
       "additionalResult": "Additional result",
       "tools": {
-        "search_datasets": { "running": "Searching datasets", "done": "Datasets found" },
-        "get_dataset_details": { "running": "Exploring dataset", "done": "Dataset explored" },
-        "get_table_details": { "running": "Exploring table structure", "done": "Table structure explored" },
-        "execute_bigquery_sql": { "running": "Querying BigQuery", "done": "BigQuery query completed" },
-        "decode_table_values": { "running": "Decoding table values", "done": "Table values decoded" },
-        "fallback": { "running": "Running tool", "done": "Tool executed" }
+        "search_datasets": {
+          "running": "Searching datasets",
+          "done": "Datasets found"
+        },
+        "get_dataset_details": {
+          "running": "Exploring dataset",
+          "done": "Dataset explored"
+        },
+        "get_table_details": {
+          "running": "Exploring table structure",
+          "done": "Table structure explored"
+        },
+        "execute_bigquery_sql": {
+          "running": "Querying BigQuery",
+          "done": "BigQuery query completed"
+        },
+        "decode_table_values": {
+          "running": "Decoding table values",
+          "done": "Table values decoded"
+        },
+        "fallback": {
+          "running": "Running tool",
+          "done": "Tool executed"
+        }
       }
     },
     "thread": {
@@ -126,10 +146,51 @@
     },
     "onboarding": {
       "items": [
-        { "eyebrow": "Analyses", "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025" },
-        { "eyebrow": "Data", "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?" },
-        { "eyebrow": "Documents", "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?" }
+        {
+          "eyebrow": "Analyses",
+          "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025"
+        },
+        {
+          "eyebrow": "Data",
+          "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?"
+        },
+        {
+          "eyebrow": "Documents",
+          "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?"
+        }
       ]
     }
+  },
+  "help": {
+    "head": {
+      "pageTitle": "Help - Chatbot"
+    },
+    "title": "DB Chatbot",
+    "subtitle": "To analyze public data using natural language",
+    "welcomeTitle": "Welcome! 👋",
+    "welcomeP1": "Welcome to the Data Basis chatbot. It helps you talk to your data so you can understand it better and extract valuable insights.",
+    "welcomeP2": "To get started, go to the chat page in the left menu and start a new conversation.",
+    "welcomeP3": "Why not ask it what data is available on your research topic?",
+    "welcomeP4": "The chatbot can also help you with:",
+    "capabilities": [
+      "Exploratory analyses",
+      "Understanding how tables are organized",
+      "Querying and downloading data from our public datalake"
+    ],
+    "welcomeP5": "All you need is a good question!",
+    "contact": "Have questions or need help? You can reach us by email at <email>suporte.bdpro@basedosdados.org</email> or through our community on <discord>Discord</discord> and <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Features 🛠️",
+    "dataSources": "Data Sources: Click the items in the \"Data Sources\" field to see the datasets used in each response.",
+    "suggestedQuestions": "Suggested Questions: Click the items in \"Suggested Questions\" to deepen your analysis with prompts suggested by the chatbot itself.",
+    "download": "Download data: Click the icon (<download></download>) and choose the table you would like to download as a .csv file.",
+    "copyResults": "Copy results: Click the icon (<copy></copy>) to copy the chatbot's response to your clipboard.",
+    "feedback": "Feedback (<up></up> or <down></down>): Click the feedback buttons to rate the responses, with optional comments.",
+    "promptGuideTitle": "Prompt Tips 📋",
+    "promptGuideIntro": "How you talk to the chatbot can affect the quality of the answers! Below are some tips to help you write your questions. They can be useful if the answers are incorrect or not good enough.",
+    "promptTips": [
+      "Try asking one question at a time. If your question is too complex, or is actually several questions, try splitting it into smaller, simpler questions.",
+      "When in doubt, ask the chatbot itself for help. It can help you understand which data is available, which lines of analysis you can follow, or you can ask it to explain a response better.",
+      "If the chatbot cannot find an answer to your question and you know which table has the data needed to answer it, you can explicitly ask it to look in that specific table."
+    ]
   }
 }
