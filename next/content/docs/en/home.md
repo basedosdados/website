@@ -52,8 +52,8 @@ tables with:
 
 Base dos Dados packages allow access to the public *data lake*
 directly from your computer or development environment.
-{/* Another way to access BD resources is directly through the endpoints, as
-documented in [BD Open API](https://basedosdados.org/openapi).
+{/* Another way to access DB resources is directly through the endpoints, as
+documented in [DB Open API](https://basedosdados.org/openapi).
 */}
 The currently available packages are:
 

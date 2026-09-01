@@ -7,6 +7,49 @@ export async function clearClientSession() {
   } catch (_) {}
 }
 
+// Returns the brand domain this build is serving. Prefers the build-time
+// NEXT_PUBLIC_DOMAIN (baked per Docker image: basedosdados.org, data-basis.org,
+// basedelosdatos.org) so it is correct on the server and under Docker, where the
+// browser hostname is localhost. Falls back to the hostname for local npm dev.
+export function getDomain() {
+  if (process.env.NEXT_PUBLIC_DOMAIN) return process.env.NEXT_PUBLIC_DOMAIN.replace(/^www\./, "");
+  if (typeof window !== "undefined") return window.location.hostname.replace(/^www\./, "");
+  return "";
+}
+
+// True only on the Brazilian branch (basedosdados.org), which is the only one
+// that offers consulting services and Brazil-specific content.
+export function isBasedosdadosDomain() {
+  return getDomain() === "basedosdados.org";
+}
+
+// Community Discord invite per interface language. Each locale has its own
+// server, so links must follow the site language rather than always pointing
+// at the Portuguese community.
+export function getDiscordUrl(locale) {
+  const byLocale = {
+    pt: "https://discord.gg/huKWpsVYx4",
+    en: "https://discord.gg/tx57ek6zqQ",
+    es: "https://discord.gg/nNfQYcmrvM",
+  };
+  return byLocale[locale] || byLocale.pt;
+}
+
+// The backend query generator (getTableOneBigTableQuery) always aliases the
+// table as `dados`. Rename that alias to match the interface language so the
+// generated SQL reads naturally per site: pt -> dados, en -> data, es -> datos.
+// The replace is targeted at the alias declaration (`AS dados`) and the column
+// prefixes (`dados.`); word boundaries keep it from touching the project path
+// `basedosdados.<dataset>.<table>` or any other identifier.
+export function localizeQueryTableAlias(query, locale) {
+  const aliasByLocale = { pt: "dados", en: "data", es: "datos" };
+  const alias = aliasByLocale[locale] || "dados";
+  if (alias === "dados" || typeof query !== "string") return query;
+  return query
+    .replace(/\bAS dados\b/g, `AS ${alias}`)
+    .replace(/\bdados\./g, `${alias}.`);
+}
+
 export function filterOnlyValidValues(obj, validValues = null) {
   return Object.entries(obj).filter(
     ([k, v]) =>
@@ -225,6 +268,72 @@ export function triggerGAEventWithData(category, data) {
   };
 
   window.dataLayer.push(eventData);
+}
+
+const UtmParamKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"]
+const ChatbotTrialFollowupCampaign = "chatbot_trial_followup"
+
+let chatbotTrialFollowupTracked = false
+
+function readQueryParam(source, key) {
+  const value = source?.[key]
+  if (value == null || value === "") return null
+  return Array.isArray(value) ? value[0] : String(value)
+}
+
+function getUtmQueryParams(query) {
+  const windowQuery =
+    typeof window === "undefined"
+      ? {}
+      : Object.fromEntries(new URLSearchParams(window.location.search))
+  const source = { ...windowQuery, ...(query || {}) }
+  const utm = {}
+
+  for (const key of UtmParamKeys) {
+    const value = readQueryParam(source, key)
+    if (value) utm[key] = value
+  }
+
+  return utm
+}
+
+function stripUtmQueryParams(router) {
+  const query = { ...(router?.query || {}) }
+  let changed = false
+
+  for (const key of UtmParamKeys) {
+    if (key in query) {
+      delete query[key]
+      changed = true
+    }
+  }
+
+  if (!changed) return Promise.resolve()
+
+  return router.replace(
+    { pathname: router.pathname, query },
+    undefined,
+    { shallow: true }
+  )
+}
+
+export async function consumeChatbotTrialFollowup(router) {
+  if (typeof window === "undefined" || !router) return
+
+  const utm = getUtmQueryParams(router.query)
+  if (utm.utm_campaign !== ChatbotTrialFollowupCampaign) return
+
+  if (!chatbotTrialFollowupTracked) {
+    chatbotTrialFollowupTracked = true
+    const user = getUserFromCookie()
+    triggerGAEventWithData("chatbot_trial_followup", {
+      value: "email",
+      ...utm,
+      is_logged_in: Boolean(user?.username),
+    })
+  }
+
+  await stripUtmQueryParams(router)
 }
 
 const CHATBOT_LP_DESKTOP_PLACEMENTS = new Set([

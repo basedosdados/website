@@ -1,7 +1,7 @@
 {
   "head": {
-    "pageTitle": "BD Pro - Data Basis",
-    "metaTitle": "BD Pro - Data Basis"
+    "pageTitle": "DB Pro - Data Basis",
+    "metaTitle": "DB Pro - Data Basis"
   },
   "hero": {
     "title": ["Public data,", "processed and always up-to-date"],
@@ -70,8 +70,8 @@
     "title": "Frequently Asked Questions - FAQ"
   },
   "banner": {
-    "title": "Discover BD Pro",
-    "description": "Subscribe to BD Pro to access the most updated version of these and other datasets, always in sync with the original source. Besides having constant access to integrated, quality data, your subscription helps Data Basis maintain and expand the largest public and free datalake in Brazil.",
+    "title": "Discover DB Pro",
+    "description": "Subscribe to DB Pro to access the most updated version of these and other datasets, always in sync with the original source. Besides having constant access to integrated, quality data, your subscription helps Data Basis maintain and expand the largest public and free datalake in Brazil.",
     "button": "Learn more and take a free test"
   }
 }

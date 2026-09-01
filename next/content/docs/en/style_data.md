@@ -231,7 +231,7 @@ OPTIONS (Description='Description of the table')
 
 - BigQuery accepts up to 4,000 partitions per table.
 
-- In our BD, tables are usually partitioned by: `year`, `month`, `quarter`, and `state_code`.
+- In our DB, tables are usually partitioned by: `year`, `month`, `quarter`, and `state_code`.
 
 - Note that when partitioning a table, it is necessary to exclude the corresponding column. Example: it is necessary to exclude the `year` column when partitioning by `year`.
 
@@ -281,4 +281,4 @@ The field refers to the data in the raw data source, which has not yet passed th
 
 ## **Thought of improvements for the standards defined?**
 
-Open an [issue on our Github](https://github.com/basedosdados/sdk/labels/docs) or send a message on [Discord](https://discord.gg/huKWpsVYx4) to talk to us :)
+Open an [issue on our Github](https://github.com/basedosdados/sdk/labels/docs) or send a message on [Discord](https://discord.gg/tx57ek6zqQ) to talk to us :)

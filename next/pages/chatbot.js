@@ -18,7 +18,7 @@ import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuest
 import Display from "../components/atoms/Text/Display";
 import SidebarIcon from "../public/img/icons/sidebarIcon";
 import CrossIcon from "../public/img/icons/crossIcon";
-import BDLogoImage from "../public/img/logos/bd_logo";
+import BrandLogo from "../components/organisms/chatbot/BrandLogo";
 import HelpContent from "../components/organisms/chatbot/HelpContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
@@ -176,7 +176,7 @@ function ChatbotContent() {
       <Box
         as="button"
         type="button"
-        aria-label="Abrir menu"
+        aria-label={t("ui.openMenu")}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -191,12 +191,12 @@ function ChatbotContent() {
         <SidebarIcon width="20px" height="20px" />
       </Box>
 
-      <BDLogoImage widthImage="48px" heightImage="21px" />
+      <BrandLogo widthImage="48px" heightImage="21px" />
 
       <Box
         as="button"
         type="button"
-        aria-label="Nova conversa"
+        aria-label={t("ui.newChat")}
         display="flex"
         alignItems="center"
         justifyContent="center"
@@ -227,15 +227,15 @@ function ChatbotContent() {
   return (
     <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
-        <title>{showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}</title>
+        <title>{showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}</title>
         <meta
           property="og:title"
-          content={showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}
+          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={showHelp ? t("help.head.pageTitle") : "Chatbot - Basedosdados"}
+          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
           key="ogdesc"
         />
       </Head>
@@ -305,7 +305,7 @@ function ChatbotContent() {
                   lineHeight={{ base: "36px", md: "48px" }}
                   paddingX={{ base: "8px", md: 0 }}
                 >
-                  Olá,
+                  {t("ui.greetingPrefix")}
                   <Text
                     as="span"
                     textTransform="capitalize"
@@ -313,7 +313,7 @@ function ChatbotContent() {
                   >
                     {greetingFirstName
                       ? greetingFirstName
-                      : "Como posso ajudar você hoje?"}
+                      : t("ui.helpQuestion")}
                   </Text>
                 </Display>
                 <Box width="100%" flexShrink={0}>

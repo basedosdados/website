@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect } from "react";
+import { getDiscordUrl } from "../utils";
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -126,7 +127,7 @@ export default function Contact({ pages }) {
               {t('questionsText')}
               <Link
                 display="inline"
-                href="https://discord.gg/huKWpsVYx4"
+                href={getDiscordUrl(locale)}
                 color="#0068C5"
                 _hover={{color: "#0057A4"}}
                 fontSize="16px"

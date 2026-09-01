@@ -7,6 +7,7 @@ import {
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import React, { useMemo, useState } from "react";
+import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
@@ -66,6 +67,7 @@ const ActionButtonProps = {
 };
 
 function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
+  const { t } = useTranslation("chatbot");
   const isUser = message.role === "user";
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -129,7 +131,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           fontSize="14px"
           lineHeight="20px"
         >
-          Obrigado pelo seu feedback!
+          {t("ui.feedback.thanks")}
         </Box>
       ),
     });
@@ -268,7 +270,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                 <Flex gap="8px" alignItems="center">
                   <Tooltip
                     {...ActionTooltipProps}
-                    label={isCopied ? "Copiado!" : "Copiar resposta"}
+                    label={isCopied ? t("ui.copied") : t("ui.copyResponse")}
                   >
                     <Box
                       {...ActionButtonProps}
@@ -295,7 +297,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                 </Flex>
 
                 <Flex gap="8px">
-                  <Tooltip {...ActionTooltipProps} label="Boa resposta">
+                  <Tooltip {...ActionTooltipProps} label={t("ui.goodResponse")}>
                     <Box
                       {...ActionButtonProps}
                       cursor={feedback != null ? "default" : "pointer"}
@@ -309,7 +311,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                       <ThumbUpIcon width="18px" height="18px" />
                     </Box>
                   </Tooltip>
-                  <Tooltip {...ActionTooltipProps} label="Resposta ruim">
+                  <Tooltip {...ActionTooltipProps} label={t("ui.badResponse")}>
                     <Box
                       {...ActionButtonProps}
                       cursor={feedback != null ? "default" : "pointer"}

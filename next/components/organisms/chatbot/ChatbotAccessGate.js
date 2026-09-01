@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import cookies from "js-cookie";
-import { redirectToChatbotCheckout, clearClientSession } from "../../../utils";
+import { redirectToChatbotCheckout, clearClientSession, consumeChatbotTrialFollowup } from "../../../utils";
 
 async function clearAuthCookiesAndRedirectLogin(router) {
   if (typeof window !== "undefined") {
@@ -27,10 +27,14 @@ export default function ChatbotAccessGate({ children }) {
   const [canEnter, setCanEnter] = useState(false);
 
   useEffect(() => {
+    if (!router.isReady) return;
+
     let cancelled = false;
 
     async function checkAccess() {
       if (typeof window === "undefined") return;
+      await consumeChatbotTrialFollowup(router);
+      if (cancelled) return;
       if (!hasUserCookie()) {
         await clearAuthCookiesAndRedirectLogin(router);
         return;
@@ -60,7 +64,7 @@ export default function ChatbotAccessGate({ children }) {
     return () => {
       cancelled = true;
     };
-  }, [router]);
+  }, [router.isReady]);
 
   if (!canEnter) return null;
   return children;
