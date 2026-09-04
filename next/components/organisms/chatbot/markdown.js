@@ -204,7 +204,7 @@ export const MemoCodeBlock = React.memo(CodeBlock);
 
 export const componentsMk = {
   p: ({ children }) => (
-    <BodyText as="p" color="#252A32" marginBottom="4px">
+    <BodyText as="p" color="#252A32" marginBottom="12px">
       {children}
     </BodyText>
   ),

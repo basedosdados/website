@@ -207,11 +207,10 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
 
   return (
     // Rows divided only between one another (the first has no top rule). On hover
-    // the row shows a rounded fill that reaches the padded edge, the dividers
-    // touching it (its own top rule and the next row's) fade out, and the text and
-    // trailing arrow darken. Padding on the container lets the fill reach the edge
-    // without overflowing.
-    <Box marginTop="12px" paddingX="8px">
+    // the row shows a rounded fill that extends slightly past the text (into the
+    // surrounding answer padding), the dividers touching it (its own top rule and
+    // the next row's) fade out, and the text and trailing arrow darken.
+    <Box marginTop="12px">
       {followUpQuestions.map((question, index) => (
         <Box
           as="button"

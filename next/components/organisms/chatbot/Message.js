@@ -217,11 +217,15 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
           borderRadius="12px"
-          padding={{ base: "12px", md: "16px" }}
-          margin={isUser ? { base: "16px 0 8px", md: "32px 0 16px" } : 0}
+          padding={
+            isUser
+              ? { base: "12px", md: "16px" }
+              : { base: "0 12px", md: "0 16px" }
+          }
+          margin={isUser ? { base: "12px 0 0", md: "20px 0 0" } : 0}
           backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
           color="#000"
-          overflow="hidden"
+          overflow={isUser ? "hidden" : "visible"}
         >
           {(showThinkingSection || showDiceLoader) && (
             <Box marginBottom="16px">
@@ -254,6 +258,9 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
               sx={{
                 wordBreak: "break-word",
                 overflowWrap: "anywhere",
+                // The last block keeps no trailing margin, so the answer sits a
+                // tight, reference-matching gap above the action row below it.
+                "& > *:last-child": { marginBottom: 0 },
               }}
             >
               <ReactMarkdown
@@ -272,7 +279,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
             message.id && (
               <HStack
                 spacing="8px"
-                marginTop="16px"
+                marginTop="8px"
                 width="100%"
                 justifyContent="space-between"
               >
@@ -341,22 +348,20 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                 </Flex>
               </HStack>
             )}
+
+          {showFollowUps ? (
+            <Box
+              width="100%"
+              {...(isLiveAnswer ? SectionFadeInProps : {})}
+            >
+              <FollowUpQuestionsList
+                followUpQuestions={message.structuredResponse.follow_up_prompts}
+                onQuestionClick={onFollowUpClick}
+              />
+            </Box>
+          ) : null}
         </Box>
       </Box>
-
-      {showFollowUps ? (
-        <Box
-          width="100%"
-          maxWidth="760px"
-          margin="0 auto"
-          {...(isLiveAnswer ? SectionFadeInProps : {})}
-        >
-          <FollowUpQuestionsList
-            followUpQuestions={message.structuredResponse.follow_up_prompts}
-            onQuestionClick={onFollowUpClick}
-          />
-        </Box>
-      ) : null}
 
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
