@@ -9,11 +9,18 @@ describe('Fluxo de Login - Cenários Principais', () => {
 
   it('Deve exibir o formulário corretamente', () => {
     cy.contains('h1', 'Faça login').should('be.visible');
+    cy.contains('Continuar com o Google').should('be.visible');
     cy.get('input[name=username]').should('exist');
     cy.get('input[name=password]').should('exist');
     cy.contains('button', 'Entrar').should('be.visible');
     cy.contains('Esqueceu a senha?').should('be.visible');
     cy.contains('Cadastre-se').should('be.visible');
+  });
+
+  it('Deve ir para a recuperação de senha', () => {
+    cy.contains('Esqueceu a senha?').click();
+    cy.url().should('include', '/user/password-recovery');
+    cy.contains('Redefina sua senha').should('be.visible');
   });
 
   it('Deve permitir alternar visibilidade da senha', () => {
