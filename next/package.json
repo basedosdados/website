@@ -9,7 +9,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",
-    "cypress": "npx cypress open"
+    "cypress": "npx cypress open",
+    "cypress:run": "npx cypress run --browser chrome",
+    "cypress:run:electron": "npx cypress run"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -57,6 +59,7 @@
   "devDependencies": {
     "cypress": "^14.4.0",
     "cypress-plugin-stripe-elements": "^1.0.2",
+    "cypress-real-events": "^1.15.0",
     "medium-2-md": "github:gautamdhameja/medium-2-md",
     "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.1",
