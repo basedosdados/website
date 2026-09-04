@@ -15,6 +15,52 @@ import { useTranslation } from "next-i18next";
 
 import DownloadIcon from "../../../public/img/icons/downloadIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
+import BracesIcon from "../../../public/img/icons/bracesIcon";
+import FileGenericIcon from "../../../public/img/icons/fileGenericIcon";
+
+// Per-format icon + accent for the export download card: table icon (green) for CSV,
+// braces (yellow) for JSONL, generic file (blue) for AVRO/PARQUET and anything else.
+const EXPORT_FORMAT_STYLES = {
+  CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },
+  JSONL: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
+  JSON: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
+  AVRO: { Icon: FileGenericIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
+  PARQUET: { Icon: FileGenericIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
+};
+
+const DEFAULT_EXPORT_FORMAT_STYLE = EXPORT_FORMAT_STYLES.AVRO;
+
+function exportFormatStyle(format) {
+  return (
+    EXPORT_FORMAT_STYLES[String(format || "").toUpperCase()] ||
+    DEFAULT_EXPORT_FORMAT_STYLE
+  );
+}
+
+// AVRO now leads OFFERED_EXPORT_FORMATS on the backend, so `formats[0]` is no longer CSV.
+// Prefer CSV when it is offered; otherwise fall back to the first offered format.
+function preferredFormat(formats) {
+  const list = Array.isArray(formats) ? formats : [];
+  return list.find((f) => String(f).toUpperCase() === "CSV") || list[0] || "CSV";
+}
+
+function formatFileSize(bytes) {
+  if (bytes == null || !Number.isFinite(bytes) || bytes < 0) return null;
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ["KB", "MB", "GB", "TB"];
+  let value = bytes / 1024;
+  let unitIndex = 0;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+  const decimals = value >= 100 ? 0 : 1;
+  const formatted = value.toLocaleString("pt-BR", {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+  return `${formatted} ${units[unitIndex]}`;
+}
 
 const ActionTooltipProps = {
   hasArrow: true,
@@ -167,14 +213,15 @@ function DownloadToastContent({ status, title, description }) {
   );
 }
 
-async function downloadQueryResult({ toast, onExport, messageId, artifact, t }) {
-  if (!artifact?.query_ref) {
-    console.error("downloadQueryResult: artifact sem query_ref", artifact);
+async function downloadQueryResult({ toast, onExport, messageId, queryRef, format, fileName, t }) {
+  if (!queryRef) {
+    console.error("downloadQueryResult: queryRef ausente");
     return false;
   }
 
-  const format = artifact.formats?.[0] || "CSV";
-  const toastId = `chatbot-download-${artifact.query_ref}`;
+  const exportFormat = (format || "CSV").toUpperCase();
+  const downloadName = fileName || `resultado.${exportFormat.toLowerCase()}`;
+  const toastId = `chatbot-download-${queryRef}`;
 
   if (toast.isActive(toastId)) {
     toast.close(toastId);
@@ -193,12 +240,12 @@ async function downloadQueryResult({ toast, onExport, messageId, artifact, t }) 
   });
 
   try {
-    const url = await onExport(messageId, artifact.query_ref, format);
+    const url = await onExport(messageId, queryRef, exportFormat);
     if (!url) throw new Error("URL de download vazia");
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${artifact.slug || "resultado"}.${format.toLowerCase()}`;
+    link.download = downloadName;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -234,10 +281,19 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
 
   const handleDownload = async (e) => {
     e.stopPropagation();
-    if (disabled || status === "loading" || !onExport || !messageId || !artifact) return;
+    if (disabled || status === "loading" || !onExport || !messageId || !artifact?.query_ref) return;
 
     setStatus("loading");
-    const success = await downloadQueryResult({ toast, onExport, messageId, artifact, t });
+    const format = preferredFormat(artifact.formats);
+    const success = await downloadQueryResult({
+      toast,
+      onExport,
+      messageId,
+      queryRef: artifact.query_ref,
+      format,
+      fileName: `${artifact.slug || "resultado"}.${format.toLowerCase()}`,
+      t,
+    });
     setStatus(success ? "idle" : "error");
     if (!success) {
       setTimeout(() => setStatus("idle"), 2000);
@@ -274,6 +330,126 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
   );
 }
 
+/**
+ * A download card for an export artifact the agent produced on request
+ * (`{ type: "export", query_ref, format, filename, size_bytes, message_id }`). The file
+ * is already materialized on the backend, so the card shows the real filename and exact
+ * size and downloads in a single click. The icon and accent color key off the format:
+ * table/green for CSV, braces/yellow for JSONL, generic file/blue for AVRO/PARQUET.
+ */
+export function ExportResultCard({ messageId, artifact, onExport }) {
+  const { t } = useTranslation("chatbot");
+  const [status, setStatus] = useState("idle");
+  const toast = useToast();
+
+  if (!artifact?.query_ref) return null;
+
+  const format = (artifact.format || "CSV").toUpperCase();
+  const fileName = artifact.filename || `resultado.${format.toLowerCase()}`;
+  const sizeLabel = formatFileSize(artifact.size_bytes);
+  const { Icon, color, tint } = exportFormatStyle(format);
+  // The export endpoint authorizes by (message_id, query_ref). A result exported from an
+  // earlier turn belongs to the message that produced it, which the artifact carries —
+  // use it so cross-turn exports resolve, falling back to the message showing the card.
+  const targetMessageId = artifact.message_id || messageId;
+  const isLoading = status === "loading";
+
+  const subtitle =
+    status === "error"
+      ? t("ui.download.retry")
+      : [format, sizeLabel].filter(Boolean).join(" · ");
+
+  const handleDownload = async () => {
+    if (isLoading || !onExport || !targetMessageId) return;
+
+    setStatus("loading");
+    const success = await downloadQueryResult({
+      toast,
+      onExport,
+      messageId: targetMessageId,
+      queryRef: artifact.query_ref,
+      format,
+      fileName,
+      t,
+    });
+    setStatus(success ? "idle" : "error");
+    if (!success) setTimeout(() => setStatus("idle"), 2000);
+  };
+
+  return (
+    <Flex
+      width="320px"
+      minWidth={0}
+      alignItems="center"
+      gap="12px"
+      padding="10px 14px"
+      borderRadius="12px"
+      backgroundColor="#F7F7F7"
+      border="1px solid #E5E7EB"
+      cursor={isLoading ? "default" : "pointer"}
+      transition="border-color 0.2s ease, background-color 0.2s ease"
+      onClick={handleDownload}
+      _hover={{ backgroundColor: isLoading ? "#F7F7F7" : "#EFEFEF", borderColor: "#DEDFE0" }}
+    >
+      <Flex
+        flexShrink={0}
+        alignItems="center"
+        justifyContent="center"
+        width="40px"
+        height="40px"
+        borderRadius="8px"
+        backgroundColor={tint}
+        color={color}
+      >
+        <Icon width="20px" height="20px" color="currentColor" />
+      </Flex>
+      <Box minWidth={0} flex={1}>
+        <Box
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="14px"
+          lineHeight="20px"
+          color="#252A32"
+          noOfLines={1}
+          wordBreak="break-all"
+        >
+          {fileName}
+        </Box>
+        <Box
+          fontFamily="Roboto"
+          fontWeight="400"
+          fontSize="12px"
+          lineHeight="16px"
+          color={status === "error" ? "#E53E3E" : "#71757A"}
+          textTransform={status === "error" ? "none" : "uppercase"}
+          letterSpacing="0.2px"
+          noOfLines={1}
+        >
+          {subtitle}
+        </Box>
+      </Box>
+      <Flex
+        flexShrink={0}
+        alignItems="center"
+        justifyContent="center"
+        width="28px"
+        height="28px"
+        borderRadius="8px"
+        color={status === "error" ? "#E53E3E" : "#464A51"}
+        fill={status === "error" ? "#E53E3E" : "#464A51"}
+        transition="color 0.2s ease, background-color 0.2s ease"
+        _hover={{ color: "#252A32", fill: "#252A32", backgroundColor: "#EEEEEE" }}
+      >
+        {isLoading ? (
+          <Spinner width="14px" height="14px" thickness="2px" color="currentColor" />
+        ) : (
+          <DownloadIcon width="18px" height="18px" fill="currentColor" />
+        )}
+      </Flex>
+    </Flex>
+  );
+}
+
 export function DownloadResultsButton({ messageId, downloads, onExport }) {
   const { t } = useTranslation("chatbot");
   const [statusByRef, setStatusByRef] = useState({});
@@ -287,7 +463,16 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
     }
 
     setStatusByRef((prev) => ({ ...prev, [artifact.query_ref]: "loading" }));
-    const success = await downloadQueryResult({ toast, onExport, messageId, artifact, t });
+    const format = preferredFormat(artifact.formats);
+    const success = await downloadQueryResult({
+      toast,
+      onExport,
+      messageId,
+      queryRef: artifact.query_ref,
+      format,
+      fileName: `${artifact.slug || "resultado"}.${format.toLowerCase()}`,
+      t,
+    });
     setStatusByRef((prev) => ({ ...prev, [artifact.query_ref]: success ? null : "error" }));
     if (!success) {
       setTimeout(() => {
@@ -320,7 +505,7 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
           <MenuList {...MenuListProps}>
             {downloads.map((artifact, index) => {
               const status = statusByRef[artifact.query_ref];
-              const format = (artifact.formats?.[0] || "CSV").toLowerCase();
+              const format = preferredFormat(artifact.formats).toLowerCase();
               const fileName = `${artifact.slug || "resultado"}.${format}`;
               return (
                 <Fragment key={artifact.query_ref}>
