@@ -483,26 +483,24 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                 </BodyText>
               </GridItem>
 
-              {locale !== 'pt' &&
-                <GridItem colSpan={{ base: 5, lg: 4 }} marginBottom="8px">
-                  <LabelText
-                    typography="large"
-                    marginBottom="8px"
-                  >
-                    {t('spatialCoverage')}
-                  </LabelText>
-                  <BodyText
-                    typography="small"
-                    color="#464A51"
-                  >
-                    {dataset?.[`spatialCoverageName${capitalize(locale)}`]
-                      ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
-                          .sort((a, b) => a.localeCompare(b, locale))
-                          .join(', ')
-                      : t('notProvided')}
-                  </BodyText>
-                </GridItem>
-              }
+              <GridItem colSpan={{ base: 5, lg: 4 }} marginBottom="8px">
+                <LabelText
+                  typography="large"
+                  marginBottom="8px"
+                >
+                  {t('spatialCoverage')}
+                </LabelText>
+                <BodyText
+                  typography="small"
+                  color="#464A51"
+                >
+                  {dataset?.[`spatialCoverageName${capitalize(locale)}`]
+                    ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
+                        .sort((a, b) => a.localeCompare(b, locale))
+                        .join(', ')
+                    : t('notProvided')}
+                </BodyText>
+              </GridItem>
             </Grid>
           </GridItem>
         </Grid>

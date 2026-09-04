@@ -577,34 +577,30 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         </StackSkeleton>
       </Stack>
 
-      {/* {locale !== 'pt' ?
-        <Stack spacing="8px"  marginBottom="40px !important">
-          <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
-            <TitleText typography="small">
-              {t('table.spatialCoverage')}
-            </TitleText>
-          </StackSkeleton>
+      <Stack spacing="8px"  marginBottom="40px !important">
+        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
+          <TitleText typography="small">
+            {t('table.spatialCoverage')}
+          </TitleText>
+        </StackSkeleton>
 
-          <StackSkeleton
-            height="20px"
-            width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
-            isLoading={isLoading}
+        <StackSkeleton
+          height="20px"
+          width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
+          isLoading={isLoading}
+        >
+          <BodyText
+            typography="small"
+            color="#464A51"
           >
-            <BodyText
-              typography="small"
-              color="#464A51"
-            >
-              {resource?.[`spatialCoverageName${capitalize(locale)}`]
-                ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
-                    .sort((a, b) => a.localeCompare(b, locale))
-                    .join(', ')
-                : t('table.notProvided')}
-            </BodyText>
-          </StackSkeleton>
-        </Stack>
-        :
-        <></>
-      } */}
+            {resource?.[`spatialCoverageName${capitalize(locale)}`]
+              ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
+                  .sort((a, b) => a.localeCompare(b, locale))
+                  .join(', ')
+              : t('table.notProvided')}
+          </BodyText>
+        </StackSkeleton>
+      </Stack>
 
       <Stack
         spacing="8px"
