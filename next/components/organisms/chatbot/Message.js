@@ -25,6 +25,7 @@ import {
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
 import PulseDotLoader from "./PulseDotLoader";
+import useFitToContent from "../../../hooks/useFitToContent";
 
 const sectionFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
@@ -69,6 +70,9 @@ const ActionButtonProps = {
 function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
   const { t } = useTranslation("chatbot");
   const isUser = message.role === "user";
+  // Collapses the user bubble to its longest wrapped line (no-op when the ref
+  // isn't attached, i.e. for assistant messages).
+  const userBubbleRef = useFitToContent([message.content]);
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [pendingRating, setPendingRating] = useState(null);
@@ -213,13 +217,17 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
         paddingX={{ base: "0", md: 0 }}
       >
         <Box
-          maxWidth={isUser ? { base: "90%", md: "80%" } : "100%"}
+          ref={isUser ? userBubbleRef : undefined}
+          maxWidth={isUser ? "85%" : "100%"}
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
-          borderRadius="12px"
+          borderRadius={isUser ? "16px" : "12px"}
+          // A tighter bottom-right corner gives the user bubble a subtle tail
+          // toward the sender's side (the reference's rounded-2xl + rounded-br-md).
+          borderBottomRightRadius={isUser ? "6px" : undefined}
           padding={
             isUser
-              ? { base: "12px", md: "16px" }
+              ? "12px 16px"
               : { base: "0 12px", md: "0 16px" }
           }
           margin={isUser ? { base: "12px 0 0", md: "20px 0 0" } : 0}
@@ -243,6 +251,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
 
           {isUser ? (
             <BodyText
+              lineHeight="28px"
               whiteSpace="pre-wrap"
               wordBreak="break-word"
               overflowWrap="anywhere"
