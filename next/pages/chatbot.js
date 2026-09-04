@@ -5,6 +5,7 @@ import {
   Box,
   Text
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -24,16 +25,63 @@ import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
 
-function getGreetingFirstNameFromCookie() {
+const greetingFadeIn = keyframes`
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+function getUserEmailFromCookie() {
   try {
     const raw = cookies.get("userBD");
     if (!raw) return null;
     const user = JSON.parse(raw);
-    const name = user?.firstName;
-    return name || null;
-  } catch { 
+    return user?.email || null;
+  } catch {
     return null;
   }
+}
+
+// Name from the email local-part's first segment, matching the reference:
+// "victor.tornisiello@basedosdados.org" -> "Victor".
+function nameFromEmail(email) {
+  const rawName = email?.split("@")[0]?.split(".")[0] ?? "";
+  return rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : "";
+}
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+// A time-of-day greeting, the user's name (from their email), and an optional
+// follow-up line, picked at random — mirroring the reference chat's greeting.
+// Re-rolls so the exact combination doesn't repeat on the next page load
+// (`avoidSignature` is the previous load's signature).
+function buildGreeting(t, avoidSignature) {
+  const hour = new Date().getHours();
+  const period =
+    hour >= 5 && hour < 12
+      ? "morning"
+      : hour >= 12 && hour < 18
+        ? "afternoon"
+        : "evening";
+  const name = nameFromEmail(getUserEmailFromCookie());
+  // "Olá"/"Hello"/"Hola" is always in the pool, so it can surface at any hour.
+  const greetingWords = [t(`ui.greetings.${period}`), t("ui.greetings.neutral")];
+  const followups = t("ui.greetings.followups", { returnObjects: true });
+  const followupList = Array.isArray(followups) ? followups : [""];
+
+  // A handful of tries is more than enough to dodge one signature across the
+  // available combinations; the loop is bounded so it always resolves.
+  let result;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const greeting = pickRandom(greetingWords);
+    const followup = pickRandom(followupList) || "";
+    const base = name ? `${greeting}, ${name}` : greeting;
+    const lead = `${base}.`;
+    result = { lead, followup, signature: `${lead}|${followup}` };
+    if (result.signature !== avoidSignature) break;
+  }
+  return result;
 }
 
 function ChatbotContent() {
@@ -50,11 +98,12 @@ function ChatbotContent() {
   const skipFetchRef = useRef(false);
   const searchRef = useRef(null);
 
-  const [greetingFirstName, setGreetingFirstName] = useState(null);
+  const [greeting, setGreeting] = useState(null);
   const [showHelp, setShowHelp] = useState(false);
+  const [composerHasText, setComposerHasText] = useState(false);
 
-  useEffect(() => {
-    setGreetingFirstName(getGreetingFirstNameFromCookie());
+  const handleComposerTextChange = useCallback((text) => {
+    setComposerHasText((text || "").trim().length > 0);
   }, []);
 
   useEffect(() => {
@@ -152,14 +201,38 @@ function ChatbotContent() {
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
 
+  // Re-pick the greeting each time the new-chat view is entered — a fresh visit
+  // to /chatbot, "new chat", or navigating back from a thread — not only on a
+  // hard refresh. Skips the greeting shown on the previous visit so it doesn't
+  // repeat two times in a row. Client-only (reads the clock, cookie, and rolls
+  // at random), so it never runs during SSR/hydration.
+  useEffect(() => {
+    // Cleared while away so the next visit fades in fresh instead of flashing the
+    // previous greeting (the component stays mounted across in-app navigation).
+    if (!showNewChatGreeting) {
+      setGreeting(null);
+      return;
+    }
+    let previous = null;
+    try {
+      previous = window.localStorage.getItem("chatbot_last_greeting");
+    } catch {}
+    const next = buildGreeting(t, previous);
+    setGreeting(next);
+    try {
+      window.localStorage.setItem("chatbot_last_greeting", next.signature);
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showNewChatGreeting]);
+
   const searchField = (
     <Search
       ref={searchRef}
       threadId={threadId}
       onSend={handleSend}
-      isLoading={isLoading}
       isGenerating={isGenerating}
       showDisclaimer={!showNewChatGreeting}
+      onTextChange={handleComposerTextChange}
     />
   );
 
@@ -297,31 +370,37 @@ function ChatbotContent() {
                 paddingX={{ base: "0", md: "32px" }}
                 gap={{ base: "20px", md: "32px" }}
               >
-                <Display
-                  as="h2"
-                  typography="small"
-                  textAlign="center"
-                  fontSize={{ base: "28px", md: "36px" }}
-                  lineHeight={{ base: "36px", md: "48px" }}
-                  paddingX={{ base: "8px", md: 0 }}
-                >
-                  {t("ui.greetingPrefix")}
-                  <Text
-                    as="span"
-                    textTransform="capitalize"
-                    marginLeft="8px"
+                {greeting && (
+                  <Display
+                    as="h2"
+                    typography="small"
+                    textAlign="center"
+                    fontSize={{ base: "28px", md: "36px" }}
+                    lineHeight={{ base: "36px", md: "48px" }}
+                    paddingX={{ base: "8px", md: 0 }}
+                    display="flex"
+                    flexWrap="wrap"
+                    justifyContent="center"
+                    sx={{ columnGap: "8px" }}
+                    animation={`${greetingFadeIn} 0.4s ease-out both`}
                   >
-                    {greetingFirstName
-                      ? greetingFirstName
-                      : t("ui.helpQuestion")}
-                  </Text>
-                </Display>
+                    <Text as="span" whiteSpace="nowrap">
+                      {greeting.lead}
+                    </Text>
+                    {greeting.followup ? (
+                      <Text as="span" whiteSpace="nowrap">
+                        {greeting.followup}
+                      </Text>
+                    ) : null}
+                  </Display>
+                )}
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
                 <OnboardingQuestions
                   onQuestionClick={handleFollowUpClick}
                   isDisabled={isLoading || isGenerating}
+                  hasText={composerHasText}
                 />
               </Flex>
             ) : (

@@ -61,8 +61,15 @@
     "error": "Erro",
     "thinkingAria": "Pensando",
     "suggestedQuestions": "Perguntas Sugeridas",
+    "greetings": {
+      "morning": "Bom dia",
+      "afternoon": "Boa tarde",
+      "evening": "Boa noite",
+      "neutral": "Olá",
+      "followups": ["", "Por onde começamos?", "Como posso ajudar?"]
+    },
     "search": {
-      "placeholder": "Faça uma pergunta...",
+      "placeholder": "Escreva uma mensagem...",
       "disclaimer": "O chatbot pode cometer erros. Considere verificar informações importantes.",
       "disclaimerPrivacy": "Todas as informações aqui enviadas são registradas para análise e melhoria do produto."
     },
