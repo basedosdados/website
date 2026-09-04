@@ -1,15 +1,12 @@
 import {
   Box,
   Flex,
-  HStack,
   Menu,
   MenuButton,
   MenuDivider,
   MenuItem,
   MenuList,
-  VStack,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
 import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 
@@ -17,7 +14,8 @@ import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
 import LinkIcon from "../../../public/img/icons/redirectIcon";
 import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
-import { MessageBubbleCleanIcon } from "../../../public/img/icons/messageBubbleIcon";
+import ArrowRightIcon from "../../../public/img/icons/arrowRightIcon";
+import ChatBubbleDotsIcon from "../../../public/img/icons/chatBubbleDotsIcon";
 
 function getDatasetTableUrl(source) {
   const datasetId = source?.dataset_id ?? source?.datasetId;
@@ -208,56 +206,82 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
   if (!Array.isArray(followUpQuestions) || followUpQuestions.length === 0) return null;
 
   return (
-    <Box marginTop="8px">
-      <VStack
-        align="stretch"
-        spacing={0}
-        width="100%"
-      >
-        {followUpQuestions.map((question, index) => (
-          <Box key={index}>
-            {index > 0 && (
-              <Box height="1px" backgroundColor="#EEEEEE" marginX="16px" />
-            )}
-            <HStack
-              as="button"
-              type="button"
-              width="100%"
-              spacing="8px"
-              align="flex-start"
-              textAlign="left"
-              padding={{ base: "10px 12px", md: "8px 16px" }}
-              background="transparent"
-              border="none"
-              cursor="pointer"
-              color="#464A51"
-              borderRadius="8px"
-              transition="color 0.2s ease, background-color 0.2s ease"
-              _hover={{
-                backgroundColor: "#EEEEEE",
-              }}
-              onClick={() => onQuestionClick?.(question)}
-            >
-              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
-                <MessageBubbleCleanIcon
-                  width="16px"
-                  height="16px"
-                  fill="currentColor"
-                />
-              </Box>
-              <BodyText color="inherit" flex={1} minWidth={0}>
-                {question}
-              </BodyText>
-              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
-                <ArrowForwardIcon
-                  boxSize="16px"
-                  color="currentColor"
-                />
-              </Box>
-            </HStack>
+    // Rows divided only between one another (the first has no top rule). On hover
+    // the row shows a rounded fill that reaches the padded edge, the dividers
+    // touching it (its own top rule and the next row's) fade out, and the text and
+    // trailing arrow darken. Padding on the container lets the fill reach the edge
+    // without overflowing.
+    <Box marginTop="12px" paddingX="8px">
+      {followUpQuestions.map((question, index) => (
+        <Box
+          as="button"
+          type="button"
+          key={`${index}-${question}`}
+          position="relative"
+          isolation="isolate"
+          display="flex"
+          alignItems="center"
+          gap="10px"
+          width="100%"
+          padding="10px 0"
+          textAlign="left"
+          background="transparent"
+          border="none"
+          borderTop="1px solid #EEEEEE"
+          color="#464A51"
+          cursor="pointer"
+          transition="color 0.15s ease, border-color 0.15s ease"
+          _first={{ borderTopColor: "transparent" }}
+          _hover={{ borderTopColor: "transparent", color: "#252A32" }}
+          _focusVisible={{
+            borderTopColor: "transparent",
+            color: "#252A32",
+            outline: "none",
+          }}
+          sx={{
+            "&:hover + button, &:focus-visible + button": {
+              borderTopColor: "transparent",
+            },
+            "&:hover [data-fu-fill], &:focus-visible [data-fu-fill]": {
+              backgroundColor: "#EEEEEE",
+            },
+            "&:hover [data-fu-arrow], &:focus-visible [data-fu-arrow]": {
+              color: "#252A32",
+            },
+          }}
+          onClick={() => onQuestionClick?.(question)}
+        >
+          <Box
+            aria-hidden
+            data-fu-fill
+            position="absolute"
+            top={0}
+            bottom={0}
+            left="-8px"
+            right="-8px"
+            zIndex={-1}
+            borderRadius="10px"
+            backgroundColor="transparent"
+            transition="background-color 0.15s ease"
+          />
+          <Box as="span" display="inline-flex" flexShrink={0} color="#71757A">
+            <ChatBubbleDotsIcon width="16px" height="16px" />
           </Box>
-        ))}
-      </VStack>
+          <BodyText as="span" typography="small" color="inherit" flex={1} minWidth={0}>
+            {question}
+          </BodyText>
+          <Box
+            as="span"
+            data-fu-arrow
+            display="inline-flex"
+            flexShrink={0}
+            color="#71757A"
+            transition="color 0.15s ease"
+          >
+            <ArrowRightIcon width="16px" height="16px" />
+          </Box>
+        </Box>
+      ))}
     </Box>
   );
 });

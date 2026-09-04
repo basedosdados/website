@@ -6,7 +6,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
@@ -182,6 +182,15 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     !message.isTyping &&
     !!message.structuredResponse;
 
+  // A freshly answered message mounts mid-generation (not yet complete) and
+  // completes later; one loaded from history is already complete on first
+  // render. Only the former animates its follow-ups in — captured once on mount.
+  const completeOnMountRef = useRef(null);
+  if (completeOnMountRef.current === null) {
+    completeOnMountRef.current = responseComplete;
+  }
+  const isLiveAnswer = completeOnMountRef.current === false;
+
   const dataSources = message.structuredResponse?.data_sources;
   const hasDataSources =
     Array.isArray(dataSources) && dataSources.length > 0;
@@ -340,7 +349,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           width="100%"
           maxWidth="760px"
           margin="0 auto"
-          {...SectionFadeInProps}
+          {...(isLiveAnswer ? SectionFadeInProps : {})}
         >
           <FollowUpQuestionsList
             followUpQuestions={message.structuredResponse.follow_up_prompts}
