@@ -72,7 +72,9 @@
       "expandMenu": "Expand menu"
     },
     "sources": {
-      "title": "Data Sources"
+      "title": "Data Sources",
+      "count_one": "{{count}} source",
+      "count_other": "{{count}} sources"
     },
     "feedback": {
       "title": "Feedback",

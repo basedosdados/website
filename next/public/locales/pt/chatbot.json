@@ -72,7 +72,9 @@
       "expandMenu": "Expandir menu"
     },
     "sources": {
-      "title": "Fontes dos Dados"
+      "title": "Fontes dos Dados",
+      "count_one": "{{count}} fonte",
+      "count_other": "{{count}} fontes"
     },
     "feedback": {
       "title": "Feedback",

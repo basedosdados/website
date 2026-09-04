@@ -20,7 +20,7 @@ import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
 import { DownloadResultsButton } from "./DownloadResults";
 import {
-  DataSourcesList,
+  DataSourcesButton,
   FollowUpQuestionsList,
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
@@ -294,6 +294,10 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                     downloads={downloadableResults}
                     onExport={onExport}
                   />
+
+                  {showDataSources && (
+                    <DataSourcesButton dataSources={dataSources} />
+                  )}
                 </Flex>
 
                 <Flex gap="8px">
@@ -331,27 +335,12 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
         </Box>
       </Box>
 
-      {showDataSources ? (
-        <Box
-          width="100%"
-          maxWidth="760px"
-          margin="0 auto"
-          {...SectionFadeInProps}
-        >
-          <DataSourcesList dataSources={dataSources} />
-        </Box>
-      ) : null}
-
       {showFollowUps ? (
         <Box
           width="100%"
           maxWidth="760px"
           margin="0 auto"
-          sx={{
-            animation: `${sectionFadeIn} 0.4s ease-out ${
-              showDataSources ? "0.28s" : "0s"
-            } both`,
-          }}
+          {...SectionFadeInProps}
         >
           <FollowUpQuestionsList
             followUpQuestions={message.structuredResponse.follow_up_prompts}
