@@ -44,6 +44,46 @@ describe('Fluxo de Login - Cenários Principais', () => {
     });
   });
 
+  it('Deve logar com o usuário Cypress de verdade', function () {
+    const email = Cypress.env('CRYPRESS_AUTH_EMAIL');
+    const password = Cypress.env('CRYPRESS_AUTH_PASSWORD');
+
+    if (!email || !password) {
+      this.skip();
+    }
+
+    cy.window().then((win) => {
+      win.localStorage.removeItem('previousPath');
+    });
+
+    cy.intercept('GET', '/api/user/getToken*').as('realGetToken');
+    cy.intercept('GET', '/api/user/getUser*').as('realGetUser');
+
+    cy.login(email, password);
+
+    cy.wait('@realGetToken', { timeout: 30000 })
+      .its('response.statusCode')
+      .should('eq', 200);
+
+    cy.wait('@realGetUser', { timeout: 30000 })
+      .its('response.statusCode')
+      .should('eq', 200);
+
+    cy.getCookie('userBD', { timeout: 20000 }).should('exist');
+
+    cy.location('pathname', { timeout: 20000 }).should((pathname) => {
+      expect(pathname).to.not.eq('/user/login');
+      expect(
+        pathname === '/' || pathname.startsWith('/user/'),
+        `redirect após login real: ${pathname}`
+      ).to.eq(true);
+    });
+
+    cy.parseUserBdCookie().then((user) => {
+      expect(user.username).to.eq('cypress_test');
+    });
+  });
+
   it('Deve redirecionar para survey quando workDataTool é null', () => {
     cy.intercept('GET', '/api/user/getToken*', { id: 'user123' });
     cy.intercept('GET', '/api/user/getUser*', { 

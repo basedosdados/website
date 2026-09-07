@@ -1107,6 +1107,7 @@ export default function PlansAndPayment ({ userData }) {
                 userData={userData}
                 plan={plan}
                 coupon={coupon}
+                enableChatbotTrial={isChatbotCheckout && !hasSubscribed}
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
