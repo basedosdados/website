@@ -179,6 +179,80 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
+  it('Deve mostrar erro para cupom inválido', () => {
+    cy.openPlansModal();
+
+    cy.get('#toggle-prices')
+      .should('exist')
+      .and('have.attr', 'type', 'checkbox')
+      .and('be.checked')
+      .click({ force: true });
+
+    cy.contains('R$ 47/mês', { timeout: 20000 })
+      .should('be.visible');
+
+    cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Confirme seu plano', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.get('input[placeholder="Digite o cupom"]', { timeout: 15000 })
+        .clear({ force: true })
+        .type('cupom_invalido_xyz', { force: true });
+
+      cy.contains('button', 'Aplicar', { timeout: 30000 })
+        .should('be.visible')
+        .click({ force: true });
+
+      cy.contains('Por favor, insira um cupom válido.', { timeout: 30000 })
+        .should('be.visible');
+    });
+  });
+
+  it('Deve chegar no checkout ou no trial do Chatbot', () => {
+    cy.get('body').then(($body) => {
+      const canSubscribe = $body.find('button:visible').filter((_, el) =>
+        (el.textContent || '').includes('Assinar Chatbot')
+      ).length > 0;
+
+      if (!canSubscribe) {
+        cy.contains('a:visible, button:visible', 'Acessar chatbot').should('be.visible');
+        cy.contains('button', 'Cancelar assinatura do chatbot').should('be.visible');
+        return;
+      }
+
+      cy.wait(1000);
+      cy.contains('button', 'Assinar Chatbot', { timeout: 20000 })
+        .should('be.visible')
+        .click();
+
+      cy.get(
+        '#chakra-modal-modal-chatbot-trial-survey, #chakra-modal-modal-stripe-checkout',
+        { timeout: 60000 }
+      )
+        .filter(':visible')
+        .should('have.length.at.least', 1);
+
+      cy.get('body').then(($after) => {
+        const $survey = $after.find('#chakra-modal-modal-chatbot-trial-survey');
+        const surveyOpen = $survey.length && $survey.is(':visible');
+
+        if (surveyOpen) {
+          cy.contains('Como você chegou até o chatbot?').should('be.visible');
+          return;
+        }
+
+        cy.get('#chakra-modal-modal-stripe-checkout')
+          .should('be.visible')
+          .within(() => {
+            cy.contains('Confirme seu plano').should('be.visible');
+            cy.contains(/chatbot/i).should('be.visible');
+          });
+      });
+    });
+  });
+
   const baseUrl = String(
     Cypress.env('NEXT_PUBLIC_BASE_URL_FRONTEND') || Cypress.config('baseUrl') || ''
   ).toLowerCase();
@@ -222,28 +296,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('button', 'Confirmar pagamento', { timeout: 60000 })
         .should('be.visible');
 
-      cy.fillStripeCard();
-
-      cy.intercept(
-        'POST',
-        /https:\/\/api\.stripe\.com\/v1\/(payment_intents|setup_intents)\/.+\/confirm/
-      ).as('stripeConfirmation');
-
-      cy.get('@checkoutModal').within(() => {
-        cy.contains('button', 'Confirmar pagamento', { timeout: 20000 })
-          .should('be.visible')
-          .click();
-      });
-
-      cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
-        expect(interception.response.statusCode).to.be.oneOf([200, 201]);
-        const body = interception.response.body || {};
-        const status =
-          body.status ||
-          body.paymentIntent?.status ||
-          body.setupIntent?.status;
-        expect(status).to.eq('succeeded');
-      });
+      cy.confirmStripePayment();
 
       cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
         .should('be.visible')

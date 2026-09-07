@@ -66,7 +66,7 @@ Cypress.Commands.add('parseUserBdCookie', () => {
   });
 });
 
-Cypress.Commands.add('cancelActiveSubscription', () => {
+Cypress.Commands.add('cancelActiveSubscription', (types = ['bd_pro', 'chatbot']) => {
   cy.loginAndSetCookies().then(({ user }) => {
     const userData = typeof user === 'string' ? JSON.parse(user) : user;
     const rawId = userData?.id;
@@ -76,39 +76,52 @@ Cypress.Commands.add('cancelActiveSubscription', () => {
       ? String(rawId).split(':')[1]
       : String(rawId);
 
-    cy.request({
-      method: 'GET',
-      url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}&t=${btoa('bd_pro')}`,
-      failOnStatusCode: false,
-    }).then((subscriptionResponse) => {
-      if (subscriptionResponse.status !== 200 || !subscriptionResponse.body) {
-        cy.log('Nenhuma assinatura BD Pro ativa para cancelar');
+    const cancelNext = (index, didCancel) => {
+      if (index >= types.length) {
+        if (!didCancel) return;
+
+        cy.wait(60000);
+        cy.loginAndSetCookies().then(({ user: refreshedUser }) => {
+          const refreshed = typeof refreshedUser === 'string'
+            ? JSON.parse(refreshedUser)
+            : refreshedUser;
+          if (refreshed?.proSubscription === 'bd_pro') {
+            cy.wait(30000);
+            cy.loginAndSetCookies();
+          }
+        });
         return;
       }
 
+      const type = types[index];
+
       cy.request({
         method: 'GET',
-        url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionResponse.body)}`,
+        url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}&t=${btoa(type)}`,
         failOnStatusCode: false,
-      }).then((response) => {
-        if (response.status === 200 && response.body?.success) {
-          cy.log('Assinatura cancelada imediatamente');
-          cy.wait(60000);
-          cy.loginAndSetCookies().then(({ user: refreshedUser }) => {
-            const refreshed = typeof refreshedUser === 'string'
-              ? JSON.parse(refreshedUser)
-              : refreshedUser;
-            if (refreshed?.proSubscription === 'bd_pro') {
-              cy.wait(30000);
-              cy.loginAndSetCookies();
-            }
-          });
-          return;
+      }).then((subscriptionResponse) => {
+        if (subscriptionResponse.status !== 200 || !subscriptionResponse.body) {
+          cy.log(`Nenhuma assinatura ${type} ativa para cancelar`);
+          return cancelNext(index + 1, didCancel);
         }
 
-        cy.log(`Falha ao cancelar assinatura: status ${response.status}`);
+        cy.request({
+          method: 'GET',
+          url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionResponse.body)}`,
+          failOnStatusCode: false,
+        }).then((response) => {
+          if (response.status === 200 && response.body?.success) {
+            cy.log(`Assinatura ${type} cancelada imediatamente`);
+            return cancelNext(index + 1, true);
+          }
+
+          cy.log(`Falha ao cancelar assinatura ${type}: status ${response.status}`);
+          cancelNext(index + 1, didCancel);
+        });
       });
-    });
+    };
+
+    cancelNext(0, false);
   });
 });
 
@@ -328,27 +341,55 @@ Cypress.Commands.add('fillStripeCard', ({
       Cypress.Promise.resolve()
     );
 
-  const pressTab = () =>
-    cdp('Input.dispatchKeyEvent', {
-      type: 'rawKeyDown',
-      key: 'Tab',
-      code: 'Tab',
-      windowsVirtualKeyCode: 9,
-      nativeVirtualKeyCode: 9,
-    }).then(() =>
-      cdp('Input.dispatchKeyEvent', {
-        type: 'keyUp',
-        key: 'Tab',
-        code: 'Tab',
-        windowsVirtualKeyCode: 9,
-        nativeVirtualKeyCode: 9,
-      })
-    );
+  const clickFirstMatch = (queries) => {
+    const tryQuery = (index) => {
+      if (index >= queries.length) return Cypress.Promise.resolve(false);
+      const { query, exactText } = queries[index];
+      return clickSearch(query, exactText ? { exactText } : {}).then((clicked) => {
+        if (clicked) return true;
+        return tryQuery(index + 1);
+      });
+    };
+    return tryQuery(0);
+  };
 
-  cy.get('#chakra-modal-modal-stripe-checkout iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
-    .should('be.visible');
+  const fillField = (queries, value) =>
+    clickFirstMatch(queries).then((clicked) => {
+      if (!clicked) return false;
+      return typeChars(value).then(() => true);
+    });
 
-  cy.then(() =>
+  const fillCardFields = () =>
+    fillField(
+      [
+        { query: 'Número do cartão', exactText: 'Número do cartão' },
+        { query: 'Card number', exactText: 'Card number' },
+        { query: '1234 1234 1234 1234' },
+      ],
+      number
+    ).then((okNumber) => {
+      if (!okNumber) return false;
+      return fillField(
+        [
+          { query: 'MM / AA' },
+          { query: 'MM/AA' },
+          { query: 'Data de validade', exactText: 'Data de validade' },
+        ],
+        expiry
+      ).then((okExpiry) => {
+        if (!okExpiry) return false;
+        return fillField(
+          [
+            { query: 'CVC' },
+            { query: 'CVV' },
+            { query: 'Código de segurança', exactText: 'Código de segurança' },
+          ],
+          cvc
+        );
+      });
+    });
+
+  const selectCardTab = () =>
     clickSearch('Cartão', { exactText: 'Cartão' }).then((clicked) => {
       if (clicked) return true;
       return clickSearch('Card', { exactText: 'Card' }).then((clickedCard) => {
@@ -359,29 +400,50 @@ Cypress.Commands.add('fillStripeCard', ({
           )
         );
       });
-    })
-  );
+    });
+
+  cy.get('#chakra-modal-modal-stripe-checkout iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+    .should('be.visible');
 
   cy.wait(1000);
 
   cy.then(() =>
-    clickSearch('Número do cartão', { exactText: 'Número do cartão' }).then((clicked) => {
-      if (clicked) return true;
-      return clickSearch('Card number', { exactText: 'Card number' }).then((clickedEn) => {
-        if (clickedEn) return true;
-        return clickSearch('1234 1234 1234 1234');
-      });
-    }).then((clickedNumber) => {
-      if (!clickedNumber) {
-        throw new Error('Campo de cartão do Stripe não encontrado após selecionar Cartão');
-      }
-      return typeChars(number)
-        .then(pressTab)
-        .then(() => typeChars(expiry))
-        .then(pressTab)
-        .then(() => typeChars(cvc));
+    fillCardFields().then((filled) => {
+      if (filled) return true;
+      return selectCardTab()
+        .then(() => new Cypress.Promise((resolve) => setTimeout(resolve, 1000)))
+        .then(() => fillCardFields())
+        .then((filledAfterSelect) => {
+          if (!filledAfterSelect) {
+            throw new Error('Campo de cartão do Stripe não encontrado após selecionar Cartão');
+          }
+          return true;
+        });
     })
   );
+});
+
+Cypress.Commands.add('confirmStripePayment', () => {
+  cy.intercept(
+    'POST',
+    /https:\/\/api\.stripe\.com\/v1\/(payment_intents|setup_intents)\/.+\/confirm/
+  ).as('stripeConfirmation');
+
+  cy.fillStripeCard();
+
+  cy.contains('button', 'Confirmar pagamento', { timeout: 20000 })
+    .should('be.visible')
+    .click();
+
+  cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
+    expect(interception.response.statusCode).to.be.oneOf([200, 201]);
+    const body = interception.response.body || {};
+    const status =
+      body.status ||
+      body.paymentIntent?.status ||
+      body.setupIntent?.status;
+    expect(status).to.eq('succeeded');
+  });
 });
 
 Cypress.Commands.add('applyCoupon', (coupon, text) => {
