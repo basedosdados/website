@@ -15,7 +15,8 @@ import BodyText from "../../atoms/Text/BodyText";
 import { ThumbUpIcon, ThumbDownIcon, CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
-import { componentsMk } from "./markdown";
+import { componentsMk, markdownContentSx } from "./markdown";
+import rehypeNumericTables from "./rehypeNumericTables";
 import { DownloadResultsButton } from "./DownloadResults";
 import {
   DataSourcesButton,
@@ -268,13 +269,12 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
               sx={{
                 wordBreak: "break-word",
                 overflowWrap: "anywhere",
-                // The last block keeps no trailing margin, so the answer sits a
-                // tight, reference-matching gap above the action row below it.
-                "& > *:last-child": { marginBottom: 0 },
+                ...markdownContentSx,
               }}
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeNumericTables]}
                 components={componentsMk}
               >
                 {message.content}

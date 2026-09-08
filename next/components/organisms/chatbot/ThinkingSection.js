@@ -23,6 +23,7 @@ import {
 } from "./icons";
 import {
   componentsMk,
+  markdownContentSx,
   MemoCodeBlock,
   formatToolOutputText,
   ToolResultView,
@@ -391,6 +392,7 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
         fontSize="14px"
         color="#71757A"
         fontStyle="italic"
+        sx={markdownContentSx}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={componentsMk}>
           {step.markdown}
