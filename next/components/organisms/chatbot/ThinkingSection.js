@@ -29,6 +29,7 @@ import {
   ToolResultView,
   RecordTable,
 } from "./markdown";
+import { renderFriendlyRequest } from "./toolViews";
 import TextShimmer from "./TextShimmer";
 import useMinDuration from "../../../hooks/useMinDuration";
 
@@ -93,6 +94,11 @@ function SolicitationArgsBlocks({ call, downloadProps }) {
       </MemoCodeBlock>
     );
   }
+
+  // A friendly, per-tool view of the request args; falls through to the generic
+  // key/value table when the tool/shape isn't recognized.
+  const friendly = renderFriendlyRequest(call?.name, parsed);
+  if (friendly) return friendly;
 
   if (isPlainObject(parsed) && Object.keys(parsed).length > 0) {
     return <RecordTable record={parsed} />;
@@ -277,7 +283,7 @@ function ToolStepItem({
         <Collapse in={isOpen} animateOpacity>
           <VStack
             align="stretch"
-            spacing="8px"
+            spacing="4px"
             width="100%"
             minWidth={0}
             minHeight={0}
@@ -328,7 +334,7 @@ function ToolStepItem({
                 >
                   {t("ui.thinking.result")}
                 </BodyText>
-                <ToolResultView output={step.output} />
+                <ToolResultView output={step.output} name={call?.name} />
               </VStack>
             )}
           </VStack>

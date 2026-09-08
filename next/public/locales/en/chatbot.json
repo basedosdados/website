@@ -119,6 +119,26 @@
       "request": "Request",
       "result": "Response",
       "additionalResult": "Additional result",
+      "views": {
+        "datasets_one": "{{formatted}} dataset",
+        "datasets_other": "{{formatted}} datasets",
+        "tables_one": "{{formatted}} table",
+        "tables_other": "{{formatted}} tables",
+        "columns_one": "{{formatted}} column",
+        "columns_other": "{{formatted}} columns",
+        "rows_one": "{{formatted}} row",
+        "rows_other": "{{formatted}} rows",
+        "values_one": "{{formatted}} distinct value",
+        "values_other": "{{formatted}} distinct values",
+        "emptyRows": "No results.",
+        "emptyValues": "No values.",
+        "coverage": "Coverage",
+        "req": {
+          "dataset": "dataset",
+          "table": "table",
+          "column": "column"
+        }
+      },
       "tools": {
         "search_datasets": {
           "running": "Searching datasets",

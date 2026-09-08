@@ -119,6 +119,26 @@
       "request": "Solicitud",
       "result": "Respuesta",
       "additionalResult": "Resultado adicional",
+      "views": {
+        "datasets_one": "{{formatted}} conjunto de datos",
+        "datasets_other": "{{formatted}} conjuntos de datos",
+        "tables_one": "{{formatted}} tabla",
+        "tables_other": "{{formatted}} tablas",
+        "columns_one": "{{formatted}} columna",
+        "columns_other": "{{formatted}} columnas",
+        "rows_one": "{{formatted}} fila",
+        "rows_other": "{{formatted}} filas",
+        "values_one": "{{formatted}} valor distinto",
+        "values_other": "{{formatted}} valores distintos",
+        "emptyRows": "Sin resultados.",
+        "emptyValues": "Sin valores.",
+        "coverage": "Cobertura",
+        "req": {
+          "dataset": "conjunto de datos",
+          "table": "tabla",
+          "column": "columna"
+        }
+      },
       "tools": {
         "search_datasets": {
           "running": "Buscando conjuntos de datos",

@@ -27,6 +27,7 @@ import BodyText from "../../atoms/Text/BodyText";
 import { CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import { DownloadResultButton } from "./DownloadResults";
+import { renderFriendlyOutput } from "./toolViews";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
@@ -696,8 +697,14 @@ function RecordsTable({
   );
 }
 
-export function ToolResultView({ output }) {
+export function ToolResultView({ output, name }) {
   const parsed = useMemo(() => parseToolOutputValue(output), [output]);
+
+  // Try a friendly, per-tool rendering first; it returns null when the payload
+  // doesn't match its expected shape, in which case we fall back to the generic
+  // table / JSON view below.
+  const friendly = renderFriendlyOutput(name, output);
+  if (friendly) return friendly;
 
   const isRecordsArray =
     Array.isArray(parsed) && parsed.length > 0 && parsed.every(isPlainObject);
