@@ -12,7 +12,7 @@ import {
 import { useTranslation } from "next-i18next";
 import cookies from "js-cookie";
 import BodyText from "../../atoms/Text/BodyText";
-import { HelpIcon, SignOutIcon } from "./icons";
+import { InfoIcon, SignOutIcon } from "./icons";
 import { clearClientSession } from "../../../utils";
 
 const FallbackUserPicture =
@@ -41,6 +41,18 @@ function getUserFromCookie() {
   }
 }
 
+// Full name from the email's local part: "joao.silva@..." -> "Joao Silva",
+// "joao@..." -> "Joao". Each dot/underscore/hyphen segment is capitalized.
+function nameFromEmail(email) {
+  const local = (email || "").split("@")[0];
+  if (!local) return "";
+  return local
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
   const { t } = useTranslation("chatbot");
   const [user, setUser] = useState(null);
@@ -49,8 +61,11 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
     setUser(getUserFromCookie());
   }, []);
 
-  const displayName = user?.firstName || user?.username || "";
-  const picture = user?.picture || FallbackUserPicture;
+  const email = user?.email || "";
+  const displayName =
+    nameFromEmail(email) || user?.firstName || user?.username || "";
+  const hasPicture = Boolean(user?.picture);
+  const initial = (displayName || email).trim().charAt(0).toUpperCase() || "?";
 
   const handleLogout = useCallback(async () => {
     await clearClientSession();
@@ -64,7 +79,13 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
   }, [onHelp, onMobileClose]);
 
   return (
-    <Menu placement="top-start" autoSelect={false}>
+    <Menu
+      placement="top-start"
+      autoSelect={false}
+      // Nudge the popover right by the avatar's left inset so it left-aligns
+      // with the avatar rather than the full-width button edge.
+      offset={[isSidebarOpen ? 16 : 8, 8]}
+    >
       <MenuButton
         variant="unstyled"
         width="100%"
@@ -77,6 +98,7 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
         display="flex"
         overflow="hidden"
         color="#252A32"
+        transition="background-color 0.2s ease"
         _hover={{ backgroundColor: "#EEEEEE" }}
         _active={{ backgroundColor: "#EEEEEE" }}
         _focus={{ boxShadow: "none" }}
@@ -94,16 +116,32 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
             height="28px"
             borderRadius="50%"
             overflow="hidden"
-            backgroundColor="#DEDFE0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor={hasPicture ? "#DEDFE0" : "#2B8C4D"}
+            color="#FFFFFF"
           >
-            <Image
-              alt=""
-              width="100%"
-              height="100%"
-              objectFit="cover"
-              src={picture}
-              fallbackSrc={FallbackUserPicture}
-            />
+            {hasPicture ? (
+              <Image
+                alt=""
+                width="100%"
+                height="100%"
+                objectFit="cover"
+                src={user.picture}
+                fallbackSrc={FallbackUserPicture}
+              />
+            ) : (
+              <Box
+                as="span"
+                fontFamily="Roboto"
+                fontSize="13px"
+                fontWeight="600"
+                lineHeight="1"
+              >
+                {initial}
+              </Box>
+            )}
           </Box>
           <BodyText
             typography="small"
@@ -134,12 +172,12 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
         >
           <MenuItem {...MenuItemProps} onClick={handleHelp}>
             <HStack spacing="8px" align="center">
-              <HelpIcon
+              <InfoIcon
                 width="16px"
                 height="16px"
                 fill="currentColor"
               />
-              <Box as="span">{t("ui.help")}</Box>
+              <Box as="span">{t("ui.learnMore")}</Box>
             </HStack>
           </MenuItem>
           <MenuItem {...MenuItemProps} onClick={handleLogout}>

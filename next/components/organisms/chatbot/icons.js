@@ -23,9 +23,11 @@ import {
   Copy,
   Database,
   Download,
+  EllipsisVertical,
   ExternalLink,
   File,
   FileText,
+  Info,
   LogOut,
   MessageCircleMore,
   PanelLeft,
@@ -82,7 +84,9 @@ export const DocIcon = makeIcon(FileText);
 export const DownloadIcon = makeIcon(Download);
 export const FileGenericIcon = makeIcon(File);
 export const HelpIcon = makeIcon(CircleHelp);
+export const InfoIcon = makeIcon(Info);
 export const LinkIcon = makeIcon(ExternalLink);
+export const MoreVerticalIcon = makeIcon(EllipsisVertical);
 export const ReloadIcon = makeIcon(RotateCw);
 export const SearchIcon = makeIcon(Search);
 export const SidebarIcon = makeIcon(PanelLeft);

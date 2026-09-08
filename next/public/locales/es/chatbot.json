@@ -47,6 +47,7 @@
     "openMenu": "Abrir menú",
     "signOut": "Cerrar sesión",
     "help": "Ayuda",
+    "learnMore": "Más información",
     "userMenu": "Menú de la cuenta",
     "greetingPrefix": "Hola,",
     "helpQuestion": "¿Cómo puedo ayudarte hoy?",
@@ -168,7 +169,9 @@
     },
     "thread": {
       "historyTitle": "Conversaciones",
-      "deleteTitle": "Confirmar eliminación de la conversación",
+      "moreOptions": "Más opciones",
+      "deleteAction": "Eliminar conversación",
+      "deleteTitle": "Eliminar conversación",
       "deleteConfirm": "¿Seguro que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
       "loadError": "Error al cargar el historial.",
       "tryAgain": "Inténtalo de nuevo."
