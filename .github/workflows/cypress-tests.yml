@@ -6,12 +6,11 @@ on:
       - main
     paths:
       - "next/**/*"
-      - ".github/workflows/cypress-tests.yaml"
+      - ".github/workflows/cypress-tests.yml"
 
 jobs:
   cypress-run:
     name: Cypress E2E Tests
-    if: github.base_ref == 'main' && github.head_ref == 'staging'
     runs-on: ubuntu-latest
     environment: staging
     env:
