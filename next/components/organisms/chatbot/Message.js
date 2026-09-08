@@ -105,6 +105,9 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     message.isLoading &&
     !message.isError &&
     !message.isTyping &&
+    // Only before any tool has run — once the timeline shows, its own
+    // "Pensando…" carries the signal (matches the reference's `!showTools`).
+    !showThinkingSection &&
     !(message.content || "").trim();
 
   React.useEffect(() => {

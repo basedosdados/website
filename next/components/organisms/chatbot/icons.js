@@ -16,7 +16,9 @@ import {
   Braces,
   Check,
   ChevronDown,
+  CircleCheck,
   CircleHelp,
+  ClockFading,
   Code,
   Copy,
   Database,
@@ -69,6 +71,8 @@ export const BracesIcon = makeIcon(Braces);
 export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);
+export const CircleCheckIcon = makeIcon(CircleCheck);
+export const ClockFadingIcon = makeIcon(ClockFading);
 export const CodeIcon = makeIcon(Code);
 export const CopyIcon = makeIcon(Copy);
 export const CrossIcon = makeIcon(X);

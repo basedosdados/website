@@ -3,7 +3,6 @@ import {
   Flex,
   HStack,
   VStack,
-  Spinner,
   Collapse,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
@@ -14,7 +13,8 @@ import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 import {
-  CheckIcon,
+  CircleCheckIcon,
+  ClockFadingIcon,
   SearchIcon,
   DataStructureIcon,
   DataBaseIcon,
@@ -28,7 +28,8 @@ import {
   ToolResultView,
   RecordTable,
 } from "./markdown";
-import { pensandoTextShimmer } from "./shimmer";
+import TextShimmer from "./TextShimmer";
+import useMinDuration from "../../../hooks/useMinDuration";
 
 const ToolIcons = {
   search_datasets: SearchIcon,
@@ -39,7 +40,9 @@ const ToolIcons = {
 };
 
 function getToolStepMeta(name, { done = false, t } = {}) {
-  const Icon = ToolIcons[name] ?? CodeIcon;
+  // A finished step always shows a circle-check; the tool-specific glyph only
+  // matters while running (though the timeline shows a spinner there).
+  const Icon = done ? CircleCheckIcon : ToolIcons[name] ?? CodeIcon;
   const keyBase = ToolIcons[name]
     ? `ui.thinking.tools.${name}`
     : "ui.thinking.tools.fallback";
@@ -148,9 +151,6 @@ function stepKey(step, index) {
 }
 
 function TimelineIcon({ status, Icon, fill }) {
-  const isCodeIcon = Icon === CodeIcon;
-  const iconSize = isCodeIcon ? "18px" : "14px";
-
   return (
     <Box
       position="relative"
@@ -158,21 +158,16 @@ function TimelineIcon({ status, Icon, fill }) {
       alignItems="center"
       justifyContent="center"
       flexShrink={0}
-      width="16px"
+      width="20px"
       height="24px"
       borderRadius="full"
       backgroundColor="#FFFFFF"
       zIndex={1}
     >
       {status === "loading" ? (
-        <Spinner width="12px" height="12px" thickness="2px" color={fill} />
+        <ClockFadingIcon width="16px" height="16px" fill={fill} />
       ) : (
-        <Icon
-          width={iconSize}
-          height={iconSize}
-          fill={fill}
-          margin={isCodeIcon ? undefined : "2px"}
-        />
+        <Icon width="16px" height="16px" fill={fill} />
       )}
     </Box>
   );
@@ -194,7 +189,7 @@ function ToolStepItem({
   const call = isOrphan ? null : step.call;
   const status = isLoadingStep ? "loading" : "done";
   const { label, Icon } = isOrphan
-    ? { label: t("ui.thinking.additionalResult"), Icon: CodeIcon }
+    ? { label: t("ui.thinking.additionalResult"), Icon: CircleCheckIcon }
     : getToolStepMeta(call?.name, { done: status === "done", t });
   const hasOutput = Boolean(formatToolOutputText(step.output));
   const downloadProps =
@@ -216,7 +211,7 @@ function ToolStepItem({
         color: "#464A51",
       }}
     >
-      <Box width="16px" position="relative" flexShrink={0}>
+      <Box width="20px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
             position="absolute"
@@ -246,7 +241,7 @@ function ToolStepItem({
         flex={1}
         minWidth={0}
         minHeight={0}
-        paddingLeft="8px"
+        paddingLeft="4px"
         transition="color 0.2s ease"
         paddingBottom={isLast ? 0 : "8px"}
       >
@@ -264,15 +259,10 @@ function ToolStepItem({
           <LabelText
             as="span"
             typography="small"
-            color={status === "loading" ? undefined : "currentColor"}
-            animation={
-              status === "loading"
-                ? `${pensandoTextShimmer} 2s ease-in-out infinite`
-                : undefined
-            }
+            color="currentColor"
             minWidth="0"
           >
-            {label}
+            {status === "loading" ? <TextShimmer>{label}</TextShimmer> : label}
           </LabelText>
           <ChevronDownIcon
             boxSize="16px"
@@ -350,7 +340,7 @@ function ToolStepItem({
 function ReasoningStepItem({ step, isFirst, isLast }) {
   return (
     <Flex width="100%" position="relative">
-      <Box width="24px" position="relative" flexShrink={0}>
+      <Box width="20px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
             position="absolute"
@@ -379,8 +369,9 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
           alignItems="center"
           justifyContent="center"
           flexShrink={0}
-          width="24px"
+          width="20px"
           height="24px"
+          backgroundColor="#FFFFFF"
           zIndex={1}
         >
           <Box
@@ -394,7 +385,7 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
       <Box
         flex={1}
         minWidth={0}
-        paddingLeft="12px"
+        paddingLeft="4px"
         paddingBottom={isLast ? 0 : "16px"}
         className="markdown-body"
         fontSize="14px"
@@ -415,15 +406,54 @@ export default function ThinkingSection({
   messageId,
   onExport,
 }) {
+  const { t } = useTranslation("chatbot");
+  // The "chain of thought" is a collapsible section — but, unlike the reference
+  // (which starts collapsed), it's expanded by default here.
+  const [open, setOpen] = useState(true);
+  // Hold the "Pensando…" shimmer on screen briefly even when the turn finishes
+  // almost instantly, so it reads as loading rather than a flicker.
+  const loading = useMinDuration(isLoading, 600);
+
   if (toolSteps.length === 0) return null;
 
   return (
-    <Box
-      width="100%"
-      overflow="hidden"
-    >
-      <Box width="100%">
-        <VStack spacing="0" align="stretch" width="100%">
+    <Box width="100%" overflow="hidden">
+      <Flex
+        as="button"
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        alignItems="center"
+        gap="6px"
+        color="#71757A"
+        cursor="pointer"
+        transition="color 0.2s ease"
+        _hover={{ color: "#464A51" }}
+      >
+        <LabelText as="span" typography="small" color="currentColor">
+          {loading ? (
+            <TextShimmer>{t("ui.thinking.header.thinking")}</TextShimmer>
+          ) : (
+            t("ui.thinking.header.done")
+          )}
+        </LabelText>
+        <ChevronDownIcon
+          boxSize="16px"
+          flexShrink={0}
+          color="currentColor"
+          transform={open ? "rotate(-180deg)" : undefined}
+          transition="transform 0.2s ease"
+        />
+      </Flex>
+
+      <Collapse in={open} animateOpacity>
+        <VStack
+          spacing="0"
+          align="stretch"
+          width="100%"
+          marginTop="12px"
+          paddingLeft="8px"
+        >
           {toolSteps.map((step, index) => {
             const key = stepKey(step, index);
             const isFirst = index === 0;
@@ -452,7 +482,7 @@ export default function ThinkingSection({
             );
           })}
         </VStack>
-      </Box>
+      </Collapse>
     </Box>
   );
 }

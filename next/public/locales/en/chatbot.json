@@ -111,8 +111,12 @@
       }
     },
     "thinking": {
+      "header": {
+        "thinking": "Thinking...",
+        "done": "Reasoning"
+      },
       "request": "Request",
-      "result": "Result",
+      "result": "Response",
       "additionalResult": "Additional result",
       "tools": {
         "search_datasets": {
