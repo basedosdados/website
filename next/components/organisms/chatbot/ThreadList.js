@@ -4,11 +4,6 @@ import { useTranslation } from 'next-i18next';
 import {
   VStack,
   Box,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   SkeletonText,
   useDisclosure,
   ModalCloseButton,
@@ -167,42 +162,25 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       </ModalGeneral>
 
       {hasHistoryContent && (
-        <Accordion
-          display="flex"
-          allowToggle={isSidebarOpen}
-          index={isSidebarOpen ? undefined : [0]}
-          defaultIndex={[0]}
-          width="100%"
-          marginTop="16px"
-        >
-          <AccordionItem border="none" width="100%">
-            <AccordionButton
-              padding="8px"
-              cursor={isSidebarOpen ? "pointer" : "default"}
-              _hover={{ backgroundColor: "transparent" }}
-              _focus={{ boxShadow: "none" }}
-              color="#252A32"
-              display="flex"
-              justifyContent="space-between"
-              width="100%"
-              pointerEvents={isSidebarOpen ? "auto" : "none"}
+        <Box display="flex" flexDirection="column" width="100%" marginTop="16px">
+          <Box padding="8px" pointerEvents="none">
+            <BodyText
+              color="#71757A"
+              fontSize="11px"
+              fontWeight="500"
+              lineHeight="18px"
+              letterSpacing="0.05em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+              height="18px"
+              opacity={isSidebarOpen ? 0.9 : 0}
+              transition="opacity 0.2s ease, transform 0.2s ease"
+              transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
             >
-              <BodyText
-                color="currentColor"
-                fontSize="12px"
-                lineHeight="18px"
-                whiteSpace="nowrap"
-                height="18px"
-                opacity={isSidebarOpen ? 0.9 : 0}
-                transition="opacity 0.2s ease, transform 0.2s ease"
-                transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
-              >
-                {t('ui.thread.historyTitle')}
-              </BodyText>
-              {isSidebarOpen && <AccordionIcon color="#252A32" />}
-            </AccordionButton>
-            <AccordionPanel padding="0">
-              {error && isSidebarOpen && (
+              {t('ui.thread.historyTitle')}
+            </BodyText>
+          </Box>
+          {error && isSidebarOpen && (
                 <VStack
                   align="stretch"
                   flexDirection="row"
@@ -239,7 +217,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   />
                 </VStack>
               )}
-              {!error && (
+          {!error && (
                 <VStack
                   align="stretch"
                   spacing="1px"
@@ -331,9 +309,7 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   ))}
                 </VStack>
               )}
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+        </Box>
       )}
     </>
   );
