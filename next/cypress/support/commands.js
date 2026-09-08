@@ -246,9 +246,15 @@ Cypress.Commands.add('fillStripeCard', ({
   number = '4242424242424242',
   expiry = '1230',
   cvc = '123',
+  postal = '12345',
 } = {}) => {
-  const cdp = (command, params = {}) =>
-    Cypress.automation('remote:debugger:protocol', { command, params });
+  const cdp = (command, params = {}, sessionId) => {
+    const payload = { command, params };
+    if (sessionId) payload.sessionId = sessionId;
+    return Cypress.automation('remote:debugger:protocol', payload);
+  };
+
+  const sleep = (ms) => new Cypress.Promise((resolve) => setTimeout(resolve, ms));
 
   const clickNode = (nodeId) =>
     cdp('DOM.scrollIntoViewIfNeeded', { nodeId })
@@ -330,13 +336,11 @@ Cypress.Commands.add('fillStripeCard', ({
       })
     );
 
-  const typeChars = (value) =>
+  const typeChars = (value, sessionId) =>
     value.split('').reduce(
       (chain, char) =>
         chain.then(() =>
-          cdp('Input.insertText', { text: char }).then(
-            () => new Cypress.Promise((resolve) => setTimeout(resolve, 35))
-          )
+          cdp('Input.insertText', { text: char }, sessionId).then(() => sleep(35))
         ),
       Cypress.Promise.resolve()
     );
@@ -359,66 +363,154 @@ Cypress.Commands.add('fillStripeCard', ({
       return typeChars(value).then(() => true);
     });
 
+  const CardNumberQueries = [
+    { query: 'Número do cartão', exactText: 'Número do cartão' },
+    { query: 'Card number', exactText: 'Card number' },
+    { query: '1234 1234 1234 1234' },
+    { query: 'cc-number' },
+    { query: 'Secure card number input frame' },
+  ];
+
+  const CardExpiryQueries = [
+    { query: 'MM / AA' },
+    { query: 'MM/AA' },
+    { query: 'MM / YY' },
+    { query: 'MM/YY' },
+    { query: 'Data de validade', exactText: 'Data de validade' },
+    { query: 'Expiration' },
+    { query: 'cc-exp' },
+    { query: 'Secure expiration date input frame' },
+  ];
+
+  const CardCvcQueries = [
+    { query: 'CVC' },
+    { query: 'CVV' },
+    { query: 'Código de segurança', exactText: 'Código de segurança' },
+    { query: 'Security code' },
+    { query: 'cc-csc' },
+    { query: 'Secure CVC input frame' },
+  ];
+
   const fillCardFields = () =>
-    fillField(
-      [
-        { query: 'Número do cartão', exactText: 'Número do cartão' },
-        { query: 'Card number', exactText: 'Card number' },
-        { query: '1234 1234 1234 1234' },
-      ],
-      number
-    ).then((okNumber) => {
+    fillField(CardNumberQueries, number).then((okNumber) => {
       if (!okNumber) return false;
-      return fillField(
-        [
-          { query: 'MM / AA' },
-          { query: 'MM/AA' },
-          { query: 'Data de validade', exactText: 'Data de validade' },
-        ],
-        expiry
-      ).then((okExpiry) => {
+      return fillField(CardExpiryQueries, expiry).then((okExpiry) => {
         if (!okExpiry) return false;
-        return fillField(
-          [
-            { query: 'CVC' },
-            { query: 'CVV' },
-            { query: 'Código de segurança', exactText: 'Código de segurança' },
-          ],
-          cvc
-        );
+        return fillField(CardCvcQueries, cvc).then((okCvc) => {
+          if (!okCvc) return false;
+          return fillField(
+            [
+              { query: 'CEP', exactText: 'CEP' },
+              { query: 'ZIP' },
+              { query: 'Postal code', exactText: 'Postal code' },
+            ],
+            postal
+          ).then(() => true);
+        });
       });
     });
 
-  const selectCardTab = () =>
-    clickSearch('Cartão', { exactText: 'Cartão' }).then((clicked) => {
+  const selectCardTab = () => {
+    const CardTabQueries = [
+      { query: 'Cartão', exactText: 'Cartão' },
+      { query: 'Card', exactText: 'Card' },
+      { query: 'Pay with card' },
+      { query: 'Use a card' },
+      { query: 'Or pay with a card' },
+    ];
+    return clickFirstMatch(CardTabQueries).then((clicked) => {
       if (clicked) return true;
-      return clickSearch('Card', { exactText: 'Card' }).then((clickedCard) => {
-        if (clickedCard) return true;
-        return clickSearch('Boleto', { exactText: 'Boleto' }).then(() =>
-          new Cypress.Promise((resolve) => setTimeout(resolve, 500)).then(() =>
-            clickSearch('Cartão', { exactText: 'Cartão' })
-          )
-        );
+      return clickSearch('Boleto', { exactText: 'Boleto' }).then(() =>
+        sleep(500).then(() => clickSearch('Cartão', { exactText: 'Cartão' }))
+      );
+    });
+  };
+
+  const fillOopifField = (selectors, value, targets) => {
+    const tryTarget = (index) => {
+      if (index >= targets.length) return Cypress.Promise.resolve(false);
+      const target = targets[index];
+      return cdp('Target.attachToTarget', { targetId: target.targetId, flatten: true })
+        .then(({ sessionId }) =>
+          cdp(
+            'Runtime.evaluate',
+            {
+              expression: `(() => {
+                const el = document.querySelector(${JSON.stringify(selectors)});
+                if (!el) return false;
+                el.focus();
+                el.click();
+                return true;
+              })()`,
+              returnByValue: true,
+            },
+            sessionId
+          ).then((result) => {
+            if (!result?.result?.value) return tryTarget(index + 1);
+            return typeChars(value, sessionId).then(() => true);
+          })
+        )
+        .catch(() => tryTarget(index + 1));
+    };
+    return tryTarget(0);
+  };
+
+  const fillViaOopif = () =>
+    cdp('Target.getTargets').then(({ targetInfos = [] }) => {
+      const stripeTargets = targetInfos.filter((target) =>
+        /stripe\.com/i.test(target.url || '')
+      );
+      if (!stripeTargets.length) return false;
+
+      return fillOopifField(
+        'input[autocomplete="cc-number"], input[name="number"], input[name="cardnumber"]',
+        number,
+        stripeTargets
+      ).then((okNumber) => {
+        if (!okNumber) return false;
+        return fillOopifField(
+          'input[autocomplete="cc-exp"], input[name="expiry"], input[name="exp-date"]',
+          expiry,
+          stripeTargets
+        ).then((okExpiry) => {
+          if (!okExpiry) return false;
+          return fillOopifField(
+            'input[autocomplete="cc-csc"], input[name="cvc"], input[name="cvv"]',
+            cvc,
+            stripeTargets
+          );
+        });
+      });
+    }).catch(() => false);
+
+  const attemptFill = (remaining) => {
+    if (remaining <= 0) return Cypress.Promise.resolve(false);
+    return fillCardFields().then((filled) => {
+      if (filled) return true;
+      return fillViaOopif().then((filledOopif) => {
+        if (filledOopif) return true;
+        return selectCardTab()
+          .then(() => sleep(1000))
+          .then(() => fillCardFields())
+          .then((filledAfterSelect) => {
+            if (filledAfterSelect) return true;
+            return sleep(1500).then(() => attemptFill(remaining - 1));
+          });
       });
     });
+  };
 
   cy.get('#chakra-modal-modal-stripe-checkout iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
     .should('be.visible');
 
-  cy.wait(1000);
+  cy.wait(2000);
 
   cy.then(() =>
-    fillCardFields().then((filled) => {
-      if (filled) return true;
-      return selectCardTab()
-        .then(() => new Cypress.Promise((resolve) => setTimeout(resolve, 1000)))
-        .then(() => fillCardFields())
-        .then((filledAfterSelect) => {
-          if (!filledAfterSelect) {
-            throw new Error('Campo de cartão do Stripe não encontrado após selecionar Cartão');
-          }
-          return true;
-        });
+    attemptFill(4).then((filled) => {
+      if (!filled) {
+        throw new Error('Campo de cartão do Stripe não encontrado após selecionar Cartão');
+      }
+      return true;
     })
   );
 });

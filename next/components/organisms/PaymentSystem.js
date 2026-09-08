@@ -68,6 +68,7 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
           options={{
             layout: "tabs",
             paymentMethodOrder: ["card", "boleto"],
+            wallets: { link: "never" },
           }}
         />
 
