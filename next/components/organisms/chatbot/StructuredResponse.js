@@ -12,10 +12,7 @@ import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
-import LinkIcon from "../../../public/img/icons/redirectIcon";
-import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
-import ArrowRightIcon from "../../../public/img/icons/arrowRightIcon";
-import ChatBubbleDotsIcon from "../../../public/img/icons/chatBubbleDotsIcon";
+import { LinkIcon, TableChartViewIcon, ArrowRightIcon, ChatBubbleDotsIcon } from "./icons";
 
 function getDatasetTableUrl(source) {
   const datasetId = source?.dataset_id ?? source?.datasetId;
@@ -263,7 +260,7 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
             backgroundColor="transparent"
             transition="background-color 0.15s ease"
           />
-          <Box as="span" display="inline-flex" flexShrink={0} color="#71757A">
+          <Box as="span" display="inline-flex" flexShrink={0} color="inherit">
             <ChatBubbleDotsIcon width="16px" height="16px" />
           </Box>
           <BodyText as="span" typography="small" color="inherit" flex={1} minWidth={0}>
@@ -274,7 +271,7 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
             data-fu-arrow
             display="inline-flex"
             flexShrink={0}
-            color="#71757A"
+            color="inherit"
             transition="color 0.15s ease"
           >
             <ArrowRightIcon width="16px" height="16px" />

@@ -4,10 +4,7 @@ import { useRouter } from "next/router";
 import TitleText from "../../atoms/Text/TitleText";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
-import DownloadIcon from "../../../public/img/icons/downloadIcon";
-import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
-import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import { DownloadIcon, ThumbUpIcon, ThumbDownIcon, CopyIcon } from "./icons";
 
 const DiscordUrlByLocale = {
   pt: "https://discord.gg/huKWpsVYx4",

@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
-import ArrowUpIcon from "../../../public/img/icons/arrowUpIcon";
+import { ArrowUpIcon } from "./icons";
 
 const useIsoLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;

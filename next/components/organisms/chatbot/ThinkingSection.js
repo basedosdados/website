@@ -6,7 +6,6 @@ import {
   Spinner,
   Collapse,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
@@ -14,11 +13,14 @@ import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
-import CheckIcon from "../../../public/img/icons/checkIcon";
-import SearchIcon from "../../../public/img/icons/searchIcon";
-import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
-import { CodeIcon } from "../../../public/img/icons/codeIcon";
+import {
+  CheckIcon,
+  SearchIcon,
+  DataStructureIcon,
+  DataBaseIcon,
+  CodeIcon,
+  ChevronDownIcon,
+} from "./icons";
 import {
   componentsMk,
   MemoCodeBlock,

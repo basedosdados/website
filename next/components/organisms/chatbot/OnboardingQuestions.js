@@ -1,9 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
-import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
-import DocIcon from "../../../public/img/icons/docIcon";
+import { DataStructureIcon, TableChartViewIcon, DocIcon } from "./icons";
 
 const SHADOW_SOFT =
   "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)";

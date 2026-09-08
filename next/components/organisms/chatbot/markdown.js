@@ -24,7 +24,7 @@ import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
 
 import BodyText from "../../atoms/Text/BodyText";
-import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import { CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import { DownloadResultButton } from "./DownloadResults";
 
@@ -97,7 +97,7 @@ export function CodeBlock({
           onClick={onCopy}
           backgroundColor="transparent"
         >
-          <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="16px" height="16px" />
+          <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} checkIcon={CheckIcon} width="16px" height="16px" />
         </Box>
       </Tooltip>
       {downloadProps && <DownloadResultButton {...downloadProps} />}

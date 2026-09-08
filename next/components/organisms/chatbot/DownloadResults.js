@@ -13,8 +13,7 @@ import {
 import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import DownloadIcon from "../../../public/img/icons/downloadIcon";
-import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
+import { DownloadIcon, TableChartViewIcon } from "./icons";
 
 const ActionTooltipProps = {
   hasArrow: true,
@@ -340,12 +339,12 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
                     >
                       <Flex alignItems="center" gap="8px" minWidth={0} flex={1}>
                         <TableChartViewIcon
-                          width="16px"
-                          height="16px"
+                          width="20px"
+                          height="20px"
                           flexShrink={0}
                           color="#464A51"
                         />
-                        <Box as="span" noOfLines={1} color="#252A32">
+                        <Box as="span" noOfLines={1} fontWeight="400" color="#252A32">
                           {fileName}
                         </Box>
                       </Flex>

@@ -22,8 +22,7 @@ import {
   ExtraInfoTextForm
 } from '../../molecules/uiUserPage';
 import { useChatbotContext } from '../../../context/ChatbotContext';
-import TrashIcon from '../../../public/img/icons/trashIcon';
-import ReloadIcon from '../../../public/img/icons/reloadIcon';
+import { TrashIcon, ReloadIcon } from "./icons";
 
 export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, onNewChat }) {
   const { t } = useTranslation('chatbot');

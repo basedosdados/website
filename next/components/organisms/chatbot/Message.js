@@ -12,9 +12,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
-import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
-import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import { ThumbUpIcon, ThumbDownIcon, CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
@@ -308,8 +306,9 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                       <AnimatedCopyIcon
                         copied={isCopied}
                         icon={CopyIcon}
-                        width="18px"
-                        height="18px"
+                        checkIcon={CheckIcon}
+                        width="16px"
+                        height="16px"
                       />
                     </Box>
                   </Tooltip>
@@ -337,7 +336,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                           feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
-                      <ThumbUpIcon width="18px" height="18px" />
+                      <ThumbUpIcon width="16px" height="16px" />
                     </Box>
                   </Tooltip>
                   <Tooltip {...ActionTooltipProps} label={t("ui.badResponse")}>
@@ -351,7 +350,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                           feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
-                      <ThumbDownIcon width="18px" height="18px" />
+                      <ThumbDownIcon width="16px" height="16px" />
                     </Box>
                   </Tooltip>
                 </Flex>

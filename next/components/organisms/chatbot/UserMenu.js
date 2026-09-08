@@ -12,8 +12,7 @@ import {
 import { useTranslation } from "next-i18next";
 import cookies from "js-cookie";
 import BodyText from "../../atoms/Text/BodyText";
-import HelpIcon from "../../../public/img/icons/helpIcon";
-import SignOutIcon from "../../../public/img/icons/signOutIcon";
+import { HelpIcon, SignOutIcon } from "./icons";
 import { clearClientSession } from "../../../utils";
 
 const FallbackUserPicture =

@@ -8,8 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import BrandLogo from './BrandLogo'
-import SidebarIcon from '../../../public/img/icons/sidebarIcon'
-import CrossIcon from '../../../public/img/icons/crossIcon'
+import { SidebarIcon, CrossIcon } from "./icons"
 import BodyText from '../../atoms/Text/BodyText'
 import ThreadList from './ThreadList'
 import UserMenu from './UserMenu'
