@@ -8,12 +8,7 @@ import DownloadIcon from "../../../public/img/icons/downloadIcon";
 import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
 import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
 import { CopyIcon } from "../../../public/img/icons/copyIcon";
-
-const DiscordUrlByLocale = {
-  pt: "https://discord.gg/huKWpsVYx4",
-  en: "https://discord.gg/tx57ek6zqQ",
-  es: "https://discord.gg/nNfQYcmrvM",
-};
+import { getDiscordUrl } from "../../../utils";
 
 const WhatsAppCommunityUrl =
   "https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22";
@@ -149,7 +144,7 @@ export default function HelpContent() {
                 ),
                 discord: (
                   <Link
-                    href={DiscordUrlByLocale[locale] || DiscordUrlByLocale.pt}
+                    href={getDiscordUrl(locale)}
                     isExternal
                     {...HelpLinkProps}
                   />
