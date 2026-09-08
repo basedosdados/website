@@ -2,21 +2,29 @@ describe('Área do Usuário e Sistema de pagamento', () => {
   const username = 'cypress_test';
 
   function getSafeUserBdCookie() {
-    return cy.getCookie('userBD').then(cookie => {
-      if (!cookie?.value) throw new Error('Cookie userBD não encontrado');
-      
-      try {
-        const decoded = decodeURIComponent(cookie.value);
-        return JSON.parse(decoded);
-      } catch (e1) {
-        try {
-          return JSON.parse(cookie.value);
-        } catch (e2) {
-          throw new Error(`Falha ao parsear cookie: ${e2.message}`);
-        }
-      }
-    });
+    return cy.parseUserBdCookie();
   }
+
+  it('Não deve acessar sem autenticação', () => {
+    cy.clearCookies();
+    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.url().should('include', '/user/login');
+  });
+
+  describe('com autenticação', () => {
+  before(() => {
+    cy.cancelActiveSubscription();
+    cy.then(() => {
+      Cypress.session.clearAllSavedSessions();
+    });
+  });
+
+  after(() => {
+    cy.cancelActiveSubscription();
+    cy.then(() => {
+      Cypress.session.clearAllSavedSessions();
+    });
+  });
 
   beforeEach(() => {
     cy.session('userSession', () => {
@@ -26,17 +34,12 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.getCookie('userBD').should('exist');
     });
 
-    cy.intercept('GET', '/api/stripe/getPlans').as('getPlans');
+    cy.intercept('GET', '**/api/stripe/getPlans*').as('getPlans');
 
-    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.visit(`/user/${username}?plans_and_payment`, { timeout: 120000 });
 
-    cy.wait('@getPlans', { timeout: 15000 });
-  });
-
-  it('Não deve acessar sem autenticação', () => {
-    cy.clearCookies();
-    cy.visit(`/user/${username}?plans_and_payment`);
-    cy.url().should('include', '/user/login');
+    cy.location('pathname', { timeout: 60000 }).should('include', `/user/${username}`);
+    cy.contains('Planos e pagamento', { timeout: 60000 }).should('be.visible');
   });
 
   it('Deve acessar a página do usuário com autenticação', () => {
@@ -45,23 +48,19 @@ describe('Área do Usuário e Sistema de pagamento', () => {
   });
 
   it('Deve verificar se o plano grátis está ativo', () => {
-    cy.contains('span', 'Ativo').should('be.visible');
     cy.contains('p', 'BD Grátis').should('be.visible');
+    cy.contains('button', 'Comparar planos').should('be.visible');
   })
 
   it('Deve validar a exibição de todos os planos no modal', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
+    cy.openPlansModal();
 
-    cy.get('section[role="dialog"].chakra-modal__content')
-      .should('be.visible')
-      .as('plansModal')
-      .within(() => {
+    cy.get('@plansModal').within(() => {
         cy.contains('p', 'BD Pro').should('be.visible');
-        cy.contains('p', 'BD Empresas').should('be.visible');
+        cy.contains('p', 'BD Orgs').should('be.visible');
         cy.contains('R$ 37').should('be.visible');
-        cy.contains('R$ 280').should('be.visible');
+        cy.contains('Sob consulta').should('be.visible');
+        cy.contains('Entre em contato').should('be.visible');
 
         cy.get('#toggle-prices')
           .should('exist')
@@ -70,7 +69,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
           .click({ force: true });
 
         cy.contains('R$ 47').should('be.visible');
-        cy.contains('R$ 385').should('be.visible');
+        cy.contains('Sob consulta').should('be.visible');
       });
 
       cy.get('@plansModal').within(() => {
@@ -83,37 +82,33 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         .should('not.exist');
   });
 
-  it('Deve chegar no checkout', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
+  it('Deve exibir a seção do Chatbot na área de planos', () => {
+    cy.contains(/Assinar Chatbot|Acessar chatbot/).should('be.visible');
+  });
 
+  it('Deve chegar no checkout', () => {
+    cy.openPlansModal();
     cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+    cy.proceedToPaymentStep();
 
     cy.get('@checkoutModal').within(() => {
       cy.contains('Pagamento', { timeout: 20000 })
         .should('be.visible');
 
-      cy.contains('BD Pro', { timeout: 25000 })
-        .should(($el) => {
-          expect($el).to.be.visible;
-          const rect = $el[0].getBoundingClientRect();
-          expect(rect.top).to.be.greaterThan(0);
-          expect(rect.bottom).to.be.lessThan(Cypress.config('viewportHeight'));
-          expect($el.text().trim()).to.not.be.empty;
-        });
+      cy.contains('button', 'Confirmar pagamento', { timeout: 60000 })
+        .should('be.visible');
+
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+        .should('be.visible');
     });
   });
 
   it('Verificar preços e trocar o plano no modal', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
-
+    cy.openPlansModal();
     cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
 
     cy.get('@checkoutModal').within(() => {
-      cy.contains('Pagamento', { timeout: 20000 })
+      cy.contains('Confirme seu plano', { timeout: 20000 })
         .should('be.visible');
 
       cy.verifyElement('BD Pro');
@@ -130,37 +125,33 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 47,00/mês', { timeout: 20000 })
         .should('be.visible');
 
+      cy.clearCookie('plan_selected');
+
       cy.contains('Trocar plano')
         .should('be.visible')
         .click();
     });
 
-    cy.arrivingAtCheckout('#bd_pro_empresas_button_sub_btn');
-
-    cy.get('@checkoutModal').within(() => {
-      cy.contains('Pagamento', { timeout: 20000 })
-        .should('be.visible');
-
-      cy.verifyElement('BD Empresas');
-
-      cy.contains('R$ 3.700,00/ano')
-        .should('be.visible');
-
-      cy.get('#toggle-prices-modal-checkout')
-        .should('exist')
-        .and('have.attr', 'type', 'checkbox')
-        .and('be.checked')
-        .click({ force: true });
-
-      cy.contains('R$ 385,00/mês', { timeout: 20000 })
-        .should('be.visible');
+    cy.get('body', { timeout: 15000 }).should(($body) => {
+      const $checkout = $body.find('#chakra-modal-modal-stripe-checkout');
+      expect(
+        $checkout.length === 0 || $checkout.css('display') === 'none' || $checkout.css('opacity') === '0',
+        'checkout fechado'
+      ).to.eq(true);
     });
+
+    cy.get('section[role="dialog"].chakra-modal__content:visible')
+      .should('be.visible')
+      .and('have.css', 'opacity', '1')
+      .within(() => {
+        cy.contains('p', 'BD Orgs', { timeout: 20000 }).should('be.visible');
+        cy.contains('Sob consulta').should('be.visible');
+        cy.contains('Entre em contato').should('be.visible');
+      });
   });
 
   it('Verificar aplicação de cupons', () => {
-    cy.contains('button', 'Comparar planos')
-      .should('be.visible')
-      .click();
+    cy.openPlansModal();
 
     cy.get('#toggle-prices')
       .should('exist')
@@ -174,7 +165,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
 
     cy.get('@checkoutModal').within(() => {
-      cy.contains('Pagamento', { timeout: 20000 })
+      cy.contains('Confirme seu plano', { timeout: 20000 })
         .should('be.visible');
 
       cy.verifyElement('BD Pro');
@@ -188,13 +179,94 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
-  const isLocalhost = Cypress.env('NEXT_PUBLIC_BASE_URL_FRONTEND')?.startsWith('http://localhost');
+  it('Deve mostrar erro para cupom inválido', () => {
+    cy.openPlansModal();
 
-  if (isLocalhost) {
-    it('Fazer fluxo de assinatura BDPro', () => {
-      cy.contains('button', 'Comparar planos')
+    cy.get('#toggle-prices')
+      .should('exist')
+      .and('have.attr', 'type', 'checkbox')
+      .and('be.checked')
+      .click({ force: true });
+
+    cy.contains('R$ 47/mês', { timeout: 20000 })
+      .should('be.visible');
+
+    cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Confirme seu plano', { timeout: 20000 })
+        .should('be.visible');
+
+      cy.get('input[placeholder="Digite o cupom"]', { timeout: 15000 })
+        .clear({ force: true })
+        .type('cupom_invalido_xyz', { force: true });
+
+      cy.contains('button', 'Aplicar', { timeout: 30000 })
+        .should('be.visible')
+        .click({ force: true });
+
+      cy.contains('Por favor, insira um cupom válido.', { timeout: 30000 })
+        .should('be.visible');
+    });
+  });
+
+  it('Deve chegar no checkout ou no trial do Chatbot', () => {
+    cy.get('body').then(($body) => {
+      const canSubscribe = $body.find('button:visible').filter((_, el) =>
+        (el.textContent || '').includes('Assinar Chatbot')
+      ).length > 0;
+
+      if (!canSubscribe) {
+        cy.contains('a:visible, button:visible', 'Acessar chatbot').should('be.visible');
+        cy.contains('button', 'Cancelar assinatura do chatbot').should('be.visible');
+        return;
+      }
+
+      cy.wait(1000);
+      cy.contains('button', 'Assinar Chatbot', { timeout: 20000 })
         .should('be.visible')
         .click();
+
+      cy.get(
+        '#chakra-modal-modal-chatbot-trial-survey, #chakra-modal-modal-stripe-checkout',
+        { timeout: 60000 }
+      )
+        .filter(':visible')
+        .should('have.length.at.least', 1);
+
+      cy.get('body').then(($after) => {
+        const $survey = $after.find('#chakra-modal-modal-chatbot-trial-survey');
+        const surveyOpen = $survey.length && $survey.is(':visible');
+
+        if (surveyOpen) {
+          cy.contains('Como você chegou até o chatbot?').should('be.visible');
+          return;
+        }
+
+        cy.get('#chakra-modal-modal-stripe-checkout')
+          .should('be.visible')
+          .within(() => {
+            cy.contains('Confirme seu plano').should('be.visible');
+            cy.contains(/chatbot/i).should('be.visible');
+          });
+      });
+    });
+  });
+
+  const baseUrl = String(
+    Cypress.env('NEXT_PUBLIC_BASE_URL_FRONTEND') || Cypress.config('baseUrl') || ''
+  ).toLowerCase();
+  const isSafeStripeEnv =
+    baseUrl.includes('localhost') ||
+    baseUrl.includes('127.0.0.1') ||
+    baseUrl.includes('staging') ||
+    baseUrl.includes('development');
+  const canFillStripeIframe =
+    Cypress.browser.family === 'chromium' && Cypress.browser.name !== 'electron';
+
+  if (isSafeStripeEnv && canFillStripeIframe) {
+    it('Fazer fluxo de assinatura BDPro', () => {
+      cy.openPlansModal();
 
       cy.get('#toggle-prices')
         .should('exist')
@@ -206,6 +278,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         .should('be.visible');
 
       cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
+      cy.proceedToPaymentStep();
 
       cy.get('@checkoutModal').within(() => {
         cy.contains('Pagamento', { timeout: 20000 })
@@ -215,31 +288,17 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
         cy.contains('R$ 47,00/mês')
           .should('be.visible');
-
-        cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
-          .should('be.visible')
-          .its('0.contentDocument.body')
-          .should('not.be.empty')
-          .then(cy.wrap)
-
-        cy.fillStripeInput('cardNumber', '4242424242424242');
-        cy.fillStripeInput('cardExpiry', '12/30');
-        cy.fillStripeInput('cardCvc', '123');
-
-        cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-          .as('stripeConfirmation');
-
-        cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
-          .should('be.visible')
-          .click();
-
-        cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
-          expect(interception.response.statusCode).to.be.oneOf([200, 201]);
-          expect(interception.response.body.status).to.eq('succeeded');
-        });
       });
 
-      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
+      cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
+        .should('be.visible');
+
+      cy.contains('button', 'Confirmar pagamento', { timeout: 60000 })
+        .should('be.visible');
+
+      cy.confirmStripePayment();
+
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
         .should('be.visible')
         .and('have.css', 'opacity', '1')
         .as('paymentIntentSucceeded')
@@ -252,14 +311,14 @@ describe('Área do Usuário e Sistema de pagamento', () => {
             .click();
         });
 
-      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
+      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 20000 })
         .should('not.be.visible');
 
       cy.wait(30000);
     });
 
     it('Verificar se BDPro está ativo e cancelar', () => {
-      cy.contains('Ativo')
+      cy.contains('Ativo', { timeout: 30000 })
         .should('be.visible');
 
       cy.contains('p', 'BD Pro')
@@ -299,7 +358,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
         cy.request({
           method: 'GET',
-          url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
+          url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}&t=${btoa('bd_pro')}`,
           headers: {
             'Content-Type': 'application/json',
           }
@@ -325,132 +384,11 @@ describe('Área do Usuário e Sistema de pagamento', () => {
         });
       });
     });
-
-    it('Fazer fluxo de assinatura BDEmpresas', () => {
-      cy.contains('button', 'Comparar planos')
-        .should('be.visible')
-        .click();
-
-      cy.arrivingAtCheckout('#bd_pro_empresas_button_sub_btn');
-
-      cy.get('@checkoutModal').within(() => {
-        cy.contains('Pagamento', { timeout: 20000 })
-          .should('be.visible');
-
-        cy.verifyElement('BD Empresas');
-
-        cy.contains('R$ 3.700,00/ano')
-          .should('be.visible');
-
-        cy.get('iframe[name^="__privateStripeFrame"]', { timeout: 60000 })
-          .should('be.visible')
-          .its('0.contentDocument.body')
-          .should('not.be.empty')
-          .then(cy.wrap)
-
-        cy.fillStripeInput('cardNumber', '4242424242424242');
-        cy.fillStripeInput('cardExpiry', '12/30');
-        cy.fillStripeInput('cardCvc', '123');
-
-        cy.intercept('POST', 'https://api.stripe.com/v1/payment_intents/pi_*/confirm')
-          .as('stripeConfirmation');
-
-        cy.contains('button', 'Confirmar pagamento', { timeout: 1500 })
-          .should('be.visible')
-          .click();
-
-        cy.wait('@stripeConfirmation', { timeout: 30000 }).then((interception) => {
-          expect(interception.response.statusCode).to.be.oneOf([200, 201]);
-          expect(interception.response.body.status).to.eq('succeeded');
-        });
-      });
-
-      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 300000 })
-        .should('be.visible')
-        .and('have.css', 'opacity', '1')
-        .as('paymentIntentSucceeded')
-        .within(() => {
-          cy.contains('Assinatura efetuada com sucesso!', { timeout: 20000 })
-            .should('be.visible');
-
-          cy.get('button[aria-label="Close"]')
-            .first()
-            .click();
-        });
-
-      cy.get('#chakra-modal-modal-stripe-payment_intent-succeeded', { timeout: 60000 })
-        .should('not.be.visible');
-
-      cy.wait(30000);
-    });
-
-    it('Verificar se BDEmpresas está ativo e cancelar', () => {
-      cy.contains('Ativo')
-        .should('be.visible');
-
-      cy.contains('p', 'BD Empresas')
-        .should('be.visible');
-
-      cy.contains('(Anual)')
-        .should('be.visible');
-
-      cy.contains('Próxima data de renovação automática:')
-        .should('be.visible');
-
-      cy.contains('button', 'Cancelar plano')
-        .should('be.visible')
-        .click();
-
-      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 15000 })
-        .should('be.visible')
-        .and('have.css', 'opacity', '1')
-        .as('cancelSub')
-        .within(() => {
-          cy.contains('button','Cancelar plano')
-            .should('be.visible')
-            .click();
-        });
-
-      cy.get('#chakra-modal-modal-cancel-sub', { timeout: 300000 })
-        .should('not.exist');
-
-      cy.contains('Cancelado')
-        .should('be.visible');
-
-      cy.contains('Acesso ao plano disponível até:')
-        .should('be.visible');
-
-      getSafeUserBdCookie().then(userData => {
-        const userId = userData.id.split(':')[1];
-
-        cy.request({
-          method: 'GET',
-          url: `/api/stripe/getSubscriptionActive?p=${btoa(userId)}`,
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }).then((subscriptionResponse) => {
-          const subscriptionId = subscriptionResponse.body;
-
-          cy.request({
-            method: 'GET',
-            url: `/api/stripe/removeSubscriptionImmediately?p=${btoa(subscriptionId)}`,
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          }).then((response) => {
-            expect(response.status).to.eq(200);
-            expect(response.body).to.have.property('success', true);
-            cy.wait(60000);
-
-            cy.visit(`/user/${username}?plans_and_payment`);
-
-            cy.contains('p', 'BD Grátis', { timeout: 10000 })
-              .should('be.visible');
-          });
-        });
-      });
+  } else {
+    it('Fazer fluxo de assinatura BDPro', function () {
+      this.skip();
     });
   }
+  });
 });
 
