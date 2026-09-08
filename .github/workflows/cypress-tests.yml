@@ -38,10 +38,27 @@ jobs:
         working-directory: ./next
         run: npm ci
 
+      - name: Install Chrome for Testing
+        working-directory: ./next
+        run: npx puppeteer browsers install chrome
+
+      - name: Resolve Chrome path
+        id: chrome
+        working-directory: ./next
+        run: echo "path=$(node -e "process.stdout.write(require('puppeteer').executablePath())")" >> "$GITHUB_OUTPUT"
+
       - name: Run Cypress tests against Staging
         uses: cypress-io/github-action@v5
         with:
-          working-directory: ./next 
-          browser: chrome
+          working-directory: ./next
+          browser: ${{ steps.chrome.outputs.path }}
           config-file: cypress.config.js
           config: baseUrl=${{ vars.NEXT_PUBLIC_BASE_URL_FRONTEND }}
+
+      - name: Upload Cypress screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: next/cypress/screenshots
+          if-no-files-found: ignore
