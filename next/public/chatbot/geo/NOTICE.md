@@ -1,6 +1,6 @@
 # Atribuição dos dados geográficos
 
-Os arquivos TopoJSON deste diretório (`brazil_states.topojson`, `brazil_municipalities.topojson`) são
+Os arquivos TopoJSON deste diretório (`brasil_estados.topojson`, `brasil_municipios.topojson`) são
 derivados do repositório **dados-referenciais-abertos** (https://github.com/fititnt/dados-referenciais-abertos).
 
 - **Licença:** ODC Open Database License (ODbL) / Database Contents License (DbCL) — veja o
@@ -14,7 +14,7 @@ derivados do repositório **dados-referenciais-abertos** (https://github.com/fit
 
 # Geographic data attribution
 
-The TopoJSON files in this directory (`brazil_states.topojson`, `brazil_municipalities.topojson`) are
+The TopoJSON files in this directory (`brasil_estados.topojson`, `brasil_municipios.topojson`) are
 derived from the repository **dados-referenciais-abertos** (https://github.com/fititnt/dados-referenciais-abertos).
 
 - **License:** ODC Open Database License (ODbL) / Database Contents License (DbCL) — see the
