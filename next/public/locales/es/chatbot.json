@@ -80,6 +80,7 @@
     },
     "sources": {
       "title": "Fuentes de Datos",
+      "viewTooltip": "Ver fuentes",
       "count_one": "{{count}} fuente",
       "count_other": "{{count}} fuentes"
     },

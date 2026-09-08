@@ -6,6 +6,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Tooltip,
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
@@ -94,6 +95,18 @@ const DataSourcesMenuListProps = {
   overflow: "hidden auto",
 };
 
+const SourcesTooltipProps = {
+  hasArrow: true,
+  backgroundColor: "#252A32",
+  borderRadius: "8px",
+  fontSize: "12px",
+  fontFamily: "Roboto",
+  color: "#FFFFFF",
+  padding: "8px 12px",
+  boxShadow: "0 2px 16px rgba(0, 0, 0, 0.16)",
+  placement: "top",
+};
+
 export const DataSourcesButton = React.memo(function DataSourcesButton({ dataSources }) {
   const { t } = useTranslation("chatbot");
   if (!Array.isArray(dataSources) || dataSources.length === 0) return null;
@@ -102,30 +115,36 @@ export const DataSourcesButton = React.memo(function DataSourcesButton({ dataSou
     <Menu placement="top-start">
       {({ isOpen }) => (
         <>
-          <MenuButton
-            as={Box}
-            display="flex"
-            alignItems="center"
-            gap="6px"
-            padding="8px 12px"
-            borderRadius="8px"
-            boxSizing="border-box"
-            cursor="pointer"
-            color="#464A51"
-            backgroundColor={isOpen ? "#EEEEEE" : "transparent"}
-            _hover={{ backgroundColor: "#EEEEEE" }}
+          <Tooltip
+            {...SourcesTooltipProps}
+            label={t("ui.sources.viewTooltip")}
+            isDisabled={isOpen}
           >
-            <Flex alignItems="center" gap="6px">
-              <BodyText
-                as="span"
-                fontSize="14px"
-                color="inherit"
-                whiteSpace="nowrap"
-              >
-                {t("ui.sources.count", { count: dataSources.length })}
-              </BodyText>
-            </Flex>
-          </MenuButton>
+            <MenuButton
+              as={Box}
+              display="flex"
+              alignItems="center"
+              gap="6px"
+              padding="8px 12px"
+              borderRadius="8px"
+              boxSizing="border-box"
+              cursor="pointer"
+              color="#464A51"
+              backgroundColor={isOpen ? "#EEEEEE" : "transparent"}
+              _hover={{ backgroundColor: "#EEEEEE" }}
+            >
+              <Flex alignItems="center" gap="6px">
+                <BodyText
+                  as="span"
+                  fontSize="14px"
+                  color="inherit"
+                  whiteSpace="nowrap"
+                >
+                  {t("ui.sources.count", { count: dataSources.length })}
+                </BodyText>
+              </Flex>
+            </MenuButton>
+          </Tooltip>
           <MenuList {...DataSourcesMenuListProps}>
             {dataSources.map((source, index) => {
               const href = getDatasetTableUrl(source);

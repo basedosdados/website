@@ -252,7 +252,7 @@ function ToolStepItem({
           display="inline-flex"
           maxWidth="100%"
           color="currentColor"
-          gap="8px"
+          gap="4px"
           minHeight="24px"
           minWidth={0}
           onClick={() => setIsOpen((v) => !v)}
