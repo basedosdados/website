@@ -57,7 +57,7 @@ export const CardPrice = ({
     if (button.onClick) {
       button.onClick();
     }
-    if (button.href) {
+    if (button.href && router.asPath !== button.href) {
       router.push(button.href);
     }
   };
@@ -606,6 +606,7 @@ export function SectionPrice({
                 (feature) => ({ name: feature }),
               )}
               button={{
+                id: "bd_chatbot_button_sub_btn",
                 text: isBDChatbot.isCurrentPlan
                     ? t("currentPlan")
                     : hasSubscribedChatbot
@@ -649,6 +650,7 @@ export function SectionPrice({
               }),
             )}
             button={{
+              id: "bd_pro_button_sub_btn",
               text: isBDPro.isCurrentPlan
                   ? t("currentPlan")
                   : hasSubscribedBDPro
@@ -691,6 +693,7 @@ export function SectionPrice({
                   },
             )}
             button={{
+              id: "bd_orgs_button_contact_btn",
               text: isBDEmp.isCurrentPlan
                   ? t("currentPlan")
                   : t("contactUs"),

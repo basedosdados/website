@@ -6,33 +6,40 @@
 Canonical reference: https://github.com/basedosdados/backend/wiki/Boas-Pr%C3%A1ticas#segue-o-fluxo
 
 ### The environment branches — never commit or push directly
-- `main` — production (basedosdados.org).
+- `main` — production (basedosdados.org). Source of truth: resets flow *from* `main`.
 - `staging` — pre-production / QA.
-- `development` — integration / testing. First target for new work.
+- `development` — integration / testing.
 
-These three are **parallel, independently maintained** branches, not a linear chain.
-Their histories have diverged, so you never merge one environment branch into another to
-move a feature — that would drag the whole environment forward. Each feature is promoted
-into each environment **selectively**, via its own PR carrying only that feature.
+### How work flows
+Every feature starts from `main` and is promoted back into the other environments using
+**one branch and three PRs** — the same head branch is PR'd into `development`, `staging`, and
+`main`. Merging the same branch into each target puts the *same commit objects* into all
+three, so the feature's own commits share SHAs everywhere. Only the merge commits differ,
+which is expected and fine.
 
-Note: the integration branch here is named `development` (full word), not `dev`.
+The environments still drift apart as those merge commits accumulate at different times, so
+the team **resets `staging` and `development` back to `main` roughly every two weeks**. Because
+resets flow *from* `main`, a change must reach `main` to survive — anything living only on
+`staging` or `development` is discarded at the next reset.
 
-### Feature workflow — promote the feature, not the environment
-1. Cut your feature branch off `development` (the branch you integrate and test in first).
+### Feature workflow — one branch, three PRs
+1. Cut your feature branch off `main` — never off `staging` or `development`.
    Name it by intent: `feat/…`, `fix/…`, `chore/…`, `docs/…`, `refactor/…`.
-   Keep one logical change per branch, with tidy commits — you will cherry-pick them.
-2. Open a PR from that branch into `development`.
-3. To promote the same feature to `staging`, cut a new branch off `staging` and
-   cherry-pick only this feature's commit(s) onto it, then open a PR into `staging`.
-4. To promote to `main`, repeat: cut a branch off `main`, cherry-pick the same commit(s),
-   open a PR into `main`.
-5. Result: one clean PR per environment, each carrying only this feature.
+   One logical change per branch.
+2. From that **same branch**, open three PRs: one into `development`, one into `staging`, one
+   into `main`. Do not cut a separate branch per target, and do not cherry-pick.
+3. Merge with a **merge commit or fast-forward — never squash**. A squash mints a new,
+   unrelated commit on each branch and breaks the shared history the resets rely on.
+4. Timing: a `main`-based branch merges cleanly into `development`/`staging` when those are
+   aligned with `main` — in practice, shortly after a reset. The longer since the last
+   reset, the more of `main`'s accumulated commits the PR will drag along. If a target has
+   drifted far, wait for the reset rather than forcing a noisy merge.
 
 ### Rules for agents working in this repo
-- Never commit or push to `main`, `staging`, or `development` directly.
-- Move a feature between environments by cherry-picking it onto a branch cut off the
-  target — never by merging `development → staging` or `staging → main`.
-- Each promotion branch is cut off its own target, so the PR diff is only this feature.
-- One logical change per branch; one PR at a time per target; keep commits clean for cherry-picking.
+- Never commit or push to `main`, `staging`, or `development` directly — always a feature branch + PR.
+- Always cut features off `main`, never off `staging` or `development`.
+- Use **one branch for all three PRs**. Never a branch-per-target, never cherry-pick.
+- **Never squash-merge.** Merge commit or fast-forward only.
+- Never merge one environment branch into another to promote a feature.
 - Before committing, verify you are on a feature branch: `git branch --show-current`.
 - Do not push without explicit permission.

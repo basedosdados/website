@@ -5,6 +5,7 @@ describe('Fluxo de Registro', () => {
 
   it('Deve exibir o formulário corretamente', () => {
     cy.contains('h1', 'Cadastre-se').should('be.visible');
+    cy.contains('Continuar com o Google').should('be.visible');
     cy.get('input[name="firstName"]').should('exist');
     cy.get('input[name="lastName"]').should('exist');
     cy.get('input[name="user"]').should('exist');
