@@ -41,7 +41,7 @@ const ACTIVE_BAR = "#2B8C4D";
 // Options-button hover: neutral grey on a normal row, a deeper green tint on
 // the selected (green) row so it reads as intentional instead of muddy.
 const OPTIONS_HOVER_BG = "#DEDFE0";
-const OPTIONS_HOVER_BG_ACTIVE = "rgba(43, 140, 77, 0.28)";
+const OPTIONS_HOVER_BG_ACTIVE = "rgba(43, 140, 77, 0.2)";
 
 const SCROLLBAR_SX = {
   "&::-webkit-scrollbar": { width: "10px" },
@@ -327,8 +327,8 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                           whiteSpace="nowrap"
                           overflow="hidden"
                           textOverflow="ellipsis"
-                          height="18px"
-                          lineHeight="18px"
+                          height="20px"
+                          lineHeight="20px"
                           opacity={isSidebarOpen ? 1 : 0}
                           transition="opacity 0.2s ease, transform 0.2s ease"
                           transform={

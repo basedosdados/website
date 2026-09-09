@@ -64,8 +64,8 @@ function Sidebar({
         left={0}
         zIndex={{ base: 20, md: "auto" }}
         width={{
-          base: "min(296px, 85vw)",
-          md: isExpanded ? "296px" : "50px",
+          base: "min(288px, 85vw)",
+          md: isExpanded ? "288px" : "50px",
         }}
         height="100dvh"
         maxHeight="100vh"
