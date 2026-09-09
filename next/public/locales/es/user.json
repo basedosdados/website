@@ -343,7 +343,16 @@
         "confirmDisableNotificationsTitle": "¿Está seguro de que desea desactivar todas las notificaciones?",
         "confirmDisableNotificationsDescription": "Al hacer clic en \"Desactivar\", dejará de recibir alertas sobre actualizaciones en todas las tablas que sigue actualmente.",
         "confirmDisableNotificationsConfirmButton": "Desactivar",
-        "selectedTableNotifications": "Notificaciones de actualización de tabla"
+        "selectedTableNotifications": "Notificaciones de actualización de tabla",
+        "bigquerySectionTitle": "Correo electrónico de acceso a BigQuery",
+        "bigquerySectionSubtitle": ["Su correo electrónico debe ser una ", "Cuenta de Google", " para garantizar el acceso exclusivo a los datos mediante BigQuery."],
+        "bigquerySectionInputPlaceholder": "Introduzca el correo electrónico que desea utilizar para acceder a BigQuery",
+        "bigquerySectionButton": "Actualizar correo electrónico",
+        "errEmailGcp": "Por favor, introduzca un correo electrónico válido.",
+        "imgCropTitle": "Recorte su nueva foto de perfil",
+        "imgCropButtonCancel": "Cancelar",
+        "imgCropButtonSave": "Guardar",
+        "couponDuration": ["A partir del ", ", el total a pagar será de "]
     },
     "activate": {
         "accountActive": "Cuenta activa",
