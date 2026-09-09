@@ -1,14 +1,14 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
-import { DataStructureIcon, TableChartViewIcon, DocIcon } from "./icons";
+import { DataStructureIcon, TableChartViewIcon, ChartIcon } from "./icons";
 
 const SHADOW_SOFT =
   "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)";
 const SHADOW_ELEVATED =
   "0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04)";
 
-const OnboardingIcons = [TableChartViewIcon, DataStructureIcon, DocIcon];
+const OnboardingIcons = [TableChartViewIcon, ChartIcon, DataStructureIcon];
 
 export default function OnboardingQuestions({
   onQuestionClick,
@@ -35,7 +35,7 @@ export default function OnboardingQuestions({
     .map((item, index) => ({
       eyebrow: item?.eyebrow,
       question: item?.question,
-      Icon: OnboardingIcons[index] ?? DocIcon,
+      Icon: OnboardingIcons[index] ?? DataStructureIcon,
     }))
     .filter((item) => String(item?.question || "").trim());
 

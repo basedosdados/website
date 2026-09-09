@@ -188,11 +188,11 @@
           "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025"
         },
         {
-          "eyebrow": "Datos",
-          "question": "¿Cuál es la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos cinco años?"
+          "eyebrow": "Visualizaciones",
+          "question": "Crea un gráfico que muestre la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos diez años."
         },
         {
-          "eyebrow": "Documentos",
+          "eyebrow": "Metadatos",
           "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?"
         }
       ]

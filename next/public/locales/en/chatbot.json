@@ -188,11 +188,11 @@
           "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025"
         },
         {
-          "eyebrow": "Data",
-          "question": "What is the average wage gap between men and women in the state of São Paulo over the last five years?"
+          "eyebrow": "Visualizations",
+          "question": "Create a chart showing the average wage gap between men and women in the state of São Paulo over the last ten years."
         },
         {
-          "eyebrow": "Documents",
+          "eyebrow": "Metadata",
           "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?"
         }
       ]
