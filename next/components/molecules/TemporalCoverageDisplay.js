@@ -6,6 +6,7 @@ import {
 import { useState, useEffect } from "react";
 import cookies from "js-cookie";
 import { useTranslation } from 'next-i18next';
+import { useRouter } from "next/router";
 import BodyText from "../atoms/Text/BodyText";
 import { triggerGAEvent, hasBDProSubscription } from "../../utils";
 import RedirectIcon from "../../public/img/icons/redirectIcon";
@@ -13,6 +14,7 @@ import CheckIcon from "../../public/img/icons/checkIcon";
 
 export function TemporalCoverageBar ({ value }) {
   const { t } = useTranslation(['dataset', 'prices']);
+  const { locale } = useRouter();
   const [values, setValues] = useState({})
 
   const isUserPro = () => {
@@ -208,7 +210,7 @@ export function TemporalCoverageBar ({ value }) {
             onClick={() => {
               if(isUserPro()) return
               triggerGAEvent("table_coverage_redirect_bdpro", "click");
-              window.open("/bdpro", "_blank")
+              window.open(locale === "en" ? "/dbpro" : "/bdpro", "_blank")
             }}
           >
             {t('temporalCoverageBar.paid')}

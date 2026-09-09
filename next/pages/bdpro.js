@@ -10,6 +10,7 @@ import {
 import Head from "next/head";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
@@ -24,6 +25,7 @@ import GreenTab from "../components/atoms/GreenTab";
 import Carousel from "../components/atoms/Carousel";
 import { SectionPrice } from "../pages/prices";
 import BDLogoProImage from "../public/img/logos/bd_logo_pro";
+import DBLogoProImage from "../public/img/logos/db_logo_pro";
 import QuestionsBox from "../components/molecules/QuestionsBox";
 
 import styles from "../styles/bdpro.module.css";
@@ -155,6 +157,8 @@ function VideoPlayer({ src, isActive }) {
 }
 
 function Hero({ t }) {
+  const { locale } = useRouter();
+  const LogoPro = locale === "en" ? DBLogoProImage : BDLogoProImage;
   const [activeHightlight, setActiveHightlight] = useState(null);
 
   const highlights = [
@@ -205,7 +209,7 @@ function Hero({ t }) {
         textAlign="center"
         zIndex="2"
       >
-        <BDLogoProImage widthImage="160px" heightImage="40px" marginBottom="16px" />
+        <LogoPro widthImage="160px" heightImage="40px" marginBottom="16px" />
         <Display
           as="h1"
           typography={isMobileMod() ? "small" : "medium"}

@@ -5,7 +5,7 @@
   },
   "hero": {
     "title": ["Public data,", "processed and always up-to-date"],
-    "description": "The data subscription with automatic processing and updates. Focus on analysis while we ensure the data is fresh and ready to use. Subscribe and help maintain the largest collection of processed public data in Brazil.",
+    "description": "A subscription that keeps your public data processed and up to date. You focus on your analysis while we make sure the data is fresh and ready to use. Subscribing also helps maintain one of the world's largest collections of processed public data.",
     "stats": "We accelerate the work of over 25,000 researchers, public servants, and companies every month",
     "highlights": {
       "cnpjs": {
@@ -52,7 +52,7 @@
     }
   },
   "testimonials": {
-    "title": "Who uses Data Basis",
+    "title": "People using Data Basis",
     "list": {
       "t1": {
         "name": "Fernando Barbalho",
@@ -71,7 +71,7 @@
   },
   "banner": {
     "title": "Discover DB Pro",
-    "description": "Subscribe to DB Pro to access the most updated version of these and other datasets, always in sync with the original source. Besides having constant access to integrated, quality data, your subscription helps Data Basis maintain and expand the largest public and free datalake in Brazil.",
+    "description": "Subscribe to DB Pro to access the most up-to-date version of these and other datasets, always in sync with the original source. Along with constant access to integrated, quality data, your subscription helps Data Basis maintain and expand one of the world's largest free and public datalakes.",
     "button": "Learn more and take a free test"
   }
 }

@@ -503,7 +503,7 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
               isVariant
               onClick={() => {
                 if (!isUserAuthorized) {
-                  window.open("/bdpro", "_blank");
+                  window.open(locale === "en" ? "/dbpro" : "/bdpro", "_blank");
                   triggerGAEvent("table_notification_redirect_bdpro", "click");
                   return;
                 }

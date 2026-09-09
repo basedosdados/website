@@ -1218,7 +1218,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       [t('solutions')]: [
         {
           name: [t('exclusive_data')],
-          href: "/bdpro"
+          href: "/dbpro"
         },
         {
           name: [t('chatbot_lp')],
