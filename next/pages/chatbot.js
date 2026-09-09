@@ -19,7 +19,7 @@ import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuest
 import Display from "../components/atoms/Text/Display";
 import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/icons";
 import BrandLogo from "../components/organisms/chatbot/BrandLogo";
-import HelpContent from "../components/organisms/chatbot/HelpContent";
+import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
@@ -98,7 +98,7 @@ function ChatbotContent() {
   const searchRef = useRef(null);
 
   const [greeting, setGreeting] = useState(null);
-  const [showHelp, setShowHelp] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [composerHasText, setComposerHasText] = useState(false);
 
   const handleComposerTextChange = useCallback((text) => {
@@ -181,7 +181,7 @@ function ChatbotContent() {
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
-    setShowHelp(false);
+    setShowAbout(false);
     setIsMobileSidebarOpen(false);
     router.push({
       pathname: router.pathname,
@@ -190,11 +190,11 @@ function ChatbotContent() {
   }, [resetChat, router]);
 
   const handleSelectThread = useCallback(() => {
-    setShowHelp(false);
+    setShowAbout(false);
   }, []);
 
-  const handleHelp = useCallback(() => {
-    setShowHelp(true);
+  const handleAbout = useCallback(() => {
+    setShowAbout(true);
   }, []);
 
   const showNewChatGreeting =
@@ -299,15 +299,15 @@ function ChatbotContent() {
   return (
     <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
-        <title>{showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}</title>
+        <title>{showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}</title>
         <meta
           property="og:title"
-          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
+          content={showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
+          content={showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}
           key="ogdesc"
         />
       </Head>
@@ -325,7 +325,7 @@ function ChatbotContent() {
         <Sidebar
           onNewChat={handleNewChat}
           onSelectThread={handleSelectThread}
-          onHelp={handleHelp}
+          onAbout={handleAbout}
           currentThreadId={
             router.isReady ? normalizedThreadId : undefined
           }
@@ -356,8 +356,8 @@ function ChatbotContent() {
             minWidth={0}
             marginX="auto"
           >
-            {showHelp ? (
-              <HelpContent />
+            {showAbout ? (
+              <AboutContent />
             ) : showNewChatGreeting ? (
               <Flex
                 flex={1}

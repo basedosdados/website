@@ -198,36 +198,43 @@
       ]
     }
   },
-  "help": {
+  "about": {
     "head": {
-      "pageTitle": "Help - Chatbot"
+      "pageTitle": "About the chatbot - Base dos Dados"
     },
     "title": "DB Chatbot",
-    "subtitle": "To analyze public data using natural language",
-    "welcomeTitle": "Welcome! 👋",
-    "welcomeP1": "Welcome to the Data Basis chatbot. It helps you talk to your data so you can understand it better and extract valuable insights.",
-    "welcomeP2": "To get started, go to the chat page in the left menu and start a new conversation.",
-    "welcomeP3": "Why not ask it what data is available on your research topic?",
-    "welcomeP4": "The chatbot can also help you with:",
-    "capabilities": [
-      "Exploratory analyses",
-      "Understanding how tables are organized",
-      "Querying and downloading data from our public datalake"
-    ],
-    "welcomeP5": "All you need is a good question!",
-    "contact": "Have questions or need help? You can reach us by email at <email>suporte.bdpro@basedosdados.org</email> or through our community on <discord>Discord</discord> and <whatsapp>WhatsApp</whatsapp>.",
-    "featuresTitle": "Features 🛠️",
-    "dataSources": "Data Sources: Click the items in the \"Data Sources\" field to see the datasets used in each response.",
-    "suggestedQuestions": "Suggested Questions: Click the items in \"Suggested Questions\" to deepen your analysis with prompts suggested by the chatbot itself.",
-    "download": "Download data: Click the icon (<download></download>) and choose the table you would like to download as a .csv file.",
-    "copyResults": "Copy results: Click the icon (<copy></copy>) to copy the chatbot's response to your clipboard.",
-    "feedback": "Feedback (<up></up> or <down></down>): Click the feedback buttons to rate the responses, with optional comments.",
-    "promptGuideTitle": "Prompt Tips 📋",
-    "promptGuideIntro": "How you talk to the chatbot can affect the quality of the answers! Below are some tips to help you write your questions. They can be useful if the answers are incorrect or not good enough.",
+    "subtitle": "Analyze public data using natural language",
+    "welcomeTitle": "Welcome!",
+    "welcomeP1": "The BD chatbot helps you talk to your data in a simple, intuitive way, making it easier to understand your information and uncover insights.",
+    "welcomeP2": "To get started, click <b>New chat</b> in the left menu and send a message.",
+    "welcomeP3": "Not sure where to start? Try asking <b>what data is available on your research topic</b>. From there, you can explore the data, ask new questions, and deepen your analysis.",
+    "welcomeP5": "It all starts with a good question.",
+    "contact": "<b>Need help or have a question?</b> Reach out to us by email at <email>suporte.bdpro@basedosdados.org</email> or join our community on <discord>Discord</discord> and <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Features",
+    "features": {
+      "findData": {
+        "title": "Data search",
+        "body": "Finds the most relevant datasets and tables to answer your question in BD's public datalake."
+      },
+      "analyze": {
+        "title": "SQL queries and analysis",
+        "body": "Writes and runs SQL queries to answer questions and analyze the data."
+      },
+      "charts": {
+        "title": "Charts",
+        "body": "Generates charts to make it easier to visualize and interpret the results of your analyses."
+      },
+      "export": {
+        "title": "Data export",
+        "body": "Exports query results to download in .csv, .parquet, .avro, or .jsonl formats."
+      }
+    },
+    "promptGuideTitle": "Tips for asking good questions",
+    "promptGuideIntro": "How you talk to the chatbot can influence the quality of the answers. That's why we've gathered a few tips to help you write your questions and get better results.",
     "promptTips": [
-      "Try asking one question at a time. If your question is too complex, or is actually several questions, try splitting it into smaller, simpler questions.",
-      "When in doubt, ask the chatbot itself for help. It can help you understand which data is available, which lines of analysis you can follow, or you can ask it to explain a response better.",
-      "If the chatbot cannot find an answer to your question and you know which table has the data needed to answer it, you can explicitly ask it to look in that specific table."
+      "Try asking one question at a time. If your question is too complex or involves several issues, try splitting it into smaller, simpler questions.",
+      "When in doubt, ask the chatbot itself for help. It can help you understand which data is available, suggest lines of analysis, and explain an answer better.",
+      "If the chatbot isn't finding the answer you're looking for and you know which table holds the data you need, try pointing to that table explicitly in your question."
     ]
   }
 }

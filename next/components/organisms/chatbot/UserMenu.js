@@ -53,7 +53,7 @@ function nameFromEmail(email) {
     .join(" ");
 }
 
-function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
+function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   const { t } = useTranslation("chatbot");
   const [user, setUser] = useState(null);
 
@@ -73,10 +73,10 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
     window.location.href = "/user/login";
   }, []);
 
-  const handleHelp = useCallback(() => {
+  const handleAbout = useCallback(() => {
     onMobileClose?.();
-    onHelp?.();
-  }, [onHelp, onMobileClose]);
+    onAbout?.();
+  }, [onAbout, onMobileClose]);
 
   return (
     <Menu
@@ -170,7 +170,7 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
           boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
           zIndex={30}
         >
-          <MenuItem {...MenuItemProps} onClick={handleHelp}>
+          <MenuItem {...MenuItemProps} onClick={handleAbout}>
             <HStack spacing="8px" align="center">
               <InfoIcon
                 width="16px"

@@ -198,36 +198,43 @@
       ]
     }
   },
-  "help": {
+  "about": {
     "head": {
-      "pageTitle": "Ayuda - Chatbot"
+      "pageTitle": "Sobre el chatbot - Base dos Dados"
     },
     "title": "Chatbot BD",
-    "subtitle": "Para analizar datos públicos utilizando lenguaje natural",
-    "welcomeTitle": "¡Bienvenido(a)! 👋",
-    "welcomeP1": "Bienvenido(a) al chatbot de BD, te ayudará a conversar con tus datos para entenderlos mejor y extraer insights valiosos.",
-    "welcomeP2": "Para empezar, entra en la página de chat en el menú de la izquierda y comienza una nueva conversación.",
-    "welcomeP3": "¿Qué tal preguntarle qué datos hay disponibles sobre el tema de tu investigación?",
-    "welcomeP4": "El chatbot también puede ayudarte con:",
-    "capabilities": [
-      "Análisis exploratorios",
-      "Entendimiento de la organización de las tablas",
-      "Consultas y descarga de datos de nuestro datalake público"
-    ],
-    "welcomeP5": "¡Todo lo que necesitas es una buena pregunta!",
-    "contact": "¿Tienes dudas o necesitas ayuda? Puedes escribirnos al correo <email>suporte.bdpro@basedosdados.org</email> o a través de nuestra comunidad en <discord>Discord</discord> y <whatsapp>WhatsApp</whatsapp>.",
-    "featuresTitle": "Funcionalidades 🛠️",
-    "dataSources": "Fuentes de Datos: Haz clic en los elementos del campo \"Fuentes de Datos\" para ver los conjuntos de datos utilizados en cada respuesta.",
-    "suggestedQuestions": "Preguntas Sugeridas: Haz clic en los elementos de \"Preguntas Sugeridas\" para profundizar tu análisis con prompts sugeridos por el propio chatbot.",
-    "download": "Descargar datos: Haz clic en el icono (<download></download>) y elige la tabla que te gustaría descargar en .csv.",
-    "copyResults": "Copiar resultados: Haz clic en el icono (<copy></copy>) para copiar la respuesta del chatbot en tu Portapapeles.",
-    "feedback": "Comentarios (<up></up> o <down></down>): Haz clic en los botones de comentarios para evaluar las respuestas, con comentarios opcionales.",
-    "promptGuideTitle": "Consejos de Prompt 📋",
-    "promptGuideIntro": "¡La forma en que conversas con el chatbot puede influir en la calidad de las respuestas! Por eso, a continuación hay algunos consejos para ayudarte a elaborar tus preguntas. Pueden ser útiles si las respuestas son incorrectas o no son lo suficientemente buenas.",
+    "subtitle": "Analiza datos públicos usando lenguaje natural",
+    "welcomeTitle": "¡Bienvenido(a)!",
+    "welcomeP1": "El chatbot de BD te ayuda a conversar con tus datos de forma simple e intuitiva, facilitando la comprensión de la información y el descubrimiento de insights.",
+    "welcomeP2": "Para empezar, haz clic en <b>Nueva conversación</b> en el menú de la izquierda y envía un mensaje.",
+    "welcomeP3": "¿No sabes por dónde empezar? Prueba preguntar <b>qué datos hay disponibles sobre el tema de tu investigación</b>. A partir de ahí, puedes explorar los datos, hacer nuevas preguntas y profundizar tu análisis.",
+    "welcomeP5": "Todo empieza con una buena pregunta.",
+    "contact": "<b>¿Necesitas ayuda o tienes alguna duda?</b> Escríbenos al correo <email>suporte.bdpro@basedosdados.org</email> o únete a nuestra comunidad en <discord>Discord</discord> y <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Funcionalidades",
+    "features": {
+      "findData": {
+        "title": "Búsqueda de datos",
+        "body": "Encuentra los conjuntos de datos y las tablas más relevantes para responder a tu pregunta en el datalake público de BD."
+      },
+      "analyze": {
+        "title": "Consultas y análisis en SQL",
+        "body": "Escribe y ejecuta consultas en SQL para responder preguntas y analizar los datos."
+      },
+      "charts": {
+        "title": "Gráficos",
+        "body": "Genera gráficos para facilitar la visualización y la interpretación de los resultados de tus análisis."
+      },
+      "export": {
+        "title": "Exportación de datos",
+        "body": "Exporta los resultados de las consultas para descargar en formato .csv, .parquet, .avro o .jsonl."
+      }
+    },
+    "promptGuideTitle": "Consejos para hacer buenas preguntas",
+    "promptGuideIntro": "La forma en que conversas con el chatbot puede influir en la calidad de las respuestas. Por eso, reunimos algunos consejos para ayudarte a elaborar tus preguntas y obtener mejores resultados.",
     "promptTips": [
-      "Intenta hacer una pregunta a la vez. Si tu pregunta es muy compleja, o es un conjunto de varias preguntas, intenta separarla en preguntas más pequeñas y simples.",
-      "En caso de duda, pide ayuda al propio chatbot. Te ayuda a entender mejor qué datos están disponibles, qué líneas de análisis puedes seguir o pídele que explique mejor alguna respuesta.",
-      "Si el chatbot no encuentra una respuesta a tu pregunta y sabes en qué tabla están los datos necesarios para responderla, puedes pedirle explícitamente que busque en esa tabla específica."
+      "Intenta hacer una pregunta a la vez. Si tu pregunta es muy compleja o abarca varias cuestiones, prueba dividirla en preguntas más pequeñas y simples.",
+      "En caso de duda, pide ayuda al propio chatbot. Puede ayudarte a entender qué datos están disponibles, sugerir caminos de análisis y explicar mejor una respuesta.",
+      "Si el chatbot no encuentra la respuesta que buscas y sabes en qué tabla están los datos necesarios, intenta indicar esa tabla explícitamente en tu pregunta."
     ]
   }
 }

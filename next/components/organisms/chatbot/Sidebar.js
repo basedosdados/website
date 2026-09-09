@@ -16,7 +16,7 @@ import UserMenu from './UserMenu'
 function Sidebar({
   onNewChat,
   onSelectThread,
-  onHelp,
+  onAbout,
   currentThreadId,
   isMobileOpen = false,
   onMobileClose,
@@ -213,7 +213,7 @@ function Sidebar({
           <Divider borderColor="#DEDFE0" />
           <UserMenu
             isSidebarOpen={isOpen}
-            onHelp={onHelp}
+            onAbout={onAbout}
             onMobileClose={onMobileClose}
           />
         </Box>

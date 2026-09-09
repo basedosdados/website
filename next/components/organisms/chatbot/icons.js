@@ -13,6 +13,7 @@ import { Box } from "@chakra-ui/react";
 import {
   ArrowRight,
   ArrowUp,
+  BarChart3,
   Braces,
   Check,
   ChevronDown,
@@ -28,11 +29,13 @@ import {
   File,
   FileText,
   Info,
+  Lightbulb,
   LogOut,
   MessageCircleMore,
   PanelLeft,
   RotateCw,
   Search,
+  Sparkles,
   Table2,
   TableProperties,
   ThumbsDown,
@@ -70,6 +73,7 @@ function makeIcon(Base) {
 export const ArrowRightIcon = makeIcon(ArrowRight);
 export const ArrowUpIcon = makeIcon(ArrowUp);
 export const BracesIcon = makeIcon(Braces);
+export const ChartIcon = makeIcon(BarChart3);
 export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);
@@ -85,11 +89,13 @@ export const DownloadIcon = makeIcon(Download);
 export const FileGenericIcon = makeIcon(File);
 export const HelpIcon = makeIcon(CircleHelp);
 export const InfoIcon = makeIcon(Info);
+export const LightbulbIcon = makeIcon(Lightbulb);
 export const LinkIcon = makeIcon(ExternalLink);
 export const MoreVerticalIcon = makeIcon(EllipsisVertical);
 export const ReloadIcon = makeIcon(RotateCw);
 export const SearchIcon = makeIcon(Search);
 export const SidebarIcon = makeIcon(PanelLeft);
+export const SparklesIcon = makeIcon(Sparkles);
 export const SignOutIcon = makeIcon(LogOut);
 export const TableChartViewIcon = makeIcon(Table2);
 export const ThumbDownIcon = makeIcon(ThumbsDown);
