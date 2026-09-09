@@ -62,8 +62,13 @@ function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   }, []);
 
   const email = user?.email || "";
-  const displayName =
-    nameFromEmail(email) || user?.firstName || user?.username || "";
+  // Prefer the profile's real name; fall back to a name derived from the email
+  // (then the raw email) only when both first and last name are missing.
+  const fullName = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const displayName = fullName || nameFromEmail(email) || email;
   const hasPicture = Boolean(user?.picture);
   const initial = (displayName || email).trim().charAt(0).toUpperCase() || "?";
 
