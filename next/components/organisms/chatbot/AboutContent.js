@@ -127,14 +127,14 @@ export default function AboutContent() {
       width="100%"
       paddingX={{ base: "16px", md: "24px" }}
       sx={{
-        "&::-webkit-scrollbar": { width: "4px" },
+        // webkit pseudo-elements only — setting scrollbar-width/color makes
+        // Chromium fall back to the native bar and ignore these rules.
+        "&::-webkit-scrollbar": { width: "6px" },
         "&::-webkit-scrollbar-track": { background: "transparent" },
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",
           borderRadius: "24px",
         },
-        scrollbarWidth: "thin",
-        scrollbarColor: "#C4C4C4 transparent",
       }}
     >
       <Box
