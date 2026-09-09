@@ -11,7 +11,6 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
@@ -23,29 +22,12 @@ import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
+import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/user";
 
 const greetingFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
-
-function getUserEmailFromCookie() {
-  try {
-    const raw = cookies.get("userBD");
-    if (!raw) return null;
-    const user = JSON.parse(raw);
-    return user?.email || null;
-  } catch {
-    return null;
-  }
-}
-
-// Name from the email local-part's first segment, matching the reference:
-// "victor.tornisiello@basedosdados.org" -> "Victor".
-function nameFromEmail(email) {
-  const rawName = email?.split("@")[0]?.split(".")[0] ?? "";
-  return rawName ? rawName.charAt(0).toUpperCase() + rawName.slice(1) : "";
-}
 
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];

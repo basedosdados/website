@@ -14,12 +14,10 @@ import {
   ArrowRight,
   ArrowUp,
   BarChart3,
-  Braces,
   Check,
   ChevronDown,
   CircleAlert,
   CircleCheck,
-  CircleHelp,
   ClockFading,
   Code,
   Copy,
@@ -27,8 +25,6 @@ import {
   Download,
   EllipsisVertical,
   ExternalLink,
-  File,
-  FileText,
   Info,
   Lightbulb,
   LogOut,
@@ -73,7 +69,6 @@ function makeIcon(Base) {
 
 export const ArrowRightIcon = makeIcon(ArrowRight);
 export const ArrowUpIcon = makeIcon(ArrowUp);
-export const BracesIcon = makeIcon(Braces);
 export const ChartIcon = makeIcon(BarChart3);
 export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
 export const CheckIcon = makeIcon(Check);
@@ -86,10 +81,7 @@ export const CopyIcon = makeIcon(Copy);
 export const CrossIcon = makeIcon(X);
 export const DataBaseIcon = makeIcon(Database);
 export const DataStructureIcon = makeIcon(TableProperties);
-export const DocIcon = makeIcon(FileText);
 export const DownloadIcon = makeIcon(Download);
-export const FileGenericIcon = makeIcon(File);
-export const HelpIcon = makeIcon(CircleHelp);
 export const InfoIcon = makeIcon(Info);
 export const LightbulbIcon = makeIcon(Lightbulb);
 export const LinkIcon = makeIcon(ExternalLink);

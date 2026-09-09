@@ -1,9 +1,5 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-
-// Layout effect on the client (measure before paint, no flicker); plain effect
-// on the server so SSR doesn't warn.
-const useIsoLayoutEffect =
-  typeof window !== "undefined" ? useLayoutEffect : useEffect;
+import { useRef } from "react";
+import useIsomorphicLayoutEffect from "./useIsomorphicLayoutEffect";
 
 /**
  * Collapses a wrapping element to the width of its longest rendered line, so a
@@ -17,13 +13,14 @@ const useIsoLayoutEffect =
  * widest and pin the element to it (plus its own horizontal padding/border).
  *
  * Returns a ref to attach to the element. `deps` re-measures on content change
- * (e.g. the message text); a `ResizeObserver` on a content-independent ancestor
- * re-measures on column resize, and it re-runs once web fonts load.
+ * (e.g. the message text); pass `containerRef` (a content-independent ancestor,
+ * e.g. the full-width row) to re-measure on column resize, and it re-runs once
+ * web fonts load.
  */
-export default function useFitToContent(deps) {
+export default function useFitToContent(deps, containerRef) {
   const ref = useRef(null);
 
-  useIsoLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const el = ref.current;
     if (!el) return undefined;
 
@@ -59,10 +56,10 @@ export default function useFitToContent(deps) {
 
     measure();
 
-    // Observe a content-independent ancestor (the row spans the full column
-    // width regardless of the bubble), so only real layout changes re-measure —
-    // observing the bubble itself would feed back on our own width write.
-    const container = el.parentElement?.parentElement;
+    // Observe a caller-provided content-independent ancestor (a full-width row,
+    // not the bubble — observing the bubble would feed back on our own width
+    // write). Falls back to the direct parent when no container ref is given.
+    const container = containerRef?.current ?? el.parentElement;
     const ro = container ? new ResizeObserver(schedule) : null;
     if (container) ro.observe(container);
     if (typeof document !== "undefined" && document.fonts?.ready) {

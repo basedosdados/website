@@ -70,8 +70,10 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
   const { t } = useTranslation("chatbot");
   const isUser = message.role === "user";
   // Collapses the user bubble to its longest wrapped line (no-op when the ref
-  // isn't attached, i.e. for assistant messages).
-  const userBubbleRef = useFitToContent([message.content]);
+  // isn't attached, i.e. for assistant messages). Observes the full-width row so
+  // it re-measures on column resize.
+  const messageRowRef = useRef(null);
+  const userBubbleRef = useFitToContent([message.content], messageRowRef);
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [pendingRating, setPendingRating] = useState(null);
@@ -208,7 +210,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     showFollowUpQuestions;
 
   return (
-    <Flex width="100%" direction="column" align="stretch" minWidth={0}>
+    <Flex ref={messageRowRef} width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
         width="100%"
         maxWidth="760px"

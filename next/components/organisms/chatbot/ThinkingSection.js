@@ -398,7 +398,7 @@ function ToolStepItem({
                   textTransform="uppercase"
                   letterSpacing="0.05em"
                 >
-                  {isError ? t("ui.thinking.error") : t("ui.thinking.result")}
+                  {isError ? t("ui.error") : t("ui.thinking.result")}
                 </BodyText>
                 {isError ? (
                   <BodyText typography="small" color="#71757A">

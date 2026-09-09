@@ -98,7 +98,7 @@ function Sidebar({
           <Box
             as="a"
             href="https://basedosdados.org/"
-            aria-label="Base dos Dados"
+            aria-label={t("ui.brand")}
             cursor="pointer"
             display={isOpen ? "block" : "none"}
             position="relative"

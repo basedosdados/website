@@ -143,6 +143,22 @@ function columnIsNumeric(rows, col) {
   return sawValue;
 }
 
+// Column order = union of keys across all rows (rows can be heterogeneous, e.g.
+// a driver omitting null keys), preserving first-seen order.
+function unionColumns(rows) {
+  const seen = new Set();
+  const columns = [];
+  for (const row of rows) {
+    for (const key of Object.keys(row)) {
+      if (!seen.has(key)) {
+        seen.add(key);
+        columns.push(key);
+      }
+    }
+  }
+  return columns;
+}
+
 // ============================== Parsers ==============================
 
 function parseDatasetList(content) {
@@ -224,7 +240,7 @@ function parseBigquerySqlResult(content) {
     if (!isPlainObject(it)) return null;
     rows.push(it);
   }
-  const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
+  const columns = unionColumns(rows);
   const rowCount = typeof results.row_count === "number" ? results.row_count : rows.length;
   const more = Math.max(0, rowCount - rows.length);
   return { columns, rows, more };
@@ -239,7 +255,7 @@ function parseRowTable(content) {
     if (!isPlainObject(it)) return null;
     rows.push(it);
   }
-  const columns = rows.length > 0 ? Object.keys(rows[0]) : [];
+  const columns = unionColumns(rows);
   return { columns, rows, more };
 }
 

@@ -10,9 +10,9 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
-import cookies from "js-cookie";
 import BodyText from "../../atoms/Text/BodyText";
 import { InfoIcon, SignOutIcon } from "./icons";
+import { getUserFromCookie, nameFromEmail } from "./user";
 import { clearClientSession } from "../../../utils";
 
 const FallbackUserPicture =
@@ -31,28 +31,6 @@ const MenuItemProps = {
   _hover: { backgroundColor: "#EEEEEE" },
 };
 
-function getUserFromCookie() {
-  try {
-    const raw = cookies.get("userBD");
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
-
-// Full name from the email's local part: "joao.silva@..." -> "Joao Silva",
-// "joao@..." -> "Joao". Each dot/underscore/hyphen segment is capitalized.
-function nameFromEmail(email) {
-  const local = (email || "").split("@")[0];
-  if (!local) return "";
-  return local
-    .split(/[._-]+/)
-    .filter(Boolean)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
-}
-
 function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   const { t } = useTranslation("chatbot");
   const [user, setUser] = useState(null);
@@ -62,13 +40,14 @@ function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   }, []);
 
   const email = user?.email || "";
-  // Prefer the profile's real name; fall back to a name derived from the email
-  // (then the raw email) only when both first and last name are missing.
+  // Prefer the profile's real name; fall back to a name derived from the email,
+  // then the username, then the raw email.
   const fullName = [user?.firstName, user?.lastName]
     .filter(Boolean)
     .join(" ")
     .trim();
-  const displayName = fullName || nameFromEmail(email) || email;
+  const displayName =
+    fullName || nameFromEmail(email, { full: true }) || user?.username || email;
   const hasPicture = Boolean(user?.picture);
   const initial = (displayName || email).trim().charAt(0).toUpperCase() || "?";
 

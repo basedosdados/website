@@ -2,7 +2,6 @@ import {
   forwardRef,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useState,
   useImperativeHandle,
@@ -16,9 +15,7 @@ import {
 import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
 import { ArrowUpIcon } from "./icons";
-
-const useIsoLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+import useIsomorphicLayoutEffect from "../../../hooks/useIsomorphicLayoutEffect";
 
 function draftKeyFor(threadId) {
   return `chatbot_draft_${threadId || 'new'}`;
@@ -92,7 +89,7 @@ const Search = forwardRef(function Search({
     setIsMultiLine(/\r?\n/.test(text) || el.scrollHeight > 64);
   }, []);
 
-  useIsoLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 
