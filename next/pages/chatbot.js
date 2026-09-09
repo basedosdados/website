@@ -320,7 +320,10 @@ function ChatbotContent() {
           minWidth={0}
           height="100%"
           maxHeight="100dvh"
-          padding={{ base: "12px 12px 16px", md: "24px" }}
+          // No horizontal padding on desktop: the scroll area runs full-bleed
+          // so its scrollbar sits at the screen edge, and each view supplies its
+          // own horizontal gutter (message/composer content, greeting, about).
+          padding={{ base: "12px 12px 16px", md: "24px 0" }}
           overflow="hidden"
           justifyContent="center"
           alignItems="stretch"

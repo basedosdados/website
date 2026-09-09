@@ -120,10 +120,13 @@ const Search = forwardRef(function Search({
   return (
     <VStack
       width="100%"
-      maxWidth="760px"
+      maxWidth="808px"
       margin="auto auto 0"
       spacing={{ base: "12px", md: "24px" }}
       minWidth={0}
+      // Own horizontal gutter (full-bleed scroll) and +48 max-width, matching
+      // the message content so the composer stays aligned with the messages.
+      paddingX={{ base: "0", md: "24px" }}
     >
       <Flex
         width="100%"

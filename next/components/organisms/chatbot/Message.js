@@ -213,12 +213,14 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     <Flex ref={messageRowRef} width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
         width="100%"
-        maxWidth="760px"
+        maxWidth="808px"
         margin="0 auto"
         display="flex"
         justifyContent={isUser ? "flex-end" : "flex-start"}
         minWidth={0}
-        paddingX={{ base: "0", md: 0 }}
+        // Own horizontal gutter now that the scroll area is full-bleed (the main
+        // area no longer pads it); +48 on max-width keeps the content ~760 wide.
+        paddingX={{ base: "0", md: "24px" }}
       >
         <Box
           ref={isUser ? userBubbleRef : undefined}

@@ -131,6 +131,9 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
           background: "#C4C4C4",
           borderRadius: "24px",
         },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#ACAEB1",
+        },
         "@media (max-width: 767px)": {
           scrollbarGutter: "auto",
         },
