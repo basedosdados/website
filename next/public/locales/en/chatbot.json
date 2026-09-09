@@ -119,6 +119,8 @@
       },
       "request": "Request",
       "result": "Response",
+      "error": "Error",
+      "errorMessage": "This step couldn't be completed.",
       "additionalResult": "Additional result",
       "views": {
         "datasets_one": "{{formatted}} dataset",
@@ -143,27 +145,33 @@
       "tools": {
         "search_datasets": {
           "running": "Searching datasets",
-          "done": "Datasets found"
+          "done": "Datasets found",
+          "error": "Failed to search datasets"
         },
         "get_dataset_details": {
           "running": "Exploring dataset",
-          "done": "Dataset explored"
+          "done": "Dataset explored",
+          "error": "Failed to explore the dataset"
         },
         "get_table_details": {
           "running": "Exploring table structure",
-          "done": "Table structure explored"
+          "done": "Table structure explored",
+          "error": "Failed to explore the table structure"
         },
         "execute_bigquery_sql": {
-          "running": "Querying BigQuery",
-          "done": "BigQuery query completed"
+          "running": "Querying the data",
+          "done": "Query completed",
+          "error": "Failed to query the data"
         },
         "decode_table_values": {
           "running": "Decoding table values",
-          "done": "Table values decoded"
+          "done": "Table values decoded",
+          "error": "Failed to decode the table values"
         },
         "fallback": {
           "running": "Running tool",
-          "done": "Tool executed"
+          "done": "Tool executed",
+          "error": "Failed to run the tool"
         }
       }
     },

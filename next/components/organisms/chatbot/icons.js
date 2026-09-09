@@ -17,6 +17,7 @@ import {
   Braces,
   Check,
   ChevronDown,
+  CircleAlert,
   CircleCheck,
   CircleHelp,
   ClockFading,
@@ -77,6 +78,7 @@ export const ChartIcon = makeIcon(BarChart3);
 export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);
+export const CircleAlertIcon = makeIcon(CircleAlert);
 export const CircleCheckIcon = makeIcon(CircleCheck);
 export const ClockFadingIcon = makeIcon(ClockFading);
 export const CodeIcon = makeIcon(Code);

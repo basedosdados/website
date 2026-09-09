@@ -13,6 +13,7 @@ import remarkGfm from "remark-gfm-v3";
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
 import {
+  CircleAlertIcon,
   CircleCheckIcon,
   ClockFadingIcon,
   SearchIcon,
@@ -28,6 +29,7 @@ import {
   formatToolOutputText,
   ToolResultView,
   RecordTable,
+  isToolErrorOutput,
 } from "./markdown";
 import { renderFriendlyRequest } from "./toolViews";
 import TextShimmer from "./TextShimmer";
@@ -41,14 +43,15 @@ const ToolIcons = {
   decode_table_values: DataStructureIcon,
 };
 
-function getToolStepMeta(name, { done = false, t } = {}) {
+function getToolStepMeta(name, { done = false, error = false, t } = {}) {
   // A finished step always shows a circle-check; the tool-specific glyph only
   // matters while running (though the timeline shows a spinner there).
   const Icon = done ? CircleCheckIcon : ToolIcons[name] ?? CodeIcon;
   const keyBase = ToolIcons[name]
     ? `ui.thinking.tools.${name}`
     : "ui.thinking.tools.fallback";
-  return { label: t(`${keyBase}.${done ? "done" : "running"}`), Icon };
+  const state = error ? "error" : done ? "done" : "running";
+  return { label: t(`${keyBase}.${state}`), Icon };
 }
 
 function isPlainObject(value) {
@@ -133,13 +136,22 @@ export function buildToolSteps(toolCalls) {
       steps.push({ kind: "reasoning", markdown: ev.content });
     }
 
-    const calls = Array.isArray(ev.tool_calls) ? ev.tool_calls : [];
-    for (const call of calls) {
-      if (!call || call.id == null) continue;
+    // Calls issued together in one tool_call event ran in parallel — tag them
+    // as a batch (size + position) so the timeline can draw a fork/bracket.
+    const calls = (Array.isArray(ev.tool_calls) ? ev.tool_calls : []).filter(
+      (call) => call && call.id != null
+    );
+    calls.forEach((call, batchPos) => {
       const output = outputByCallId.get(call.id) ?? null;
       if (output) consumedOutputIds.add(call.id);
-      steps.push({ kind: "tool", call, output });
-    }
+      steps.push({
+        kind: "tool",
+        call,
+        output,
+        batchSize: calls.length,
+        batchPos,
+      });
+    });
   }
 
   for (const [callId, output] of outputByCallId) {
@@ -180,6 +192,42 @@ function TimelineIcon({ status, Icon, fill }) {
   );
 }
 
+// The TimelineIcon is 24px tall, so its glyph centers at y=12; the fork bracket
+// sits 8px to the left of the icon column.
+const ICON_CENTER_Y = 12;
+const BRACKET_LEFT = -8;
+
+// One row's slice of the fork that joins a parallel batch: a vertical rail to
+// the left of the icon column (opening at the first call, closing at the last)
+// plus a horizontal tick into each call's icon. Consecutive rows' slices line
+// up into one continuous bracket.
+function ParallelBracket({ batchPos, batchSize }) {
+  const isFirst = batchPos === 0;
+  const isLast = batchPos === batchSize - 1;
+  return (
+    <>
+      <Box
+        aria-hidden
+        position="absolute"
+        width="2px"
+        backgroundColor="#E5E7EB"
+        left={`${BRACKET_LEFT}px`}
+        top={isFirst ? `${ICON_CENTER_Y}px` : "0"}
+        bottom={isLast ? `calc(100% - ${ICON_CENTER_Y}px)` : "0"}
+      />
+      <Box
+        aria-hidden
+        position="absolute"
+        height="2px"
+        backgroundColor="#E5E7EB"
+        left={`${BRACKET_LEFT}px`}
+        width={`${-BRACKET_LEFT}px`}
+        top={`${ICON_CENTER_Y - 1}px`}
+      />
+    </>
+  );
+}
+
 function ToolStepItem({
   step,
   index,
@@ -195,9 +243,20 @@ function ToolStepItem({
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
   const status = isLoadingStep ? "loading" : "done";
+  const isError = isToolErrorOutput(step.output);
+  // A parallel batch (>1 call from one event) shows a left bracket; the icon
+  // spine then only enters the first call and exits the last, never running
+  // between siblings (the bracket carries that).
+  const batchSize = step.batchSize ?? 1;
+  const batchPos = step.batchPos ?? 0;
+  const isParallel = batchSize > 1;
+  const spineTop = isParallel ? batchPos === 0 && !isFirst : !isFirst;
+  const spineBottom = isParallel
+    ? batchPos === batchSize - 1 && !isLast
+    : !isLast;
   const { label, Icon } = isOrphan
     ? { label: t("ui.thinking.additionalResult"), Icon: CircleCheckIcon }
-    : getToolStepMeta(call?.name, { done: status === "done", t });
+    : getToolStepMeta(call?.name, { done: status === "done", error: isError, t });
   const hasOutput = Boolean(formatToolOutputText(step.output));
   const downloadProps =
     step.output?.artifact?.type === "query_result"
@@ -219,7 +278,7 @@ function ToolStepItem({
       }}
     >
       <Box width="20px" position="relative" flexShrink={0}>
-        {!isFirst && (
+        {spineTop && (
           <Box
             position="absolute"
             top="0"
@@ -230,7 +289,7 @@ function ToolStepItem({
             backgroundColor="#E5E7EB"
           />
         )}
-        {!isLast && (
+        {spineBottom && (
           <Box
             position="absolute"
             bottom="0"
@@ -241,7 +300,14 @@ function ToolStepItem({
             backgroundColor="#E5E7EB"
           />
         )}
-        <TimelineIcon status={status} Icon={Icon} fill="currentColor"/>
+        {isParallel && (
+          <ParallelBracket batchPos={batchPos} batchSize={batchSize} />
+        )}
+        <TimelineIcon
+          status={status}
+          Icon={isError ? CircleAlertIcon : Icon}
+          fill="currentColor"
+        />
       </Box>
 
       <Box
@@ -302,11 +368,11 @@ function ToolStepItem({
               >
                 <BodyText
                   typography="small"
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="#464A51"
+                  fontSize="11px"
+                  fontWeight="500"
+                  color="#71757A"
                   textTransform="uppercase"
-                  letterSpacing="5%"
+                  letterSpacing="0.05em"
                 >
                   {t("ui.thinking.request")}
                 </BodyText>
@@ -326,15 +392,21 @@ function ToolStepItem({
               >
                 <BodyText
                   typography="small"
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="#464A51"
+                  fontSize="11px"
+                  fontWeight="500"
+                  color="#71757A"
                   textTransform="uppercase"
-                  letterSpacing="5%"
+                  letterSpacing="0.05em"
                 >
-                  {t("ui.thinking.result")}
+                  {isError ? t("ui.thinking.error") : t("ui.thinking.result")}
                 </BodyText>
-                <ToolResultView output={step.output} name={call?.name} />
+                {isError ? (
+                  <BodyText typography="small" color="#71757A">
+                    {t("ui.thinking.errorMessage")}
+                  </BodyText>
+                ) : (
+                  <ToolResultView output={step.output} name={call?.name} />
+                )}
               </VStack>
             )}
           </VStack>

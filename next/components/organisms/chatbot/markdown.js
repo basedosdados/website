@@ -413,6 +413,14 @@ function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
+// A tool that raised returns a `{ status: "error", message }` envelope (see the
+// backend's handle_tool_errors). We surface a generic message for these rather
+// than the raw exception string, so detect them here.
+export function isToolErrorOutput(output) {
+  const parsed = parseToolOutputValue(output);
+  return isPlainObject(parsed) && parsed.status === "error";
+}
+
 function formatCellValue(value) {
   if (value === null || value === undefined) return "—";
   if (typeof value === "object") return JSON.stringify(value);

@@ -119,6 +119,8 @@
       },
       "request": "Solicitud",
       "result": "Respuesta",
+      "error": "Error",
+      "errorMessage": "No se pudo completar este paso.",
       "additionalResult": "Resultado adicional",
       "views": {
         "datasets_one": "{{formatted}} conjunto de datos",
@@ -143,27 +145,33 @@
       "tools": {
         "search_datasets": {
           "running": "Buscando conjuntos de datos",
-          "done": "Conjuntos de datos encontrados"
+          "done": "Conjuntos de datos encontrados",
+          "error": "Error al buscar conjuntos de datos"
         },
         "get_dataset_details": {
           "running": "Explorando conjunto de datos",
-          "done": "Conjunto de datos explorado"
+          "done": "Conjunto de datos explorado",
+          "error": "Error al explorar el conjunto de datos"
         },
         "get_table_details": {
           "running": "Explorando la estructura de la tabla",
-          "done": "Estructura de la tabla explorada"
+          "done": "Estructura de la tabla explorada",
+          "error": "Error al explorar la estructura de la tabla"
         },
         "execute_bigquery_sql": {
-          "running": "Consultando BigQuery",
-          "done": "Consulta a BigQuery completada"
+          "running": "Consultando los datos",
+          "done": "Consulta completada",
+          "error": "Error al consultar los datos"
         },
         "decode_table_values": {
           "running": "Decodificando valores de la tabla",
-          "done": "Valores de la tabla decodificados"
+          "done": "Valores de la tabla decodificados",
+          "error": "Error al decodificar los valores de la tabla"
         },
         "fallback": {
           "running": "Ejecutando herramienta",
-          "done": "Herramienta ejecutada"
+          "done": "Herramienta ejecutada",
+          "error": "Error al ejecutar la herramienta"
         }
       }
     },

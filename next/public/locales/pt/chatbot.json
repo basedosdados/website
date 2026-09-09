@@ -119,6 +119,8 @@
       },
       "request": "Solicitação",
       "result": "Resposta",
+      "error": "Erro",
+      "errorMessage": "Não foi possível concluir esta etapa.",
       "additionalResult": "Resultado adicional",
       "views": {
         "datasets_one": "{{formatted}} conjunto de dados",
@@ -143,27 +145,33 @@
       "tools": {
         "search_datasets": {
           "running": "Buscando conjuntos de dados",
-          "done": "Conjuntos de dados encontrados"
+          "done": "Conjuntos de dados encontrados",
+          "error": "Falha ao buscar conjuntos de dados"
         },
         "get_dataset_details": {
           "running": "Explorando conjunto de dados",
-          "done": "Conjunto de dados explorado"
+          "done": "Conjunto de dados explorado",
+          "error": "Falha ao explorar o conjunto de dados"
         },
         "get_table_details": {
           "running": "Explorando estrutura da tabela",
-          "done": "Estrutura da tabela explorada"
+          "done": "Estrutura da tabela explorada",
+          "error": "Falha ao explorar a estrutura da tabela"
         },
         "execute_bigquery_sql": {
-          "running": "Consultando o BigQuery",
-          "done": "Consulta ao BigQuery concluída"
+          "running": "Consultando os dados",
+          "done": "Consulta concluída",
+          "error": "Falha ao consultar os dados"
         },
         "decode_table_values": {
           "running": "Decodificando valores da tabela",
-          "done": "Valores da tabela decodificados"
+          "done": "Valores da tabela decodificados",
+          "error": "Falha ao decodificar os valores da tabela"
         },
         "fallback": {
           "running": "Executando ferramenta",
-          "done": "Ferramenta executada"
+          "done": "Ferramenta executada",
+          "error": "Falha ao executar a ferramenta"
         }
       }
     },
