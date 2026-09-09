@@ -327,7 +327,7 @@ function ChatbotContent() {
           onSelectThread={handleSelectThread}
           onAbout={handleAbout}
           currentThreadId={
-            router.isReady ? normalizedThreadId : undefined
+            showAbout || !router.isReady ? undefined : normalizedThreadId
           }
           isMobileOpen={isMobileSidebarOpen}
           onMobileClose={() => setIsMobileSidebarOpen(false)}

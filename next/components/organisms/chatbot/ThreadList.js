@@ -38,6 +38,10 @@ const THREAD_TITLE_FADE =
 const ACTIVE_BG = "rgba(43, 140, 77, 0.12)";
 const ACTIVE_BG_HOVER = "rgba(43, 140, 77, 0.18)";
 const ACTIVE_BAR = "#2B8C4D";
+// Options-button hover: neutral grey on a normal row, a deeper green tint on
+// the selected (green) row so it reads as intentional instead of muddy.
+const OPTIONS_HOVER_BG = "#DEDFE0";
+const OPTIONS_HOVER_BG_ACTIVE = "rgba(43, 140, 77, 0.28)";
 
 const SCROLLBAR_SX = {
   "&::-webkit-scrollbar": { width: "10px" },
@@ -360,8 +364,19 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                               },
                             }}
                             _groupHover={{ opacity: 1 }}
-                            _hover={{ backgroundColor: "#DEDFE0", color: "#252A32" }}
-                            _expanded={{ opacity: 1, backgroundColor: "#DEDFE0", color: "#252A32" }}
+                            _hover={{
+                              backgroundColor: isActive
+                                ? OPTIONS_HOVER_BG_ACTIVE
+                                : OPTIONS_HOVER_BG,
+                              color: "#252A32",
+                            }}
+                            _expanded={{
+                              opacity: 1,
+                              backgroundColor: isActive
+                                ? OPTIONS_HOVER_BG_ACTIVE
+                                : OPTIONS_HOVER_BG,
+                              color: "#252A32",
+                            }}
                           >
                             <MoreVerticalIcon
                               display="block"
