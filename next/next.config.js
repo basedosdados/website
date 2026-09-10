@@ -38,8 +38,6 @@ module.exports = {
         ],
       },
       {
-        // Chart basemap geometry (TopoJSON) is immutable static reference data. It is not
-        // content-hashed, so cache it hard and version the filename when it ever changes.
         source: '/chatbot/geo/:file*',
         headers: [
           {

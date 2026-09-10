@@ -3,10 +3,6 @@ import { useEffect, useRef, useState } from "react";
 
 import BodyText from "../../atoms/Text/BodyText";
 
-// Presentational chrome applied on top of whatever the backend spec declares, so every
-// chart shares one look (font, muted axes/legend, title). Data colours are NOT set here:
-// the model picks a scheme when a quantity's colour carries meaning (see the prompt), and
-// Vega's own defaults handle everything else.
 const CHART_CONFIG = {
   font: "Roboto",
   background: "transparent",
@@ -34,10 +30,6 @@ const CHART_CONFIG = {
   view: { stroke: "transparent" },
 };
 
-// Deep-merge the backend spec's `config` onto CHART_CONFIG so a spec that sets a single
-// nested key (e.g. `config.axis.grid`) refines the theme instead of replacing a whole
-// sub-object. Plain objects merge recursively; everything else (incl. arrays, so a spec
-// can swap a colour range wholesale) replaces.
 function mergeConfig(base, override) {
   if (!override || typeof override !== "object" || Array.isArray(override)) {
     return override === undefined ? base : override;
@@ -65,19 +57,17 @@ const EMBED_ACTIONS = {
   editor: false,
 };
 
-/**
- * Renders a complete Vega-Lite spec (data already bound server-side) with vega-embed,
- * loaded lazily on the client so the ~heavy Vega runtime stays out of the initial
- * bundle and never runs during SSR. Merges in a shared presentational config and lets
- * the chart size to its container width. Exposes vega-embed's built-in PNG/SVG export.
- */
-export default function VegaChart({ spec }) {
+export default function VegaChart({ spec, onStatusChange }) {
   const containerRef = useRef(null);
+  const onStatusChangeRef = useRef(onStatusChange);
   const [status, setStatus] = useState("loading");
+
+  onStatusChangeRef.current = onStatusChange;
 
   useEffect(() => {
     if (!spec || typeof spec !== "object") {
       setStatus("error");
+      onStatusChangeRef.current?.("error");
       return undefined;
     }
 
@@ -105,8 +95,6 @@ export default function VegaChart({ spec }) {
           downloadFileName: spec.title || "grafico",
         };
 
-        // The backend renders every spec with vl-convert before emitting it, so a spec
-        // that reaches here already compiles; the catch below only handles the unexpected.
         embedded = await embed(container, responsiveSpec, embedOptions);
 
         if (cancelled) {
@@ -114,9 +102,13 @@ export default function VegaChart({ spec }) {
           return;
         }
         setStatus("ready");
+        onStatusChangeRef.current?.("ready");
       } catch (error) {
         console.error("Falha ao renderizar o gráfico:", error);
-        if (!cancelled) setStatus("error");
+        if (!cancelled) {
+          setStatus("error");
+          onStatusChangeRef.current?.("error");
+        }
       }
     })();
 
@@ -148,16 +140,12 @@ export default function VegaChart({ spec }) {
         ref={containerRef}
         width="100%"
         minWidth={0}
-        position="relative"
+        position={status === "ready" ? "relative" : "absolute"}
+        left={0}
+        right={status === "ready" ? undefined : 0}
+        opacity={status === "ready" ? 1 : 0}
+        pointerEvents={status === "ready" ? "auto" : "none"}
         overflowX="auto"
-        display={status === "ready" ? "block" : "none"}
-        // vega-embed adds its `vega-embed` class to THIS element (the one passed to
-        // embed()) and ships its action-menu CSS as a runtime-injected <style> that does
-        // not take effect in this bundle — so its <details> menu would otherwise render
-        // unstyled in normal flow (default ▶ marker + a full-size "⋯" ellipsis). Selectors
-        // are relative to this element (`&` = the .vega-embed element, bare names = its
-        // descendants); they restyle the menu into a small top-right button and keep the
-        // PNG/SVG export links usable.
         sx={{
           canvas: { maxWidth: "100%" },
           "svg.marks": { maxWidth: "100%", height: "auto" },
