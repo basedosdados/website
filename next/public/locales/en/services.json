@@ -57,5 +57,6 @@
     "formacao-card-1-title": "Practical content, aligned with your needs.",
     "formacao-card-1-content": "Training built from your team's real challenges and project goals, ensuring that learning is applicable to everyday life.",
     "formacao-card-2-title": "Continuous and flexible learning.",
-    "formacao-card-2-content": "Your team has lifetime access to didactic material, plus exercises and extra materials, with tracks that adapt to the participants' routine and knowledge level."
+    "formacao-card-2-content": "Your team has lifetime access to didactic material, plus exercises and extra materials, with tracks that adapt to the participants' routine and knowledge level.",
+    "chatbot-warning-msg": "* In the chatbot service, your data is subject to the security and privacy policies of the LLM and infrastructure providers."
 }

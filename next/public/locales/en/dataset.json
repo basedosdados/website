@@ -173,7 +173,8 @@
         "paid": "PAID",
         "accessGranted": "Access granted for the period",
         "upgradeRequired": "Upgrade to access the period",
-        "comparePlans": "Compare the plans"
+        "comparePlans": "Compare the plans",
+        "noTemporalCoverage": "No temporal coverage"
     },
     "column": {
         "search": "Search columns",

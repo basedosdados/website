@@ -7,6 +7,8 @@ import {
 import { useState, useCallback } from "react";
 import cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 
 import Button from "../../components/atoms/Button";
 import Display from "../../components/atoms/Text/Display";
@@ -18,12 +20,20 @@ import Exclamation from "../../public/img/icons/exclamationIcon";
 
 import { withPages } from "../../hooks/pages.hook";
 
-export async function getStaticProps() {
-  return await withPages()
+export async function getStaticProps({ locale }) {
+  const pagesProps = await withPages()
+  return {
+    ...pagesProps,
+    props: {
+      ...pagesProps.props,
+      ...(await serverSideTranslations(locale, ['survey', 'common', 'menu'])),
+    },
+  }
 }
 
 export default function Survey() {
   const router = useRouter();
+  const { t } = useTranslation('survey');
   const [err, setErr] = useState("")
   const [index, setIndex] = useState(0)
   const [stages, setStages] = useState(Array(7).fill([]))
@@ -49,7 +59,7 @@ export default function Survey() {
       .then(res => res.json())
 
     if(result.errors.length > 0) {
-      setErr("Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.")
+      setErr(t('errors.server'))
       console.error(result.errors)
       return setIsLoading(false)
     }
@@ -71,142 +81,41 @@ export default function Survey() {
     router.push('/')
   }
 
-  const question  = [
-    {
-      question: "Em que área você atua?",
-      options: [
-        ["Tecnologia", "TECNOLOGIA"],
-        ["Saúde", "SAUDE"],
-        ["Financeiro", "FINANCEIRO"],
-        ["Educação", "EDUCACAO"],
-        ["Varejo", "VAREJO"],
-        ["Energia", "ENERGIA"],
-        ["Jornalismo", "JORNALISMO"],
-        ["Outra", "OUTRA"]
-      ],
-      buttons: [
-        {text: "Pular", style: "clean",function: async () => fetchUpdateProfileSurvey("true")},
-        {text: "Continuar", function: () => {
-          if(stages[0].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(1)
-        }}
-      ],
-    },
-    {
-      question: "Qual o seu cargo?",
-      options: [
-        ["CEO/Diretor(a)", "CEO_DIRETOR"],
-        ["Gerente", "GERENTE"],
-        ["Coordenador(a)", "COORDENADOR"],
-        ["Analista", "ANALISTA"],
-        ["Consultor(a)", "CONSULTOR"],
-        ["Especialista", "ESPECIALISTA"],
-        ["Assistente", "ASSISTENTE"],
-        ["Estagiário(a)", "ESTAGIARIO"],
-        ["Estudante", "ESTUDANTE"],
-        ["Professor(a)/Pesquisador(a)", "PROFESSOR_PESQUISADOR"],
-        ["Freelancer", "FREELANCER"],
-        ["Empreendedor(a)", "EMPREENDEDOR"],
-        ["Outro", "OUTRO"]
-      ],
-      buttons: [
-        {text: "Voltar", function: () => setIndex(0), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[1].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(2)
-        }}
-      ]
-    },
-    {
-      question: "Qual o tamanho da empresa em que você trabalha?",
-      options: [
-        ["1-10 funcionários", "PEQUENA_1_10"],
-        ["11-50 funcionários", "PEQUENA_11_50"],
-        ["51-200 funcionários", "MEDIA_51_200"],
-        ["201-500 funcionários", "MEDIA_201_500"],
-        ["Mais de 500 funcionários", "GRANDE_MAIS_500"],
-      ],
-      buttons: [
-        {text: "Voltar", function: () => setIndex(1), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[2].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(3)
-        }}
-      ]
-    },
-    {
-      question: "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
-      options: [
-        ["SQL", "SQL"],
-        ["Python", "PYTHON"],
-        ["R", "R"],
-        ["Stata", "STATA"],
-        ["Excel", "EXCEL"],
-        ["Nenhuma", "NONE"],
-        ["Outra", "OTHER"],
-      ],
-      buttons: [
-        {text: "Voltar", function: () => setIndex(2), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[3].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(4)
-        }}
-      ]
-    },
-    {
-      question: "Qual o seu principal objetivo com a BD?",
-      options: [
-        ["Análise de mercado", "MARKET_ANALYSIS"],
-        ["Monitoramento de concorrência", "COMPETITOR_MONITORING"],
-        ["Pesquisa acadêmica", "ACADEMIC_RESEARCH"],
-        ["Gestão de riscos", "RISK_MANAGEMENT"],
-        ["Desenvolvimento de produto", "PRODUCT_DEVELOPMENT"],
-        ["Compliance e regulatório", "COMPLIANCE_REGULATORY"],
-        ["Análise de políticas públicas", "PUBLIC_POLICY_ANALYSIS"],
-        ["Outro", "OTHER"],
-      ],
-      buttons: [
-        {text: "Voltar", function: () => setIndex(3), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[4].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(5)
-        }}
-      ]
-    },
-    {
-      question: "Como você conheceu a BD?",
-      options: [
-        ["Redes sociais", "SOCIAL_MEDIA"],
-        ["Indicação", "REFERRAL"],
-        ["Pesquisa online", "ONLINE_SEARCH"],
-        ["Eventos", "EVENTS"],
-        ["Publicidade", "ADVERTISING"],
-        ["Outros", "OTHER"],
-      ],
-      buttons: [
-        {text: "Voltar", function: () => setIndex(4), style: "clean"},
-        {text: "Continuar", function: () => {
-          if(stages[5].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-          setErr("")
-          setIndex(6)
-        }}
-      ]
-    },
-    {
-      question: "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
-      options: [["Sim", "YES"], ["Não", "NO"]],
-      buttons: [{text: "Voltar", function: () => setIndex(5), style: "clean"}, {text: "Enviar", function: () => {
-        if(stages[6].length === 0) return setErr("Por favor, selecione uma das opções abaixo.")
-        setErr("")
-        fetchUpdateProfileSurvey("false")
-      }}]
-    }
+  // Option codes are sent to the backend and must not be translated; only the
+  // labels come from the locale files.
+  const questionSpecs = [
+    {key: "area", options: ["TECNOLOGIA", "SAUDE", "FINANCEIRO", "EDUCACAO", "VAREJO", "ENERGIA", "JORNALISMO", "OUTRA"]},
+    {key: "role", options: ["CEO_DIRETOR", "GERENTE", "COORDENADOR", "ANALISTA", "CONSULTOR", "ESPECIALISTA", "ASSISTENTE", "ESTAGIARIO", "ESTUDANTE", "PROFESSOR_PESQUISADOR", "FREELANCER", "EMPREENDEDOR", "OUTRO"]},
+    {key: "companySize", options: ["PEQUENA_1_10", "PEQUENA_11_50", "MEDIA_51_200", "MEDIA_201_500", "GRANDE_MAIS_500"]},
+    {key: "tool", options: ["SQL", "PYTHON", "R", "STATA", "EXCEL", "NONE", "OTHER"]},
+    {key: "goal", options: ["MARKET_ANALYSIS", "COMPETITOR_MONITORING", "ACADEMIC_RESEARCH", "RISK_MANAGEMENT", "PRODUCT_DEVELOPMENT", "COMPLIANCE_REGULATORY", "PUBLIC_POLICY_ANALYSIS", "OTHER"]},
+    {key: "discovery", options: ["SOCIAL_MEDIA", "REFERRAL", "ONLINE_SEARCH", "EVENTS", "ADVERTISING", "OTHER"]},
+    {key: "contact", options: ["YES", "NO"]}
   ]
+
+  const question = questionSpecs.map((spec, i) => {
+    const isLast = i === questionSpecs.length - 1
+
+    return {
+      question: t(`${spec.key}.question`),
+      options: spec.options.map((code) => [t(`${spec.key}.options.${code}`), code]),
+      buttons: [
+        i === 0
+          ? {text: t('buttons.skip'), style: "clean", submits: true, function: async () => fetchUpdateProfileSurvey("true")}
+          : {text: t('buttons.back'), style: "clean", function: () => setIndex(i - 1)},
+        {
+          text: isLast ? t('buttons.submit') : t('buttons.continue'),
+          submits: isLast,
+          function: () => {
+            if(stages[i].length === 0) return setErr(t('errors.selectOption'))
+            setErr("")
+            if(isLast) return fetchUpdateProfileSurvey("false")
+            setIndex(i + 1)
+          }
+        }
+      ]
+    }
+  })
 
   const handleSelected = useCallback((value, stageIndex) => {
     setStages((prevStages) => prevStages.map((stage, i) => 
@@ -346,7 +255,7 @@ export default function Survey() {
                   backgroundColor: elm.style ? "" : "#22703E"
                 }}
               >
-                {isLoading ? (elm.text === "Pular" || elm.text === "Enviar")  ? <Spinner /> : elm.text : elm.text}
+                {isLoading && elm.submits ? <Spinner /> : elm.text}
               </Button>
             )}
           </Stack>

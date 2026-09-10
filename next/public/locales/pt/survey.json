@@ -1,0 +1,96 @@
+{
+  "errors": {
+    "server": "Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.",
+    "selectOption": "Por favor, selecione uma das opções abaixo."
+  },
+  "buttons": {
+    "skip": "Pular",
+    "back": "Voltar",
+    "continue": "Continuar",
+    "submit": "Enviar"
+  },
+  "area": {
+    "question": "Em que área você atua?",
+    "options": {
+      "TECNOLOGIA": "Tecnologia",
+      "SAUDE": "Saúde",
+      "FINANCEIRO": "Financeiro",
+      "EDUCACAO": "Educação",
+      "VAREJO": "Varejo",
+      "ENERGIA": "Energia",
+      "JORNALISMO": "Jornalismo",
+      "OUTRA": "Outra"
+    }
+  },
+  "role": {
+    "question": "Qual o seu cargo?",
+    "options": {
+      "CEO_DIRETOR": "CEO/Diretor(a)",
+      "GERENTE": "Gerente",
+      "COORDENADOR": "Coordenador(a)",
+      "ANALISTA": "Analista",
+      "CONSULTOR": "Consultor(a)",
+      "ESPECIALISTA": "Especialista",
+      "ASSISTENTE": "Assistente",
+      "ESTAGIARIO": "Estagiário(a)",
+      "ESTUDANTE": "Estudante",
+      "PROFESSOR_PESQUISADOR": "Professor(a)/Pesquisador(a)",
+      "FREELANCER": "Freelancer",
+      "EMPREENDEDOR": "Empreendedor(a)",
+      "OUTRO": "Outro"
+    }
+  },
+  "companySize": {
+    "question": "Qual o tamanho da empresa em que você trabalha?",
+    "options": {
+      "PEQUENA_1_10": "1-10 funcionários",
+      "PEQUENA_11_50": "11-50 funcionários",
+      "MEDIA_51_200": "51-200 funcionários",
+      "MEDIA_201_500": "201-500 funcionários",
+      "GRANDE_MAIS_500": "Mais de 500 funcionários"
+    }
+  },
+  "tool": {
+    "question": "Qual a principal ferramenta que você utiliza para realizar análises de dados?",
+    "options": {
+      "SQL": "SQL",
+      "PYTHON": "Python",
+      "R": "R",
+      "STATA": "Stata",
+      "EXCEL": "Excel",
+      "NONE": "Nenhuma",
+      "OTHER": "Outra"
+    }
+  },
+  "goal": {
+    "question": "Qual o seu principal objetivo com a BD?",
+    "options": {
+      "MARKET_ANALYSIS": "Análise de mercado",
+      "COMPETITOR_MONITORING": "Monitoramento de concorrência",
+      "ACADEMIC_RESEARCH": "Pesquisa acadêmica",
+      "RISK_MANAGEMENT": "Gestão de riscos",
+      "PRODUCT_DEVELOPMENT": "Desenvolvimento de produto",
+      "COMPLIANCE_REGULATORY": "Compliance e regulatório",
+      "PUBLIC_POLICY_ANALYSIS": "Análise de políticas públicas",
+      "OTHER": "Outro"
+    }
+  },
+  "discovery": {
+    "question": "Como você conheceu a BD?",
+    "options": {
+      "SOCIAL_MEDIA": "Redes sociais",
+      "REFERRAL": "Indicação",
+      "ONLINE_SEARCH": "Pesquisa online",
+      "EVENTS": "Eventos",
+      "ADVERTISING": "Publicidade",
+      "OTHER": "Outros"
+    }
+  },
+  "contact": {
+    "question": "Estamos sempre buscando aprimorar a plataforma e consideramos fundamental ouvir a nossa comunidade nesse processo. Podemos contatar você para futuras pesquisas?",
+    "options": {
+      "YES": "Sim",
+      "NO": "Não"
+    }
+  }
+}

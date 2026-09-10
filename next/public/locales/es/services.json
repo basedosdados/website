@@ -57,5 +57,6 @@
     "formacao-card-1-title": "Contenido práctico, alineado a sus necesidades.",
     "formacao-card-1-content": "Formaciones construidas a partir de los desafíos reales de su equipo y de los objetivos del proyecto, garantizando que el aprendizaje sea aplicable en el día a día.",
     "formacao-card-2-title": "Aprendizaje continuo y flexible.",
-    "formacao-card-2-content": "Su equipo tiene acceso vitalicio al material didáctico, además de ejercicios y materiales extra, con rutas que se adaptan a la rutina y al nivel de conocimiento de los participantes."
+    "formacao-card-2-content": "Su equipo tiene acceso vitalicio al material didáctico, además de ejercicios y materiales extra, con rutas que se adaptan a la rutina y al nivel de conocimiento de los participantes.",
+    "chatbot-warning-msg": "* En el servicio de chatbot, sus datos estarán sujetos a las políticas de seguridad y privacidad de los proveedores de LLM e infraestructura."
 }
