@@ -18,8 +18,6 @@ import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
 import BracesIcon from "../../../public/img/icons/bracesIcon";
 import FileGenericIcon from "../../../public/img/icons/fileGenericIcon";
 
-// Per-format icon + accent for the export download card: table icon (green) for CSV,
-// braces (yellow) for JSONL, generic file (blue) for AVRO/PARQUET and anything else.
 const EXPORT_FORMAT_STYLES = {
   CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },
   JSONL: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
@@ -37,8 +35,6 @@ function exportFormatStyle(format) {
   );
 }
 
-// AVRO now leads OFFERED_EXPORT_FORMATS on the backend, so `formats[0]` is no longer CSV.
-// Prefer CSV when it is offered; otherwise fall back to the first offered format.
 function preferredFormat(formats) {
   const list = Array.isArray(formats) ? formats : [];
   return list.find((f) => String(f).toUpperCase() === "CSV") || list[0] || "CSV";
@@ -330,13 +326,6 @@ export function DownloadResultButton({ messageId, artifact, onExport, disabled }
   );
 }
 
-/**
- * A download card for an export artifact the agent produced on request
- * (`{ type: "export", query_ref, format, filename, size_bytes, message_id }`). The file
- * is already materialized on the backend, so the card shows the real filename and exact
- * size and downloads in a single click. The icon and accent color key off the format:
- * table/green for CSV, braces/yellow for JSONL, generic file/blue for AVRO/PARQUET.
- */
 export function ExportResultCard({ messageId, artifact, onExport }) {
   const { t } = useTranslation("chatbot");
   const [status, setStatus] = useState("idle");
@@ -348,9 +337,6 @@ export function ExportResultCard({ messageId, artifact, onExport }) {
   const fileName = artifact.filename || `resultado.${format.toLowerCase()}`;
   const sizeLabel = formatFileSize(artifact.size_bytes);
   const { Icon, color, tint } = exportFormatStyle(format);
-  // The export endpoint authorizes by (message_id, query_ref). A result exported from an
-  // earlier turn belongs to the message that produced it, which the artifact carries —
-  // use it so cross-turn exports resolve, falling back to the message showing the card.
   const targetMessageId = artifact.message_id || messageId;
   const isLoading = status === "loading";
 

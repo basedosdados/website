@@ -97,9 +97,6 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
       .map((step) => step.output.artifact);
   }, [message.downloads, toolSteps]);
 
-  // Client-facing artifacts the agent emitted this turn: charts to render inline and
-  // export files to offer as download cards. Both ride on tool outputs (live via the
-  // stream, and again in `events` on history reload).
   const { chartArtifacts, exportArtifacts } = useMemo(() => {
     const charts = [];
     const exports = [];
@@ -209,6 +206,13 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     responseComplete &&
     showFollowUpQuestions;
 
+  const showResponseArtifacts =
+    !isUser &&
+    !message.isError &&
+    !message.isLoading &&
+    !message.isTyping &&
+    (chartArtifacts.length > 0 || exportArtifacts.length > 0);
+
   return (
     <Flex width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
@@ -273,8 +277,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
             </Box>
           )}
 
-          {!isUser && !message.isError &&
-            (chartArtifacts.length > 0 || exportArtifacts.length > 0) && (
+          {showResponseArtifacts && (
               <VStack
                 align="stretch"
                 spacing="12px"
