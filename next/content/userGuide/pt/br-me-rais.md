@@ -62,6 +62,7 @@ O instrumento de coleta atual é um formulário que deve ser preenchido pelos em
 
 # Mudanças na coleta
 Algumas colunas foram adicionadas ou retiradas ao longo do tempo. A partir do ano de 2022 as empresas do grupo 3 do eSocial ficaram desobrigadas a declarar a RAIS pelo seu programa usual. Assim não é recomendável a comparação dos resultados desse ano com os resultados do anos anteriores.
+A partir do ano de 2023, com a entrada do grupo 4 (órgãos públicos e organizações internacionais), toda a RAIS passou a ser declarada pelo eSocial, e também não é recomendável a comparação direta desse ano com os anteriores.
 
 # Atualizações
 Os dados têm atualização parcial e completa. A atualização parcial ocorre em setembro do ano de coleta e a completa ocorre até o início do ano seguinte ao ano de coleta. Isso significa que os dados referentes a 2023, que foram coletados em 2024, ficaram parcialmente disponíveis em setembro de 2024 e a versão completa foi disponibilizada até o início de 2025. Às vezes, a atualização pode ocorrer fora do calendário previsto. Se perceber que os dados estão desatualizados, entre em contato com nossa equipe.
