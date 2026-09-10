@@ -27,17 +27,19 @@ function splitSourceName(name) {
   if (typeof name !== "string" || name.trim() === "") {
     return { dataset: "—", table: null };
   }
-  const separatorIndex = name.indexOf(" - ");
+  // The backend joins them with an em-dash: "{dataset} — {table}".
+  const separator = " — ";
+  const separatorIndex = name.indexOf(separator);
   if (separatorIndex === -1) {
     return { dataset: name, table: null };
   }
   return {
     dataset: name.slice(0, separatorIndex).trim(),
-    table: name.slice(separatorIndex + 3).trim() || null,
+    table: name.slice(separatorIndex + separator.length).trim() || null,
   };
 }
 
-function SourceThumbnail({ thumbnailUrl, alt, size = "20px" }) {
+function SourceThumbnail({ thumbnailUrl, alt, size = "16px" }) {
   return (
     <Box
       as="span"
@@ -153,33 +155,47 @@ export const DataSourcesButton = React.memo(function DataSourcesButton({ dataSou
               const rowKey = source?.table_id ?? index;
 
               const content = (
-                <Flex alignItems="center" gap="10px" width="100%" minWidth={0}>
-                  <SourceThumbnail thumbnailUrl={thumbnailUrl} alt={dataset} />
-                  <Box minWidth={0} flex={1}>
+                <Box
+                  display="grid"
+                  gridTemplateColumns="auto minmax(0, 1fr) auto"
+                  alignItems="center"
+                  columnGap="8px"
+                  width="100%"
+                  minWidth={0}
+                >
+                  <SourceThumbnail
+                    thumbnailUrl={thumbnailUrl}
+                    alt={table || dataset}
+                  />
+                  <BodyText
+                    as="span"
+                    gridColumn="2"
+                    gridRow="1"
+                    fontSize="14px"
+                    lineHeight="18px"
+                    color="#252A32"
+                    isTruncated
+                  >
+                    {table || dataset}
+                  </BodyText>
+                  {table && dataset && (
                     <BodyText
                       as="span"
-                      display="block"
-                      fontSize="14px"
-                      color="#252A32"
+                      gridColumn="2"
+                      gridRow="2"
+                      fontSize="12px"
+                      lineHeight="16px"
+                      color="#71757A"
                       isTruncated
                     >
                       {dataset}
                     </BodyText>
-                    {table && (
-                      <BodyText
-                        as="span"
-                        display="block"
-                        fontSize="14px"
-                        color="#71757A"
-                        isTruncated
-                      >
-                        {table}
-                      </BodyText>
-                    )}
-                  </Box>
+                  )}
                   {href && (
                     <Box
                       as="span"
+                      gridColumn="3"
+                      gridRow="1"
                       display="flex"
                       flexShrink={0}
                       color="#464A51"
@@ -187,7 +203,7 @@ export const DataSourcesButton = React.memo(function DataSourcesButton({ dataSou
                       <LinkIcon width="16px" height="16px" fill="currentColor" />
                     </Box>
                   )}
-                </Flex>
+                </Box>
               );
 
               return (

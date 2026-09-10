@@ -339,8 +339,8 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
                     >
                       <Flex alignItems="center" gap="8px" minWidth={0} flex={1}>
                         <TableChartViewIcon
-                          width="20px"
-                          height="20px"
+                          width="16px"
+                          height="16px"
                           flexShrink={0}
                           color="#464A51"
                         />
