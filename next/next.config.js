@@ -18,6 +18,33 @@ module.exports = {
   serverRuntimeConfig: {
     port: parseInt(process.env.PORT, 10) || 3000
   },
+  // The Pro product is "BD Pro" (Base dos Dados) in pt/es and "DB Pro" (Data
+  // Basis) in en, so the English site serves the page at /dbpro.
+  async rewrites() {
+    return [
+      {
+        source: '/dbpro',
+        destination: '/bdpro',
+      },
+    ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/bdpro',
+        destination: '/dbpro',
+        locale: false,
+        permanent: false,
+        has: [{ type: 'host', value: '(www\\.)?data-basis\\.org' }],
+      },
+      {
+        source: '/en/bdpro',
+        destination: '/en/dbpro',
+        locale: false,
+        permanent: false,
+      },
+    ]
+  },
   async headers() {
     return [
       {
