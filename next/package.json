@@ -54,7 +54,8 @@
     "remark-gfm": "^4.0.0",
     "remark-gfm-v3": "npm:remark-gfm@3.0.1",
     "swiper": "^8.4.5",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "vega-embed": "^7.1.0"
   },
   "devDependencies": {
     "cypress": "^14.4.0",

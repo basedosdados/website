@@ -3,6 +3,7 @@ import {
   Flex,
   HStack,
   Tooltip,
+  VStack,
   useToast,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
@@ -18,7 +19,8 @@ import { CopyIcon } from "../../../public/img/icons/copyIcon";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
 import { componentsMk } from "./markdown";
-import { DownloadResultsButton } from "./DownloadResults";
+import { DownloadResultsButton, ExportResultCard } from "./DownloadResults";
+import { ChartCard } from "./Charts";
 import {
   DataSourcesList,
   FollowUpQuestionsList,
@@ -94,6 +96,18 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
       )
       .map((step) => step.output.artifact);
   }, [message.downloads, toolSteps]);
+
+  const { chartArtifacts, exportArtifacts } = useMemo(() => {
+    const charts = [];
+    const exports = [];
+    for (const step of toolSteps) {
+      const artifact = step.kind === "tool" ? step.output?.artifact : null;
+      if (!artifact || typeof artifact !== "object") continue;
+      if (artifact.type === "chart" && artifact.spec) charts.push(artifact);
+      else if (artifact.type === "export" && artifact.query_ref) exports.push(artifact);
+    }
+    return { chartArtifacts: charts, exportArtifacts: exports };
+  }, [toolSteps]);
 
   const showThinkingSection =
     !isUser && !message.isError && toolSteps.length > 0;
@@ -192,6 +206,13 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     responseComplete &&
     showFollowUpQuestions;
 
+  const showResponseArtifacts =
+    !isUser &&
+    !message.isError &&
+    !message.isLoading &&
+    !message.isTyping &&
+    (chartArtifacts.length > 0 || exportArtifacts.length > 0);
+
   return (
     <Flex width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
@@ -255,6 +276,29 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
               </ReactMarkdown>
             </Box>
           )}
+
+          {showResponseArtifacts && (
+              <VStack
+                align="stretch"
+                spacing="12px"
+                width="100%"
+                minWidth={0}
+                marginTop="16px"
+                {...SectionFadeInProps}
+              >
+                {chartArtifacts.map((chart, index) => (
+                  <ChartCard key={`chart-${chart.query_ref}-${index}`} spec={chart.spec} />
+                ))}
+                {exportArtifacts.map((artifact, index) => (
+                  <ExportResultCard
+                    key={`export-${artifact.query_ref}-${index}`}
+                    messageId={message.id}
+                    artifact={artifact}
+                    onExport={onExport}
+                  />
+                ))}
+              </VStack>
+            )}
 
           {!isUser &&
             !message.isLoading &&
