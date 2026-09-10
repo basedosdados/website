@@ -297,7 +297,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                 width="100%"
                 justifyContent="space-between"
               >
-                <Flex gap="8px" alignItems="center">
+                <Flex gap="4px" alignItems="center">
                   <Tooltip
                     {...ActionTooltipProps}
                     label={isCopied ? t("ui.copied") : t("ui.copyResponse")}
@@ -331,7 +331,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                   )}
                 </Flex>
 
-                <Flex gap="8px">
+                <Flex gap="2px">
                   <Tooltip {...ActionTooltipProps} label={t("ui.goodResponse")}>
                     <Box
                       {...ActionButtonProps}
