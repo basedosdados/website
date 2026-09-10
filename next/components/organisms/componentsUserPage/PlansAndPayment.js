@@ -1141,7 +1141,7 @@ export default function PlansAndPayment ({ userData }) {
               inputFocus={emailGCPFocus}
               changeInputFocus={setEmailGCPFocus}
               width="100%"
-              placeholder="Insira o e-mail que deseja utilizar para acessar o BigQuery"
+              placeholder={t('username.bigquerySectionInputPlaceholder')}
               inputElementStyle={{
                 display: "none",
               }}

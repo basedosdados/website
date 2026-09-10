@@ -239,7 +239,9 @@
         "auxiliaryFiles": "Archivos auxiliares",
         "auxiliaryFilesDescription": "Descripción de archivos auxiliares",
         "version": "Versión",
-        "versionDescription": "Descripción de la versión"
+        "versionDescription": "Descripción de la versión",
+        "rawDataDisclaimer": "Estos datos no han pasado por la metodología de tratamiento de Base de los Datos.",
+        "accessOriginalSource": "Acceder a la fuente original"
     },
     "informationRequest": {
         "requestNumber": "Número del pedido: {{number}}",
