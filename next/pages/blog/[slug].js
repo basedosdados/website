@@ -103,10 +103,11 @@ export default function Post({ slug, locale, mdxSource, headings }) {
           key="ogdesc"
         />
         <meta name="description" content={frontmatter.description} />
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content="article" key="ogtype" />
         <meta
           property="og:url"
           content={`https://basedosdados.org/blog/${slug}`}
+          key="ogurl"
         />
         <meta
           property="og:image"

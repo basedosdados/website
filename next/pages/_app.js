@@ -48,6 +48,10 @@ function MyApp({ Component, pageProps }) {
   };
 
   const currentMeta = metaData[locale] || metaData.pt;
+  const canonicalPath = (router.asPath || "/").split(/[?#]/)[0];
+  const canonicalUrl = local
+    ? `${local}${canonicalPath === "/" ? "" : canonicalPath}`
+    : null;
   const pageOgImage =
     pageProps?.meta?.ogImage ||
     Component?.ogImage ||
@@ -68,11 +72,12 @@ function MyApp({ Component, pageProps }) {
         {/* <meta/> para não noindex ambientes de development e staging */}
 
         {pageOgImage ? (
-          <link rel="image_src" href={pageOgImage} />
+          <link rel="image_src" href={pageOgImage} key="imagesrc" />
         ) : (
           <link
             rel="image_src"
             href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`}
+            key="imagesrc"
           />
         )}
 
@@ -80,28 +85,24 @@ function MyApp({ Component, pageProps }) {
         <meta name="description" content={currentMeta.description} />
         <link rel="icon" href={currentMeta.icon} />
 
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content={local} />
-        <meta property="twitter:title" content={currentMeta.ogTitle} />
-        <meta property="twitter:description" content={currentMeta.ogDescription} />
-        {pageOgImage ? (
-          <meta property="twitter:image" content={pageOgImage} />
-        ) : (
-          <meta property="twitter:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
-        )}
+        {/* Twitter — apenas o card. Sem twitter:title/description/image aqui:
+            os crawlers caem para as tags og: correspondentes, o que faz cada
+            página herdar automaticamente o og: que ela mesma define. */}
+        <meta name="twitter:card" content="summary_large_image" key="twcard" />
 
         {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={local} />
-        <meta property="og:title" content={currentMeta.ogTitle} />
-        <meta property="og:description" content={currentMeta.ogDescription} />
-        {pageOgImage ? (
-          <meta property="og:image" content={pageOgImage} />
-        ) : (
-          <meta property="og:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} />
+        <meta property="og:type" content="website" key="ogtype" />
+        {canonicalUrl && (
+          <meta property="og:url" content={canonicalUrl} key="ogurl" />
         )}
-        <meta property="og:site_name" content={currentMeta.siteName} />
+        <meta property="og:title" content={currentMeta.ogTitle} key="ogtitle" />
+        <meta property="og:description" content={currentMeta.ogDescription} key="ogdesc" />
+        {pageOgImage ? (
+          <meta property="og:image" content={pageOgImage} key="ogimage" />
+        ) : (
+          <meta property="og:image" content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/general.png`} key="ogimage" />
+        )}
+        <meta property="og:site_name" content={currentMeta.siteName} key="ogsitename" />
 
         {/* <!-- Google Tag Manager --> */}
         {local === "https://staging.basedosdados.org" || local === "https://basedosdados.org" ? (

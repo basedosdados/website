@@ -30,6 +30,7 @@ import useABTestVariant from "../../hooks/useABTestVariant";
 import Banner from "../../components/molecules/Banner";
 import {
   triggerGAEvent,
+  formatMetaDescription,
   hasBDProSubscription,
   hasChatbotSubscription,
   trackNavigateToChatbotLp,
@@ -329,37 +330,32 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
     }
   };
 
+  const datasetName = dataset[`name${capitalize(locale)}`] || dataset.name
+  const datasetTitle = `${datasetName} – ${t("dataBasis")}`
+  const datasetDescription = formatMetaDescription(
+    dataset[`description${capitalize(locale)}`] || dataset.description
+  )
+  const datasetThumbnail = `https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`
+  const frontendUrl = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
+  const datasetUrl = frontendUrl ? `${frontendUrl}/dataset/${dataset._id}` : null
+
   return (
     <MainPageTemplate userTemplate footerTemplate="simple">
       <Head>
-        <title>{`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}</title>
+        <title>{datasetTitle}</title>
 
-        <link
-          rel="image_src"
-          href={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
-        />
-        <meta
-          property="og:image"
-          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
-          key="ogimage"
-        />
-        <meta
-          name="twitter:image"
-          content={`https://storage.googleapis.com/basedosdados-website/thumbnails/${locale}/dataset.png`}
-          key="twimage"
-        />
-        <meta
-          property="og:title"
-          content={`${dataset[`name${capitalize(locale)}`] || dataset.name} – ${t("dataBasis")}`}
-          key="ogtitle"
-        />
-        <meta
-          property="og:description"
-          content={
-            dataset[`description${capitalize(locale)}`] || dataset.description
-          }
-          key="ogdesc"
-        />
+        <link rel="image_src" href={datasetThumbnail} key="imagesrc" />
+        {datasetUrl && (
+          <link rel="canonical" href={datasetUrl} key="canonical" />
+        )}
+        <meta property="og:image" content={datasetThumbnail} key="ogimage" />
+        <meta name="twitter:image" content={datasetThumbnail} key="twimage" />
+        <meta property="og:title" content={datasetTitle} key="ogtitle" />
+        {datasetUrl && (
+          <meta property="og:url" content={datasetUrl} key="ogurl" />
+        )}
+        <meta name="description" content={datasetDescription} />
+        <meta property="og:description" content={datasetDescription} key="ogdesc" />
       </Head>
 
       <VStack
