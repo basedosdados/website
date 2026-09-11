@@ -556,50 +556,68 @@ export default function TablePage({ id, isBDSudo, changeTab, datasetName }) {
         </ReadMore>
       </SkeletonText>
 
+      {/* Temporal and spatial coverage sit side by side from `lg` up, and
+          stack on narrow viewports. The temporal bar is a fixed-width visual,
+          so it keeps `fit-content` and the spatial list takes the rest of the
+          row rather than wrapping under a mostly-empty line. */}
       <Stack
-        id="table_temporalcoverage"
-        width={{base: "100%", lg: "fit-content"}}
-        spacing="8px"
+        direction={{base: "column", lg: "row"}}
+        spacing={{base: "24px", lg: "64px"}}
+        alignItems="flex-start"
+        width="100%"
         marginBottom="40px !important"
       >
-        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
-          <TitleText typography="small">
-            {t('table.temporalCoverage')}
-          </TitleText>
-        </StackSkeleton>
-
-        <StackSkeleton
-          width="100%"
-          height={!isLoading ? "fit-content" : "65px"}
-          isLoading={isLoading}
+        <Stack
+          id="table_temporalcoverage"
+          width={{base: "100%", lg: "fit-content"}}
+          spacing="8px"
+          marginBottom="0 !important"
         >
-          <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
-        </StackSkeleton>
-      </Stack>
+          <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
+            <TitleText typography="small">
+              {t('table.temporalCoverage')}
+            </TitleText>
+          </StackSkeleton>
 
-      <Stack spacing="8px"  marginBottom="40px !important">
-        <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
-          <TitleText typography="small">
-            {t('table.spatialCoverage')}
-          </TitleText>
-        </StackSkeleton>
-
-        <StackSkeleton
-          height="20px"
-          width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
-          isLoading={isLoading}
-        >
-          <BodyText
-            typography="small"
-            color="#464A51"
+          <StackSkeleton
+            width="100%"
+            height={!isLoading ? "fit-content" : "65px"}
+            isLoading={isLoading}
           >
-            {resource?.[`spatialCoverageName${capitalize(locale)}`]
-              ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
-                  .sort((a, b) => a.localeCompare(b, locale))
-                  .join(', ')
-              : t('table.notProvided')}
-          </BodyText>
-        </StackSkeleton>
+            <TemporalCoverageBar value={resource?.fullTemporalCoverage}/>
+          </StackSkeleton>
+        </Stack>
+
+        <Stack
+          id="table_spatialcoverage"
+          width={{base: "100%", lg: "auto"}}
+          minWidth={{lg: "200px"}}
+          spacing="8px"
+          marginBottom="0 !important"
+        >
+          <StackSkeleton width="300px" height="28px" isLoading={isLoading}>
+            <TitleText typography="small">
+              {t('table.spatialCoverage')}
+            </TitleText>
+          </StackSkeleton>
+
+          <StackSkeleton
+            height="20px"
+            width={resource?.[`spatialCoverageName${capitalize(locale)}`] ? "100%" : "200px"}
+            isLoading={isLoading}
+          >
+            <BodyText
+              typography="small"
+              color="#464A51"
+            >
+              {resource?.[`spatialCoverageName${capitalize(locale)}`]
+                ? Object.values(resource[`spatialCoverageName${capitalize(locale)}`])
+                    .sort((a, b) => a.localeCompare(b, locale))
+                    .join(', ')
+                : t('table.notProvided')}
+            </BodyText>
+          </StackSkeleton>
+        </Stack>
       </Stack>
 
       <Stack
