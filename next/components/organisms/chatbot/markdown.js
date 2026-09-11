@@ -60,9 +60,11 @@ export function CodeBlock({
   const { hasCopied, onCopy } = useClipboard(code);
   const hasHeader = title != null;
 
+  const canHighlight = !inline && !raw && Boolean(hljs.getLanguage(language));
+
   const highlighted = useMemo(
-    () => (inline || raw ? null : hljs.highlight(code, { language })),
-    [inline, raw, code, language]
+    () => (canHighlight ? hljs.highlight(code, { language }) : null),
+    [canHighlight, code, language]
   );
 
   if (inline) {
@@ -171,7 +173,7 @@ export function CodeBlock({
         }
         boxSizing="border-box"
       >
-        {raw ? (
+        {!canHighlight ? (
           <Box
             as="code"
             display="block"
@@ -202,35 +204,110 @@ export function CodeBlock({
 
 export const MemoCodeBlock = React.memo(CodeBlock);
 
+const headingStyles = {
+  h1: { fontSize: "24px", lineHeight: "32px", fontWeight: "700", marginTop: "24px" },
+  h2: { fontSize: "20px", lineHeight: "28px", fontWeight: "700", marginTop: "24px" },
+  h3: { fontSize: "18px", lineHeight: "26px", fontWeight: "600", marginTop: "20px" },
+  h4: { fontSize: "16px", lineHeight: "24px", fontWeight: "600", marginTop: "16px" },
+  h5: { fontSize: "15px", lineHeight: "22px", fontWeight: "600", marginTop: "16px" },
+  h6: { fontSize: "14px", lineHeight: "20px", fontWeight: "600", marginTop: "16px" },
+};
+
+// Chakra's CSS reset flattens h1-h6 to `font-size: inherit; font-weight: inherit`,
+// so every heading level needs an explicit style or it renders as body text.
+function makeHeading(level) {
+  const { marginTop, ...style } = headingStyles[level];
+  const Heading = ({ children }) => (
+    <Text
+      as={level}
+      fontFamily="Roboto"
+      color="#252A32"
+      margin={`${marginTop} 0 8px`}
+      _first={{ marginTop: 0 }}
+      {...style}
+    >
+      {children}
+    </Text>
+  );
+  Heading.displayName = `Markdown${level.toUpperCase()}`;
+  return Heading;
+}
+
+function getCodeLanguage(className) {
+  const match = /language-(\w+)/.exec(className || "");
+  return match ? match[1] : "sql";
+}
+
 export const componentsMk = {
+  h1: makeHeading("h1"),
+  h2: makeHeading("h2"),
+  h3: makeHeading("h3"),
+  h4: makeHeading("h4"),
+  h5: makeHeading("h5"),
+  h6: makeHeading("h6"),
   p: ({ children }) => (
-    <BodyText as="p" color="#252A32" marginBottom="4px">
+    <BodyText as="p" color="#252A32" marginBottom="8px" _last={{ marginBottom: 0 }}>
       {children}
     </BodyText>
   ),
   a: ({ children, href }) => (
-    <BodyText as="a" color="#0068C5" href={href} target="_blank" rel="noopener noreferrer">
+    <BodyText
+      as="a"
+      color="#0068C5"
+      fontSize="inherit"
+      lineHeight="inherit"
+      fontWeight="inherit"
+      textDecoration="underline"
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       {children}
     </BodyText>
   ),
   strong: ({ children }) => (
-    <Text as="strong" fontWeight="bold" color="#252A32">
+    <Text as="strong" fontWeight="700" color="inherit">
       {children}
     </Text>
   ),
   em: ({ children }) => (
-    <Text as="em" fontStyle="italic" color="#252A32">
+    <Text as="em" fontStyle="italic" color="inherit">
       {children}
     </Text>
   ),
-  code: ({ children, inline }) => <MemoCodeBlock inline={inline} children={children} />,
+  blockquote: ({ children }) => (
+    <Box
+      as="blockquote"
+      borderLeft="3px solid #DEDFE0"
+      paddingLeft="12px"
+      margin="12px 0"
+      color="#464A51"
+    >
+      {children}
+    </Box>
+  ),
+  hr: () => <Box as="hr" borderTop="1px solid #DEDFE0" margin="16px 0" />,
+  del: ({ children }) => (
+    <Text as="del" textDecoration="line-through" color="inherit">
+      {children}
+    </Text>
+  ),
+  // react-markdown wraps fenced code in <pre>; CodeBlock renders its own <pre>.
+  pre: ({ children }) => <>{children}</>,
+  code: ({ children, inline, className }) => (
+    <MemoCodeBlock
+      inline={inline}
+      language={getCodeLanguage(className)}
+      children={children}
+    />
+  ),
   ul: ({ children }) => (
     <UnorderedList margin="8px 0 8px 20px">
       {children}
     </UnorderedList>
   ),
   ol: ({ children }) => (
-    <OrderedList >
+    <OrderedList margin="8px 0 8px 20px">
       {children}
     </OrderedList>
   ),
@@ -288,7 +365,7 @@ export const componentsMk = {
       textTransform="none"
       letterSpacing="inherit"
       fontFamily="Roboto"
-      fontWeight="400"
+      fontWeight="600"
       fontSize={{ base: "13px", md: "14px" }}
       lineHeight="20px"
       color="#252A32"
