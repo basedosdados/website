@@ -1,12 +1,9 @@
 import {
   Box,
   Flex,
-  HStack,
   VStack,
-  Spinner,
   Collapse,
 } from "@chakra-ui/react";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import React, { useState } from "react";
 import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
@@ -14,19 +11,28 @@ import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
 import LabelText from "../../atoms/Text/LabelText";
-import CheckIcon from "../../../public/img/icons/checkIcon";
-import SearchIcon from "../../../public/img/icons/searchIcon";
-import DataStructureIcon from "../../../public/img/icons/dataStructureIcon";
-import { DataBaseIcon } from "../../../public/img/icons/databaseIcon";
-import { CodeIcon } from "../../../public/img/icons/codeIcon";
+import {
+  CircleAlertIcon,
+  CircleCheckIcon,
+  ClockFadingIcon,
+  SearchIcon,
+  DataStructureIcon,
+  DataBaseIcon,
+  CodeIcon,
+  ChevronDownIcon,
+} from "./icons";
 import {
   componentsMk,
+  markdownContentSx,
   MemoCodeBlock,
   formatToolOutputText,
   ToolResultView,
   RecordTable,
+  isToolErrorOutput,
 } from "./markdown";
-import { pensandoTextShimmer } from "./shimmer";
+import { renderFriendlyRequest } from "./toolViews";
+import TextShimmer from "./TextShimmer";
+import useMinDuration from "../../../hooks/useMinDuration";
 
 const ToolIcons = {
   search_datasets: SearchIcon,
@@ -36,12 +42,13 @@ const ToolIcons = {
   decode_table_values: DataStructureIcon,
 };
 
-function getToolStepMeta(name, { done = false, t } = {}) {
-  const Icon = ToolIcons[name] ?? CodeIcon;
+function getToolStepMeta(name, { done = false, error = false, t } = {}) {
+  const Icon = done ? CircleCheckIcon : ToolIcons[name] ?? CodeIcon;
   const keyBase = ToolIcons[name]
     ? `ui.thinking.tools.${name}`
     : "ui.thinking.tools.fallback";
-  return { label: t(`${keyBase}.${done ? "done" : "running"}`), Icon };
+  const state = error ? "error" : done ? "done" : "running";
+  return { label: t(`${keyBase}.${state}`), Icon };
 }
 
 function isPlainObject(value) {
@@ -88,6 +95,9 @@ function SolicitationArgsBlocks({ call, downloadProps }) {
     );
   }
 
+  const friendly = renderFriendlyRequest(call?.name, parsed);
+  if (friendly) return friendly;
+
   if (isPlainObject(parsed) && Object.keys(parsed).length > 0) {
     return <RecordTable record={parsed} />;
   }
@@ -121,13 +131,20 @@ export function buildToolSteps(toolCalls) {
       steps.push({ kind: "reasoning", markdown: ev.content });
     }
 
-    const calls = Array.isArray(ev.tool_calls) ? ev.tool_calls : [];
-    for (const call of calls) {
-      if (!call || call.id == null) continue;
+    const calls = (Array.isArray(ev.tool_calls) ? ev.tool_calls : []).filter(
+      (call) => call && call.id != null
+    );
+    calls.forEach((call, batchPos) => {
       const output = outputByCallId.get(call.id) ?? null;
       if (output) consumedOutputIds.add(call.id);
-      steps.push({ kind: "tool", call, output });
-    }
+      steps.push({
+        kind: "tool",
+        call,
+        output,
+        batchSize: calls.length,
+        batchPos,
+      });
+    });
   }
 
   for (const [callId, output] of outputByCallId) {
@@ -146,9 +163,6 @@ function stepKey(step, index) {
 }
 
 function TimelineIcon({ status, Icon, fill }) {
-  const isCodeIcon = Icon === CodeIcon;
-  const iconSize = isCodeIcon ? "18px" : "14px";
-
   return (
     <Box
       position="relative"
@@ -156,23 +170,48 @@ function TimelineIcon({ status, Icon, fill }) {
       alignItems="center"
       justifyContent="center"
       flexShrink={0}
-      width="16px"
+      width="20px"
       height="24px"
       borderRadius="full"
       backgroundColor="#FFFFFF"
       zIndex={1}
     >
       {status === "loading" ? (
-        <Spinner width="12px" height="12px" thickness="2px" color={fill} />
+        <ClockFadingIcon width="16px" height="16px" fill={fill} />
       ) : (
-        <Icon
-          width={iconSize}
-          height={iconSize}
-          fill={fill}
-          margin={isCodeIcon ? undefined : "2px"}
-        />
+        <Icon width="16px" height="16px" fill={fill} />
       )}
     </Box>
+  );
+}
+
+const ICON_CENTER_Y = 12;
+const BRACKET_LEFT = -8;
+
+function ParallelBracket({ batchPos, batchSize }) {
+  const isFirst = batchPos === 0;
+  const isLast = batchPos === batchSize - 1;
+  return (
+    <>
+      <Box
+        aria-hidden
+        position="absolute"
+        width="2px"
+        backgroundColor="#E5E7EB"
+        left={`${BRACKET_LEFT}px`}
+        top={isFirst ? `${ICON_CENTER_Y}px` : "0"}
+        bottom={isLast ? `calc(100% - ${ICON_CENTER_Y}px)` : "0"}
+      />
+      <Box
+        aria-hidden
+        position="absolute"
+        height="2px"
+        backgroundColor="#E5E7EB"
+        left={`${BRACKET_LEFT}px`}
+        width={`${-BRACKET_LEFT}px`}
+        top={`${ICON_CENTER_Y - 1}px`}
+      />
+    </>
   );
 }
 
@@ -191,9 +230,17 @@ function ToolStepItem({
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
   const status = isLoadingStep ? "loading" : "done";
+  const isError = isToolErrorOutput(step.output);
+  const batchSize = step.batchSize ?? 1;
+  const batchPos = step.batchPos ?? 0;
+  const isParallel = batchSize > 1;
+  const spineTop = isParallel ? batchPos === 0 && !isFirst : !isFirst;
+  const spineBottom = isParallel
+    ? batchPos === batchSize - 1 && !isLast
+    : !isLast;
   const { label, Icon } = isOrphan
-    ? { label: t("ui.thinking.additionalResult"), Icon: CodeIcon }
-    : getToolStepMeta(call?.name, { done: status === "done", t });
+    ? { label: t("ui.thinking.additionalResult"), Icon: CircleCheckIcon }
+    : getToolStepMeta(call?.name, { done: status === "done", error: isError, t });
   const hasOutput = Boolean(formatToolOutputText(step.output));
   const downloadProps =
     step.output?.artifact?.type === "query_result"
@@ -214,8 +261,8 @@ function ToolStepItem({
         color: "#464A51",
       }}
     >
-      <Box width="16px" position="relative" flexShrink={0}>
-        {!isFirst && (
+      <Box width="20px" position="relative" flexShrink={0}>
+        {spineTop && (
           <Box
             position="absolute"
             top="0"
@@ -226,7 +273,7 @@ function ToolStepItem({
             backgroundColor="#E5E7EB"
           />
         )}
-        {!isLast && (
+        {spineBottom && (
           <Box
             position="absolute"
             bottom="0"
@@ -237,14 +284,21 @@ function ToolStepItem({
             backgroundColor="#E5E7EB"
           />
         )}
-        <TimelineIcon status={status} Icon={Icon} fill="currentColor"/>
+        {isParallel && (
+          <ParallelBracket batchPos={batchPos} batchSize={batchSize} />
+        )}
+        <TimelineIcon
+          status={status}
+          Icon={isError ? CircleAlertIcon : Icon}
+          fill="currentColor"
+        />
       </Box>
 
       <Box
         flex={1}
         minWidth={0}
         minHeight={0}
-        paddingLeft="8px"
+        paddingLeft="4px"
         transition="color 0.2s ease"
         paddingBottom={isLast ? 0 : "8px"}
       >
@@ -254,7 +308,7 @@ function ToolStepItem({
           display="inline-flex"
           maxWidth="100%"
           color="currentColor"
-          gap="8px"
+          gap="4px"
           minHeight="24px"
           minWidth={0}
           onClick={() => setIsOpen((v) => !v)}
@@ -262,15 +316,10 @@ function ToolStepItem({
           <LabelText
             as="span"
             typography="small"
-            color={status === "loading" ? undefined : "currentColor"}
-            animation={
-              status === "loading"
-                ? `${pensandoTextShimmer} 2s ease-in-out infinite`
-                : undefined
-            }
+            color="currentColor"
             minWidth="0"
           >
-            {label}
+            {status === "loading" ? <TextShimmer>{label}</TextShimmer> : label}
           </LabelText>
           <ChevronDownIcon
             boxSize="16px"
@@ -284,7 +333,7 @@ function ToolStepItem({
         <Collapse in={isOpen} animateOpacity>
           <VStack
             align="stretch"
-            spacing="8px"
+            spacing="4px"
             width="100%"
             minWidth={0}
             minHeight={0}
@@ -303,11 +352,11 @@ function ToolStepItem({
               >
                 <BodyText
                   typography="small"
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="#464A51"
+                  fontSize="11px"
+                  fontWeight="500"
+                  color="#71757A"
                   textTransform="uppercase"
-                  letterSpacing="5%"
+                  letterSpacing="0.05em"
                 >
                   {t("ui.thinking.request")}
                 </BodyText>
@@ -327,15 +376,21 @@ function ToolStepItem({
               >
                 <BodyText
                   typography="small"
-                  fontSize="12px"
-                  fontWeight="600"
-                  color="#464A51"
+                  fontSize="11px"
+                  fontWeight="500"
+                  color="#71757A"
                   textTransform="uppercase"
-                  letterSpacing="5%"
+                  letterSpacing="0.05em"
                 >
-                  {t("ui.thinking.result")}
+                  {isError ? t("ui.error") : t("ui.thinking.result")}
                 </BodyText>
-                <ToolResultView output={step.output} />
+                {isError ? (
+                  <BodyText typography="small" color="#71757A">
+                    {t("ui.thinking.errorMessage")}
+                  </BodyText>
+                ) : (
+                  <ToolResultView output={step.output} name={call?.name} />
+                )}
               </VStack>
             )}
           </VStack>
@@ -348,7 +403,7 @@ function ToolStepItem({
 function ReasoningStepItem({ step, isFirst, isLast }) {
   return (
     <Flex width="100%" position="relative">
-      <Box width="24px" position="relative" flexShrink={0}>
+      <Box width="20px" position="relative" flexShrink={0}>
         {!isFirst && (
           <Box
             position="absolute"
@@ -377,8 +432,9 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
           alignItems="center"
           justifyContent="center"
           flexShrink={0}
-          width="24px"
+          width="20px"
           height="24px"
+          backgroundColor="#FFFFFF"
           zIndex={1}
         >
           <Box
@@ -392,12 +448,13 @@ function ReasoningStepItem({ step, isFirst, isLast }) {
       <Box
         flex={1}
         minWidth={0}
-        paddingLeft="12px"
+        paddingLeft="4px"
         paddingBottom={isLast ? 0 : "16px"}
         className="markdown-body"
         fontSize="14px"
         color="#71757A"
         fontStyle="italic"
+        sx={markdownContentSx}
       >
         <ReactMarkdown remarkPlugins={[remarkGfm]} components={componentsMk}>
           {step.markdown}
@@ -413,15 +470,50 @@ export default function ThinkingSection({
   messageId,
   onExport,
 }) {
+  const { t } = useTranslation("chatbot");
+  const [open, setOpen] = useState(true);
+  const loading = useMinDuration(isLoading, 600);
+
   if (toolSteps.length === 0) return null;
 
   return (
-    <Box
-      width="100%"
-      overflow="hidden"
-    >
-      <Box width="100%">
-        <VStack spacing="0" align="stretch" width="100%">
+    <Box width="100%" overflow="hidden">
+      <Flex
+        as="button"
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        alignItems="center"
+        gap="6px"
+        color="#71757A"
+        cursor="pointer"
+        transition="color 0.2s ease"
+        _hover={{ color: "#464A51" }}
+      >
+        <LabelText as="span" typography="small" color="currentColor">
+          {loading ? (
+            <TextShimmer>{t("ui.thinking.header.thinking")}</TextShimmer>
+          ) : (
+            t("ui.thinking.header.done")
+          )}
+        </LabelText>
+        <ChevronDownIcon
+          boxSize="16px"
+          flexShrink={0}
+          color="currentColor"
+          transform={open ? "rotate(-180deg)" : undefined}
+          transition="transform 0.2s ease"
+        />
+      </Flex>
+
+      <Collapse in={open} animateOpacity>
+        <VStack
+          spacing="0"
+          align="stretch"
+          width="100%"
+          marginTop="12px"
+          paddingLeft="8px"
+        >
           {toolSteps.map((step, index) => {
             const key = stepKey(step, index);
             const isFirst = index === 0;
@@ -450,7 +542,7 @@ export default function ThinkingSection({
             );
           })}
         </VStack>
-      </Box>
+      </Collapse>
     </Box>
   );
 }

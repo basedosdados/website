@@ -10,10 +10,9 @@ import {
   Portal,
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
-import cookies from "js-cookie";
 import BodyText from "../../atoms/Text/BodyText";
-import HelpIcon from "../../../public/img/icons/helpIcon";
-import SignOutIcon from "../../../public/img/icons/signOutIcon";
+import { InfoIcon, SignOutIcon } from "./icons";
+import { getUserFromCookie, nameFromEmail } from "./user";
 import { clearClientSession } from "../../../utils";
 
 const FallbackUserPicture =
@@ -32,17 +31,7 @@ const MenuItemProps = {
   _hover: { backgroundColor: "#EEEEEE" },
 };
 
-function getUserFromCookie() {
-  try {
-    const raw = cookies.get("userBD");
-    if (!raw) return null;
-    return JSON.parse(raw);
-  } catch {
-    return null;
-  }
-}
-
-function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
+function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   const { t } = useTranslation("chatbot");
   const [user, setUser] = useState(null);
 
@@ -50,8 +39,15 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
     setUser(getUserFromCookie());
   }, []);
 
-  const displayName = user?.firstName || user?.username || "";
-  const picture = user?.picture || FallbackUserPicture;
+  const email = user?.email || "";
+  const fullName = [user?.firstName, user?.lastName]
+    .filter(Boolean)
+    .join(" ")
+    .trim();
+  const displayName =
+    fullName || nameFromEmail(email, { full: true }) || user?.username || email;
+  const hasPicture = Boolean(user?.picture);
+  const initial = (displayName || email).trim().charAt(0).toUpperCase() || "?";
 
   const handleLogout = useCallback(async () => {
     await clearClientSession();
@@ -59,13 +55,17 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
     window.location.href = "/user/login";
   }, []);
 
-  const handleHelp = useCallback(() => {
+  const handleAbout = useCallback(() => {
     onMobileClose?.();
-    onHelp?.();
-  }, [onHelp, onMobileClose]);
+    onAbout?.();
+  }, [onAbout, onMobileClose]);
 
   return (
-    <Menu placement="top-start" autoSelect={false}>
+    <Menu
+      placement="top-start"
+      autoSelect={false}
+      offset={[isSidebarOpen ? 16 : 8, 8]}
+    >
       <MenuButton
         variant="unstyled"
         width="100%"
@@ -78,6 +78,7 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
         display="flex"
         overflow="hidden"
         color="#252A32"
+        transition="background-color 0.2s ease"
         _hover={{ backgroundColor: "#EEEEEE" }}
         _active={{ backgroundColor: "#EEEEEE" }}
         _focus={{ boxShadow: "none" }}
@@ -95,16 +96,32 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
             height="28px"
             borderRadius="50%"
             overflow="hidden"
-            backgroundColor="#DEDFE0"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            backgroundColor={hasPicture ? "#DEDFE0" : "#2B8C4D"}
+            color="#FFFFFF"
           >
-            <Image
-              alt=""
-              width="100%"
-              height="100%"
-              objectFit="cover"
-              src={picture}
-              fallbackSrc={FallbackUserPicture}
-            />
+            {hasPicture ? (
+              <Image
+                alt=""
+                width="100%"
+                height="100%"
+                objectFit="cover"
+                src={user.picture}
+                fallbackSrc={FallbackUserPicture}
+              />
+            ) : (
+              <Box
+                as="span"
+                fontFamily="Roboto"
+                fontSize="13px"
+                fontWeight="600"
+                lineHeight="1"
+              >
+                {initial}
+              </Box>
+            )}
           </Box>
           <BodyText
             typography="small"
@@ -133,14 +150,14 @@ function UserMenu({ isSidebarOpen = true, onHelp, onMobileClose }) {
           boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
           zIndex={30}
         >
-          <MenuItem {...MenuItemProps} onClick={handleHelp}>
+          <MenuItem {...MenuItemProps} onClick={handleAbout}>
             <HStack spacing="8px" align="center">
-              <HelpIcon
+              <InfoIcon
                 width="16px"
                 height="16px"
                 fill="currentColor"
               />
-              <Box as="span">{t("ui.help")}</Box>
+              <Box as="span">{t("ui.learnMore")}</Box>
             </HStack>
           </MenuItem>
           <MenuItem {...MenuItemProps} onClick={handleLogout}>

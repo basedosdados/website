@@ -5,35 +5,57 @@ import {
   Box,
   Text
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import cookies from "js-cookie";
 import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuestions";
 import Display from "../components/atoms/Text/Display";
-import SidebarIcon from "../public/img/icons/sidebarIcon";
-import CrossIcon from "../public/img/icons/crossIcon";
+import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/icons";
 import BrandLogo from "../components/organisms/chatbot/BrandLogo";
-import HelpContent from "../components/organisms/chatbot/HelpContent";
+import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
+import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/user";
 
-function getGreetingFirstNameFromCookie() {
-  try {
-    const raw = cookies.get("userBD");
-    if (!raw) return null;
-    const user = JSON.parse(raw);
-    const name = user?.firstName;
-    return name || null;
-  } catch { 
-    return null;
+const greetingFadeIn = keyframes`
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+`;
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function buildGreeting(t, avoidSignature) {
+  const hour = new Date().getHours();
+  const period =
+    hour >= 5 && hour < 12
+      ? "morning"
+      : hour >= 12 && hour < 18
+        ? "afternoon"
+        : "evening";
+  const name = nameFromEmail(getUserEmailFromCookie());
+  const greetingWords = [t(`ui.greetings.${period}`), t("ui.greetings.neutral")];
+  const followups = t("ui.greetings.followups", { returnObjects: true });
+  const followupList = Array.isArray(followups) ? followups : [""];
+
+  let result;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const greeting = pickRandom(greetingWords);
+    const followup = pickRandom(followupList) || "";
+    const base = name ? `${greeting}, ${name}` : greeting;
+    const lead = `${base}.`;
+    result = { lead, followup, signature: `${lead}|${followup}` };
+    if (result.signature !== avoidSignature) break;
   }
+  return result;
 }
 
 function ChatbotContent() {
@@ -50,11 +72,12 @@ function ChatbotContent() {
   const skipFetchRef = useRef(false);
   const searchRef = useRef(null);
 
-  const [greetingFirstName, setGreetingFirstName] = useState(null);
-  const [showHelp, setShowHelp] = useState(false);
+  const [greeting, setGreeting] = useState(null);
+  const [showAbout, setShowAbout] = useState(false);
+  const [composerHasText, setComposerHasText] = useState(false);
 
-  useEffect(() => {
-    setGreetingFirstName(getGreetingFirstNameFromCookie());
+  const handleComposerTextChange = useCallback((text) => {
+    setComposerHasText((text || "").trim().length > 0);
   }, []);
 
   useEffect(() => {
@@ -133,7 +156,7 @@ function ChatbotContent() {
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
-    setShowHelp(false);
+    setShowAbout(false);
     setIsMobileSidebarOpen(false);
     router.push({
       pathname: router.pathname,
@@ -142,24 +165,41 @@ function ChatbotContent() {
   }, [resetChat, router]);
 
   const handleSelectThread = useCallback(() => {
-    setShowHelp(false);
+    setShowAbout(false);
   }, []);
 
-  const handleHelp = useCallback(() => {
-    setShowHelp(true);
+  const handleAbout = useCallback(() => {
+    setShowAbout(true);
   }, []);
 
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
+
+  useEffect(() => {
+    if (!showNewChatGreeting) {
+      setGreeting(null);
+      return;
+    }
+    let previous = null;
+    try {
+      previous = window.localStorage.getItem("chatbot_last_greeting");
+    } catch {}
+    const next = buildGreeting(t, previous);
+    setGreeting(next);
+    try {
+      window.localStorage.setItem("chatbot_last_greeting", next.signature);
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showNewChatGreeting]);
 
   const searchField = (
     <Search
       ref={searchRef}
       threadId={threadId}
       onSend={handleSend}
-      isLoading={isLoading}
       isGenerating={isGenerating}
       showDisclaimer={!showNewChatGreeting}
+      onTextChange={handleComposerTextChange}
     />
   );
 
@@ -227,15 +267,15 @@ function ChatbotContent() {
   return (
     <HStack width="100%" minHeight="100dvh" spacing={0} align="stretch">
       <Head>
-        <title>{showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}</title>
+        <title>{showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}</title>
         <meta
           property="og:title"
-          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
+          content={showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}
           key="ogtitle"
         />
         <meta
           property="og:description"
-          content={showHelp ? t("help.head.pageTitle") : t("head.pageTitle")}
+          content={showAbout ? t("about.head.pageTitle") : t("head.pageTitle")}
           key="ogdesc"
         />
       </Head>
@@ -253,9 +293,9 @@ function ChatbotContent() {
         <Sidebar
           onNewChat={handleNewChat}
           onSelectThread={handleSelectThread}
-          onHelp={handleHelp}
+          onAbout={handleAbout}
           currentThreadId={
-            router.isReady ? normalizedThreadId : undefined
+            showAbout || !router.isReady ? undefined : normalizedThreadId
           }
           isMobileOpen={isMobileSidebarOpen}
           onMobileClose={() => setIsMobileSidebarOpen(false)}
@@ -266,7 +306,7 @@ function ChatbotContent() {
           minWidth={0}
           height="100%"
           maxHeight="100dvh"
-          padding={{ base: "12px 12px 16px", md: "24px" }}
+          padding={{ base: "12px 12px 16px", md: "24px 0" }}
           overflow="hidden"
           justifyContent="center"
           alignItems="stretch"
@@ -284,8 +324,8 @@ function ChatbotContent() {
             minWidth={0}
             marginX="auto"
           >
-            {showHelp ? (
-              <HelpContent />
+            {showAbout ? (
+              <AboutContent />
             ) : showNewChatGreeting ? (
               <Flex
                 flex={1}
@@ -297,31 +337,37 @@ function ChatbotContent() {
                 paddingX={{ base: "0", md: "32px" }}
                 gap={{ base: "20px", md: "32px" }}
               >
-                <Display
-                  as="h2"
-                  typography="small"
-                  textAlign="center"
-                  fontSize={{ base: "28px", md: "36px" }}
-                  lineHeight={{ base: "36px", md: "48px" }}
-                  paddingX={{ base: "8px", md: 0 }}
-                >
-                  {t("ui.greetingPrefix")}
-                  <Text
-                    as="span"
-                    textTransform="capitalize"
-                    marginLeft="8px"
+                {greeting && (
+                  <Display
+                    as="h2"
+                    typography="small"
+                    textAlign="center"
+                    fontSize={{ base: "28px", md: "36px" }}
+                    lineHeight={{ base: "36px", md: "48px" }}
+                    paddingX={{ base: "8px", md: 0 }}
+                    display="flex"
+                    flexWrap="wrap"
+                    justifyContent="center"
+                    sx={{ columnGap: "8px" }}
+                    animation={`${greetingFadeIn} 0.4s ease-out both`}
                   >
-                    {greetingFirstName
-                      ? greetingFirstName
-                      : t("ui.helpQuestion")}
-                  </Text>
-                </Display>
+                    <Text as="span" whiteSpace="nowrap">
+                      {greeting.lead}
+                    </Text>
+                    {greeting.followup ? (
+                      <Text as="span" whiteSpace="nowrap">
+                        {greeting.followup}
+                      </Text>
+                    ) : null}
+                  </Display>
+                )}
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
                 <OnboardingQuestions
                   onQuestionClick={handleFollowUpClick}
                   isDisabled={isLoading || isGenerating}
+                  hasText={composerHasText}
                 />
               </Flex>
             ) : (
