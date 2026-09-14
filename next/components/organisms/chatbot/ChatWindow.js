@@ -25,7 +25,7 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 160,
     overscan: 10,
-    gap: 16,
+    gap: 12,
     getItemKey: useCallback(
       (index) => messages[index]?.id || index,
       [messages]
@@ -120,13 +120,17 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
         WebkitOverflowScrolling: "touch",
         "&::-webkit-scrollbar": {
           width: "6px",
+          background: "transparent",
         },
         "&::-webkit-scrollbar-track": {
-          width: "8px",
+          background: "transparent",
         },
         "&::-webkit-scrollbar-thumb": {
           background: "#C4C4C4",
           borderRadius: "24px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+          background: "#ACAEB1",
         },
         "@media (max-width: 767px)": {
           scrollbarGutter: "auto",

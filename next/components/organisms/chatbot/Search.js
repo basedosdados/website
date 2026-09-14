@@ -2,7 +2,6 @@ import {
   forwardRef,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useState,
   useImperativeHandle,
@@ -15,10 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
-import SendIcon from "../../../public/img/icons/sendIcon";
-
-const useIsoLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+import { ArrowUpIcon } from "./icons";
+import useIsomorphicLayoutEffect from "../../../hooks/useIsomorphicLayoutEffect";
 
 function draftKeyFor(threadId) {
   return `chatbot_draft_${threadId || 'new'}`;
@@ -27,9 +24,9 @@ function draftKeyFor(threadId) {
 const Search = forwardRef(function Search({
   threadId,
   onSend,
-  isLoading,
   isGenerating,
   showDisclaimer = true,
+  onTextChange,
 }, ref) {
   const { t } = useTranslation("chatbot");
   const textareaRef = useRef(null);
@@ -54,6 +51,10 @@ const Search = forwardRef(function Search({
     return () => clearTimeout(timeoutId);
   }, [value, threadId]);
 
+  useEffect(() => {
+    onTextChange?.(value);
+  }, [value, onTextChange]);
+
   useImperativeHandle(ref, () => ({
     clear: () => {
       localStorage.removeItem(draftKeyFor(threadId));
@@ -69,43 +70,25 @@ const Search = forwardRef(function Search({
     const text =
       rawText !== undefined && rawText !== null ? String(rawText) : el.value;
 
-    el.style.minHeight = '0';
-    el.style.height = '0';
-    el.style.lineHeight = '26px';
-    el.style.overflow = 'hidden';
+    el.style.height = 'auto';
+    const maxH =
+      typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
+        ? 160
+        : 400;
+    const fullH = Math.min(el.scrollHeight, maxH);
+    el.style.height = `${fullH}px`;
+    el.style.overflowY = el.scrollHeight > maxH ? 'auto' : 'hidden';
 
-    const collapsedScroll = el.scrollHeight;
-    const multi =
-      /\r?\n/.test(text) || collapsedScroll > 40;
-
-    setIsMultiLine(multi);
-
-    el.style.minHeight = '';
-    el.style.height = '';
-    el.style.overflow = '';
-
-    if (multi) {
-      el.style.lineHeight = '26px';
-      el.style.height = 'auto';
-      const maxH =
-        typeof window !== 'undefined' && window.matchMedia('(max-width: 767px)').matches
-          ? 160
-          : 400;
-      const fullH = Math.min(el.scrollHeight, maxH);
-      el.style.height = `${fullH}px`;
-      el.style.overflowY = fullH >= maxH ? 'scroll' : 'auto';
-    } else {
-      el.style.lineHeight = '38px';
-      el.style.height = '38px';
-      el.style.overflowY = 'hidden';
-    }
+    setIsMultiLine(/\r?\n/.test(text) || el.scrollHeight > 64);
   }, []);
 
-  useIsoLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 
-  const isBusy = isLoading || isGenerating;
+  const isBusy = isGenerating;
+  const hasText = value.trim().length > 0;
+  const isSendActive = hasText && !isBusy;
 
   const triggerSend = useCallback(() => {
     if (isBusy) return;
@@ -126,35 +109,38 @@ const Search = forwardRef(function Search({
   return (
     <VStack
       width="100%"
-      maxWidth="760px"
+      maxWidth="808px"
       margin="auto auto 0"
       spacing={{ base: "12px", md: "24px" }}
       minWidth={0}
+      paddingX={{ base: "0", md: "24px" }}
     >
       <Flex
         width="100%"
-        borderRadius={{ base: "12px", md: "14px" }}
-        backgroundColor="#EEEEEE"
-        padding={{ base: "10px 12px", md: "12px 16px" }}
+        borderRadius={{ base: "14px", md: "16px" }}
+        backgroundColor="#FFFFFF"
+        padding="8px"
         alignItems={isMultiLine ? "flex-end" : "center"}
-        border="2px solid transparent !important"
+        border="1px solid #E5E7EB"
+        boxShadow="0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)"
         cursor={isBusy ? "wait" : "text"}
-        transition="background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease"
+        transition="border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, opacity 0.2s ease"
         aria-busy={isBusy}
         _hover={
           isBusy
             ? undefined
             : {
-                border: "2px solid transparent !important",
-                backgroundColor: "#DEDFE0",
+                borderColor: "#D5D8DC",
               }
         }
         _focusWithin={
           isBusy
             ? undefined
             : {
-                border: "2px solid #0068C5 !important",
-                backgroundColor: "#FFF",
+                borderColor: "#2B8C4D",
+                boxShadow:
+                  "0 0 0 3px rgba(43, 140, 77, 0.15), 0 1px 3px -1px rgba(0, 0, 0, 0.06)",
+                backgroundColor: "#FFFFFF",
               }
         }
       >
@@ -162,6 +148,7 @@ const Search = forwardRef(function Search({
           <Textarea
             id="search-chatbot"
             ref={textareaRef}
+            rows={1}
             disabled={isBusy}
             value={value}
             width="100%"
@@ -173,29 +160,23 @@ const Search = forwardRef(function Search({
             }}
             opacity={isBusy ? 0.22 : 1}
             transition="opacity 0.2s ease"
-            placeholder={
-              isBusy
-                ? t("ui.search.placeholder")
-                : !showDisclaimer
-                  ? t("ui.helpQuestion")
-                  : t("ui.search.placeholder")
-            }
+            placeholder={t("ui.search.placeholder")}
             variant="unstyled"
-            minHeight="38px"
+            minHeight="52px"
             maxHeight={{ base: "160px", md: "400px" }}
             resize="none"
-            padding="0"
+            padding="14px 12px"
             fontSize="16px"
-            lineHeight={isMultiLine ? "26px" : "38px"}
+            lineHeight="24px"
             fontFamily="Roboto"
             fontWeight="400"
             color="#464A51"
-            overflowY={isMultiLine ? "auto" : "hidden"}
+            overflowY="hidden"
             _placeholder={{
               color: "#464A51",
-              fontSize: { base: "14px", md: "14px" },
+              fontSize: "14px",
               opacity: 1,
-              lineHeight: isMultiLine ? "26px" : "38px",
+              lineHeight: "24px",
             }}
             css={{
               "&::-webkit-scrollbar": {
@@ -211,36 +192,34 @@ const Search = forwardRef(function Search({
             }}
           />
         </Box>
-        <Box
+        <Flex
+          as="button"
+          type="button"
+          aria-label={t("ui.send")}
+          disabled={!isSendActive}
           flexShrink={0}
           marginLeft="8px"
-          cursor={isBusy ? "wait" : "pointer"}
-          onClick={triggerSend}
-          color="#464A51"
-          opacity={isBusy || !value ? 0.5 : 1}
-          minWidth="40px"
-          minHeight="40px"
-          display="flex"
+          width="36px"
+          height="36px"
+          borderRadius="12px"
           alignItems="center"
           justifyContent="center"
-          pointerEvents={isBusy || !value ? "none" : "auto"}
-          transition="color 0.2s ease, fill 0.2s ease, opacity 0.2s ease"
-          _hover={
-            isBusy
-              ? undefined
-              : {
-                  color: "#2B8C4D",
-                  fill: "#2B8C4D",
-                }
+          onClick={triggerSend}
+          backgroundColor={isSendActive ? "#2B8C4D" : "#EEEEEE"}
+          color={isSendActive ? "#FFFFFF" : "#71757A"}
+          boxShadow={
+            isSendActive
+              ? "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)"
+              : "none"
           }
+          opacity={isBusy ? 0.5 : 1}
+          cursor={isSendActive ? "pointer" : "default"}
+          pointerEvents={isSendActive ? "auto" : "none"}
+          transition="background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease"
+          _hover={isSendActive ? { backgroundColor: "#22703E" } : undefined}
         >
-          <SendIcon
-            width="18px"
-            height="18px"
-            fill="currentColor"
-            transform="rotate(45deg)"
-          />
-        </Box>
+          <ArrowUpIcon width="16px" height="16px" />
+        </Flex>
       </Flex>
 
       {showDisclaimer && (
