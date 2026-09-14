@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Head from "next/head";
+import useCheckoutCampaign from "../hooks/useCheckoutCampaign.hook";
 import "../styles/globals.css";
 
 const queryClient = new QueryClient({
@@ -17,6 +18,7 @@ const queryClient = new QueryClient({
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const { locale } = router;
+  useCheckoutCampaign();
 
   const local = process.env.NEXT_PUBLIC_BASE_URL_FRONTEND
 

@@ -24,7 +24,7 @@ import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import ChatbotTrialSurveyModal from "./ChatbotTrialSurveyModal";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, resolveCheckoutCampaign, clearCheckoutCampaign } from "../../../utils";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -142,8 +142,8 @@ export default function PlansAndPayment ({ userData }) {
   const [isLoadingH, setIsLoadingH] = useState(false)
   const [isLoadingCanSub, setIsLoadingCanSub] = useState(false)
   const [isLoadingClientSecret, setIsLoadingClientSecret] = useState(true)
-  const [hasSubscribedBDPro, setHasSubscribedBDPro] = useState(true)
-  const [hasSubscribedChatbot, setHasSubscribedChatbot] = useState(true)
+  const [hasSubscribedBDPro, setHasSubscribedBDPro] = useState(null)
+  const [hasSubscribedChatbot, setHasSubscribedChatbot] = useState(null)
   const [hasSubscribedLoaded, setHasSubscribedLoaded] = useState(false)
   const [plans, setPlans] = useState(null)
   const [toggleAnual, setToggleAnual] = useState(true)
@@ -154,6 +154,10 @@ export default function PlansAndPayment ({ userData }) {
   const [isSetupIntentCheckout, setIsSetupIntentCheckout] = useState(false)
   const successCheckoutKindRef = useRef(null)
   const trialSurveyFinishedRef = useRef(false)
+  const campaignCouponAppliedRef = useRef(false)
+  const campaignDismissedRef = useRef(false)
+  const startedChatbotTrialRef = useRef(false)
+  const [skipTrialCheckout, setSkipTrialCheckout] = useState(false)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
   const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
@@ -187,6 +191,8 @@ export default function PlansAndPayment ({ userData }) {
     const match = reg.exec(userData.id)
 
     if (!match) {
+      setHasSubscribedBDPro(false)
+      setHasSubscribedChatbot(false)
       setHasSubscribedLoaded(true)
       return
     }
@@ -247,6 +253,7 @@ export default function PlansAndPayment ({ userData }) {
     if(plans === null) return
     if(plan === "") return
     if(!hasSubscribedLoaded) return
+    if(hasSubscribedChatbot === null || hasSubscribedBDPro === null) return
 
     const value = Object.values(plans).find(elm => elm?._id === plan)
     if (!value) return
@@ -269,21 +276,56 @@ export default function PlansAndPayment ({ userData }) {
     setCheckoutInfos(value)
 
     const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
-    if (!checkoutAlreadyVisible) {
-      if (isChatbotType) {
-        if (!hasSubscribedChatbot) {
-          startChatbotTrialFlow()
-        } else {
-          openCheckoutPlanStep()
-        }
-      } else {
-        EmailModal.onOpen()
-      }
+    if (skipTrialCheckout) {
+      if (!checkoutAlreadyVisible) openCheckoutPlanStep()
+      return
     }
-  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot])
+
+    if (isChatbotType) {
+      if (!hasSubscribedChatbot) {
+        if (!startedChatbotTrialRef.current) {
+          startedChatbotTrialRef.current = true
+          startChatbotTrialFlow()
+        }
+        return
+      }
+      if (!checkoutAlreadyVisible) openCheckoutPlanStep()
+      return
+    }
+
+    if (!checkoutAlreadyVisible) {
+      EmailModal.onOpen()
+    }
+  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot, hasSubscribedBDPro, skipTrialCheckout])
 
   useEffect(() => {
     if (!plans || plan !== "") return
+    if (!hasSubscribedLoaded) return
+
+    const campaign = resolveCheckoutCampaign(query)
+    if (campaign.product) {
+      if (campaignDismissedRef.current) return
+      if (campaign.product === "chatbot" && hasChatbotSubscription(userData)) {
+        clearCheckoutCampaign()
+        return
+      }
+      if (campaign.product === "bd_pro" && hasBDProSubscription(userData)) {
+        clearCheckoutCampaign()
+        return
+      }
+
+      setSkipTrialCheckout(Boolean(campaign.coupon))
+      if (campaign.coupon) setValueCoupon(campaign.coupon)
+
+      const interval = campaign.interval === "month" ? "month" : "year"
+      const planKey = campaign.product === "bd_pro"
+        ? `bd_pro_${interval}`
+        : `bd_chatbot_${interval}`
+      const planId = plans[planKey]?._id
+      if (planId) setPlan(planId)
+      return
+    }
+
     if (query.checkout !== "chatbot") return
     if (hasChatbotSubscription(userData)) return
 
@@ -291,9 +333,11 @@ export default function PlansAndPayment ({ userData }) {
     if (planId) {
       setPlan(planId)
     }
-  }, [query.checkout, plans, userData, plan])
+  }, [query, plans, userData, plan, hasSubscribedLoaded])
 
   useEffect(() => {
+    if (resolveCheckoutCampaign(query).product) return
+    if (!hasSubscribedLoaded) return
     const planSelected = cookies.get('plan_selected');
     if (planSelected && plans) {
       const monthId = plans.bd_chatbot_month?._id
@@ -327,7 +371,7 @@ export default function PlansAndPayment ({ userData }) {
       setPlan(planSelected);
       cookies.remove('plan_selected');
     }
-  }, [query, plans, userData, chatbotSubscriptionInfo])
+  }, [query, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded])
 
   const planActive = hasBDProSubscription(userData)
   const hasChatbotActiveSubscription = hasChatbotSubscription(userData)
@@ -337,9 +381,9 @@ export default function PlansAndPayment ({ userData }) {
 
   function getCheckoutStepLabel() {
     if (checkoutStep === "plan") {
-      return isChatbotCheckout ? t("username.step1of2") : t("username.step2of3")
+      return isChatbotCheckout || skipTrialCheckout ? t("username.step1of2") : t("username.step2of3")
     }
-    return isChatbotCheckout ? t("username.step2of2") : t("username.step3of3")
+    return isChatbotCheckout || skipTrialCheckout ? t("username.step2of2") : t("username.step3of3")
   }
 
   function resetCheckoutState() {
@@ -351,6 +395,10 @@ export default function PlansAndPayment ({ userData }) {
     setCouponInfos({})
     setPlan("")
     setIsSetupIntentCheckout(false)
+    setSkipTrialCheckout(false)
+    campaignCouponAppliedRef.current = false
+    campaignDismissedRef.current = true
+    startedChatbotTrialRef.current = false
   }
 
   function openCheckoutPlanStep() {
@@ -389,7 +437,7 @@ export default function PlansAndPayment ({ userData }) {
 
   function goBackFromPlanStep() {
     PaymentModal.onClose()
-    if (isChatbotCheckout) {
+    if (isChatbotCheckout || skipTrialCheckout) {
       resetCheckoutState()
       return
     }
@@ -652,32 +700,49 @@ export default function PlansAndPayment ({ userData }) {
     let togglerValue = !toggleAnual ? "year" : "month"
     const value = Object.values(plans).find(elm => elm?.interval === togglerValue && elm?.productSlug === checkoutInfos?.productSlug)
     if (!value?._id) return
+    const couponToKeep = (coupon || valueCoupon).trim()
     setCheckoutInfos(value)
-    setCoupon("")
-    setValueCoupon("")
     setPlan(value._id)
     setErrCoupon(false)
     setToggleAnual(!toggleAnual)
+    if (couponToKeep) {
+      setValueCoupon(couponToKeep)
+      validateStripeCoupon(value._id, couponToKeep, {
+        isYearly: value.interval === "year",
+        keepInputOnError: true,
+      })
+    }
   }
 
-  async function validateStripeCoupon() {
-    if(valueCoupon === "") return
+  async function validateStripeCoupon(
+    planId = plan,
+    couponCode = valueCoupon,
+    { isYearly = toggleAnual, keepInputOnError = false } = {},
+  ) {
+    if(!couponCode) return
     setErrCoupon(false)
 
-    const result = await fetch(`/api/stripe/validateStripeCoupon?p=${btoa(plan)}&c=${btoa(valueCoupon)}`, { method: "GET" })
+    const result = await fetch(`/api/stripe/validateStripeCoupon?p=${btoa(planId)}&c=${btoa(couponCode)}`, { method: "GET" })
       .then(res => res.json())
 
     if(result?.isValid === false || result?.errors || !result) {
-      setValueCoupon("")
+      if (!keepInputOnError) setValueCoupon("")
+      setCoupon("")
+      setCouponInfos({})
       setErrCoupon(true)
+      return
     }
-    if(result?.duration === "repeating" && toggleAnual === true) {
-      setValueCoupon("")
+    if(result?.duration === "repeating" && isYearly === true) {
+      if (!keepInputOnError) setValueCoupon("")
+      setCoupon("")
+      setCouponInfos({})
       setErrCoupon(true)
-    } else {
-      setCouponInfos(result)
-      setCoupon(valueCoupon)
+      return
     }
+
+    setCouponInfos(result)
+    setCoupon(couponCode)
+    setValueCoupon(couponCode)
   }
 
   const CouponDisplay = () => {
@@ -779,6 +844,14 @@ export default function PlansAndPayment ({ userData }) {
   }, [valueCoupon])
 
   useEffect(() => {
+    if (!skipTrialCheckout || !plan || !valueCoupon) return
+    if (!PaymentModal.isOpen) return
+    if (campaignCouponAppliedRef.current) return
+    campaignCouponAppliedRef.current = true
+    validateStripeCoupon(plan, valueCoupon, { isYearly: toggleAnual })
+  }, [skipTrialCheckout, plan, valueCoupon, PaymentModal.isOpen, toggleAnual])
+
+  useEffect(() => {
     if(isLoading === true || isLoadingH === true) closeModalSucess()
     if(isLoadingCanSub === true) cancelSubscripetion()
   }, [isLoading, isLoadingH, isLoadingCanSub]) 
@@ -814,6 +887,17 @@ export default function PlansAndPayment ({ userData }) {
         isOpen={PaymentModal.isOpen}
         onClose={() => {
           resetCheckoutState();
+          clearCheckoutCampaign();
+          if (query.checkout || query.coupon) {
+            router.replace(
+              {
+                pathname: `/user/${userData.username}`,
+                query: { plans_and_payment: "" },
+              },
+              undefined,
+              { shallow: true },
+            );
+          }
           if (query.i)
             return window.open(
               `/user/${userData.username}?plans_and_payment`,
@@ -986,7 +1070,7 @@ export default function PlansAndPayment ({ userData }) {
               </Stack>
 
               <BodyText
-                display={hasSubscribed ? "none" : "flex"}
+                display={hasSubscribed || skipTrialCheckout ? "none" : "flex"}
                 fontFamily="Roboto"
                 color="#464A51"
               >
@@ -1032,7 +1116,7 @@ export default function PlansAndPayment ({ userData }) {
                   {couponInfos?.duration === "repeating" &&
                     couponInfos?.durationInMonths + 1}
                   º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
-                  {!hasSubscribed && "e 7º dia"}
+                  {!hasSubscribed && !skipTrialCheckout && "e 7º dia"}
                   {t("username.couponDuration", { returnObjects: true })[1]}
                   {checkoutInfos?.amount?.toLocaleString("pt-BR", {
                     style: "currency",
@@ -1107,7 +1191,8 @@ export default function PlansAndPayment ({ userData }) {
                 userData={userData}
                 plan={plan}
                 coupon={coupon}
-                enableChatbotTrial={isChatbotCheckout && !hasSubscribed}
+                enableChatbotTrial={isChatbotCheckout && !hasSubscribed && !skipTrialCheckout}
+                skipTrial={skipTrialCheckout}
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}

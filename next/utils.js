@@ -494,6 +494,159 @@ export function getUserFromCookie() {
   }
 }
 
+const CheckoutCampaignCookieKeys = {
+  product: "checkout_product",
+  coupon: "checkout_coupon",
+  interval: "checkout_interval",
+}
+
+const CheckoutCampaignCookieOptions = { expires: 1, path: "/" }
+
+const CheckoutCampaignPassthroughPaths = new Set([
+  "/user/login",
+  "/user/register",
+  "/user/check-email",
+  "/user/activate-account",
+  "/user/survey",
+  "/user/password-recovery",
+  "/user/[username]",
+])
+
+function normalizeCheckoutProduct(value) {
+  const checkout = String(value || "").toLowerCase()
+  if (checkout === "chatbot") return "chatbot"
+  if (checkout === "bd_pro" || checkout === "bdpro") return "bd_pro"
+  return ""
+}
+
+function normalizeCheckoutInterval(value) {
+  const interval = String(value || "").toLowerCase()
+  if (interval === "month" || interval === "year") return interval
+  return ""
+}
+
+export function parseCheckoutCampaignQuery(query = {}) {
+  // Links de campanha: /prices?checkout=chatbot&coupon=CODIGO&interval=month
+  const windowQuery =
+    typeof window === "undefined"
+      ? {}
+      : Object.fromEntries(new URLSearchParams(window.location.search))
+  const source = { ...windowQuery, ...(query || {}) }
+
+  return {
+    product: normalizeCheckoutProduct(readQueryParam(source, "checkout")),
+    coupon: (readQueryParam(source, "coupon") || "").trim(),
+    interval: normalizeCheckoutInterval(readQueryParam(source, "interval")),
+  }
+}
+
+export function persistCheckoutCampaign(intent) {
+  if (typeof window === "undefined" || !intent) return
+  if (intent.product) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.product,
+      intent.product,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.coupon) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.coupon,
+      intent.coupon,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.interval) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.interval,
+      intent.interval,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+}
+
+export function persistCheckoutCampaignFromQuery(query) {
+  const intent = parseCheckoutCampaignQuery(query)
+  if (intent.product || intent.coupon) persistCheckoutCampaign(intent)
+  return intent
+}
+
+export function getCheckoutCampaign() {
+  if (typeof window === "undefined") {
+    return { product: "", coupon: "", interval: "" }
+  }
+
+  return {
+    product: cookies.get(CheckoutCampaignCookieKeys.product) || "",
+    coupon: cookies.get(CheckoutCampaignCookieKeys.coupon) || "",
+    interval: cookies.get(CheckoutCampaignCookieKeys.interval) || "",
+  }
+}
+
+export function resolveCheckoutCampaign(query) {
+  const fromQuery = parseCheckoutCampaignQuery(query)
+  const fromCookie = getCheckoutCampaign()
+
+  return {
+    product: fromQuery.product || fromCookie.product,
+    coupon: fromQuery.coupon || fromCookie.coupon,
+    interval: fromQuery.interval || fromCookie.interval,
+  }
+}
+
+export function clearCheckoutCampaign() {
+  cookies.remove(CheckoutCampaignCookieKeys.product, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.coupon, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.interval, { path: "/" })
+}
+
+export function buildCheckoutCampaignQuery(intent) {
+  const query = {}
+  if (intent?.product) query.checkout = intent.product
+  if (intent?.coupon) query.coupon = intent.coupon
+  if (intent?.interval) query.interval = intent.interval
+  return query
+}
+
+export function getLoginRedirectWithCheckout(query) {
+  const intent = parseCheckoutCampaignQuery(query || {})
+  const search = new URLSearchParams()
+  if (intent.product) search.set("checkout", intent.product)
+  if (intent.coupon) search.set("coupon", intent.coupon)
+  if (intent.interval) search.set("interval", intent.interval)
+  const qs = search.toString()
+  return qs ? `/user/login?${qs}` : "/user/login"
+}
+
+export function getPlansAndPaymentRoute(username, intent) {
+  return {
+    pathname: `/user/${username}`,
+    query: {
+      plans_and_payment: "",
+      ...buildCheckoutCampaignQuery(intent),
+    },
+  }
+}
+
+export function consumeCheckoutCampaignRedirect(router) {
+  if (typeof window === "undefined" || !router?.isReady) return
+
+  const intent = persistCheckoutCampaignFromQuery(router.query)
+  if (!intent.product) return
+  if (CheckoutCampaignPassthroughPaths.has(router.pathname)) return
+
+  const user = getUserFromCookie()
+  if (user?.username) {
+    router.replace(getPlansAndPaymentRoute(user.username, intent))
+    return
+  }
+
+  router.replace({
+    pathname: "/user/login",
+    query: buildCheckoutCampaignQuery(intent),
+  })
+}
+
 export async function redirectToChatbotCheckout(router, { interval = "year" } = {}) {
   const plan = await fetchChatbotPlan(interval)
 
