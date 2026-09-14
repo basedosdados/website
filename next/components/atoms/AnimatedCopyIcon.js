@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import CheckIcon from "../../public/img/icons/checkIcon";
 
-function AnimatedCopyIcon({ copied, icon: Icon, width = "18px", height = "18px", ...props }) {
+function AnimatedCopyIcon({ copied, icon: Icon, checkIcon: CheckIconComp = CheckIcon, width = "18px", height = "18px", ...props }) {
   return (
     <Box position="relative" width={width} height={height} display="inline-block" {...props}>
       <Box
@@ -26,7 +26,7 @@ function AnimatedCopyIcon({ copied, icon: Icon, width = "18px", height = "18px",
         opacity={copied ? 1 : 0}
         transform={copied ? "scale(1) rotate(0deg)" : "scale(0.5) rotate(40deg)"}
       >
-        <CheckIcon width={width} height={height} />
+        <CheckIconComp width={width} height={height} />
       </Box>
     </Box>
   );

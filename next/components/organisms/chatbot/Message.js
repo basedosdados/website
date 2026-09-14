@@ -7,26 +7,26 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
-import ThumbUpIcon from "../../../public/img/icons/thumbUpIcon";
-import ThumbDownIcon from "../../../public/img/icons/thumbDownIcon";
-import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import { ThumbUpIcon, ThumbDownIcon, CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
-import { componentsMk } from "./markdown";
+import { componentsMk, markdownContentSx } from "./markdown";
+import rehypeNumericTables from "./rehypeNumericTables";
 import { DownloadResultsButton, ExportResultCard } from "./DownloadResults";
 import { ChartCard } from "./Charts";
 import {
-  DataSourcesList,
+  DataSourcesButton,
   FollowUpQuestionsList,
 } from "./StructuredResponse";
 import ThinkingSection, { buildToolSteps } from "./ThinkingSection";
 import PulseDotLoader from "./PulseDotLoader";
+import useFitToContent from "../../../hooks/useFitToContent";
 
 const sectionFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
@@ -71,6 +71,8 @@ const ActionButtonProps = {
 function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
   const { t } = useTranslation("chatbot");
   const isUser = message.role === "user";
+  const messageRowRef = useRef(null);
+  const userBubbleRef = useFitToContent([message.content], messageRowRef);
   const [feedback, setFeedback] = useState(message.rating ?? null);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [pendingRating, setPendingRating] = useState(null);
@@ -117,6 +119,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     message.isLoading &&
     !message.isError &&
     !message.isTyping &&
+    !showThinkingSection &&
     !(message.content || "").trim();
 
   React.useEffect(() => {
@@ -196,6 +199,12 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     !message.isTyping &&
     !!message.structuredResponse;
 
+  const completeOnMountRef = useRef(null);
+  if (completeOnMountRef.current === null) {
+    completeOnMountRef.current = responseComplete;
+  }
+  const isLiveAnswer = completeOnMountRef.current === false;
+
   const dataSources = message.structuredResponse?.data_sources;
   const hasDataSources =
     Array.isArray(dataSources) && dataSources.length > 0;
@@ -214,26 +223,32 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     (chartArtifacts.length > 0 || exportArtifacts.length > 0);
 
   return (
-    <Flex width="100%" direction="column" align="stretch" minWidth={0}>
+    <Flex ref={messageRowRef} width="100%" direction="column" align="stretch" minWidth={0}>
       <Box
         width="100%"
-        maxWidth="760px"
+        maxWidth="808px"
         margin="0 auto"
         display="flex"
         justifyContent={isUser ? "flex-end" : "flex-start"}
         minWidth={0}
-        paddingX={{ base: "0", md: 0 }}
+        paddingX={{ base: "0", md: "24px" }}
       >
         <Box
-          maxWidth={isUser ? { base: "90%", md: "80%" } : "100%"}
+          ref={isUser ? userBubbleRef : undefined}
+          maxWidth={isUser ? "85%" : "100%"}
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
-          borderRadius="12px"
-          padding={{ base: "12px", md: "16px" }}
-          margin={isUser ? { base: "16px 0 8px", md: "32px 0 16px" } : 0}
+          borderRadius={isUser ? "16px" : "12px"}
+          borderBottomRightRadius={isUser ? "6px" : undefined}
+          padding={
+            isUser
+              ? "12px 16px"
+              : { base: "0 12px", md: "0 16px" }
+          }
+          margin={isUser ? { base: "12px 0 0", md: "20px 0 0" } : 0}
           backgroundColor={isUser ? "#F7F7F7" : "#FFFFFF"}
           color="#000"
-          overflow="hidden"
+          overflow={isUser ? "hidden" : "visible"}
         >
           {(showThinkingSection || showDiceLoader) && (
             <Box marginBottom="16px">
@@ -251,6 +266,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
 
           {isUser ? (
             <BodyText
+              lineHeight="28px"
               whiteSpace="pre-wrap"
               wordBreak="break-word"
               overflowWrap="anywhere"
@@ -266,10 +282,12 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
               sx={{
                 wordBreak: "break-word",
                 overflowWrap: "anywhere",
+                ...markdownContentSx,
               }}
             >
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeNumericTables]}
                 components={componentsMk}
               >
                 {message.content}
@@ -307,11 +325,11 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
             message.id && (
               <HStack
                 spacing="8px"
-                marginTop="16px"
+                marginTop="8px"
                 width="100%"
                 justifyContent="space-between"
               >
-                <Flex gap="8px" alignItems="center">
+                <Flex gap="4px" alignItems="center">
                   <Tooltip
                     {...ActionTooltipProps}
                     label={isCopied ? t("ui.copied") : t("ui.copyResponse")}
@@ -327,8 +345,9 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                       <AnimatedCopyIcon
                         copied={isCopied}
                         icon={CopyIcon}
-                        width="18px"
-                        height="18px"
+                        checkIcon={CheckIcon}
+                        width="16px"
+                        height="16px"
                       />
                     </Box>
                   </Tooltip>
@@ -338,9 +357,13 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                     downloads={downloadableResults}
                     onExport={onExport}
                   />
+
+                  {showDataSources && (
+                    <DataSourcesButton dataSources={dataSources} />
+                  )}
                 </Flex>
 
-                <Flex gap="8px">
+                <Flex gap="2px">
                   <Tooltip {...ActionTooltipProps} label={t("ui.goodResponse")}>
                     <Box
                       {...ActionButtonProps}
@@ -352,7 +375,7 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                           feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
-                      <ThumbUpIcon width="18px" height="18px" />
+                      <ThumbUpIcon width="16px" height="16px" />
                     </Box>
                   </Tooltip>
                   <Tooltip {...ActionTooltipProps} label={t("ui.badResponse")}>
@@ -366,43 +389,26 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
                           feedback != null ? undefined : "#EEEEEE",
                       }}
                     >
-                      <ThumbDownIcon width="18px" height="18px" />
+                      <ThumbDownIcon width="16px" height="16px" />
                     </Box>
                   </Tooltip>
                 </Flex>
               </HStack>
             )}
+
+          {showFollowUps ? (
+            <Box
+              width="100%"
+              {...(isLiveAnswer ? SectionFadeInProps : {})}
+            >
+              <FollowUpQuestionsList
+                followUpQuestions={message.structuredResponse.follow_up_prompts}
+                onQuestionClick={onFollowUpClick}
+              />
+            </Box>
+          ) : null}
         </Box>
       </Box>
-
-      {showDataSources ? (
-        <Box
-          width="100%"
-          maxWidth="760px"
-          margin="0 auto"
-          {...SectionFadeInProps}
-        >
-          <DataSourcesList dataSources={dataSources} />
-        </Box>
-      ) : null}
-
-      {showFollowUps ? (
-        <Box
-          width="100%"
-          maxWidth="760px"
-          margin="0 auto"
-          sx={{
-            animation: `${sectionFadeIn} 0.4s ease-out ${
-              showDataSources ? "0.28s" : "0s"
-            } both`,
-          }}
-        >
-          <FollowUpQuestionsList
-            followUpQuestions={message.structuredResponse.follow_up_prompts}
-            onQuestionClick={onFollowUpClick}
-          />
-        </Box>
-      ) : null}
 
       <FeedbackModal
         isOpen={isFeedbackModalOpen}

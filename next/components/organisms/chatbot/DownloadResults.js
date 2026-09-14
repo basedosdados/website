@@ -13,10 +13,12 @@ import {
 import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import DownloadIcon from "../../../public/img/icons/downloadIcon";
-import TableChartViewIcon from "../../../public/img/icons/tableChartViewIcon";
-import BracesIcon from "../../../public/img/icons/bracesIcon";
-import FileGenericIcon from "../../../public/img/icons/fileGenericIcon";
+import {
+  BracesIcon,
+  DownloadIcon,
+  FileGenericIcon,
+  TableChartViewIcon,
+} from "./icons";
 
 const EXPORT_FORMAT_STYLES = {
   CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },
@@ -57,6 +59,7 @@ function formatFileSize(bytes) {
   });
   return `${formatted} ${units[unitIndex]}`;
 }
+
 
 const ActionTooltipProps = {
   hasArrow: true,
@@ -516,7 +519,7 @@ export function DownloadResultsButton({ messageId, downloads, onExport }) {
                           flexShrink={0}
                           color="#464A51"
                         />
-                        <Box as="span" noOfLines={1} color="#252A32">
+                        <Box as="span" noOfLines={1} fontWeight="400" color="#252A32">
                           {fileName}
                         </Box>
                       </Flex>
