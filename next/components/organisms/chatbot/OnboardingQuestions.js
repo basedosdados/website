@@ -16,10 +16,7 @@ export default function OnboardingQuestions({
   hasText = false,
 }) {
   const { t } = useTranslation("chatbot");
-  // Start hidden so the cards slide in one paint after mount (like the reference).
   const [mounted, setMounted] = useState(false);
-  // Latches on pick so the cards don't flash back during the async gap before the
-  // thread view takes over.
   const [submitted, setSubmitted] = useState(false);
   const frameRef = useRef(null);
 
@@ -41,8 +38,6 @@ export default function OnboardingQuestions({
 
   if (items.length === 0) return null;
 
-  // Hidden until mounted, and while the composer has text or a card was picked —
-  // so the cards slide out of the way as soon as the user starts writing.
   const showCards = mounted && !hasText && !submitted;
 
   const handlePick = (question) => {
@@ -96,7 +91,6 @@ export default function OnboardingQuestions({
               pointerEvents={isDisabled ? "none" : "auto"}
               onClick={() => handlePick(trimmed)}
             >
-              {/* Only this surface layer scales on hover, so the text stays crisp. */}
               <Box
                 aria-hidden
                 position="absolute"

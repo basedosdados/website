@@ -36,13 +36,10 @@ const AboutLinkProps = {
   _hover: { opacity: 0.8 },
 };
 
-// Emphasis inside the welcome copy — Trans injects the text as children.
 const Bold = (props) => (
   <Box as="strong" fontWeight="600" color="#252A32" {...props} />
 );
 
-// Each feature card keys off about.features.<key>.{title,body}; the icon is the
-// card's own accent, so the copy no longer repeats an inline glyph.
 const Features = [
   { key: "findData", Icon: SearchIcon },
   { key: "analyze", Icon: CodeIcon },
@@ -111,8 +108,6 @@ export default function AboutContent() {
   const promptTips = t("about.promptTips", { returnObjects: true });
   const tips = Array.isArray(promptTips) ? promptTips : [];
 
-  // Fade + slide the feature cards in once, staggered — set after first paint
-  // so the transition actually runs.
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
@@ -127,8 +122,6 @@ export default function AboutContent() {
       width="100%"
       paddingX={{ base: "16px", md: "24px" }}
       sx={{
-        // webkit pseudo-elements only — setting scrollbar-width/color makes
-        // Chromium fall back to the native bar and ignore these rules.
         "&::-webkit-scrollbar": { width: "6px" },
         "&::-webkit-scrollbar-track": { background: "transparent" },
         "&::-webkit-scrollbar-thumb": {

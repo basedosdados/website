@@ -40,8 +40,6 @@ function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
   }, []);
 
   const email = user?.email || "";
-  // Prefer the profile's real name; fall back to a name derived from the email,
-  // then the username, then the raw email.
   const fullName = [user?.firstName, user?.lastName]
     .filter(Boolean)
     .join(" ")
@@ -66,8 +64,6 @@ function UserMenu({ isSidebarOpen = true, onAbout, onMobileClose }) {
     <Menu
       placement="top-start"
       autoSelect={false}
-      // Nudge the popover right by the avatar's left inset so it left-aligns
-      // with the avatar rather than the full-width button edge.
       offset={[isSidebarOpen ? 16 : 8, 8]}
     >
       <MenuButton

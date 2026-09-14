@@ -69,9 +69,6 @@ const ActionButtonProps = {
 function Message({ message, onFeedback, onExport, showFollowUpQuestions = false, onFollowUpClick }) {
   const { t } = useTranslation("chatbot");
   const isUser = message.role === "user";
-  // Collapses the user bubble to its longest wrapped line (no-op when the ref
-  // isn't attached, i.e. for assistant messages). Observes the full-width row so
-  // it re-measures on column resize.
   const messageRowRef = useRef(null);
   const userBubbleRef = useFitToContent([message.content], messageRowRef);
   const [feedback, setFeedback] = useState(message.rating ?? null);
@@ -108,8 +105,6 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     message.isLoading &&
     !message.isError &&
     !message.isTyping &&
-    // Only before any tool has run — once the timeline shows, its own
-    // "Pensando…" carries the signal (matches the reference's `!showTools`).
     !showThinkingSection &&
     !(message.content || "").trim();
 
@@ -190,9 +185,6 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
     !message.isTyping &&
     !!message.structuredResponse;
 
-  // A freshly answered message mounts mid-generation (not yet complete) and
-  // completes later; one loaded from history is already complete on first
-  // render. Only the former animates its follow-ups in — captured once on mount.
   const completeOnMountRef = useRef(null);
   if (completeOnMountRef.current === null) {
     completeOnMountRef.current = responseComplete;
@@ -218,8 +210,6 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
         display="flex"
         justifyContent={isUser ? "flex-end" : "flex-start"}
         minWidth={0}
-        // Own horizontal gutter now that the scroll area is full-bleed (the main
-        // area no longer pads it); +48 on max-width keeps the content ~760 wide.
         paddingX={{ base: "0", md: "24px" }}
       >
         <Box
@@ -228,8 +218,6 @@ function Message({ message, onFeedback, onExport, showFollowUpQuestions = false,
           width={isUser ? "fit-content" : "100%"}
           minWidth={isUser ? undefined : 0}
           borderRadius={isUser ? "16px" : "12px"}
-          // A tighter bottom-right corner gives the user bubble a subtle tail
-          // toward the sender's side (the reference's rounded-2xl + rounded-br-md).
           borderBottomRightRadius={isUser ? "6px" : undefined}
           padding={
             isUser

@@ -1,14 +1,3 @@
-// Chatbot icon set, standardized on lucide-react. This is a thin shim: it
-// re-exports lucide glyphs under the chatbot's historical `…Icon` names, each
-// rendered through a Chakra `Box as={…}` so it keeps the Chakra style-prop
-// surface the call sites use (width/height, color, boxSize, position, margin, …)
-// and defaults to lucide's stroke look at the app's weight (18px / 1.25).
-//
-// BD's old icons were fill-based and callers coloured them via `fill`; lucide is
-// stroke-based, so a concrete `fill` colour is routed to `color` (→ currentColor
-// stroke) and a plain `currentColor` fill is dropped, so a stroke glyph is never
-// accidentally filled solid.
-
 import { Box } from "@chakra-ui/react";
 import {
   ArrowRight,

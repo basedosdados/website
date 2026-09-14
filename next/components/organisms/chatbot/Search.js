@@ -51,8 +51,6 @@ const Search = forwardRef(function Search({
     return () => clearTimeout(timeoutId);
   }, [value, threadId]);
 
-  // Surface the current text so the caller can react to it (e.g. slide the
-  // onboarding cards out of the way once the user starts writing).
   useEffect(() => {
     onTextChange?.(value);
   }, [value, onTextChange]);
@@ -67,10 +65,6 @@ const Search = forwardRef(function Search({
     },
   }), [threadId]);
 
-  // Auto-grow with a constant 24px line-height and the padding baked into the
-  // textarea (matching the reference composer's box model): one row is
-  // 24px line + 28px vertical padding = 52px; it grows a row at a time up to the
-  // max, then scrolls.
   const adjustTextareaSizing = useCallback((el, rawText) => {
     if (!el) return;
     const text =
@@ -85,7 +79,6 @@ const Search = forwardRef(function Search({
     el.style.height = `${fullH}px`;
     el.style.overflowY = el.scrollHeight > maxH ? 'auto' : 'hidden';
 
-    // Past a single row, pin the send button to the bottom.
     setIsMultiLine(/\r?\n/.test(text) || el.scrollHeight > 64);
   }, []);
 
@@ -93,11 +86,7 @@ const Search = forwardRef(function Search({
     adjustTextareaSizing(textareaRef.current, value);
   }, [value, adjustTextareaSizing]);
 
-  // Busy only while a response is generating — loading a thread's history must
-  // not disable the composer (that caused a "blink" on every thread open).
   const isBusy = isGenerating;
-  // Send button pops from a muted chip to filled brand green the moment there's
-  // something to send.
   const hasText = value.trim().length > 0;
   const isSendActive = hasText && !isBusy;
 
@@ -124,8 +113,6 @@ const Search = forwardRef(function Search({
       margin="auto auto 0"
       spacing={{ base: "12px", md: "24px" }}
       minWidth={0}
-      // Own horizontal gutter (full-bleed scroll) and +48 max-width, matching
-      // the message content so the composer stays aligned with the messages.
       paddingX={{ base: "0", md: "24px" }}
     >
       <Flex

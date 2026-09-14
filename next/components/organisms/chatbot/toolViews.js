@@ -13,24 +13,6 @@ import {
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "next-i18next";
 
-// Friendlier, per-tool renderings of a tool's request args and JSON output — a
-// dataset list, a table schema, a result table, and so on — so the request and
-// result blocks read as structured information instead of a raw JSON dump. Each
-// parser is pure and returns null when the payload doesn't match its expected
-// shape; the caller then falls back to the generic table / JSON rendering, so an
-// unexpected shape never regresses to worse than today.
-//
-// Shapes follow the backend models in app/agent/tools/models.py: datasets carry
-// a human `name` and `organizations`, tables a `name` and coverage
-// (`period_start`/`period_end`), columns a `unit`. We surface names in place of
-// the raw ids.
-
-// ============================== Payload helpers ==============================
-
-// search_datasets / decode_table_values return a bare JSON array; the *_details
-// tools return a bare object; an error path may return a `{ status: "error" }`
-// envelope. Unwrap `results` when present, bow out on an error envelope, and
-// pass a bare value through unchanged.
 function unwrapResults(content) {
   let parsed;
   try {
@@ -47,8 +29,6 @@ function unwrapResults(content) {
 
 const MORE_ITEMS_RE = /^\.\.\. \((\d+) more items\)$/;
 
-// A truncated list can end with a "... (N more items)" sentinel string; split it
-// off as a numeric `more` so it renders as a "+N" note instead of a row.
 function splitTruncation(arr) {
   const last = arr[arr.length - 1];
   if (typeof last === "string") {
@@ -66,7 +46,6 @@ function nonEmptyString(value) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-// The display name, preferring the human `name` and falling back to the id.
 function pickName(o, fallback) {
   return nonEmptyString(o.name) || fallback;
 }
@@ -75,7 +54,6 @@ function stringList(value) {
   return Array.isArray(value) ? value.filter((s) => typeof s === "string" && s.trim()) : [];
 }
 
-// A column's description with its unit appended — "description (unit)".
 function columnDescription(c) {
   const desc = nonEmptyString(c.description);
   const unit = nonEmptyString(c.unit);
@@ -85,7 +63,6 @@ function columnDescription(c) {
   return null;
 }
 
-// A "start – end" coverage label from the table's period bounds.
 function coveragePeriod(start, end) {
   const s = nonEmptyString(start);
   const e = nonEmptyString(end);
@@ -93,21 +70,12 @@ function coveragePeriod(start, end) {
   return s || e || null;
 }
 
-// The dataset/table part of a fully-qualified id (drops the project prefix).
 function cleanTableRef(raw) {
   const cleaned = raw.replace(/`/g, "").trim();
   return cleaned.split(".").slice(-2).join(".") || cleaned;
 }
 
-// Rounded, inset scrollbars for the result table's scroll container, so the
-// bars don't read as square rails that collide in the bottom-right corner. The
-// transparent border + padding-box clip keeps the thumb slim and off the edges.
 const scrollbarSx = {
-  // Intentionally NOT setting the standard `scrollbar-width`/`scrollbar-color`:
-  // once either is present, Chromium renders the native scrollbar and ignores
-  // the `::-webkit-scrollbar-*` rules below — which brings back the OS arrow
-  // buttons we hide via `scrollbar-button`. Relying on the webkit pseudo-elements
-  // keeps arrowless scrollbars in Chrome; Firefox's default thin bars have no arrows.
   "&::-webkit-scrollbar": { width: "12px", height: "12px" },
   "&::-webkit-scrollbar-button": { display: "none", width: 0, height: 0 },
   "&::-webkit-scrollbar-track": { background: "transparent" },
@@ -143,8 +111,6 @@ function columnIsNumeric(rows, col) {
   return sawValue;
 }
 
-// Column order = union of keys across all rows (rows can be heterogeneous, e.g.
-// a driver omitting null keys), preserving first-seen order.
 function unionColumns(rows) {
   const seen = new Set();
   const columns = [];
@@ -159,7 +125,6 @@ function unionColumns(rows) {
   return columns;
 }
 
-// ============================== Parsers ==============================
 
 function parseDatasetList(content) {
   const results = unwrapResults(content);
@@ -228,9 +193,6 @@ function parseTableDetail(content) {
   };
 }
 
-// execute_bigquery_sql returns `{ row_count, rows, query_ref }`. The `rows` list
-// may carry the "... (N more items)" sentinel; the real "+N" is row_count (total
-// matched) minus the rows actually shown.
 function parseBigquerySqlResult(content) {
   const results = unwrapResults(content);
   if (!isPlainObject(results) || !Array.isArray(results.rows)) return null;
@@ -259,10 +221,7 @@ function parseRowTable(content) {
   return { columns, rows, more };
 }
 
-// ============================== Shared UI ==============================
 
-// Renders a locale-aware count label ("5 linhas") with the number grouped for
-// the active language and the noun pluralized on `count`.
 function useCountLabel() {
   const { t, i18n } = useTranslation("chatbot");
   const nf = useMemo(
@@ -368,7 +327,6 @@ function TypeBadge({ children }) {
   );
 }
 
-// ============================== Output views ==============================
 
 function DatasetList({ datasets, more }) {
   const label = useCountLabel();
@@ -563,7 +521,6 @@ function RowTable({ columns, rows, more }) {
   );
 }
 
-// ============================== Request views ==============================
 
 function QueryText({ children }) {
   return (
@@ -590,11 +547,7 @@ function RequestPairs({ pairs }) {
   );
 }
 
-// ============================== Entry points ==============================
 
-// A friendly view of a tool's request args, or null to fall back to the generic
-// args rendering. execute_bigquery_sql is intentionally left out — the caller
-// renders its SQL in a code block with a download action.
 export function renderFriendlyRequest(name, args) {
   if (!isPlainObject(args)) return null;
 
@@ -626,9 +579,6 @@ export function renderFriendlyRequest(name, args) {
   }
 }
 
-// A friendly view for the tool's output, or null when the payload doesn't match
-// (caller falls back to the generic rendering). Never renders while the output
-// is still streaming — the JSON is only partial then.
 export function renderFriendlyOutput(name, output) {
   if (!output || output.streaming) return null;
   const raw = output.content ?? output.output ?? output.result;

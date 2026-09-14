@@ -23,23 +23,12 @@ import {
 import { useChatbotContext } from '../../../context/ChatbotContext';
 import { TrashIcon, ReloadIcon, MoreVerticalIcon } from "./icons";
 
-// On hover, softly fade the right edge of the thread title into the space the
-// options button occupies, instead of a hard ellipsis under the button.
 const THREAD_TITLE_FADE =
   "linear-gradient(to right, #000 calc(100% - 40px), transparent calc(100% - 12px))";
 
-// Slim, arrowless scrollbar copied from the reference. Deliberately omits
-// `scrollbar-width`/`scrollbar-color`: once either is set, Chromium falls back
-// to the native scrollbar (with OS arrow buttons) and ignores the webkit
-// pseudo-element rules below. The inset thumb (transparent border + padding-box
-// clip) leaves a little breathing room around the bar.
-// Selected-thread accents: a light green fill with a darker green bar down the
-// left edge (BD brand green #2B8C4D), mirroring the reference's active row.
 const ACTIVE_BG = "rgba(43, 140, 77, 0.12)";
 const ACTIVE_BG_HOVER = "rgba(43, 140, 77, 0.18)";
 const ACTIVE_BAR = "#2B8C4D";
-// Options-button hover: neutral grey on a normal row, a deeper green tint on
-// the selected (green) row so it reads as intentional instead of muddy.
 const OPTIONS_HOVER_BG = "#DEDFE0";
 const OPTIONS_HOVER_BG_ACTIVE = "rgba(43, 140, 77, 0.2)";
 

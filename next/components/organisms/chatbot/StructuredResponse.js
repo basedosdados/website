@@ -27,7 +27,6 @@ function splitSourceName(name) {
   if (typeof name !== "string" || name.trim() === "") {
     return { dataset: "—", table: null };
   }
-  // The backend joins them with an em-dash: "{dataset} — {table}".
   const separator = " — ";
   const separatorIndex = name.indexOf(separator);
   if (separatorIndex === -1) {
@@ -238,10 +237,6 @@ export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({
   if (!Array.isArray(followUpQuestions) || followUpQuestions.length === 0) return null;
 
   return (
-    // Rows divided only between one another (the first has no top rule). On hover
-    // the row shows a rounded fill that extends slightly past the text (into the
-    // surrounding answer padding), the dividers touching it (its own top rule and
-    // the next row's) fade out, and the text and trailing arrow darken.
     <Box marginTop="12px">
       {followUpQuestions.map((question, index) => (
         <Box

@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  HStack,
   VStack,
   Collapse,
 } from "@chakra-ui/react";
@@ -44,8 +43,6 @@ const ToolIcons = {
 };
 
 function getToolStepMeta(name, { done = false, error = false, t } = {}) {
-  // A finished step always shows a circle-check; the tool-specific glyph only
-  // matters while running (though the timeline shows a spinner there).
   const Icon = done ? CircleCheckIcon : ToolIcons[name] ?? CodeIcon;
   const keyBase = ToolIcons[name]
     ? `ui.thinking.tools.${name}`
@@ -98,8 +95,6 @@ function SolicitationArgsBlocks({ call, downloadProps }) {
     );
   }
 
-  // A friendly, per-tool view of the request args; falls through to the generic
-  // key/value table when the tool/shape isn't recognized.
   const friendly = renderFriendlyRequest(call?.name, parsed);
   if (friendly) return friendly;
 
@@ -136,8 +131,6 @@ export function buildToolSteps(toolCalls) {
       steps.push({ kind: "reasoning", markdown: ev.content });
     }
 
-    // Calls issued together in one tool_call event ran in parallel — tag them
-    // as a batch (size + position) so the timeline can draw a fork/bracket.
     const calls = (Array.isArray(ev.tool_calls) ? ev.tool_calls : []).filter(
       (call) => call && call.id != null
     );
@@ -192,15 +185,9 @@ function TimelineIcon({ status, Icon, fill }) {
   );
 }
 
-// The TimelineIcon is 24px tall, so its glyph centers at y=12; the fork bracket
-// sits 8px to the left of the icon column.
 const ICON_CENTER_Y = 12;
 const BRACKET_LEFT = -8;
 
-// One row's slice of the fork that joins a parallel batch: a vertical rail to
-// the left of the icon column (opening at the first call, closing at the last)
-// plus a horizontal tick into each call's icon. Consecutive rows' slices line
-// up into one continuous bracket.
 function ParallelBracket({ batchPos, batchSize }) {
   const isFirst = batchPos === 0;
   const isLast = batchPos === batchSize - 1;
@@ -244,9 +231,6 @@ function ToolStepItem({
   const call = isOrphan ? null : step.call;
   const status = isLoadingStep ? "loading" : "done";
   const isError = isToolErrorOutput(step.output);
-  // A parallel batch (>1 call from one event) shows a left bracket; the icon
-  // spine then only enters the first call and exits the last, never running
-  // between siblings (the bracket carries that).
   const batchSize = step.batchSize ?? 1;
   const batchPos = step.batchPos ?? 0;
   const isParallel = batchSize > 1;
@@ -487,11 +471,7 @@ export default function ThinkingSection({
   onExport,
 }) {
   const { t } = useTranslation("chatbot");
-  // The "chain of thought" is a collapsible section — but, unlike the reference
-  // (which starts collapsed), it's expanded by default here.
   const [open, setOpen] = useState(true);
-  // Hold the "Pensando…" shimmer on screen briefly even when the turn finishes
-  // almost instantly, so it reads as loading rather than a flicker.
   const loading = useMinDuration(isLoading, 600);
 
   if (toolSteps.length === 0) return null;

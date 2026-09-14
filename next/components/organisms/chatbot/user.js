@@ -1,6 +1,5 @@
 import cookies from "js-cookie";
 
-// The signed-in user, parsed from the `userBD` cookie (see pages/user/login.js).
 export function getUserFromCookie() {
   try {
     const raw = cookies.get("userBD");
@@ -15,9 +14,6 @@ export function getUserEmailFromCookie() {
   return getUserFromCookie()?.email || null;
 }
 
-// A name derived from an email's local part. `full` title-cases every
-// dot/underscore/hyphen segment ("joao.silva" -> "Joao Silva"); otherwise it
-// takes just the first dot-segment, capitalized ("joao.silva" -> "Joao").
 export function nameFromEmail(email, { full = false } = {}) {
   const local = (email || "").split("@")[0];
   if (!local) return "";

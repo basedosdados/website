@@ -25,8 +25,6 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 160,
     overscan: 10,
-    // Base spacing between messages (a user's question and its answer); extra
-    // space between separate exchanges comes from the user bubble's top margin.
     gap: 12,
     getItemKey: useCallback(
       (index) => messages[index]?.id || index,

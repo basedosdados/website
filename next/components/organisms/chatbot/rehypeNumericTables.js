@@ -1,16 +1,8 @@
-// Ported from the reference: decides table alignment per COLUMN, not per cell.
-// A column whose body cells are all numeric (empties ignored) gets
-// `data-numeric` on every cell — header included — so the title and its values
-// always right-align together. Columns the author aligned explicitly in GFM
-// (`:---` / `---:`) are left untouched (remark-gfm already set those).
-
 function textOf(node) {
   if (node.type === "text") return node.value ?? "";
   return (node.children ?? []).map(textOf).join("");
 }
 
-// "5,84", "5.5", "41%", "R$ 1.200", "-0,3" — digits plus numeric punctuation and
-// currency only. Anything with prose ("0,34 ponto") stays left-aligned.
 const NUMERIC_RE = /^[\s%+\-–—.,()R$\d]*\d[\s%+\-–—.,()R$\d]*$/;
 
 function isElement(node, tag) {

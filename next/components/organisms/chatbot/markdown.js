@@ -230,10 +230,6 @@ function mkHeading(tag) {
   };
 }
 
-// One rhythm for rendered markdown (the answer and the reasoning steps share
-// `componentsMk`): a uniform gap between blocks via top-margins only — no
-// collapsing to reason about — with headings getting more room above, and no
-// leading/trailing margin. Mirrors the reference's `.markdown` CSS.
 export const markdownContentSx = {
   "& > * + *": { marginTop: "12px" },
   "& h1, & h2, & h3, & h4, & h5, & h6": { marginTop: "24px" },
@@ -413,9 +409,6 @@ function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
-// A tool that raised returns a `{ status: "error", message }` envelope (see the
-// backend's handle_tool_errors). We surface a generic message for these rather
-// than the raw exception string, so detect them here.
 export function isToolErrorOutput(output) {
   const parsed = parseToolOutputValue(output);
   return isPlainObject(parsed) && parsed.status === "error";
@@ -708,9 +701,6 @@ function RecordsTable({
 export function ToolResultView({ output, name }) {
   const parsed = useMemo(() => parseToolOutputValue(output), [output]);
 
-  // Try a friendly, per-tool rendering first; it returns null when the payload
-  // doesn't match its expected shape, in which case we fall back to the generic
-  // table / JSON view below.
   const friendly = renderFriendlyOutput(name, output);
   if (friendly) return friendly;
 

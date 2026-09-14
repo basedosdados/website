@@ -152,8 +152,6 @@ function Sidebar({
             transition="background-color 0.2s ease"
             onClick={handleNewChat}
             _hover={{
-              // Row fills grey on hover; the plus circle keeps its own (darker)
-              // #DEDFE0 so it stays visible against the row instead of merging.
               backgroundColor: "#EEEEEE",
             }}
           >

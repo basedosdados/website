@@ -33,10 +33,6 @@ function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// A time-of-day greeting, the user's name (from their email), and an optional
-// follow-up line, picked at random — mirroring the reference chat's greeting.
-// Re-rolls so the exact combination doesn't repeat on the next page load
-// (`avoidSignature` is the previous load's signature).
 function buildGreeting(t, avoidSignature) {
   const hour = new Date().getHours();
   const period =
@@ -46,13 +42,10 @@ function buildGreeting(t, avoidSignature) {
         ? "afternoon"
         : "evening";
   const name = nameFromEmail(getUserEmailFromCookie());
-  // "Olá"/"Hello"/"Hola" is always in the pool, so it can surface at any hour.
   const greetingWords = [t(`ui.greetings.${period}`), t("ui.greetings.neutral")];
   const followups = t("ui.greetings.followups", { returnObjects: true });
   const followupList = Array.isArray(followups) ? followups : [""];
 
-  // A handful of tries is more than enough to dodge one signature across the
-  // available combinations; the loop is bounded so it always resolves.
   let result;
   for (let attempt = 0; attempt < 8; attempt++) {
     const greeting = pickRandom(greetingWords);
@@ -182,14 +175,7 @@ function ChatbotContent() {
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
 
-  // Re-pick the greeting each time the new-chat view is entered — a fresh visit
-  // to /chatbot, "new chat", or navigating back from a thread — not only on a
-  // hard refresh. Skips the greeting shown on the previous visit so it doesn't
-  // repeat two times in a row. Client-only (reads the clock, cookie, and rolls
-  // at random), so it never runs during SSR/hydration.
   useEffect(() => {
-    // Cleared while away so the next visit fades in fresh instead of flashing the
-    // previous greeting (the component stays mounted across in-app navigation).
     if (!showNewChatGreeting) {
       setGreeting(null);
       return;
@@ -320,9 +306,6 @@ function ChatbotContent() {
           minWidth={0}
           height="100%"
           maxHeight="100dvh"
-          // No horizontal padding on desktop: the scroll area runs full-bleed
-          // so its scrollbar sits at the screen edge, and each view supplies its
-          // own horizontal gutter (message/composer content, greeting, about).
           padding={{ base: "12px 12px 16px", md: "24px 0" }}
           overflow="hidden"
           justifyContent="center"
