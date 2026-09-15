@@ -128,12 +128,25 @@
         "columns_other": "{{formatted}} columnas",
         "rows_one": "{{formatted}} fila",
         "rows_other": "{{formatted}} filas",
+        "results_one": "{{formatted}} resultado",
+        "results_other": "{{formatted}} resultados",
+        "points_one": "{{formatted}} punto",
+        "points_other": "{{formatted}} puntos",
         "emptyRows": "Sin resultados.",
+        "emptyResults": "Sin resultados.",
+        "expired": "expirado",
+        "chartRendered": "Gráfico generado",
         "coverage": "Cobertura",
         "req": {
           "dataset": "conjunto de datos",
           "table": "tabla",
-          "column": "columna"
+          "column": "columna",
+          "format": "formato"
+        },
+        "res": {
+          "filename": "archivo",
+          "format": "formato",
+          "size": "tamaño"
         }
       },
       "tools": {
@@ -161,6 +174,21 @@
           "running": "Decodificando valores de la tabla",
           "done": "Valores de la tabla decodificados",
           "error": "Error al decodificar los valores de la tabla"
+        },
+        "list_query_results": {
+          "running": "Listando resultados",
+          "done": "Resultados listados",
+          "error": "Error al listar resultados"
+        },
+        "export_query_result": {
+          "running": "Preparando archivo",
+          "done": "Archivo listo",
+          "error": "Error al preparar archivo"
+        },
+        "chart_query_result": {
+          "running": "Generando gráfico",
+          "done": "Gráfico generado",
+          "error": "Error al generar gráfico"
         },
         "fallback": {
           "running": "Ejecutando herramienta",

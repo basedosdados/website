@@ -20,6 +20,9 @@ import {
   DataBaseIcon,
   CodeIcon,
   ChevronDownIcon,
+  ChartIcon,
+  DownloadIcon,
+  TableChartViewIcon,
 } from "./icons";
 import {
   componentsMk,
@@ -40,6 +43,9 @@ const ToolIcons = {
   get_table_details: DataStructureIcon,
   execute_bigquery_sql: CodeIcon,
   decode_table_values: DataStructureIcon,
+  list_query_results: TableChartViewIcon,
+  export_query_result: DownloadIcon,
+  chart_query_result: ChartIcon,
 };
 
 function getToolStepMeta(name, { done = false, error = false, t } = {}) {
@@ -242,6 +248,10 @@ function ToolStepItem({
     ? { label: t("ui.thinking.additionalResult"), Icon: CircleCheckIcon }
     : getToolStepMeta(call?.name, { done: status === "done", error: isError, t });
   const hasOutput = Boolean(formatToolOutputText(step.output));
+  const hasRequest =
+    Boolean(call) &&
+    ((typeof call.streamArgsJson === "string" && call.streamArgsJson.trim() !== "") ||
+      (isPlainObject(call.args) && Object.keys(call.args).length > 0));
   const downloadProps =
     step.output?.artifact?.type === "query_result"
       ? {
@@ -339,7 +349,7 @@ function ToolStepItem({
             minHeight={0}
             marginTop="8px"
           >
-            {call && (
+            {call && hasRequest && (
               <VStack
                 align="stretch"
                 spacing="8px"
