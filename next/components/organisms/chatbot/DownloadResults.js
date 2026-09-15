@@ -13,16 +13,19 @@ import {
 import { Fragment, useState } from "react";
 import { useTranslation } from "next-i18next";
 
-import { DownloadIcon, TableChartViewIcon } from "./icons";
-import BracesIcon from "../../../public/img/icons/bracesIcon";
-import FileGenericIcon from "../../../public/img/icons/fileGenericIcon";
+import {
+  DownloadIcon,
+  TableChartViewIcon,
+  BracesIcon,
+  FileIcon,
+} from "./icons";
 
 const EXPORT_FORMAT_STYLES = {
   CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },
   JSONL: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
   JSON: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
-  AVRO: { Icon: FileGenericIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
-  PARQUET: { Icon: FileGenericIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
+  AVRO: { Icon: FileIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
+  PARQUET: { Icon: FileIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
 };
 
 const DEFAULT_EXPORT_FORMAT_STYLE = EXPORT_FORMAT_STYLES.AVRO;
