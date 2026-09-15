@@ -22,8 +22,8 @@ import {
 
 const EXPORT_FORMAT_STYLES = {
   CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },
-  JSONL: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
-  JSON: { Icon: BracesIcon, color: "#F2C94C", tint: "rgba(242, 201, 76, 0.16)" },
+  JSONL: { Icon: BracesIcon, color: "#D69E2E", tint: "rgba(214, 158, 46, 0.16)" },
+  JSON: { Icon: BracesIcon, color: "#D69E2E", tint: "rgba(214, 158, 46, 0.16)" },
   AVRO: { Icon: FileIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
   PARQUET: { Icon: FileIcon, color: "#5B9DF0", tint: "rgba(91, 157, 240, 0.16)" },
 };
