@@ -4,7 +4,7 @@ import {
   VStack,
   Collapse,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
@@ -37,6 +37,10 @@ import { renderFriendlyRequest } from "./toolViews";
 import TextShimmer from "./TextShimmer";
 import useMinDuration from "../../../hooks/useMinDuration";
 
+// Minimum time a tool step shows its "running" state before flipping to done, so fast tools
+// still flash a shimmer. Mirrors the reference frontend's RUNNING_DWELL_MS.
+const TOOL_RUNNING_DWELL_MS = 700;
+
 const ToolIcons = {
   search_datasets: SearchIcon,
   get_dataset_details: DataBaseIcon,
@@ -62,21 +66,6 @@ function isPlainObject(value) {
 }
 
 function SolicitationArgsBlocks({ call, downloadProps }) {
-  const rawStream =
-    call &&
-    typeof call.streamArgsJson === "string" &&
-    call.streamArgsJson.trim() !== ""
-      ? call.streamArgsJson
-      : null;
-
-  if (rawStream != null) {
-    return (
-      <MemoCodeBlock language="json" raw>
-        {rawStream}
-      </MemoCodeBlock>
-    );
-  }
-
   const parsed = call.args ?? {};
 
   if (call?.name === "execute_bigquery_sql" && isPlainObject(parsed)) {
@@ -226,7 +215,6 @@ function ToolStepItem({
   index,
   isFirst,
   isLast,
-  isLoadingStep,
   messageId,
   messageLoading,
   onExport,
@@ -235,8 +223,21 @@ function ToolStepItem({
   const [isOpen, setIsOpen] = useState(false);
   const isOrphan = step.kind === "orphan_output";
   const call = isOrphan ? null : step.call;
-  const status = isLoadingStep ? "loading" : "done";
-  const isError = isToolErrorOutput(step.output);
+  const resultReady = Boolean(formatToolOutputText(step.output));
+  // Keep a tool step in its "running" state for a minimum time, so fast tools still flash a
+  // shimmer instead of snapping straight to done. Loaded history is settled immediately.
+  const [dwellPassed, setDwellPassed] = useState(!messageLoading);
+  useEffect(() => {
+    if (!messageLoading) {
+      setDwellPassed(true);
+      return undefined;
+    }
+    const id = setTimeout(() => setDwellPassed(true), TOOL_RUNNING_DWELL_MS);
+    return () => clearTimeout(id);
+  }, [messageLoading]);
+  const settled = isOrphan || (resultReady && dwellPassed);
+  const status = messageLoading && !settled ? "loading" : "done";
+  const isError = settled && isToolErrorOutput(step.output);
   const batchSize = step.batchSize ?? 1;
   const batchPos = step.batchPos ?? 0;
   const isParallel = batchSize > 1;
@@ -247,11 +248,11 @@ function ToolStepItem({
   const { label, Icon } = isOrphan
     ? { label: t("ui.thinking.additionalResult"), Icon: CircleCheckIcon }
     : getToolStepMeta(call?.name, { done: status === "done", error: isError, t });
-  const hasOutput = Boolean(formatToolOutputText(step.output));
+  // The request card shows once the (complete) args are present; the result card shows once
+  // the step has settled — output present and the running dwell elapsed — so neither flashes.
   const hasRequest =
-    Boolean(call) &&
-    ((typeof call.streamArgsJson === "string" && call.streamArgsJson.trim() !== "") ||
-      (isPlainObject(call.args) && Object.keys(call.args).length > 0));
+    Boolean(call) && isPlainObject(call.args) && Object.keys(call.args).length > 0;
+  const hasOutput = settled && resultReady;
   const downloadProps =
     step.output?.artifact?.type === "query_result"
       ? {
@@ -535,8 +536,6 @@ export default function ThinkingSection({
               );
             }
 
-            const isLoadingStep = isLoading && step.kind === "tool" && !step.output;
-
             return (
               <ToolStepItem
                 key={key}
@@ -544,7 +543,6 @@ export default function ThinkingSection({
                 index={index}
                 isFirst={isFirst}
                 isLast={isLast}
-                isLoadingStep={isLoadingStep}
                 messageId={messageId}
                 messageLoading={isLoading}
                 onExport={onExport}
