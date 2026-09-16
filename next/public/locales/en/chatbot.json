@@ -128,12 +128,25 @@
         "columns_other": "{{formatted}} columns",
         "rows_one": "{{formatted}} row",
         "rows_other": "{{formatted}} rows",
+        "results_one": "{{formatted}} result",
+        "results_other": "{{formatted}} results",
+        "points_one": "{{formatted}} point",
+        "points_other": "{{formatted}} points",
         "emptyRows": "No results.",
+        "emptyResults": "No results.",
+        "expired": "expired",
+        "chartRendered": "Chart generated",
         "coverage": "Coverage",
         "req": {
           "dataset": "dataset",
           "table": "table",
-          "column": "column"
+          "column": "column",
+          "format": "format"
+        },
+        "res": {
+          "filename": "file",
+          "format": "format",
+          "size": "size"
         }
       },
       "tools": {
@@ -161,6 +174,21 @@
           "running": "Decoding table values",
           "done": "Table values decoded",
           "error": "Failed to decode the table values"
+        },
+        "list_query_results": {
+          "running": "Listing results",
+          "done": "Results listed",
+          "error": "Failed to list results"
+        },
+        "export_query_result": {
+          "running": "Preparing file",
+          "done": "File ready",
+          "error": "Failed to prepare file"
+        },
+        "chart_query_result": {
+          "running": "Generating chart",
+          "done": "Chart generated",
+          "error": "Failed to generate chart"
         },
         "fallback": {
           "running": "Running tool",
