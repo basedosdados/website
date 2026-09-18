@@ -100,6 +100,19 @@ function formatCell(v) {
   return String(v);
 }
 
+function formatBytes(bytes) {
+  if (typeof bytes !== "number" || !Number.isFinite(bytes) || bytes < 0) return null;
+  if (bytes < 1024) return `${bytes} B`;
+  const units = ["KB", "MB", "GB", "TB"];
+  let value = bytes / 1024;
+  let unitIndex = 0;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex += 1;
+  }
+  return `${value.toFixed(value >= 100 ? 0 : 1)} ${units[unitIndex]}`;
+}
+
 function columnIsNumeric(rows, col) {
   let sawValue = false;
   for (const row of rows) {
@@ -219,6 +232,38 @@ function parseRowTable(content) {
   }
   const columns = unionColumns(rows);
   return { columns, rows, more };
+}
+
+function parseQueryResultsList(content) {
+  const results = unwrapResults(content);
+  if (!Array.isArray(results)) return null;
+  const { items, more } = splitTruncation(results);
+  const entries = [];
+  for (const item of items) {
+    if (!isPlainObject(item)) return null;
+    const description = nonEmptyString(item.description) || nonEmptyString(item.query_ref);
+    if (!description) return null;
+    entries.push({ description, expired: item.expired === true });
+  }
+  return { entries, more };
+}
+
+function parseExportResult(content) {
+  const results = unwrapResults(content);
+  if (!isPlainObject(results)) return null;
+  const filename = nonEmptyString(results.filename);
+  const format = nonEmptyString(results.format);
+  const size = formatBytes(results.size_bytes);
+  if (!filename && !format && !size) return null;
+  return { filename, format, size };
+}
+
+function parseChartResult(content) {
+  const results = unwrapResults(content);
+  if (!isPlainObject(results)) return null;
+  const rowCount = typeof results.row_count === "number" ? results.row_count : null;
+  if (rowCount === null) return null;
+  return { rowCount };
 }
 
 
@@ -547,6 +592,72 @@ function RequestPairs({ pairs }) {
   );
 }
 
+function ResultPairs({ pairs }) {
+  const { t } = useTranslation("chatbot");
+  return (
+    <VStack align="stretch" spacing="6px">
+      {pairs.map(([key, value]) => (
+        <LabeledValue key={key} label={t(`ui.thinking.views.res.${key}`)} value={value} mono />
+      ))}
+    </VStack>
+  );
+}
+
+function QueryResultsList({ entries, more }) {
+  const { t } = useTranslation("chatbot");
+  const label = useCountLabel();
+  if (entries.length === 0) {
+    return (
+      <Text fontFamily="Roboto" fontSize="13px" color="#71757A">
+        {t("ui.thinking.views.emptyResults")}
+      </Text>
+    );
+  }
+  const total = entries.length + more;
+  return (
+    <VStack align="stretch" spacing="8px">
+      <Eyebrow>{label("results", total)}</Eyebrow>
+      <VStack as="ul" align="stretch" spacing="6px" listStyleType="none" margin={0}>
+        {entries.map((e, i) => (
+          <Flex as="li" key={i} align="center" gap="6px" minWidth={0}>
+            <Text
+              noOfLines={1}
+              minWidth={0}
+              fontFamily="Roboto"
+              fontSize="13px"
+              fontWeight="500"
+              color="#464A51"
+            >
+              {e.description}
+            </Text>
+            {e.expired && <TypeBadge>{t("ui.thinking.views.expired")}</TypeBadge>}
+          </Flex>
+        ))}
+      </VStack>
+      <MoreNote count={more} nounKey="results" />
+    </VStack>
+  );
+}
+
+function ExportResult({ filename, format, size }) {
+  const pairs = [];
+  if (filename) pairs.push(["filename", filename]);
+  if (format) pairs.push(["format", format.toUpperCase()]);
+  if (size) pairs.push(["size", size]);
+  return <ResultPairs pairs={pairs} />;
+}
+
+function ChartResult({ rowCount }) {
+  const { t } = useTranslation("chatbot");
+  const label = useCountLabel();
+  return (
+    <VStack align="stretch" spacing="6px">
+      <Eyebrow>{t("ui.thinking.views.chartRendered")}</Eyebrow>
+      <MutedText>{label("points", rowCount)}</MutedText>
+    </VStack>
+  );
+}
+
 
 export function renderFriendlyRequest(name, args) {
   if (!isPlainObject(args)) return null;
@@ -573,6 +684,14 @@ export function renderFriendlyRequest(name, args) {
       if (table) pairs.push(["table", table]);
       if (column) pairs.push(["column", column]);
       return <RequestPairs pairs={pairs} />;
+    }
+    case "export_query_result": {
+      const format = nonEmptyString(args.file_format);
+      return format ? <RequestPairs pairs={[["format", format.toUpperCase()]]} /> : null;
+    }
+    case "chart_query_result": {
+      const instructions = nonEmptyString(args.instructions);
+      return instructions ? <QueryText>{instructions}</QueryText> : null;
     }
     default:
       return null;
@@ -609,6 +728,18 @@ export function renderFriendlyOutput(name, output) {
       return table ? (
         <RowTable columns={table.columns} rows={table.rows} more={table.more} />
       ) : null;
+    }
+    case "list_query_results": {
+      const parsed = parseQueryResultsList(content);
+      return parsed ? <QueryResultsList entries={parsed.entries} more={parsed.more} /> : null;
+    }
+    case "export_query_result": {
+      const parsed = parseExportResult(content);
+      return parsed ? <ExportResult {...parsed} /> : null;
+    }
+    case "chart_query_result": {
+      const parsed = parseChartResult(content);
+      return parsed ? <ChartResult rowCount={parsed.rowCount} /> : null;
     }
     default:
       return null;
