@@ -54,6 +54,7 @@ async function getTable(id, locale='pt') {
                 isDeprecated
                 temporalCoverage
                 fullTemporalCoverage
+                spatialCoverageName${capitalize(locale)}
                 rawDataSource {
                   edges {
                     node {

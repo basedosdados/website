@@ -704,23 +704,19 @@ export default function SearchDatasetPage() {
 
           <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
-          {locale !== 'pt' && (
-            <>
-              <CheckboxFilterAccordion
-                isActive={validateActiveFilterAccordin("spatial_coverage")}
-                choices={memoizedFilters.spatialCoverages}
-                valueField="key"
-                displayField="name"
-                fieldName={t('spatialCoverage')}
-                valuesChecked={valuesCheckedFilter("spatial_coverage")}
-                onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
-                isLoading={!isLoading}
-                facet="spatial_coverage"
-              />
+          <CheckboxFilterAccordion
+            isActive={validateActiveFilterAccordin("spatial_coverage")}
+            choices={memoizedFilters.spatialCoverages}
+            valueField="key"
+            displayField="name"
+            fieldName={t('spatialCoverage')}
+            valuesChecked={valuesCheckedFilter("spatial_coverage")}
+            onChange={(value) => handleSelectFilter(["spatial_coverage",`${value}`])}
+            isLoading={!isLoading}
+            facet="spatial_coverage"
+          />
 
-              <Divider marginY="16px !important" borderColor="#DEDFE0"/>
-            </>
-          )}
+          <Divider marginY="16px !important" borderColor="#DEDFE0"/>
 
           <CheckboxFilterAccordion
             isActive={validateActiveFilterAccordin("organization")}
