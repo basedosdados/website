@@ -8,7 +8,7 @@ import { MDXRemote } from "next-mdx-remote";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
-import { getAllPosts, getPostBySlug, serializePost } from "../api/blog";
+import { getAllPosts, getPostBySlug, getSlugForLocale, getFilenameForSlug, serializePost } from "../api/blog";
 import { categories } from "../api/blog/categories";
 import BodyText from "../../components/atoms/Text/BodyText";
 import Link from "../../components/atoms/Link";
@@ -51,11 +51,22 @@ export async function getStaticProps({ params, locale }) {
     };
   }
 
+  const canonicalSlug = await getSlugForLocale(slug, locale);
+  if (canonicalSlug && canonicalSlug !== slug) {
+    return {
+      redirect: {
+        destination: locale === "pt" ? `/blog/${canonicalSlug}` : `/${locale}/blog/${canonicalSlug}`,
+        permanent: false,
+      },
+    };
+  }
+
   const serialize = await serializePost(content);
 
   return {
     props: {
       slug,
+      filename: (await getFilenameForSlug(slug, locale)) || slug,
       locale,
       ...serialize,
       ...(await serverSideTranslations(locale, ['common', 'blog', 'menu'])),
@@ -63,15 +74,31 @@ export async function getStaticProps({ params, locale }) {
   };
 }
 
-export async function getStaticPaths() {
-  const allPosts = await getAllPosts();
-  return {
-    paths: allPosts.map(({ slug }) => ({ params: { slug } })),
-    fallback: "blocking"
-  };
+export async function getStaticPaths({ locales = ["pt"] }) {
+  const perLocale = await Promise.all(
+    locales.map(async (locale) => {
+      const posts = await getAllPosts(locale);
+      // Both forms resolve: the locale's own slug and the shared filename,
+      // which redirects to it.
+      return posts.flatMap(({ slug, filename }) =>
+        [slug, filename].filter(Boolean).map((s) => ({ params: { slug: s }, locale }))
+      );
+    })
+  );
+
+  const paths = [];
+  const seen = new Set();
+  for (const entry of perLocale.flat()) {
+    const key = `${entry.locale}:${entry.params.slug}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    paths.push(entry);
+  }
+
+  return { paths, fallback: "blocking" };
 }
 
-export default function Post({ slug, locale, mdxSource, headings }) {
+export default function Post({ slug, filename, locale, mdxSource, headings }) {
   const { t } = useTranslation('blog')
   const { frontmatter } = mdxSource;
 
@@ -190,7 +217,7 @@ export default function Post({ slug, locale, mdxSource, headings }) {
               <BodyText marginTop="24px">{t("noticedSomething")} </BodyText>
               <BodyText
                 as="a"
-                href={`https://github.com/basedosdados/website/edit/${repository()}/next/blog/${locale}/${slug}.md`}
+                href={`https://github.com/basedosdados/website/edit/${repository()}/next/blog/${locale}/${filename}.md`}
                 isexternal="true"
                 color="#0068C5"
                 _hover={{

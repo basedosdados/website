@@ -255,13 +255,15 @@ function FigCaption(props) {
 }
 
 export function Toc({ headings }) {
+  const { t } = useTranslation('blog');
+
   return (
     <Box>
       <LabelText
         typography="large"
         marginBottom="2px"
       >
-        Tabela de conteúdo
+        {t('tableOfContents')}
       </LabelText>
       <Box as="hr" borderWidth="2px" borderColor="#DEDFE0" marginBottom="8px"/>
       <UnorderedList margin="0">
