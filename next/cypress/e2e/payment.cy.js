@@ -176,6 +176,79 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.applyCoupon('25off', 'Cupom 25OFF')
       cy.applyCoupon('20off', 'Cupom 20OFF')
       cy.applyCoupon('15off', 'Cupom 15OFF')
+      cy.applyCoupon('25off', 'Cupom 25OFF')
+
+      cy.get('#toggle-prices-modal-checkout')
+        .should('exist')
+        .and('have.attr', 'type', 'checkbox')
+        .click({ force: true });
+
+      cy.contains('Cupom 25OFF', { timeout: 20000 })
+        .should('be.visible');
+    });
+  });
+
+  it('Deve abrir o checkout com cupom da URL e pular o trial', () => {
+    cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
+      body: { started: true },
+    }).as('startTrial');
+
+    cy.intercept('GET', '/api/stripe/validateStripeCoupon*', {
+      body: {
+        isValid: true,
+        discountAmount: 11.75,
+        duration: 'once',
+        durationInMonths: 0,
+      },
+    }).as('validateCoupon');
+
+    cy.visit(`/user/${username}?plans_and_payment&checkout=bd_pro&coupon=25off&interval=month`);
+    cy.wait('@getPlans', { timeout: 15000 });
+
+    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
+      .should('be.visible')
+      .as('checkoutModal');
+
+    cy.wait('@validateCoupon', { timeout: 20000 });
+    cy.get('@startTrial.all').should('have.length', 0);
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('BD Pro', { timeout: 20000 }).should('be.visible');
+      cy.contains('R$ 47,00/mês', { timeout: 20000 }).should('be.visible');
+      cy.contains('Cupom 25OFF', { timeout: 20000 }).should('be.visible');
+      cy.contains('Total a pagar', { timeout: 20000 }).should('be.visible');
+    });
+  });
+
+  it('Deve abrir o checkout do chatbot com cupom da URL e pular o trial', () => {
+    cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
+      body: { started: true },
+    }).as('startChatbotTrial');
+
+    cy.intercept('GET', '/api/stripe/validateStripeCoupon*', {
+      body: {
+        isValid: true,
+        discountAmount: 7.5,
+        duration: 'once',
+        durationInMonths: 0,
+      },
+    }).as('validateChatbotCoupon');
+
+    cy.visit(`/user/${username}?plans_and_payment&checkout=chatbot&coupon=25off&interval=month`);
+    cy.wait('@getPlans', { timeout: 15000 });
+
+    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
+      .should('be.visible')
+      .as('checkoutModal');
+
+    cy.get('#chakra-modal-modal-chatbot-trial-survey').should('not.exist');
+    cy.wait('@validateChatbotCoupon', { timeout: 20000 });
+    cy.get('@startChatbotTrial.all').should('have.length', 0);
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains(/chatbot/i).should('be.visible');
+      cy.contains('Cupom 25OFF', { timeout: 20000 }).should('be.visible');
+      cy.contains('Total a pagar').should('be.visible');
     });
   });
 

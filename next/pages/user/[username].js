@@ -9,7 +9,7 @@ import { serialize } from 'cookie';
 import { useTranslation } from "react-i18next";
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../../components/templates/main";
-import { hasBDProSubscription } from "../../utils";
+import { hasBDProSubscription, getLoginRedirectWithCheckout } from "../../utils";
 import { serializeClearedTokenCookie } from "../../lib/authCookie";
 import TitleText from "../../components/atoms/Text/TitleText";
 import LabelText from "../../components/atoms/Text/LabelText";
@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
 
     return {
       redirect: {
-        destination: "/user/login",
+        destination: getLoginRedirectWithCheckout(context.query),
         permanent: false,
       }
     }
@@ -67,7 +67,7 @@ export async function getServerSideProps(context) {
 
       return {
         redirect: {
-          destination: "/user/login",
+          destination: getLoginRedirectWithCheckout(context.query),
           permanent: false,
         }
       }
@@ -91,7 +91,7 @@ export async function getServerSideProps(context) {
 
     return {
       redirect: {
-        destination: "/user/login",
+        destination: getLoginRedirectWithCheckout(context.query),
         permanent: false,
       }
     }
@@ -117,7 +117,7 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   const { t, ready } = useTranslation('user')
   const router = useRouter()
   const { query } = router
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState(getUser || {})
   const [sectionSelected, setSectionSelected] = useState(0)
 
   if (!ready) return null
@@ -138,17 +138,11 @@ export default function UserPage({ getUser, isUserPro, haveInterprisePlan }) {
   ].filter(Boolean)
 
   useEffect(() => {
-    const key = Object.keys(query)
-    const removeElem = key.indexOf("username")
-    if (removeElem !== -1) key.splice(removeElem, 1)
+    const queryKeys = Object.keys(query).filter((key) => key !== "username")
+    if (queryKeys.length === 0) return
 
-    if (key.length === 0) return
-
-    for (const elements of choices) {
-      if (elements && elements.value === key[0]) {
-        setSectionSelected(elements.index)
-      }
-    }
+    const section = choices.find((choice) => choice && queryKeys.includes(choice.value))
+    if (section) setSectionSelected(section.index)
   }, [query])
 
   return (
