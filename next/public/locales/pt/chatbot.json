@@ -46,10 +46,9 @@
     "newChat": "Nova conversa",
     "openMenu": "Abrir menu",
     "signOut": "Sair",
-    "help": "Ajuda",
+    "brand": "Base dos Dados",
+    "learnMore": "Saiba mais",
     "userMenu": "Menu da conta",
-    "greetingPrefix": "Olá,",
-    "helpQuestion": "Como posso ajudar você hoje?",
     "copy": "Copiar",
     "copied": "Copiado!",
     "copyResponse": "Copiar resposta",
@@ -61,8 +60,15 @@
     "error": "Erro",
     "thinkingAria": "Pensando",
     "suggestedQuestions": "Perguntas Sugeridas",
+    "greetings": {
+      "morning": "Bom dia",
+      "afternoon": "Boa tarde",
+      "evening": "Boa noite",
+      "neutral": "Olá",
+      "followups": ["", "Por onde começamos?", "Como posso ajudar?"]
+    },
     "search": {
-      "placeholder": "Faça uma pergunta...",
+      "placeholder": "Escreva uma mensagem...",
       "disclaimer": "O chatbot pode cometer erros. Considere verificar informações importantes.",
       "disclaimerPrivacy": "Todas as informações aqui enviadas são registradas para análise e melhoria do produto."
     },
@@ -72,7 +78,10 @@
       "expandMenu": "Expandir menu"
     },
     "sources": {
-      "title": "Fontes dos Dados"
+      "title": "Fontes dos Dados",
+      "viewTooltip": "Ver fontes",
+      "count_one": "{{count}} fonte",
+      "count_other": "{{count}} fontes"
     },
     "feedback": {
       "title": "Feedback",
@@ -102,39 +111,97 @@
       }
     },
     "thinking": {
+      "header": {
+        "thinking": "Pensando...",
+        "done": "Pensamentos"
+      },
       "request": "Solicitação",
-      "result": "Resultado",
+      "result": "Resposta",
+      "errorMessage": "Não foi possível concluir esta etapa.",
       "additionalResult": "Resultado adicional",
+      "views": {
+        "datasets_one": "{{formatted}} conjunto de dados",
+        "datasets_other": "{{formatted}} conjuntos de dados",
+        "tables_one": "{{formatted}} tabela",
+        "tables_other": "{{formatted}} tabelas",
+        "columns_one": "{{formatted}} coluna",
+        "columns_other": "{{formatted}} colunas",
+        "rows_one": "{{formatted}} linha",
+        "rows_other": "{{formatted}} linhas",
+        "results_one": "{{formatted}} resultado",
+        "results_other": "{{formatted}} resultados",
+        "points_one": "{{formatted}} ponto",
+        "points_other": "{{formatted}} pontos",
+        "emptyRows": "Nenhum resultado.",
+        "emptyResults": "Nenhum resultado.",
+        "expired": "expirado",
+        "chartRendered": "Gráfico gerado",
+        "coverage": "Cobertura",
+        "req": {
+          "dataset": "conjunto de dados",
+          "table": "tabela",
+          "column": "coluna",
+          "format": "formato"
+        },
+        "res": {
+          "filename": "arquivo",
+          "format": "formato",
+          "size": "tamanho"
+        }
+      },
       "tools": {
         "search_datasets": {
           "running": "Buscando conjuntos de dados",
-          "done": "Conjuntos de dados encontrados"
+          "done": "Conjuntos de dados encontrados",
+          "error": "Falha ao buscar conjuntos de dados"
         },
         "get_dataset_details": {
           "running": "Explorando conjunto de dados",
-          "done": "Conjunto de dados explorado"
+          "done": "Conjunto de dados explorado",
+          "error": "Falha ao explorar o conjunto de dados"
         },
         "get_table_details": {
           "running": "Explorando estrutura da tabela",
-          "done": "Estrutura da tabela explorada"
+          "done": "Estrutura da tabela explorada",
+          "error": "Falha ao explorar a estrutura da tabela"
         },
         "execute_bigquery_sql": {
-          "running": "Consultando o BigQuery",
-          "done": "Consulta ao BigQuery concluída"
+          "running": "Consultando os dados",
+          "done": "Consulta concluída",
+          "error": "Falha ao consultar os dados"
         },
         "decode_table_values": {
           "running": "Decodificando valores da tabela",
-          "done": "Valores da tabela decodificados"
+          "done": "Valores da tabela decodificados",
+          "error": "Falha ao decodificar os valores da tabela"
+        },
+        "list_query_results": {
+          "running": "Listando resultados",
+          "done": "Resultados listados",
+          "error": "Falha ao listar resultados"
+        },
+        "export_query_result": {
+          "running": "Preparando arquivo",
+          "done": "Arquivo pronto",
+          "error": "Falha ao preparar arquivo"
+        },
+        "chart_query_result": {
+          "running": "Gerando gráfico",
+          "done": "Gráfico gerado",
+          "error": "Falha ao gerar gráfico"
         },
         "fallback": {
           "running": "Executando ferramenta",
-          "done": "Ferramenta executada"
+          "done": "Ferramenta executada",
+          "error": "Falha ao executar a ferramenta"
         }
       }
     },
     "thread": {
       "historyTitle": "Conversas",
-      "deleteTitle": "Confirmar exclusão de conversa",
+      "moreOptions": "Mais opções",
+      "deleteAction": "Excluir conversa",
+      "deleteTitle": "Excluir conversa",
       "deleteConfirm": "Tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.",
       "loadError": "Erro ao carregar histórico.",
       "tryAgain": "Tente novamente."
@@ -148,49 +215,56 @@
       "items": [
         {
           "eyebrow": "Análises",
-          "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025"
+          "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025."
         },
         {
-          "eyebrow": "Dados",
-          "question": "Qual é a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos cinco anos?"
+          "eyebrow": "Visualizações",
+          "question": "Crie um gráfico mostrando a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos dez anos."
         },
         {
-          "eyebrow": "Documentos",
+          "eyebrow": "Metadados",
           "question": "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?"
         }
       ]
     }
   },
-  "help": {
+  "about": {
     "head": {
-      "pageTitle": "Ajuda - Chatbot"
+      "pageTitle": "Sobre o chatbot - Base dos Dados"
     },
     "title": "Chatbot BD",
-    "subtitle": "Para analisar dados públicos utilizando linguagem natural",
-    "welcomeTitle": "Bem-vindo(a)! 👋",
-    "welcomeP1": "Bem-vindo(a) ao chatbot da BD, ele vai te ajudar a conversar com seus dados para você entendê-los melhor e extrair insights valiosos.",
-    "welcomeP2": "Para começar, basta entrar na página de chat no menu à esquerda e começar uma nova conversa.",
-    "welcomeP3": "Que tal perguntar para ele quais são os dados disponíveis sobre o tema da sua pesquisa?",
-    "welcomeP4": "O chatbot também pode te ajudar com:",
-    "capabilities": [
-      "Análises exploratórias",
-      "Entendimento da organização das tabelas",
-      "Consultas e download de dados do nosso datalake público"
-    ],
-    "welcomeP5": "Tudo que você precisa é de uma boa pergunta!",
-    "contact": "Teve dúvidas ou precisa de ajuda? Você pode falar conosco pelo email <email>suporte.bdpro@basedosdados.org</email> ou pela nossa comunidade no <discord>Discord</discord> e <whatsapp>WhatsApp</whatsapp>.",
-    "featuresTitle": "Funcionalidades 🛠️",
-    "dataSources": "Fontes de Dados: Clique nos itens do campo \"Fontes dos Dados\" para conferir os conjuntos de dados utilizados em cada resposta.",
-    "suggestedQuestions": "Perguntas Sugeridas: Clique nos itens em \"Perguntas Sugeridas\" para aprofundar sua análise com prompts sugeridos pelo próprio chatbot.",
-    "download": "Baixar dados: Clique no ícone (<download></download>) e escolha a tabela que você gostaria de fazer download em .csv.",
-    "copyResults": "Copiar resultados: Clique no ícone (<copy></copy>) para copiar a resposta do chatbot na sua Área de Transferência.",
-    "feedback": "Feedback (<up></up> ou <down></down>): Clique nos botões de feedback para avaliar as respostas, com comentários opcionais.",
-    "promptGuideTitle": "Dicas de Prompt 📋",
-    "promptGuideIntro": "A forma como você conversa com o chatbot pode influenciar na qualidade das respostas! Por isso, abaixo estão listadas algumas dicas para te ajudar a elaborar suas perguntas. Elas podem ser úteis caso as respostas fornecidas estejam incorretas ou não sejam boas o suficiente!",
+    "subtitle": "Analise dados públicos usando linguagem natural",
+    "welcomeTitle": "Bem-vindo(a)!",
+    "welcomeP1": "O chatbot da BD ajuda você a conversar com seus dados de forma simples e intuitiva, facilitando a compreensão das informações e a descoberta de insights.",
+    "welcomeP2": "Para começar, clique em <b>Nova conversa</b> no menu à esquerda e envie uma mensagem.",
+    "welcomeP3": "Não sabe por onde começar? Experimente perguntar <b>quais dados estão disponíveis sobre o tema da sua pesquisa</b>. A partir daí, você pode explorar os dados, fazer novas perguntas e aprofundar sua análise.",
+    "welcomeP5": "Tudo começa com uma boa pergunta.",
+    "contact": "<b>Precisa de ajuda ou ficou com alguma dúvida?</b> Entre em contato conosco pelo e-mail <email>suporte.bdpro@basedosdados.org</email> ou participe da nossa comunidade no <discord>Discord</discord> e <whatsapp>WhatsApp</whatsapp>.",
+    "featuresTitle": "Funcionalidades",
+    "features": {
+      "findData": {
+        "title": "Busca de dados",
+        "body": "Encontra os conjuntos de dados e as tabelas mais relevantes para responder à sua pergunta no datalake público da BD."
+      },
+      "analyze": {
+        "title": "Consultas e análises em SQL",
+        "body": "Escreve e executa consultas em SQL para responder perguntas e realizar análises sobre os dados."
+      },
+      "charts": {
+        "title": "Gráficos",
+        "body": "Gera gráficos para facilitar a visualização e a interpretação dos resultados das suas análises."
+      },
+      "export": {
+        "title": "Exportação de dados",
+        "body": "Exporta os resultados das consultas para baixar nos formatos .csv, .parquet, .avro ou .jsonl."
+      }
+    },
+    "promptGuideTitle": "Dicas para fazer boas perguntas",
+    "promptGuideIntro": "A forma como você conversa com o chatbot pode influenciar a qualidade das respostas. Por isso, reunimos algumas dicas para ajudar você a elaborar suas perguntas e obter melhores resultados.",
     "promptTips": [
-      "Tente fazer uma pergunta por vez. Caso sua pergunta seja muito complexa, ou talvez seja um conjunto de várias perguntas, tente separá-la em perguntas menores e mais simples.",
-      "Na dúvida, peça uma ajuda para o próprio chatbot. Ele te ajuda a entender melhor quais dados estão disponíveis, quais linhas de análises possíveis você pode seguir ou peça para ele explicar melhor alguma resposta.",
-      "Caso o chatbot não esteja encontrando uma resposta para a sua pergunta e você saiba em qual tabela estão os dados necessários para respondê-la, você pode tentar pedir explicitamente para procurar nesta tabela específica."
+      "Tente fazer uma pergunta por vez. Se a sua pergunta for muito complexa ou envolver várias questões, experimente dividi-la em perguntas menores e mais simples.",
+      "Na dúvida, peça ajuda ao próprio chatbot. Ele pode ajudar você a entender quais dados estão disponíveis, sugerir caminhos de análise e explicar melhor uma resposta.",
+      "Se o chatbot não estiver encontrando a resposta que você procura e você souber em qual tabela estão os dados necessários, tente indicar explicitamente essa tabela na sua pergunta."
     ]
   }
 }
