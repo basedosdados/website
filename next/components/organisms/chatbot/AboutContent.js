@@ -10,6 +10,7 @@ import {
 import { Trans, useTranslation } from "next-i18next";
 import { useRouter } from "next/router";
 import BodyText from "../../atoms/Text/BodyText";
+import { getDiscordUrl } from "../../../utils";
 import {
   SearchIcon,
   CodeIcon,
@@ -18,12 +19,6 @@ import {
   SparklesIcon,
   LightbulbIcon,
 } from "./icons";
-
-const DiscordUrlByLocale = {
-  pt: "https://discord.gg/huKWpsVYx4",
-  en: "https://discord.gg/tx57ek6zqQ",
-  es: "https://discord.gg/nNfQYcmrvM",
-};
 
 const WhatsAppCommunityUrl = "https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22";
 
@@ -177,7 +172,7 @@ export default function AboutContent() {
                   email: <Link href={`mailto:${SupportEmail}`} {...AboutLinkProps} />,
                   discord: (
                     <Link
-                      href={DiscordUrlByLocale[locale] || DiscordUrlByLocale.pt}
+                      href={getDiscordUrl(locale)}
                       isExternal
                       {...AboutLinkProps}
                     />
