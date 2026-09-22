@@ -360,6 +360,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
 
       <VStack
         maxWidth="1440px"
+        minWidth="0"
         marginX="auto"
         boxSizing="content-box"
         paddingX="24px"
@@ -510,7 +511,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             buttonText={t("banner.button", { ns: "bdpro" })}
             href="/bdpro"
             onClick={() => triggerGAEvent("button_banner_bdpro_lp", "click")}
-            imageSrc="/img/banner_bd_pro.svg"
+            imageSrc={locale === "en" ? "/img/banner_db_pro.svg" : "/img/banner_bd_pro.svg"}
           />
         )}
         {effectiveBannerVariant === "chatbot" && (
@@ -537,7 +538,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 
-        <Stack spacing={0} width="100%" height="100%">
+        <Stack spacing={0} width="100%" minWidth="0" height="100%">
           <Stack
             spacing={0}
             flexDirection="row"

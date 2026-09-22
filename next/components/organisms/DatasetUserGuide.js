@@ -15,18 +15,147 @@ import {
   Stack,
   HStack,
   Divider,
+  useClipboard,
 } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { MDXRemote } from "next-mdx-remote";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useTranslation } from 'next-i18next';
+import hljs from "highlight.js/lib/core";
+import bashHighlight from "highlight.js/lib/languages/bash";
+import markdownHighlight from "highlight.js/lib/languages/markdown";
+import pythonHighlight from "highlight.js/lib/languages/python";
+import rHighlight from "highlight.js/lib/languages/r";
+import sqlHighlight from "highlight.js/lib/languages/sql";
+import stataHighlight from "highlight.js/lib/languages/stata";
+import "highlight.js/styles/obsidian.css";
 import Button from "../atoms/Button";
 import TitleText from "../atoms/Text/TitleText";
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
 import Link from "../atoms/Link";
+import AnimatedCopyIcon from "../atoms/AnimatedCopyIcon";
 import InfoIcon from "../../public/img/icons/infoIcon";
+import { CopyIcon } from "../../public/img/icons/copyIcon";
+
+const LangsSupported = ["sql", "python", "r", "bash", "sh", "stata", "markdown", "md"];
+
+hljs.registerLanguage("sql", sqlHighlight);
+hljs.registerLanguage("python", pythonHighlight);
+hljs.registerLanguage("r", rHighlight);
+hljs.registerLanguage("bash", bashHighlight);
+hljs.registerLanguage("sh", bashHighlight);
+hljs.registerLanguage("stata", stataHighlight);
+hljs.registerLanguage("markdown", markdownHighlight);
+hljs.registerLanguage("md", markdownHighlight);
+
+function getCodeString(children) {
+  const raw = children?.props?.children ?? children;
+  if (typeof raw === "string") return raw;
+  if (Array.isArray(raw)) return raw.join("");
+  return raw == null ? "" : String(raw);
+}
+
+function CodeBlock({ children }) {
+  const { t } = useTranslation("dataset");
+  const code = getCodeString(children);
+  const language = (children?.props?.className || "").match(/language-([\w-]+)/)?.[1] || "";
+  const { hasCopied, onCopy } = useClipboard(code);
+
+  let highlightedValue = code
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+  if (LangsSupported.includes(language) && code) {
+    try {
+      highlightedValue = hljs.highlight(code, { language }).value;
+    } catch (_) {}
+  }
+
+  return (
+    <Box
+      marginY="16px"
+      borderRadius="8px"
+      backgroundColor="#252A32"
+      maxWidth="100%"
+      minWidth="0"
+      overflow="hidden"
+    >
+      <Box display="flex" alignItems="center" padding="0 8px">
+        {language ? (
+          <Text
+            as="span"
+            display="block"
+            paddingLeft="7px"
+            fontWeight="500"
+            fontSize="12px"
+            color="#878A8E"
+            textTransform="capitalize"
+            userSelect="none"
+            fontFamily="Roboto"
+          >
+            {["sh", "sql"].includes(language) ? language.toUpperCase() : language}
+          </Text>
+        ) : null}
+        <Box
+          as="button"
+          type="button"
+          onClick={onCopy}
+          display="flex"
+          marginLeft="auto"
+          alignItems="center"
+          backgroundColor="transparent"
+          padding="4px 0"
+          cursor="pointer"
+          fontFamily="Roboto"
+          fontWeight="500"
+          fontSize="12px"
+          color="#878A8E"
+          fill="#878A8E"
+          _hover={{
+            fill: "#9D9FA3",
+            color: "#9D9FA3",
+          }}
+        >
+          {hasCopied ? t("table.copied") : t("table.copy")}
+          <AnimatedCopyIcon
+            copied={hasCopied}
+            icon={CopyIcon}
+            width="24px"
+            height="24px"
+            marginLeft="4px"
+          />
+        </Box>
+      </Box>
+      <Box
+        as="pre"
+        margin="0"
+        width="100%"
+        maxHeight="70vh"
+        overflowX="auto"
+        overflowY="auto"
+        whiteSpace="pre"
+        borderBottomLeftRadius="8px"
+        borderBottomRightRadius="8px"
+      >
+        <Text
+          as="code"
+          display="block"
+          width="max-content"
+          minWidth="100%"
+          padding="12px 16px"
+          fontFamily="ui-monospace, monospace"
+          fontSize="13px"
+          lineHeight="20px"
+          className={`hljs ${language}`}
+          dangerouslySetInnerHTML={{ __html: highlightedValue }}
+        />
+      </Box>
+    </Box>
+  );
+}
 
 function Toc({ headings }) {
   const { t } = useTranslation('dataset');
@@ -286,6 +415,7 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  pre: (props) => <CodeBlock {...props} />,
   ol: (props) => <OrderedList {...props} />,
   ul: (props) => <UnorderedList margin="8px 0 8px 20px" {...props} />,
   li: (props) => (
@@ -301,7 +431,7 @@ export const mdxComponents = {
     />
   ),
   table: (props) => (
-    <TableContainer>
+    <TableContainer maxWidth="100%" overflowX="auto">
       <Table variant="simple" border="1px solid #edf2f7" {...props} />
     </TableContainer>
   ),
@@ -377,6 +507,8 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
       paddingTop="32px"
       spacing={0}
       flexDirection="row"
+      width="100%"
+      minWidth="0"
       height="100%"
     >
       {data?.headings.length > 0 &&
@@ -399,6 +531,8 @@ export default function DatasetUserGuide({ data, locale = "pt", slug }) {
       <Box
         as="section"
         width="100%"
+        minWidth="0"
+        overflow="hidden"
         paddingLeft={{base: "0", md: data?.headings.length === 0 ? "0" : "24px"}}
       >
         {mdxSource && <MDXRemote {...mdxSource} components={mdxComponents} />}
