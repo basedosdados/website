@@ -266,7 +266,7 @@ const DataInformationQuery = memo(({ resource, datasetName, changeTab }) => {
 
   const handleDownload = useCallback(() => {
     if(downloadWarning !== "free" && isUserPro() === false) {
-      window.open("/bdpro", "_blank");
+      window.open(locale === "en" ? "/dbpro" : "/bdpro", "_blank");
       return;
     }
     window.open(`/api/tables/downloadTable?p=${btoa(gcpDatasetID)}&q=${btoa(gcpTableId)}&d=${btoa(downloadPermitted)}&s=${btoa(downloadWarning)}`, "_blank");
