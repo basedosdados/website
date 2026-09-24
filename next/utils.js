@@ -452,6 +452,23 @@ export function getSubscriptionType(user) {
   return "none"
 }
 
+export function pickBrlStripePrice(nodes) {
+  const list = (nodes || []).filter(Boolean)
+  if (!list.length) return undefined
+
+  const brl = list.find((node) => String(node.currency || "").toLowerCase() === "brl")
+  if (brl) return brl
+
+  const notUsd = list.find((node) => {
+    const currency = String(node.currency || "").toLowerCase()
+    if (currency === "usd") return false
+    const text = `${node.productSlug || ""} ${node.productName || ""}`.toLowerCase()
+    return !text.includes("usd")
+  })
+
+  return notUsd || list[0]
+}
+
 function filterConsumerChatbotPlans(edges) {
   return (edges || []).filter((item) => {
     const name = item?.node?.productName?.toLowerCase() || ""
@@ -474,11 +491,11 @@ export async function fetchChatbotPlan(interval = "year") {
     if (!result?.success) return null
 
     const chatbotPlans = filterConsumerChatbotPlans(result.data)
-    return (
-      chatbotPlans.find(
-        (item) => item?.node?.interval === interval && item?.node?.amount === amount
-      )?.node ?? null
-    )
+    return pickBrlStripePrice(
+      chatbotPlans
+        .filter((item) => item?.node?.interval === interval && item?.node?.amount === amount)
+        .map((item) => item.node)
+    ) ?? null
   } catch {
     return null
   }
