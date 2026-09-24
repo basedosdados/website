@@ -96,7 +96,6 @@ export default function PaymentSystem({
   isLoading,
   onClientSecretReady,
   enableChatbotTrial = false,
-  skipTrial = false,
 }) {
   const [clientSecret, setClientSecret] = useState("")
 
@@ -162,7 +161,7 @@ export default function PaymentSystem({
   }
 
   const customerCreatPost = async (id, coupon) => {
-    if (enableChatbotTrial && !skipTrial) {
+    if (enableChatbotTrial) {
       const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
 
@@ -173,8 +172,7 @@ export default function PaymentSystem({
       }
     }
 
-    const skipTrialParam = skipTrial ? `&st=${btoa("1")}` : ""
-    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon || "")}${skipTrialParam}`, {method: "GET"})
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon || "")}`, {method: "GET"})
       .then(res => res.json())
 
     if (clientSecret) {
@@ -194,7 +192,7 @@ export default function PaymentSystem({
     if(plan) {
       customerCreatPost(plan, coupon)
     }
-  }, [plan, coupon, skipTrial, enableChatbotTrial])
+  }, [plan, coupon, enableChatbotTrial])
 
   const SkeletonBox = ({ type, ...props }) => {
     if(type === "text") return <Skeleton height="17px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>
