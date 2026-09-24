@@ -24,7 +24,7 @@ import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import ChatbotTrialSurveyModal from "./ChatbotTrialSurveyModal";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, resolveCheckoutCampaign, clearCheckoutCampaign } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, resolveCheckoutCampaign, clearCheckoutCampaign, pickBrlStripePrice } from "../../../utils";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -232,10 +232,10 @@ export default function PlansAndPayment ({ userData }) {
           }
 
           const filteredPlans = {
-            bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-            bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-            bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
-            bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
+            bd_pro_month : pickBrlStripePrice(filterData("BD Pro", "month", true, 47).map((item) => item.node)),
+            bd_pro_year : pickBrlStripePrice(filterData("BD Pro", "year", true, 444).map((item) => item.node)),
+            bd_chatbot_month : pickBrlStripePrice(filterChatbot("month", 30).map((item) => item.node)),
+            bd_chatbot_year : pickBrlStripePrice(filterChatbot("year", 326).map((item) => item.node)),
           }
 
           setPlans(filteredPlans)

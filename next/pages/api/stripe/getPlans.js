@@ -2,7 +2,16 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function getPlans() {
+const PriceFields = `
+  _id
+  amount
+  productName
+  productSlug
+  interval
+  isActive
+`
+
+async function getPlans(fields) {
   try {
     const res = await axios({
       url: API_URL,
@@ -13,12 +22,7 @@ async function getPlans() {
           allStripePrice (active: true) {
             edges {
               node {
-                _id
-                amount
-                productName
-                productSlug
-                interval
-                isActive
+                ${fields}
               }
             }
           }
@@ -35,7 +39,11 @@ async function getPlans() {
 }
 
 export default async function handler(req, res) {
-  const result = await getPlans()
+  let result = await getPlans(`${PriceFields} currency`)
+  const currencyUnsupported = result?.errors?.some((error) =>
+    String(error?.message || "").toLowerCase().includes("currency")
+  )
+  if (currencyUnsupported) result = await getPlans(PriceFields)
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
