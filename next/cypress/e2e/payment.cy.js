@@ -188,39 +188,20 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
-  it('Deve abrir o checkout com cupom da URL e pular o trial', () => {
+  it('Deve abrir o e-mail do BigQuery no BD Pro com cupom da URL, sem pular o fluxo', () => {
     cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
       body: { started: true },
     }).as('startTrial');
 
-    cy.intercept('GET', '/api/stripe/validateStripeCoupon*', {
-      body: {
-        isValid: true,
-        discountAmount: 11.75,
-        duration: 'once',
-        durationInMonths: 0,
-      },
-    }).as('validateCoupon');
-
     cy.visit(`/user/${username}?plans_and_payment&checkout=bd_pro&coupon=25off&interval=month`);
     cy.wait('@getPlans', { timeout: 15000 });
 
-    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
-      .should('be.visible')
-      .as('checkoutModal');
-
-    cy.wait('@validateCoupon', { timeout: 20000 });
+    cy.get('#chakra-modal-modal-email-gcp', { timeout: 30000 }).should('be.visible');
+    cy.get('#chakra-modal-modal-stripe-checkout').should('not.exist');
     cy.get('@startTrial.all').should('have.length', 0);
-
-    cy.get('@checkoutModal').within(() => {
-      cy.contains('BD Pro', { timeout: 20000 }).should('be.visible');
-      cy.contains('R$ 47,00/mês', { timeout: 20000 }).should('be.visible');
-      cy.contains('Cupom 25OFF', { timeout: 20000 }).should('be.visible');
-      cy.contains('Total a pagar', { timeout: 20000 }).should('be.visible');
-    });
   });
 
-  it('Deve abrir o checkout do chatbot com cupom da URL e pular o trial', () => {
+  it('Deve abrir o checkout do chatbot com cupom da URL para pedir o cartão', () => {
     cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
       body: { started: true },
     }).as('startChatbotTrial');

@@ -157,7 +157,6 @@ export default function PlansAndPayment ({ userData }) {
   const campaignCouponAppliedRef = useRef(false)
   const campaignDismissedRef = useRef(false)
   const startedChatbotTrialRef = useRef(false)
-  const [skipTrialCheckout, setSkipTrialCheckout] = useState(false)
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
   const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
@@ -276,13 +275,13 @@ export default function PlansAndPayment ({ userData }) {
     setCheckoutInfos(value)
 
     const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
-    if (skipTrialCheckout) {
-      if (!checkoutAlreadyVisible) openCheckoutPlanStep()
-      return
-    }
 
     if (isChatbotType) {
       if (!hasSubscribedChatbot) {
+        if (resolveCheckoutCampaign(query).coupon) {
+          if (!checkoutAlreadyVisible) openCheckoutPlanStep()
+          return
+        }
         if (!startedChatbotTrialRef.current) {
           startedChatbotTrialRef.current = true
           startChatbotTrialFlow()
@@ -296,7 +295,7 @@ export default function PlansAndPayment ({ userData }) {
     if (!checkoutAlreadyVisible) {
       EmailModal.onOpen()
     }
-  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot, hasSubscribedBDPro, skipTrialCheckout])
+  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot, hasSubscribedBDPro, query])
 
   useEffect(() => {
     if (!plans || plan !== "") return
@@ -314,7 +313,6 @@ export default function PlansAndPayment ({ userData }) {
         return
       }
 
-      setSkipTrialCheckout(Boolean(campaign.coupon))
       if (campaign.coupon) setValueCoupon(campaign.coupon)
 
       const interval = campaign.interval === "month" ? "month" : "year"
@@ -381,9 +379,9 @@ export default function PlansAndPayment ({ userData }) {
 
   function getCheckoutStepLabel() {
     if (checkoutStep === "plan") {
-      return isChatbotCheckout || skipTrialCheckout ? t("username.step1of2") : t("username.step2of3")
+      return isChatbotCheckout ? t("username.step1of2") : t("username.step2of3")
     }
-    return isChatbotCheckout || skipTrialCheckout ? t("username.step2of2") : t("username.step3of3")
+    return isChatbotCheckout ? t("username.step2of2") : t("username.step3of3")
   }
 
   function resetCheckoutState() {
@@ -395,7 +393,6 @@ export default function PlansAndPayment ({ userData }) {
     setCouponInfos({})
     setPlan("")
     setIsSetupIntentCheckout(false)
-    setSkipTrialCheckout(false)
     campaignCouponAppliedRef.current = false
     campaignDismissedRef.current = true
     startedChatbotTrialRef.current = false
@@ -437,7 +434,7 @@ export default function PlansAndPayment ({ userData }) {
 
   function goBackFromPlanStep() {
     PaymentModal.onClose()
-    if (isChatbotCheckout || skipTrialCheckout) {
+    if (isChatbotCheckout) {
       resetCheckoutState()
       return
     }
@@ -844,12 +841,12 @@ export default function PlansAndPayment ({ userData }) {
   }, [valueCoupon])
 
   useEffect(() => {
-    if (!skipTrialCheckout || !plan || !valueCoupon) return
+    if (!resolveCheckoutCampaign(query).coupon || !plan || !valueCoupon) return
     if (!PaymentModal.isOpen) return
     if (campaignCouponAppliedRef.current) return
     campaignCouponAppliedRef.current = true
     validateStripeCoupon(plan, valueCoupon, { isYearly: toggleAnual })
-  }, [skipTrialCheckout, plan, valueCoupon, PaymentModal.isOpen, toggleAnual])
+  }, [query, plan, valueCoupon, PaymentModal.isOpen, toggleAnual])
 
   useEffect(() => {
     if(isLoading === true || isLoadingH === true) closeModalSucess()
@@ -1070,7 +1067,7 @@ export default function PlansAndPayment ({ userData }) {
               </Stack>
 
               <BodyText
-                display={hasSubscribed || skipTrialCheckout ? "none" : "flex"}
+                display={hasSubscribed ? "none" : "flex"}
                 fontFamily="Roboto"
                 color="#464A51"
               >
@@ -1116,7 +1113,7 @@ export default function PlansAndPayment ({ userData }) {
                   {couponInfos?.duration === "repeating" &&
                     couponInfos?.durationInMonths + 1}
                   º {formattedPlanInterval(checkoutInfos?.interval, true)}{" "}
-                  {!hasSubscribed && !skipTrialCheckout && "e 7º dia"}
+                  {!hasSubscribed && "e 7º dia"}
                   {t("username.couponDuration", { returnObjects: true })[1]}
                   {checkoutInfos?.amount?.toLocaleString("pt-BR", {
                     style: "currency",
@@ -1191,8 +1188,7 @@ export default function PlansAndPayment ({ userData }) {
                 userData={userData}
                 plan={plan}
                 coupon={coupon}
-                enableChatbotTrial={isChatbotCheckout && !hasSubscribed && !skipTrialCheckout}
-                skipTrial={skipTrialCheckout}
+                enableChatbotTrial={isChatbotCheckout && !hasSubscribed && !resolveCheckoutCampaign(query).coupon}
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
