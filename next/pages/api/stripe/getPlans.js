@@ -34,16 +34,14 @@ async function getPlans(fields) {
     return data
   } catch (error) {
     console.error(error)
+    if (error?.response?.data?.errors) return error.response.data
     return "err"
   }
 }
 
 export default async function handler(req, res) {
   let result = await getPlans(`${PriceFields} currency`)
-  const currencyUnsupported = result?.errors?.some((error) =>
-    String(error?.message || "").toLowerCase().includes("currency")
-  )
-  if (currencyUnsupported) result = await getPlans(PriceFields)
+  if (result === "err" || result?.errors) result = await getPlans(PriceFields)
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})
