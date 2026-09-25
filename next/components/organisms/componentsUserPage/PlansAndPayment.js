@@ -151,7 +151,6 @@ export default function PlansAndPayment ({ userData }) {
   const [checkoutStep, setCheckoutStep] = useState("plan")
   const [isChatbotTrialSuccess, setIsChatbotTrialSuccess] = useState(false)
   const [isStartingChatbotTrial, setIsStartingChatbotTrial] = useState(false)
-  const [isSetupIntentCheckout, setIsSetupIntentCheckout] = useState(false)
   const successCheckoutKindRef = useRef(null)
   const trialSurveyFinishedRef = useRef(false)
   const campaignCouponAppliedRef = useRef(false)
@@ -392,7 +391,6 @@ export default function PlansAndPayment ({ userData }) {
     setCoupon("")
     setCouponInfos({})
     setPlan("")
-    setIsSetupIntentCheckout(false)
     campaignCouponAppliedRef.current = false
     campaignDismissedRef.current = true
     startedChatbotTrialRef.current = false
@@ -406,7 +404,6 @@ export default function PlansAndPayment ({ userData }) {
   function openCheckoutPaymentStep() {
     setCheckoutStep("payment")
     setIsLoadingClientSecret(true)
-    setIsSetupIntentCheckout(false)
     PaymentModal.onOpen()
   }
 
@@ -775,6 +772,19 @@ export default function PlansAndPayment ({ userData }) {
     })
   }
 
+  function getCouponDurationLabel() {
+    if (couponInfos?.duration === "once") {
+      return toggleAnual ? t("username.validFor1Year") : t("username.validFor1Month")
+    }
+    if (couponInfos?.duration === "repeating") {
+      const months = Number(couponInfos.durationInMonths) || 0
+      const unit = months === 1 ? t("username.month") : t("username.months")
+      return `${t("username.validFor")} ${months} ${unit})`
+    }
+    if (couponInfos?.duration === "forever") return t("username.validForever")
+    return ""
+  }
+
   const TotalToPayDisplay = () => {
     const value = formatCheckoutAmount(getCheckoutTotalAmount())
 
@@ -792,8 +802,7 @@ export default function PlansAndPayment ({ userData }) {
 
   const showPaymentSummary =
     checkoutStep === "payment" &&
-    !isLoadingClientSecret &&
-    (!isSetupIntentCheckout || !isChatbotCheckout)
+    !isLoadingClientSecret
 
   async function handlerEmailGcp() {
     setErrEmailGCP(false)
@@ -1141,7 +1150,6 @@ export default function PlansAndPayment ({ userData }) {
                 <Button
                   width={{ base: "100%", lg: "fit-content" }}
                   onClick={() => {
-                    setIsSetupIntentCheckout(false)
                     setIsLoadingClientSecret(true)
                     setCheckoutStep("payment")
                   }}
@@ -1177,6 +1185,22 @@ export default function PlansAndPayment ({ userData }) {
                       {formattedPlanInterval(checkoutInfos?.interval)}
                     </BodyText>
                   </Box>
+                  {couponInfos?.isValid && (
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      gap="16px"
+                    >
+                      <BodyText typography="small" color="#464A51">
+                        {t("username.coupon")} {coupon.toUpperCase()} {getCouponDurationLabel()}
+                      </BodyText>
+                      <BodyText typography="small" color="#464A51" whiteSpace="nowrap">
+                        - {formatCheckoutAmount(couponInfos.discountAmount)}/
+                        {formattedPlanInterval(checkoutInfos?.interval, true)}
+                      </BodyText>
+                    </Box>
+                  )}
                   <TitleText typography="small">
                     {formatCheckoutAmount(getCheckoutTotalAmount())}/
                     {formattedPlanInterval(checkoutInfos?.interval, true)}
@@ -1192,13 +1216,6 @@ export default function PlansAndPayment ({ userData }) {
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
-                onClientSecretReady={({ isSetupIntent, isLoading: loadingSecret }) => {
-                  if (loadingSecret) {
-                    setIsSetupIntentCheckout(false)
-                    return
-                  }
-                  setIsSetupIntentCheckout(Boolean(isSetupIntent))
-                }}
               />
             </Stack>
           )}
