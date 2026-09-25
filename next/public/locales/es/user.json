@@ -287,6 +287,7 @@
         "validFor1Year": "(válido por 1 año)",
         "validFor1Month": "(válido por 1 mes)",
         "validFor": "(válido por",
+        "validForever": "(válido en todos los cobros)",
         "coupon": "Cupón",
         "clear": "limpiar",
         "enterValidCoupon": "Por favor, ingrese un cupón válido.",
