@@ -9,9 +9,14 @@ import {
 import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { triggerGAEvent } from "../../utils";
 import { useRouter } from 'next/router';
-import cookies from 'js-cookie';
+import {
+  triggerGAEvent,
+  cleanString,
+  persistCheckoutCampaignFromQuery,
+  getCheckoutCampaign,
+  buildCheckoutCampaignQuery,
+} from "../../utils";
 
 import {
   LabelTextForm,
@@ -25,7 +30,6 @@ import Link from "../../components/atoms/Link";
 import Display from "../../components/atoms/Text/Display";
 import BodyText from "../../components/atoms/Text/BodyText";
 import { MainPageTemplate } from "../../components/templates/main";
-import { cleanString } from "../../utils";
 
 import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
@@ -67,10 +71,13 @@ export default function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
 
+  useEffect(() => {
+    if (!router.isReady) return
+    persistCheckoutCampaignFromQuery(router.query)
+  }, [router.isReady, router.query])
+
   const handleGoogleLogin = () => {
-    // Tell the backend which domain to return to after Google OAuth, so a login
-    // started on data-basis.org (en) or basedelosdatos.org (es) comes back to
-    // the same domain instead of the pt default. The backend allowlists it.
+    persistCheckoutCampaignFromQuery(router.query)
     const redirectOrigin =
       typeof window !== "undefined" ? window.location.origin : "";
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/?redirect_origin=${encodeURIComponent(redirectOrigin)}`;
@@ -526,6 +533,7 @@ export default function Register() {
             }}
             href={{
                 pathname: '/user/login',
+                query: buildCheckoutCampaignQuery(getCheckoutCampaign()),
               }}
           >
             {t('signup.login')}

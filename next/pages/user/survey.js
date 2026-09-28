@@ -14,7 +14,7 @@ import Button from "../../components/atoms/Button";
 import Display from "../../components/atoms/Text/Display";
 import LabelText from "../../components/atoms/Text/LabelText";
 import { MainPageTemplate } from "../../components/templates/main";
-import { triggerGAEvent } from "../../utils";
+import { triggerGAEvent, getUserFromCookie, getCheckoutCampaign, getPlansAndPaymentRoute } from "../../utils";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 
@@ -68,6 +68,14 @@ export default function Survey() {
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(userData))
     triggerGAEvent("survey_login", skip === "true" ? "Skipou" : "Respondeu")
+
+    const campaign = getCheckoutCampaign()
+    if (campaign.product) {
+      const user = getUserFromCookie()
+      if (user?.username) {
+        return router.push(getPlansAndPaymentRoute(user.username, campaign))
+      }
+    }
 
     const previousPath = localStorage.getItem('previousPath')
     const isAuthPage = previousPath && (previousPath.includes('/user/login') || previousPath.includes('/user/register'))
