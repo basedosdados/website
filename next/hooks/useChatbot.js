@@ -10,10 +10,6 @@ const TYPEWRITER_FRAME_INTERVAL_MS = 1000 / 30
 const TYPEWRITER_MIN_CHARS_PER_FRAME = 3
 const TYPEWRITER_DECAY_DIVISOR = 18
 
-const TOOL_STREAM_FRAME_INTERVAL_MS = 1000 / 24
-const TOOL_STREAM_MIN_CHARS_PER_FRAME = 20
-const TOOL_STREAM_DECAY_DIVISOR = 20
-
 function isAuthFailure(errorOrStatus) {
   const status =
     typeof errorOrStatus === 'number'
@@ -53,67 +49,6 @@ function normalizeStructuredResponse(structuredResponse) {
     return { ...structuredResponse, follow_up_prompts: structuredResponse.follow_up_questions }
   }
   return structuredResponse
-}
-
-function patchToolCallEvent(msg, toolCallsIndex, patch) {
-  const toolCalls = [...(msg.toolCalls || [])]
-  const prevEv = toolCalls[toolCallsIndex]
-  if (!prevEv) return msg
-
-  if (patch.kind === 'callContent') {
-    toolCalls[toolCallsIndex] = { ...prevEv, content: patch.text }
-    return { ...msg, toolCalls }
-  }
-
-  if (patch.kind === 'callArgsJson') {
-    const list = [...(prevEv.tool_calls || [])]
-    const i = patch.callIndex
-    const call = list[i]
-    if (!call) return { ...msg, toolCalls }
-    list[i] = { ...call, streamArgsJson: patch.text }
-    toolCalls[toolCallsIndex] = { ...prevEv, tool_calls: list }
-    return { ...msg, toolCalls }
-  }
-
-  if (patch.kind === 'callArgsJsonFinalize') {
-    const list = [...(prevEv.tool_calls || [])]
-    const i = patch.callIndex
-    const call = list[i]
-    if (!call) return { ...msg, toolCalls }
-    const { streamArgsJson: _drop, ...rest } = call
-    list[i] = rest
-    toolCalls[toolCallsIndex] = { ...prevEv, tool_calls: list }
-    return { ...msg, toolCalls }
-  }
-
-  if (patch.kind === 'outputContent') {
-    const list = [...(prevEv.tool_outputs || [])]
-    const i = patch.outputIndex
-    const row = list[i]
-    if (!row) return { ...msg, toolCalls }
-    list[i] = { ...row, content: patch.text, streaming: !patch.done }
-    toolCalls[toolCallsIndex] = { ...prevEv, tool_outputs: list }
-    return { ...msg, toolCalls }
-  }
-
-  return msg
-}
-
-function stripForStreamingToolCall(data) {
-  return {
-    ...data,
-    type: 'tool_call',
-    content: '',
-    tool_calls: (data.tool_calls || []).map(c => ({ ...c, streamArgsJson: '' }))
-  }
-}
-
-function stripForStreamingToolOutput(data) {
-  return {
-    ...data,
-    type: 'tool_output',
-    tool_outputs: (data.tool_outputs || []).map(o => ({ ...o, content: '' }))
-  }
 }
 
 function summarizeErrorPayload(body, maxLen = 600) {
@@ -201,28 +136,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   const currentBotMessageIdRef = useRef(null)
   const animationFrameRef = useRef(null)
   const typewriterLastFlushRef = useRef(0)
-  const toolStreamQueueRef = useRef([])
-  const toolStreamRafRef = useRef(null)
-  const toolStreamPumpRef = useRef(null)
-  const toolStreamLastFlushRef = useRef(0)
-
-  const cancelToolStream = useCallback(targetThreadId => {
-    const q = toolStreamQueueRef.current
-    if (targetThreadId === undefined) {
-      toolStreamQueueRef.current = []
-    } else {
-      toolStreamQueueRef.current = q.filter(j => j.streamThreadId !== targetThreadId)
-    }
-    const remaining = toolStreamQueueRef.current.length
-    if (remaining === 0 && toolStreamRafRef.current != null) {
-      cancelAnimationFrame(toolStreamRafRef.current)
-      toolStreamRafRef.current = null
-    } else if (remaining > 0 && toolStreamRafRef.current == null) {
-      toolStreamRafRef.current = requestAnimationFrame(() => {
-        toolStreamPumpRef.current?.()
-      })
-    }
-  }, [])
 
   const detachTypingAnimation = useCallback(() => {
     charQueueRef.current = []
@@ -340,9 +253,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
       const typingOrToolAnim =
         charQueueRef.current.length > 0 ||
-        animationFrameRef.current != null ||
-        toolStreamQueueRef.current.length > 0 ||
-        toolStreamRafRef.current != null
+        animationFrameRef.current != null
 
       const assistantUiBusy = messagesRef.current.some(
         m => m.role === 'assistant' && (m.isLoading === true || m.isTyping === true)
@@ -557,146 +468,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     [processQueue]
   )
 
-  const ensureToolStreamPump = useCallback(() => {
-    if (toolStreamRafRef.current != null) return
-    toolStreamRafRef.current = requestAnimationFrame(() => {
-      toolStreamPumpRef.current?.()
-    })
-  }, [])
-
-  const toolStreamPump = useCallback(timestamp => {
-    const now = typeof timestamp === 'number' ? timestamp : performance.now()
-    if (now - toolStreamLastFlushRef.current < TOOL_STREAM_FRAME_INTERVAL_MS) {
-      toolStreamRafRef.current = requestAnimationFrame(ts => {
-        toolStreamPumpRef.current?.(ts)
-      })
-      return
-    }
-    toolStreamLastFlushRef.current = now
-
-    const queue = toolStreamQueueRef.current
-    const job = queue[0]
-    if (!job) {
-      toolStreamRafRef.current = null
-      return
-    }
-
-    const jobThreadId = job.streamThreadId
-    if (!jobThreadId || threadIdRef.current !== jobThreadId) {
-      queue.shift()
-      if (queue.length > 0) {
-        toolStreamRafRef.current = requestAnimationFrame(ts => {
-          toolStreamPumpRef.current?.(ts)
-        })
-      } else {
-        toolStreamRafRef.current = null
-      }
-      return
-    }
-
-    const remaining = job.fullText.length - (job.pos || 0)
-    const charsPerFrame = Math.max(
-      TOOL_STREAM_MIN_CHARS_PER_FRAME,
-      Math.ceil(remaining / TOOL_STREAM_DECAY_DIVISOR)
-    )
-    const nextPos = Math.min((job.pos || 0) + charsPerFrame, job.fullText.length)
-    const slice = job.fullText.slice(0, nextPos)
-    job.pos = nextPos
-    const isDone = nextPos >= job.fullText.length
-
-    if (job.patchKind === 'callArgsJson') {
-      setMessages(prev =>
-        prev.map(msg => {
-          if (msg.id !== job.botMessageId) return msg
-          let next = patchToolCallEvent(msg, job.toolCallsIndex, {
-            kind: 'callArgsJson',
-            callIndex: job.callIndex,
-            text: slice
-          })
-          if (isDone) {
-            next = patchToolCallEvent(next, job.toolCallsIndex, {
-              kind: 'callArgsJsonFinalize',
-              callIndex: job.callIndex
-            })
-          }
-          return next
-        })
-      )
-    } else {
-      const patch =
-        job.patchKind === 'callContent'
-          ? { kind: 'callContent', text: slice }
-          : { kind: 'outputContent', outputIndex: job.outputIndex, text: slice, done: isDone }
-      setMessages(prev =>
-        prev.map(msg => {
-          if (msg.id !== job.botMessageId) return msg
-          return patchToolCallEvent(msg, job.toolCallsIndex, patch)
-        })
-      )
-    }
-
-    if (isDone) queue.shift()
-
-    if (toolStreamQueueRef.current.length > 0) {
-      toolStreamRafRef.current = requestAnimationFrame(ts => {
-        toolStreamPumpRef.current?.(ts)
-      })
-    } else {
-      toolStreamRafRef.current = null
-    }
-  }, [setMessages])
-
-  toolStreamPumpRef.current = toolStreamPump
-
-  const scheduleToolStreamForEvent = useCallback(
-    (botMessageId, toolCallsIndex, eventType, data, streamThreadId) => {
-      const q = toolStreamQueueRef.current
-      if (eventType === 'tool_call') {
-        const content = data.content ?? ''
-        if (content.length > 0) {
-          q.push({
-            botMessageId,
-            toolCallsIndex,
-            streamThreadId,
-            patchKind: 'callContent',
-            fullText: content,
-            pos: 0
-          })
-        }
-        const calls = data.tool_calls || []
-        for (let i = 0; i < calls.length; i++) {
-          q.push({
-            botMessageId,
-            toolCallsIndex,
-            streamThreadId,
-            patchKind: 'callArgsJson',
-            callIndex: i,
-            fullText: JSON.stringify(calls[i]?.args ?? {}, null, 2),
-            pos: 0
-          })
-        }
-      } else if (eventType === 'tool_output') {
-        const outs = data.tool_outputs || []
-        for (let i = 0; i < outs.length; i++) {
-          const raw = outs[i]?.content ?? outs[i]?.output ?? outs[i]?.result
-          const text =
-            typeof raw === 'string' ? raw : raw != null ? JSON.stringify(raw, null, 2) : ''
-          q.push({
-            botMessageId,
-            toolCallsIndex,
-            streamThreadId,
-            patchKind: 'outputContent',
-            outputIndex: i,
-            fullText: text,
-            pos: 0
-          })
-        }
-      }
-      ensureToolStreamPump()
-    },
-    [ensureToolStreamPump]
-  )
-
   const sendMessage = useCallback(
     async content => {
       const viewThreadSnapshot = threadId
@@ -775,7 +546,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
         const existingCtl = abortControllersByThreadRef.current.get(streamThreadId)
         if (existingCtl) {
           existingCtl.abort()
-          cancelToolStream(streamThreadId)
           detachTypingAnimation()
         }
 
@@ -848,21 +618,12 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                     setMessages(prev =>
                       prev.map(msg => {
                         if (msg.id !== botMessageId) return msg
-                        const idx = (msg.toolCalls || []).length
-                        const partial =
-                          event.type === 'tool_call'
-                            ? stripForStreamingToolCall(payload)
-                            : stripForStreamingToolOutput(payload)
-                        scheduleToolStreamForEvent(
-                          botMessageId,
-                          idx,
-                          event.type,
-                          payload,
-                          streamThreadId
-                        )
+                        // Tool args and outputs arrive complete from the backend, so apply the
+                        // whole event at once — no client-side typewriter. The friendly views
+                        // render as soon as the event lands (same shape as loaded history).
                         return {
                           ...msg,
-                          toolCalls: [...(msg.toolCalls || []), partial]
+                          toolCalls: [...(msg.toolCalls || []), { ...payload, type: event.type }]
                         }
                       })
                     )
@@ -889,9 +650,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
                     if (!streamMatchesView()) break
                     const completeId =
                       event.data?.message_id || event.data?.id || event.data?.run_id || botMessageId
-                    for (const job of toolStreamQueueRef.current) {
-                      if (job.botMessageId === botMessageId) job.botMessageId = completeId
-                    }
                     currentBotMessageIdRef.current = completeId
                     setMessages(prev =>
                       prev.map(msg =>
@@ -920,9 +678,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       } catch (err) {
         const tid =
           typeof streamThreadId === 'string' && streamThreadId ? streamThreadId : currentThreadId
-        if (err.name !== 'AbortError' && tid) {
-          cancelToolStream(tid)
-        }
         if (err.name === 'AbortError') return
         console.error(err)
         const errBotId = currentBotMessageIdRef.current || botMessageId
@@ -988,8 +743,6 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       getAccessToken,
       addToQueue,
       handleAuthError,
-      cancelToolStream,
-      scheduleToolStreamForEvent,
       detachTypingAnimation,
       fetchThreadMessages
     ]
@@ -1017,12 +770,8 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current)
       }
-      if (toolStreamRafRef.current) {
-        cancelAnimationFrame(toolStreamRafRef.current)
-      }
-      cancelToolStream()
     }
-  }, [cancelToolStream])
+  }, [])
 
   return {
     messages,

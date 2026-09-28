@@ -117,7 +117,7 @@ export function CheckboxFilterAccordion({
   facet = ""
 }) {
   const { t } = useTranslation('search');
-  const { asPath } =  useRouter();
+  const { asPath, locale } =  useRouter();
   const [options, setOptions] = useState([]);
   const [allOptions, setAllOptions] = useState([]);
   const [search, setSearch] = useState("");
@@ -145,14 +145,14 @@ export function CheckboxFilterAccordion({
   const MoreOptions = useCallback(async () => {
     try {
       const params = asPath.replace("/search?", "");
-      const res = await MoreFacetSearch(facet, params);
+      const res = await MoreFacetSearch(facet, params, locale);
       setAllOptions(res.values);
       setOptions(res.values);
       setShowAll(true);
     } catch (error) {
       console.error("Failed to load more options", error);
     }
-  }, [asPath, facet]);
+  }, [asPath, facet, locale]);
 
   function toggleShowAll() {
     if (showAll) {
