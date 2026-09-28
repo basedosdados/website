@@ -63,7 +63,14 @@ const PaymentForm = ({ onSucess, onErro, clientSecret}) => {
         className={styles.content}
         onSubmit={handlerSubmit}
       >
-        <PaymentElement className={styles.payment}/>
+        <PaymentElement
+          className={styles.payment}
+          options={{
+            layout: "tabs",
+            paymentMethodOrder: ["card", "boleto"],
+            wallets: { link: "never" },
+          }}
+        />
 
         <Button
           width="100%"
@@ -88,6 +95,7 @@ export default function PaymentSystem({
   onErro,
   isLoading,
   onClientSecretReady,
+  enableChatbotTrial = false,
 }) {
   const [clientSecret, setClientSecret] = useState("")
 
@@ -153,16 +161,18 @@ export default function PaymentSystem({
   }
 
   const customerCreatPost = async (id, coupon) => {
-    const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(id)}`, {method: "GET"})
-      .then(res => res.json())
+    if (enableChatbotTrial) {
+      const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(id)}`, {method: "GET"})
+        .then(res => res.json())
 
-    if (trial?.started) {
-      setClientSecret(null)
-      onClientSecretReady?.({ isSetupIntent: false, isTrialStarted: true })
-      return isLoading(false)
+      if (trial?.started) {
+        setClientSecret(null)
+        onClientSecretReady?.({ isSetupIntent: false, isTrialStarted: true })
+        return isLoading(false)
+      }
     }
 
-    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon)}`, {method: "GET"})
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon || "")}`, {method: "GET"})
       .then(res => res.json())
 
     if (clientSecret) {
@@ -182,7 +192,7 @@ export default function PaymentSystem({
     if(plan) {
       customerCreatPost(plan, coupon)
     }
-  }, [plan, coupon])
+  }, [plan, coupon, enableChatbotTrial])
 
   const SkeletonBox = ({ type, ...props }) => {
     if(type === "text") return <Skeleton height="17px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>

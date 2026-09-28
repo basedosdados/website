@@ -14,7 +14,7 @@ import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription } from "../utils";
+import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription, pickBrlStripePrice } from "../utils";
 
 import { getAllFAQs } from "./api/faqs";
 
@@ -64,13 +64,11 @@ async function fetchChatbotPlans() {
   const chatbotPlans = filterChatbotPlans(result.data);
 
   function findByInterval(interval, amount) {
-    return (
-      chatbotPlans.find(
-        (item) =>
-          item.node.interval === interval &&
-          item.node.amount === amount
-      )?.node ?? null
-    );
+    return pickBrlStripePrice(
+      chatbotPlans
+        .filter((item) => item.node.interval === interval && item.node.amount === amount)
+        .map((item) => item.node)
+    ) ?? null;
   }
 
   return {

@@ -24,9 +24,10 @@ import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
 
 import BodyText from "../../atoms/Text/BodyText";
-import { CopyIcon } from "../../../public/img/icons/copyIcon";
+import { CopyIcon, CheckIcon } from "./icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import { DownloadResultButton } from "./DownloadResults";
+import { renderFriendlyOutput } from "./toolViews";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
@@ -97,7 +98,7 @@ export function CodeBlock({
           onClick={onCopy}
           backgroundColor="transparent"
         >
-          <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} width="16px" height="16px" />
+          <AnimatedCopyIcon copied={hasCopied} icon={CopyIcon} checkIcon={CheckIcon} width="16px" height="16px" />
         </Box>
       </Tooltip>
       {downloadProps && <DownloadResultButton {...downloadProps} />}
@@ -202,11 +203,62 @@ export function CodeBlock({
 
 export const MemoCodeBlock = React.memo(CodeBlock);
 
+const HEADING_STYLES = {
+  h1: { fontSize: "24px", lineHeight: "32px" },
+  h2: { fontSize: "20px", lineHeight: "28px" },
+  h3: { fontSize: "18px", lineHeight: "26px" },
+  h4: { fontSize: "16px", lineHeight: "24px" },
+  h5: { fontSize: "14px", lineHeight: "20px" },
+  h6: { fontSize: "13px", lineHeight: "18px" },
+};
+
+function mkHeading(tag) {
+  const { fontSize, lineHeight } = HEADING_STYLES[tag];
+  return function Heading({ children }) {
+    return (
+      <Text
+        as={tag}
+        fontFamily="Roboto"
+        fontWeight="600"
+        fontSize={fontSize}
+        lineHeight={lineHeight}
+        color="#252A32"
+      >
+        {children}
+      </Text>
+    );
+  };
+}
+
+export const markdownContentSx = {
+  "& > * + *": { marginTop: "12px" },
+  "& h1, & h2, & h3, & h4, & h5, & h6": { marginTop: "24px" },
+  "& > *:first-child": { marginTop: 0 },
+  "& > *:last-child": { marginBottom: 0 },
+};
+
 export const componentsMk = {
+  h1: mkHeading("h1"),
+  h2: mkHeading("h2"),
+  h3: mkHeading("h3"),
+  h4: mkHeading("h4"),
+  h5: mkHeading("h5"),
+  h6: mkHeading("h6"),
   p: ({ children }) => (
-    <BodyText as="p" color="#252A32" marginBottom="4px">
+    <BodyText as="p" color="#252A32" lineHeight="28px">
       {children}
     </BodyText>
+  ),
+  blockquote: ({ children }) => (
+    <Box
+      as="blockquote"
+      borderLeft="2px solid #DEDFE0"
+      paddingLeft="16px"
+      color="#71757A"
+      fontStyle="italic"
+    >
+      {children}
+    </Box>
   ),
   a: ({ children, href }) => (
     <BodyText as="a" color="#0068C5" href={href} target="_blank" rel="noopener noreferrer">
@@ -223,14 +275,16 @@ export const componentsMk = {
       {children}
     </Text>
   ),
-  code: ({ children, inline }) => <MemoCodeBlock inline={inline} children={children} />,
+  code: ({ children, inline }) => (
+    <MemoCodeBlock inline={inline} marginY={0} children={children} />
+  ),
   ul: ({ children }) => (
-    <UnorderedList margin="8px 0 8px 20px">
+    <UnorderedList marginLeft="20px">
       {children}
     </UnorderedList>
   ),
   ol: ({ children }) => (
-    <OrderedList >
+    <OrderedList marginLeft="20px">
       {children}
     </OrderedList>
   ),
@@ -239,7 +293,7 @@ export const componentsMk = {
       fontFamily="Roboto"
       fontWeight="400"
       fontSize="16px"
-      lineHeight="20px"
+      lineHeight="24px"
       color="#252A32"
       margin="0 0 4px 0"
     >
@@ -248,13 +302,20 @@ export const componentsMk = {
   ),
   table: ({ children }) => (
     <TableContainer
-      marginY="16px"
       maxWidth="100%"
       overflowX="auto"
       border="1px solid #DEDFE0"
-      borderRadius="20px"
+      borderRadius="12px"
     >
-      <Table variant="simple" size="sm">
+      <Table
+        variant="simple"
+        size="sm"
+        sx={{
+          fontVariantNumeric: "tabular-nums",
+          "tbody tr td": { transition: "background-color 0.15s ease" },
+          "tbody tr:hover td": { backgroundColor: "#F7F7F7" },
+        }}
+      >
         {children}
       </Table>
     </TableContainer>
@@ -264,40 +325,49 @@ export const componentsMk = {
   ),
   tbody: ({ children }) => <Tbody>{children}</Tbody>,
   tr: ({ children }) => <Tr>{children}</Tr>,
-  td: ({ children }) => (
-    <Td
-      padding={{ base: "10px 12px", md: "14px 22px" }}
-      fontFamily="Roboto"
-      fontWeight="400"
-      fontSize={{ base: "13px", md: "14px" }}
-      lineHeight="20px"
-      color="#464A51"
-      backgroundColor="#FFF"
-      borderColor="#DEDFE0"
-      textTransform="none"
-      letterSpacing="inherit"
-      whiteSpace="break-spaces"
-    >
-      {children}
-    </Td>
-  ),
-  th: ({ children }) => (
-    <Th
-      padding={{ base: "10px 12px", md: "14px 22px" }}
-      minWidth="40px"
-      textTransform="none"
-      letterSpacing="inherit"
-      fontFamily="Roboto"
-      fontWeight="400"
-      fontSize={{ base: "13px", md: "14px" }}
-      lineHeight="20px"
-      color="#252A32"
-      borderBottom="1px solid #DEDFE0 !important"
-      boxSizing="content-box"
-    >
-      {children}
-    </Th>
-  ),
+  td: ({ children, node, style }) => {
+    const numeric = node?.properties?.dataNumeric === "true";
+    return (
+      <Td
+        padding={{ base: "10px 12px", md: "14px 22px" }}
+        fontFamily="Roboto"
+        fontWeight="400"
+        fontSize={{ base: "13px", md: "14px" }}
+        lineHeight="20px"
+        color="#464A51"
+        borderColor="#DEDFE0"
+        textTransform="none"
+        letterSpacing="inherit"
+        whiteSpace="break-spaces"
+        style={style}
+        textAlign={numeric ? "right" : undefined}
+      >
+        {children}
+      </Td>
+    );
+  },
+  th: ({ children, node, style }) => {
+    const numeric = node?.properties?.dataNumeric === "true";
+    return (
+      <Th
+        padding={{ base: "10px 12px", md: "14px 22px" }}
+        minWidth="40px"
+        textTransform="uppercase"
+        letterSpacing="0.05em"
+        fontFamily="Roboto"
+        fontWeight="600"
+        fontSize="11px"
+        lineHeight="16px"
+        color="#71757A"
+        borderBottom="1px solid #C4C4C4 !important"
+        boxSizing="content-box"
+        style={style}
+        textAlign={numeric ? "right" : undefined}
+      >
+        {children}
+      </Th>
+    );
+  },
 }
 
 export function formatToolOutputText(output) {
@@ -337,6 +407,11 @@ function parseToolOutputValue(output) {
 
 function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+export function isToolErrorOutput(output) {
+  const parsed = parseToolOutputValue(output);
+  return isPlainObject(parsed) && parsed.status === "error";
 }
 
 function formatCellValue(value) {
@@ -623,8 +698,11 @@ function RecordsTable({
   );
 }
 
-export function ToolResultView({ output }) {
+export function ToolResultView({ output, name }) {
   const parsed = useMemo(() => parseToolOutputValue(output), [output]);
+
+  const friendly = renderFriendlyOutput(name, output);
+  if (friendly) return friendly;
 
   const isRecordsArray =
     Array.isArray(parsed) && parsed.length > 0 && parsed.every(isPlainObject);

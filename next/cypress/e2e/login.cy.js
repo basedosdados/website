@@ -9,11 +9,18 @@ describe('Fluxo de Login - Cenários Principais', () => {
 
   it('Deve exibir o formulário corretamente', () => {
     cy.contains('h1', 'Faça login').should('be.visible');
+    cy.contains('Continuar com o Google').should('be.visible');
     cy.get('input[name=username]').should('exist');
     cy.get('input[name=password]').should('exist');
     cy.contains('button', 'Entrar').should('be.visible');
     cy.contains('Esqueceu a senha?').should('be.visible');
     cy.contains('Cadastre-se').should('be.visible');
+  });
+
+  it('Deve ir para a recuperação de senha', () => {
+    cy.contains('Esqueceu a senha?').click();
+    cy.url().should('include', '/user/password-recovery');
+    cy.contains('Redefina sua senha').should('be.visible');
   });
 
   it('Deve permitir alternar visibilidade da senha', () => {
@@ -34,6 +41,46 @@ describe('Fluxo de Login - Cenários Principais', () => {
     cy.wait(['@getToken', '@getUser']).then(() => {
       cy.getCookie('userBD').should('exist');
       cy.url({ timeout: 10000 }).should('eq', Cypress.config().baseUrl + '/');
+    });
+  });
+
+  it('Deve logar com o usuário Cypress de verdade', function () {
+    const email = Cypress.env('CRYPRESS_AUTH_EMAIL');
+    const password = Cypress.env('CRYPRESS_AUTH_PASSWORD');
+
+    if (!email || !password) {
+      this.skip();
+    }
+
+    cy.window().then((win) => {
+      win.localStorage.removeItem('previousPath');
+    });
+
+    cy.intercept('GET', '/api/user/getToken*').as('realGetToken');
+    cy.intercept('GET', '/api/user/getUser*').as('realGetUser');
+
+    cy.login(email, password);
+
+    cy.wait('@realGetToken', { timeout: 30000 })
+      .its('response.statusCode')
+      .should('eq', 200);
+
+    cy.wait('@realGetUser', { timeout: 30000 })
+      .its('response.statusCode')
+      .should('eq', 200);
+
+    cy.getCookie('userBD', { timeout: 20000 }).should('exist');
+
+    cy.location('pathname', { timeout: 20000 }).should((pathname) => {
+      expect(pathname).to.not.eq('/user/login');
+      expect(
+        pathname === '/' || pathname.startsWith('/user/'),
+        `redirect após login real: ${pathname}`
+      ).to.eq(true);
+    });
+
+    cy.parseUserBdCookie().then((user) => {
+      expect(user.username).to.eq('cypress_test');
     });
   });
 
