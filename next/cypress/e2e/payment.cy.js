@@ -288,6 +288,9 @@ describe('Área do Usuário e Sistema de pagamento', () => {
   });
 
   it('Deve chegar no checkout ou no trial do Chatbot', () => {
+    cy.contains('button, a', /Assinar Chatbot|Acessar chatbot/, { timeout: 20000 })
+      .should('be.visible');
+
     cy.get('body').then(($body) => {
       const canSubscribe = $body.find('button:visible').filter((_, el) =>
         (el.textContent || '').includes('Assinar Chatbot')

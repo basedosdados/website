@@ -1950,14 +1950,13 @@ export default function PlansAndPayment ({ userData }) {
                 </BodyText>
               </Stack>
             )}
-            {!hasChatbotActiveSubscription && (
+            {!hasChatbotActiveSubscription && plans?.bd_chatbot_year?._id && (
               <Button
                 isVariant
                 marginTop="8px"
                 onClick={() => {
                   setToggleAnual(true);
-                  if (plans?.bd_chatbot_year?._id)
-                    setPlan(plans.bd_chatbot_year._id);
+                  setPlan(plans.bd_chatbot_year._id);
                 }}
               >
                 {t("username.subscribeChatbot")}
