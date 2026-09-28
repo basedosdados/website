@@ -20,10 +20,10 @@ import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
+import { pickBrlStripePrice, triggerGAEvent, triggerGAEventWithData, getUserPageHref, isUserLoggedIn } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
-import { triggerGAEvent, triggerGAEventWithData, getUserPageHref, isUserLoggedIn } from "../utils";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -54,7 +54,7 @@ export const CardPrice = ({
     if (button.onClick) {
       button.onClick();
     }
-    if (button.href) {
+    if (button.href && router.asPath !== button.href) {
       router.push(button.href);
     }
   };
@@ -391,10 +391,10 @@ export function SectionPrice({
         }
 
         const filteredPlans = {
-          bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-          bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-          bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
-          bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
+          bd_pro_month : pickBrlStripePrice(filterData("BD Pro", "month", true, 47).map((item) => item.node)),
+          bd_pro_year : pickBrlStripePrice(filterData("BD Pro", "year", true, 444).map((item) => item.node)),
+          bd_chatbot_month : pickBrlStripePrice(filterChatbot("month", 30).map((item) => item.node)),
+          bd_chatbot_year : pickBrlStripePrice(filterChatbot("year", 326).map((item) => item.node)),
         }
 
         setPlans(filteredPlans)
@@ -635,6 +635,7 @@ export function SectionPrice({
                 (feature) => ({ name: feature }),
               )}
               button={{
+                id: "bd_chatbot_button_sub_btn",
                 text: isBDChatbot.isCurrentPlan
                     ? t("currentPlan")
                     : hasSubscribedChatbot
@@ -676,6 +677,7 @@ export function SectionPrice({
               }),
             )}
             button={{
+              id: "bd_pro_button_sub_btn",
               text: isBDPro.isCurrentPlan
                   ? t("currentPlan")
                   : hasSubscribedBDPro
@@ -718,6 +720,7 @@ export function SectionPrice({
                   },
             )}
             button={{
+              id: "bd_orgs_button_contact_btn",
               text: isBDEmp.isCurrentPlan
                   ? t("currentPlan")
                   : t("contactUs"),

@@ -4,11 +4,10 @@ import { useTranslation } from 'next-i18next';
 import {
   VStack,
   Box,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
   SkeletonText,
   useDisclosure,
   ModalCloseButton,
@@ -22,8 +21,34 @@ import {
   ExtraInfoTextForm
 } from '../../molecules/uiUserPage';
 import { useChatbotContext } from '../../../context/ChatbotContext';
-import TrashIcon from '../../../public/img/icons/trashIcon';
-import ReloadIcon from '../../../public/img/icons/reloadIcon';
+import { TrashIcon, ReloadIcon, MoreVerticalIcon } from "./icons";
+
+const THREAD_TITLE_FADE =
+  "linear-gradient(to right, #000 calc(100% - 40px), transparent calc(100% - 12px))";
+
+const ACTIVE_BG = "rgba(43, 140, 77, 0.12)";
+const ACTIVE_BG_HOVER = "rgba(43, 140, 77, 0.18)";
+const ACTIVE_BAR = "#2B8C4D";
+const OPTIONS_HOVER_BG = "#DEDFE0";
+const OPTIONS_HOVER_BG_ACTIVE = "rgba(43, 140, 77, 0.2)";
+
+const SCROLLBAR_SX = {
+  "&::-webkit-scrollbar": { width: "10px" },
+  "&::-webkit-scrollbar-button": { display: "none", width: 0, height: 0 },
+  "&::-webkit-scrollbar-track": { background: "transparent" },
+  "&::-webkit-scrollbar-corner": { background: "transparent" },
+  "&::-webkit-scrollbar-thumb": {
+    backgroundColor: "#C4C4C4",
+    borderRadius: "8px",
+    border: "2px solid transparent",
+    backgroundClip: "padding-box",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+    backgroundColor: "#ACAEB1",
+    border: "2px solid transparent",
+    backgroundClip: "padding-box",
+  },
+};
 
 export default function ThreadList({ onSelectThread, currentThreadId, isSidebarOpen, onNewChat }) {
   const { t } = useTranslation('chatbot');
@@ -168,42 +193,37 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
       </ModalGeneral>
 
       {hasHistoryContent && (
-        <Accordion
+        <Box
           display="flex"
-          allowToggle={isSidebarOpen}
-          index={isSidebarOpen ? undefined : [0]}
-          defaultIndex={[0]}
+          flexDirection="column"
+          flex="1"
+          minHeight={0}
           width="100%"
           marginTop="16px"
         >
-          <AccordionItem border="none" width="100%">
-            <AccordionButton
-              padding="8px"
-              cursor={isSidebarOpen ? "pointer" : "default"}
-              _hover={{ backgroundColor: "transparent" }}
-              _focus={{ boxShadow: "none" }}
-              color="#252A32"
-              display="flex"
-              justifyContent="space-between"
-              width="100%"
-              pointerEvents={isSidebarOpen ? "auto" : "none"}
+          <Box
+            paddingX="16px"
+            paddingY="8px"
+            pointerEvents="none"
+            flexShrink={0}
+          >
+            <BodyText
+              color="#71757A"
+              fontSize="11px"
+              fontWeight="500"
+              lineHeight="18px"
+              letterSpacing="0.05em"
+              textTransform="uppercase"
+              whiteSpace="nowrap"
+              height="18px"
+              opacity={isSidebarOpen ? 0.9 : 0}
+              transition="opacity 0.2s ease, transform 0.2s ease"
+              transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
             >
-              <BodyText
-                color="currentColor"
-                fontSize="12px"
-                lineHeight="18px"
-                whiteSpace="nowrap"
-                height="18px"
-                opacity={isSidebarOpen ? 0.9 : 0}
-                transition="opacity 0.2s ease, transform 0.2s ease"
-                transform={isSidebarOpen ? "translateX(0)" : "translateX(4px)"}
-              >
-                {t('ui.thread.historyTitle')}
-              </BodyText>
-              {isSidebarOpen && <AccordionIcon color="#252A32" />}
-            </AccordionButton>
-            <AccordionPanel padding="0">
-              {error && isSidebarOpen && (
+              {t('ui.thread.historyTitle')}
+            </BodyText>
+          </Box>
+          {error && isSidebarOpen && (
                 <VStack
                   align="stretch"
                   flexDirection="row"
@@ -240,101 +260,152 @@ export default function ThreadList({ onSelectThread, currentThreadId, isSidebarO
                   />
                 </VStack>
               )}
-              {!error && (
+          {!error && (
                 <VStack
                   align="stretch"
-                  spacing="1px"
+                  spacing="2px"
+                  flex="1"
+                  minHeight={0}
                   overflowY={isSidebarOpen ? "auto" : "hidden"}
-                  maxHeight="100%"
-                  sx={{
-                    '&::-webkit-scrollbar': { width: '4px' },
-                    '&::-webkit-scrollbar-track': { background: 'transparent' },
-                    '&::-webkit-scrollbar-thumb': {
-                      background: '#C4C4C4',
-                      borderRadius: '24px',
-                    },
-                    scrollbarWidth: 'thin',
-                    scrollbarColor: '#C4C4C4 transparent',
-                  }}
+                  overflowX="hidden"
+                  paddingX="8px"
+                  sx={SCROLLBAR_SX}
                 >
-                  {sortedThreads.map((thread) => (
+                  {sortedThreads.map((thread) => {
+                    const isActive =
+                      isSidebarOpen && currentThreadId === thread.id;
+                    return (
                     <Box
                       position="relative"
                       role="group"
-                      cursor="pointer"
                       key={thread.id}
-                      display="flex"
-                      alignItems="center"
-                      padding="8px"
                       borderRadius="8px"
-                      gap={isSidebarOpen ? "8px" : "0"}
-                      onClick={() => handleSelectThread(thread)}
-                      backgroundColor={
-                        isSidebarOpen && currentThreadId === thread.id
-                          ? "#EEEEEE"
-                          : "transparent"
-                      }
-                      pointerEvents={
-                        isSidebarOpen ? "auto" : "none"
-                      }
+                      backgroundColor={isActive ? ACTIVE_BG : "transparent"}
+                      pointerEvents={isSidebarOpen ? "auto" : "none"}
                       _hover={{
-                        backgroundColor: "#EEEEEE",
+                        backgroundColor: isActive ? ACTIVE_BG_HOVER : "#EEEEEE",
                       }}
                     >
-                      <BodyText
-                        typography="small"
-                        flex="1"
-                        minWidth="0"
-                        color="#464A51"
-                        whiteSpace="nowrap"
-                        overflow="hidden"
-                        textOverflow="ellipsis"
-                        height="18px"
-                        lineHeight="18px"
-                        opacity={isSidebarOpen ? 1 : 0}
-                        transition="opacity 0.2s ease, transform 0.2s ease"
-                        transform={
-                          isSidebarOpen ? "translateX(0)" : "translateX(4px)"
-                        }
-                      >
-                        {thread.title}
-                      </BodyText>
-                      {isSidebarOpen && (
+                      {isActive && (
                         <Box
-                          flexShrink={0}
-                          width="18px"
-                          height="18px"
-                          display="flex"
-                          alignItems="center"
-                          justifyContent="center"
-                          visibility="visible"
-                          sx={{
-                            "@media (hover: hover) and (pointer: fine)": {
-                              visibility: "hidden",
-                            },
+                          aria-hidden
+                          position="absolute"
+                          left="0"
+                          top="50%"
+                          transform="translateY(-50%)"
+                          width="3px"
+                          height="16px"
+                          borderRadius="full"
+                          backgroundColor={ACTIVE_BAR}
+                          zIndex={1}
+                        />
+                      )}
+                      <Box
+                        cursor="pointer"
+                        display="flex"
+                        alignItems="center"
+                        padding="8px"
+                        paddingRight={isSidebarOpen ? "34px" : "8px"}
+                        onClick={() => handleSelectThread(thread)}
+                      >
+                        <BodyText
+                          typography="small"
+                          flex="1"
+                          minWidth="0"
+                          color="#464A51"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                          height="20px"
+                          lineHeight="20px"
+                          opacity={isSidebarOpen ? 1 : 0}
+                          transition="opacity 0.2s ease, transform 0.2s ease"
+                          transform={
+                            isSidebarOpen ? "translateX(0)" : "translateX(4px)"
+                          }
+                          _groupHover={{
+                            maskImage: THREAD_TITLE_FADE,
+                            WebkitMaskImage: THREAD_TITLE_FADE,
                           }}
-                          _groupHover={{ visibility: "visible" }}
                         >
-                          <TrashIcon
-                            width="18px"
-                            height="18px"
-                            fill="#ACAEB1"
+                          {thread.title}
+                        </BodyText>
+                      </Box>
+                      {isSidebarOpen && (
+                        <Menu placement="bottom-end" autoSelect={false} isLazy>
+                          <MenuButton
+                            as={Box}
+                            aria-label={t('ui.thread.moreOptions')}
+                            position="absolute"
+                            right="6px"
+                            top="50%"
+                            transform="translateY(-50%)"
+                            padding="5px"
+                            lineHeight="0"
+                            borderRadius="6px"
                             cursor="pointer"
-                            onClick={(e) => handleDeleteClick(e, thread)}
-                            _hover={{
-                              color: "#BF3434",
-                              fill: "#BF3434",
+                            color="#71757A"
+                            opacity={0}
+                            transition="opacity 0.15s ease"
+                            sx={{
+                              "@media (hover: none) and (pointer: coarse)": {
+                                opacity: 1,
+                              },
                             }}
-                          />
-                        </Box>
+                            _groupHover={{ opacity: 1 }}
+                            _hover={{
+                              backgroundColor: isActive
+                                ? OPTIONS_HOVER_BG_ACTIVE
+                                : OPTIONS_HOVER_BG,
+                              color: "#252A32",
+                            }}
+                            _expanded={{
+                              opacity: 1,
+                              backgroundColor: isActive
+                                ? OPTIONS_HOVER_BG_ACTIVE
+                                : OPTIONS_HOVER_BG,
+                              color: "#252A32",
+                            }}
+                          >
+                            <MoreVerticalIcon
+                              display="block"
+                              width="16px"
+                              height="16px"
+                              fill="currentColor"
+                            />
+                          </MenuButton>
+                          <MenuList
+                            minWidth="180px"
+                            padding="4px"
+                            borderRadius="8px"
+                            border="1px solid #DEDFE0"
+                            boxShadow="0px 1.5px 16px rgba(0, 0, 0, 0.16)"
+                          >
+                            <MenuItem
+                              onClick={(e) => handleDeleteClick(e, thread)}
+                              borderRadius="6px"
+                              padding="8px"
+                              fontFamily="Roboto"
+                              fontSize="14px"
+                              lineHeight="20px"
+                              color="#BF3434"
+                              icon={
+                                <TrashIcon width="16px" height="16px" fill="currentColor" />
+                              }
+                              _hover={{ backgroundColor: "#D03B3B", color: "#FFFFFF" }}
+                              _focus={{ backgroundColor: "#D03B3B", color: "#FFFFFF" }}
+                            >
+                              {t('ui.thread.deleteAction')}
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
                       )}
                     </Box>
-                  ))}
+                    );
+                  })}
                 </VStack>
               )}
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+        </Box>
       )}
     </>
   );

@@ -1,0 +1,96 @@
+{
+  "errors": {
+    "server": "Se produjo un error interno en el servidor. Por favor, inténtelo de nuevo más tarde.",
+    "selectOption": "Por favor, seleccione una de las opciones a continuación."
+  },
+  "buttons": {
+    "skip": "Omitir",
+    "back": "Volver",
+    "continue": "Continuar",
+    "submit": "Enviar"
+  },
+  "area": {
+    "question": "¿En qué área trabaja?",
+    "options": {
+      "TECNOLOGIA": "Tecnología",
+      "SAUDE": "Salud",
+      "FINANCEIRO": "Finanzas",
+      "EDUCACAO": "Educación",
+      "VAREJO": "Comercio minorista",
+      "ENERGIA": "Energía",
+      "JORNALISMO": "Periodismo",
+      "OUTRA": "Otra"
+    }
+  },
+  "role": {
+    "question": "¿Cuál es su cargo?",
+    "options": {
+      "CEO_DIRETOR": "CEO/Director(a)",
+      "GERENTE": "Gerente",
+      "COORDENADOR": "Coordinador(a)",
+      "ANALISTA": "Analista",
+      "CONSULTOR": "Consultor(a)",
+      "ESPECIALISTA": "Especialista",
+      "ASSISTENTE": "Asistente",
+      "ESTAGIARIO": "Pasante",
+      "ESTUDANTE": "Estudiante",
+      "PROFESSOR_PESQUISADOR": "Profesor(a)/Investigador(a)",
+      "FREELANCER": "Freelancer",
+      "EMPREENDEDOR": "Emprendedor(a)",
+      "OUTRO": "Otro"
+    }
+  },
+  "companySize": {
+    "question": "¿Cuál es el tamaño de la empresa en la que trabaja?",
+    "options": {
+      "PEQUENA_1_10": "1-10 empleados",
+      "PEQUENA_11_50": "11-50 empleados",
+      "MEDIA_51_200": "51-200 empleados",
+      "MEDIA_201_500": "201-500 empleados",
+      "GRANDE_MAIS_500": "Más de 500 empleados"
+    }
+  },
+  "tool": {
+    "question": "¿Cuál es la principal herramienta que utiliza para analizar datos?",
+    "options": {
+      "SQL": "SQL",
+      "PYTHON": "Python",
+      "R": "R",
+      "STATA": "Stata",
+      "EXCEL": "Excel",
+      "NONE": "Ninguna",
+      "OTHER": "Otra"
+    }
+  },
+  "goal": {
+    "question": "¿Cuál es su principal objetivo con Base de los Datos?",
+    "options": {
+      "MARKET_ANALYSIS": "Análisis de mercado",
+      "COMPETITOR_MONITORING": "Monitoreo de la competencia",
+      "ACADEMIC_RESEARCH": "Investigación académica",
+      "RISK_MANAGEMENT": "Gestión de riesgos",
+      "PRODUCT_DEVELOPMENT": "Desarrollo de producto",
+      "COMPLIANCE_REGULATORY": "Cumplimiento y regulación",
+      "PUBLIC_POLICY_ANALYSIS": "Análisis de políticas públicas",
+      "OTHER": "Otro"
+    }
+  },
+  "discovery": {
+    "question": "¿Cómo conoció Base de los Datos?",
+    "options": {
+      "SOCIAL_MEDIA": "Redes sociales",
+      "REFERRAL": "Por recomendación",
+      "ONLINE_SEARCH": "Búsqueda en línea",
+      "EVENTS": "Un evento",
+      "ADVERTISING": "Publicidad",
+      "OTHER": "Otros"
+    }
+  },
+  "contact": {
+    "question": "Siempre buscamos mejorar la plataforma y escuchar a nuestra comunidad es fundamental en ese proceso. ¿Podemos contactarle para futuras investigaciones?",
+    "options": {
+      "YES": "Sí",
+      "NO": "No"
+    }
+  }
+}

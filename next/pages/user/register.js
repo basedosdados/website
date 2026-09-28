@@ -9,9 +9,18 @@ import {
 import { useState, useEffect } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { triggerGAEvent, cleanString, normalizePhone, isValidE164Phone, getDefaultCallingCode, formatPhoneInput } from "../../utils";
 import { useRouter } from 'next/router';
-import cookies from 'js-cookie';
+import {
+  triggerGAEvent,
+  cleanString,
+  normalizePhone,
+  isValidE164Phone,
+  getDefaultCallingCode,
+  formatPhoneInput,
+  persistCheckoutCampaignFromQuery,
+  getCheckoutCampaign,
+  buildCheckoutCampaignQuery,
+} from "../../utils";
 
 import {
   LabelTextForm,
@@ -77,7 +86,13 @@ export default function Register() {
     }))
   }, [locale])
 
+  useEffect(() => {
+    if (!router.isReady) return
+    persistCheckoutCampaignFromQuery(router.query)
+  }, [router.isReady, router.query])
+
   const handleGoogleLogin = () => {
+    persistCheckoutCampaignFromQuery(router.query)
     const redirectOrigin =
       typeof window !== "undefined" ? window.location.origin : "";
     window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/account/google/login/?redirect_origin=${encodeURIComponent(redirectOrigin)}`;
@@ -533,6 +548,7 @@ export default function Register() {
             }}
             href={{
                 pathname: '/user/login',
+                query: buildCheckoutCampaignQuery(getCheckoutCampaign()),
               }}
           >
             {t('signup.login')}

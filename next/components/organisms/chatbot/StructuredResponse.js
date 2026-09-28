@@ -1,17 +1,19 @@
 import {
   Box,
-  HStack,
-  VStack,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Tooltip,
 } from "@chakra-ui/react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
-import React from "react";
+import React, { Fragment } from "react";
 import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
-import LinkIcon from "../../../public/img/icons/redirectIcon";
-import { DataBaseCleanIcon } from "../../../public/img/icons/databaseIcon";
-import { MessageBubbleCleanIcon } from "../../../public/img/icons/messageBubbleIcon";
+import { LinkIcon, TableChartViewIcon, ArrowRightIcon, ChatBubbleDotsIcon } from "./icons";
 
 function getDatasetTableUrl(source) {
   const datasetId = source?.dataset_id ?? source?.datasetId;
@@ -19,6 +21,52 @@ function getDatasetTableUrl(source) {
   if (!datasetId) return null;
   const base = `/dataset/${datasetId}`;
   return tableId ? `${base}?table=${tableId}` : base;
+}
+
+function splitSourceName(name) {
+  if (typeof name !== "string" || name.trim() === "") {
+    return { dataset: "—", table: null };
+  }
+  const separator = " — ";
+  const separatorIndex = name.indexOf(separator);
+  if (separatorIndex === -1) {
+    return { dataset: name, table: null };
+  }
+  return {
+    dataset: name.slice(0, separatorIndex).trim(),
+    table: name.slice(separatorIndex + separator.length).trim() || null,
+  };
+}
+
+function SourceThumbnail({ thumbnailUrl, alt, size = "16px" }) {
+  return (
+    <Box
+      as="span"
+      display="flex"
+      flexShrink={0}
+      alignItems="center"
+      justifyContent="center"
+      width={size}
+      height={size}
+      color="#464A51"
+      overflow="hidden"
+      borderRadius="4px"
+      sx={{ svg: { strokeWidth: "1px" } }}
+    >
+      {thumbnailUrl ? (
+        <Box
+          as="img"
+          src={thumbnailUrl}
+          alt={alt}
+          width={size}
+          height={size}
+          objectFit="cover"
+        />
+      ) : (
+        <TableChartViewIcon width={size} height={size} fill="currentColor" />
+      )}
+    </Box>
+  );
 }
 
 export function StructuredSectionHeader({ title }) {
@@ -35,161 +83,231 @@ export function StructuredSectionHeader({ title }) {
   );
 }
 
-export const DataSourcesList = React.memo(function DataSourcesList({ dataSources }) {
+const DataSourcesMenuListProps = {
+  boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16)",
+  _focus: { boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important" },
+  padding: "0",
+  borderRadius: "8px",
+  zIndex: "11",
+  color: "#252A32",
+  minWidth: "260px",
+  maxWidth: "340px",
+  maxHeight: "320px",
+  overflow: "hidden auto",
+};
+
+const SourcesTooltipProps = {
+  hasArrow: true,
+  backgroundColor: "#252A32",
+  borderRadius: "8px",
+  fontSize: "12px",
+  fontFamily: "Roboto",
+  color: "#FFFFFF",
+  padding: "8px 12px",
+  boxShadow: "0 2px 16px rgba(0, 0, 0, 0.16)",
+  placement: "top",
+};
+
+export const DataSourcesButton = React.memo(function DataSourcesButton({ dataSources }) {
   const { t } = useTranslation("chatbot");
   if (!Array.isArray(dataSources) || dataSources.length === 0) return null;
 
   return (
-    <Box marginTop="8px">
-      <Box paddingX="16px">
-        <StructuredSectionHeader title={t("ui.sources.title")} />
-      </Box>
-      <VStack align="stretch" spacing={0} marginTop="4px" width="100%">
-        {dataSources.map((source, index) => {
-          const href = getDatasetTableUrl(source);
-          const label = source?.name ?? "—";
-          const rowKey = source?.table_id ?? index;
-
-          const icon = (
-            <Box
-              as="span"
+    <Menu placement="top-start">
+      {({ isOpen }) => (
+        <>
+          <Tooltip
+            {...SourcesTooltipProps}
+            label={t("ui.sources.viewTooltip")}
+            isDisabled={isOpen}
+          >
+            <MenuButton
+              as={Box}
               display="flex"
-              flexShrink={0}
               alignItems="center"
-              justifyContent="center"
-              width="16px"
-              height="16px"
-              color="currentColor"
-            >
-              <DataBaseCleanIcon
-                width="16px"
-                height="16px"
-                fill="currentColor"
-              />
-            </Box>
-          );
-
-          const row = !href ? (
-            <HStack
-              spacing="8px"
-              align="center"
-              width="100%"
-              padding="8px 16px"
-              color="#464A51"
-              minWidth={0}
-            >
-              {icon}
-              <BodyText color="inherit" flex={1} minWidth={0} isTruncated>
-                {label}
-              </BodyText>
-            </HStack>
-          ) : (
-            <Link
-              href={href}
-              target="_blank"
-              width="100%"
-              minWidth={0}
-              gap="8px"
-              padding="8px 16px"
+              gap="6px"
+              padding="8px 12px"
               borderRadius="8px"
+              boxSizing="border-box"
+              cursor="pointer"
               color="#464A51"
-              fontWeight="400"
-              textDecoration="none"
-              transition="color 0.2s ease, background-color 0.2s ease"
-              _hover={{
-                backgroundColor: "#EEEEEE",
-                textDecoration: "none",
-              }}
+              backgroundColor={isOpen ? "#EEEEEE" : "transparent"}
+              _hover={{ backgroundColor: "#EEEEEE" }}
             >
-              {icon}
-              <BodyText
-                as="span"
-                color="inherit"
-                flex={1}
-                minWidth={0}
-                isTruncated
-              >
-                {label}
-              </BodyText>
-              <Box as="span" display="flex" flexShrink={0} color="currentColor">
-                <LinkIcon width="16px" height="16px" fill="currentColor" />
-              </Box>
-            </Link>
-          );
+              <Flex alignItems="center" gap="6px">
+                <BodyText
+                  as="span"
+                  fontSize="14px"
+                  color="inherit"
+                  whiteSpace="nowrap"
+                >
+                  {t("ui.sources.count", { count: dataSources.length })}
+                </BodyText>
+              </Flex>
+            </MenuButton>
+          </Tooltip>
+          <MenuList {...DataSourcesMenuListProps}>
+            {dataSources.map((source, index) => {
+              const href = getDatasetTableUrl(source);
+              const { dataset, table } = splitSourceName(source?.name);
+              const thumbnailUrl = source?.thumbnail_url ?? source?.thumbnailUrl;
+              const rowKey = source?.table_id ?? index;
 
-          return (
-            <Box key={rowKey}>
-              {index > 0 && (
-                <Box height="1px" backgroundColor="#EEEEEE" marginX="16px" />
-              )}
-              {row}
-            </Box>
-          );
-        })}
-      </VStack>
-    </Box>
+              const content = (
+                <Box
+                  display="grid"
+                  gridTemplateColumns="auto minmax(0, 1fr) auto"
+                  alignItems="center"
+                  columnGap="8px"
+                  width="100%"
+                  minWidth={0}
+                >
+                  <SourceThumbnail
+                    thumbnailUrl={thumbnailUrl}
+                    alt={table || dataset}
+                  />
+                  <BodyText
+                    as="span"
+                    gridColumn="2"
+                    gridRow="1"
+                    fontSize="14px"
+                    lineHeight="18px"
+                    color="#252A32"
+                    isTruncated
+                  >
+                    {table || dataset}
+                  </BodyText>
+                  {table && dataset && (
+                    <BodyText
+                      as="span"
+                      gridColumn="2"
+                      gridRow="2"
+                      fontSize="12px"
+                      lineHeight="16px"
+                      color="#71757A"
+                      isTruncated
+                    >
+                      {dataset}
+                    </BodyText>
+                  )}
+                  {href && (
+                    <Box
+                      as="span"
+                      gridColumn="3"
+                      gridRow="1"
+                      display="flex"
+                      flexShrink={0}
+                      color="#464A51"
+                    >
+                      <LinkIcon width="16px" height="16px" fill="currentColor" />
+                    </Box>
+                  )}
+                </Box>
+              );
+
+              return (
+                <Fragment key={rowKey}>
+                  {index > 0 && (
+                    <MenuDivider margin="0" borderColor="#DEDFE0" />
+                  )}
+                  <MenuItem
+                    as={href ? Link : undefined}
+                    href={href || undefined}
+                    target={href ? "_blank" : undefined}
+                    padding="8px 16px"
+                    backgroundColor="#FFF"
+                    textDecoration="none"
+                    cursor={href ? "pointer" : "default"}
+                    _focus={{ backgroundColor: "#F7F7F7" }}
+                    _hover={{ backgroundColor: "#F7F7F7", textDecoration: "none" }}
+                  >
+                    {content}
+                  </MenuItem>
+                </Fragment>
+              );
+            })}
+          </MenuList>
+        </>
+      )}
+    </Menu>
   );
 });
 
 export const FollowUpQuestionsList = React.memo(function FollowUpQuestionsList({ followUpQuestions, onQuestionClick }) {
-  const { t } = useTranslation("chatbot");
   if (!Array.isArray(followUpQuestions) || followUpQuestions.length === 0) return null;
 
   return (
-    <Box marginTop="24px">
-      <Box paddingX="16px">
-        <StructuredSectionHeader title={t("ui.suggestedQuestions")} />
-      </Box>
-      <VStack
-        align="stretch"
-        spacing={0}
-        marginTop="4px"
-        width="100%"
-      >
-        {followUpQuestions.map((question, index) => (
-          <Box key={index}>
-            {index > 0 && (
-              <Box height="1px" backgroundColor="#EEEEEE" marginX="16px" />
-            )}
-            <HStack
-              as="button"
-              type="button"
-              width="100%"
-              spacing="8px"
-              align="flex-start"
-              textAlign="left"
-              padding={{ base: "10px 12px", md: "8px 16px" }}
-              background="transparent"
-              border="none"
-              cursor="pointer"
-              color="#464A51"
-              borderRadius="8px"
-              transition="color 0.2s ease, background-color 0.2s ease"
-              _hover={{
-                backgroundColor: "#EEEEEE",
-              }}
-              onClick={() => onQuestionClick?.(question)}
-            >
-              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
-                <MessageBubbleCleanIcon
-                  width="16px"
-                  height="16px"
-                  fill="currentColor"
-                />
-              </Box>
-              <BodyText color="inherit" flex={1} minWidth={0}>
-                {question}
-              </BodyText>
-              <Box as="span" display="flex" flexShrink={0} marginTop="2px">
-                <ArrowForwardIcon
-                  boxSize="16px"
-                  color="currentColor"
-                />
-              </Box>
-            </HStack>
+    <Box marginTop="12px">
+      {followUpQuestions.map((question, index) => (
+        <Box
+          as="button"
+          type="button"
+          key={`${index}-${question}`}
+          position="relative"
+          isolation="isolate"
+          display="flex"
+          alignItems="center"
+          gap="10px"
+          width="100%"
+          padding="10px 0"
+          textAlign="left"
+          background="transparent"
+          border="none"
+          borderTop="1px solid #EEEEEE"
+          color="#464A51"
+          cursor="pointer"
+          transition="color 0.15s ease, border-color 0.15s ease"
+          _first={{ borderTopColor: "transparent" }}
+          _hover={{ borderTopColor: "transparent", color: "#252A32" }}
+          _focusVisible={{
+            borderTopColor: "transparent",
+            color: "#252A32",
+            outline: "none",
+          }}
+          sx={{
+            "&:hover + button, &:focus-visible + button": {
+              borderTopColor: "transparent",
+            },
+            "&:hover [data-fu-fill], &:focus-visible [data-fu-fill]": {
+              backgroundColor: "#EEEEEE",
+            },
+            "&:hover [data-fu-arrow], &:focus-visible [data-fu-arrow]": {
+              color: "#252A32",
+            },
+          }}
+          onClick={() => onQuestionClick?.(question)}
+        >
+          <Box
+            aria-hidden
+            data-fu-fill
+            position="absolute"
+            top={0}
+            bottom={0}
+            left="-8px"
+            right="-8px"
+            zIndex={-1}
+            borderRadius="10px"
+            backgroundColor="transparent"
+            transition="background-color 0.15s ease"
+          />
+          <Box as="span" display="inline-flex" flexShrink={0} color="inherit">
+            <ChatBubbleDotsIcon width="16px" height="16px" />
           </Box>
-        ))}
-      </VStack>
+          <BodyText as="span" typography="small" color="inherit" flex={1} minWidth={0}>
+            {question}
+          </BodyText>
+          <Box
+            as="span"
+            data-fu-arrow
+            display="inline-flex"
+            flexShrink={0}
+            color="inherit"
+            transition="color 0.15s ease"
+          >
+            <ArrowRightIcon width="16px" height="16px" />
+          </Box>
+        </Box>
+      ))}
     </Box>
   );
 });

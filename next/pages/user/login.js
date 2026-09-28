@@ -29,7 +29,13 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import GoogleIcon from "../../public/img/icons/googleIcon";
 
 import { withPages } from "../../hooks/pages.hook";
-import { getUserPageHref } from "../../utils";
+import {
+  persistCheckoutCampaignFromQuery,
+  getCheckoutCampaign,
+  getPlansAndPaymentRoute,
+  buildCheckoutCampaignQuery,
+  isUserLoggedIn,
+} from "../../utils";
 
 export async function getStaticProps({ locale }) {
   const pages = await withPages();
@@ -50,8 +56,22 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    if (!router.isReady) return
+
+    persistCheckoutCampaignFromQuery(router.query)
+    const campaign = getCheckoutCampaign()
     const urlParams = new URLSearchParams(window.location.search);
     const loginSuccess = urlParams.get('login');
+    const user = cookies.get("userBD")
+    if (campaign.product && user && loginSuccess !== "success") {
+      try {
+        const userData = JSON.parse(user)
+        if (isUserLoggedIn(userData)) {
+          router.replace(getPlansAndPaymentRoute(campaign))
+          return
+        }
+      } catch (_) {}
+    }
 
     if (loginSuccess === 'success') {
       setIsLoading(true)
@@ -96,7 +116,7 @@ export default function Login() {
       }
       setErrors({ login: errorMessage });
     }
-  }, []);
+  }, [router.isReady]);
 
   const handleInputChange = (e, field) => {
     setFormData((prevState) => ({
@@ -106,6 +126,7 @@ export default function Login() {
   }
 
   const handleGoogleLogin = () => {
+    persistCheckoutCampaignFromQuery(router.query)
     // Tell the backend which domain to return to after Google OAuth, so a login
     // started on data-basis.org (en) or basedelosdatos.org (es) comes back to
     // the same domain instead of the pt default. The backend allowlists it.
@@ -142,10 +163,12 @@ export default function Login() {
 
     cookies.set('userBD', JSON.stringify(userData))
 
+    persistCheckoutCampaignFromQuery(router.query)
+    const campaign = getCheckoutCampaign()
     const postAuthPlanId = cookies.get('plan_selected');
 
-    if(postAuthPlanId) {
-      return router.push(getUserPageHref("plans_and_payment"))
+    if(postAuthPlanId || campaign.product) {
+      return router.push(getPlansAndPaymentRoute(campaign))
     }
 
     if(userData.workDataTool === null) {
@@ -351,6 +374,7 @@ export default function Login() {
               marginLeft="2px"
               href={{
                 pathname: '/user/register',
+                query: buildCheckoutCampaignQuery(getCheckoutCampaign()),
               }}
               fontWeight="400"
               color="#0068C5"
