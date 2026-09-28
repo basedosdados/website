@@ -114,23 +114,42 @@ function distinctRawValues(rows, field) {
   return distinct.size || null;
 }
 
+// Every inline row array in the spec. Not just `spec.data.values`: a choropleth's rows live
+// in its lookup transform's `from.data.values`, since its top-level `data` is the geometry.
+function collectRowArrays(node, out = []) {
+  if (Array.isArray(node)) {
+    node.forEach((item) => collectRowArrays(item, out));
+  } else if (node && typeof node === "object") {
+    // Guard on row-like objects so an axis/legend `values` (tick values) isn't taken for data.
+    if (Array.isArray(node.values) && node.values.some((v) => v && typeof v === "object")) {
+      out.push(node.values);
+    }
+    Object.values(node).forEach((value) => collectRowArrays(value, out));
+  }
+  return out;
+}
+
 // Real series count, for `pickCategoryPalette`. Null means no categorical color (a
 // single-series chart, or color mapped to a quantitative field).
 //
-// `color.field` is often derived by a `calculate` transform (e.g. a shortened label) that
-// only runs in Vega's own dataflow at render time, so it's never in the raw `data.values` we
-// read here — counting it directly comes back empty. Fall back to `detail.field`: models add
-// `detail` to keep each raw category its own series even when several share a derived label,
-// so it reflects the true count when `color.field` can't.
+// Fall back to `detail.field` when `color.field` is a `calculate`-derived label absent from
+// the raw rows. Each field is tried across every row array, since the color field may sit in
+// a different source than the top-level data (e.g. a choropleth's lookup transform).
 function countColorSeries(spec) {
   const encoding = findColorEncoding(spec);
-  const rows = spec?.data?.values;
-  if (!encoding || !Array.isArray(rows)) return null;
+  if (!encoding) return null;
 
+  const rowArrays = collectRowArrays(spec);
   const detail = Array.isArray(encoding.detail) ? encoding.detail[0] : encoding.detail;
-  return (
-    distinctRawValues(rows, encoding.color.field) ?? distinctRawValues(rows, detail?.field)
-  );
+
+  for (const field of [encoding.color.field, detail?.field]) {
+    for (const rows of rowArrays) {
+      const count = distinctRawValues(rows, field);
+      if (count !== null) return count;
+    }
+  }
+
+  return null;
 }
 
 function pickCategoryPalette(spec) {
