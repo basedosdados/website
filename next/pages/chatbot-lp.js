@@ -14,7 +14,7 @@ import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription, pickBrlStripePrice } from "../utils";
+import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription, getUserPageHref, isUserLoggedIn, pickBrlStripePrice } from "../utils";
 
 import { getAllFAQs } from "./api/faqs";
 
@@ -202,7 +202,7 @@ function ChatbotPricingCard() {
 
   const [toggleAnual, setToggleAnual] = useState(true);
   const [plans, setPlans] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [hasSubscribed, setHasSubscribed] = useState(true);
   const [isBDChatbot, setIsBDChatbot] = useState({ isCurrentPlan: false });
   const [isLoading, setIsLoading] = useState(true);
@@ -253,7 +253,7 @@ function ChatbotPricingCard() {
           (n?.stripeSubscription || "").toLowerCase().includes("chatbot")
         );
 
-        setUsername(user?.username);
+        setIsLoggedIn(isUserLoggedIn(user));
         setIsBDChatbot({
           isCurrentPlan: !!chatbotNode,
           planInterval: chatbotNode?.planInterval,
@@ -281,12 +281,12 @@ function ChatbotPricingCard() {
       cookies.set("plan_selected", selectedPlan._id, { expires: 1, path: "/" });
     }
 
-    if (username === null) {
+    if (!isLoggedIn) {
       router.push("/user/login");
       return;
     }
 
-    router.push(`/user/${username}?plans_and_payment`);
+    router.push(getUserPageHref("plans_and_payment"));
   };
 
   const buttonLabel = isCurrentPlan

@@ -14,7 +14,7 @@ import Link from "../../atoms/Link";
 import TitleText from "../../atoms/Text/TitleText";
 import CheckIcon from "../../../public/img/icons/checkIcon";
 import WarningIcon from "../../../public/img/icons/warningIcon";
-import { hasBDProSubscription, clearClientSession } from "../../../utils";
+import { hasBDProSubscription, clearClientSession, getUserPageHref, normalizePhone, isValidE164Phone, formatPhoneInput, formatPhoneDisplay, splitStoredPhone, getDefaultCallingCode } from "../../../utils";
 
 import {
   LabelTextForm,
@@ -22,15 +22,16 @@ import {
   ExtraInfoTextForm,
   ModalGeneral,
   Button,
-  InputForm,
   ErrorMessage
 } from "../../molecules/uiUserPage";
+import PhoneInput from "../../molecules/PhoneInput";
 
 export default function Account({ userInfo }) {
   const { t } = useTranslation('user');
   const router = useRouter();
+  const { locale } = router;
   const toast = useToast();
-  const usernameModal = useDisclosure();
+  const phoneModal = useDisclosure();
   const eraseModalAccount = useDisclosure();
   const sucessEraseModalAccount = useDisclosure();
   const errorEraseModalAccount = useDisclosure();
@@ -39,38 +40,34 @@ export default function Account({ userInfo }) {
   const [hasCancelSubscription, setHasCancelSubscription] = useState(false);
   const [hasMembers, setHasMembers] = useState(false);
 
-  const [formData, setFormData] = useState({username: ""});
+  const [formData, setFormData] = useState({
+    phone: "",
+    phoneCallingCode: getDefaultCallingCode(locale),
+  });
   const [errors, setErrors] = useState({});
-
-  const handleInputChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }))
-  }
 
   async function submitUpdate() {
     setErrors({})
-    if(formData.username === "") return setErrors({username: t('username.invalidUsername')})
-    if(formData.username.includes(" ")) return setErrors({username: t('username.noSpacesInUsername')})
+    const phone = normalizePhone(formData.phone, formData.phoneCallingCode)
+    if(phone && !isValidE164Phone(phone)) return setErrors({phone: t('username.invalidPhone')})
     setIsLoading(true)
 
     const reg = new RegExp("(?<=:).*")
     const [ id ] = reg.exec(userInfo?.id)
-    const form = {id: id, username: formData.username}
 
-    const result = await fetch(`/api/user/updateUser?p=${btoa(id)}&q=${btoa(form.username)}`, {method: "GET"})
+    const result = await fetch(`/api/user/updateUser?p=${btoa(id)}&q=${btoa(phone)}`, {method: "GET"})
       .then(res => res.json())
 
     if(result?.errors?.length === 0) {
       const userData = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
-      window.open(`/user/${formData.username}?account`, "_self")
+      window.open(getUserPageHref("account"), "_self")
     }
 
     if(result?.errors?.length > 0) {
-      setErrors({username: t('username.usernameAlreadyExists')})
+      const hasUniqueError = result.errors.some((elm) => elm.field === "phone")
+      setErrors({phone: hasUniqueError ? t('username.phoneAlreadyExists') : t('username.invalidPhone')})
       setIsLoading(false)
     }
   }
@@ -249,11 +246,11 @@ export default function Account({ userInfo }) {
       <Box display={isLoading ? "flex" : "none"} position="fixed" top="0" left="0" width="100%" height="100%" zIndex="99999"/>
 
       <ModalGeneral
-        isOpen={usernameModal.isOpen}
-        onClose={usernameModal.onClose}
+        isOpen={phoneModal.isOpen}
+        onClose={phoneModal.onClose}
       >
         <Stack spacing={0} marginBottom="16px">
-          <TitleText>{t('username.changeUsername')}</TitleText>
+          <TitleText>{userInfo.phone ? t('username.changePhone') : t('username.addPhone')}</TitleText>
           <ModalCloseButton
             fontSize="14px"
             top="34px"
@@ -262,17 +259,24 @@ export default function Account({ userInfo }) {
           />
         </Stack>
 
-        <FormControl isInvalid={!!errors.username}>
-          <LabelTextForm text={t('username.newUsername')}/>
-          <InputForm
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleInputChange}
-            placeholder={t('username.changeUsernameInput')}
+        <FormControl isInvalid={!!errors.phone}>
+          <LabelTextForm text={t('username.phone')}/>
+          <PhoneInput
+            callingCode={formData.phoneCallingCode}
+            onCallingCodeChange={(callingCode) => setFormData((prevState) => ({
+              ...prevState,
+              phoneCallingCode: callingCode,
+              phone: formatPhoneInput(prevState.phone, callingCode),
+            }))}
+            value={formData.phone}
+            onChange={(phone) => setFormData((prevState) => ({
+              ...prevState,
+              phone,
+            }))}
+            optional
           />
           <ErrorMessage>
-            {errors.username}
+            {errors.phone}
           </ErrorMessage>
         </FormControl>
 
@@ -283,7 +287,7 @@ export default function Account({ userInfo }) {
           isLoading={isLoading}
           pointerEvents={isLoading ? "none" : "default"}
         >
-          {t('username.updateUsername')}
+          {t('username.updatePhone')}
         </Button>
       </ModalGeneral>
 
@@ -480,12 +484,20 @@ export default function Account({ userInfo }) {
       </ModalGeneral>
 
       <Box marginTop="0 !important">
-        <TitleTextForm>{t('username.username')}</TitleTextForm>
-        <ExtraInfoTextForm>{userInfo.username}</ExtraInfoTextForm>
+        <TitleTextForm>{t('username.phone')}</TitleTextForm>
+        <ExtraInfoTextForm>{userInfo.phone ? formatPhoneDisplay(userInfo.phone, locale) : t('username.phoneNotSet')}</ExtraInfoTextForm>
         <Button
           isVariant
-          onClick={() => usernameModal.onOpen()}
-        >{t('username.changeUsername')}</Button>
+          onClick={() => {
+            const parsed = splitStoredPhone(userInfo.phone || "", locale)
+            setFormData({
+              phone: formatPhoneInput(parsed.localNumber, parsed.callingCode),
+              phoneCallingCode: parsed.callingCode,
+            })
+            setErrors({})
+            phoneModal.onOpen()
+          }}
+        >{userInfo.phone ? t('username.changePhone') : t('username.addPhone')}</Button>
       </Box>
 
       <Box>

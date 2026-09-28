@@ -4,7 +4,7 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 async function updateUser({
   id,
-  username = "",
+  phone = "",
 }, token
 ) {
   try {
@@ -16,20 +16,20 @@ async function updateUser({
       },
       data: {
         query: `
-        mutation {
-          CreateUpdateAccount (input:
-            {
-              id: "${id}"
-              ${username === "" ? "" : `username: "${username}"`}
-            }  
-          )
-          {
+        mutation CreateUpdateAccount($input: CreateUpdateAccountInput!) {
+          CreateUpdateAccount(input: $input) {
             errors {
-              field,
+              field
               messages
             }
           }
-        }`
+        }`,
+        variables: {
+          input: {
+            id,
+            phone: phone === "" ? null : phone
+          }
+        }
       }
     })
 
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
   const object = {
     id: atob(req.query.p),
-    username: atob(req.query.q)
+    phone: req.query.q ? atob(req.query.q) : ""
   }
 
   const result = await updateUser(object, token)

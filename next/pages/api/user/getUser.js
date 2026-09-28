@@ -22,7 +22,7 @@ async function getUser(id, token) {
                   isEmailVisible
                   gcpEmail
                   picture
-                  username
+                  phone
                   firstName
                   lastName
                   email

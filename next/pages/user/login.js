@@ -34,6 +34,7 @@ import {
   getCheckoutCampaign,
   getPlansAndPaymentRoute,
   buildCheckoutCampaignQuery,
+  isUserLoggedIn,
 } from "../../utils";
 
 export async function getStaticProps({ locale }) {
@@ -65,8 +66,8 @@ export default function Login() {
     if (campaign.product && user && loginSuccess !== "success") {
       try {
         const userData = JSON.parse(user)
-        if (userData?.username) {
-          router.replace(getPlansAndPaymentRoute(userData.username, campaign))
+        if (isUserLoggedIn(userData)) {
+          router.replace(getPlansAndPaymentRoute(campaign))
           return
         }
       } catch (_) {}
@@ -167,7 +168,7 @@ export default function Login() {
     const postAuthPlanId = cookies.get('plan_selected');
 
     if(postAuthPlanId || campaign.product) {
-      return router.push(getPlansAndPaymentRoute(userData.username, campaign))
+      return router.push(getPlansAndPaymentRoute(campaign))
     }
 
     if(userData.workDataTool === null) {
