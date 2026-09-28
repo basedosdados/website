@@ -29,7 +29,7 @@ export function isBasedosdadosDomain() {
 export function getDiscordUrl(locale) {
   const byLocale = {
     pt: "https://discord.gg/huKWpsVYx4",
-    en: "https://discord.gg/tx57ek6zqQ",
+    en: "https://discord.gg/jFUZZpA4ME",
     es: "https://discord.gg/nNfQYcmrvM",
   };
   return byLocale[locale] || byLocale.pt;
