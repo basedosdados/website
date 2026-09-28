@@ -8,8 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from 'next-i18next'
 import BrandLogo from './BrandLogo'
-import SidebarIcon from '../../../public/img/icons/sidebarIcon'
-import CrossIcon from '../../../public/img/icons/crossIcon'
+import { SidebarIcon, CrossIcon } from "./icons"
 import BodyText from '../../atoms/Text/BodyText'
 import ThreadList from './ThreadList'
 import UserMenu from './UserMenu'
@@ -17,14 +16,13 @@ import UserMenu from './UserMenu'
 function Sidebar({
   onNewChat,
   onSelectThread,
-  onHelp,
+  onAbout,
   currentThreadId,
   isMobileOpen = false,
   onMobileClose,
 }) {
   const { t } = useTranslation('chatbot')
   const [isExpanded, setIsExpanded] = useState(true)
-  const [isHovering, setIsHovering] = useState(false)
   const [isMobile] = useMediaQuery("(max-width: 767px)")
 
   const isOpen = isMobile ? true : isExpanded
@@ -66,8 +64,8 @@ function Sidebar({
         left={0}
         zIndex={{ base: 20, md: "auto" }}
         width={{
-          base: "min(296px, 85vw)",
-          md: isExpanded ? "296px" : "50px",
+          base: "min(288px, 85vw)",
+          md: isExpanded ? "288px" : "50px",
         }}
         height="100dvh"
         maxHeight="100vh"
@@ -89,8 +87,6 @@ function Sidebar({
           base: isMobileOpen ? "0 0 24px rgba(0, 0, 0, 0.16)" : "none",
           md: "none",
         }}
-        onMouseEnter={() => !isMobile && setIsHovering(true)}
-        onMouseLeave={() => !isMobile && setIsHovering(false)}
       >
         <Flex
           direction="row"
@@ -100,6 +96,10 @@ function Sidebar({
           gap="12px"
         >
           <Box
+            as="a"
+            href="https://basedosdados.org/"
+            aria-label={t("ui.brand")}
+            cursor="pointer"
             display={isOpen ? "block" : "none"}
             position="relative"
             left="-2px"
@@ -107,20 +107,9 @@ function Sidebar({
             <BrandLogo widthImage="58px" heightImage="25px" />
           </Box>
 
-          {!isOpen && !isHovering && (
-            <BrandLogo
-              display={{ base: "none", md: "block" }}
-              widthImage="34px"
-              heightImage="34px"
-            />
-          )}
-
           <Box
             cursor="pointer"
-            display={{
-              base: "flex",
-              md: isExpanded || isHovering ? "flex" : "none",
-            }}
+            display="flex"
             alignItems="center"
             justifyContent="center"
             width="34px"
@@ -129,8 +118,6 @@ function Sidebar({
             marginLeft="auto"
             flexShrink={0}
             _hover={{
-              color: "#2B8C4D",
-              fill: "#2B8C4D",
               backgroundColor: "#EEEEEE",
             }}
             onClick={handleToggle}
@@ -147,7 +134,6 @@ function Sidebar({
           flex={1}
           minHeight={0}
           overflow="hidden"
-          paddingX="8px"
           spacing={0}
           flexDirection="column"
         >
@@ -157,20 +143,16 @@ function Sidebar({
             alignItems="center"
             justifyContent={isOpen ? "flex-start" : "center"}
             flexShrink={0}
-            width="100%"
+            alignSelf="stretch"
+            marginX="8px"
             padding={isOpen ? "8px" : "8px 4px"}
             borderRadius="8px"
             gap={isOpen ? "10px" : "0"}
             color="#252A32"
+            transition="background-color 0.2s ease"
             onClick={handleNewChat}
-            sx={{
-              "&:hover .new-chat-icon-surface": {
-                backgroundColor: "#F4F4F4",
-                borderColor: "#C8CACF",
-              },
-            }}
             _hover={{
-              color: "#2B8C4D"
+              backgroundColor: "#EEEEEE",
             }}
           >
             <Box
@@ -185,6 +167,7 @@ function Sidebar({
               backgroundColor="#DEDFE0"
               border="1px solid #DEDFE0"
               transform="rotate(45deg)"
+              transition="background-color 0.2s ease, border-color 0.2s ease"
             >
               <CrossIcon
                 width="12px"
@@ -212,18 +195,9 @@ function Sidebar({
           <Box
             flex={1}
             minHeight={0}
-            overflowY={isOpen ? "auto" : "hidden"}
-            overflowX="hidden"
-            sx={{
-              "&::-webkit-scrollbar": { width: "4px" },
-              "&::-webkit-scrollbar-track": { background: "transparent" },
-              "&::-webkit-scrollbar-thumb": {
-                background: "#C4C4C4",
-                borderRadius: "24px",
-              },
-              scrollbarWidth: "thin",
-              scrollbarColor: "#C4C4C4 transparent",
-            }}
+            display="flex"
+            flexDirection="column"
+            overflow="hidden"
           >
             <ThreadList
               onSelectThread={handleSelectThread}
@@ -237,7 +211,7 @@ function Sidebar({
           <Divider borderColor="#DEDFE0" />
           <UserMenu
             isSidebarOpen={isOpen}
-            onHelp={onHelp}
+            onAbout={onAbout}
             onMobileClose={onMobileClose}
           />
         </Box>

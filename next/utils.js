@@ -29,7 +29,7 @@ export function isBasedosdadosDomain() {
 export function getDiscordUrl(locale) {
   const byLocale = {
     pt: "https://discord.gg/huKWpsVYx4",
-    en: "https://discord.gg/tx57ek6zqQ",
+    en: "https://discord.gg/jFUZZpA4ME",
     es: "https://discord.gg/nNfQYcmrvM",
   };
   return byLocale[locale] || byLocale.pt;
@@ -368,6 +368,33 @@ export function cleanString(string) {
   return returnString
 }
 
+// Descrições vêm do backend em markdown. Crawlers de redes sociais exibem o
+// conteúdo de og:description como texto puro e cortam por volta de 200
+// caracteres, então removemos a marcação e truncamos numa fronteira de palavra.
+export function formatMetaDescription(string, maxLength = 200) {
+  if (!string) return ""
+
+  const plain = String(string)
+    .replace(/```[\s\S]*?```/g, " ")
+    .replace(/`([^`]*)`/g, "$1")
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/^[ \t]{0,3}#{1,6}[ \t]+/gm, "")
+    .replace(/^[ \t]{0,3}>[ \t]?/gm, "")
+    .replace(/^[ \t]{0,3}(?:[-*+]|\d+\.)[ \t]+/gm, "")
+    .replace(/(\*\*|__)(.*?)\1/g, "$2")
+    .replace(/(\*|_)(.*?)\1/g, "$2")
+
+  const cleaned = cleanString(plain)
+  if (cleaned.length <= maxLength) return cleaned
+
+  const truncated = cleaned.slice(0, maxLength - 1)
+  const lastSpace = truncated.lastIndexOf(" ")
+  const cut = lastSpace > maxLength * 0.6 ? truncated.slice(0, lastSpace) : truncated
+
+  return `${cut.trimEnd().replace(/[,;:.\-–—]$/, "")}…`
+}
+
 export function formatBytes(bytes) {
   if (bytes < 1024) {
     return `${bytes} B`
@@ -425,6 +452,23 @@ export function getSubscriptionType(user) {
   return "none"
 }
 
+export function pickBrlStripePrice(nodes) {
+  const list = (nodes || []).filter(Boolean)
+  if (!list.length) return undefined
+
+  const brl = list.find((node) => String(node.currency || "").toLowerCase() === "brl")
+  if (brl) return brl
+
+  const notUsd = list.find((node) => {
+    const currency = String(node.currency || "").toLowerCase()
+    if (currency === "usd") return false
+    const text = `${node.productSlug || ""} ${node.productName || ""}`.toLowerCase()
+    return !text.includes("usd")
+  })
+
+  return notUsd || list[0]
+}
+
 function filterConsumerChatbotPlans(edges) {
   return (edges || []).filter((item) => {
     const name = item?.node?.productName?.toLowerCase() || ""
@@ -447,11 +491,11 @@ export async function fetchChatbotPlan(interval = "year") {
     if (!result?.success) return null
 
     const chatbotPlans = filterConsumerChatbotPlans(result.data)
-    return (
-      chatbotPlans.find(
-        (item) => item?.node?.interval === interval && item?.node?.amount === amount
-      )?.node ?? null
-    )
+    return pickBrlStripePrice(
+      chatbotPlans
+        .filter((item) => item?.node?.interval === interval && item?.node?.amount === amount)
+        .map((item) => item.node)
+    ) ?? null
   } catch {
     return null
   }
@@ -465,6 +509,159 @@ export function getUserFromCookie() {
   } catch {
     return null
   }
+}
+
+const CheckoutCampaignCookieKeys = {
+  product: "checkout_product",
+  coupon: "checkout_coupon",
+  interval: "checkout_interval",
+}
+
+const CheckoutCampaignCookieOptions = { expires: 1, path: "/" }
+
+const CheckoutCampaignPassthroughPaths = new Set([
+  "/user/login",
+  "/user/register",
+  "/user/check-email",
+  "/user/activate-account",
+  "/user/survey",
+  "/user/password-recovery",
+  "/user/[username]",
+])
+
+function normalizeCheckoutProduct(value) {
+  const checkout = String(value || "").toLowerCase()
+  if (checkout === "chatbot") return "chatbot"
+  if (checkout === "bd_pro" || checkout === "bdpro") return "bd_pro"
+  return ""
+}
+
+function normalizeCheckoutInterval(value) {
+  const interval = String(value || "").toLowerCase()
+  if (interval === "month" || interval === "year") return interval
+  return ""
+}
+
+export function parseCheckoutCampaignQuery(query = {}) {
+  // Links de campanha: /prices?checkout=chatbot&coupon=CODIGO&interval=month
+  const windowQuery =
+    typeof window === "undefined"
+      ? {}
+      : Object.fromEntries(new URLSearchParams(window.location.search))
+  const source = { ...windowQuery, ...(query || {}) }
+
+  return {
+    product: normalizeCheckoutProduct(readQueryParam(source, "checkout")),
+    coupon: (readQueryParam(source, "coupon") || "").trim(),
+    interval: normalizeCheckoutInterval(readQueryParam(source, "interval")),
+  }
+}
+
+export function persistCheckoutCampaign(intent) {
+  if (typeof window === "undefined" || !intent) return
+  if (intent.product) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.product,
+      intent.product,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.coupon) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.coupon,
+      intent.coupon,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.interval) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.interval,
+      intent.interval,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+}
+
+export function persistCheckoutCampaignFromQuery(query) {
+  const intent = parseCheckoutCampaignQuery(query)
+  if (intent.product || intent.coupon) persistCheckoutCampaign(intent)
+  return intent
+}
+
+export function getCheckoutCampaign() {
+  if (typeof window === "undefined") {
+    return { product: "", coupon: "", interval: "" }
+  }
+
+  return {
+    product: cookies.get(CheckoutCampaignCookieKeys.product) || "",
+    coupon: cookies.get(CheckoutCampaignCookieKeys.coupon) || "",
+    interval: cookies.get(CheckoutCampaignCookieKeys.interval) || "",
+  }
+}
+
+export function resolveCheckoutCampaign(query) {
+  const fromQuery = parseCheckoutCampaignQuery(query)
+  const fromCookie = getCheckoutCampaign()
+
+  return {
+    product: fromQuery.product || fromCookie.product,
+    coupon: fromQuery.coupon || fromCookie.coupon,
+    interval: fromQuery.interval || fromCookie.interval,
+  }
+}
+
+export function clearCheckoutCampaign() {
+  cookies.remove(CheckoutCampaignCookieKeys.product, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.coupon, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.interval, { path: "/" })
+}
+
+export function buildCheckoutCampaignQuery(intent) {
+  const query = {}
+  if (intent?.product) query.checkout = intent.product
+  if (intent?.coupon) query.coupon = intent.coupon
+  if (intent?.interval) query.interval = intent.interval
+  return query
+}
+
+export function getLoginRedirectWithCheckout(query) {
+  const intent = parseCheckoutCampaignQuery(query || {})
+  const search = new URLSearchParams()
+  if (intent.product) search.set("checkout", intent.product)
+  if (intent.coupon) search.set("coupon", intent.coupon)
+  if (intent.interval) search.set("interval", intent.interval)
+  const qs = search.toString()
+  return qs ? `/user/login?${qs}` : "/user/login"
+}
+
+export function getPlansAndPaymentRoute(username, intent) {
+  return {
+    pathname: `/user/${username}`,
+    query: {
+      plans_and_payment: "",
+      ...buildCheckoutCampaignQuery(intent),
+    },
+  }
+}
+
+export function consumeCheckoutCampaignRedirect(router) {
+  if (typeof window === "undefined" || !router?.isReady) return
+
+  const intent = persistCheckoutCampaignFromQuery(router.query)
+  if (!intent.product) return
+  if (CheckoutCampaignPassthroughPaths.has(router.pathname)) return
+
+  const user = getUserFromCookie()
+  if (user?.username) {
+    router.replace(getPlansAndPaymentRoute(user.username, intent))
+    return
+  }
+
+  router.replace({
+    pathname: "/user/login",
+    query: buildCheckoutCampaignQuery(intent),
+  })
 }
 
 export async function redirectToChatbotCheckout(router, { interval = "year" } = {}) {

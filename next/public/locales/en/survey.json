@@ -1,0 +1,96 @@
+{
+  "errors": {
+    "server": "An internal server error occurred. Please try again later.",
+    "selectOption": "Please select one of the options below."
+  },
+  "buttons": {
+    "skip": "Skip",
+    "back": "Back",
+    "continue": "Continue",
+    "submit": "Submit"
+  },
+  "area": {
+    "question": "What field do you work in?",
+    "options": {
+      "TECNOLOGIA": "Technology",
+      "SAUDE": "Health",
+      "FINANCEIRO": "Finance",
+      "EDUCACAO": "Education",
+      "VAREJO": "Retail",
+      "ENERGIA": "Energy",
+      "JORNALISMO": "Journalism",
+      "OUTRA": "Other"
+    }
+  },
+  "role": {
+    "question": "What is your role?",
+    "options": {
+      "CEO_DIRETOR": "CEO/Director",
+      "GERENTE": "Manager",
+      "COORDENADOR": "Coordinator",
+      "ANALISTA": "Analyst",
+      "CONSULTOR": "Consultant",
+      "ESPECIALISTA": "Specialist",
+      "ASSISTENTE": "Assistant",
+      "ESTAGIARIO": "Intern",
+      "ESTUDANTE": "Student",
+      "PROFESSOR_PESQUISADOR": "Professor/Researcher",
+      "FREELANCER": "Freelancer",
+      "EMPREENDEDOR": "Entrepreneur",
+      "OUTRO": "Other"
+    }
+  },
+  "companySize": {
+    "question": "How large is the company you work for?",
+    "options": {
+      "PEQUENA_1_10": "1-10 employees",
+      "PEQUENA_11_50": "11-50 employees",
+      "MEDIA_51_200": "51-200 employees",
+      "MEDIA_201_500": "201-500 employees",
+      "GRANDE_MAIS_500": "More than 500 employees"
+    }
+  },
+  "tool": {
+    "question": "Which tool do you mainly use for data analysis?",
+    "options": {
+      "SQL": "SQL",
+      "PYTHON": "Python",
+      "R": "R",
+      "STATA": "Stata",
+      "EXCEL": "Excel",
+      "NONE": "None",
+      "OTHER": "Other"
+    }
+  },
+  "goal": {
+    "question": "What do you mainly want to do with Data Basis?",
+    "options": {
+      "MARKET_ANALYSIS": "Market analysis",
+      "COMPETITOR_MONITORING": "Competitor monitoring",
+      "ACADEMIC_RESEARCH": "Academic research",
+      "RISK_MANAGEMENT": "Risk management",
+      "PRODUCT_DEVELOPMENT": "Product development",
+      "COMPLIANCE_REGULATORY": "Compliance and regulation",
+      "PUBLIC_POLICY_ANALYSIS": "Public policy analysis",
+      "OTHER": "Other"
+    }
+  },
+  "discovery": {
+    "question": "How did you hear about Data Basis?",
+    "options": {
+      "SOCIAL_MEDIA": "Social media",
+      "REFERRAL": "Someone recommended it",
+      "ONLINE_SEARCH": "Online search",
+      "EVENTS": "An event",
+      "ADVERTISING": "An ad",
+      "OTHER": "Other"
+    }
+  },
+  "contact": {
+    "question": "We are always working to improve the platform, and hearing from our community is central to that. May we contact you about future research?",
+    "options": {
+      "YES": "Yes",
+      "NO": "No"
+    }
+  }
+}
