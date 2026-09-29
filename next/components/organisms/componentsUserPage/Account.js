@@ -63,13 +63,12 @@ export default function Account({ userInfo }) {
         .then(res => res.json())
       cookies.set('userBD', JSON.stringify(userData))
       window.open(getUserPageHref("account"), "_self")
+      return
     }
 
-    if(result?.errors?.length > 0) {
-      const hasUniqueError = result.errors.some((elm) => elm.field === "phone")
-      setErrors({phone: hasUniqueError ? t('username.phoneAlreadyExists') : t('username.invalidPhone')})
-      setIsLoading(false)
-    }
+    const hasUniqueError = result?.errors?.some((elm) => elm.field === "phone")
+    setErrors({phone: hasUniqueError ? t('username.phoneAlreadyExists') : t('username.invalidPhone')})
+    setIsLoading(false)
   }
 
   async function eraseAccount() {
