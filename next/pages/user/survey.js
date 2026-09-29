@@ -14,7 +14,7 @@ import Button from "../../components/atoms/Button";
 import Display from "../../components/atoms/Text/Display";
 import LabelText from "../../components/atoms/Text/LabelText";
 import { MainPageTemplate } from "../../components/templates/main";
-import { triggerGAEvent, getUserFromCookie, getCheckoutCampaign, getPlansAndPaymentRoute } from "../../utils";
+import { triggerGAEvent, getUserFromCookie, getCheckoutCampaign, getPlansAndPaymentRoute, isUserLoggedIn } from "../../utils";
 
 import Exclamation from "../../public/img/icons/exclamationIcon";
 
@@ -72,8 +72,8 @@ export default function Survey() {
     const campaign = getCheckoutCampaign()
     if (campaign.product) {
       const user = getUserFromCookie()
-      if (user?.username) {
-        return router.push(getPlansAndPaymentRoute(user.username, campaign))
+      if (isUserLoggedIn(user)) {
+        return router.push(getPlansAndPaymentRoute(campaign))
       }
     }
 
