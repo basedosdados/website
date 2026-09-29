@@ -1,13 +1,11 @@
 describe('Área do Usuário e Sistema de pagamento', () => {
-  const username = 'cypress_test';
-
   function getSafeUserBdCookie() {
     return cy.parseUserBdCookie();
   }
 
   it('Não deve acessar sem autenticação', () => {
     cy.clearCookies();
-    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.visit(`/user?plans_and_payment`);
     cy.url().should('include', '/user/login');
   });
 
@@ -40,14 +38,14 @@ describe('Área do Usuário e Sistema de pagamento', () => {
 
     cy.intercept('GET', '**/api/stripe/getPlans*').as('getPlans');
 
-    cy.visit(`/user/${username}?plans_and_payment`, { timeout: 120000 });
+    cy.visit(`/user?plans_and_payment`, { timeout: 120000 });
 
-    cy.location('pathname', { timeout: 60000 }).should('include', `/user/${username}`);
+    cy.location('pathname', { timeout: 60000 }).should('eq', '/user');
     cy.contains('Planos e pagamento', { timeout: 60000 }).should('be.visible');
   });
 
   it('Deve acessar a página do usuário com autenticação', () => {
-    cy.url().should('include', `/user/${username}`);
+    cy.location('pathname').should('eq', '/user');
     cy.url().should('include', 'plans_and_payment');
   });
 
@@ -197,7 +195,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       body: { started: true },
     }).as('startTrial');
 
-    cy.visit(`/user/${username}?plans_and_payment&checkout=bd_pro&coupon=25off&interval=month`);
+    cy.visit(`/user?plans_and_payment&checkout=bd_pro&coupon=25off&interval=month`);
     cy.wait('@getPlans', { timeout: 15000 });
 
     cy.get('#chakra-modal-modal-email-gcp', { timeout: 30000 }).should('be.visible');
@@ -229,7 +227,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       if (/IntegrationError|clientSecret/i.test(err.message)) return false
     });
 
-    cy.visit(`/user/${username}?plans_and_payment&checkout=chatbot&coupon=25off&interval=month`);
+    cy.visit(`/user?plans_and_payment&checkout=chatbot&coupon=25off&interval=month`);
     cy.wait('@getPlans', { timeout: 15000 });
 
     cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
@@ -290,6 +288,9 @@ describe('Área do Usuário e Sistema de pagamento', () => {
   });
 
   it('Deve chegar no checkout ou no trial do Chatbot', () => {
+    cy.contains('button, a', /Assinar Chatbot|Acessar chatbot/, { timeout: 20000 })
+      .should('be.visible');
+
     cy.get('body').then(($body) => {
       const canSubscribe = $body.find('button:visible').filter((_, el) =>
         (el.textContent || '').includes('Assinar Chatbot')
@@ -455,7 +456,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
             expect(response.body).to.have.property('success', true);
             cy.wait(60000);
 
-            cy.visit(`/user/${username}?plans_and_payment`);
+            cy.visit(`/user?plans_and_payment`);
 
             cy.contains('p', 'BD Grátis', { timeout: 10000 })
               .should('be.visible');

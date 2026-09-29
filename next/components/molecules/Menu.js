@@ -32,7 +32,7 @@ import { ControlledInputSimple } from "../atoms/ControlledInput";
 import Link from "../atoms/Link";
 import Button from "../atoms/Button";
 import HelpWidget from "../atoms/HelpWidget";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp, clearClientSession, getDiscordUrl } from "../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, trackNavigateToChatbotLp, clearClientSession, getDiscordUrl, getUserDisplayName, getUserPageHref, UserPagePath } from "../../utils";
 
 import LabelText from "../atoms/Text/LabelText";
 import BodyText from "../atoms/Text/BodyText";
@@ -346,7 +346,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
               src={userData?.picture ? userData?.picture : "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
             />
           </Box>
-          <LabelText typography="x-small">{userData?.username || ""}</LabelText>
+          <LabelText typography="x-small">{getUserDisplayName(userData)}</LabelText>
           <LabelText
             typography="x-small"
             color="#71757A"
@@ -402,7 +402,7 @@ function MenuDrawerUser({ userData, isOpen, onClose, isUserPro, haveInterprisePl
                   fontWeight="400"
                   onClick={() => {
                     onClose()
-                    router.push({ pathname: `/user/${userData.username}`, query: elm.value })
+                    router.push(getUserPageHref(elm.value))
                   }}
                 >
                   {elm.name}
@@ -593,7 +593,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
               />
             </Box>
             <LabelText typography="x-small">
-              {userData?.username ? userData?.username : ""}
+              {getUserDisplayName(userData)}
             </LabelText>
             <LabelText
               typography="x-small"
@@ -630,7 +630,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             gap="8px"
             padding="16px"
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
-            onClick={() => router.push(`/user/${userData.username}`)}
+            onClick={() => router.push(UserPagePath)}
           >
             <SettingsIcon fill="#D0D0D0" width="20px" height="20px"/>
             <BodyText typography="small">
@@ -647,7 +647,7 @@ function MenuUser ({ userData, onOpen, onClose, isUserPro }) {
             _hover={{ backgroundColor: "transparent", opacity: "0.7" }}
             onClick={async () => {
               await clearClientSession()
-              if(window.location.pathname.includes('/user/')) return window.location.href = "/"
+              if(window.location.pathname === "/user" || window.location.pathname.includes("/user/")) return window.location.href = "/"
               window.location.reload()
             }}
           >
@@ -914,6 +914,7 @@ function DesktopLinks({
       <HStack spacing="21px" display={{ base: "none", lg: "flex" }}>
         {(path === "/search" ||
           path === "/dataset/[dataset]" ||
+          path === "/user" ||
           path === "/user/[username]") && (
           <Box id="widget_help_and_resources">
             <HelpWidget
@@ -1160,7 +1161,8 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
 
         setUserData({
           email: res.email,
-          username: res.username,
+          firstName: res.firstName,
+          lastName: res.lastName,
           picture: res.picture || "",
           plan: res?.proSubscription
         })
