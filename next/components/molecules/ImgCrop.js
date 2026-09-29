@@ -53,7 +53,7 @@ export default function CropImage ({
   onClose,
   src,
   id,
-  username,
+  email,
 }) {
   const { t } = useTranslation('user');
   const imgRef = useRef(null)
@@ -147,7 +147,7 @@ export default function CropImage ({
       })
     })
 
-    const filePic = new File([picture], `${username}.jpeg`, {type: "image/jpeg"})
+    const filePic = new File([picture], `${email || id}.jpeg`, {type: "image/jpeg"})
 
     const reg = new RegExp("(?<=:).*")
     const [ uid ] = reg.exec(id)
