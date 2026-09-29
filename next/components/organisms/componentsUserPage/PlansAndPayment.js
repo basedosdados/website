@@ -24,7 +24,7 @@ import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import ChatbotTrialSurveyModal from "./ChatbotTrialSurveyModal";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, resolveCheckoutCampaign, clearCheckoutCampaign, pickBrlStripePrice } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, getUserPageHref, resolveCheckoutCampaign, clearCheckoutCampaign, pickBrlStripePrice, UserPagePath } from "../../../utils";
 
 const SubscriptionBadgeStyles = {
   active: { backgroundColor: "#D5E8DB", color: "#2B8C4D" },
@@ -636,7 +636,7 @@ export default function PlansAndPayment ({ userData }) {
     const user = await fetch(`/api/user/getUser?p=${btoa(id)}`, {method: "GET"})
       .then(res => res.json())
     cookies.set('userBD', JSON.stringify(user))
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open(getUserPageHref("plans_and_payment"), "_self")
   }
 
   async function closeModalSucess() {
@@ -669,7 +669,7 @@ export default function PlansAndPayment ({ userData }) {
     setIsChatbotTrialSuccess(false)
 
     if(isLoadingH === true) return window.open("/", "_self")
-    window.open(`/user/${userData.username}?plans_and_payment`, "_self")
+    window.open(getUserPageHref("plans_and_payment"), "_self")
   }
 
   function formatTimeStamp (value) {
@@ -897,7 +897,7 @@ export default function PlansAndPayment ({ userData }) {
           if (query.checkout || query.coupon) {
             router.replace(
               {
-                pathname: `/user/${userData.username}`,
+                pathname: UserPagePath,
                 query: { plans_and_payment: "" },
               },
               undefined,
@@ -906,7 +906,7 @@ export default function PlansAndPayment ({ userData }) {
           }
           if (query.i)
             return window.open(
-              `/user/${userData.username}?plans_and_payment`,
+              `/user?plans_and_payment`,
               "_self",
             );
           PaymentModal.onClose();
@@ -1476,7 +1476,7 @@ export default function PlansAndPayment ({ userData }) {
                   setIsLoading(false);
                   setIsLoadingH(false);
                   SucessPaymentModal.onClose();
-                  window.open(`/user/${userData?.username}?big_query`, "_self");
+                  window.open(getUserPageHref("big_query"), "_self");
                 }}
                 isLoading={isLoading}
               >
@@ -1950,14 +1950,13 @@ export default function PlansAndPayment ({ userData }) {
                 </BodyText>
               </Stack>
             )}
-            {!hasChatbotActiveSubscription && (
+            {!hasChatbotActiveSubscription && plans?.bd_chatbot_year?._id && (
               <Button
                 isVariant
                 marginTop="8px"
                 onClick={() => {
                   setToggleAnual(true);
-                  if (plans?.bd_chatbot_year?._id)
-                    setPlan(plans.bd_chatbot_year._id);
+                  setPlan(plans.bd_chatbot_year._id);
                 }}
               >
                 {t("username.subscribeChatbot")}

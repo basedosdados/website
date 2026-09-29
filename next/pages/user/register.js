@@ -13,6 +13,10 @@ import { useRouter } from 'next/router';
 import {
   triggerGAEvent,
   cleanString,
+  normalizePhone,
+  isValidE164Phone,
+  getDefaultCallingCode,
+  formatPhoneInput,
   persistCheckoutCampaignFromQuery,
   getCheckoutCampaign,
   buildCheckoutCampaignQuery,
@@ -35,6 +39,7 @@ import { EyeIcon, EyeOffIcon } from "../../public/img/icons/eyeIcon";
 import Exclamation from "../../public/img/icons/exclamationIcon";
 import GoogleIcon from "../../public/img/icons/googleIcon";
 
+import PhoneInput from "../../components/molecules/PhoneInput";
 import { withPages } from "../../hooks/pages.hook";
 
 export async function getStaticProps({ locale }) {
@@ -48,20 +53,22 @@ export async function getStaticProps({ locale }) {
 
 export default function Register() {
   const router = useRouter();
+  const { locale } = router;
   const { t } = useTranslation('user');
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    username: "",
     email: "",
+    phone: "",
+    phoneCallingCode: getDefaultCallingCode(locale),
     password: "",
     confirmPassword: ""
   })
   const [errors, setErrors] = useState({
     firstName: "",
-    username: "",
     email: "",
+    phone: "",
     password: "",
     regexPassword: {},
     confirmPassword: "",
@@ -70,6 +77,14 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(true)
   const [showConfirmPassword, setShowConfirmPassword] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    setFormData((prevState) => ({
+      ...prevState,
+      phoneCallingCode: getDefaultCallingCode(locale),
+      phone: formatPhoneInput(prevState.phone, getDefaultCallingCode(locale)),
+    }))
+  }, [locale])
 
   useEffect(() => {
     if (!router.isReady) return
@@ -100,20 +115,17 @@ export default function Register() {
     if (!formData.firstName) {
       validationErrors.firstName = t('signup.errors.firstName')
     }
-    if (!formData.username) {
-      validationErrors.username = t('signup.errors.username.invalid')
-    }
-    if(/\s/.test(formData.username)) {
-      validationErrors.username = t('signup.errors.username.noSpaces')
-    }
-    if(/[À-ÿ]/.test(formData.username)) {
-      validationErrors.username = t('signup.errors.username.noAccents')
-    }
     if (!formData.email) {
       validationErrors.email = t('signup.errors.email.invalid')
     } 
     if (!/^\S+@\S+$/.test(formData.email)) {
       validationErrors.email = t('signup.errors.email.invalid')
+    }
+    if (formData.phone) {
+      const phone = normalizePhone(formData.phone, formData.phoneCallingCode)
+      if (!isValidE164Phone(phone)) {
+        validationErrors.phone = t('signup.errors.phone.invalid')
+      }
     }
     if(!/^.{8,}$/.test(formData.password)) {
       regexPassword = {...regexPassword, amount: true}
@@ -149,9 +161,9 @@ export default function Register() {
       createRegister({
         firstName: cleanString(formData.firstName),
         lastName: cleanString(formData?.lastName) || "null",
-        username: formData.username,
         email: formData.email,
         password: formData.password,
+        phone: normalizePhone(formData.phone, formData.phoneCallingCode),
       })
     } else {
       triggerGAEvent("user_register", "register_err")
@@ -166,12 +178,13 @@ export default function Register() {
     );
   }
 
-  const createRegister = async ({ firstName, lastName, username, email, password }) => {
+  const createRegister = async ({ firstName, lastName, email, password, phone }) => {
     try {
       const b64FirstName = b64EncodeUnicode(firstName);
       const b64LastName = b64EncodeUnicode(lastName);
+      const phoneParam = phone ? `&c=${btoa(phone)}` : ""
 
-      const result = await fetch(`/api/user/registerAccount?f=${b64FirstName}&l=${b64LastName}&u=${btoa(username)}&e=${btoa(email)}&p=${btoa(password)}`, { method: "GET" })
+      const result = await fetch(`/api/user/registerAccount?f=${b64FirstName}&l=${b64LastName}&e=${btoa(email)}&p=${btoa(password)}${phoneParam}`, { method: "GET" })
         .then(res => res.json())
 
       let arrayErrors = {}
@@ -181,7 +194,7 @@ export default function Register() {
       if(result?.errors?.length > 0) {
         result.errors.map((elm) => {
           if(elm.field === "email") arrayErrors = ({...arrayErrors, email: t('signup.errors.email.exists'), register: t('signup.errors.registerEmail')})
-          if(elm.field === "username") arrayErrors = ({...arrayErrors, username: t('signup.errors.username.exists'), register: t('signup.errors.registerUsername')})
+          if(elm.field === "phone") arrayErrors = ({...arrayErrors, phone: t('signup.errors.phone.exists'), register: t('signup.errors.registerPhone')})
         })
       }
       setErrors(arrayErrors)
@@ -307,19 +320,21 @@ export default function Register() {
                 </ErrorMessage>
               </FormControl>
 
-              <FormControl isInvalid={!!errors.username} >
-                <LabelTextForm text={t('signup.username')}/>
-                <InputForm
-                  id="user"
-                  name="user"
-                  type="text"
-                  autoComplete="off"
-                  value={formData.username}
-                  onChange={(e) => handleInputChange(e, "username")}
-                  placeholder={t('signup.placeholders.username')}
+              <FormControl isInvalid={!!errors.phone} >
+                <LabelTextForm text={t('signup.phone')}/>
+                <PhoneInput
+                  callingCode={formData.phoneCallingCode}
+                  onCallingCodeChange={(callingCode) => setFormData((prevState) => ({
+                    ...prevState,
+                    phoneCallingCode: callingCode,
+                    phone: formatPhoneInput(prevState.phone, callingCode),
+                  }))}
+                  value={formData.phone}
+                  onChange={(phone) => handleInputChange({ target: { value: phone } }, "phone")}
+                  optional
                 />
                 <ErrorMessage>
-                  {errors.username}
+                  {errors.phone}
                 </ErrorMessage>
               </FormControl>
 
