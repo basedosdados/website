@@ -1,11 +1,12 @@
 ---
-title: Análise da Atividade Econômica do Estado do Rio de Janeiro e da influência da capital
-description: Explorando dados da RAIS para analisar as principais atividades econômicas do estado e sua relação com a capital
+title: Economic activity in the state of Rio de Janeiro and the pull of its capital
+description: Using RAIS data to analyse the state's main economic activities and their relationship with the capital
+slug: economic-activity-in-rio-de-janeiro-state
 date:
   created: "2024-04-10T15:00:00"
 authors:
   - name: Laryssa Bertin Ribeiro
-    role: Autora
+    role: Author
     social: https://medium.com/@lary.bertin
 thumbnail: /blog/analisando-atividade-economica-do-rio-de-janeiro/image_4.webp
 categories: [analise]
@@ -16,37 +17,37 @@ published: true
 
 ## TL;DR
 
-Este relatório apresenta uma investigação detalhada sobre os dados relacionados às principais atividades econômicas do Estado do Rio de Janeiro, focando na relação com sua capital.
+This report investigates the main economic activities of the state of Rio de Janeiro, focusing on their relationship with the state capital.
 
-O estudo também avalia a dinâmica da geração dos empregos ativos ao longo de um período determinado. Utilizando dados da [Relação Anual de Informações Sociais](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=c3a5121e-f00d-41ff-b46f-bd26be8d4af3) (RAIS), o trabalho emprega análises estatísticas para compreender a evolução desses padrões e suas implicações na relação com os demais municípios do estado do Rio de Janeiro.
+It also examines how active employment was generated over a defined period. Drawing on data from the [Annual Social Information Report](/dataset/3e7c4d58-96ba-448e-b053-d385a829ef00?table=c3a5121e-f00d-41ff-b46f-bd26be8d4af3) (RAIS), it applies statistical analysis to trace how these patterns evolved and what they imply for the other municipalities in the state.
 
-> Este artigo foi produzido como Projeto Final do Curso de Análise de Dados Públicos com SQl e Sheets, da Base dos Dados. Para saber mais sobre o curso, acesse [aqui](https://info.basedosdados.org/bd-edu-cursos)
+> This article was produced as the final project of Data Basis' course on Public Data Analysis with SQL and Sheets. To find out more about the course, see [here](https://info.basedosdados.org/bd-edu-cursos)
 
-## Introdução
+## Introduction
 
-Segundo a [Pesquisa Mensal de Emprego](https://www.data.rio/documents/4e6901873b314e2bacce25f8645046bd/explore) (PME), do IBGE, em 2016 o grupamento _Educação, Saúde e Administração Pública_ ocupava 23,3% dos empregos na cidade do Rio de Janeiro (680 mil); _Outros Serviços_ empregavam 19,9% (581 mil); os _Serviços Prestados às Empresas_, 18,7% (548 mil); o _Comércio_, 17,0% (496 mil); a Indústria,11,2% (328 mil); a _Construção_, 5,7% (166 mil) e os _Serviços Domésticos_, 3,7% (108 mil).
+According to IBGE's [Monthly Employment Survey](https://www.data.rio/documents/4e6901873b314e2bacce25f8645046bd/explore) (PME), in 2016 the grouping _Education, Health and Public Administration_ accounted for 23.3% of jobs in the city of Rio de Janeiro (680,000); _Other Services_ for 19.9% (581,000); _Business Services_ for 18.7% (548,000); _Commerce_ for 17.0% (496,000); Industry for 11.2% (328,000); _Construction_ for 5.7% (166,000); and _Domestic Services_ for 3.7% (108,000).
 
-Segundo o IBGE, em fevereiro de 2016 haviam 5 milhões e 910 mil pessoas em idade ativa (PIA) no Município do Rio de Janeiro. Essa população ficou ligeiramente estável durante o ano. Desse total de pessoas em idade ativa, 49,4% encontravam-se ocupadas (nível de ocupação), 2,7% desocupadas e 47,8% não estavam economicamente ativas. O rendimento médio real da população ocupada no município foi estimado em R$ 3.038,40, o que traduzia a renda per capita do carioca.
+IBGE recorded 5,910,000 people of working age in the municipality of Rio de Janeiro in February 2016, a figure that held roughly steady across the year. Of those, 49.4% were employed, 2.7% unemployed and 47.8% not economically active. Average real income among the employed population in the municipality was estimated at R$ 3,038.40, which stood as the per capita income of a Rio resident.
 
-Em relação à população ocupada, os empregados com carteira assinada no setor privado representaram 47,0% (1.373 mil), os empregados sem carteira assinada no setor privado, 7,2% (210 mil), os trabalhadores por conta própria, 21,8% (636 mil) e os Militares ou funcionários públicos estatutários, 13,5% (395 mil).
+Within the employed population, formally registered private sector employees made up 47.0% (1,373,000), unregistered private sector employees 7.2% (210,000), self-employed workers 21.8% (636,000), and military or statutory public servants 13.5% (395,000).
 
-Os CNAEs foram oficializados através da Resolução do IBGE/CONCLA (Figura 1), do dia 4 de setembro de 2006. Direcionada tecnicamente pelo IBGE (Instituto Brasileiro de Geografia e Estatística), o CNAE é coordenado pela Secretaria da Receita Federal. Formado por uma combinação de 7 números, eles representam a junção de seções, grupos, divisões, classes e subclasses.
+The CNAE economic activity codes were formalised by an IBGE/CONCLA resolution (Figure 1) of 4 September 2006. Technically directed by IBGE, the Brazilian Institute of Geography and Statistics, CNAE is coordinated by the Federal Revenue Secretariat. Each code combines seven digits representing sections, groups, divisions, classes and subclasses.
 
-A primeira versão do detalhamento das subclasses CNAE foi definida em 1998, com a denominação CNAE-Fiscal. Passou por ajustes em 2001 (versão CNAE-Fiscal 1.0) e em 2002 (versão CNAE-Fiscal 1.1), esta última acompanhando alterações pontuais na estrutura da CNAE (versão CNAE 1.0) em função de ajustes na classificação internacional versão ISIC/CIIU 3.1 (Figura 2).
+The first detailed version of the CNAE subclasses was defined in 1998 under the name CNAE-Fiscal. It was adjusted in 2001 (CNAE-Fiscal 1.0) and again in 2002 (CNAE-Fiscal 1.1), the latter tracking specific changes to the CNAE structure (CNAE 1.0) that followed adjustments to the international ISIC/CIIU 3.1 classification (Figure 2).
 
 <Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_0.webp"/>
 
-## Metodologia
+## Methodology
 
-Este estudo baseia-se na análise de dados provenientes da base [Relação Anual de Informações Sociais](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Mensal_de_Emprego/Municipio_RJ/Comentarios/2016/pme-rj_201602comentarios.pdf) (RAIS), que é um relatório de informações socioeconômicas solicitado pela Secretaria de Trabalho do Ministério da Economia brasileiro às pessoas jurídicas e outros empregadores anualmente. O relatório possui periodicidade anual e apresenta informações sobre todos os estabelecimentos formais e vínculos celetistas e estatutários no Brasil. A geração das estatísticas da RAIS 2021 contou, portanto, com duas fontes de captação de dados: o eSocial e o GDRAIS, com as seguintes definições:
+This study analyses data from the [Annual Social Information Report](https://ftp.ibge.gov.br/Trabalho_e_Rendimento/Pesquisa_Mensal_de_Emprego/Municipio_RJ/Comentarios/2016/pme-rj_201602comentarios.pdf) (RAIS), a socioeconomic return that the Labour Secretariat of Brazil's Ministry of the Economy requires annually from companies and other employers. It is published yearly and covers every formal establishment and every contractual and statutory employment relationship in Brazil. The 2021 RAIS statistics drew on two data sources, eSocial and GDRAIS, with the following definitions:
 
-- **Estoque de empregos formais**: Diz respeito ao número de vínculos ativos em 31/12 do ano anterior, ou seja, um retrato do mercado de trabalho.
-- **Estabelecimentos**: A obrigatoriedade de declaração da RAIS é por cada estabelecimento, permitindo análise de suas principais características como: setor de atividade econômica, natureza jurídica e localização geográfica. Desde 1995, os estabelecimentos sem empregados passaram a ser obrigados a enviar a chamada RAIS negativa.
-- **Grupamento de Atividades Econômicas**: Classificação derivada da agregação das Seções da Classificação Nacional de Atividades Econômicas (CNAE2.0).
+- **Stock of formal jobs**: the number of active employment relationships on 31 December of the previous year — a snapshot of the labour market.
+- **Establishments**: RAIS must be filed per establishment, which allows analysis of characteristics such as economic sector, legal status and geographic location. Since 1995, establishments with no employees have been required to file what is known as a negative RAIS.
+- **Economic Activity Grouping**: a classification derived from aggregating the Sections of the National Classification of Economic Activities (CNAE 2.0).
 
-Foram utilizadas consultas SQL e o datalake público da Base dos Dados, que pode ser acessado pela plataforma BigQuery para coletar e visualizar os dados relevantes. A consulta SQL específica utilizada para extrair os dados necessários para a análise básica, que trata dos vínculos ativos no período de 2018 a 2022 para cada CNAE no estado do Rio de Janeiro, está apresentada abaixo:
+We used SQL queries against the public Data Basis datalake, accessible through BigQuery, to collect and visualise the relevant data. The query used to extract the data for the basic analysis — active employment relationships from 2018 to 2022 for each CNAE in the state of Rio de Janeiro — is shown below:
 
-**Consulta A**
+**Query A**
 
 ```sql
 SELECT
@@ -91,10 +92,9 @@ GROUP BY
 ORDER BY
   CNAE DESC;
 ```
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_1.webp" caption="Table A1: Jobs by CNAE, state of Rio de Janeiro, 2018 to 2022"/>
 
-<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_1.webp" caption="Tabela A1: Empregos por CNAEs, estado do Rio de Janeiro, 2018 a 2022"/>
-
-**Consulta B**
+**Query B**
 
 ```sql
 SELECT
@@ -142,41 +142,40 @@ GROUP BY
 ORDER BY
   CNAE DESC;
 ```
+## Analysis and results
 
-## Desenvolvimento e resultados
+The economy of a region shapes how many jobs it generates. The city of Rio de Janeiro has a large metropolitan area and considerable pull over other cities in the state.
 
-A economia de uma região geográfica influencia a quantidade de empregos gerados. A cidade do Rio de Janeiro possui uma grande região metropolitana e uma grande influência em outras cidades do estado.
+One aim of **Query A** was to identify the economic activities accounting for more than 50% of jobs generated in the state of Rio de Janeiro. For this purpose the study set a cut-off of 35 CNAEs out of a total of 1,318, together holding 52.82% of the total job stock at the start of 2022, as shown in **Table A1**.
 
-Um dos objetivos da **Consulta A** foi identificar as atividades econômicas que representam mais de 50% dos empregados gerados no estado do Rio de Janeiro. A pesquisa estabeleceu como uma linha de corte para efeitos dessa pesquisa 35 CNAEs, de um total de 1.318, com 52,82% do estoque total de empregos no início de 2022 conforme a **Tabela A1**.
+**Chart A** was then produced to identify the main job-generating economic activities in the state, drawing on **Table A2**, which presents the groupings of those activities.
 
-Dessa forma, o **Gráfico A** foi gerado para identificar as principais atividades econômicas geradoras de empregos no estado do Rio de Janeiro a partir da **Tabela A2,** que apresenta os grupamentos das principais atividades econômicas.
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_2.webp" caption="Chart A: Main economic activities accounting for more than 50% of jobs"/>
 
-<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_2.webp" caption="Gráfico A: Principais atividades econômicas com mais de 50% dos empregos"/>
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_3.webp" caption="Table A2: Jobs by grouping, state of Rio de Janeiro"/>
 
-<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_3.webp" caption="Tabela A2: Empregos por Grupamentos, estado do Rio de Janeiro"/>
+One aim of **Query B** was to identify the economic activities generating the most jobs in the city of Rio de Janeiro, shown in **Table B**. Summing total jobs generated in the state and in the city across 2018 to 2022 allowed **Chart B** to be built, showing how the two move together.
 
-Um dos objetivos da **Consulta B** foi identificar as principais atividades econômicas que geraram mais empregos na cidade do Rio de Janeiro, conforme é possível observar na **Tabela B**. Com o somatório do total de empregos gerados no estado e na cidade ao longo do período 2018 a 2022, foi possível elaborar o **Gráfico B** para identificar sua relação dinâmica.
+DataMPE Brasil, a service producing and disseminating data relevant to small business development created by SEBRAE Rio de Janeiro, used RAIS data to establish that 3,938,871 employees were registered in the state in 2021, a change of 4.56% on the previous year. Average worker pay in 2021 was R$ 2,333.58, and 560,871 establishments were registered, a change of 2.84% on the previous year.
 
-O DataMPE Brasil, serviço para a produção e disseminação de dados e informações relevantes para o desenvolvimento dos pequenos negócios criado pelo SEBRAE Rio de Janeiro, utilizando os dados da Relação Anual de Informações Sociais (RAIS), identificou que o número de empregados cadastrados no estado foi 3.938.871 em 2021, o que representa uma variação de 4.56% em relação ao ano anterior. A remuneração média do trabalhador no ano de 2021 foi de R$ 2.333,58, e o número de estabelecimentos cadastrados foi 560.871, o que representa uma variação de 2.84% em relação ao ano anterior.
+In the state of Rio de Janeiro, the economic sectors employing the most workers in 2021 were _Public Administration, Defence and Social Security_ (730,013), _Retail Commerce_ (598,989) and _Education_ (231,811).
 
-No Estado de Rio De Janeiro, os setores econômicos que mais reuniram trabalhadores em 2021 foram a _Administração Pública_, _Defesa e Seguridade Social_ (730.013), o _Comércio Varejista_ (598.989), e _Educação_ (231.811).
+In the same year, 42.9% of workers were women, with average pay of R$ 3,186.91, and 57.1% were men, with average pay of R$ 3,780.99.
 
-No mesmo ano, 42.9% dos trabalhadores eram mulheres, com uma remuneração média por pessoa de R$ 3186,91; 57.1% correspondiam a homens, com remuneração média de R$ 3780,99.
+According to Brazil's Federal Revenue Service, of all establishments registered up to 2023, 10.3% fall under _Other_ (214,564 establishments), 62.8% are _Individual Micro-entrepreneurs (MEI)_ (1,312,029), 22.5% are _Micro-enterprises (ME)_ (470,895), and 4.44% are _Small Businesses (EPP)_ (92,755).
 
-De acordo com os dados da Receita Federal do Brasil (RFB), do total de estabelecimentos com registro até 2023, 10.3% correspondem a _Outros_ (214.564 estabelecimentos), 62.8% correspondem a _Micro Empresário Individual_ _(MEI)_ (1.312.029 estabelecimentos), 22.5% correspondem a _Microempresa (ME)_ (470.895 estabelecimentos), e 4.44% correspondem a _Empresa de Pequeno Porte (EPP)_ (92.755 estabelecimentos).
+About 13.2 million people worked as individual micro-entrepreneurs (MEIs) in Brazil in 2021, equivalent to 69.7% of all companies and other organisations and 19.2% of all formally employed people. Of the 673 classes in CNAE 2.0, MEIs were present in 206 in 2021. More than half of MEIs (55.7%) fall within the first 15 classes and almost 75% within the first 30. About half (50.2%) were in the Services sector in 2021. Commerce and 'repair of motor vehicles and motorcycles' accounted for 29.3%, and that activity had the largest number of MEI employees (48.3%).
 
-Cerca de 13,2 milhões de pessoas trabalhavam como microempreendedores individuais (MEIs) no Brasil em 2021, o equivalente a 69,7% do total de empresas e outras organizações e 19,2% do total de ocupados formais. Em 2021, do total de 673 classes da CNAE 2.0, o MEI esteve presente em 206. Mais da metade dos MEIs (55,7%) estão presentes nas 15 primeiras classes e quase 75% nas 30 primeiras. Cerca de metade dos MEIs (50,2%) estava presente no setor de Serviços em 2021. O Comércio ‘reparação de veículo automotores e motocicletas’ respondeu por 29,3%, sendo essa atividade a que apresentou o maior quantitativo de empregados dos MEIs (48,3%).
+Rio de Janeiro was the federal unit with the highest proportion of MEIs relative to total formal employment (26%), followed by Espírito Santo (24.8%).
 
-O Rio de Janeiro foi a unidade da federação com maior proporção de MEIs em relação ao total de ocupados formais (26%), seguida pelo Espírito Santo (24,8%).
+We consulted the [Federal Revenue](https://www8.receita.fazenda.gov.br/simplesnacional/aplicacoes/atbhe/estatisticassinac.app/EstatisticasOptantesPorCNAE.aspx?tipoConsulta=2&optanteSimei=&anoConsulta=MjAyMg%3D%3D) site, which holds figures on MEIs by CNAE. The search found 35 CNAEs accounting for 67.42% of all individual micro-entrepreneurs as of 18 November 2023.
 
-Consultamos o site da [Receita federal](https://www8.receita.fazenda.gov.br/simplesnacional/aplicacoes/atbhe/estatisticassinac.app/EstatisticasOptantesPorCNAE.aspx?tipoConsulta=2&optanteSimei=&anoConsulta=MjAyMg%3D%3D) que contém informações sobre a quantidade de MEIs por CNAE. A pesquisa encontrou 35 CNAEs com 67,42% do total de microempresários individuais em 18/11/2023.
+<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_4.webp" caption="Chart B: Employment relationship between the city and state of Rio de Janeiro"/>
 
-<Image src="/blog/analisando-atividade-economica-do-rio-de-janeiro/image_4.webp" caption="Gráfico B: Relação de emprego cidade/estado do Rio de Janeiro"/>
+## Conclusion
 
-## Conclusão
+The analysis shows how much economic activity tied to Public Administration weighs on the economy of the state of Rio de Janeiro, as **Chart A** makes clear. Many of these activities are plausibly carried out by companies providing technical or administrative services to state entities, public organisations and municipal and state governments.
 
-A análise revela a significativa influência das atividades econômicas ligadas à Administração Pública no panorama econômico do Estado do Rio de Janeiro, evidenciada pelo **Gráfico A**. É plausível que muitas dessas atividades sejam conduzidas por empresas que oferecem serviços técnicos ou administrativos complementares às entidades estatais, organizações públicas e governos municipais e estaduais.
+To understand the picture better, future work could identify the centres of influence for public economic activity, which would allow comparison against salary distribution patterns across the state.
 
-Para avançar no entendimento desse cenário, futuras pesquisas podem se concentrar na identificação dos centros de influência das atividades econômicas públicas, possibilitando comparações com os padrões de distribuição salarial em todo o estado do Rio de Janeiro.
-
-Além disso, o **Gráfico B** sugere uma correlação econômica entre o estado do Rio de Janeiro e sua capital. Para aprofundar essa análise, é fundamental expandir a série histórica e realizar comparações mais abrangentes das atividades econômicas em pesquisas futuras.
+**Chart B** further suggests an economic correlation between the state of Rio de Janeiro and its capital. Extending the time series and making broader comparisons of economic activities in future research would sharpen that finding.
