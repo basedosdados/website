@@ -215,7 +215,7 @@ export default function Footer({ template, ocult = false }) {
               >
                 {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href={locale === 'en' ? "/en/bdpro" : 
+              <FooterLink href={locale === 'en' ? "/en/dbpro" : 
                                 locale === 'es' ? "/es/bdpro" : 
                                 "/bdpro"}>
                 {t('footer.products.DBPro')}

@@ -509,7 +509,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             title={t("banner.title", { ns: "bdpro" })}
             description={t("banner.description", { ns: "bdpro" })}
             buttonText={t("banner.button", { ns: "bdpro" })}
-            href="/bdpro"
+            href={locale === "en" ? "/dbpro" : "/bdpro"}
             onClick={() => triggerGAEvent("button_banner_bdpro_lp", "click")}
             imageSrc={locale === "en" ? "/img/banner_db_pro.svg" : "/img/banner_bd_pro.svg"}
           />
