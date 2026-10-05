@@ -78,11 +78,10 @@ export async function getStaticPaths({ locales = ["pt"] }) {
   const perLocale = await Promise.all(
     locales.map(async (locale) => {
       const posts = await getAllPosts(locale);
-      // Both forms resolve: the locale's own slug and the shared filename,
-      // which redirects to it.
-      return posts.flatMap(({ slug, filename }) =>
-        [slug, filename].filter(Boolean).map((s) => ({ params: { slug: s }, locale }))
-      );
+      return posts
+        .map(({ slug }) => slug)
+        .filter(Boolean)
+        .map((slug) => ({ params: { slug }, locale }));
     })
   );
 
