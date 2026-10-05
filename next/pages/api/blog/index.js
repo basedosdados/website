@@ -27,8 +27,14 @@ export async function getAllPosts(locale = 'pt') {
           const { data } = matter(content);
 
           if (isDevelopment || data.published) {
+            const filename = file.replace(".md", "");
             return {
-              slug: file.replace(".md", ""),
+              // `slug` is the public URL segment; translated posts override it
+              // in frontmatter so English and Spanish get their own wording.
+              slug: data.slug || filename,
+              // `filename` is shared across locales and is what links the
+              // translations of one post together.
+              filename,
               frontmatter: data,
             };
           }
@@ -58,10 +64,61 @@ export async function getAllPosts(locale = 'pt') {
 }
 
 export async function getPostBySlug(slug, locale = 'pt') {
+  const blogpostsDir = path.join(root, `blog/${locale}`)
+
+  // Fast path: the URL segment is the filename (always true for pt).
   try {
-    const blogpostsDir = path.join(root, `blog/${locale}`)
-    const filepath = path.join(blogpostsDir, `${slug}.md`);
-    return await fs.readFile(filepath, "utf-8");
+    return await fs.readFile(path.join(blogpostsDir, `${slug}.md`), "utf-8");
+  } catch (error) {
+    // fall through to the frontmatter lookup
+  }
+
+  // Translated posts keep the Portuguese filename but publish under a
+  // localized `slug`, so scan for the file that declares this one.
+  try {
+    const files = await fs.readdir(blogpostsDir, "utf-8");
+    for (const file of files) {
+      if (!file.endsWith(".md")) continue;
+      const content = await fs.readFile(path.join(blogpostsDir, file), "utf-8");
+      if (matter(content).data.slug === slug) return content;
+    }
+  } catch (error) {
+    return null;
+  }
+
+  return null;
+}
+
+// The filename backing a URL segment, which is what the file on disk is
+// actually called. Equals the slug for pt and for untranslated posts.
+export async function getFilenameForSlug(slug, locale = 'pt') {
+  const blogpostsDir = path.join(root, `blog/${locale}`)
+  try {
+    await fs.access(path.join(blogpostsDir, `${slug}.md`));
+    return slug;
+  } catch (error) {
+    // not a filename; look for the post declaring it as its slug
+  }
+  try {
+    const files = await fs.readdir(blogpostsDir, "utf-8");
+    for (const file of files) {
+      if (!file.endsWith(".md")) continue;
+      const content = await fs.readFile(path.join(blogpostsDir, file), "utf-8");
+      if (matter(content).data.slug === slug) return file.replace(".md", "");
+    }
+  } catch (error) {
+    return null;
+  }
+  return null;
+}
+
+// The canonical URL segment for a post in a given locale, or null when that
+// locale has no translation of it.
+export async function getSlugForLocale(filename, locale) {
+  try {
+    const filepath = path.join(root, `blog/${locale}`, `${filename}.md`);
+    const content = await fs.readFile(filepath, "utf-8");
+    return matter(content).data.slug || filename;
   } catch (error) {
     return null;
   }
