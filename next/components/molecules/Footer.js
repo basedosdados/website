@@ -311,6 +311,9 @@ export default function Footer({ template, ocult = false }) {
               <FooterLink href="/about-us">
                 {t('footer.institutional.aboutUs')}
               </FooterLink>
+              <FooterLink href="/invited-researchers">
+                {t('footer.institutional.invitedResearchers')}
+              </FooterLink>
               <FooterLink href="/transparency">
                 {t('footer.institutional.transparency')}
               </FooterLink>
