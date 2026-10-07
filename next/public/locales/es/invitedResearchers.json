@@ -1,0 +1,27 @@
+{
+  "pageTitle": "Investigadores Invitados – Base de los Datos",
+  "pageDescription": "Conoce la red de Investigadores Invitados de Base de los Datos: investigadoras e investigadores con doctorado, vinculados a universidades e institutos de investigación en Brasil y en el extranjero.",
+  "heroTitle": "Investigadores Invitados",
+  "heroSubtitle": "Una red de investigadoras e investigadores que colaboran con Base de los Datos para universalizar el acceso a datos de calidad.",
+  "aboutTitle": "La red",
+  "aboutText1": "La red de Investigadores Invitados reúne a investigadoras e investigadores de universidades e institutos de investigación, en Brasil y en el extranjero, que colaboran con Base de los Datos.",
+  "aboutText2": "Los miembros aportan conocimiento especializado en sus áreas de investigación, ayudando a identificar, documentar y mejorar datos públicos relevantes para la investigación y el debate público.",
+  "eligibilityTitle": "Elegibilidad",
+  "eligibilityPhd": "Tener un doctorado completo",
+  "eligibilityAffiliation": "Estar vinculado(a) a una universidad o instituto de investigación, en Brasil o en el extranjero",
+  "rulesTitle": "Reglas",
+  "rulesMembership": "La participación es solo por invitación. Las nominaciones abiertas comienzan en 2028",
+  "rulesTerm": "Mandatos de 2 años, renovables indefinidamente",
+  "rulesCohorts": "Las nuevas cohortes se seleccionan una vez por semestre, con anuncios a principios de enero y a principios de julio",
+  "rosterTitle": "Nuestros investigadores invitados",
+  "rosterEmpty": "La primera cohorte de Investigadores Invitados se anunciará pronto.",
+  "alumniTitle": "Ex investigadores invitados",
+  "alumniText": "Investigadoras e investigadores que formaron parte de la red en cohortes anteriores.",
+  "filterAll": "Todas las áreas",
+  "cohort": "Cohorte {{cohort}}",
+  "links": {
+    "website": "Sitio web",
+    "email": "Correo electrónico",
+    "lattes": "Currículo Lattes"
+  }
+}

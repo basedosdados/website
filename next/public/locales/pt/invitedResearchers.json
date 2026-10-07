@@ -1,0 +1,27 @@
+{
+  "pageTitle": "Pesquisadores Convidados – Base dos Dados",
+  "pageDescription": "Conheça a rede de Pesquisadores Convidados da Base dos Dados: pesquisadoras e pesquisadores com doutorado, vinculados a universidades e institutos de pesquisa no Brasil e no exterior.",
+  "heroTitle": "Pesquisadores Convidados",
+  "heroSubtitle": "Uma rede de pesquisadoras e pesquisadores que colaboram com a Base dos Dados para universalizar o acesso a dados de qualidade.",
+  "aboutTitle": "A rede",
+  "aboutText1": "A rede de Pesquisadores Convidados reúne pesquisadoras e pesquisadores de universidades e institutos de pesquisa, no Brasil e no exterior, que colaboram com a Base dos Dados.",
+  "aboutText2": "Os membros contribuem com conhecimento especializado nas suas áreas de pesquisa, ajudando a identificar, documentar e qualificar dados públicos relevantes para a pesquisa e para o debate público.",
+  "eligibilityTitle": "Elegibilidade",
+  "eligibilityPhd": "Ter doutorado completo",
+  "eligibilityAffiliation": "Estar associado(a) a universidades ou institutos de pesquisa, seja no Brasil ou no exterior",
+  "rulesTitle": "Regras",
+  "rulesMembership": "A participação é apenas por convite. Indicações abertas começam em 2028",
+  "rulesTerm": "Mandatos de 2 anos, renováveis indefinidamente",
+  "rulesCohorts": "Novas coortes são selecionadas uma vez por semestre, com anúncios no início de janeiro e no início de julho",
+  "rosterTitle": "Nossos pesquisadores convidados",
+  "rosterEmpty": "A primeira coorte de Pesquisadores Convidados será anunciada em breve.",
+  "alumniTitle": "Ex-pesquisadores convidados",
+  "alumniText": "Pesquisadoras e pesquisadores que fizeram parte da rede em coortes anteriores.",
+  "filterAll": "Todas as áreas",
+  "cohort": "Coorte {{cohort}}",
+  "links": {
+    "website": "Site",
+    "email": "E-mail",
+    "lattes": "Currículo Lattes"
+  }
+}

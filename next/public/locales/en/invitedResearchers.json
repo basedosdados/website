@@ -1,0 +1,27 @@
+{
+  "pageTitle": "Invited Researchers – Data Basis",
+  "pageDescription": "Meet the Data Basis Invited Researchers network: researchers with a PhD, affiliated with universities and research institutes in Brazil and abroad.",
+  "heroTitle": "Invited Researchers",
+  "heroSubtitle": "A network of researchers who collaborate with Data Basis to universalize access to quality data.",
+  "aboutTitle": "The network",
+  "aboutText1": "The Invited Researchers network brings together researchers from universities and research institutes, in Brazil and abroad, who collaborate with Data Basis.",
+  "aboutText2": "Members contribute expertise in their research fields, helping to identify, document and improve public data that matter for research and public debate.",
+  "eligibilityTitle": "Eligibility",
+  "eligibilityPhd": "Hold a completed PhD",
+  "eligibilityAffiliation": "Be affiliated with a university or research institute, in Brazil or abroad",
+  "rulesTitle": "Rules",
+  "rulesMembership": "Membership is by invitation only. Open nominations start in 2028",
+  "rulesTerm": "2-year terms, indefinitely renewable",
+  "rulesCohorts": "New cohorts are selected once a semester, with announcements in early January and early July",
+  "rosterTitle": "Our invited researchers",
+  "rosterEmpty": "The first cohort of Invited Researchers will be announced soon.",
+  "alumniTitle": "Alumni",
+  "alumniText": "Researchers who were part of the network in previous cohorts.",
+  "filterAll": "All fields",
+  "cohort": "Cohort {{cohort}}",
+  "links": {
+    "website": "Website",
+    "email": "Email",
+    "lattes": "Lattes CV"
+  }
+}
