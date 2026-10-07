@@ -23,7 +23,7 @@ import {
   ChartIcon,
   DownloadIcon,
   TableChartViewIcon,
-} from "./icons";
+} from "./Icons";
 import {
   componentsMk,
   markdownContentSx,
@@ -32,8 +32,8 @@ import {
   ToolResultView,
   RecordTable,
   isToolErrorOutput,
-} from "./markdown";
-import { renderFriendlyRequest } from "./toolViews";
+} from "./Markdown";
+import { renderFriendlyRequest } from "./ToolViews";
 import TextShimmer from "./TextShimmer";
 import useMinDuration from "../../../hooks/useMinDuration";
 

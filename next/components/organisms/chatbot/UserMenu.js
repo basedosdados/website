@@ -11,8 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
-import { InfoIcon, SignOutIcon } from "./icons";
-import { getUserFromCookie, nameFromEmail } from "./user";
+import { InfoIcon, SignOutIcon } from "./Icons";
+import { getUserFromCookie, nameFromEmail } from "./User";
 import { clearClientSession } from "../../../utils";
 
 const FallbackUserPicture =

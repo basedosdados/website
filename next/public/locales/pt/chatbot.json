@@ -60,13 +60,7 @@
     "error": "Erro",
     "thinkingAria": "Pensando",
     "suggestedQuestions": "Perguntas Sugeridas",
-    "greetings": {
-      "morning": "Bom dia",
-      "afternoon": "Boa tarde",
-      "evening": "Boa noite",
-      "neutral": "Olá",
-      "followups": ["", "Por onde começamos?", "Como posso ajudar?"]
-    },
+    "greeting": "Olá, como posso ajudar você hoje?",
     "search": {
       "placeholder": "Escreva uma mensagem...",
       "disclaimer": "O chatbot pode cometer erros. Considere verificar informações importantes.",
@@ -204,7 +198,8 @@
       "deleteTitle": "Excluir conversa",
       "deleteConfirm": "Tem certeza que deseja excluir esta conversa? Esta ação não pode ser desfeita.",
       "loadError": "Erro ao carregar histórico.",
-      "tryAgain": "Tente novamente."
+      "tryAgain": "Tente novamente.",
+      "openIdeas": "Abrir central de ideias"
     },
     "table": {
       "seeMore": "ver mais",
@@ -212,20 +207,96 @@
       "showingRows": "Mostrando {{shown}} de {{total}} resultados"
     },
     "onboarding": {
-      "items": [
-        {
-          "eyebrow": "Análises",
-          "question": "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o Salário Real Médio das novas contratações em Recife no ano de 2025."
+      "title": "Central de ideias",
+      "themesIntro": "Escolha uma pergunta para começar a conversa.",
+      "analysesIntro": "Estas são as formas de análise que o chatbot combina para responder.",
+      "formatIntro": "A resposta chega em partes, de acordo com o que a pergunta pede.",
+      "tabs": {
+        "themes": "Perguntas por temas",
+        "analyses": "Tipos de análises",
+        "format": "Formato da resposta"
+      },
+      "badges": {
+        "health": "Saúde",
+        "education": "Educação",
+        "economy": "Economia",
+        "environment": "Meio Ambiente",
+        "politics": "Política",
+        "analyses": "Tipos de análises que o chatbot faz",
+        "format": "Como a resposta chega até você"
+      },
+      "themes": {
+        "health": {
+          "questions": [
+            "Como evoluiu a mortalidade infantil por estado nos últimos dez anos?",
+            "Quantos leitos de UTI o SUS oferece por município?"
+          ]
         },
-        {
-          "eyebrow": "Visualizações",
-          "question": "Crie um gráfico mostrando a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos dez anos."
+        "education": {
+          "questions": [
+            "Qual a nota média do ENEM por estado na última edição disponível?",
+            "Como está a distorção idade-série no ensino fundamental por município?"
+          ]
         },
-        {
-          "eyebrow": "Metadados",
-          "question": "Como estão organizados os dados de raça e cor na tabela de vínculos da RAIS e quais são os códigos utilizados no dicionário?"
+        "economy": {
+          "questions": [
+            "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o salário real médio das novas contratações em Recife no ano de 2025.",
+            "Crie um gráfico mostrando a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos dez anos."
+          ]
+        },
+        "environment": {
+          "questions": [
+            "Quais municípios do Cerrado registraram mais focos de queimadas no último ano?",
+            "Como evoluiu o desmatamento na Amazônia Legal na última década?"
+          ]
+        },
+        "politics": {
+          "questions": [
+            "Qual foi o comparecimento nas eleições municipais de 2024 por estado?",
+            "Como se distribuíram os votos para presidente em 2022 por região?"
+          ]
         }
-      ]
+      },
+      "analyses": {
+        "findData": {
+          "title": "Busca de dados",
+          "body": "Encontra os conjuntos de dados e as tabelas mais relevantes para a pergunta no datalake público da BD."
+        },
+        "analyze": {
+          "title": "Consultas e análises em SQL",
+          "body": "Escreve e executa consultas em SQL para responder perguntas e cruzar informações."
+        },
+        "charts": {
+          "title": "Gráficos",
+          "body": "Gera gráficos para visualizar e interpretar os resultados da análise."
+        },
+        "export": {
+          "title": "Exportação",
+          "body": "Prepara os resultados para download nos formatos .csv, .parquet, .avro ou .jsonl."
+        }
+      },
+      "formats": {
+        "text": {
+          "title": "Explicação em texto",
+          "body": "A resposta começa com um texto que resume o que foi encontrado e como interpretar."
+        },
+        "table": {
+          "title": "Tabela",
+          "body": "Quando a pergunta pede números, os resultados aparecem em uma tabela."
+        },
+        "chart": {
+          "title": "Gráfico",
+          "body": "Se a visualização ajudar, um gráfico é gerado junto com a resposta."
+        },
+        "sql": {
+          "title": "Consulta SQL",
+          "body": "A consulta usada na análise fica disponível para você conferir."
+        },
+        "download": {
+          "title": "Arquivo para download",
+          "body": "Os resultados podem ser exportados para baixar e usar fora do chatbot."
+        }
+      }
     }
   },
   "about": {
