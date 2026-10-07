@@ -3,11 +3,14 @@ import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
-function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger }) {
+function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger, onScrollDirection }) {
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
   const isProgrammaticScrollRef = useRef(false);
   const touchStartYRef = useRef(null);
+  const lastScrollTopRef = useRef(0);
+  const onScrollDirectionRef = useRef(onScrollDirection);
+  onScrollDirectionRef.current = onScrollDirection;
   const bottomThreshold = 80;
 
   const lastAssistantMessageId = useMemo(() => {
@@ -47,15 +50,23 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
   }, []);
 
   const handleScroll = useCallback(() => {
-    if (isProgrammaticScrollRef.current) return;
-
     const el = scrollContainerRef.current;
     if (!el) return;
 
+    const nextTop = el.scrollTop;
+    const delta = nextTop - lastScrollTopRef.current;
+    lastScrollTopRef.current = nextTop;
+
+    if (isProgrammaticScrollRef.current) return;
+
     const distanceFromBottom =
-      el.scrollHeight - el.scrollTop - el.clientHeight;
+      el.scrollHeight - nextTop - el.clientHeight;
 
     shouldAutoScrollRef.current = distanceFromBottom < bottomThreshold;
+
+    if (nextTop <= 4) onScrollDirectionRef.current?.("up");
+    else if (delta > 8 && nextTop > 24) onScrollDirectionRef.current?.("down");
+    else if (delta < -8) onScrollDirectionRef.current?.("up");
   }, []);
 
   const handleWheel = useCallback((e) => {
@@ -111,6 +122,7 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
       minWidth={0}
       overflowY="auto"
       overflowX="hidden"
+      paddingTop={{ base: 0, md: "64px" }}
       paddingBottom={{ base: "12px", md: "24px" }}
       align="stretch"
       spacing={0}

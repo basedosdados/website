@@ -24,10 +24,10 @@ import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
 
 import BodyText from "../../atoms/Text/BodyText";
-import { CopyIcon, CheckIcon } from "./icons";
+import { CopyIcon, CheckIcon } from "./Icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import { DownloadResultButton } from "./DownloadResults";
-import { renderFriendlyOutput } from "./toolViews";
+import { renderFriendlyOutput } from "./ToolViews";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);

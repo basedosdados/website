@@ -60,13 +60,7 @@
     "error": "Error",
     "thinkingAria": "Thinking",
     "suggestedQuestions": "Suggested Questions",
-    "greetings": {
-      "morning": "Good morning",
-      "afternoon": "Good afternoon",
-      "evening": "Good evening",
-      "neutral": "Hello",
-      "followups": ["", "Where do we start?", "How can I help?"]
-    },
+    "greeting": "Hello, how can I help you today?",
     "search": {
       "placeholder": "Write a message...",
       "disclaimer": "The chatbot can make mistakes. Consider verifying important information.",
@@ -204,7 +198,8 @@
       "deleteTitle": "Delete conversation",
       "deleteConfirm": "Are you sure you want to delete this conversation? This action cannot be undone.",
       "loadError": "Error loading history.",
-      "tryAgain": "Please try again."
+      "tryAgain": "Please try again.",
+      "openIdeas": "Open idea center"
     },
     "table": {
       "seeMore": "see more",
@@ -212,20 +207,96 @@
       "showingRows": "Showing {{shown}} of {{total}} results"
     },
     "onboarding": {
-      "items": [
-        {
-          "eyebrow": "Analyses",
-          "question": "Cross CAGED data with IPCA inflation data to calculate the Average Real Wage of new hires in Recife in 2025"
+      "title": "Idea center",
+      "themesIntro": "Pick a question to start the conversation.",
+      "analysesIntro": "These are the kinds of analysis the chatbot combines to answer.",
+      "formatIntro": "The answer arrives in parts, depending on what the question asks for.",
+      "tabs": {
+        "themes": "Questions by theme",
+        "analyses": "Types of analyses",
+        "format": "Answer format"
+      },
+      "badges": {
+        "health": "Health",
+        "education": "Education",
+        "economy": "Economy",
+        "environment": "Environment",
+        "politics": "Politics",
+        "analyses": "Types of analyses the chatbot does",
+        "format": "How the answer reaches you"
+      },
+      "themes": {
+        "health": {
+          "questions": [
+            "How has infant mortality evolved by state over the last ten years?",
+            "How many ICU beds does the SUS offer by municipality?"
+          ]
         },
-        {
-          "eyebrow": "Visualizations",
-          "question": "Create a chart showing the average wage gap between men and women in the state of São Paulo over the last ten years."
+        "education": {
+          "questions": [
+            "What is the average ENEM score by state in the latest available edition?",
+            "How does age-grade distortion look in elementary school by municipality?"
+          ]
         },
-        {
-          "eyebrow": "Metadata",
-          "question": "How are race and color data organized in the RAIS employment links table, and what codes are used in the dictionary?"
+        "economy": {
+          "questions": [
+            "Cross CAGED data with IPCA inflation data to calculate the average real wage of new hires in Recife in 2025.",
+            "Create a chart showing the average wage gap between men and women in the state of São Paulo over the last ten years."
+          ]
+        },
+        "environment": {
+          "questions": [
+            "Which municipalities in the Cerrado recorded the most fire hotspots in the last year?",
+            "How has deforestation in the Legal Amazon evolved over the last decade?"
+          ]
+        },
+        "politics": {
+          "questions": [
+            "What was voter turnout in the 2024 municipal elections by state?",
+            "How were votes for president distributed by region in 2022?"
+          ]
         }
-      ]
+      },
+      "analyses": {
+        "findData": {
+          "title": "Data search",
+          "body": "Finds the datasets and tables most relevant to the question in BD's public data lake."
+        },
+        "analyze": {
+          "title": "SQL queries and analyses",
+          "body": "Writes and runs SQL queries to answer questions and combine information."
+        },
+        "charts": {
+          "title": "Charts",
+          "body": "Builds charts to visualize and interpret the analysis results."
+        },
+        "export": {
+          "title": "Export",
+          "body": "Prepares results for download as .csv, .parquet, .avro, or .jsonl."
+        }
+      },
+      "formats": {
+        "text": {
+          "title": "Written explanation",
+          "body": "The answer starts with text that summarizes what was found and how to read it."
+        },
+        "table": {
+          "title": "Table",
+          "body": "When the question asks for numbers, the results show up in a table."
+        },
+        "chart": {
+          "title": "Chart",
+          "body": "If a visual helps, a chart is generated along with the answer."
+        },
+        "sql": {
+          "title": "SQL query",
+          "body": "The query used in the analysis stays available for you to check."
+        },
+        "download": {
+          "title": "Downloadable file",
+          "body": "Results can be exported so you can download and use them outside the chatbot."
+        }
+      }
     }
   },
   "about": {

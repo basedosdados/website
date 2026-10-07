@@ -21,7 +21,7 @@ import {
   ExtraInfoTextForm
 } from '../../molecules/uiUserPage';
 import { useChatbotContext } from '../../../context/ChatbotContext';
-import { TrashIcon, ReloadIcon, MoreVerticalIcon } from "./icons";
+import { TrashIcon, ReloadIcon, MoreVerticalIcon } from "./Icons";
 
 const THREAD_TITLE_FADE =
   "linear-gradient(to right, #000 calc(100% - 40px), transparent calc(100% - 12px))";
