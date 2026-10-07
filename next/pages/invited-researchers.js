@@ -50,7 +50,7 @@ const withProtocol = (url) => /^https?:\/\//i.test(url) ? url : `https://${url}`
 
 const ResearcherBox = ({ index, researcher, t }) => {
   const hasLeftSpacing = index % 2 !== 0
-  const subtitle = [researcher.position, researcher.affiliation].filter(Boolean).join(", ")
+  const subtitle = [researcher.position, researcher.affiliations.join(" · ")].filter(Boolean).join(", ")
   const cohort = researcher.cohorts[0] || null
 
   const iconProps = (href, label) => ({
@@ -151,7 +151,7 @@ const ResearcherBox = ({ index, researcher, t }) => {
 }
 
 const AlumniBox = ({ researcher, t }) => {
-  const subtitle = [researcher.position, researcher.affiliation].filter(Boolean).join(", ")
+  const subtitle = [researcher.position, researcher.affiliations.join(" · ")].filter(Boolean).join(", ")
   const cohorts = researcher.cohorts.length > 0
     ? t('cohort', { cohort: researcher.cohorts.join(", ") })
     : null

@@ -20,9 +20,13 @@ export async function getInvitedResearchers(locale = 'pt') {
                 picture
                 position
                 position${Locale}
-                affiliation {
-                  name
-                  name${Locale}
+                affiliations {
+                  edges {
+                    node {
+                      name
+                      name${Locale}
+                    }
+                  }
                 }
                 description
                 description${Locale}
@@ -69,9 +73,9 @@ export async function getInvitedResearchers(locale = 'pt') {
       name: node.name,
       picture: node.picture || null,
       position: node[`position${Locale}`] || node.position || null,
-      affiliation: node.affiliation
-        ? node.affiliation[`name${Locale}`] || node.affiliation.name
-        : null,
+      affiliations: node.affiliations.edges.map(
+        (org) => org.node[`name${Locale}`] || org.node.name
+      ),
       description: node[`description${Locale}`] || node.description || null,
       email: node.email || null,
       website: node.website || null,
