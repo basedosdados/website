@@ -20,7 +20,10 @@ export async function getInvitedResearchers(locale = 'pt') {
                 picture
                 position
                 position${Locale}
-                affiliation
+                affiliation {
+                  name
+                  name${Locale}
+                }
                 description
                 description${Locale}
                 email
@@ -29,6 +32,7 @@ export async function getInvitedResearchers(locale = 'pt') {
                 googleScholar
                 lattes
                 isInvitedResearcher
+                isInvitedResearcherAlumni
                 themes {
                   edges {
                     node {
@@ -65,7 +69,9 @@ export async function getInvitedResearchers(locale = 'pt') {
       name: node.name,
       picture: node.picture || null,
       position: node[`position${Locale}`] || node.position || null,
-      affiliation: node.affiliation || null,
+      affiliation: node.affiliation
+        ? node.affiliation[`name${Locale}`] || node.affiliation.name
+        : null,
       description: node[`description${Locale}`] || node.description || null,
       email: node.email || null,
       website: node.website || null,
@@ -73,21 +79,30 @@ export async function getInvitedResearchers(locale = 'pt') {
       googleScholar: node.googleScholar || null,
       lattes: node.lattes || null,
       isInvitedResearcher: node.isInvitedResearcher,
+      isInvitedResearcherAlumni: node.isInvitedResearcherAlumni,
       cohorts: node.invitedResearcherTerms.edges
         .map((term) => term.node.cohort)
-        .filter((cohort) => cohort !== null),
+        .filter(Boolean)
+        .sort(),
       themes: node.themes.edges.map((theme) => ({
         slug: theme.node.slug,
         name: theme.node[`name${Locale}`] || theme.node.name,
       })),
     }))
-    .filter((researcher) => researcher.isInvitedResearcher)
+}
+
+export async function getInvitedResearchersByStatus(locale = 'pt') {
+  const researchers = await getInvitedResearchers(locale)
+  return {
+    current: researchers.filter((researcher) => researcher.isInvitedResearcher),
+    alumni: researchers.filter((researcher) => researcher.isInvitedResearcherAlumni),
+  }
 }
 
 export default async function handler(req, res) {
   const { locale } = req.query;
   try {
-    const researchers = await getInvitedResearchers(locale);
+    const researchers = await getInvitedResearchersByStatus(locale);
     return res.status(200).json({ resource: researchers, success: true });
   } catch (error) {
     return res.status(500).json({ error: error.message, success: false });

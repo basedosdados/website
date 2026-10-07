@@ -10,10 +10,13 @@
   "eligibilityPhd": "Tener un doctorado completo",
   "eligibilityAffiliation": "Estar vinculado(a) a una universidad o instituto de investigación, en Brasil o en el extranjero",
   "rulesTitle": "Reglas",
+  "rulesMembership": "La participación es solo por invitación. Las nominaciones abiertas comienzan en 2028",
   "rulesTerm": "Mandatos de 2 años, renovables indefinidamente",
   "rulesCohorts": "Las nuevas cohortes se seleccionan una vez por semestre, con anuncios a principios de enero y a principios de julio",
   "rosterTitle": "Nuestros investigadores invitados",
   "rosterEmpty": "La primera cohorte de Investigadores Invitados se anunciará pronto.",
+  "alumniTitle": "Ex investigadores invitados",
+  "alumniText": "Investigadoras e investigadores que formaron parte de la red en cohortes anteriores.",
   "filterAll": "Todas las áreas",
   "cohort": "Cohorte {{cohort}}",
   "links": {

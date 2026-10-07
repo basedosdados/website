@@ -3,6 +3,7 @@ import {
   Stack,
   VStack,
   Image,
+  SimpleGrid,
   UnorderedList,
   ListItem,
 } from "@chakra-ui/react";
@@ -11,7 +12,7 @@ import { useState, useMemo } from "react";
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { MainPageTemplate } from "../components/templates/main";
-import { getInvitedResearchers } from "./api/researchers/getInvitedResearchers";
+import { getInvitedResearchersByStatus } from "./api/researchers/getInvitedResearchers";
 
 import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
@@ -27,8 +28,11 @@ import DocIcon from "../public/img/icons/docIcon";
 
 export async function getServerSideProps({ locale }) {
   let researchers = null
+  let alumni = []
   try {
-    researchers = await getInvitedResearchers(locale)
+    const result = await getInvitedResearchersByStatus(locale)
+    researchers = result.current
+    alumni = result.alumni
   } catch (error) {
     console.error(error)
   }
@@ -37,6 +41,7 @@ export async function getServerSideProps({ locale }) {
     props: {
       ...(await serverSideTranslations(locale, ['invitedResearchers', 'common', 'menu'])),
       researchers,
+      alumni,
     },
   }
 }
@@ -46,7 +51,7 @@ const withProtocol = (url) => /^https?:\/\//i.test(url) ? url : `https://${url}`
 const ResearcherBox = ({ index, researcher, t }) => {
   const hasLeftSpacing = index % 2 !== 0
   const subtitle = [researcher.position, researcher.affiliation].filter(Boolean).join(", ")
-  const cohort = researcher.cohorts.length > 0 ? Math.min(...researcher.cohorts) : null
+  const cohort = researcher.cohorts[0] || null
 
   const iconProps = (href, label) => ({
     alt: label,
@@ -136,10 +141,63 @@ const ResearcherBox = ({ index, researcher, t }) => {
         >
           {[
             researcher.themes.map((theme) => theme.name).join(" · "),
-            cohort !== null ? t('cohort', { cohort }) : null,
+            cohort ? t('cohort', { cohort }) : null,
           ].filter(Boolean).join(" | ")}
         </LabelText>
         <IconLinks display={{base: "flex", lg: "none"}}/>
+      </Box>
+    </Box>
+  )
+}
+
+const AlumniBox = ({ researcher, t }) => {
+  const subtitle = [researcher.position, researcher.affiliation].filter(Boolean).join(", ")
+  const cohorts = researcher.cohorts.length > 0
+    ? t('cohort', { cohort: researcher.cohorts.join(", ") })
+    : null
+
+  return (
+    <Box display="flex" flexDirection="row" alignItems="center" gap="16px">
+      <Box
+        minWidth="64px"
+        maxWidth="64px"
+        minHeight="64px"
+        maxHeight="64px"
+        borderRadius="12px"
+        overflow="hidden"
+      >
+        <Image
+          alt={researcher.name}
+          src={researcher.picture || "https://storage.googleapis.com/basedosdados-website/equipe/sem_foto.png"}
+          width="100%"
+          height="100%"
+          objectFit="cover"
+        />
+      </Box>
+      <Box display="flex" flexDirection="column">
+        {researcher.website ?
+          <LabelText
+            as="a"
+            href={withProtocol(researcher.website)}
+            target="_blank"
+            textAlign="start"
+            _hover={{ color: "#0057A4" }}
+          >
+            {researcher.name}
+          </LabelText>
+        :
+          <LabelText textAlign="start">{researcher.name}</LabelText>
+        }
+        {subtitle &&
+          <LabelText typography="small" fontWeight="400" color="#71757A" textAlign="start">
+            {subtitle}
+          </LabelText>
+        }
+        {cohorts &&
+          <LabelText typography="small" fontWeight="400" color="#71757A" textAlign="start">
+            {cohorts}
+          </LabelText>
+        }
       </Box>
     </Box>
   )
@@ -166,7 +224,7 @@ const InfoCard = ({ title, items }) => (
   </Box>
 )
 
-export default function InvitedResearchers({ researchers }) {
+export default function InvitedResearchers({ researchers, alumni }) {
   const { t } = useTranslation('invitedResearchers');
   const [filterTheme, setFilterTheme] = useState("")
 
@@ -270,7 +328,7 @@ export default function InvitedResearchers({ researchers }) {
           />
           <InfoCard
             title={t('rulesTitle')}
-            items={[t('rulesTerm'), t('rulesCohorts')]}
+            items={[t('rulesMembership'), t('rulesTerm'), t('rulesCohorts')]}
           />
         </Stack>
       </VStack>
@@ -332,6 +390,35 @@ export default function InvitedResearchers({ researchers }) {
           </Stack>
         }
       </Stack>
+      {alumni?.length > 0 &&
+        <Stack
+          id="alumni"
+          width="100%"
+          maxWidth="1440px"
+          padding="50px 24px 94px"
+          margin="auto"
+          spacing={0}
+        >
+          <Display as="h2" textAlign="center" paddingBottom="16px">
+            {t('alumniTitle')}
+          </Display>
+          <BodyText typography="large" color="#464A51" textAlign="center" paddingBottom="64px">
+            {t('alumniText')}
+          </BodyText>
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3 }}
+            spacingX="48px"
+            spacingY="32px"
+            maxWidth="1100px"
+            width="100%"
+            alignSelf="center"
+          >
+            {alumni.map((researcher) => (
+              <AlumniBox key={researcher.id} researcher={researcher} t={t}/>
+            ))}
+          </SimpleGrid>
+        </Stack>
+      }
     </MainPageTemplate>
   )
 }

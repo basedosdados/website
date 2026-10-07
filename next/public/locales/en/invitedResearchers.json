@@ -10,10 +10,13 @@
   "eligibilityPhd": "Hold a completed PhD",
   "eligibilityAffiliation": "Be affiliated with a university or research institute, in Brazil or abroad",
   "rulesTitle": "Rules",
+  "rulesMembership": "Membership is by invitation only. Open nominations start in 2028",
   "rulesTerm": "2-year terms, indefinitely renewable",
   "rulesCohorts": "New cohorts are selected once a semester, with announcements in early January and early July",
   "rosterTitle": "Our invited researchers",
   "rosterEmpty": "The first cohort of Invited Researchers will be announced soon.",
+  "alumniTitle": "Alumni",
+  "alumniText": "Researchers who were part of the network in previous cohorts.",
   "filterAll": "All fields",
   "cohort": "Cohort {{cohort}}",
   "links": {
