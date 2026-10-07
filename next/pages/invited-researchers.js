@@ -313,24 +313,6 @@ export default function InvitedResearchers({ researchers, alumni }) {
             {t('aboutText2')}
           </BodyText>
         </Stack>
-
-        <Stack
-          width="100%"
-          maxWidth="1100px"
-          padding="24px 24px 50px"
-          flexDirection={{ base: "column", lg: "row" }}
-          gap="32px"
-          spacing={0}
-        >
-          <InfoCard
-            title={t('eligibilityTitle')}
-            items={[t('eligibilityPhd'), t('eligibilityAffiliation')]}
-          />
-          <InfoCard
-            title={t('rulesTitle')}
-            items={[t('rulesMembership'), t('rulesTerm'), t('rulesCohorts')]}
-          />
-        </Stack>
       </VStack>
 
       <Stack
@@ -390,6 +372,27 @@ export default function InvitedResearchers({ researchers, alumni }) {
           </Stack>
         }
       </Stack>
+
+      <Stack width="100%" alignItems="center" paddingBottom="50px">
+        <Stack
+          width="100%"
+          maxWidth="1100px"
+          padding="0 24px"
+          flexDirection={{ base: "column", lg: "row" }}
+          gap="32px"
+          spacing={0}
+        >
+          <InfoCard
+            title={t('eligibilityTitle')}
+            items={[t('eligibilityPhd'), t('eligibilityAffiliation')]}
+          />
+          <InfoCard
+            title={t('rulesTitle')}
+            items={[t('rulesMembership'), t('rulesTerm'), t('rulesCohorts')]}
+          />
+        </Stack>
+      </Stack>
+
       {alumni?.length > 0 &&
         <Stack
           id="alumni"
