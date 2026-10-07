@@ -21,6 +21,7 @@ import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
 import Link from "../../components/atoms/Link";
 import ReadMore from "../../components/atoms/ReadMore";
+import { getResearchPapers } from "../../components/organisms/DatasetResource";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -278,6 +279,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
     if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
     if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
     if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
+
+    const research_papers = getResearchPapers(dataset)
+    if(research_papers.length > 0) return pushQuery("research_paper", research_papers[0]?._id)
   }
 
   useEffect(() => {
