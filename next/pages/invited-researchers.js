@@ -212,7 +212,7 @@ export default function InvitedResearchers({ researchers }) {
           width="100%"
           maxWidth="1440px"
           margin="auto"
-          paddingTop={{ base: "128px", lg: "0" }}
+          paddingTop={{ base: "128px", lg: "80px" }}
           paddingX="24px"
           paddingBottom="50px"
           alignItems="center"
@@ -270,7 +270,7 @@ export default function InvitedResearchers({ researchers }) {
           />
           <InfoCard
             title={t('rulesTitle')}
-            items={[t('rulesTerm')]}
+            items={[t('rulesTerm'), t('rulesCohorts')]}
           />
         </Stack>
       </VStack>
