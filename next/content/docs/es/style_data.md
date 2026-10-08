@@ -181,6 +181,13 @@ Llenar la columna `cobertura_temporal` en los metadatos de tabla, columna y clav
 - Valor nulo: `""` (csv), `NULL` (Python), `NA` (R)
 - Proporción/porcentaje: entre 0-100
 
+## Archivos CSV
+
+En todo archivo `.csv` que se sube a staging, cada fila debe tener el mismo número de columnas que el encabezado. La tabla de staging se crea con la opción `allowJaggedRows` desactivada, en dev y en producción. Por eso, BigQuery da error al leer una fila con columnas faltantes, en lugar de completarla con nulos.
+
+- Al crear la tabla con `tb.create`, no pases `csv_allow_jagged_rows=True`. El valor predeterminado del paquete ya es `False`.
+- Cuando una columna nueva entre en una tabla que ya tiene archivos en staging, vuelve a escribir los archivos antiguos con esa columna. Donde no haya valor, déjala vacía (`""`), como cualquier valor nulo.
+
 ## Particionamiento de tablas
 
 ### **¿Qué es el particionamiento y cuál es su objetivo?**
