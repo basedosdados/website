@@ -1,0 +1,37 @@
+{
+  "health": [
+    "What were the leading causes of death in Brazil in 2019, 2021, and 2024, grouped by ICD-10 chapter?",
+    "Show on a map the share of births by cesarean section in each state in 2025.",
+    "What percentage of hospital beds are available to the SUS in each Brazilian state?",
+    "What percentage of children under 5 were overweight or obese among those monitored by SISVAN, in 2019 and in 2023?",
+    "Make a chart of the number of confirmed dengue cases in Brazil per year, from 2017 to 2025."
+  ],
+  "education": [
+    "How has the IDEB for high school in Brazil evolved, across all school systems, since 2005? Show it in a chart.",
+    "Which states had the highest and lowest percentage of children who were literate by the end of the 2nd year of elementary school in 2024?",
+    "What were the approval, failure, and dropout rates in high school in each Brazilian state in 2024?",
+    "What percentage of active public schools had internet for student use in 2025, by state?",
+    "Compare Brazil's average mathematics score in PISA 2025 with those of Argentina, Chile, Colombia, Mexico, and Uruguay."
+  ],
+  "economy": [
+    "Which 10 products, by NCM classification, did Brazil export the most in FOB value (US$) in 2025, and what were the top 3 destination countries for each?",
+    "Make a chart of 12-month accumulated inflation (IPCA) over the last 20 years.",
+    "How did the dollar's exchange rate against the real change from 2010 to 2025? Show in a chart the average rate for each year, highlighting the highest and lowest points.",
+    "Create a map of the unemployment rate in each state in the 4th quarter of 2025, according to the PNAD Contínua.",
+    "In 2025, what was the average earnings of men and women with an active formal job in each state, and what was the percentage difference in women's earnings relative to men's, considering only jobs with positive earnings?"
+  ],
+  "environment": [
+    "What were the 5 largest land-use transitions in the state of Amazonas between 2020 and 2025?",
+    "How did Brazil's gross greenhouse gas emissions, in tonnes of CO₂e (GWP-AR5), evolve by sector from 2000 to 2019, excluding emissions not counted in the inventory (NCI)? Show it in a chart.",
+    "Create a chart showing how the percentage of deforested area evolved in each biome between 2000 and 2023, according to PRODES/INPE data.",
+    "Which biome had the most fire hotspots in 2024? Compare the biomes in a chart, using only INPE's reference satellite (AQUA, afternoon pass).",
+    "How many animal species and subspecies are threatened with extinction in Brazil, by group, considering the categories vulnerable, endangered, critically endangered, and possibly extinct?"
+  ],
+  "politics": [
+    "Make a chart of the percentage of women among the 513 federal deputies elected in each election, from 2010 to 2022.",
+    "In the current legislature, on which type of expense did federal deputies spend the most from the parliamentary quota (Cota Parlamentar)? And which 10 deputies spent the most over the period?",
+    "Who was the most-voted candidate for federal deputy in each state in 2022, from which party, and were they elected?",
+    "Who were the governors elected in 2022? Which party were they from, and how many states did each party win?",
+    "How did the average age of the 513 federal deputies elected in each election change from 2010 to 2022?"
+  ]
+}

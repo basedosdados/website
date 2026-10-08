@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import BodyText from "../../atoms/Text/BodyText";
-import { ArrowUpIcon } from "./icons";
+import { ArrowUpIcon } from "./Icons";
 import useIsomorphicLayoutEffect from "../../../hooks/useIsomorphicLayoutEffect";
 
 function draftKeyFor(threadId) {
@@ -62,6 +62,9 @@ const Search = forwardRef(function Search({
     },
     focus: () => {
       textareaRef.current?.focus();
+    },
+    setText: (text) => {
+      setValue(String(text ?? ""));
     },
   }), [threadId]);
 

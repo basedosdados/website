@@ -13,11 +13,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm-v3";
 
 import BodyText from "../../atoms/Text/BodyText";
-import { ThumbUpIcon, ThumbDownIcon, CopyIcon, CheckIcon } from "./icons";
+import { ThumbUpIcon, ThumbDownIcon, CopyIcon, CheckIcon } from "./Icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import FeedbackModal from "./FeedbackModal";
-import { componentsMk, markdownContentSx } from "./markdown";
-import rehypeNumericTables from "./rehypeNumericTables";
+import { componentsMk, markdownContentSx } from "./Markdown";
+import rehypeNumericTables from "./RehypeNumericTables";
 import { DownloadResultsButton, ExportResultCard } from "./DownloadResults";
 import { ChartCard } from "./Charts";
 import {

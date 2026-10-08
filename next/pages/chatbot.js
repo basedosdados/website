@@ -3,7 +3,6 @@ import {
   HStack,
   Stack,
   Box,
-  Text
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -15,48 +14,19 @@ import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuestions";
+import ThreadHeader from "../components/organisms/chatbot/ThreadHeader";
 import Display from "../components/atoms/Text/Display";
-import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/icons";
+import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/Icons";
 import BrandLogo from "../components/organisms/chatbot/BrandLogo";
 import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
-import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/user";
 
 const greetingFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
-
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function buildGreeting(t, avoidSignature) {
-  const hour = new Date().getHours();
-  const period =
-    hour >= 5 && hour < 12
-      ? "morning"
-      : hour >= 12 && hour < 18
-        ? "afternoon"
-        : "evening";
-  const name = nameFromEmail(getUserEmailFromCookie());
-  const greetingWords = [t(`ui.greetings.${period}`), t("ui.greetings.neutral")];
-  const followups = t("ui.greetings.followups", { returnObjects: true });
-  const followupList = Array.isArray(followups) ? followups : [""];
-
-  let result;
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const greeting = pickRandom(greetingWords);
-    const followup = pickRandom(followupList) || "";
-    const base = name ? `${greeting}, ${name}` : greeting;
-    const lead = `${base}.`;
-    result = { lead, followup, signature: `${lead}|${followup}` };
-    if (result.signature !== avoidSignature) break;
-  }
-  return result;
-}
 
 function ChatbotContent() {
   const router = useRouter();
@@ -72,9 +42,9 @@ function ChatbotContent() {
   const skipFetchRef = useRef(false);
   const searchRef = useRef(null);
 
-  const [greeting, setGreeting] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
   const [composerHasText, setComposerHasText] = useState(false);
+  const scrollDirectionRef = useRef(null);
 
   const handleComposerTextChange = useCallback((text) => {
     setComposerHasText((text || "").trim().length > 0);
@@ -153,6 +123,22 @@ function ChatbotContent() {
     });
   }, [sendMessage, isLoading, isGenerating]);
 
+  const handleIdeaPrompt = useCallback((question) => {
+    const trimmed = String(question || "").trim();
+    if (!trimmed || isLoading || isGenerating) return;
+
+    searchRef.current?.setText(trimmed);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        searchRef.current?.focus();
+      });
+    });
+  }, [isLoading, isGenerating]);
+
+  const handleScrollDirection = useCallback((direction) => {
+    scrollDirectionRef.current?.(direction);
+  }, []);
+
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
@@ -174,23 +160,7 @@ function ChatbotContent() {
 
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
-
-  useEffect(() => {
-    if (!showNewChatGreeting) {
-      setGreeting(null);
-      return;
-    }
-    let previous = null;
-    try {
-      previous = window.localStorage.getItem("chatbot_last_greeting");
-    } catch {}
-    const next = buildGreeting(t, previous);
-    setGreeting(next);
-    try {
-      window.localStorage.setItem("chatbot_last_greeting", next.signature);
-    } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showNewChatGreeting]);
+  const isThreadView = !showAbout && !showNewChatGreeting;
 
   const searchField = (
     <Search
@@ -306,7 +276,10 @@ function ChatbotContent() {
           minWidth={0}
           height="100%"
           maxHeight="100dvh"
-          padding={{ base: "12px 12px 16px", md: "24px 0" }}
+          padding={{
+            base: "12px 12px 16px",
+            md: isThreadView ? 0 : "24px 0",
+          }}
           overflow="hidden"
           justifyContent="center"
           alignItems="stretch"
@@ -337,53 +310,56 @@ function ChatbotContent() {
                 paddingX={{ base: "0", md: "32px" }}
                 gap={{ base: "20px", md: "32px" }}
               >
-                {greeting && (
-                  <Display
-                    as="h2"
-                    typography="small"
-                    textAlign="center"
-                    fontSize={{ base: "28px", md: "36px" }}
-                    lineHeight={{ base: "36px", md: "48px" }}
-                    paddingX={{ base: "8px", md: 0 }}
-                    display="flex"
-                    flexWrap="wrap"
-                    justifyContent="center"
-                    sx={{ columnGap: "8px" }}
-                    animation={`${greetingFadeIn} 0.4s ease-out both`}
-                  >
-                    <Text as="span" whiteSpace="nowrap">
-                      {greeting.lead}
-                    </Text>
-                    {greeting.followup ? (
-                      <Text as="span" whiteSpace="nowrap">
-                        {greeting.followup}
-                      </Text>
-                    ) : null}
-                  </Display>
-                )}
+                <Display
+                  as="h2"
+                  typography="small"
+                  textAlign="center"
+                  fontSize={{ base: "28px", md: "36px" }}
+                  lineHeight={{ base: "36px", md: "48px" }}
+                  paddingX={{ base: "8px", md: 0 }}
+                  animation={`${greetingFadeIn} 0.4s ease-out both`}
+                >
+                  {t("ui.greeting")}
+                </Display>
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
                 <OnboardingQuestions
-                  onQuestionClick={handleFollowUpClick}
+                  onQuestionClick={handleIdeaPrompt}
                   isDisabled={isLoading || isGenerating}
                   hasText={composerHasText}
                 />
               </Flex>
             ) : (
               <>
-                <Box flex={1} overflow="hidden" width="100%" minHeight={0} minWidth={0}>
+                <Box
+                  position="relative"
+                  flex={1}
+                  overflow="hidden"
+                  width="100%"
+                  minHeight={0}
+                  minWidth={0}
+                >
+                  <ThreadHeader
+                    scrollDirectionRef={scrollDirectionRef}
+                    threadId={threadId || normalizedThreadId}
+                    messages={messages}
+                    onDeleted={handleNewChat}
+                    onQuestionClick={handleIdeaPrompt}
+                    isDisabled={isLoading || isGenerating}
+                  />
                   <ChatWindow
                     messages={messages}
                     onFeedback={sendFeedback}
                     onExport={exportQueryResult}
                     onFollowUpClick={handleFollowUpClick}
                     scrollTrigger={scrollTrigger}
+                    onScrollDirection={handleScrollDirection}
                   />
                 </Box>
                 <Box
                   width="100%"
-                  paddingTop={{ base: "12px", md: "24px" }}
+                  padding={{ base: "12px 0", md: "24px 0" }}
                   flexShrink={0}
                   overflowY="auto"
                   sx={{

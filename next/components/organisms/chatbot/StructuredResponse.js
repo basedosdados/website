@@ -13,7 +13,7 @@ import { useTranslation } from "next-i18next";
 
 import BodyText from "../../atoms/Text/BodyText";
 import Link from "../../atoms/Link";
-import { LinkIcon, TableChartViewIcon, ArrowRightIcon, ChatBubbleDotsIcon } from "./icons";
+import { LinkIcon, TableChartViewIcon, ArrowRightIcon, ChatBubbleDotsIcon } from "./Icons";
 
 function getDatasetTableUrl(source) {
   const datasetId = source?.dataset_id ?? source?.datasetId;

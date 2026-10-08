@@ -18,7 +18,7 @@ import {
   TableChartViewIcon,
   BracesIcon,
   FileIcon,
-} from "./icons";
+} from "./Icons";
 
 const EXPORT_FORMAT_STYLES = {
   CSV: { Icon: TableChartViewIcon, color: "#3AC17C", tint: "rgba(58, 193, 124, 0.16)" },

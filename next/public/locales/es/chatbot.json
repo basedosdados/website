@@ -60,13 +60,7 @@
     "error": "Error",
     "thinkingAria": "Pensando",
     "suggestedQuestions": "Preguntas Sugeridas",
-    "greetings": {
-      "morning": "Buenos días",
-      "afternoon": "Buenas tardes",
-      "evening": "Buenas noches",
-      "neutral": "Hola",
-      "followups": ["", "¿Por dónde empezamos?", "¿Cómo puedo ayudarte?"]
-    },
+    "greeting": "Hola, ¿cómo puedo ayudarte hoy?",
     "search": {
       "placeholder": "Escribe un mensaje...",
       "disclaimer": "El chatbot puede cometer errores. Considera verificar la información importante.",
@@ -204,7 +198,8 @@
       "deleteTitle": "Eliminar conversación",
       "deleteConfirm": "¿Seguro que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
       "loadError": "Error al cargar el historial.",
-      "tryAgain": "Inténtalo de nuevo."
+      "tryAgain": "Inténtalo de nuevo.",
+      "openIdeas": "Abrir central de ideas"
     },
     "table": {
       "seeMore": "ver más",
@@ -212,20 +207,64 @@
       "showingRows": "Mostrando {{shown}} de {{total}} resultados"
     },
     "onboarding": {
-      "items": [
-        {
-          "eyebrow": "Análisis",
-          "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025"
+      "title": "Central de ideas",
+      "themesIntro": "Explora datos por diferentes temas y mira algunos ejemplos de inspiración para empezar tu análisis:",
+      "analysesIntro": "Estas son las formas de análisis que el chatbot combina para responder.",
+      "formatIntro": "La respuesta llega en partes, según lo que pide la pregunta.",
+      "tabs": {
+        "themes": "Preguntas por temas",
+        "analyses": "Tipos de análisis",
+        "format": "Formato de la respuesta"
+      },
+      "badges": {
+        "health": "Salud",
+        "education": "Educación",
+        "economy": "Economía",
+        "environment": "Medio ambiente / Naturaleza",
+        "politics": "Política / Elecciones",
+        "analyses": "Tipos de análisis que hace el chatbot",
+        "format": "Cómo te llega la respuesta"
+      },
+      "analyses": {
+        "findData": {
+          "title": "Búsqueda de datos",
+          "body": "Encuentra los conjuntos de datos y las tablas más relevantes para la pregunta en el datalake público de BD."
         },
-        {
-          "eyebrow": "Visualizaciones",
-          "question": "Crea un gráfico que muestre la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos diez años."
+        "analyze": {
+          "title": "Consultas y análisis en SQL",
+          "body": "Escribe y ejecuta consultas en SQL para responder preguntas y cruzar información."
         },
-        {
-          "eyebrow": "Metadatos",
-          "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?"
+        "charts": {
+          "title": "Gráficos",
+          "body": "Genera gráficos para visualizar e interpretar los resultados del análisis."
+        },
+        "export": {
+          "title": "Exportación",
+          "body": "Prepara los resultados para descargar en los formatos .csv, .parquet, .avro o .jsonl."
         }
-      ]
+      },
+      "formats": {
+        "text": {
+          "title": "Explicación en texto",
+          "body": "La respuesta empieza con un texto que resume lo encontrado y cómo interpretarlo."
+        },
+        "table": {
+          "title": "Tabla",
+          "body": "Cuando la pregunta pide números, los resultados aparecen en una tabla."
+        },
+        "chart": {
+          "title": "Gráfico",
+          "body": "Si la visualización ayuda, se genera un gráfico junto con la respuesta."
+        },
+        "sql": {
+          "title": "Consulta SQL",
+          "body": "La consulta usada en el análisis queda disponible para que la revises."
+        },
+        "download": {
+          "title": "Archivo para descargar",
+          "body": "Los resultados se pueden exportar para descargarlos y usarlos fuera del chatbot."
+        }
+      }
     }
   },
   "about": {
