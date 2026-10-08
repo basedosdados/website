@@ -208,7 +208,7 @@
     },
     "onboarding": {
       "title": "Central de ideias",
-      "themesIntro": "Escolha uma pergunta para começar a conversa.",
+      "themesIntro": "Explore dados por diferentes temas e confira alguns exemplos de inspiração para começar sua análise:",
       "analysesIntro": "Estas são as formas de análise que o chatbot combina para responder.",
       "formatIntro": "A resposta chega em partes, de acordo com o que a pergunta pede.",
       "tabs": {
@@ -220,42 +220,10 @@
         "health": "Saúde",
         "education": "Educação",
         "economy": "Economia",
-        "environment": "Meio Ambiente",
-        "politics": "Política",
+        "environment": "Meio Ambiente / Natureza",
+        "politics": "Política / Eleições",
         "analyses": "Tipos de análises que o chatbot faz",
         "format": "Como a resposta chega até você"
-      },
-      "themes": {
-        "health": {
-          "questions": [
-            "Como evoluiu a mortalidade infantil por estado nos últimos dez anos?",
-            "Quantos leitos de UTI o SUS oferece por município?"
-          ]
-        },
-        "education": {
-          "questions": [
-            "Qual a nota média do ENEM por estado na última edição disponível?",
-            "Como está a distorção idade-série no ensino fundamental por município?"
-          ]
-        },
-        "economy": {
-          "questions": [
-            "Cruze os dados do CAGED e os dados de inflação do IPCA para calcular o salário real médio das novas contratações em Recife no ano de 2025.",
-            "Crie um gráfico mostrando a diferença salarial média entre homens e mulheres no estado de São Paulo ao longo dos últimos dez anos."
-          ]
-        },
-        "environment": {
-          "questions": [
-            "Quais municípios do Cerrado registraram mais focos de queimadas no último ano?",
-            "Como evoluiu o desmatamento na Amazônia Legal na última década?"
-          ]
-        },
-        "politics": {
-          "questions": [
-            "Qual foi o comparecimento nas eleições municipais de 2024 por estado?",
-            "Como se distribuíram os votos para presidente em 2022 por região?"
-          ]
-        }
       },
       "analyses": {
         "findData": {

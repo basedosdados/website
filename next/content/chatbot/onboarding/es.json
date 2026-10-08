@@ -1,0 +1,37 @@
+{
+  "health": [
+    "¿Cuáles fueron las principales causas de muerte en Brasil en 2019, 2021 y 2024, agrupadas por capítulo de la CID-10?",
+    "Muestra en un mapa la proporción de partos por cesárea en cada estado en 2025.",
+    "¿Qué porcentaje de camas hospitalarias está disponible para el SUS en cada estado brasileño?",
+    "¿Qué porcentaje de niños menores de 5 años tenía sobrepeso u obesidad entre los acompañados por el SISVAN, en 2019 y en 2023?",
+    "Haz un gráfico del número de casos confirmados de dengue en Brasil por año, de 2017 a 2025."
+  ],
+  "education": [
+    "¿Cómo evolucionó el IDEB de la enseñanza media en Brasil, considerando todas las redes de enseñanza, desde 2005? Muéstralo en un gráfico.",
+    "¿Qué estados tuvieron el mayor y el menor porcentaje de niños alfabetizados al final del 2.º año de la enseñanza fundamental en 2024?",
+    "¿Cuáles fueron las tasas de aprobación, reprobación y abandono en la enseñanza media en cada estado brasileño en 2024?",
+    "¿Qué porcentaje de escuelas públicas en actividad tenía internet para uso de los alumnos en 2025, por estado?",
+    "Compara la nota media en matemáticas de Brasil en el PISA 2025 con las de Argentina, Chile, Colombia, México y Uruguay."
+  ],
+  "economy": [
+    "¿Cuáles fueron los 10 productos, según la clasificación NCM, que Brasil más exportó en valor FOB (US$) en 2025, y cuáles fueron los 3 principales países de destino de cada uno?",
+    "Haz un gráfico de la inflación acumulada en 12 meses (IPCA) en los últimos 20 años.",
+    "¿Cómo cambió la cotización del dólar frente al real de 2010 a 2025? Muestra en un gráfico la cotización media de cada año, destacando el punto más alto y el más bajo.",
+    "Crea un mapa con la tasa de desocupación de cada estado en el 4.º trimestre de 2025, según la PNAD Contínua.",
+    "En 2025, ¿cuál fue la remuneración media de hombres y mujeres con vínculo formal activo en cada estado y cuál fue la diferencia porcentual de la remuneración de las mujeres respecto a la de los hombres, considerando solo vínculos con remuneración positiva?"
+  ],
+  "environment": [
+    "¿Cuáles fueron las 5 mayores transiciones de uso del suelo en el estado de Amazonas entre 2020 y 2025?",
+    "¿Cómo evolucionaron las emisiones brutas de gases de efecto invernadero en Brasil, en toneladas de CO₂e (GWP-AR5), por sector, de 2000 a 2019, sin incluir las emisiones no contabilizadas en el inventario (NCI)? Muéstralo en un gráfico.",
+    "Crea un gráfico que muestre la evolución del porcentaje de área deforestada en cada bioma entre 2000 y 2023, según los datos del PRODES/INPE.",
+    "¿En qué bioma hubo más focos de incendio en 2024? Compara los biomas en un gráfico, usando solo el satélite de referencia del INPE (AQUA, paso de la tarde).",
+    "¿Cuántas especies y subespecies de animales están amenazadas de extinción en Brasil, por grupo, considerando las categorías vulnerable, en peligro, en peligro crítico y posiblemente extinta?"
+  ],
+  "politics": [
+    "Haz un gráfico del porcentaje de mujeres entre los 513 diputados federales elegidos en cada elección, de 2010 a 2022.",
+    "En la legislatura actual, ¿en qué tipo de gasto usaron más los diputados federales la Cuota Parlamentaria? ¿Y cuáles fueron los 10 diputados que más gastaron en el período?",
+    "¿Quién fue el candidato a diputado federal más votado en cada estado en 2022, de qué partido, y resultó elegido?",
+    "¿Quiénes fueron los gobernadores elegidos en 2022? ¿De qué partido eran y cuántos estados conquistó cada partido?",
+    "¿Cómo cambió la edad media de los 513 diputados federales elegidos en cada elección, de 2010 a 2022?"
+  ]
+}

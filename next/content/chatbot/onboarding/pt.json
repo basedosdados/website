@@ -1,0 +1,37 @@
+{
+  "health": [
+    "Quais foram as principais causas de morte no Brasil em 2019, 2021 e 2024, agrupadas por capítulo da CID-10?",
+    "Mostre em um mapa a proporção de partos por cesariana em cada estado em 2025.",
+    "Qual a porcentagem de leitos hospitalares disponíveis para o SUS em cada estado brasileiro?",
+    "Qual a porcentagem de crianças menores de 5 anos com sobrepeso ou obesidade entre as acompanhadas pelo SISVAN, em 2019 e em 2023?",
+    "Faça um gráfico do número de casos confirmados de dengue no Brasil por ano, de 2017 a 2025."
+  ],
+  "education": [
+    "Como evoluiu o IDEB do ensino médio no Brasil, considerando todas as redes de ensino, desde 2005? Mostre em um gráfico.",
+    "Quais estados tiveram a maior e a menor porcentagem de crianças alfabetizadas ao fim do 2º ano do ensino fundamental em 2024?",
+    "Quais foram as taxas de aprovação, reprovação e abandono no ensino médio em cada estado brasileiro em 2024?",
+    "Qual a porcentagem de escolas públicas em atividade com internet para uso dos alunos em 2025, por estado?",
+    "Compare a nota média em matemática do Brasil no PISA 2025 com as de Argentina, Chile, Colômbia, México e Uruguai."
+  ],
+  "economy": [
+    "Quais foram os 10 produtos, pela classificação NCM, que o Brasil mais exportou em valor FOB (US$) em 2025, e quais os 3 principais países de destino de cada um?",
+    "Faça um gráfico da inflação acumulada em 12 meses (IPCA) nos últimos 20 anos.",
+    "Como a cotação do dólar em relação ao real mudou de 2010 a 2025? Mostre em um gráfico a cotação média de cada ano, destacando o ponto mais alto e o mais baixo.",
+    "Crie um mapa com a taxa de desocupação de cada estado no 4º trimestre de 2025, segundo a PNAD Contínua.",
+    "Em 2025, qual foi a remuneração média de homens e mulheres com vínculo formal ativo em cada estado e qual foi a diferença percentual da remuneração das mulheres em relação à dos homens, considerando apenas vínculos com remuneração positiva?"
+  ],
+  "environment": [
+    "Quais foram as 5 maiores transições de uso do solo no estado do Amazonas entre 2020 e 2025?",
+    "Como evoluíram as emissões brutas de gases de efeito estufa no Brasil, em toneladas de CO₂e (GWP-AR5), por setor, de 2000 a 2019, sem incluir as emissões não contabilizadas no inventário (NCI)? Mostre em um gráfico.",
+    "Crie um gráfico mostrando a evolução da porcentagem de área desmatada em cada bioma entre 2000 e 2023, segundo os dados do PRODES/INPE.",
+    "Em qual bioma houve mais focos de queimada em 2024? Compare os biomas em um gráfico, usando apenas o satélite de referência do INPE (AQUA, passagem da tarde).",
+    "Quantas espécies e subespécies de animais estão ameaçadas de extinção no Brasil, por grupo, considerando as categorias vulnerável, em perigo, criticamente em perigo e possivelmente extinta?"
+  ],
+  "politics": [
+    "Faça um gráfico da porcentagem de mulheres entre os 513 deputados federais eleitos em cada eleição, de 2010 a 2022.",
+    "Na legislatura atual, em que tipo de despesa os deputados federais mais gastaram a Cota Parlamentar? E quais foram os 10 deputados que mais gastaram no período?",
+    "Quem foi o candidato a deputado federal mais votado em cada estado em 2022, de qual partido, e ele foi eleito?",
+    "Quais foram os governadores eleitos em 2022? De que partido eles eram e quantos estados cada partido conquistou?",
+    "Como mudou a idade média dos 513 deputados federais eleitos em cada eleição, de 2010 a 2022?"
+  ]
+}

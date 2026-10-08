@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import GreenTab from "../../atoms/GreenTab";
+import LabelText from "../../atoms/Text/LabelText";
 import TitleText from "../../atoms/Text/TitleText";
 import {
   BanknoteIcon,
@@ -31,6 +32,9 @@ import {
   TableChartViewIcon,
   VoteIcon,
 } from "./Icons";
+import ptQuestions from "../../../content/chatbot/onboarding/pt.json";
+import enQuestions from "../../../content/chatbot/onboarding/en.json";
+import esQuestions from "../../../content/chatbot/onboarding/es.json";
 
 const SoftShadow =
   "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)";
@@ -51,7 +55,27 @@ const IdeaBadges = [
   { id: "format", tab: FormatTab, Icon: MessageSquareTextIcon },
 ];
 
-const ThemeSections = IdeaBadges.filter((badge) => badge.tab === ThemesTab);
+const ThemeOptions = [
+  { id: "health", Icon: HeartPulseIcon },
+  { id: "education", Icon: GraduationCapIcon },
+  { id: "economy", Icon: BanknoteIcon },
+  { id: "environment", Icon: LeafIcon },
+  { id: "politics", Icon: VoteIcon },
+];
+
+const DefaultTheme = ThemeOptions[0].id;
+
+const ActiveThemeBadgeProps = {
+  backgroundColor: "#2B8C4D",
+  borderColor: "#2B8C4D",
+  color: "#FFFFFF",
+  _hover: {
+    backgroundColor: "#22703E",
+    borderColor: "#22703E",
+    boxShadow: ElevatedShadow,
+    "& .badge-icon": { color: "#FFFFFF" },
+  },
+};
 
 const AnalysisItems = [
   { id: "findData", Icon: SearchIcon },
@@ -95,9 +119,29 @@ const IdeaBadgeProps = {
   },
 };
 
-function readQuestions(value) {
+const ThemeQuestionsByLocale = {
+  pt: ptQuestions,
+  en: enQuestions,
+  es: esQuestions,
+};
+
+function questionsForLocale(language) {
+  const locale = String(language || "pt").split("-")[0];
+  return ThemeQuestionsByLocale[locale] || ThemeQuestionsByLocale.pt;
+}
+
+function readThemeCards(value) {
   return (Array.isArray(value) ? value : [])
-    .map((item) => String(item || "").trim())
+    .map((item) => {
+      if (typeof item === "string") {
+        const question = item.trim();
+        return question ? { title: "", question } : null;
+      }
+      const title = String(item?.title || "").trim();
+      const question = String(item?.question || "").trim();
+      if (!question) return null;
+      return { title, question };
+    })
     .filter(Boolean);
 }
 
@@ -111,15 +155,12 @@ export function IdeasModal({
   isDisabled,
 }) {
   const { t } = useTranslation("chatbot");
-  const sectionRefs = useRef({});
+  const [selectedTheme, setSelectedTheme] = useState(activeTheme || DefaultTheme);
 
   useEffect(() => {
-    if (!isOpen || tabIndex !== ThemesTab || !activeTheme) return;
-    const frame = requestAnimationFrame(() => {
-      sectionRefs.current[activeTheme]?.scrollIntoView({ block: "nearest" });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [isOpen, tabIndex, activeTheme]);
+    if (!isOpen) return;
+    setSelectedTheme(activeTheme || DefaultTheme);
+  }, [isOpen, activeTheme]);
 
   return (
     <Modal
@@ -131,148 +172,228 @@ export function IdeasModal({
     >
       <ModalOverlay />
       <ModalContent
-        margin="24px"
-        maxWidth="720px"
-        maxHeight="calc(100vh - 48px)"
-        borderRadius="16px"
-        padding={{ base: "24px 20px", md: "32px" }}
+        containerProps={{
+          alignItems: { base: "stretch", md: "center" },
+          height: { base: "100dvh", md: "100vh" },
+        }}
+        margin={{ base: 0, md: "24px" }}
+        width={{ base: "100%", md: "1072px" }}
+        maxWidth={{ base: "100%", md: "1072px" }}
+        flexShrink={{ base: 1, md: 0 }}
+        sx={{
+          "@media (min-width: 48em)": {
+            width: "1072px",
+            maxWidth: "1072px",
+          },
+        }}
+        height={{ base: "100%", md: "510px" }}
+        maxHeight={{ base: "100%", md: "calc(100vh - 48px)" }}
+        borderRadius={{ base: 0, md: "16px" }}
+        paddingX={{ base: "20px", md: "32px" }}
+        paddingTop={{
+          base: "calc(16px + env(safe-area-inset-top, 0px))",
+          md: "32px",
+        }}
+        paddingBottom={{
+          base: "max(24px, env(safe-area-inset-bottom, 0px))",
+          md: "32px",
+        }}
+        overflow="hidden"
       >
-        <ModalHeader padding="0" marginBottom="8px">
+        <ModalHeader padding="0" marginBottom="8px" flexShrink={0}>
           <TitleText typography="medium" marginRight="32px">
             {t("ui.onboarding.title")}
           </TitleText>
           <ModalCloseButton
             fontSize="14px"
-            top={{ base: "22px", md: "34px" }}
+            top={{
+              base: "calc(22px + env(safe-area-inset-top, 0px))",
+              md: "34px",
+            }}
             right={{ base: "16px", md: "26px" }}
             _hover={{ backgroundColor: "transparent", opacity: 0.7 }}
           />
         </ModalHeader>
-        <ModalBody padding="0">
+        <ModalBody
+          padding="0"
+          overflow="hidden"
+          display="flex"
+          flexDirection="column"
+          flex="1"
+          minHeight="0"
+        >
           <Tabs
             index={tabIndex}
             onChange={onTabChange}
             variant="unstyled"
             isLazy={false}
+            display="flex"
+            flexDirection="column"
+            flex="1"
+            minHeight="0"
+            overflow="hidden"
           >
             <TabList
+              flexShrink={0}
               borderBottom="1px solid #DEDFE0"
               overflowX="auto"
               overflowY="hidden"
+              paddingX="24px"
+              marginBottom="8px"
               sx={{
                 "::-webkit-scrollbar": { display: "none" },
                 scrollbarWidth: "none",
               }}
             >
-              <GreenTab whiteSpace="nowrap" flexShrink={0} padding="12px 16px 13px">
+              <GreenTab
+                whiteSpace="nowrap"
+                flexShrink={0}
+                padding="12px 16px 13px"
+              >
                 {t("ui.onboarding.tabs.themes")}
               </GreenTab>
-              <GreenTab whiteSpace="nowrap" flexShrink={0} padding="12px 16px 13px">
+              <GreenTab
+                whiteSpace="nowrap"
+                flexShrink={0}
+                padding="12px 16px 13px"
+              >
                 {t("ui.onboarding.tabs.analyses")}
               </GreenTab>
-              <GreenTab whiteSpace="nowrap" flexShrink={0} padding="12px 16px 13px">
+              <GreenTab
+                whiteSpace="nowrap"
+                flexShrink={0}
+                padding="12px 16px 13px"
+              >
                 {t("ui.onboarding.tabs.format")}
               </GreenTab>
             </TabList>
-            <TabPanels>
-              <TabPanel padding="20px 0 0">
-                <Text
-                  fontFamily="Roboto"
-                  fontSize="14px"
-                  lineHeight="20px"
-                  color="#71757A"
-                  marginBottom="16px"
-                >
-                  {t("ui.onboarding.themesIntro")}
-                </Text>
-                <Flex direction="column" gap="20px">
-                  {ThemeSections.map(({ id, Icon }) => {
-                    const questions = readQuestions(
-                      t(`ui.onboarding.themes.${id}.questions`, { returnObjects: true })
-                    );
-                    if (questions.length === 0) return null;
-                    const isActive = activeTheme === id;
-
-                    return (
-                      <Box
-                        key={id}
-                        ref={(node) => {
-                          sectionRefs.current[id] = node;
-                        }}
-                        borderRadius="12px"
-                        border="1px solid"
-                        borderColor={isActive ? "#2B8C4D" : "transparent"}
-                        backgroundColor={isActive ? "#F4FBF6" : "transparent"}
-                        padding="12px"
-                      >
-                        <Flex align="center" gap="8px" marginBottom="10px" color="#2B8C4D">
-                          <Icon width="16px" height="16px" color="currentColor" />
-                          <Text
-                            as="h3"
-                            fontFamily="Roboto"
-                            fontSize="14px"
-                            fontWeight="600"
-                            lineHeight="20px"
-                            color="#252A32"
-                          >
-                            {t(`ui.onboarding.badges.${id}`)}
-                          </Text>
-                        </Flex>
-                        <Flex direction="column" gap="8px">
-                          {questions.map((question) => (
-                            <Box
-                              key={question}
-                              as="button"
-                              type="button"
-                              width="100%"
-                              textAlign="left"
-                              padding="12px 14px"
-                              borderRadius="10px"
-                              border="1px solid #EEEEEE"
-                              backgroundColor="#FFFFFF"
-                              fontFamily="Roboto"
-                              fontSize="14px"
-                              fontWeight="400"
-                              lineHeight="20px"
-                              color="#464A51"
-                              cursor={isDisabled ? "not-allowed" : "pointer"}
-                              opacity={isDisabled ? 0.5 : 1}
-                              disabled={isDisabled}
-                              transition="border-color 0.15s ease, background-color 0.15s ease"
-                              _hover={{
-                                borderColor: "#2B8C4D",
-                                backgroundColor: "#F7FBF8",
-                              }}
-                              onClick={() => onQuestionClick(question)}
-                            >
-                              {question}
-                            </Box>
-                          ))}
-                        </Flex>
-                      </Box>
-                    );
-                  })}
-                </Flex>
+            <TabPanels flex="1" minHeight="0" overflowY="auto">
+              <TabPanel padding="16px 0 0">
+                <ThemeQuestions
+                  selectedTheme={selectedTheme}
+                  onThemeChange={setSelectedTheme}
+                  onQuestionClick={onQuestionClick}
+                  isDisabled={isDisabled}
+                />
               </TabPanel>
-              <TabPanel padding="20px 0 0">
-                <InfoList
+              <TabPanel padding="16px 0 0">
+                {/* <InfoList
                   intro={t("ui.onboarding.analysesIntro")}
                   items={AnalysisItems}
                   copyPrefix="ui.onboarding.analyses"
-                />
+                /> */}
               </TabPanel>
-              <TabPanel padding="20px 0 0">
-                <InfoList
+              <TabPanel padding="16px 0 0">
+                {/* <InfoList
                   intro={t("ui.onboarding.formatIntro")}
                   items={FormatItems}
                   copyPrefix="ui.onboarding.formats"
-                />
+                /> */}
               </TabPanel>
             </TabPanels>
           </Tabs>
         </ModalBody>
       </ModalContent>
     </Modal>
+  );
+}
+
+function ThemeQuestions({
+  selectedTheme,
+  onThemeChange,
+  onQuestionClick,
+  isDisabled,
+}) {
+  const { t, i18n } = useTranslation("chatbot");
+  const cards = readThemeCards(questionsForLocale(i18n.language)[selectedTheme]);
+
+  return (
+    <Flex direction="column" gap="24px">
+      <LabelText typography="medium" color="#464A51">
+        {t("ui.onboarding.themesIntro")}
+      </LabelText>
+      <Flex wrap="wrap" gap="16px">
+        {ThemeOptions.map(({ id, Icon }) => {
+          const isActive = selectedTheme === id;
+
+          return (
+            <Box
+              key={id}
+              as="button"
+              type="button"
+              aria-pressed={isActive}
+              onClick={() => onThemeChange(id)}
+              {...IdeaBadgeProps}
+              {...(isActive ? ActiveThemeBadgeProps : {})}
+            >
+              <Box
+                as="span"
+                className="badge-icon"
+                display="inline-flex"
+                color={isActive ? "#FFFFFF" : "#878A8E"}
+                flexShrink={0}
+                transition="color 0.15s ease"
+              >
+                <Icon width="16px" height="16px" color="currentColor" />
+              </Box>
+              {t(`ui.onboarding.badges.${id}`)}
+            </Box>
+          );
+        })}
+      </Flex>
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(auto-fit, minmax(min(100%, 360px), 1fr))"
+        gap="8px"
+        marginTop="16px"
+        alignItems="stretch"
+      >
+        {cards.map((card) => (
+          <Box
+            key={card.question}
+            as="button"
+            type="button"
+            height="100%"
+            textAlign="left"
+            padding="14px"
+            borderRadius="12px"
+            border="1px solid #EEEEEE"
+            backgroundColor="#FFFFFF"
+            cursor={isDisabled ? "not-allowed" : "pointer"}
+            opacity={isDisabled ? 0.5 : 1}
+            disabled={isDisabled}
+            transition="border-color 0.15s ease, background-color 0.15s ease"
+            _hover={{
+              borderColor: "#2B8C4D",
+              backgroundColor: "#F7FBF8",
+            }}
+            onClick={() => onQuestionClick(card.question)}
+          >
+            {card.title ? (
+              <Text
+                fontFamily="Roboto"
+                fontSize="14px"
+                fontWeight="600"
+                lineHeight="20px"
+                color="#252A32"
+                marginBottom="4px"
+              >
+                {card.title}
+              </Text>
+            ) : null}
+            <Text
+              fontFamily="Roboto"
+              fontSize="14px"
+              fontWeight="400"
+              lineHeight="20px"
+              color="#464A51"
+            >
+              {card.question}
+            </Text>
+          </Box>
+        ))}
+      </Box>
+    </Flex>
   );
 }
 
