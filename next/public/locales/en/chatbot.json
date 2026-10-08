@@ -208,7 +208,7 @@
     },
     "onboarding": {
       "title": "Idea center",
-      "themesIntro": "Pick a question to start the conversation.",
+      "themesIntro": "Explore data across different themes and check a few examples to start your analysis:",
       "analysesIntro": "These are the kinds of analysis the chatbot combines to answer.",
       "formatIntro": "The answer arrives in parts, depending on what the question asks for.",
       "tabs": {
@@ -220,42 +220,10 @@
         "health": "Health",
         "education": "Education",
         "economy": "Economy",
-        "environment": "Environment",
-        "politics": "Politics",
+        "environment": "Environment / Nature",
+        "politics": "Politics / Elections",
         "analyses": "Types of analyses the chatbot does",
         "format": "How the answer reaches you"
-      },
-      "themes": {
-        "health": {
-          "questions": [
-            "How has infant mortality evolved by state over the last ten years?",
-            "How many ICU beds does the SUS offer by municipality?"
-          ]
-        },
-        "education": {
-          "questions": [
-            "What is the average ENEM score by state in the latest available edition?",
-            "How does age-grade distortion look in elementary school by municipality?"
-          ]
-        },
-        "economy": {
-          "questions": [
-            "Cross CAGED data with IPCA inflation data to calculate the average real wage of new hires in Recife in 2025.",
-            "Create a chart showing the average wage gap between men and women in the state of São Paulo over the last ten years."
-          ]
-        },
-        "environment": {
-          "questions": [
-            "Which municipalities in the Cerrado recorded the most fire hotspots in the last year?",
-            "How has deforestation in the Legal Amazon evolved over the last decade?"
-          ]
-        },
-        "politics": {
-          "questions": [
-            "What was voter turnout in the 2024 municipal elections by state?",
-            "How were votes for president distributed by region in 2022?"
-          ]
-        }
       },
       "analyses": {
         "findData": {
