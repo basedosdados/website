@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Results table",
+    "description": "See the data organized in rows and columns, right in the conversation.",
+    "image": ""
+  },
+  {
+    "title": "Data visualization",
+    "description": "Generate charts from your question to spot patterns and comparisons.",
+    "image": ""
+  },
+  {
+    "title": "CSV export",
+    "description": "Download the results as CSV to continue the analysis in other tools.",
+    "image": ""
+  },
+  {
+    "title": "SQL query and metadata",
+    "description": "Access the SQL code of the query and information about the tables and columns used.",
+    "image": ""
+  }
+]
