@@ -209,8 +209,13 @@
     "onboarding": {
       "title": "Central de ideias",
       "themesIntro": "Explore dados por diferentes temas e confira alguns exemplos de inspiração para começar sua análise:",
-      "analysesIntro": "Estas são as formas de análise que o chatbot combina para responder.",
-      "formatIntro": "A resposta chega em partes, de acordo com o que a pergunta pede.",
+      "analysesIntro": "Veja alguns tipos de análises e operações que o chatbot consegue fazer com os dados da BD:",
+      "formatIntro": "Confira os tipos de resultados que você pode pedir e baixar com o chatbot:",
+      "carousel": {
+        "previous": "Anterior",
+        "next": "Próximo",
+        "goTo": "Ir para o item {{index}}"
+      },
       "tabs": {
         "themes": "Perguntas por temas",
         "analyses": "Tipos de análises",
@@ -224,24 +229,6 @@
         "politics": "Política / Eleições",
         "analyses": "Tipos de análises que o chatbot faz",
         "format": "Como a resposta chega até você"
-      },
-      "analyses": {
-        "findData": {
-          "title": "Busca de dados",
-          "body": "Encontra os conjuntos de dados e as tabelas mais relevantes para a pergunta no datalake público da BD."
-        },
-        "analyze": {
-          "title": "Consultas e análises em SQL",
-          "body": "Escreve e executa consultas em SQL para responder perguntas e cruzar informações."
-        },
-        "charts": {
-          "title": "Gráficos",
-          "body": "Gera gráficos para visualizar e interpretar os resultados da análise."
-        },
-        "export": {
-          "title": "Exportação",
-          "body": "Prepara os resultados para download nos formatos .csv, .parquet, .avro ou .jsonl."
-        }
       },
       "formats": {
         "text": {

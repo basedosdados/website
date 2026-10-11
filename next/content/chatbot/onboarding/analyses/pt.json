@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Cruzamento de dados diferentes",
+    "body": "Combine informações de tabelas diferentes na mesma resposta",
+    "example": "Ex: empresas ativas por CNPJ + resultado das eleições no mesmo município"
+  },
+  {
+    "title": "Cálculos matemáticos",
+    "body": "Médias, somas, contagens e operações específicas para sua análise",
+    "example": "Ex: taxa de mortalidade infantil por 1.000 nascidos vivos"
+  },
+  {
+    "title": "Ordenação e ranking",
+    "body": "Classifique e ordene resultados com seus critérios",
+    "example": "Ex: os 5 municípios com mais CNPJs abertos este ano"
+  },
+  {
+    "title": "Evolução ao longo do tempo",
+    "body": "Analise tendências e variações ao longo do tempo",
+    "example": "Ex: evolução do IDEB nas escolas públicas desde 2010"
+  },
+  {
+    "title": "Comparação entre grupos",
+    "body": "Diferenças entre regiões, categorias ou perfis",
+    "example": "Ex: diferença salarial entre homens e mulheres"
+  },
+  {
+    "title": "Informações sobre os dados",
+    "body": "O que cada coluna ou variável realmente significa",
+    "example": "Ex: o que significa cada tipo de estabelecimento no CNES"
+  }
+]

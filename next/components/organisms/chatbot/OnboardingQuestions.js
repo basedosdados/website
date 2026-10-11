@@ -14,27 +14,32 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
+import { keyframes } from "@emotion/react";
 import { useTranslation } from "next-i18next";
 import GreenTab from "../../atoms/GreenTab";
 import LabelText from "../../atoms/Text/LabelText";
 import TitleText from "../../atoms/Text/TitleText";
+import BodyText from "../../atoms/Text/BodyText";
 import {
   BanknoteIcon,
   ChartIcon,
-  ChatBubbleDotsIcon,
-  CodeIcon,
-  DownloadIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   GraduationCapIcon,
   HeartPulseIcon,
   LeafIcon,
   MessageSquareTextIcon,
-  SearchIcon,
-  TableChartViewIcon,
   VoteIcon,
 } from "./Icons";
 import ptQuestions from "../../../content/chatbot/onboarding/pt.json";
 import enQuestions from "../../../content/chatbot/onboarding/en.json";
 import esQuestions from "../../../content/chatbot/onboarding/es.json";
+import ptAnalyses from "../../../content/chatbot/onboarding/analyses/pt.json";
+import enAnalyses from "../../../content/chatbot/onboarding/analyses/en.json";
+import esAnalyses from "../../../content/chatbot/onboarding/analyses/es.json";
+import ptFormats from "../../../content/chatbot/onboarding/formats/pt.json";
+import enFormats from "../../../content/chatbot/onboarding/formats/en.json";
+import esFormats from "../../../content/chatbot/onboarding/formats/es.json";
 
 const SoftShadow =
   "0 1px 2px 0 rgba(0, 0, 0, 0.04), 0 1px 3px -1px rgba(0, 0, 0, 0.06)";
@@ -77,20 +82,34 @@ const ActiveThemeBadgeProps = {
   },
 };
 
-const AnalysisItems = [
-  { id: "findData", Icon: SearchIcon },
-  { id: "analyze", Icon: CodeIcon },
-  { id: "charts", Icon: ChartIcon },
-  { id: "export", Icon: DownloadIcon },
-];
+const AnalysesByLocale = {
+  pt: ptAnalyses,
+  en: enAnalyses,
+  es: esAnalyses,
+};
 
-const FormatItems = [
-  { id: "text", Icon: ChatBubbleDotsIcon },
-  { id: "table", Icon: TableChartViewIcon },
-  { id: "chart", Icon: ChartIcon },
-  { id: "sql", Icon: CodeIcon },
-  { id: "download", Icon: DownloadIcon },
-];
+const FormatsByLocale = {
+  pt: ptFormats,
+  en: enFormats,
+  es: esFormats,
+};
+
+const SlideFadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const CarouselArrowProps = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "28px",
+  height: "28px",
+  borderRadius: "8px",
+  color: "#464A51",
+  flexShrink: 0,
+  _hover: { color: "#2B8C4D", backgroundColor: "transparent" },
+};
 
 const IdeaBadgeProps = {
   display: "inline-flex",
@@ -125,9 +144,13 @@ const ThemeQuestionsByLocale = {
   es: esQuestions,
 };
 
-function questionsForLocale(language) {
+function contentForLocale(language, packs) {
   const locale = String(language || "pt").split("-")[0];
-  return ThemeQuestionsByLocale[locale] || ThemeQuestionsByLocale.pt;
+  return packs[locale] || packs.pt;
+}
+
+function examplePrompt(example) {
+  return String(example || "").replace(/^(Ex|E\.g\.|Ej\.)\s*:\s*/i, "").trim();
 }
 
 function readThemeCards(value) {
@@ -154,7 +177,7 @@ export function IdeasModal({
   onQuestionClick,
   isDisabled,
 }) {
-  const { t } = useTranslation("chatbot");
+  const { t, i18n } = useTranslation("chatbot");
   const [selectedTheme, setSelectedTheme] = useState(activeTheme || DefaultTheme);
 
   useEffect(() => {
@@ -267,8 +290,12 @@ export function IdeasModal({
                 {t("ui.onboarding.tabs.format")}
               </GreenTab>
             </TabList>
-            <TabPanels flex="1" minHeight="0" overflowY="auto">
-              <TabPanel padding="16px 0 0">
+            <TabPanels
+              flex="1"
+              minHeight="0"
+              overflowY={tabIndex === FormatTab ? "hidden" : "auto"}
+            >
+              <TabPanel padding="16px 24px 0 0">
                 <ThemeQuestions
                   selectedTheme={selectedTheme}
                   onThemeChange={setSelectedTheme}
@@ -276,19 +303,24 @@ export function IdeasModal({
                   isDisabled={isDisabled}
                 />
               </TabPanel>
-              <TabPanel padding="16px 0 0">
-                {/* <InfoList
+              <TabPanel padding="16px 24px 0 0">
+                <InfoList
                   intro={t("ui.onboarding.analysesIntro")}
-                  items={AnalysisItems}
-                  copyPrefix="ui.onboarding.analyses"
-                /> */}
+                  items={contentForLocale(i18n.language, AnalysesByLocale)}
+                  onExampleClick={onQuestionClick}
+                  isDisabled={isDisabled}
+                />
               </TabPanel>
-              <TabPanel padding="16px 0 0">
-                {/* <InfoList
+              <TabPanel
+                padding="16px 24px 0 0"
+                height="100%"
+                overflow="hidden"
+                display="flex"
+              >
+                <FormatCarousel
                   intro={t("ui.onboarding.formatIntro")}
-                  items={FormatItems}
-                  copyPrefix="ui.onboarding.formats"
-                /> */}
+                  items={contentForLocale(i18n.language, FormatsByLocale)}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>
@@ -305,7 +337,9 @@ function ThemeQuestions({
   isDisabled,
 }) {
   const { t, i18n } = useTranslation("chatbot");
-  const cards = readThemeCards(questionsForLocale(i18n.language)[selectedTheme]);
+  const cards = readThemeCards(
+    contentForLocale(i18n.language, ThemeQuestionsByLocale)[selectedTheme],
+  );
 
   return (
     <Flex direction="column" gap="24px">
@@ -397,68 +431,166 @@ function ThemeQuestions({
   );
 }
 
-function InfoList({ intro, items, copyPrefix }) {
+function InfoList({ intro, items, onExampleClick, isDisabled }) {
+  return (
+    <Flex direction="column" gap="24px">
+      <LabelText typography="medium" color="#464A51">
+        {intro}
+      </LabelText>
+      <Box
+        display="grid"
+        gridTemplateColumns="repeat(auto-fit, minmax(min(100%, 360px), 1fr))"
+        gap="8px"
+        alignItems="stretch"
+      >
+        {items.map(({ title, body, example }) => (
+          <Box
+            key={title}
+            as="button"
+            type="button"
+            height="100%"
+            textAlign="left"
+            padding="14px"
+            borderRadius="12px"
+            border="1px solid #EEEEEE"
+            backgroundColor="#FFFFFF"
+            cursor={isDisabled ? "not-allowed" : "pointer"}
+            opacity={isDisabled ? 0.5 : 1}
+            disabled={isDisabled}
+            transition="border-color 0.15s ease, background-color 0.15s ease"
+            _hover={{
+              borderColor: "#2B8C4D",
+              backgroundColor: "#F7FBF8",
+            }}
+            onClick={() => onExampleClick(examplePrompt(example))}
+          >
+            <LabelText>
+              {title}
+            </LabelText>
+            <BodyText
+              color="#464A51"
+              marginTop="16px"
+            >
+              {body}
+            </BodyText>
+            <BodyText
+              color="#71757A"
+              marginTop="8px"
+            >
+              {example}
+            </BodyText>
+          </Box>
+        ))}
+      </Box>
+    </Flex>
+  );
+}
+
+function FormatCarousel({ intro, items }) {
   const { t } = useTranslation("chatbot");
+  const [index, setIndex] = useState(0);
+  const total = items.length;
+  const current = items[index] || items[0];
+
+  const goTo = (next) => {
+    if (!total) return;
+    setIndex((next + total) % total);
+  };
+
+  if (!current) return null;
 
   return (
-    <Flex direction="column" gap="12px">
-      <Text
-        fontFamily="Roboto"
-        fontSize="14px"
-        lineHeight="20px"
-        color="#71757A"
-      >
+    <Flex direction="column" flex="1" width="100%" minHeight="0">
+      <LabelText typography="medium" color="#464A51">
         {intro}
-      </Text>
-      {items.map(({ id, Icon }) => {
-        const title = t(`${copyPrefix}.${id}.title`);
-        const body = t(`${copyPrefix}.${id}.body`);
-        if (!title || title === `${copyPrefix}.${id}.title`) return null;
-
-        return (
-          <Flex
-            key={id}
-            gap="12px"
-            padding="14px"
-            border="1px solid #EEEEEE"
-            borderRadius="12px"
-            backgroundColor="#FFFFFF"
-          >
-            <Flex
-              align="center"
-              justify="center"
-              boxSize="36px"
-              borderRadius="10px"
-              backgroundColor="#F3FAF5"
-              flexShrink={0}
-              color="#2B8C4D"
-            >
-              <Icon width="18px" height="18px" color="currentColor" />
-            </Flex>
-            <Box>
-              <Text
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="600"
-                lineHeight="20px"
-                color="#252A32"
-              >
-                {title}
-              </Text>
-              <Text
-                fontFamily="Roboto"
-                fontSize="14px"
-                fontWeight="400"
-                lineHeight="20px"
-                color="#71757A"
-                marginTop="4px"
-              >
-                {body}
-              </Text>
-            </Box>
-          </Flex>
-        );
-      })}
+      </LabelText>
+      <Flex
+        key={current.title}
+        gap="40px"
+        align="flex-start"
+        direction={{ base: "column", md: "row" }}
+        marginTop="16px"
+        flex="1"
+        minHeight="0"
+        animation={`${SlideFadeIn} 0.28s ease`}
+        sx={{
+          "@media (prefers-reduced-motion: reduce)": { animation: "none" },
+        }}
+      >
+        <Box
+          width={{ base: "100%", md: "325px" }}
+          maxWidth="325px"
+          height="240px"
+          maxHeight="100%"
+          flexShrink={1}
+          borderRadius="12px"
+          backgroundColor="#F4F5F6"
+          overflow="hidden"
+        >
+          {current.image ? (
+            <Box
+              as="img"
+              src={current.image}
+              alt=""
+              width="100%"
+              height="100%"
+              objectFit="cover"
+            />
+          ) : null}
+        </Box>
+        <Flex direction="column" gap="8px" alignSelf="flex-start">
+          <LabelText color="#464A51">{current.title}</LabelText>
+          <LabelText color="#464A51" fontWeight="400">
+            {current.description}
+          </LabelText>
+        </Flex>
+      </Flex>
+      <Flex
+        justify="flex-end"
+        align="center"
+        gap="16px"
+        marginTop="auto"
+        paddingTop="12px"
+        flexShrink={0}
+      >
+        <Box
+          as="button"
+          type="button"
+          aria-label={t("ui.onboarding.carousel.previous")}
+          onClick={() => goTo(index - 1)}
+          {...CarouselArrowProps}
+        >
+          <ChevronLeftIcon width="18px" height="18px" color="currentColor" />
+        </Box>
+        <Flex align="center" gap="8px">
+          {items.map((item, itemIndex) => {
+            const isActive = itemIndex === index;
+            return (
+              <Box
+                key={item.title}
+                as="button"
+                type="button"
+                aria-label={t("ui.onboarding.carousel.goTo", { index: itemIndex + 1 })}
+                aria-current={isActive ? "true" : undefined}
+                width="8px"
+                height="8px"
+                borderRadius="999px"
+                backgroundColor={isActive ? "#2B8C4D" : "#DEDFE0"}
+                onClick={() => setIndex(itemIndex)}
+              />
+            );
+          })}
+        </Flex>
+        <Box
+          as="button"
+          type="button"
+          aria-label={t("ui.onboarding.carousel.next")}
+          onClick={() => goTo(index + 1)}
+          {...CarouselArrowProps}
+        >
+          <ChevronRightIcon width="18px" height="18px" color="currentColor" />
+        </Box>
+      </Flex>
     </Flex>
   );
 }

@@ -7,6 +7,8 @@ import {
   Braces,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CircleAlert,
   CircleCheck,
   ClockFading,
@@ -77,6 +79,8 @@ export const MessageSquareTextIcon = makeIcon(MessageSquareText);
 export const VoteIcon = makeIcon(Vote);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);
+export const ChevronLeftIcon = makeIcon(ChevronLeft);
+export const ChevronRightIcon = makeIcon(ChevronRight);
 export const CircleAlertIcon = makeIcon(CircleAlert);
 export const CircleCheckIcon = makeIcon(CircleCheck);
 export const ClockFadingIcon = makeIcon(ClockFading);
