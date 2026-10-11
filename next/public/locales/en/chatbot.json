@@ -209,8 +209,13 @@
     "onboarding": {
       "title": "Idea center",
       "themesIntro": "Explore data across different themes and check a few examples to start your analysis:",
-      "analysesIntro": "These are the kinds of analysis the chatbot combines to answer.",
-      "formatIntro": "The answer arrives in parts, depending on what the question asks for.",
+      "analysesIntro": "See some types of analyses and operations the chatbot can run on BD data:",
+      "formatIntro": "See the types of results you can request and download with the chatbot:",
+      "carousel": {
+        "previous": "Previous",
+        "next": "Next",
+        "goTo": "Go to item {{index}}"
+      },
       "tabs": {
         "themes": "Questions by theme",
         "analyses": "Types of analyses",
@@ -224,24 +229,6 @@
         "politics": "Politics / Elections",
         "analyses": "Types of analyses the chatbot does",
         "format": "How the answer reaches you"
-      },
-      "analyses": {
-        "findData": {
-          "title": "Data search",
-          "body": "Finds the datasets and tables most relevant to the question in BD's public data lake."
-        },
-        "analyze": {
-          "title": "SQL queries and analyses",
-          "body": "Writes and runs SQL queries to answer questions and combine information."
-        },
-        "charts": {
-          "title": "Charts",
-          "body": "Builds charts to visualize and interpret the analysis results."
-        },
-        "export": {
-          "title": "Export",
-          "body": "Prepares results for download as .csv, .parquet, .avro, or .jsonl."
-        }
       },
       "formats": {
         "text": {
