@@ -30,11 +30,17 @@ import {
 import TablePage from "./TablePage";
 import RawDataSourcesPage from "./RawDataSourcesPage";
 import InformationRequestPage from "./InformationRequestPage";
+import ResearchPaperPage from "./ResearchPaperPage";
 
 import introJs from 'intro.js';
 import 'intro.js/introjs.css';
 
 import ChevronIcon from "../../public/img/icons/chevronIcon";
+
+export const getResearchPapers = (dataset) =>
+  dataset?.researchPapers?.edges
+    ?.map((elm) => ({ ...elm.node, name: elm.node.title }))
+      ?.sort((a, b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title)) || [];
 
 const ContentFilter = memo(({ id, fieldName, choices, onChange, value, hasDivider = true }) => {
   const [isOverflow, setIsOverflow] = useState({});
@@ -142,12 +148,12 @@ const ContentFilter = memo(({ id, fieldName, choices, onChange, value, hasDivide
   );
 });
 
-const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSources, informationRequests }) => {
+const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSources, informationRequests, researchPapers }) => {
   const { t } = useTranslation('dataset');
   const [widthScreen, setWidthScreen] = useState(0);
   const [value, setValue] = useState("");
   const { locale } = useRouter();
-  const { table, raw_data_source, information_request } = selectedResource;
+  const { table, raw_data_source, information_request, research_paper } = selectedResource;
 
   const findResourceName = useCallback((source, id) => {
     const resource = source.find(item => item._id === id);
@@ -170,14 +176,19 @@ const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSourc
     informationRequests: informationRequests.map(elm => ({
       ...elm,
       displayName: elm.name || elm.number
+    })),
+    researchPapers: researchPapers.map(elm => ({
+      ...elm,
+      displayName: elm.name
     }))
-  }), [tables, rawDataSources, informationRequests]);
+  }), [tables, rawDataSources, informationRequests, researchPapers]);
 
   useEffect(() => {
     setValue(
       table ? findResourceName(tables, table) :
       raw_data_source ? findResourceName(rawDataSources, raw_data_source) :
-      information_request ? findResourceName(informationRequests, information_request) : ""
+      information_request ? findResourceName(informationRequests, information_request) :
+      research_paper ? findResourceName(researchPapers, research_paper) : ""
     );
 
     updateWidthScreen();
@@ -186,7 +197,7 @@ const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSourc
     return () => {
       window.removeEventListener('resize', updateWidthScreen);
     };
-  }, [table, raw_data_source, information_request, findResourceName, updateWidthScreen, tables, rawDataSources, informationRequests]);
+  }, [table, raw_data_source, information_request, research_paper, findResourceName, updateWidthScreen, tables, rawDataSources, informationRequests, researchPapers]);
 
   const handleMenuItemClick = useCallback((type, id) => {
     pushQuery(type, id);
@@ -352,6 +363,46 @@ const SelectResource = memo(({ selectedResource, pushQuery, tables, rawDataSourc
             </MenuOptionGroup>
           </>
         }
+
+        {menuItems.researchPapers.length > 0 &&
+          <>
+            <MenuDivider margin="0" borderWidth="2px" borderColor="#DEDFE0"/>
+            <MenuOptionGroup
+              title={t('researchPapers')}
+              fontFamily="Roboto"
+              fontWeight="400"
+              fontSize="16px"
+              lineHeight="24px"
+              color="#71757A"
+              margin="0"
+              padding="24px 20px 8px"
+            >
+              {menuItems.researchPapers.map((elm, i) => (
+                <MenuItem
+                  key={i}
+                  width="100%"
+                  whiteSpace="normal"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  wordBreak="break-all"
+                  fontFamily="Roboto"
+                  fontWeight="500"
+                  fontSize="14px"
+                  lineHeight="20px"
+                  color="#252A32"
+                  padding="16px 20px"
+                  _hover={{ backgroundColor: "transparent"}}
+                  _focus={{ backgroundColor: "transparent"}}
+                  _active={{ backgroundColor: "transparent" }}
+                  _focusVisible={{ backgroundColor: "transparent" }}
+                  onClick={() => handleMenuItemClick("research_paper", elm._id)}
+                >
+                  {elm.displayName}
+                </MenuItem>
+              ))}
+            </MenuOptionGroup>
+          </>
+        }
       </MenuList>
     </Menu>
   );
@@ -386,6 +437,11 @@ const SwitchResource = memo(({ route, isBDSudo, changeTabDataInformationQuery, d
         />
       );
 
+    case route.hasOwnProperty("research_paper"):
+      return (
+        <ResearchPaperPage id={route.research_paper}/>
+      );
+
     default:
       return null;
   }
@@ -402,6 +458,7 @@ export default function DatasetResource({
   const [tables, setTables] = useState([]);
   const [rawDataSources, setRawDataSources] = useState([]);
   const [informationRequests, setInformationRequests] = useState([]);
+  const [researchPapers, setResearchPapers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const displayScreen = useBreakpointValue({ base: "mobile", lg: "desktop" });
   const [tourBeginTable, setTourBeginTable] = useState(false);
@@ -620,12 +677,16 @@ export default function DatasetResource({
     setRawDataSources(raw_data_sources);
     setInformationRequests(information_request);
 
+    const research_papers = getResearchPapers(dataset);
+    setResearchPapers(research_papers);
+
     const queryParams = new URLSearchParams(window.location.search);
 
     if(queryParams.toString().length === 0) {
       if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id);
       if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id);
       if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id);
+      if(research_papers.length > 0) return pushQuery("research_paper", research_papers[0]?._id);
     }
   }, [dataset, isBDSudo, sortElements, pushQuery]);
 
@@ -701,6 +762,17 @@ export default function DatasetResource({
             }}
             hasDivider={tables.length > 0 || rawDataSources.length > 0 ? true : false}
           />
+
+          <ContentFilter
+            id="dataset_select_researchpaper"
+            fieldName={t('researchPapers')}
+            choices={researchPapers}
+            value={query.research_paper}
+            onChange={(id) => {
+              pushQuery("research_paper", id);
+            }}
+            hasDivider={tables.length > 0 || rawDataSources.length > 0 || informationRequests.length > 0 ? true : false}
+          />
         </Stack>
         :
         <SelectResource 
@@ -709,6 +781,7 @@ export default function DatasetResource({
           tables={tables}
           rawDataSources={rawDataSources}
           informationRequests={informationRequests}
+          researchPapers={researchPapers}
         />
       }
 
