@@ -1208,6 +1208,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
+        {name: [t('invited_researchers')], href: "/invited-researchers"},
         {name: [t('transparency')], href: "/transparency"},
         {name: [t('jobs')], href: "https://info.basedosdados.org/carreiras"},
       ],
@@ -1235,6 +1236,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
+        {name: [t('invited_researchers')], href: "/invited-researchers"},
         {name: [t('transparency')], href: "/transparency"},
       ],
       [t('contact')]: "/contact",
@@ -1261,6 +1263,7 @@ export default function MenuNav({ simpleTemplate = false, userTemplate = false }
       ],
       [t('institutional')]: [
         {name: [t('about_us')], href: "/about-us"},
+        {name: [t('invited_researchers')], href: "/invited-researchers"},
         {name: [t('transparency')], href: "/transparency"},
       ],
       [t('contact')]: "/contact",
