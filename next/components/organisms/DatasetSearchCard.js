@@ -183,7 +183,7 @@ const DatasetSearchCard= ({
             borderRadius="16px"
             overflow="hidden"
             width="222px"
-            height={locale !== 'pt' ? "165px" : "138px"}
+            height="165px"
             position="relative"
             _hover={{ opacity: 0.9 }}
           >
@@ -258,11 +258,9 @@ const DatasetSearchCard= ({
                 {temporalCoverageText || t('notProvided')}
               </MetadataRow>
 
-              {locale !== 'pt' && (
-                <MetadataRow label={t('spatialCoverage')}>
-                  {spatialCoverage || t('notProvided')}
-                </MetadataRow>
-              )}
+              <MetadataRow label={t('spatialCoverage')}>
+                {spatialCoverage || t('notProvided')}
+              </MetadataRow>
 
               <MetadataRow label={t('resources')}>
                 {resourcesText}
