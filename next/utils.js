@@ -29,7 +29,7 @@ export function isBasedosdadosDomain() {
 export function getDiscordUrl(locale) {
   const byLocale = {
     pt: "https://discord.gg/huKWpsVYx4",
-    en: "https://discord.gg/tx57ek6zqQ",
+    en: "https://discord.gg/jFUZZpA4ME",
     es: "https://discord.gg/nNfQYcmrvM",
   };
   return byLocale[locale] || byLocale.pt;
@@ -329,7 +329,7 @@ export async function consumeChatbotTrialFollowup(router) {
     triggerGAEventWithData("chatbot_trial_followup", {
       value: "email",
       ...utm,
-      is_logged_in: Boolean(user?.username),
+      is_logged_in: isUserLoggedIn(user),
     })
   }
 
@@ -355,7 +355,7 @@ export function trackNavigateToChatbotLp({
     value,
     menu_placement: placement,
     is_mobile: isMobile ?? !CHATBOT_LP_DESKTOP_PLACEMENTS.has(placement),
-    is_logged_in: Boolean(user?.username),
+    is_logged_in: isUserLoggedIn(user),
     is_bd_pro: hasBDProSubscription(user),
     page_path: pagePath || window.location.pathname,
   });
@@ -366,6 +366,188 @@ export function cleanString(string) {
   const returnString = newString.replace(/\s+/g, ' ')
 
   return returnString
+}
+
+export const UserPagePath = "/user"
+
+export function isUserLoggedIn(user) {
+  return Boolean(user?.id || user?.email)
+}
+
+export function getUserDisplayName(user) {
+  return [user?.firstName, user?.lastName].filter(Boolean).join(" ").trim()
+}
+
+export function getUserPageHref(section) {
+  if (!section) return UserPagePath
+  return `${UserPagePath}?${section}`
+}
+
+const PhoneE164Pattern = /^\+[1-9]\d{7,14}$/
+
+export const PhoneCountries = [
+  { callingCode: "55", maxDigits: 11, placeholder: "(11) 9 9999-9999", iso: "BR" },
+  { callingCode: "1", maxDigits: 10, placeholder: "(555) 123-4567", iso: "US" },
+  { callingCode: "52", maxDigits: 10, placeholder: "55 1234 5678", iso: "MX" },
+  { callingCode: "54", maxDigits: 10, placeholder: "11 1234-5678", iso: "AR" },
+  { callingCode: "57", maxDigits: 10, placeholder: "300 123 4567", iso: "CO" },
+  { callingCode: "56", maxDigits: 9, placeholder: "9 1234 5678", iso: "CL" },
+  { callingCode: "51", maxDigits: 9, placeholder: "912 345 678", iso: "PE" },
+  { callingCode: "34", maxDigits: 9, placeholder: "612 34 56 78", iso: "ES" },
+  { callingCode: "351", maxDigits: 9, placeholder: "912 345 678", iso: "PT" },
+  { callingCode: "44", maxDigits: 10, placeholder: "7400 123456", iso: "GB" },
+]
+
+const PhoneCountryByCode = Object.fromEntries(
+  PhoneCountries.map((country) => [country.callingCode, country])
+)
+
+const DefaultCallingCodeByLocale = {
+  pt: "55",
+  en: "1",
+  es: "52",
+}
+
+export function getDefaultCallingCode(locale) {
+  return DefaultCallingCodeByLocale[locale] || DefaultCallingCodeByLocale.pt
+}
+
+export function getPhoneCountry(callingCode) {
+  return PhoneCountryByCode[callingCode] || PhoneCountryByCode[getDefaultCallingCode("pt")]
+}
+
+export function sanitizePhoneInput(value) {
+  return String(value || "").replace(/\D/g, "")
+}
+
+function localPhoneDigits(value, callingCode) {
+  const country = getPhoneCountry(callingCode)
+  let digits = sanitizePhoneInput(value)
+
+  if (digits.startsWith(callingCode) && digits.length > country.maxDigits) {
+    digits = digits.slice(callingCode.length)
+  }
+
+  return digits.slice(0, country.maxDigits)
+}
+
+function formatGroupedPhone(digits, groups, joiner = " ") {
+  if (!digits) return ""
+
+  const parts = []
+  let index = 0
+
+  for (const size of groups) {
+    if (index >= digits.length) break
+    parts.push(digits.slice(index, index + size))
+    index += size
+  }
+
+  if (index < digits.length) parts.push(digits.slice(index))
+  return parts.join(joiner)
+}
+
+function formatBrazilLocal(digits) {
+  if (digits.length === 0) return ""
+  if (digits.length < 2) return `(${digits}`
+  if (digits.length === 2) return `(${digits})`
+
+  const ddd = digits.slice(0, 2)
+  const subscriber = digits.slice(2)
+
+  if (subscriber.length === 1) return `(${ddd}) ${subscriber}`
+  if (subscriber.length <= 5) {
+    return `(${ddd}) ${subscriber.slice(0, 1)} ${subscriber.slice(1)}`
+  }
+
+  return `(${ddd}) ${subscriber.slice(0, 1)} ${subscriber.slice(1, 5)}-${subscriber.slice(5, 9)}`
+}
+
+function formatUsLocal(digits) {
+  if (digits.length === 0) return ""
+  if (digits.length < 3) return `(${digits}`
+  if (digits.length === 3) return `(${digits})`
+  if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`
+  return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`
+}
+
+function formatArLocal(digits) {
+  if (digits.length <= 2) return digits
+  if (digits.length <= 6) return `${digits.slice(0, 2)} ${digits.slice(2)}`
+  return `${digits.slice(0, 2)} ${digits.slice(2, 6)}-${digits.slice(6, 10)}`
+}
+
+export function formatPhoneInput(value, callingCode) {
+  const digits = localPhoneDigits(value, callingCode)
+
+  if (callingCode === "55") return formatBrazilLocal(digits)
+  if (callingCode === "1") return formatUsLocal(digits)
+  if (callingCode === "52") return formatGroupedPhone(digits, [2, 4, 4])
+  if (callingCode === "54") return formatArLocal(digits)
+  if (callingCode === "57") return formatGroupedPhone(digits, [3, 3, 4])
+  if (callingCode === "56") return formatGroupedPhone(digits, [1, 4, 4])
+  if (callingCode === "51" || callingCode === "351") return formatGroupedPhone(digits, [3, 3, 3])
+  if (callingCode === "34") return formatGroupedPhone(digits, [3, 2, 2, 2])
+  if (callingCode === "44") return formatGroupedPhone(digits, [4, 6])
+
+  return digits
+}
+
+export function handlePhoneInputChange(previousValue, nextValue, callingCode) {
+  const nextDigits = sanitizePhoneInput(nextValue)
+  const prevDigits = sanitizePhoneInput(previousValue)
+
+  if (
+    String(nextValue).length < String(previousValue || "").length &&
+    nextDigits === prevDigits
+  ) {
+    return formatPhoneInput(prevDigits.slice(0, -1), callingCode)
+  }
+
+  return formatPhoneInput(nextValue, callingCode)
+}
+
+export function splitStoredPhone(value, locale) {
+  const defaultCallingCode = getDefaultCallingCode(locale)
+  const digits = sanitizePhoneInput(value)
+
+  if (!digits) {
+    return { callingCode: defaultCallingCode, localNumber: "" }
+  }
+
+  const sortedCodes = PhoneCountries
+    .map((country) => country.callingCode)
+    .sort((a, b) => b.length - a.length)
+
+  for (const callingCode of sortedCodes) {
+    const country = getPhoneCountry(callingCode)
+    if (digits.startsWith(callingCode) && digits.length > callingCode.length) {
+      const localNumber = digits.slice(callingCode.length)
+      if (localNumber.length <= country.maxDigits) {
+        return { callingCode, localNumber }
+      }
+    }
+  }
+
+  return { callingCode: defaultCallingCode, localNumber: digits }
+}
+
+export function formatPhoneDisplay(value, locale) {
+  if (!value) return ""
+  const { callingCode, localNumber } = splitStoredPhone(value, locale)
+  const formattedLocal = formatPhoneInput(localNumber, callingCode)
+  return formattedLocal ? `+${callingCode} ${formattedLocal}` : `+${callingCode}`
+}
+
+export function normalizePhone(value, callingCode = getDefaultCallingCode("pt")) {
+  const country = getPhoneCountry(callingCode)
+  const digits = localPhoneDigits(value, callingCode)
+  if (!digits) return ""
+  return `+${country.callingCode}${digits}`
+}
+
+export function isValidE164Phone(value) {
+  return PhoneE164Pattern.test(value)
 }
 
 // Descrições vêm do backend em markdown. Crawlers de redes sociais exibem o
@@ -452,6 +634,23 @@ export function getSubscriptionType(user) {
   return "none"
 }
 
+export function pickBrlStripePrice(nodes) {
+  const list = (nodes || []).filter(Boolean)
+  if (!list.length) return undefined
+
+  const brl = list.find((node) => String(node.currency || "").toLowerCase() === "brl")
+  if (brl) return brl
+
+  const notUsd = list.find((node) => {
+    const currency = String(node.currency || "").toLowerCase()
+    if (currency === "usd") return false
+    const text = `${node.productSlug || ""} ${node.productName || ""}`.toLowerCase()
+    return !text.includes("usd")
+  })
+
+  return notUsd || list[0]
+}
+
 function filterConsumerChatbotPlans(edges) {
   return (edges || []).filter((item) => {
     const name = item?.node?.productName?.toLowerCase() || ""
@@ -474,11 +673,11 @@ export async function fetchChatbotPlan(interval = "year") {
     if (!result?.success) return null
 
     const chatbotPlans = filterConsumerChatbotPlans(result.data)
-    return (
-      chatbotPlans.find(
-        (item) => item?.node?.interval === interval && item?.node?.amount === amount
-      )?.node ?? null
-    )
+    return pickBrlStripePrice(
+      chatbotPlans
+        .filter((item) => item?.node?.interval === interval && item?.node?.amount === amount)
+        .map((item) => item.node)
+    ) ?? null
   } catch {
     return null
   }
@@ -494,6 +693,160 @@ export function getUserFromCookie() {
   }
 }
 
+const CheckoutCampaignCookieKeys = {
+  product: "checkout_product",
+  coupon: "checkout_coupon",
+  interval: "checkout_interval",
+}
+
+const CheckoutCampaignCookieOptions = { expires: 1, path: "/" }
+
+const CheckoutCampaignPassthroughPaths = new Set([
+  "/user/login",
+  "/user/register",
+  "/user/check-email",
+  "/user/activate-account",
+  "/user/survey",
+  "/user/password-recovery",
+  "/user",
+  "/user/[username]",
+])
+
+function normalizeCheckoutProduct(value) {
+  const checkout = String(value || "").toLowerCase()
+  if (checkout === "chatbot") return "chatbot"
+  if (checkout === "bd_pro" || checkout === "bdpro") return "bd_pro"
+  return ""
+}
+
+function normalizeCheckoutInterval(value) {
+  const interval = String(value || "").toLowerCase()
+  if (interval === "month" || interval === "year") return interval
+  return ""
+}
+
+export function parseCheckoutCampaignQuery(query = {}) {
+  // Links de campanha: /prices?checkout=chatbot&coupon=CODIGO&interval=month
+  const windowQuery =
+    typeof window === "undefined"
+      ? {}
+      : Object.fromEntries(new URLSearchParams(window.location.search))
+  const source = { ...windowQuery, ...(query || {}) }
+
+  return {
+    product: normalizeCheckoutProduct(readQueryParam(source, "checkout")),
+    coupon: (readQueryParam(source, "coupon") || "").trim(),
+    interval: normalizeCheckoutInterval(readQueryParam(source, "interval")),
+  }
+}
+
+export function persistCheckoutCampaign(intent) {
+  if (typeof window === "undefined" || !intent) return
+  if (intent.product) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.product,
+      intent.product,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.coupon) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.coupon,
+      intent.coupon,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+  if (intent.interval) {
+    cookies.set(
+      CheckoutCampaignCookieKeys.interval,
+      intent.interval,
+      CheckoutCampaignCookieOptions,
+    )
+  }
+}
+
+export function persistCheckoutCampaignFromQuery(query) {
+  const intent = parseCheckoutCampaignQuery(query)
+  if (intent.product || intent.coupon) persistCheckoutCampaign(intent)
+  return intent
+}
+
+export function getCheckoutCampaign() {
+  if (typeof window === "undefined") {
+    return { product: "", coupon: "", interval: "" }
+  }
+
+  return {
+    product: cookies.get(CheckoutCampaignCookieKeys.product) || "",
+    coupon: cookies.get(CheckoutCampaignCookieKeys.coupon) || "",
+    interval: cookies.get(CheckoutCampaignCookieKeys.interval) || "",
+  }
+}
+
+export function resolveCheckoutCampaign(query) {
+  const fromQuery = parseCheckoutCampaignQuery(query)
+  const fromCookie = getCheckoutCampaign()
+
+  return {
+    product: fromQuery.product || fromCookie.product,
+    coupon: fromQuery.coupon || fromCookie.coupon,
+    interval: fromQuery.interval || fromCookie.interval,
+  }
+}
+
+export function clearCheckoutCampaign() {
+  cookies.remove(CheckoutCampaignCookieKeys.product, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.coupon, { path: "/" })
+  cookies.remove(CheckoutCampaignCookieKeys.interval, { path: "/" })
+}
+
+export function buildCheckoutCampaignQuery(intent) {
+  const query = {}
+  if (intent?.product) query.checkout = intent.product
+  if (intent?.coupon) query.coupon = intent.coupon
+  if (intent?.interval) query.interval = intent.interval
+  return query
+}
+
+export function getLoginRedirectWithCheckout(query) {
+  const intent = parseCheckoutCampaignQuery(query || {})
+  const search = new URLSearchParams()
+  if (intent.product) search.set("checkout", intent.product)
+  if (intent.coupon) search.set("coupon", intent.coupon)
+  if (intent.interval) search.set("interval", intent.interval)
+  const qs = search.toString()
+  return qs ? `/user/login?${qs}` : "/user/login"
+}
+
+export function getPlansAndPaymentRoute(intent) {
+  return {
+    pathname: UserPagePath,
+    query: {
+      plans_and_payment: "",
+      ...buildCheckoutCampaignQuery(intent),
+    },
+  }
+}
+
+export function consumeCheckoutCampaignRedirect(router) {
+  if (typeof window === "undefined" || !router?.isReady) return
+
+  const intent = persistCheckoutCampaignFromQuery(router.query)
+  if (!intent.product) return
+  if (CheckoutCampaignPassthroughPaths.has(router.pathname)) return
+
+  const user = getUserFromCookie()
+  if (isUserLoggedIn(user)) {
+    router.replace(getPlansAndPaymentRoute(intent))
+    return
+  }
+
+  router.replace({
+    pathname: "/user/login",
+    query: buildCheckoutCampaignQuery(intent),
+  })
+}
+
 export async function redirectToChatbotCheckout(router, { interval = "year" } = {}) {
   const plan = await fetchChatbotPlan(interval)
 
@@ -503,7 +856,7 @@ export async function redirectToChatbotCheckout(router, { interval = "year" } = 
 
   const user = getUserFromCookie()
 
-  if (!user?.username) {
+  if (!isUserLoggedIn(user)) {
     if (typeof window !== "undefined") {
       localStorage.setItem("previousPath", window.location.href)
     }
@@ -516,7 +869,7 @@ export async function redirectToChatbotCheckout(router, { interval = "year" } = 
   }
 
   return router.push({
-    pathname: `/user/${user.username}`,
+    pathname: UserPagePath,
     query,
   })
 }

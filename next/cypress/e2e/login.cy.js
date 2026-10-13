@@ -74,13 +74,13 @@ describe('Fluxo de Login - Cenários Principais', () => {
     cy.location('pathname', { timeout: 20000 }).should((pathname) => {
       expect(pathname).to.not.eq('/user/login');
       expect(
-        pathname === '/' || pathname.startsWith('/user/'),
+        pathname === '/' || pathname === '/user' || pathname.startsWith('/user/'),
         `redirect após login real: ${pathname}`
       ).to.eq(true);
     });
 
     cy.parseUserBdCookie().then((user) => {
-      expect(user.username).to.eq('cypress_test');
+      expect(user.email).to.eq(email);
     });
   });
 

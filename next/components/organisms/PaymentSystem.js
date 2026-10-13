@@ -172,7 +172,7 @@ export default function PaymentSystem({
       }
     }
 
-    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon)}`, {method: "GET"})
+    const clientSecret = await fetch(`/api/stripe/createSubscription?p=${btoa(id)}&c=${btoa(coupon || "")}`, {method: "GET"})
       .then(res => res.json())
 
     if (clientSecret) {
@@ -192,7 +192,7 @@ export default function PaymentSystem({
     if(plan) {
       customerCreatPost(plan, coupon)
     }
-  }, [plan, coupon])
+  }, [plan, coupon, enableChatbotTrial])
 
   const SkeletonBox = ({ type, ...props }) => {
     if(type === "text") return <Skeleton height="17px" borderRadius="12px" startColor="#F0F0F0" endColor="#F3F3F3" {...props}/>

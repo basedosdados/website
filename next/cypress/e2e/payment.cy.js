@@ -1,13 +1,11 @@
 describe('Área do Usuário e Sistema de pagamento', () => {
-  const username = 'cypress_test';
-
   function getSafeUserBdCookie() {
     return cy.parseUserBdCookie();
   }
 
   it('Não deve acessar sem autenticação', () => {
     cy.clearCookies();
-    cy.visit(`/user/${username}?plans_and_payment`);
+    cy.visit(`/user?plans_and_payment`);
     cy.url().should('include', '/user/login');
   });
 
@@ -34,16 +32,20 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.getCookie('userBD').should('exist');
     });
 
+    cy.clearCookie('checkout_product');
+    cy.clearCookie('checkout_coupon');
+    cy.clearCookie('checkout_interval');
+
     cy.intercept('GET', '**/api/stripe/getPlans*').as('getPlans');
 
-    cy.visit(`/user/${username}?plans_and_payment`, { timeout: 120000 });
+    cy.visit(`/user?plans_and_payment`, { timeout: 120000 });
 
-    cy.location('pathname', { timeout: 60000 }).should('include', `/user/${username}`);
+    cy.location('pathname', { timeout: 60000 }).should('eq', '/user');
     cy.contains('Planos e pagamento', { timeout: 60000 }).should('be.visible');
   });
 
   it('Deve acessar a página do usuário com autenticação', () => {
-    cy.url().should('include', `/user/${username}`);
+    cy.location('pathname').should('eq', '/user');
     cy.url().should('include', 'plans_and_payment');
   });
 
@@ -176,6 +178,81 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.applyCoupon('25off', 'Cupom 25OFF')
       cy.applyCoupon('20off', 'Cupom 20OFF')
       cy.applyCoupon('15off', 'Cupom 15OFF')
+      cy.applyCoupon('25off', 'Cupom 25OFF')
+
+      cy.get('#toggle-prices-modal-checkout')
+        .should('exist')
+        .and('have.attr', 'type', 'checkbox')
+        .click({ force: true });
+
+      cy.contains('Cupom 25OFF', { timeout: 20000 })
+        .should('be.visible');
+    });
+  });
+
+  it('Deve abrir o e-mail do BigQuery no BD Pro com cupom da URL, sem pular o fluxo', () => {
+    cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
+      body: { started: true },
+    }).as('startTrial');
+
+    cy.visit(`/user?plans_and_payment&checkout=bd_pro&coupon=25off&interval=month`);
+    cy.wait('@getPlans', { timeout: 15000 });
+
+    cy.get('#chakra-modal-modal-email-gcp', { timeout: 30000 }).should('be.visible');
+    cy.get('#chakra-modal-modal-stripe-checkout').should('not.exist');
+    cy.get('@startTrial.all').should('have.length', 0);
+  });
+
+  it('Deve abrir o checkout do chatbot com cupom da URL para pedir o cartão', () => {
+    cy.intercept('GET', '/api/stripe/startChatbotTrial*', {
+      body: { started: true },
+    }).as('startChatbotTrial');
+
+    cy.intercept('GET', '/api/stripe/validateStripeCoupon*', {
+      body: {
+        isValid: true,
+        discountAmount: 7.5,
+        duration: 'once',
+        durationInMonths: 0,
+      },
+    }).as('validateChatbotCoupon');
+
+    cy.intercept('GET', '/api/stripe/createSubscription*', {
+      statusCode: 200,
+      headers: { 'content-type': 'application/json' },
+      body: '"seti_123_secret_test"',
+    }).as('createSubscription');
+
+    cy.on('uncaught:exception', (err) => {
+      if (/IntegrationError|clientSecret/i.test(err.message)) return false
+    });
+
+    cy.visit(`/user?plans_and_payment&checkout=chatbot&coupon=25off&interval=month`);
+    cy.wait('@getPlans', { timeout: 15000 });
+
+    cy.get('#chakra-modal-modal-stripe-checkout', { timeout: 30000 })
+      .should('be.visible')
+      .as('checkoutModal');
+
+    cy.get('#chakra-modal-modal-chatbot-trial-survey').should('not.exist');
+    cy.wait('@validateChatbotCoupon', { timeout: 20000 });
+    cy.get('@startChatbotTrial.all').should('have.length', 0);
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains(/chatbot/i).should('be.visible');
+      cy.contains('Cupom 25OFF', { timeout: 20000 }).should('be.visible');
+      cy.contains('Total a pagar').should('be.visible');
+
+      cy.contains('button', 'Próximo').click({ force: true });
+    });
+
+    cy.wait('@createSubscription');
+
+    cy.get('@checkoutModal').within(() => {
+      cy.contains('Detalhes do pagamento', { timeout: 20000 }).should('be.visible');
+      cy.contains('Cupom 25OFF').should('be.visible');
+      cy.contains('(válido por 1 mês)').should('be.visible');
+      cy.contains('- R$ 7,50/mês').should('be.visible');
     });
   });
 
@@ -211,6 +288,9 @@ describe('Área do Usuário e Sistema de pagamento', () => {
   });
 
   it('Deve chegar no checkout ou no trial do Chatbot', () => {
+    cy.contains('button, a', /Assinar Chatbot|Acessar chatbot/, { timeout: 20000 })
+      .should('be.visible');
+
     cy.get('body').then(($body) => {
       const canSubscribe = $body.find('button:visible').filter((_, el) =>
         (el.textContent || '').includes('Assinar Chatbot')
@@ -376,7 +456,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
             expect(response.body).to.have.property('success', true);
             cy.wait(60000);
 
-            cy.visit(`/user/${username}?plans_and_payment`);
+            cy.visit(`/user?plans_and_payment`);
 
             cy.contains('p', 'BD Grátis', { timeout: 10000 })
               .should('be.visible');

@@ -2,23 +2,17 @@ import axios from "axios";
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
-async function createSubscription({id, coupon,  token}) {
-  const query = coupon !== "" ?
-    `
-      mutation {
-        createStripeSubscription (priceId: ${id}, coupon: "${coupon}") {
-          clientSecret
-        }
+async function createSubscription({id, coupon, token}) {
+  const args = [`priceId: ${id}`]
+  if (coupon) args.push(`coupon: "${coupon}"`)
+
+  const query = `
+    mutation {
+      createStripeSubscription (${args.join(", ")}) {
+        clientSecret
       }
-    `
-  :
-    `
-      mutation {
-        createStripeSubscription (priceId: ${id}) {
-          clientSecret
-        }
-      }
-    `
+    }
+  `
 
   try {
     const res = await axios({
@@ -39,11 +33,20 @@ async function createSubscription({id, coupon,  token}) {
   }
 }
 
+function decodeQueryParam(value) {
+  if (!value) return ""
+  try {
+    return atob(value)
+  } catch {
+    return ""
+  }
+}
+
 export default async function handler(req, res) {
   const token = req.cookies.token
   const result = await createSubscription({
     id: atob(req.query.p),
-    coupon: atob(req.query.c),
+    coupon: decodeQueryParam(req.query.c),
     token: token
   })
 

@@ -20,10 +20,10 @@ import Display from "../components/atoms/Text/Display";
 import TitleText from "../components/atoms/Text/TitleText";
 import LabelText from "../components/atoms/Text/LabelText";
 import BodyText from "../components/atoms/Text/BodyText";
+import { pickBrlStripePrice, triggerGAEvent, triggerGAEventWithData, getUserPageHref, isUserLoggedIn } from "../utils";
 
 import CheckIcon from "../public/img/icons/checkIcon";
 import InfoIcon from '../public/img/icons/infoIcon';
-import { triggerGAEvent, triggerGAEventWithData } from "../utils";
 
 export async function getStaticProps({ locale }) {
   const pagesProps = await withPages();
@@ -336,7 +336,7 @@ export function SectionPrice({
   const { locale } = useRouter();
   const [toggleAnual, setToggleAnual] = useState(true)
   const [plans, setPlans] = useState(null)
-  const [username, setUsername] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isBDPro, setIsBDPro] = useState({isCurrentPlan: false})
   const [isBDEmp, setIsBDEmp] = useState({isCurrentPlan: false})
   const [isBDChatbot, setIsBDChatbot] = useState({isCurrentPlan: false})
@@ -391,10 +391,10 @@ export function SectionPrice({
         }
 
         const filteredPlans = {
-          bd_pro_month : filterData("BD Pro", "month", true, 47)[0].node,
-          bd_pro_year : filterData("BD Pro", "year", true, 444)[0].node,
-          bd_chatbot_month : filterChatbot("month", 30)[0]?.node,
-          bd_chatbot_year : filterChatbot("year", 326)[0]?.node,
+          bd_pro_month : pickBrlStripePrice(filterData("BD Pro", "month", true, 47).map((item) => item.node)),
+          bd_pro_year : pickBrlStripePrice(filterData("BD Pro", "year", true, 444).map((item) => item.node)),
+          bd_chatbot_month : pickBrlStripePrice(filterChatbot("month", 30).map((item) => item.node)),
+          bd_chatbot_year : pickBrlStripePrice(filterChatbot("year", 326).map((item) => item.node)),
         }
 
         setPlans(filteredPlans)
@@ -439,7 +439,7 @@ export function SectionPrice({
         )
         const planIntervalLegacy = user?.subscriptionSet?.edges?.[0]?.node?.planInterval
 
-        setUsername(user?.username)
+        setIsLoggedIn(isUserLoggedIn(user))
         setIsBDPro({
           isCurrentPlan: user?.proSubscription === "bd_pro",
           planInterval: (nodeBDPro?.planInterval ?? planIntervalLegacy),
@@ -642,9 +642,9 @@ export function SectionPrice({
                       ? t("subscribe")
                       : t("startFreeTrial"),
                 href:
-                  username === null
-                    ? `/user/login`
-                    : `/user/${username}?plans_and_payment`,
+                  isLoggedIn
+                    ? getUserPageHref("plans_and_payment")
+                    : `/user/login`,
                 onClick: () => {
                   triggerGAEventWithData("bd_chatbot_card_price", {
                     plan_interval: toggleAnual ? "year" : "month",
@@ -684,9 +684,9 @@ export function SectionPrice({
                     ? t("subscribe")
                     : t("startFreeTrial"),
               href:
-                username === null
-                  ? `/user/login`
-                  : `/user/${username}?plans_and_payment`,
+                isLoggedIn
+                  ? getUserPageHref("plans_and_payment")
+                  : `/user/login`,
               onClick: () => {
                 triggerGAEventWithData("bd_pro_card_price", {
                   plan_interval: toggleAnual ? "year" : "month",

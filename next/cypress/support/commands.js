@@ -35,8 +35,8 @@ Cypress.Commands.add('fillRegisterForm', (userData) => {
   if (userData.email) {
     cy.get('input[name="username"]').clear().type(userData.email);
   }
-  if (userData.username) {
-    cy.get('input[name="user"]').type(userData.username);
+  if (userData.phone) {
+    cy.get('input[name="phone"]').type(userData.phone);
   }
   if (userData.password) {
     cy.get('input[id="password"]').type(userData.password);

@@ -36,6 +36,7 @@
     "intro.js": "^7.2.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
+    "lucide-react": "^1.41.0",
     "mdast-util-from-markdown": "^2.0.1",
     "next": "^12.3.4",
     "next-i18next": "^15.3.1",
@@ -54,7 +55,8 @@
     "remark-gfm": "^4.0.0",
     "remark-gfm-v3": "npm:remark-gfm@3.0.1",
     "swiper": "^8.4.5",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "vega-embed": "^7.1.0"
   },
   "devDependencies": {
     "cypress": "^14.4.0",

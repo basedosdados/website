@@ -21,6 +21,7 @@ import LabelText from "../../components/atoms/Text/LabelText";
 import BodyText from "../../components/atoms/Text/BodyText";
 import Link from "../../components/atoms/Link";
 import ReadMore from "../../components/atoms/ReadMore";
+import { getResearchPapers } from "../../components/organisms/DatasetResource";
 import DatasetResource from "../../components/organisms/DatasetResource";
 import DatasetUserGuide from "../../components/organisms/DatasetUserGuide";
 import { MainPageTemplate } from "../../components/templates/main";
@@ -278,6 +279,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
     if(dataset_tables.length > 0) return pushQuery("table", dataset_tables[0]?._id)
     if(raw_data_sources.length > 0) return pushQuery("raw_data_source", raw_data_sources[0]?._id)
     if(information_request.length > 0) return pushQuery("information_request", information_request[0]?._id)
+
+    const research_papers = getResearchPapers(dataset)
+    if(research_papers.length > 0) return pushQuery("research_paper", research_papers[0]?._id)
   }
 
   useEffect(() => {
@@ -360,6 +364,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
 
       <VStack
         maxWidth="1440px"
+        minWidth="0"
         marginX="auto"
         boxSizing="content-box"
         paddingX="24px"
@@ -508,9 +513,9 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
             title={t("banner.title", { ns: "bdpro" })}
             description={t("banner.description", { ns: "bdpro" })}
             buttonText={t("banner.button", { ns: "bdpro" })}
-            href="/bdpro"
+            href={locale === "en" ? "/dbpro" : "/bdpro"}
             onClick={() => triggerGAEvent("button_banner_bdpro_lp", "click")}
-            imageSrc="/img/banner_bd_pro.svg"
+            imageSrc={locale === "en" ? "/img/banner_db_pro.svg" : "/img/banner_bd_pro.svg"}
           />
         )}
         {effectiveBannerVariant === "chatbot" && (
@@ -537,7 +542,7 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
           <ServiceHighlightABTest {...abTestContent[abVariant]} />
         )}
 
-        <Stack spacing={0} width="100%" height="100%">
+        <Stack spacing={0} width="100%" minWidth="0" height="100%">
           <Stack
             spacing={0}
             flexDirection="row"

@@ -92,6 +92,15 @@ export default async function getDataset(id, locale = 'pt') {
                     }
                   }
                 }
+                researchPapers {
+                  edges {
+                    node {
+                      _id
+                      title
+                      year
+                    }
+                  }
+                }
                 tables {
                   edges {
                     node {

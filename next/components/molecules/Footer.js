@@ -215,7 +215,7 @@ export default function Footer({ template, ocult = false }) {
               >
                 {t('footer.products.publicDatalake')}
               </FooterLink>
-              <FooterLink href={locale === 'en' ? "/en/bdpro" : 
+              <FooterLink href={locale === 'en' ? "/en/dbpro" : 
                                 locale === 'es' ? "/es/bdpro" : 
                                 "/bdpro"}>
                 {t('footer.products.DBPro')}
@@ -310,6 +310,9 @@ export default function Footer({ template, ocult = false }) {
             <SectionCategories title={t('footer.institutional.title')} marginBottom={isMobile && "24px !important"}>
               <FooterLink href="/about-us">
                 {t('footer.institutional.aboutUs')}
+              </FooterLink>
+              <FooterLink href="/invited-researchers">
+                {t('footer.institutional.invitedResearchers')}
               </FooterLink>
               <FooterLink href="/transparency">
                 {t('footer.institutional.transparency')}
