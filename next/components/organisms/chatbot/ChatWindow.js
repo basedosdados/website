@@ -1,37 +1,55 @@
-import React, { useRef, useCallback, useEffect, useMemo } from 'react';
+import React, { useRef, useCallback, useEffect, useMemo, useState } from 'react';
 import { VStack, Box } from '@chakra-ui/react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import Message from './Message';
 
-function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTrigger, onScrollDirection }) {
+function ChatWindow({
+  threadId,
+  messagesThreadId,
+  messages,
+  onFeedback,
+  onExport,
+  onFollowUpClick,
+  scrollTrigger,
+}) {
+  const messagesReady = Boolean(threadId) && String(messagesThreadId) === String(threadId);
+  const [opacity, setOpacity] = useState(() => (messagesReady ? 1 : 0));
+  const [shownMessages, setShownMessages] = useState(messages);
+
+  useEffect(() => {
+    if (!messagesReady) {
+      setOpacity(0);
+      return;
+    }
+    setShownMessages(messages);
+    setOpacity(1);
+  }, [messagesReady, messages]);
+
   const scrollContainerRef = useRef(null);
   const shouldAutoScrollRef = useRef(true);
   const isProgrammaticScrollRef = useRef(false);
   const touchStartYRef = useRef(null);
-  const lastScrollTopRef = useRef(0);
-  const onScrollDirectionRef = useRef(onScrollDirection);
-  onScrollDirectionRef.current = onScrollDirection;
   const bottomThreshold = 80;
 
   const lastAssistantMessageId = useMemo(() => {
-    for (let i = messages.length - 1; i >= 0; i -= 1) {
-      const msg = messages[i];
+    for (let i = shownMessages.length - 1; i >= 0; i -= 1) {
+      const msg = shownMessages[i];
       if (msg?.role === 'assistant') {
         return msg.id;
       }
     }
     return null;
-  }, [messages]);
+  }, [shownMessages]);
 
   const rowVirtualizer = useVirtualizer({
-    count: messages.length,
+    count: shownMessages.length,
     getScrollElement: () => scrollContainerRef.current,
     estimateSize: () => 160,
     overscan: 10,
     gap: 12,
     getItemKey: useCallback(
-      (index) => messages[index]?.id || index,
-      [messages]
+      (index) => shownMessages[index]?.id || index,
+      [shownMessages]
     ),
   });
 
@@ -53,20 +71,12 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
     const el = scrollContainerRef.current;
     if (!el) return;
 
-    const nextTop = el.scrollTop;
-    const delta = nextTop - lastScrollTopRef.current;
-    lastScrollTopRef.current = nextTop;
-
     if (isProgrammaticScrollRef.current) return;
 
     const distanceFromBottom =
-      el.scrollHeight - nextTop - el.clientHeight;
+      el.scrollHeight - el.scrollTop - el.clientHeight;
 
     shouldAutoScrollRef.current = distanceFromBottom < bottomThreshold;
-
-    if (nextTop <= 4) onScrollDirectionRef.current?.("up");
-    else if (delta > 8 && nextTop > 24) onScrollDirectionRef.current?.("down");
-    else if (delta < -8) onScrollDirectionRef.current?.("up");
   }, []);
 
   const handleWheel = useCallback((e) => {
@@ -91,17 +101,17 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
   }, []);
 
   useEffect(() => {
-    if (!messages.length) return;
+    if (!shownMessages.length) return;
 
     shouldAutoScrollRef.current = true;
     scrollToBottom();
-  }, [scrollTrigger, scrollToBottom]);
+  }, [scrollTrigger, scrollToBottom, shownMessages.length]);
 
   useEffect(() => {
     if (!shouldAutoScrollRef.current) return;
 
     scrollToBottom();
-  }, [messages, scrollToBottom]);
+  }, [shownMessages, scrollToBottom]);
 
   const totalSize = rowVirtualizer.getTotalSize();
   useEffect(() => {
@@ -117,13 +127,20 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
+      flex="1"
       width="100%"
-      height="100%"
+      minHeight={0}
       minWidth={0}
+      opacity={opacity}
       overflowY="auto"
       overflowX="hidden"
-      paddingTop={{ base: 0, md: "64px" }}
       paddingBottom={{ base: "12px", md: "24px" }}
+      transition="opacity 0.18s ease"
+      sx={{
+        "@media (prefers-reduced-motion: reduce)": {
+          transition: "none",
+        },
+      }}
       align="stretch"
       spacing={0}
       css={{
@@ -168,13 +185,13 @@ function ChatWindow({ messages, onFeedback, onExport, onFollowUpClick, scrollTri
             transform={`translateY(${virtualRow.start}px)`}
           >
             <Message
-              message={messages[virtualRow.index]}
+              message={shownMessages[virtualRow.index]}
               onFeedback={onFeedback}
               onExport={onExport}
               showFollowUpQuestions={
-                messages[virtualRow.index]?.id === lastAssistantMessageId &&
-                !messages[virtualRow.index]?.isLoading &&
-                !messages[virtualRow.index]?.isTyping
+                shownMessages[virtualRow.index]?.id === lastAssistantMessageId &&
+                !shownMessages[virtualRow.index]?.isLoading &&
+                !shownMessages[virtualRow.index]?.isTyping
               }
               onFollowUpClick={onFollowUpClick}
             />

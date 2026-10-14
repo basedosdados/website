@@ -26,7 +26,7 @@ import {
   Lightbulb,
   LogOut,
   MessageCircleMore,
-  MessageSquareText,
+  MessageCircleText,
   PanelLeft,
   RotateCw,
   Search,
@@ -75,7 +75,7 @@ export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
 export const GraduationCapIcon = makeIcon(GraduationCap);
 export const HeartPulseIcon = makeIcon(HeartPulse);
 export const LeafIcon = makeIcon(Leaf);
-export const MessageSquareTextIcon = makeIcon(MessageSquareText);
+export const MessageCircleTextIcon = makeIcon(MessageCircleText);
 export const VoteIcon = makeIcon(Vote);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);

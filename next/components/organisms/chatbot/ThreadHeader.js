@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Box,
   Flex,
@@ -20,18 +20,28 @@ import {
   ExtraInfoTextForm,
 } from "../../molecules/uiUserPage";
 import { useChatbotContext } from "../../../context/ChatbotContext";
-import { LightbulbIcon, MoreVerticalIcon, TrashIcon } from "./Icons";
+import { ChevronDownIcon, LightbulbIcon, TrashIcon } from "./Icons";
 import { IdeasModal } from "./OnboardingQuestions";
 
 const ThemesTab = 0;
+const TitleLimit = 50;
 
 function titleFromMessages(messages) {
   const firstUser = (messages || []).find((message) => message?.role === "user");
   return String(firstUser?.content || "").replace(/\s+/g, " ").trim();
 }
 
+function titleWithEllipsis(title, full) {
+  const trimmed = String(title || "").trim();
+  const source = String(full || "").replace(/\s+/g, " ").trim();
+  const base = trimmed || source;
+  if (!base || base.endsWith("...")) return base;
+  if (trimmed.length >= TitleLimit) return `${trimmed}...`;
+  if (trimmed && source.startsWith(trimmed) && source.length > trimmed.length) return `${trimmed}...`;
+  return base;
+}
+
 export default function ThreadHeader({
-  scrollDirectionRef,
   threadId,
   messages,
   onDeleted,
@@ -41,38 +51,16 @@ export default function ThreadHeader({
   const { t } = useTranslation("chatbot");
   const { threads, deleteThread, isDeleting } = useChatbotContext();
   const deleteModal = useDisclosure();
-  const [isVisible, setIsVisible] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [ideasOpen, setIdeasOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(ThemesTab);
   const [activeTheme, setActiveTheme] = useState(null);
 
-  useEffect(() => {
-    setIsVisible(true);
-  }, [threadId]);
-
-  useEffect(() => {
-    if (!scrollDirectionRef) return undefined;
-    scrollDirectionRef.current = (direction) => {
-      setIsVisible((current) => {
-        const next = direction !== "down";
-        return current === next ? current : next;
-      });
-    };
-    return () => {
-      scrollDirectionRef.current = null;
-    };
-  }, [scrollDirectionRef]);
-
-  useEffect(() => {
-    if (!isVisible) setMenuOpen(false);
-  }, [isVisible]);
-
   const title = useMemo(() => {
     const fromList = (threads || []).find(
       (item) => String(item.id) === String(threadId)
     )?.title;
-    return String(fromList || "").trim() || titleFromMessages(messages);
+    return titleWithEllipsis(fromList, titleFromMessages(messages));
   }, [threads, threadId, messages]);
 
   const confirmDelete = async () => {
@@ -99,14 +87,10 @@ export default function ThreadHeader({
     <>
       <Box
         display={{ base: "none", md: title ? "block" : "none" }}
-        position="absolute"
-        top={0}
-        left={0}
+        position="relative"
+        flexShrink={0}
         width="100%"
         zIndex={3}
-        transform={isVisible ? "translateY(0)" : "translateY(-100%)"}
-        pointerEvents={isVisible ? "auto" : "none"}
-        transition="transform 0.2s ease"
         backgroundColor="#FFFFFF"
         padding="8px 24px"
       >
@@ -162,7 +146,7 @@ export default function ThreadHeader({
                 _hover={{ backgroundColor: "#EEEEEE", color: "#252A32" }}
                 _expanded={{ backgroundColor: "#EEEEEE", color: "#252A32" }}
               >
-                <MoreVerticalIcon
+                <ChevronDownIcon
                   display="block"
                   width="16px"
                   height="16px"

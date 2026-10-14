@@ -60,7 +60,13 @@
     "error": "Error",
     "thinkingAria": "Thinking",
     "suggestedQuestions": "Suggested Questions",
-    "greeting": "Hello, how can I help you today?",
+    "greetings": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening",
+      "neutral": "Hello",
+      "followups": ["", "Where do we start?", "How can I help?"]
+    },
     "search": {
       "placeholder": "Write a message...",
       "disclaimer": "The chatbot can make mistakes. Consider verifying important information.",

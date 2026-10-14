@@ -70,6 +70,7 @@ function chatbotError(message) {
 export default function useChatbot(initialThreadId = null, options = {}) {
   const { onThreadCreated } = options
   const [messages, setMessages] = useState([])
+  const [messagesThreadId, setMessagesThreadId] = useState(null)
   const [historyLoading, setHistoryLoading] = useState(false)
   const [threadId, setThreadId] = useState(
     initialThreadId === undefined ? null : initialThreadId
@@ -154,6 +155,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
       if (!id) {
         if (!silent) {
           setMessages([])
+          setMessagesThreadId(null)
         }
         return
       }
@@ -222,11 +224,16 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           return
         }
         setMessages(sortMessagesChronologically(formattedMessages))
+        setMessagesThreadId(id)
         lastFetchedThreadIdRef.current = id
       } catch (err) {
         console.error('Failed to fetch messages:', err)
         if (isAuthFailure(err)) {
           handleAuthError()
+        }
+        if (!silent && navGen === fetchSeqRef.current) {
+          setMessages([])
+          setMessagesThreadId(id)
         }
       } finally {
         if (!silent) {
@@ -300,7 +307,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
         const title = firstMessage
           ? firstMessage.length > 50
-            ? `${firstMessage.substring(0, 50)}`
+            ? `${firstMessage.substring(0, 50).trimEnd()}...`
             : firstMessage
           : 'Nova conversa'
 
@@ -313,6 +320,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
         const newThreadId = response.data.id
         setThreadId(newThreadId)
+        setMessagesThreadId(newThreadId)
         lastFetchedThreadIdRef.current = newThreadId
         if (refetchThreads) refetchThreads()
         if (onThreadCreated) onThreadCreated(newThreadId)
@@ -762,6 +770,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
     detachTypingAnimation()
     setThreadId(null)
     setMessages([])
+    setMessagesThreadId(null)
     lastFetchedThreadIdRef.current = null
   }, [detachTypingAnimation])
 
@@ -775,6 +784,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
 
   return {
     messages,
+    messagesThreadId,
     isLoading,
     isGenerating,
     threadId,

@@ -60,7 +60,13 @@
     "error": "Error",
     "thinkingAria": "Pensando",
     "suggestedQuestions": "Preguntas Sugeridas",
-    "greeting": "Hola, ¿cómo puedo ayudarte hoy?",
+    "greetings": {
+      "morning": "Buenos días",
+      "afternoon": "Buenas tardes",
+      "evening": "Buenas noches",
+      "neutral": "Hola",
+      "followups": ["", "¿Por dónde empezamos?", "¿Cómo puedo ayudarte?"]
+    },
     "search": {
       "placeholder": "Escribe un mensaje...",
       "disclaimer": "El chatbot puede cometer errores. Considera verificar la información importante.",
