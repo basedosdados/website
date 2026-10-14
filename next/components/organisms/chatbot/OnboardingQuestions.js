@@ -28,7 +28,7 @@ import {
   GraduationCapIcon,
   HeartPulseIcon,
   LeafIcon,
-  MessageSquareTextIcon,
+  MessageCircleTextIcon,
   VoteIcon,
 } from "./Icons";
 import ptQuestions from "../../../content/chatbot/onboarding/pt.json";
@@ -57,7 +57,7 @@ const IdeaBadges = [
   { id: "environment", tab: ThemesTab, Icon: LeafIcon },
   { id: "politics", tab: ThemesTab, Icon: VoteIcon },
   { id: "analyses", tab: AnalysesTab, Icon: ChartIcon },
-  { id: "format", tab: FormatTab, Icon: MessageSquareTextIcon },
+  { id: "format", tab: FormatTab, Icon: MessageCircleTextIcon },
 ];
 
 const ThemeOptions = [
@@ -294,6 +294,22 @@ export function IdeasModal({
               flex="1"
               minHeight="0"
               overflowY={tabIndex === FormatTab ? "hidden" : "auto"}
+              sx={{
+                "&::-webkit-scrollbar": {
+                  width: "6px",
+                  background: "transparent",
+                },
+                "&::-webkit-scrollbar-track": {
+                  background: "transparent",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  background: "#C4C4C4",
+                  borderRadius: "24px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  background: "#ACAEB1",
+                },
+              }}
             >
               <TabPanel padding="16px 24px 0 0">
                 <ThemeQuestions

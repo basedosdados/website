@@ -3,6 +3,7 @@ import {
   HStack,
   Stack,
   Box,
+  Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -22,11 +23,41 @@ import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
+import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/User";
 
 const greetingFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 `;
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function buildGreeting(t, avoidSignature) {
+  const hour = new Date().getHours();
+  const period =
+    hour >= 5 && hour < 12
+      ? "morning"
+      : hour >= 12 && hour < 18
+        ? "afternoon"
+        : "evening";
+  const name = nameFromEmail(getUserEmailFromCookie());
+  const greetingWords = [t(`ui.greetings.${period}`), t("ui.greetings.neutral")];
+  const followups = t("ui.greetings.followups", { returnObjects: true });
+  const followupList = Array.isArray(followups) ? followups : [""];
+
+  let result;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const greeting = pickRandom(greetingWords);
+    const followup = pickRandom(followupList) || "";
+    const base = name ? `${greeting}, ${name}` : greeting;
+    const lead = `${base}.`;
+    result = { lead, followup, signature: `${lead}|${followup}` };
+    if (result.signature !== avoidSignature) break;
+  }
+  return result;
+}
 
 function ChatbotContent() {
   const router = useRouter();
@@ -42,10 +73,9 @@ function ChatbotContent() {
   const skipFetchRef = useRef(false);
   const searchRef = useRef(null);
 
+  const [greeting, setGreeting] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
   const [composerHasText, setComposerHasText] = useState(false);
-  const scrollDirectionRef = useRef(null);
-
   const handleComposerTextChange = useCallback((text) => {
     setComposerHasText((text || "").trim().length > 0);
   }, []);
@@ -62,6 +92,7 @@ function ChatbotContent() {
 
   const {
     messages,
+    messagesThreadId,
     isLoading,
     isGenerating,
     threadId,
@@ -135,10 +166,6 @@ function ChatbotContent() {
     });
   }, [isLoading, isGenerating]);
 
-  const handleScrollDirection = useCallback((direction) => {
-    scrollDirectionRef.current?.(direction);
-  }, []);
-
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
     resetChat();
@@ -160,6 +187,23 @@ function ChatbotContent() {
 
   const showNewChatGreeting =
     router.isReady && !normalizedThreadId && messages.length === 0;
+
+  useEffect(() => {
+    if (!showNewChatGreeting) {
+      setGreeting(null);
+      return;
+    }
+    let previous = null;
+    try {
+      previous = window.localStorage.getItem("chatbot_last_greeting");
+    } catch {}
+    const next = buildGreeting(t, previous);
+    setGreeting(next);
+    try {
+      window.localStorage.setItem("chatbot_last_greeting", next.signature);
+    } catch {}
+  }, [showNewChatGreeting, t]);
+
   const isThreadView = !showAbout && !showNewChatGreeting;
 
   const searchField = (
@@ -310,17 +354,30 @@ function ChatbotContent() {
                 paddingX={{ base: "0", md: "32px" }}
                 gap={{ base: "20px", md: "32px" }}
               >
-                <Display
-                  as="h2"
-                  typography="small"
-                  textAlign="center"
-                  fontSize={{ base: "28px", md: "36px" }}
-                  lineHeight={{ base: "36px", md: "48px" }}
-                  paddingX={{ base: "8px", md: 0 }}
-                  animation={`${greetingFadeIn} 0.4s ease-out both`}
-                >
-                  {t("ui.greeting")}
-                </Display>
+                {greeting && (
+                  <Display
+                    as="h2"
+                    typography="small"
+                    textAlign="center"
+                    fontSize={{ base: "28px", md: "36px" }}
+                    lineHeight={{ base: "36px", md: "48px" }}
+                    paddingX={{ base: "8px", md: 0 }}
+                    display="flex"
+                    flexWrap="wrap"
+                    justifyContent="center"
+                    sx={{ columnGap: "8px" }}
+                    animation={`${greetingFadeIn} 0.4s ease-out both`}
+                  >
+                    <Text as="span" whiteSpace="nowrap">
+                      {greeting.lead}
+                    </Text>
+                    {greeting.followup ? (
+                      <Text as="span" whiteSpace="nowrap">
+                        {greeting.followup}
+                      </Text>
+                    ) : null}
+                  </Display>
+                )}
                 <Box width="100%" flexShrink={0}>
                   {searchField}
                 </Box>
@@ -332,8 +389,8 @@ function ChatbotContent() {
               </Flex>
             ) : (
               <>
-                <Box
-                  position="relative"
+                <Flex
+                  direction="column"
                   flex={1}
                   overflow="hidden"
                   width="100%"
@@ -341,7 +398,6 @@ function ChatbotContent() {
                   minWidth={0}
                 >
                   <ThreadHeader
-                    scrollDirectionRef={scrollDirectionRef}
                     threadId={threadId || normalizedThreadId}
                     messages={messages}
                     onDeleted={handleNewChat}
@@ -349,14 +405,15 @@ function ChatbotContent() {
                     isDisabled={isLoading || isGenerating}
                   />
                   <ChatWindow
+                    threadId={threadId || normalizedThreadId}
+                    messagesThreadId={messagesThreadId}
                     messages={messages}
                     onFeedback={sendFeedback}
                     onExport={exportQueryResult}
                     onFollowUpClick={handleFollowUpClick}
                     scrollTrigger={scrollTrigger}
-                    onScrollDirection={handleScrollDirection}
                   />
-                </Box>
+                </Flex>
                 <Box
                   width="100%"
                   padding={{ base: "12px 0", md: "24px 0" }}
