@@ -20,8 +20,8 @@ async function getSubscriptionActive(id, token, type) {
       },
       data: {
         query: `
-          query {
-            allAccount (id: "${id}"){
+          query ($id: ID) {
+            allAccount (id: $id){
               edges {
                 node {
                   internalSubscription (isActive: true, first: 20){
@@ -36,7 +36,8 @@ async function getSubscriptionActive(id, token, type) {
               }
             }
           }
-        `
+        `,
+        variables: { id }
       }
     })
     const subscriptions = res?.data?.data?.allAccount?.edges?.[0]?.node?.internalSubscription?.edges?.map((edge) => edge?.node) || []

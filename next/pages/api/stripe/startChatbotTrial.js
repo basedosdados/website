@@ -4,8 +4,8 @@ const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 async function startChatbotTrial({id, token}) {
   const query = `
-    mutation {
-      startChatbotTrial (priceId: ${id}) {
+    mutation ($priceId: ID!) {
+      startChatbotTrial (priceId: $priceId) {
         chatbotTrialEndsAt
         errors
       }
@@ -20,7 +20,8 @@ async function startChatbotTrial({id, token}) {
         Authorization: `Bearer ${token}`
       },
       data: {
-        query: query
+        query: query,
+        variables: { priceId: id }
       }
     })
     const data = res.data
