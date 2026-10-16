@@ -150,6 +150,13 @@ Fill in the `temporal_coverage` column in table, column, and key metadata (in di
 - Null value: `""` (csv), `NULL` (Python), `NA` (R)
 - Proportion/percentage: between 0-100
 
+## CSV files
+
+In every `.csv` file uploaded to staging, each row must have the same number of columns as the header. The staging table is created with the `allowJaggedRows` option turned off, in both dev and production. Because of this, BigQuery raises an error when it reads a row with missing columns, instead of filling them with nulls.
+
+- When creating the table with `tb.create`, do not pass `csv_allow_jagged_rows=True`. The package default is already `False`.
+- When a new column is added to a table that already has files in staging, rewrite the old files with that column. Where there is no value, leave it empty (`""`), as with any null value.
+
 ## Table partitioning
 
 ### **What is partitioning and what is its goal?**
