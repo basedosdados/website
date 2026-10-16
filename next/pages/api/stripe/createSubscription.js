@@ -3,12 +3,9 @@ import axios from "axios";
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
 async function createSubscription({id, coupon, token}) {
-  const args = [`priceId: ${id}`]
-  if (coupon) args.push(`coupon: "${coupon}"`)
-
   const query = `
-    mutation {
-      createStripeSubscription (${args.join(", ")}) {
+    mutation ($priceId: ID!, $coupon: String) {
+      createStripeSubscription (priceId: $priceId, coupon: $coupon) {
         clientSecret
       }
     }
@@ -22,7 +19,8 @@ async function createSubscription({id, coupon, token}) {
         Authorization: `Bearer ${token}`
       },
       data: {
-        query: query
+        query: query,
+        variables: { priceId: id, coupon: coupon || null }
       }
     })
     const data = res.data

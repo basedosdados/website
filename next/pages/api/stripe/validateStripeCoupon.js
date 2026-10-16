@@ -12,8 +12,8 @@ async function validateStripeCoupon({id, coupon, token}) {
       },
       data: {
         query:`
-          mutation {
-            validateStripeCoupon (priceId: ${id}, coupon: "${coupon}") {
+          mutation ($priceId: ID!, $coupon: String!) {
+            validateStripeCoupon (priceId: $priceId, coupon: $coupon) {
               isValid
               discountAmount
               duration
@@ -21,7 +21,8 @@ async function validateStripeCoupon({id, coupon, token}) {
               errors
             }
           }
-        `
+        `,
+        variables: { priceId: id, coupon }
       }
     })
     const data = res.data

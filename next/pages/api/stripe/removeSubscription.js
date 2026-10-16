@@ -20,15 +20,16 @@ async function removeSubscriptionById(id, token) {
       },
       data: {
         query: `
-        mutation {
-          deleteStripeSubscription (subscriptionId: "${id}"){
+        mutation ($subscriptionId: ID!) {
+          deleteStripeSubscription (subscriptionId: $subscriptionId){
             subscription {
               id
             }
             errors
           }
         }
-        `
+        `,
+        variables: { subscriptionId: id }
       }
     })
     const data = res.data
@@ -49,8 +50,8 @@ async function getSubscriptionIdByAccount(id, token, subscriptionType) {
       },
       data: {
         query: `
-          query {
-            allAccount (id: "${id}"){
+          query ($id: ID) {
+            allAccount (id: $id){
               edges {
                 node {
                   internalSubscription (isActive: true, first: 20){
@@ -65,7 +66,8 @@ async function getSubscriptionIdByAccount(id, token, subscriptionType) {
               }
             }
           }
-        `
+        `,
+        variables: { id }
       }
     })
 
