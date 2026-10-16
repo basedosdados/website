@@ -12,15 +12,16 @@ async function removeSubscriptionImmediately(id, token) {
       },
       data: {
         query: `
-        mutation {
-          deleteStripeSubscriptionImmediately (subscriptionId: "${id}"){
+        mutation ($subscriptionId: ID!) {
+          deleteStripeSubscriptionImmediately (subscriptionId: $subscriptionId){
             subscription {
               id
             }
             errors
           }
         }
-        `
+        `,
+        variables: { subscriptionId: id }
       }
     })
     const data = res.data
