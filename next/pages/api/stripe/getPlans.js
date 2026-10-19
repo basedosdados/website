@@ -7,6 +7,7 @@ const PriceFields = `
   amount
   productName
   productSlug
+  region
   interval
   isActive
 `
@@ -40,8 +41,7 @@ async function getPlans(fields) {
 }
 
 export default async function handler(req, res) {
-  let result = await getPlans(`${PriceFields} currency`)
-  if (result === "err" || result?.errors) result = await getPlans(PriceFields)
+  const result = await getPlans(PriceFields)
 
   if(result.errors) return res.status(500).json({error: result.errors, success: false})
   if(result === "err") return res.status(500).json({error: "err", success: false})

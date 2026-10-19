@@ -14,7 +14,8 @@ import { useTranslation } from 'next-i18next';
 import { MainPageTemplate } from "../components/templates/main";
 import { withPages } from "../hooks/pages.hook";
 import { isMobileMod } from "../hooks/useCheckMobile.hook";
-import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription, getUserPageHref, isUserLoggedIn, pickBrlStripePrice } from "../utils";
+import { triggerGAEventWithData, getUserFromCookie, hasChatbotSubscription, getUserPageHref, isUserLoggedIn } from "../utils";
+import { selectPlans } from "../constants/stripePlans";
 
 import { getAllFAQs } from "./api/faqs";
 
@@ -40,20 +41,6 @@ export async function getStaticProps({ locale }) {
   };
 }
 
-function filterChatbotPlans(edges) {
-  return edges.filter((item) => {
-    const name = item.node.productName?.toLowerCase() || "";
-    const slug = item.node.productSlug?.toLowerCase() || "";
-    const isConsumerChatbot =
-      (name.includes("chatbot") || slug.includes("chatbot")) &&
-      !name.includes("empresas");
-    return (
-      isConsumerChatbot &&
-      item.node.isActive === true
-    );
-  });
-}
-
 async function fetchChatbotPlans() {
   const result = await fetch("/api/stripe/getPlans", { method: "GET" }).then(
     (res) => res.json()
@@ -61,19 +48,11 @@ async function fetchChatbotPlans() {
 
   if (!result.success) return null;
 
-  const chatbotPlans = filterChatbotPlans(result.data);
-
-  function findByInterval(interval, amount) {
-    return pickBrlStripePrice(
-      chatbotPlans
-        .filter((item) => item.node.interval === interval && item.node.amount === amount)
-        .map((item) => item.node)
-    ) ?? null;
-  }
+  const plans = selectPlans(result.data);
 
   return {
-    month: findByInterval("month", 30),
-    year: findByInterval("year", 326),
+    month: plans.bd_chatbot_month ?? null,
+    year: plans.bd_chatbot_year ?? null,
   };
 }
 
