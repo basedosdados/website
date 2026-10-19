@@ -4,6 +4,7 @@ import {
   GridItem,
   Image,
   Stack,
+  Skeleton,
   useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect, useMemo } from "react";
@@ -110,6 +111,8 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
   const bannerVariant = useABTestVariant('dataset-banner-ab', ['bdpro', 'chatbot'], 1);
   const [isSubscriber, setIsSubscriber] = useState(false);
   const [hasChatbotSubscriber, setHasChatbotSubscriber] = useState(false);
+  const [spatialCoverage, setSpatialCoverage] = useState(null);
+  const [isSpatialCoverageLoading, setIsSpatialCoverageLoading] = useState(true);
 
   const isDatasetEmpty = !dataset || Object.keys(dataset).length === 0
 
@@ -123,6 +126,51 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
       return Object.values(coverage).some(c => c?.type === "closed");
     });
   }, [dataset]);
+
+  useEffect(() => {
+    const datasetId = dataset?._id;
+    if (!datasetId) {
+      setIsSpatialCoverageLoading(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    let cancelled = false;
+    setIsSpatialCoverageLoading(true);
+    setSpatialCoverage(null);
+
+    fetch(`/api/datasets/getSpatialCoverage?id=${datasetId}&locale=${locale || "pt"}`, {
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("spatial coverage request failed");
+        return response.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        setSpatialCoverage(data?.spatialCoverage || null);
+      })
+      .catch((error) => {
+        if (cancelled || error.name === "AbortError") return;
+        console.error(error);
+        setSpatialCoverage(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsSpatialCoverageLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [dataset?._id, locale]);
+
+  const spatialCoverageText = useMemo(() => {
+    if (!spatialCoverage) return null;
+    return Object.values(spatialCoverage)
+      .sort((a, b) => a.localeCompare(b, locale))
+      .join(", ");
+  }, [spatialCoverage, locale]);
 
   useEffect(() => {
     const handleLoadingTourSurvey = (e) => {
@@ -491,16 +539,22 @@ export default function DatasetPage ({ dataset, userGuide, hiddenDataset }) {
                 >
                   {t('spatialCoverage')}
                 </LabelText>
-                <BodyText
-                  typography="small"
-                  color="#464A51"
-                >
-                  {dataset?.[`spatialCoverageName${capitalize(locale)}`]
-                    ? Object.values(dataset[`spatialCoverageName${capitalize(locale)}`])
-                        .sort((a, b) => a.localeCompare(b, locale))
-                        .join(', ')
-                    : t('notProvided')}
-                </BodyText>
+                {isSpatialCoverageLoading ? (
+                  <Skeleton
+                    height="18px"
+                    width="280px"
+                    borderRadius="4px"
+                    startColor="#F0F0F0"
+                    endColor="#E4E4E4"
+                  />
+                ) : (
+                  <BodyText
+                    typography="small"
+                    color="#464A51"
+                  >
+                    {spatialCoverageText || t("notProvided")}
+                  </BodyText>
+                )}
               </GridItem>
             </Grid>
           </GridItem>
