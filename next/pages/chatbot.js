@@ -103,6 +103,7 @@ function ChatbotContent() {
     resetChat
   } = useChatbot(resolvedInitialThread, {
     onThreadCreated: (id) => {
+      skipFetchRef.current = true;
       router.replace({
         pathname: router.pathname,
         query: { ...router.query, t: id }
@@ -127,7 +128,7 @@ function ChatbotContent() {
 
   useEffect(() => {
     if (!router.isReady) return;
-    if (normalizedThreadId && normalizedThreadId !== threadId) {
+    if (normalizedThreadId && String(normalizedThreadId) !== String(threadId ?? "")) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
         return;

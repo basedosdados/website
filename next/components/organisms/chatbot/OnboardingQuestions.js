@@ -393,7 +393,7 @@ function ThemeQuestions({
       </Flex>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(auto-fit, minmax(min(100%, 360px), 1fr))"
+        gridTemplateColumns="1fr"
         gap="8px"
         marginTop="16px"
         alignItems="stretch"
@@ -412,11 +412,8 @@ function ThemeQuestions({
             cursor={isDisabled ? "not-allowed" : "pointer"}
             opacity={isDisabled ? 0.5 : 1}
             disabled={isDisabled}
-            transition="border-color 0.15s ease, background-color 0.15s ease"
-            _hover={{
-              borderColor: "#2B8C4D",
-              backgroundColor: "#F7FBF8",
-            }}
+            transition="background-color 0.15s ease"
+            _hover={isDisabled ? undefined : { backgroundColor: "#EEEEEE" }}
             onClick={() => onQuestionClick(card.question)}
           >
             {card.title ? (
@@ -455,7 +452,7 @@ function InfoList({ intro, items, onExampleClick, isDisabled }) {
       </LabelText>
       <Box
         display="grid"
-        gridTemplateColumns="repeat(auto-fit, minmax(min(100%, 360px), 1fr))"
+        gridTemplateColumns="1fr"
         gap="8px"
         alignItems="stretch"
       >
@@ -473,11 +470,8 @@ function InfoList({ intro, items, onExampleClick, isDisabled }) {
             cursor={isDisabled ? "not-allowed" : "pointer"}
             opacity={isDisabled ? 0.5 : 1}
             disabled={isDisabled}
-            transition="border-color 0.15s ease, background-color 0.15s ease"
-            _hover={{
-              borderColor: "#2B8C4D",
-              backgroundColor: "#F7FBF8",
-            }}
+            transition="background-color 0.15s ease"
+            _hover={isDisabled ? undefined : { backgroundColor: "#EEEEEE" }}
             onClick={() => onExampleClick(examplePrompt(example))}
           >
             <LabelText>
@@ -540,6 +534,7 @@ function FormatCarousel({ intro, items }) {
           maxHeight="100%"
           flexShrink={1}
           borderRadius="12px"
+          border="1px solid #DEDFE0"
           backgroundColor="#F4F5F6"
           overflow="hidden"
         >
@@ -550,11 +545,17 @@ function FormatCarousel({ intro, items }) {
               alt=""
               width="100%"
               height="100%"
-              objectFit="cover"
+              objectFit={current.image.includes("consulta_sql") ? "contain" : "cover"}
             />
           ) : null}
         </Box>
-        <Flex direction="column" gap="8px" alignSelf="flex-start">
+        <Flex
+          direction="column"
+          gap="8px"
+          alignSelf="center"
+          height="100%"
+          justifyContent="center"
+        >
           <LabelText color="#464A51">{current.title}</LabelText>
           <LabelText color="#464A51" fontWeight="400">
             {current.description}
