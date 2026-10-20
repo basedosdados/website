@@ -27,7 +27,6 @@ export default async function getDataset(id, locale = 'pt') {
                 description
                 description${capitalize(locale)}
                 temporalCoverage
-                spatialCoverageName${capitalize(locale)}
                 status {
                   slug
                 }
