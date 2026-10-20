@@ -2,21 +2,21 @@
   {
     "title": "Results table",
     "description": "See the data organized in rows and columns, right in the conversation.",
-    "image": ""
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/tabela_resultado.png"
   },
   {
     "title": "Data visualization",
     "description": "Generate charts from your question to spot patterns and comparisons.",
-    "image": ""
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/visualizacao_dados.png"
   },
   {
     "title": "CSV export",
     "description": "Download the results as CSV to continue the analysis in other tools.",
-    "image": ""
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/download_csv.png"
   },
   {
     "title": "SQL query and metadata",
     "description": "Access the SQL code of the query and information about the tables and columns used.",
-    "image": ""
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/consulta_sql.png"
   }
 ]

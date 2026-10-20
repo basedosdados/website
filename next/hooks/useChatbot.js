@@ -67,6 +67,11 @@ function chatbotError(message) {
   return new Error(`[Chatbot] ${message}`)
 }
 
+function sameThreadId(a, b) {
+  if (a == null || b == null) return false
+  return String(a) === String(b)
+}
+
 export default function useChatbot(initialThreadId = null, options = {}) {
   const { onThreadCreated } = options
   const [messages, setMessages] = useState([])
@@ -220,7 +225,18 @@ export default function useChatbot(initialThreadId = null, options = {}) {
             isTyping: false
           }
         })
-        if (silent && threadIdRef.current !== id) {
+        if (silent && !sameThreadId(threadIdRef.current, id)) {
+          return
+        }
+        const replyInProgress = messagesRef.current.some(
+          message => message?.role === 'assistant' && (message.isLoading || message.isTyping)
+        )
+        const streamForThisThread = pendingStreamsRef.current.some(stream =>
+          sameThreadId(stream.threadId, id)
+        )
+        if (replyInProgress && streamForThisThread && sameThreadId(threadIdRef.current, id)) {
+          setMessagesThreadId(id)
+          lastFetchedThreadIdRef.current = id
           return
         }
         setMessages(sortMessagesChronologically(formattedMessages))
@@ -278,7 +294,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   useEffect(() => {
     const prev = prevThreadIdRef.current
     prevThreadIdRef.current = threadId
-    if (prev != null && prev !== threadId) {
+    if (prev != null && !sameThreadId(prev, threadId)) {
       fetchSeqRef.current++
       lastFetchedThreadIdRef.current = null
       detachTypingAnimation()
@@ -286,7 +302,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
   }, [threadId, detachTypingAnimation])
 
   useEffect(() => {
-    if (threadId && threadId !== lastFetchedThreadIdRef.current) {
+    if (threadId && !sameThreadId(threadId, lastFetchedThreadIdRef.current)) {
       fetchThreadMessages(threadId)
     } else if (!threadId) {
       setMessages([])
@@ -318,7 +334,7 @@ export default function useChatbot(initialThreadId = null, options = {}) {
           { title, language: router.locale || 'pt' }
         )
 
-        const newThreadId = response.data.id
+        const newThreadId = response.data?.id != null ? String(response.data.id) : null
         setThreadId(newThreadId)
         setMessagesThreadId(newThreadId)
         lastFetchedThreadIdRef.current = newThreadId
