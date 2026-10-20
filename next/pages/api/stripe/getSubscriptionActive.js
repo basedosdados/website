@@ -11,6 +11,8 @@ function matchesSubscriptionType(stripeSubscription, type) {
 }
 
 async function getSubscriptionActive(id, token, type) {
+  if (!/^\d+$/.test(String(id))) return null
+
   try {
     const res = await axios({
       url: API_URL,
@@ -20,8 +22,8 @@ async function getSubscriptionActive(id, token, type) {
       },
       data: {
         query: `
-          query ($id: ID) {
-            allAccount (id: $id){
+          query {
+            allAccount (id: "${id}"){
               edges {
                 node {
                   internalSubscription (isActive: true, first: 20){
@@ -36,8 +38,7 @@ async function getSubscriptionActive(id, token, type) {
               }
             }
           }
-        `,
-        variables: { id }
+        `
       }
     })
     const subscriptions = res?.data?.data?.allAccount?.edges?.[0]?.node?.internalSubscription?.edges?.map((edge) => edge?.node) || []

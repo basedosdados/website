@@ -41,6 +41,8 @@ async function removeSubscriptionById(id, token) {
 }
 
 async function getSubscriptionIdByAccount(id, token, subscriptionType) {
+  if (!/^\d+$/.test(String(id))) return null
+
   try {
     const res = await axios({
       url: API_URL,
@@ -50,8 +52,8 @@ async function getSubscriptionIdByAccount(id, token, subscriptionType) {
       },
       data: {
         query: `
-          query ($id: ID) {
-            allAccount (id: $id){
+          query {
+            allAccount (id: "${id}"){
               edges {
                 node {
                   internalSubscription (isActive: true, first: 20){
@@ -66,8 +68,7 @@ async function getSubscriptionIdByAccount(id, token, subscriptionType) {
               }
             }
           }
-        `,
-        variables: { id }
+        `
       }
     })
 
