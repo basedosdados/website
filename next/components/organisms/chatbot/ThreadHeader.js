@@ -92,6 +92,7 @@ export default function ThreadHeader({
         width="100%"
         zIndex={3}
         backgroundColor="#FFFFFF"
+        borderBottom="1px solid #EEEEEE"
         padding="8px 24px"
       >
         <Flex
@@ -189,13 +190,14 @@ export default function ThreadHeader({
             width="28px"
             height="28px"
             borderRadius="8px"
-            color="#878A8E"
+            color="#71757A"
             flexShrink={0}
             cursor={isDisabled ? "not-allowed" : "pointer"}
             opacity={isDisabled ? 0.5 : 1}
             disabled={isDisabled}
-            transition="color 0.15s ease"
-            _hover={isDisabled ? undefined : { color: "#2B8C4D", backgroundColor: "transparent" }}
+            backgroundColor="transparent"
+            transition="color 0.15s ease, background-color 0.15s ease"
+            _hover={isDisabled ? undefined : { color: "#252A32", backgroundColor: "#EEEEEE" }}
             onClick={openIdeas}
           >
             <LightbulbIcon width="20px" height="20px" color="currentColor" />

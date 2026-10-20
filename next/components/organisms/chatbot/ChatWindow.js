@@ -12,7 +12,11 @@ function ChatWindow({
   onFollowUpClick,
   scrollTrigger,
 }) {
-  const messagesReady = Boolean(threadId) && String(messagesThreadId) === String(threadId);
+  const threadMatches =
+    messagesThreadId == null || String(messagesThreadId) === String(threadId ?? "");
+  const messagesReady = messages.length > 0
+    ? threadMatches
+    : Boolean(threadId) && messagesThreadId != null && String(messagesThreadId) === String(threadId);
   const [opacity, setOpacity] = useState(() => (messagesReady ? 1 : 0));
   const [shownMessages, setShownMessages] = useState(messages);
 
