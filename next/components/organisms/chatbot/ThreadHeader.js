@@ -21,7 +21,7 @@ import {
 } from "../../molecules/uiUserPage";
 import { useChatbotContext } from "../../../context/ChatbotContext";
 import { ChevronDownIcon, LightbulbIcon, TrashIcon } from "./Icons";
-import { IdeasModal } from "./OnboardingQuestions";
+import { IdeasModal, trackIdeasOpen } from "./OnboardingQuestions";
 
 const ThemesTab = 0;
 const TitleLimit = 50;
@@ -81,6 +81,7 @@ export default function ThreadHeader({
     setTabIndex(ThemesTab);
     setActiveTheme(null);
     setIdeasOpen(true);
+    trackIdeasOpen("thread_header");
   };
 
   return (
@@ -264,6 +265,7 @@ export default function ThreadHeader({
         activeTheme={activeTheme}
         onQuestionClick={handleQuestion}
         isDisabled={isDisabled}
+        source="thread_header"
       />
     </>
   );
