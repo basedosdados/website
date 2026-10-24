@@ -17,8 +17,8 @@
     "Which 10 products, by NCM classification, did Brazil export the most in FOB value (US$) in 2025, and what were the top 3 destination countries for each?",
     "Make a chart of 12-month accumulated inflation (IPCA) over the last 20 years.",
     "How did the dollar's exchange rate against the real change from 2010 to 2025? Show in a chart the average rate for each year, highlighting the highest and lowest points.",
-    "Create a map of the unemployment rate in each state in the 4th quarter of 2025, according to the PNAD Contínua.",
-    "In 2025, what was the average earnings of men and women with an active formal job in each state, and what was the percentage difference in women's earnings relative to men's, considering only jobs with positive earnings?"
+    "Create a map of the unemployment rate in each state in the 2nd quarter of 2025, according to the PNAD Contínua.",
+    "Make a chart of the balance between companies opened and closed in Brazil in 2025."
   ],
   "environment": [
     "What were the 5 largest land-use transitions in the state of Amazonas between 2020 and 2025?",
@@ -28,10 +28,10 @@
     "How many animal species and subspecies are threatened with extinction in Brazil, by group, considering the categories vulnerable, endangered, critically endangered, and possibly extinct?"
   ],
   "politics": [
-    "Make a chart of the percentage of women among the 513 federal deputies elected in each election, from 2010 to 2022.",
+    "Make a chart of the percentage of women among the 513 federal deputies elected in each election, from 2010 to 2026.",
     "In the current legislature, on which type of expense did federal deputies spend the most from the parliamentary quota (Cota Parlamentar)? And which 10 deputies spent the most over the period?",
-    "Who was the most-voted candidate for federal deputy in each state in 2022, from which party, and were they elected?",
-    "Who were the governors elected in 2022? Which party were they from, and how many states did each party win?",
-    "How did the average age of the 513 federal deputies elected in each election change from 2010 to 2022?"
+    "Who was the most-voted candidate for federal deputy in each state in 2026, from which party, and were they elected?",
+    "Which governors were elected in the first round in 2026? Which party were they from, and how many states did each party win?",
+    "How did the average age of the 513 federal deputies elected in each election change from 2010 to 2026?"
   ]
 }

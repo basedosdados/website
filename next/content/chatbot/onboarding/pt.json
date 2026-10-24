@@ -17,8 +17,8 @@
     "Quais foram os 10 produtos, pela classificação NCM, que o Brasil mais exportou em valor FOB (US$) em 2025, e quais os 3 principais países de destino de cada um?",
     "Faça um gráfico da inflação acumulada em 12 meses (IPCA) nos últimos 20 anos.",
     "Como a cotação do dólar em relação ao real mudou de 2010 a 2025? Mostre em um gráfico a cotação média de cada ano, destacando o ponto mais alto e o mais baixo.",
-    "Crie um mapa com a taxa de desocupação de cada estado no 4º trimestre de 2025, segundo a PNAD Contínua.",
-    "Em 2025, qual foi a remuneração média de homens e mulheres com vínculo formal ativo em cada estado e qual foi a diferença percentual da remuneração das mulheres em relação à dos homens, considerando apenas vínculos com remuneração positiva?"
+    "Crie um mapa com a taxa de desocupação de cada estado no 2º trimestre de 2025, segundo a PNAD Contínua.",
+    "Faça um gráfico com o saldo entre empresas abertas e fechadas no Brasil em 2025."
   ],
   "environment": [
     "Quais foram as 5 maiores transições de uso do solo no estado do Amazonas entre 2020 e 2025?",
@@ -28,10 +28,10 @@
     "Quantas espécies e subespécies de animais estão ameaçadas de extinção no Brasil, por grupo, considerando as categorias vulnerável, em perigo, criticamente em perigo e possivelmente extinta?"
   ],
   "politics": [
-    "Faça um gráfico da porcentagem de mulheres entre os 513 deputados federais eleitos em cada eleição, de 2010 a 2022.",
+    "Faça um gráfico da porcentagem de mulheres entre os 513 deputados federais eleitos em cada eleição, de 2010 a 2026.",
     "Na legislatura atual, em que tipo de despesa os deputados federais mais gastaram a Cota Parlamentar? E quais foram os 10 deputados que mais gastaram no período?",
-    "Quem foi o candidato a deputado federal mais votado em cada estado em 2022, de qual partido, e ele foi eleito?",
-    "Quais foram os governadores eleitos em 2022? De que partido eles eram e quantos estados cada partido conquistou?",
-    "Como mudou a idade média dos 513 deputados federais eleitos em cada eleição, de 2010 a 2022?"
+    "Quem foi o candidato a deputado federal mais votado em cada estado em 2026, de qual partido, e ele foi eleito?",
+    "Quais foram os governadores eleitos no primeiro turno em 2026? De que partido eles eram e quantos estados cada partido conquistou?",
+    "Como mudou a idade média dos 513 deputados federais eleitos em cada eleição, de 2010 a 2026?"
   ]
 }
