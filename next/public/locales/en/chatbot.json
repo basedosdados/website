@@ -231,8 +231,8 @@
         "health": "Health",
         "education": "Education",
         "economy": "Economy",
-        "environment": "Environment / Nature",
-        "politics": "Politics / Elections",
+        "environment": "Environment",
+        "politics": "Politics",
         "analyses": "Types of analyses the chatbot does",
         "format": "How the answer reaches you"
       },

@@ -20,6 +20,7 @@ import GreenTab from "../../atoms/GreenTab";
 import LabelText from "../../atoms/Text/LabelText";
 import TitleText from "../../atoms/Text/TitleText";
 import BodyText from "../../atoms/Text/BodyText";
+import { triggerGAEventWithData } from "../../../utils";
 import {
   BanknoteIcon,
   ChartIcon,
@@ -93,6 +94,21 @@ const FormatsByLocale = {
   en: enFormats,
   es: esFormats,
 };
+
+export function trackIdeasOpen(source, badge) {
+  triggerGAEventWithData("chatbot_ideas_open", {
+    ideas_source: source,
+    ideas_badge: badge || "none",
+  });
+}
+
+function trackIdeasQuestionClick(source, tab, theme) {
+  triggerGAEventWithData("chatbot_ideas_question_click", {
+    ideas_source: source,
+    ideas_tab: tab,
+    ideas_theme: theme || "none",
+  });
+}
 
 const SlideFadeIn = keyframes`
   from { opacity: 0; }
@@ -176,9 +192,22 @@ export function IdeasModal({
   activeTheme,
   onQuestionClick,
   isDisabled,
+  source,
 }) {
   const { t, i18n } = useTranslation("chatbot");
   const [selectedTheme, setSelectedTheme] = useState(activeTheme || DefaultTheme);
+
+  const handleThemeQuestion = (question) => {
+    if (isDisabled) return;
+    trackIdeasQuestionClick(source, "themes", selectedTheme);
+    onQuestionClick(question);
+  };
+
+  const handleAnalysisExample = (question) => {
+    if (isDisabled) return;
+    trackIdeasQuestionClick(source, "analyses");
+    onQuestionClick(question);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -315,7 +344,7 @@ export function IdeasModal({
                 <ThemeQuestions
                   selectedTheme={selectedTheme}
                   onThemeChange={setSelectedTheme}
-                  onQuestionClick={onQuestionClick}
+                  onQuestionClick={handleThemeQuestion}
                   isDisabled={isDisabled}
                 />
               </TabPanel>
@@ -323,7 +352,7 @@ export function IdeasModal({
                 <InfoList
                   intro={t("ui.onboarding.analysesIntro")}
                   items={contentForLocale(i18n.language, AnalysesByLocale)}
-                  onExampleClick={onQuestionClick}
+                  onExampleClick={handleAnalysisExample}
                   isDisabled={isDisabled}
                 />
               </TabPanel>
@@ -638,6 +667,7 @@ export default function OnboardingQuestions({
     setTabIndex(badge.tab);
     setActiveTheme(badge.tab === ThemesTab ? badge.id : null);
     setIsOpen(true);
+    trackIdeasOpen("badge", badge.id);
   };
 
   const handleQuestion = (question) => {
@@ -700,6 +730,7 @@ export default function OnboardingQuestions({
         activeTheme={activeTheme}
         onQuestionClick={handleQuestion}
         isDisabled={isDisabled}
+        source="badge"
       />
     </>
   );
