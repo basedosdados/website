@@ -2,10 +2,13 @@ import { Box } from "@chakra-ui/react";
 import {
   ArrowRight,
   ArrowUp,
+  Banknote,
   BarChart3,
   Braces,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   CircleAlert,
   CircleCheck,
   ClockFading,
@@ -16,10 +19,14 @@ import {
   EllipsisVertical,
   ExternalLink,
   File,
+  GraduationCap,
+  HeartPulse,
   Info,
+  Leaf,
   Lightbulb,
   LogOut,
   MessageCircleMore,
+  MessageCircleText,
   PanelLeft,
   RotateCw,
   Search,
@@ -29,6 +36,7 @@ import {
   ThumbsDown,
   ThumbsUp,
   Trash2,
+  Vote,
   X,
 } from "lucide-react";
 
@@ -39,7 +47,7 @@ function makeIcon(Base) {
     width = "18px",
     height = "18px",
     boxSize,
-    strokeWidth = 1.25,
+    strokeWidth = 1.5,
     ...props
   }) {
     const resolvedColor =
@@ -60,11 +68,19 @@ function makeIcon(Base) {
 
 export const ArrowRightIcon = makeIcon(ArrowRight);
 export const ArrowUpIcon = makeIcon(ArrowUp);
+export const BanknoteIcon = makeIcon(Banknote);
 export const BracesIcon = makeIcon(Braces);
 export const ChartIcon = makeIcon(BarChart3);
 export const ChatBubbleDotsIcon = makeIcon(MessageCircleMore);
+export const GraduationCapIcon = makeIcon(GraduationCap);
+export const HeartPulseIcon = makeIcon(HeartPulse);
+export const LeafIcon = makeIcon(Leaf);
+export const MessageCircleTextIcon = makeIcon(MessageCircleText);
+export const VoteIcon = makeIcon(Vote);
 export const CheckIcon = makeIcon(Check);
 export const ChevronDownIcon = makeIcon(ChevronDown);
+export const ChevronLeftIcon = makeIcon(ChevronLeft);
+export const ChevronRightIcon = makeIcon(ChevronRight);
 export const CircleAlertIcon = makeIcon(CircleAlert);
 export const CircleCheckIcon = makeIcon(CircleCheck);
 export const ClockFadingIcon = makeIcon(ClockFading);

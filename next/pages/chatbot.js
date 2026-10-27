@@ -3,7 +3,7 @@ import {
   HStack,
   Stack,
   Box,
-  Text
+  Text,
 } from "@chakra-ui/react";
 import { keyframes } from "@emotion/react";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -15,14 +15,15 @@ import Sidebar from "../components/organisms/chatbot/Sidebar";
 import Search from "../components/organisms/chatbot/Search";
 import ChatWindow from "../components/organisms/chatbot/ChatWindow";
 import OnboardingQuestions from "../components/organisms/chatbot/OnboardingQuestions";
+import ThreadHeader from "../components/organisms/chatbot/ThreadHeader";
 import Display from "../components/atoms/Text/Display";
-import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/icons";
+import { SidebarIcon, CrossIcon } from "../components/organisms/chatbot/Icons";
 import BrandLogo from "../components/organisms/chatbot/BrandLogo";
 import AboutContent from "../components/organisms/chatbot/AboutContent";
 import useChatbot from "../hooks/useChatbot";
 import { ChatbotProvider } from "../context/ChatbotContext";
 import ChatbotAccessGate from "../components/organisms/chatbot/ChatbotAccessGate";
-import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/user";
+import { getUserEmailFromCookie, nameFromEmail } from "../components/organisms/chatbot/User";
 
 const greetingFadeIn = keyframes`
   from { opacity: 0; transform: translateY(6px); }
@@ -75,7 +76,6 @@ function ChatbotContent() {
   const [greeting, setGreeting] = useState(null);
   const [showAbout, setShowAbout] = useState(false);
   const [composerHasText, setComposerHasText] = useState(false);
-
   const handleComposerTextChange = useCallback((text) => {
     setComposerHasText((text || "").trim().length > 0);
   }, []);
@@ -92,6 +92,7 @@ function ChatbotContent() {
 
   const {
     messages,
+    messagesThreadId,
     isLoading,
     isGenerating,
     threadId,
@@ -102,6 +103,7 @@ function ChatbotContent() {
     resetChat
   } = useChatbot(resolvedInitialThread, {
     onThreadCreated: (id) => {
+      skipFetchRef.current = true;
       router.replace({
         pathname: router.pathname,
         query: { ...router.query, t: id }
@@ -126,7 +128,7 @@ function ChatbotContent() {
 
   useEffect(() => {
     if (!router.isReady) return;
-    if (normalizedThreadId && normalizedThreadId !== threadId) {
+    if (normalizedThreadId && String(normalizedThreadId) !== String(threadId ?? "")) {
       if (skipFetchRef.current) {
         skipFetchRef.current = false;
         return;
@@ -152,6 +154,18 @@ function ChatbotContent() {
       searchRef.current?.focus();
     });
   }, [sendMessage, isLoading, isGenerating]);
+
+  const handleIdeaPrompt = useCallback((question) => {
+    const trimmed = String(question || "").trim();
+    if (!trimmed || isLoading || isGenerating) return;
+
+    searchRef.current?.setText(trimmed);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        searchRef.current?.focus();
+      });
+    });
+  }, [isLoading, isGenerating]);
 
   const handleNewChat = useCallback(() => {
     skipFetchRef.current = true;
@@ -189,8 +203,9 @@ function ChatbotContent() {
     try {
       window.localStorage.setItem("chatbot_last_greeting", next.signature);
     } catch {}
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showNewChatGreeting]);
+  }, [showNewChatGreeting, t]);
+
+  const isThreadView = !showAbout && !showNewChatGreeting;
 
   const searchField = (
     <Search
@@ -306,7 +321,10 @@ function ChatbotContent() {
           minWidth={0}
           height="100%"
           maxHeight="100dvh"
-          padding={{ base: "12px 12px 16px", md: "24px 0" }}
+          padding={{
+            base: "12px 12px 16px",
+            md: isThreadView ? 0 : "24px 0",
+          }}
           overflow="hidden"
           justifyContent="center"
           alignItems="stretch"
@@ -365,25 +383,41 @@ function ChatbotContent() {
                   {searchField}
                 </Box>
                 <OnboardingQuestions
-                  onQuestionClick={handleFollowUpClick}
+                  onQuestionClick={handleIdeaPrompt}
                   isDisabled={isLoading || isGenerating}
                   hasText={composerHasText}
                 />
               </Flex>
             ) : (
               <>
-                <Box flex={1} overflow="hidden" width="100%" minHeight={0} minWidth={0}>
+                <Flex
+                  direction="column"
+                  flex={1}
+                  overflow="hidden"
+                  width="100%"
+                  minHeight={0}
+                  minWidth={0}
+                >
+                  <ThreadHeader
+                    threadId={threadId || normalizedThreadId}
+                    messages={messages}
+                    onDeleted={handleNewChat}
+                    onQuestionClick={handleIdeaPrompt}
+                    isDisabled={isLoading || isGenerating}
+                  />
                   <ChatWindow
+                    threadId={threadId || normalizedThreadId}
+                    messagesThreadId={messagesThreadId}
                     messages={messages}
                     onFeedback={sendFeedback}
                     onExport={exportQueryResult}
                     onFollowUpClick={handleFollowUpClick}
                     scrollTrigger={scrollTrigger}
                   />
-                </Box>
+                </Flex>
                 <Box
                   width="100%"
-                  paddingTop={{ base: "12px", md: "24px" }}
+                  padding={{ base: "12px 0", md: "24px 0" }}
                   flexShrink={0}
                   overflowY="auto"
                   sx={{

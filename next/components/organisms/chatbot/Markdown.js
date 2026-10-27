@@ -24,10 +24,10 @@ import sql from "highlight.js/lib/languages/sql";
 import json from "highlight.js/lib/languages/json";
 
 import BodyText from "../../atoms/Text/BodyText";
-import { CopyIcon, CheckIcon } from "./icons";
+import { CopyIcon, CheckIcon } from "./Icons";
 import AnimatedCopyIcon from "../../atoms/AnimatedCopyIcon";
 import { DownloadResultButton } from "./DownloadResults";
-import { renderFriendlyOutput } from "./toolViews";
+import { renderFriendlyOutput } from "./ToolViews";
 
 hljs.registerLanguage("sql", sql);
 hljs.registerLanguage("json", json);
@@ -161,7 +161,7 @@ export function CodeBlock({
         maxHeight="70vh"
         overflow="auto"
         fontSize="14px"
-        backgroundColor="#F9FAFB"
+        backgroundColor="#FFFFFF"
         margin={0}
         padding={
           hasHeader
@@ -237,6 +237,14 @@ export const markdownContentSx = {
   "& > *:last-child": { marginBottom: 0 },
 };
 
+const MarkdownCellContentProps = {
+  display: "inline-block",
+  maxWidth: "420px",
+  whiteSpace: "normal",
+  overflowWrap: "break-word",
+  verticalAlign: "top",
+};
+
 export const componentsMk = {
   h1: mkHeading("h1"),
   h2: mkHeading("h2"),
@@ -310,10 +318,12 @@ export const componentsMk = {
       <Table
         variant="simple"
         size="sm"
+        width="max-content"
+        minWidth="100%"
         sx={{
           fontVariantNumeric: "tabular-nums",
-          "tbody tr td": { transition: "background-color 0.15s ease" },
-          "tbody tr:hover td": { backgroundColor: "#F7F7F7" },
+          wordBreak: "normal",
+          overflowWrap: "normal",
         }}
       >
         {children}
@@ -325,49 +335,43 @@ export const componentsMk = {
   ),
   tbody: ({ children }) => <Tbody>{children}</Tbody>,
   tr: ({ children }) => <Tr>{children}</Tr>,
-  td: ({ children, node, style }) => {
-    const numeric = node?.properties?.dataNumeric === "true";
-    return (
-      <Td
-        padding={{ base: "10px 12px", md: "14px 22px" }}
-        fontFamily="Roboto"
-        fontWeight="400"
-        fontSize={{ base: "13px", md: "14px" }}
-        lineHeight="20px"
-        color="#464A51"
-        borderColor="#DEDFE0"
-        textTransform="none"
-        letterSpacing="inherit"
-        whiteSpace="break-spaces"
-        style={style}
-        textAlign={numeric ? "right" : undefined}
-      >
-        {children}
-      </Td>
-    );
-  },
-  th: ({ children, node, style }) => {
-    const numeric = node?.properties?.dataNumeric === "true";
-    return (
-      <Th
-        padding={{ base: "10px 12px", md: "14px 22px" }}
-        minWidth="40px"
-        textTransform="uppercase"
-        letterSpacing="0.05em"
-        fontFamily="Roboto"
-        fontWeight="600"
-        fontSize="11px"
-        lineHeight="16px"
-        color="#71757A"
-        borderBottom="1px solid #C4C4C4 !important"
-        boxSizing="content-box"
-        style={style}
-        textAlign={numeric ? "right" : undefined}
-      >
-        {children}
-      </Th>
-    );
-  },
+  td: ({ children }) => (
+    <Td
+      padding={{ base: "10px 12px", md: "14px 22px" }}
+      fontFamily="Roboto"
+      fontWeight="400"
+      fontSize={{ base: "13px", md: "14px" }}
+      lineHeight="20px"
+      color="#464A51"
+      borderColor="#DEDFE0"
+      textTransform="none"
+      letterSpacing="inherit"
+      whiteSpace="normal"
+      verticalAlign="top"
+      textAlign="start"
+      sx={{ "& > *": { textAlign: "inherit" } }}
+    >
+      <Box {...MarkdownCellContentProps}>{children}</Box>
+    </Td>
+  ),
+  th: ({ children }) => (
+    <Th
+      padding={{ base: "10px 12px", md: "14px 22px" }}
+      textTransform="uppercase"
+      letterSpacing="0.05em"
+      fontFamily="Roboto"
+      fontWeight="600"
+      fontSize="11px"
+      lineHeight="16px"
+      color="#71757A"
+      borderBottom="1px solid #C4C4C4 !important"
+      whiteSpace="nowrap"
+      textAlign="start"
+      sx={{ "& > *": { textAlign: "inherit" } }}
+    >
+      {children}
+    </Th>
+  ),
 }
 
 export function formatToolOutputText(output) {

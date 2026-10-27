@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Crossing different datasets",
+    "body": "Combine information from different tables in the same answer",
+    "example": "E.g.: Active companies by CNPJ with the election results in the same municipality"
+  },
+  {
+    "title": "Mathematical calculations",
+    "body": "Averages, sums, counts, and operations specific to your analysis",
+    "example": "E.g.: Infant mortality rate per 1,000 live births"
+  },
+  {
+    "title": "Sorting and ranking",
+    "body": "Classify and order results by your criteria",
+    "example": "E.g.: The 5 municipalities with the most CNPJs opened this year"
+  },
+  {
+    "title": "Change over time",
+    "body": "Analyze trends and variation over time",
+    "example": "E.g.: How the IDEB has evolved in public schools since 2010"
+  },
+  {
+    "title": "Comparison across groups",
+    "body": "Differences between regions, categories, or profiles",
+    "example": "E.g.: The wage gap between men and women in Ceará"
+  },
+  {
+    "title": "Information about the data",
+    "body": "What each column or variable actually means",
+    "example": "E.g.: What each type of establishment means in the CNES"
+  }
+]

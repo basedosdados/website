@@ -204,7 +204,8 @@
       "deleteTitle": "Eliminar conversación",
       "deleteConfirm": "¿Seguro que deseas eliminar esta conversación? Esta acción no se puede deshacer.",
       "loadError": "Error al cargar el historial.",
-      "tryAgain": "Inténtalo de nuevo."
+      "tryAgain": "Inténtalo de nuevo.",
+      "openIdeas": "Abrir central de ideas"
     },
     "table": {
       "seeMore": "ver más",
@@ -212,20 +213,51 @@
       "showingRows": "Mostrando {{shown}} de {{total}} resultados"
     },
     "onboarding": {
-      "items": [
-        {
-          "eyebrow": "Análisis",
-          "question": "Cruza los datos del CAGED con los datos de inflación del IPCA para calcular el Salario Real Medio de las nuevas contrataciones en Recife en el año 2025"
+      "title": "Central de ideas",
+      "themesIntro": "Explora datos por diferentes temas y mira algunos ejemplos de inspiración para empezar tu análisis:",
+      "analysesIntro": "Mira algunos tipos de análisis y operaciones que el chatbot puede hacer con los datos de BD:",
+      "formatIntro": "Mira los tipos de resultados que puedes pedir y descargar con el chatbot:",
+      "carousel": {
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "goTo": "Ir al elemento {{index}}"
+      },
+      "tabs": {
+        "themes": "Preguntas por temas",
+        "analyses": "Tipos de análisis",
+        "format": "Formato de la respuesta"
+      },
+      "badges": {
+        "health": "Salud",
+        "education": "Educación",
+        "economy": "Economía",
+        "environment": "Medio Ambiente",
+        "politics": "Política",
+        "analyses": "Tipos de análisis que hace el chatbot",
+        "format": "Cómo te llega la respuesta"
+      },
+      "formats": {
+        "text": {
+          "title": "Explicación en texto",
+          "body": "La respuesta empieza con un texto que resume lo encontrado y cómo interpretarlo."
         },
-        {
-          "eyebrow": "Visualizaciones",
-          "question": "Crea un gráfico que muestre la diferencia salarial media entre hombres y mujeres en el estado de São Paulo a lo largo de los últimos diez años."
+        "table": {
+          "title": "Tabla",
+          "body": "Cuando la pregunta pide números, los resultados aparecen en una tabla."
         },
-        {
-          "eyebrow": "Metadatos",
-          "question": "¿Cómo están organizados los datos de raza y color en la tabla de vínculos de la RAIS y cuáles son los códigos utilizados en el diccionario?"
+        "chart": {
+          "title": "Gráfico",
+          "body": "Si la visualización ayuda, se genera un gráfico junto con la respuesta."
+        },
+        "sql": {
+          "title": "Consulta SQL",
+          "body": "La consulta usada en el análisis queda disponible para que la revises."
+        },
+        "download": {
+          "title": "Archivo para descargar",
+          "body": "Los resultados se pueden exportar para descargarlos y usarlos fuera del chatbot."
         }
-      ]
+      }
     }
   },
   "about": {

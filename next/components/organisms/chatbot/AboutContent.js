@@ -18,7 +18,7 @@ import {
   DownloadIcon,
   SparklesIcon,
   LightbulbIcon,
-} from "./icons";
+} from "./Icons";
 
 const WhatsAppCommunityUrl = "https://chat.whatsapp.com/CLLFXb1ogPPDomCM6tQT22";
 

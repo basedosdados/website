@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Tabela de resultados",
+    "description": "Veja os dados organizados em linhas e colunas, direto na conversa.",
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/tabela_resultado.png"
+  },
+  {
+    "title": "Visualização de dados",
+    "description": "Gere gráficos a partir da sua pergunta para identificar padrões e comparações.",
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/visualizacao_dados.png"
+  },
+  {
+    "title": "Exportação de CSV",
+    "description": "Baixe os resultados em CSV para continuar a análise em outras ferramentas.",
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/download_csv.png"
+  },
+  {
+    "title": "Consulta SQL e metadados",
+    "description": "Acesse o código SQL da consulta e as informações sobre as tabelas e colunas usadas.",
+    "image": "https://storage.googleapis.com/basedosdados-website/images/onboarding_chatbot/consulta_sql.png"
+  }
+]
