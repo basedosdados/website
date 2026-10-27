@@ -1,4 +1,5 @@
 import cookies from 'js-cookie';
+import { findPlan, planFilters, PlanRegion } from "./constants/stripePlans";
 
 export async function clearClientSession() {
   cookies.remove('userBD', { path: '/' });
@@ -634,37 +635,8 @@ export function getSubscriptionType(user) {
   return "none"
 }
 
-export function pickBrlStripePrice(nodes) {
-  const list = (nodes || []).filter(Boolean)
-  if (!list.length) return undefined
-
-  const brl = list.find((node) => String(node.currency || "").toLowerCase() === "brl")
-  if (brl) return brl
-
-  const notUsd = list.find((node) => {
-    const currency = String(node.currency || "").toLowerCase()
-    if (currency === "usd") return false
-    const text = `${node.productSlug || ""} ${node.productName || ""}`.toLowerCase()
-    return !text.includes("usd")
-  })
-
-  return notUsd || list[0]
-}
-
-function filterConsumerChatbotPlans(edges) {
-  return (edges || []).filter((item) => {
-    const name = item?.node?.productName?.toLowerCase() || ""
-    const slug = item?.node?.productSlug?.toLowerCase() || ""
-    const isConsumerChatbot =
-      (name.includes("chatbot") || slug.includes("chatbot")) &&
-      !name.includes("empresas")
-    return isConsumerChatbot && item?.node?.isActive === true
-  })
-}
-
 export async function fetchChatbotPlan(interval = "year") {
-  const amounts = { month: 30, year: 326 }
-  const amount = amounts[interval] || amounts.year
+  const filterKey = interval === "month" ? "bd_chatbot_month" : "bd_chatbot_year"
 
   try {
     const result = await fetch("/api/stripe/getPlans", { method: "GET" }).then((res) =>
@@ -672,12 +644,7 @@ export async function fetchChatbotPlan(interval = "year") {
     )
     if (!result?.success) return null
 
-    const chatbotPlans = filterConsumerChatbotPlans(result.data)
-    return pickBrlStripePrice(
-      chatbotPlans
-        .filter((item) => item?.node?.interval === interval && item?.node?.amount === amount)
-        .map((item) => item.node)
-    ) ?? null
+    return findPlan(result.data, planFilters[filterKey], PlanRegion, filterKey) ?? null
   } catch {
     return null
   }
