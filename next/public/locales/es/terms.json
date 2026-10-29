@@ -62,22 +62,25 @@
     "PP": {
         "header": {
             "subContent1": "Base de los Datos (\"Nosotros\", \"Nuestro\" o \"Nuestros\"). Nos comprometemos a proteger y respetar su privacidad y cumplir con todas las obligaciones establecidas en la Ley General de Protección de Datos (\"LGPD\").",
-            "subContent2": "Esta Política de Privacidad describe cómo recopilamos, usamos, compartimos y protegemos su información personal. Al acceder o usar nuestros servicios, usted acepta los términos y prácticas descritos en esta Política de Privacidad."
+            "subContent2": "Esta Política de Privacidad describe cómo recopilamos, usamos, compartimos y protegemos su información personal. Al acceder o usar nuestros servicios, usted acepta los términos y prácticas descritos en esta Política de Privacidad.",
+            "lastUpdated": "Última actualización: 29 de octubre de 2026."
         },
         "term1": {
             "title": "1. Información que Recopilamos",
             "subContent1": "1.1. Recopilamos información personal que nos proporciona directamente al usar nuestros servicios. Esto puede incluir su nombre, dirección de correo electrónico, información de pago y otras informaciones que elija compartir con nosotros.",
-            "subContent2": "1.2. También recopilamos información de forma automática, incluida la información de uso, la dirección IP, el tipo de navegador y la información sobre el dispositivo que usa para acceder a nuestros servicios."
+            "subContent2": "1.2. También recopilamos información de forma automática, incluida la información de uso, la dirección IP, el tipo de navegador y la información sobre el dispositivo que usa para acceder a nuestros servicios.",
+            "subContent3": "1.3. Para entender cómo se usa el sitio y mejorarlo, registramos eventos de navegación, como clics en botones y menús, búsquedas realizadas (incluido el término buscado), descargas de tablas y elección de planes. Estos eventos pueden indicar, por ejemplo, si usted ha iniciado sesión o si tiene una suscripción, pero no incluyen su nombre, correo electrónico ni otros datos que lo identifiquen directamente."
         },
         "term2": {
             "title": "2. Uso de la Información",
             "subContent1": "2.1. Utilizamos su información personal para proporcionar y mejorar nuestros servicios, incluyendo el procesamiento de pagos, la prestación de atención al cliente y la personalización de la experiencia del usuario.",
-            "subContent2": "2.2. No venderemos, alquilaremos ni compartiremos su información personal con terceros no afiliados sin su consentimiento explícito."
+            "subContent2": "2.2. No venderemos ni alquilaremos su información personal. Solo la compartimos con terceros no afiliados con su consentimiento explícito o con proveedores de servicios que nos ayudan a operar el sitio, como Stripe, para el procesamiento de pagos, Google, que procesa los mensajes enviados al chatbot, y las herramientas de análisis descritas en el ítem 2.3.",
+            "subContent3": "2.3. Para medir el uso del sitio, utilizamos Google Analytics, a través de Google Tag Manager, y el Meta Pixel. Estas herramientas reciben los datos descritos en los ítems 1.2 y 1.3 y están sujetas a las políticas de privacidad de Google y Meta."
         },
         "term3": {
             "title": "3. Cookies y Tecnologías Similares",
             "subContent1": "3.1. Las cookies son fragmentos de datos que ayudan al sitio web a recordar sus preferencias y hacer la navegación más eficiente.",
-            "subContent2": "3.2. Estas cookies son necesarias para garantizar el funcionamiento adecuado del sitio, mejorar el rendimiento y personalizar la experiencia de navegación, como el idioma y la región.",
+            "subContent2": "3.2. Usamos cookies necesarias para el funcionamiento del sitio, como las de inicio de sesión; cookies de análisis, que nos ayudan a entender cómo se usa el sitio; y cookies de pruebas, que definen qué versión de una página usted ve para que podamos comparar mejoras.",
             "subContent3": {
                 "title": "3.3. Cookies utilizadas:",
                 "headers": {
@@ -99,9 +102,35 @@
                     "name": "tourBD",
                     "retention": "360 dias",
                     "purpose": "Al acceder a la página de búsqueda o a un dataset, esta cookie se genera para controlar el progreso del tour en el sitio. Registra el estado actual de navegación—como 'exploración', 'iniciado', 'descargas', 'último' o 'saltado'—y sirve como referencia para la función que gestiona la experiencia guiada."
+                },
+                "row4": {
+                    "name": "plan_selected",
+                    "retention": "1 día",
+                    "purpose": "Guarda el plan elegido en la página de precios para que siga seleccionado después de iniciar sesión o registrarse."
+                },
+                "row5": {
+                    "name": "service-highlight-ab",
+                    "retention": "365 días",
+                    "purpose": "Cookie de prueba. Define qué versión del bloque de servicios usted ve en la página de un conjunto de datos, para que podamos comparar las versiones."
+                },
+                "row6": {
+                    "name": "dataset-banner-ab",
+                    "retention": "1 día",
+                    "purpose": "Cookie de prueba. Define qué banner de suscripción usted ve en la página de un conjunto de datos, para que podamos comparar las versiones."
+                },
+                "row7": {
+                    "name": "_ga, _ga_<id>",
+                    "retention": "2 años",
+                    "purpose": "Cookies de análisis de Google Analytics. Distinguen visitantes y sesiones para generar estadísticas de uso del sitio."
+                },
+                "row8": {
+                    "name": "_fbp",
+                    "retention": "90 días",
+                    "purpose": "Cookie de análisis del Meta Pixel. Mide las visitas al sitio para que podamos evaluar el alcance de nuestras campañas."
                 }
             },
-            "subContent4": "3.4. Al continuar utilizando nuestro sitio, usted acepta el uso de estas cookies. Si prefiere no usarlas, le recomendamos que ajuste la configuración de su navegador. Sin embargo, esto afectará su capacidad para iniciar sesión y acceder a áreas restringidas.",
+            "subContent4": "3.4. Al continuar utilizando nuestro sitio, usted acepta el uso de estas cookies. Si prefiere no usarlas, le recomendamos que ajuste la configuración de su navegador. Bloquear las cookies de análisis y de pruebas no impide el uso del sitio; bloquear las cookies necesarias afectará su capacidad para iniciar sesión y acceder a áreas restringidas.",
+            "subContent6": "3.5. Además de las cookies, el sitio guarda alguna información en el almacenamiento de su navegador (localStorage y sessionStorage): el correo electrónico indicado en el registro, hasta la confirmación de la cuenta; la página en la que estaba, para llevarlo de vuelta después de iniciar sesión; la última búsqueda realizada, para que podamos medir el uso de la búsqueda; y borradores de mensajes del chatbot. Puede borrar estos datos limpiando los datos del sitio en la configuración de su navegador.",
             "subContent5": "Si tiene alguna pregunta sobre estas cookies o cualquier otra cuestión de privacidad, póngase en contacto con nosotros a través de la dirección de correo electrónico contato@basedosdados.org."
         },
         "term4": {
