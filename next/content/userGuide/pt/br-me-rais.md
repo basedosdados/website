@@ -42,6 +42,11 @@ A RAIS registra vínculos de trabalho anualmente e o CAGED registra movimentaç�
 ## Coluna id_municipio_trabalho
 A coluna `id_municipio_trabalho` está preenchida apenas entre 2005-2011 e 2017-2021. Não se sabe o motivo.  
 
+## Vínculos ativos nas tabelas de estabelecimentos e vínculos em 2023
+A soma da coluna `quantidade_vinculos_ativos`, na tabela de estabelecimentos, é igual ao número de vínculos com `vinculo_ativo_3112` igual a 1 na tabela de vínculos, desde que sejam desconsiderados os vínculos abandonados (`indicador_vinculo_abandonado` igual a 1, coluna disponível a partir de 2023). Em 2023, o total do Brasil é igual nas duas tabelas (55.316.614 vínculos), mas 13 UFs têm diferença de 1 ou 2 vínculos. Ao todo, cerca de 350 vínculos aparecem em município, natureza jurídica ou CNAE diferentes entre as duas tabelas, quase todos em estabelecimentos com até 4 empregados.
+
+A diferença está nos arquivos originais divulgados pelo MTE, e não no tratamento feito pela BD. Não se sabe o motivo exato. Segundo a nota técnica da RAIS 2023, este é o primeiro ano declarado inteiramente pelo eSocial, em que o estabelecimento de cada vínculo é identificado pelo local de trabalho informado pela empresa. A partir de 2024, as duas tabelas voltam a ser iguais.
+
 ## Dados desatualizados
 Às vezes, os dados da RAIS são atualizados fora do calendário esperado e nossa equipe nem sempre fica sabendo. Se você está confiante de que está fazendo as queries corretas, entre em contato conosco enviando a query e a diferença com o site oficial, para que possamos avaliar a situação e, se necessário, corrigir.  
 
