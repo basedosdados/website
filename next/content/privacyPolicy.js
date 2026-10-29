@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import TitleTextComponent from "../components/atoms/Text/TitleText";
 import BodyText from "../components/atoms/Text/BodyText";
 
+const cookieRows = ["row1", "row2", "row3", "row4", "row5", "row6", "row7", "row8"]
+
 export default function PrivacyPolicy() {
   const { t } = useTranslation('terms');
 
@@ -53,6 +55,7 @@ export default function PrivacyPolicy() {
       >
         <SecText>{t('PP.header.subContent1')}</SecText>
         <SecText>{t('PP.header.subContent2')}</SecText>
+        <SecText color="#71757A">{t('PP.header.lastUpdated')}</SecText>
       </VStack>
 
       <VStack
@@ -66,6 +69,7 @@ export default function PrivacyPolicy() {
         <Box>
           <SecText>{t('PP.term1.subContent1')}</SecText>
           <SecText>{t('PP.term1.subContent2')}</SecText>
+          <SecText>{t('PP.term1.subContent3')}</SecText>
         </Box>
       </VStack>
 
@@ -80,6 +84,7 @@ export default function PrivacyPolicy() {
         <Box>
           <SecText>{t('PP.term2.subContent1')}</SecText>
           <SecText>{t('PP.term2.subContent2')}</SecText>
+          <SecText>{t('PP.term2.subContent3')}</SecText>
         </Box>
       </VStack>
     
@@ -119,17 +124,14 @@ export default function PrivacyPolicy() {
                   }
                 }}
                 headers={["Nome do Cookie", "Retenção", "Finalidade"]}
-                values={[[
-                  t('PP.term3.subContent3.row1.name'), t('PP.term3.subContent3.row1.retention'), t('PP.term3.subContent3.row1.purpose')
-                ],[
-                  t('PP.term3.subContent3.row2.name'), t('PP.term3.subContent3.row2.retention'), t('PP.term3.subContent3.row2.purpose')
-                ],[
-                  t('PP.term3.subContent3.row3.name'), t('PP.term3.subContent3.row3.retention'), t('PP.term3.subContent3.row3.purpose')
-                ]]}
+                values={cookieRows.map((row) => [
+                  t(`PP.term3.subContent3.${row}.name`), t(`PP.term3.subContent3.${row}.retention`), t(`PP.term3.subContent3.${row}.purpose`)
+                ])}
               />
             </Stack>
 
             <SecText>{t('PP.term3.subContent4')}</SecText>
+            <SecText>{t('PP.term3.subContent6')}</SecText>
             <SecText>{t('PP.term3.subContent5')}</SecText>
           </VStack>
         </VStack>
