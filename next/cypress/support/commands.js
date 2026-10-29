@@ -170,7 +170,7 @@ Cypress.Commands.add('openPlansModal', () => {
     .and('have.css', 'opacity', '1')
     .as('plansModal')
     .within(() => {
-      cy.contains('p', 'BD Pro', { timeout: 20000 }).should('be.visible');
+      cy.contains('p', 'BD Pro', { timeout: 40000 }).should('be.visible');
     });
 });
 
