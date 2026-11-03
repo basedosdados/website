@@ -1,9 +1,9 @@
 ---
-question: Posso testar o chatbot gratuitamente?
+question: Posso testar o Chatbot gratuitamente?
 categories: []
 keywords: []
-order: 5
+order: 7
 id: free-trial-chatbot
 ---
 
-Sim. Oferecemos um período de teste gratuito de 7 dias para você conhecer a ferramenta. Após esse período, o chatbot faz parte de um plano de assinatura que garante perguntas ilimitadas e nos ajuda a manter nosso datalake público gratuito.
+Sim. Você tem 7 dias de teste gratuito e não paga nada nesse período. Depois disso, você pode assinar o Chatbot por apenas R$ 30 por mês, [veja os planos por aqui](/prices). Vale lembrar que sua assinatura apoia o trabalho da Base dos Dados e nos ajuda a manter nosso datalake público.

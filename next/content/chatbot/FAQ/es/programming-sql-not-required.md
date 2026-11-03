@@ -6,4 +6,4 @@ order: 2
 id: programming-sql-not-required
 ---
 
-No. El Chatbot fue diseñado para que cualquier persona explore datos públicos usando lenguaje natural. El propio proceso de extraer los datos utilizados en una respuesta no exige conocimientos previos de SQL: el chatbot genera la consulta y te permite ir directo a los datos que necesitas.
+No. Preguntas en lenguaje natural y descargas los resultados directamente en .csv, sin escribir código. La consulta SQL queda disponible para quien quiera validar la respuesta o reutilizarla, pero no es obligatoria.

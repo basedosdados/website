@@ -2,7 +2,7 @@
 question: Is there technical support?
 categories: []
 keywords: []
-order: 7
+order: 12
 id: technical-support-chatbot
 ---
 

@@ -2,7 +2,7 @@
 question: Por que a ferramenta está em versão Beta?
 categories: []
 keywords: []
-order: 10
+order: 13
 id: why-beta-version
 ---
 
