@@ -13,22 +13,27 @@
     "items": [
       {
         "title": "Access to a Large Public Datalake",
-        "content": "Browse terabytes of data across more than 740 tables on diverse topics (education, economy, health, labor market, demography, environment).",
-        "highlightFeature": 0
-      },
-      {
-        "title": "Advanced AI Engine with Unlimited Questions",
-        "content": "Powered by Gemini, Google's state-of-the-art AI model, to turn as many questions as you want into precise queries.",
-        "highlightFeature": 1
+        "content": "Browse terabytes of data across more than 740 tables on diverse topics (education, economy, health, labor market, demography, environment)."
       },
       {
         "title": "Natural Language Interface",
         "content": "Lets anyone explore the Data Basis public datalake through simple questions, with no programming required."
       },
       {
+        "title": "Instant Visualizations",
+        "content": "Turns the result of your question into charts and maps, so you can spot trends and comparisons without leaving the conversation."
+      },
+      {
+        "title": "Download Results as CSV",
+        "content": "Download the results table as .csv and take the data to Excel, Google Sheets or whatever tool you already use."
+      },
+      {
         "title": "Transparency and Flexibility",
-        "content": "Including the SQL query lets you validate insights and download data to build your own visualizations and reports in other tools.",
-        "highlightFeature": 2
+        "content": "The SQL query is visible, so you can validate how each answer was generated and reuse the code in your own analyses."
+      },
+      {
+        "title": "Advanced AI Engine with Unlimited Questions",
+        "content": "Powered by Gemini, Google's state-of-the-art AI model, to turn as many questions as you want into precise queries."
       }
     ]
   },
