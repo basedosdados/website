@@ -42,6 +42,11 @@ RAIS registers employment records annually, while CAGED registers hiring and dis
 ## `id_municipio_trabalho` column
 The `id_municipio_trabalho` column is populated only between 2005-2011 and 2017-2021. The reason is unknown.  
 
+## Active employment records in the establishments and employment records tables in 2023
+The sum of the `quantidade_vinculos_ativos` column, in the establishments table, equals the number of employment records with `vinculo_ativo_3112` equal to 1 in the employment records table, as long as abandoned employment records are disregarded (`indicador_vinculo_abandonado` equal to 1, a column available from 2023 onwards). In 2023, the total for Brazil is the same in both tables (55,316,614 employment records), but 13 states differ by 1 or 2 employment records. Overall, about 350 employment records appear under a different municipality, legal nature or CNAE between the two tables, almost all of them in establishments with up to 4 employees.
+
+The difference is in the original files released by MTE, not in the treatment done by BD. The exact reason is unknown. According to the RAIS 2023 technical note, this is the first year declared entirely through eSocial, in which the establishment of each employment record is identified by the workplace reported by the company. From 2024 onwards, the two tables match again.
+
 ## Outdated data
 Sometimes RAIS data are updated outside the expected calendar, and our team does not always find out. If you are confident that you are running the correct queries, contact us with the query and the discrepancy relative to the official site, so that we can assess the situation and correct it if necessary.  
 

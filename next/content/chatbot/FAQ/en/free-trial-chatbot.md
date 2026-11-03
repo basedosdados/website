@@ -1,9 +1,9 @@
 ---
-question: Can I try the chatbot for free?
+question: Can I try the Chatbot for free?
 categories: []
 keywords: []
-order: 5
+order: 7
 id: free-trial-chatbot
 ---
 
-Yes. We offer a 7-day free trial so you can get to know the tool. After that period, the chatbot is part of a subscription plan that guarantees unlimited questions and helps us keep our public datalake free.
+Yes. You get a 7-day free trial and pay nothing during that period. After that, you can subscribe to the Chatbot for just R$ 30 per month, [see the plans here](/prices). Keep in mind that your subscription supports the work of Data Basis and helps us maintain our public datalake.

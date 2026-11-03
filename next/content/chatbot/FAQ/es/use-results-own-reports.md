@@ -2,7 +2,7 @@
 question: ¿Puedo usar los resultados en mis propios informes y gráficos?
 categories: []
 keywords: []
-order: 4
+order: 10
 id: use-results-own-reports
 ---
 

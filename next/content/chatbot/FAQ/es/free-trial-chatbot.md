@@ -1,9 +1,9 @@
 ---
-question: ¿Puedo probar el chatbot gratuitamente?
+question: ¿Puedo probar el Chatbot gratuitamente?
 categories: []
 keywords: []
-order: 5
+order: 7
 id: free-trial-chatbot
 ---
 
-Sí. Ofrecemos un período de prueba gratuito de 7 días para que conozcas la herramienta. Después de ese período, el chatbot forma parte de un plan de suscripción que garantiza preguntas ilimitadas y nos ayuda a mantener nuestro datalake público gratuito.
+Sí. Tienes 7 días de prueba gratuita y no pagas nada durante ese período. Después, puedes suscribirte al Chatbot por solo R$ 30 al mes, [consulta los planes aquí](/prices). Recuerda que tu suscripción apoya el trabajo de Base dos Dados y nos ayuda a mantener nuestro datalake público.
