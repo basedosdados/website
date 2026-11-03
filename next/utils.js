@@ -298,24 +298,34 @@ function getUtmQueryParams(query) {
   return utm
 }
 
-function stripUtmQueryParams(router) {
-  const query = { ...(router?.query || {}) }
-  let changed = false
+export function isUtmQueryParam(key) {
+  return UtmParamKeys.includes(key)
+}
 
-  for (const key of UtmParamKeys) {
-    if (key in query) {
-      delete query[key]
-      changed = true
-    }
+export function hasNonUtmQueryParams(search) {
+  const params = new URLSearchParams(search)
+  for (const key of params.keys()) {
+    if (!isUtmQueryParam(key)) return true
   }
+  return false
+}
 
-  if (!changed) return Promise.resolve()
+const ChatbotTrialFollowupStorageKey = "bd_chatbot_trial_followup_tracked"
 
-  return router.replace(
-    { pathname: router.pathname, query },
-    undefined,
-    { shallow: true }
-  )
+function wasChatbotTrialFollowupTracked() {
+  if (chatbotTrialFollowupTracked) return true
+  try {
+    return window.sessionStorage.getItem(ChatbotTrialFollowupStorageKey) === "1"
+  } catch {
+    return false
+  }
+}
+
+function markChatbotTrialFollowupTracked() {
+  chatbotTrialFollowupTracked = true
+  try {
+    window.sessionStorage.setItem(ChatbotTrialFollowupStorageKey, "1")
+  } catch {}
 }
 
 export async function consumeChatbotTrialFollowup(router) {
@@ -323,18 +333,15 @@ export async function consumeChatbotTrialFollowup(router) {
 
   const utm = getUtmQueryParams(router.query)
   if (utm.utm_campaign !== ChatbotTrialFollowupCampaign) return
+  if (wasChatbotTrialFollowupTracked()) return
 
-  if (!chatbotTrialFollowupTracked) {
-    chatbotTrialFollowupTracked = true
-    const user = getUserFromCookie()
-    triggerGAEventWithData("chatbot_trial_followup", {
-      value: "email",
-      ...utm,
-      is_logged_in: isUserLoggedIn(user),
-    })
-  }
-
-  await stripUtmQueryParams(router)
+  markChatbotTrialFollowupTracked()
+  const user = getUserFromCookie()
+  triggerGAEventWithData("chatbot_trial_followup", {
+    value: "email",
+    ...utm,
+    is_logged_in: isUserLoggedIn(user),
+  })
 }
 
 const CHATBOT_LP_DESKTOP_PLACEMENTS = new Set([
