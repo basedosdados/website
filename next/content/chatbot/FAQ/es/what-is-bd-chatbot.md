@@ -6,4 +6,4 @@ order: 1
 id: what-is-bd-chatbot
 ---
 
-Es una interfaz de consulta que utiliza lenguaje natural para que cualquier persona explore el datalake público de Base de los Datos. Utiliza el modelo Gemini, de Google, para transformar tus preguntas en consultas de datos precisas.
+Es una herramienta de IA que te permite explorar el datalake público de Base dos Dados haciendo preguntas. Responde con tablas, gráficos y mapas, muestra la consulta SQL utilizada y te permite descargar los resultados en .csv. Te ayuda a encontrar datos, entender cómo están organizados y transforma tus preguntas en análisis.

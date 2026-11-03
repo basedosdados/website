@@ -1,9 +1,9 @@
 ---
-question: Do I need to know how to program or know SQL to use the Chatbot?
+question: Do I need to know how to code or know SQL to use the Chatbot?
 categories: []
 keywords: []
 order: 2
 id: programming-sql-not-required
 ---
 
-No. The Chatbot was designed so anyone can explore public data using natural language. Even extracting the data used in an answer requires no prior SQL knowledge: the chatbot generates the query and lets you go straight to the data you need.
+No. You ask in natural language and download the results directly as .csv, without writing any code. The SQL query is available for anyone who wants to validate the answer or reuse it, but it is not required.
