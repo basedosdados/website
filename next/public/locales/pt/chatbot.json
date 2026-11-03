@@ -13,22 +13,27 @@
     "items": [
       {
         "title": "Acesso ao Maior Datalake Público do Brasil",
-        "content": "Navega por terabytes de dados em mais de 740 tabelas sobre diversos temas (educação, economia, saúde, mercado de trabalho, demografia, meio ambiente).",
-        "highlightFeature": 0
-      },
-      {
-        "title": "Motor de IA Avançado com perguntas ilimitadas",
-        "content": "Utiliza o Gemini, modelo de inteligência artificial de última geração do Google, para transformar quantas perguntas quiser em consultas precisas.",
-        "highlightFeature": 1
+        "content": "Navega por terabytes de dados em mais de 740 tabelas sobre diversos temas (educação, economia, saúde, mercado de trabalho, demografia, meio ambiente)."
       },
       {
         "title": "Interface de Linguagem Natural",
         "content": "Permite que qualquer pessoa explore o datalake público da BD Brasil através de perguntas simples, sem linguagem de programação."
       },
       {
+        "title": "Visualizações Geradas na Hora",
+        "content": "Transforma o resultado da sua pergunta em gráficos e mapas, para você enxergar tendências e comparações sem sair da conversa."
+      },
+      {
+        "title": "Download dos Resultados em csv",
+        "content": "Baixe a tabela de resultados em .csv e leve os dados para o Excel, o Google Sheets ou a ferramenta que você já usa."
+      },
+      {
         "title": "Transparência e Flexibilidade",
-        "content": "A inclusão da consulta SQL permite que o usuário valide os insights e baixe os dados para criar suas próprias visualizações e relatórios em outras ferramentas.",
-        "highlightFeature": 2
+        "content": "A consulta SQL fica visível, para você validar como cada resposta foi gerada e reaproveitar o código nas suas próprias análises."
+      },
+      {
+        "title": "Motor de IA Avançado com perguntas ilimitadas",
+        "content": "Utiliza o Gemini, modelo de inteligência artificial de última geração do Google, para transformar quantas perguntas quiser em consultas precisas."
       }
     ]
   },

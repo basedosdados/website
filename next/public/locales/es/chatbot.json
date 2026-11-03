@@ -13,22 +13,27 @@
     "items": [
       {
         "title": "Acceso a un gran datalake público",
-        "content": "Navega por terabytes de datos en más de 740 tablas sobre diversos temas (educación, economía, salud, mercado de trabajo, demografía, medio ambiente).",
-        "highlightFeature": 0
-      },
-      {
-        "title": "Motor de IA avanzado con preguntas ilimitadas",
-        "content": "Utiliza Gemini, el modelo de inteligencia artificial de última generación de Google, para transformar todas las preguntas que quieras en consultas precisas.",
-        "highlightFeature": 1
+        "content": "Navega por terabytes de datos en más de 740 tablas sobre diversos temas (educación, economía, salud, mercado de trabajo, demografía, medio ambiente)."
       },
       {
         "title": "Interfaz de lenguaje natural",
         "content": "Permite que cualquier persona explore el datalake público de Base de los Datos mediante preguntas simples, sin lenguaje de programación."
       },
       {
+        "title": "Visualizaciones generadas al instante",
+        "content": "Transforma el resultado de tu pregunta en gráficos y mapas, para que veas tendencias y comparaciones sin salir de la conversación."
+      },
+      {
+        "title": "Descarga de resultados en CSV",
+        "content": "Descarga la tabla de resultados en .csv y lleva los datos a Excel, Google Sheets o la herramienta que ya usas."
+      },
+      {
         "title": "Transparencia y flexibilidad",
-        "content": "La inclusión de la consulta SQL permite validar los insights y descargar los datos para crear tus propias visualizaciones e informes en otras herramientas.",
-        "highlightFeature": 2
+        "content": "La consulta SQL queda visible, para que valides cómo se generó cada respuesta y reutilices el código en tus propios análisis."
+      },
+      {
+        "title": "Motor de IA avanzado con preguntas ilimitadas",
+        "content": "Utiliza Gemini, el modelo de inteligencia artificial de última generación de Google, para transformar todas las preguntas que quieras en consultas precisas."
       }
     ]
   },
