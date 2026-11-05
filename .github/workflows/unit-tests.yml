@@ -1,0 +1,43 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - development
+      - staging
+      - main
+    paths:
+      - "next/**/*"
+      - ".github/workflows/unit-tests.yml"
+
+concurrency:
+  group: unit-tests-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vitest:
+    name: Vitest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CYPRESS_INSTALL_BINARY: "0"
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: next/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./next
+        run: npm ci
+
+      - name: Run unit tests
+        working-directory: ./next
+        run: npm run test:run

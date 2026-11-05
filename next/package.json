@@ -11,7 +11,10 @@
     "start": "NODE_OPTIONS='-r next-logger' next start",
     "cypress": "npx cypress open",
     "cypress:run": "npx cypress run --browser chrome",
-    "cypress:run:electron": "npx cypress run"
+    "cypress:run:electron": "npx cypress run",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.1.7",
@@ -23,6 +26,7 @@
     "@tanstack/react-query": "^4.43.0",
     "@tanstack/react-virtual": "^3.13.21",
     "axios": "1.6.2",
+    "cookie": "^0.7.2",
     "cookie-parser": "^1.4.6",
     "framer-motion": "^4.1.17",
     "fuzzy-search": "^3.2.1",
@@ -59,9 +63,13 @@
     "vega-embed": "^7.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^12.1.5",
+    "@vitest/coverage-v8": "^3.2.4",
     "cypress": "^14.4.0",
     "cypress-plugin-stripe-elements": "^1.0.2",
     "cypress-real-events": "^1.15.0",
+    "jsdom": "^26.1.0",
     "medium-2-md": "github:gautamdhameja/medium-2-md",
     "puppeteer": "^23.1.1",
     "puppeteer-core": "^23.1.1",
@@ -70,6 +78,7 @@
     "remark-parse": "^10.0.2",
     "remark-stringify": "^10.0.3",
     "unified": "^10.1.2",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "vitest": "^3.2.4"
   }
 }
