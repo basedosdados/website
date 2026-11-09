@@ -3,6 +3,9 @@ import { capitalize } from 'lodash';
 
 const API_URL= `${process.env.NEXT_PUBLIC_API_URL}/api/v1/graphql`
 
+// Same statuses that hide datasets and tables
+const HIDDEN_STATUSES = ["under_review", "excluded"]
+
 export async function getInvitedResearchers(locale = 'pt') {
   const Locale = capitalize(locale)
   const res = await axios({
@@ -37,6 +40,9 @@ export async function getInvitedResearchers(locale = 'pt') {
                 lattes
                 isInvitedResearcher
                 isInvitedResearcherAlumni
+                status {
+                  slug
+                }
                 themes {
                   edges {
                     node {
@@ -67,6 +73,7 @@ export async function getInvitedResearchers(locale = 'pt') {
   if (!edges) throw new Error(res?.data?.errors?.[0]?.message || "No researchers found")
 
   return edges
+    .filter(({ node }) => !HIDDEN_STATUSES.includes(node.status?.slug))
     .map(({ node }) => ({
       id: node._id,
       slug: node.slug,
