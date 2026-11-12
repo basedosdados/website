@@ -635,6 +635,49 @@ export function getSubscriptionStatusKey(subscription) {
   return "active"
 }
 
+export function getSubscriptionForProduct(user, product) {
+  const subscriptions = user?.internalSubscription?.edges?.map((edge) => edge?.node) || []
+  if (product === "chatbot") {
+    return subscriptions.find((subscription) =>
+      (subscription?.stripeSubscription || "").toLowerCase().includes("chatbot")
+    ) || null
+  }
+  if (product === "bd_pro") {
+    return subscriptions.find((subscription) => {
+      const slug = (subscription?.stripeSubscription || "").toLowerCase()
+      return slug.includes("bd_pro") || slug.includes("empresas")
+    }) || user?.subscriptionSet?.edges?.[0]?.node || null
+  }
+  return null
+}
+
+export function canReactivateSubscription(user, product) {
+  if (product === "chatbot" && !hasChatbotSubscription(user)) return false
+  if (product === "bd_pro" && user?.proSubscription !== "bd_pro") return false
+  return Boolean(getSubscriptionForProduct(user, product)?.canceledAt)
+}
+
+export function getCampaignSubscriptionAction(user, product) {
+  const hasSubscription = product === "bd_pro"
+    ? hasBDProSubscription(user)
+    : hasChatbotSubscription(user)
+  if (!hasSubscription) return "checkout"
+  if (canReactivateSubscription(user, product)) return "reactivate"
+  return "dismiss"
+}
+
+export function canSwitchIntervalOnReactivation(subscription, product) {
+  return product === "chatbot" && isSubscriptionTrialing(subscription)
+}
+
+export function getReactivationInterval(subscription, product, requestedInterval) {
+  const current = subscription?.planInterval || "year"
+  if (canSwitchIntervalOnReactivation(subscription, product)) {
+    return requestedInterval === "month" || requestedInterval === "year" ? requestedInterval : current
+  }
+  return current
+}
+
 export function getSubscriptionType(user) {
   if (hasBDProSubscription(user)) return "bd_pro"
   if (hasChatbotSubscription(user)) return "chatbot"

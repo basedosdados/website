@@ -8,7 +8,8 @@ import {
   ModalCloseButton,
   Badge,
   Grid,
-  GridItem
+  GridItem,
+  Skeleton
 } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
@@ -24,7 +25,7 @@ import Toggle from "../../atoms/Toggle";
 import { SectionPrice } from "../../../pages/prices";
 import PaymentSystem from "../../organisms/PaymentSystem";
 import ChatbotTrialSurveyModal from "./ChatbotTrialSurveyModal";
-import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, getUserPageHref, resolveCheckoutCampaign, clearCheckoutCampaign, UserPagePath } from "../../../utils";
+import { triggerGAEvent, triggerGAEventWithData, hasBDProSubscription, hasChatbotSubscription, getChatbotStreamlitAppUrl, getSubscriptionStatusKey, isSubscriptionTrialing, getUserPageHref, resolveCheckoutCampaign, clearCheckoutCampaign, UserPagePath, getSubscriptionForProduct, canReactivateSubscription, getCampaignSubscriptionAction, canSwitchIntervalOnReactivation, getReactivationInterval } from "../../../utils";
 import { selectPlans } from "../../../constants/stripePlans";
 
 const SubscriptionBadgeStyles = {
@@ -81,6 +82,11 @@ function purchaseReflectedInUserData(user, expectChatbot) {
     const slug = (node?.stripeSubscription || "").toLowerCase()
     return slug.includes("bd_pro") || slug.includes("empresas")
   })
+}
+
+function reactivationReflectedInUserData(user, product) {
+  const subscription = getSubscriptionForProduct(user, product)
+  return Boolean(subscription) && !subscription.canceledAt
 }
 
 function trackOpenChatbotPaymentSuccess({ checkoutInfos, hasBdPro, pagePath }) {
@@ -147,6 +153,7 @@ export default function PlansAndPayment ({ userData }) {
   const [hasSubscribedChatbot, setHasSubscribedChatbot] = useState(null)
   const [hasSubscribedLoaded, setHasSubscribedLoaded] = useState(false)
   const [plans, setPlans] = useState(null)
+  const [isLoadingPlans, setIsLoadingPlans] = useState(true)
   const [toggleAnual, setToggleAnual] = useState(true)
   const [subscriptionToCancel, setSubscriptionToCancel] = useState("bd_pro")
   const [checkoutStep, setCheckoutStep] = useState("plan")
@@ -157,6 +164,9 @@ export default function PlansAndPayment ({ userData }) {
   const campaignCouponAppliedRef = useRef(false)
   const campaignDismissedRef = useRef(false)
   const startedChatbotTrialRef = useRef(false)
+  // Produto ("chatbot" | "bd_pro") cuja assinatura com cancelamento agendado está sendo reativada.
+  const [reactivateMode, setReactivateMode] = useState(null)
+  const [reactivationError, setReactivationError] = useState("")
 
   const internalSubscriptions = userData?.internalSubscription?.edges?.map((edge) => edge?.node) || []
   const bdProSubscriptionInfo = internalSubscriptions.find((subscription) => {
@@ -167,6 +177,14 @@ export default function PlansAndPayment ({ userData }) {
     const slug = (subscription?.stripeSubscription || "").toLowerCase()
     return slug.includes("chatbot")
   }) || null
+  const userNumericId = new RegExp("(?<=:).*").exec(userData?.id || "")?.[0]
+  const reactivationSubscription = reactivateMode
+    ? getSubscriptionForProduct(userData, reactivateMode)
+    : null
+  const canSwitchReactivationInterval = canSwitchIntervalOnReactivation(
+    reactivationSubscription,
+    reactivateMode,
+  )
 
   async function alreadySubscribed(id) {
     try {
@@ -210,6 +228,8 @@ export default function PlansAndPayment ({ userData }) {
         }
       } catch (error) {
         console.error(error)
+      } finally {
+        setIsLoadingPlans(false)
       }
     }
 
@@ -231,7 +251,8 @@ export default function PlansAndPayment ({ userData }) {
       hasChatbotSubscription(userData) &&
       chatbotSubscriptionInfo?.planInterval &&
       value?.interval &&
-      value.interval !== chatbotSubscriptionInfo.planInterval
+      value.interval !== chatbotSubscriptionInfo.planInterval &&
+      !(reactivateMode === "chatbot" && canSwitchIntervalOnReactivation(chatbotSubscriptionInfo, "chatbot"))
     ) {
       setPlan("")
       setToggleAnual(true)
@@ -243,6 +264,11 @@ export default function PlansAndPayment ({ userData }) {
     setCheckoutInfos(value)
 
     const checkoutAlreadyVisible = PaymentModal.isOpen || EmailModal.isOpen
+
+    if (reactivateMode) {
+      if (!checkoutAlreadyVisible) openCheckoutPlanStep()
+      return
+    }
 
     if (isChatbotType) {
       if (!hasSubscribedChatbot) {
@@ -263,7 +289,7 @@ export default function PlansAndPayment ({ userData }) {
     if (!checkoutAlreadyVisible) {
       EmailModal.onOpen()
     }
-  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot, hasSubscribedBDPro, query])
+  }, [plan, plans, userData, chatbotSubscriptionInfo, hasSubscribedLoaded, hasSubscribedChatbot, hasSubscribedBDPro, query, reactivateMode])
 
   useEffect(() => {
     if (!plans || plan !== "") return
@@ -272,18 +298,24 @@ export default function PlansAndPayment ({ userData }) {
     const campaign = resolveCheckoutCampaign(query)
     if (campaign.product) {
       if (campaignDismissedRef.current) return
-      if (campaign.product === "chatbot" && hasChatbotSubscription(userData)) {
-        clearCheckoutCampaign()
-        return
-      }
-      if (campaign.product === "bd_pro" && hasBDProSubscription(userData)) {
+      const action = getCampaignSubscriptionAction(userData, campaign.product)
+      if (action === "dismiss") {
         clearCheckoutCampaign()
         return
       }
 
       if (campaign.coupon) setValueCoupon(campaign.coupon)
 
-      const interval = campaign.interval === "month" ? "month" : "year"
+      let interval = campaign.interval === "month" ? "month" : "year"
+      if (action === "reactivate") {
+        interval = getReactivationInterval(
+          getSubscriptionForProduct(userData, campaign.product),
+          campaign.product,
+          interval,
+        )
+        setReactivationError("")
+        setReactivateMode(campaign.product)
+      }
       const planKey = campaign.product === "bd_pro"
         ? `bd_pro_${interval}`
         : `bd_chatbot_${interval}`
@@ -363,6 +395,20 @@ export default function PlansAndPayment ({ userData }) {
     campaignCouponAppliedRef.current = false
     campaignDismissedRef.current = true
     startedChatbotTrialRef.current = false
+    setReactivateMode(null)
+    setReactivationError("")
+  }
+
+  function startReactivation(product) {
+    const subscription = getSubscriptionForProduct(userData, product)
+    const interval = subscription?.planInterval === "month" ? "month" : "year"
+    const planKey = product === "bd_pro" ? `bd_pro_${interval}` : `bd_chatbot_${interval}`
+    const planId = plans?.[planKey]?._id
+    if (!planId) return
+    setReactivationError("")
+    setReactivateMode(product)
+    setToggleAnual(interval === "year")
+    setPlan(planId)
   }
 
   function openCheckoutPlanStep() {
@@ -400,7 +446,7 @@ export default function PlansAndPayment ({ userData }) {
 
   function goBackFromPlanStep() {
     PaymentModal.onClose()
-    if (isChatbotCheckout) {
+    if (isChatbotCheckout || reactivateMode) {
       resetCheckoutState()
       return
     }
@@ -429,7 +475,10 @@ export default function PlansAndPayment ({ userData }) {
     },
     "bd_pro" : {
       title: t('username.DBPro'),
-      buttons : [{
+      buttons : [canReactivateSubscription(userData, "bd_pro") ? {
+        text: t('username.reactivateSubscription'),
+        onClick: () => startReactivation("bd_pro"),
+      } : {
         text: t('username.cancelPlan'),
         onClick: () => {
           setSubscriptionToCancel("bd_pro")
@@ -572,6 +621,19 @@ export default function PlansAndPayment ({ userData }) {
   }
 
   const openModalSucess = (isTrial = false) => {
+    if (reactivateMode) {
+      triggerGAEventWithData("subscription_reactivated", {
+        product: reactivateMode,
+        from_trial: isSubscriptionTrialing(reactivationSubscription),
+        plan_interval: checkoutInfos?.interval,
+        coupon: coupon || undefined,
+      })
+      successCheckoutKindRef.current = reactivateMode
+      setIsChatbotTrialSuccess(false)
+      PaymentModal.onClose()
+      SucessPaymentModal.onOpen()
+      return
+    }
     const isChatbotPurchase =
       checkoutInfos?.productName?.toLowerCase().includes("chatbot") ||
       checkoutInfos?.productSlug?.toLowerCase().includes("chatbot")
@@ -615,17 +677,21 @@ export default function PlansAndPayment ({ userData }) {
     const [ id ] = reg.exec(userData.id)
 
     const expectChatbot = successCheckoutKindRef.current === "chatbot"
+    const reactivatedProduct = reactivateMode
+    const isReflected = (user) => reactivatedProduct
+      ? reactivationReflectedInUserData(user, reactivatedProduct)
+      : purchaseReflectedInUserData(user, expectChatbot)
 
     let user
     let attempts = 0
     const maxAttempts = 10
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-    while (!purchaseReflectedInUserData(user, expectChatbot) && attempts < maxAttempts) {
+    while (!isReflected(user) && attempts < maxAttempts) {
       user = await fetch(`/api/user/getUser?p=${btoa(id)}`, { method: "GET" })
         .then((res) => res.json())
 
-      if (purchaseReflectedInUserData(user, expectChatbot)) {
+      if (isReflected(user)) {
         cookies.set("userBD", JSON.stringify(user))
         break
       }
@@ -893,7 +959,9 @@ export default function PlansAndPayment ({ userData }) {
           </BodyText>
           <TitleText width="100%">
             {checkoutStep === "plan"
-              ? t("username.confirmPlan")
+              ? reactivateMode
+                ? t("username.reactivateTitle")
+                : t("username.confirmPlan")
               : t("username.payment")}
           </TitleText>
           <ModalCloseButton
@@ -912,25 +980,10 @@ export default function PlansAndPayment ({ userData }) {
                   <LabelText textTransform="capitalize">
                     {checkoutInfos?.productName}
                   </LabelText>
-                  {!isChatbotCheckout && (
-                    <BodyText
-                      cursor="pointer"
-                      color="#0068C5"
-                      _hover={{ color: "#0057A4" }}
-                      marginLeft="auto"
-                      onClick={() => {
-                        PaymentModal.onClose();
-                        resetCheckoutState();
-                        PlansModal.onOpen();
-                      }}
-                    >
-                      {t("username.changePlan")}
-                    </BodyText>
-                  )}
                 </Box>
 
                 <Box
-                  display="flex"
+                  display={reactivateMode && !canSwitchReactivationInterval ? "none" : "flex"}
                   flexDirection={{ base: "column", lg: "row" }}
                   gap="8px"
                   alignItems={{ base: "start", lg: "center" }}
@@ -941,6 +994,14 @@ export default function PlansAndPayment ({ userData }) {
                     gap="8px"
                     alignItems="center"
                   >
+                    <BodyText
+                      color={toggleAnual ? "#71757A" : "#252A32"}
+                      fontWeight={toggleAnual ? "400" : "500"}
+                      cursor="pointer"
+                      onClick={() => toggleAnual && changeIntervalPlanCheckout()}
+                    >
+                      {t("username.intervalMonthly")}
+                    </BodyText>
                     {toggleAnual ? (
                       <Toggle
                         id="toggle-prices-modal-checkout"
@@ -955,7 +1016,14 @@ export default function PlansAndPayment ({ userData }) {
                         onChange={() => changeIntervalPlanCheckout()}
                       />
                     )}
-                    <BodyText>{t("username.annualDiscount")}</BodyText>
+                    <BodyText
+                      color={toggleAnual ? "#252A32" : "#71757A"}
+                      fontWeight={toggleAnual ? "500" : "400"}
+                      cursor="pointer"
+                      onClick={() => !toggleAnual && changeIntervalPlanCheckout()}
+                    >
+                      {t("username.intervalAnnual")}
+                    </BodyText>
                   </Box>
 
                   <TitleText
@@ -1052,6 +1120,17 @@ export default function PlansAndPayment ({ userData }) {
                 {t("username.trialPeriod")}
               </BodyText>
 
+              {reactivateMode && (
+                <BodyText fontFamily="Roboto" color="#464A51">
+                  {t(
+                    isSubscriptionTrialing(reactivationSubscription)
+                      ? "username.reactivateTrialNotice"
+                      : "username.reactivateNotice",
+                    { date: formatTimeStamp(reactivationSubscription?.canceledAt) },
+                  )}
+                </BodyText>
+              )}
+
               <Divider borderColor="#DEDFE0" />
 
               <Grid
@@ -1102,6 +1181,20 @@ export default function PlansAndPayment ({ userData }) {
                 </BodyText>
               )}
 
+              {reactivationError && (
+                <BodyText
+                  typography="small"
+                  display="flex"
+                  flexDirection="row"
+                  color="#BF3434"
+                  gap="8px"
+                  alignItems="center"
+                >
+                  <Exclamation width="21px" height="21px" fill="#BF3434" />{" "}
+                  {reactivationError}
+                </BodyText>
+              )}
+
               <Stack
                 width="100%"
                 spacing={0}
@@ -1119,6 +1212,7 @@ export default function PlansAndPayment ({ userData }) {
                 <Button
                   width={{ base: "100%", lg: "fit-content" }}
                   onClick={() => {
+                    setReactivationError("")
                     setIsLoadingClientSecret(true)
                     setCheckoutStep("payment")
                   }}
@@ -1185,6 +1279,15 @@ export default function PlansAndPayment ({ userData }) {
                 onSucess={(isTrial) => openModalSucess(isTrial)}
                 onErro={() => openModalErro()}
                 isLoading={(e) => setIsLoadingClientSecret(e)}
+                reactivation={reactivateMode ? {
+                  type: reactivateMode,
+                  userId: userNumericId,
+                  sendPrice: canSwitchReactivationInterval,
+                } : null}
+                onReactivationError={(message) => {
+                  setReactivationError(message || t("username.reactivateError"))
+                  setCheckoutStep("plan")
+                }}
               />
             </Stack>
           )}
@@ -1345,13 +1448,23 @@ export default function PlansAndPayment ({ userData }) {
         >
           <SuccessIcon width="90px" height="64px" fill="#34A15A" />
           <TitleText>
-            {isChatbotCheckout
+            {reactivateMode
+              ? t("username.reactivateSuccessTitle")
+              : isChatbotCheckout
               ? isChatbotTrialSuccess
                 ? t("username.chatbotTrialSuccessTitle")
                 : t("username.chatbotSubscriptionSuccessTitle")
               : t("username.congratulations")}
           </TitleText>
-          {isChatbotCheckout ? (
+          {reactivateMode ? (
+            <BodyText color="#464A51">
+              {t(
+                isSubscriptionTrialing(reactivationSubscription)
+                  ? "username.reactivateTrialSuccessDescription"
+                  : "username.reactivateSuccessDescription",
+              )}
+            </BodyText>
+          ) : isChatbotCheckout ? (
             isChatbotTrialSuccess ? (
               <BodyText color="#464A51">
                 {t("username.chatbotTrialSuccessDescription")}
@@ -1919,7 +2032,17 @@ export default function PlansAndPayment ({ userData }) {
                 </BodyText>
               </Stack>
             )}
-            {!hasChatbotActiveSubscription && plans?.bd_chatbot_year?._id && (
+            {!hasChatbotActiveSubscription && isLoadingPlans && (
+              <Skeleton
+                width="160px"
+                height="44px"
+                marginTop="8px"
+                borderRadius="8px"
+                startColor="#F0F0F0"
+                endColor="#F3F3F3"
+              />
+            )}
+            {!hasChatbotActiveSubscription && !isLoadingPlans && plans?.bd_chatbot_year?._id && (
               <Button
                 isVariant
                 marginTop="8px"
@@ -1957,6 +2080,14 @@ export default function PlansAndPayment ({ userData }) {
                 >
                   {t("username.openChatbot")}
                 </Button>
+                {canReactivateSubscription(userData, "chatbot") ? (
+                <Button
+                  isVariant
+                  onClick={() => startReactivation("chatbot")}
+                >
+                  {t("username.reactivateSubscription")}
+                </Button>
+                ) : (
                 <Button
                   isVariant
                   onClick={() => {
@@ -1982,6 +2113,7 @@ export default function PlansAndPayment ({ userData }) {
                 >
                   {t("username.cancelChatbotSubscription")}
                 </Button>
+                )}
               </Stack>
             )}
           </Box>
