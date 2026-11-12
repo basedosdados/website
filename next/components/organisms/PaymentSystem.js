@@ -96,6 +96,8 @@ export default function PaymentSystem({
   isLoading,
   onClientSecretReady,
   enableChatbotTrial = false,
+  reactivation = null,
+  onReactivationError,
 }) {
   const [clientSecret, setClientSecret] = useState("")
 
@@ -160,7 +162,35 @@ export default function PaymentSystem({
     fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap' }],
   }
 
+  const reactivateSubscription = async (id, coupon) => {
+    const params = new URLSearchParams({
+      p: btoa(reactivation.userId),
+      t: btoa(reactivation.type),
+      pr: btoa(reactivation.sendPrice ? id : ""),
+      c: btoa(coupon || ""),
+    })
+    let result
+    try {
+      result = await fetch(`/api/stripe/reactivateSubscription?${params}`, { method: "GET" })
+        .then(res => res.json())
+    } catch (error) {
+      console.error(error)
+    }
+
+    if (result?.clientSecret) {
+      setClientSecret(result.clientSecret)
+      onClientSecretReady?.({ isSetupIntent: true, isTrialStarted: false })
+      return isLoading(false)
+    }
+
+    isLoading(false)
+    if (result?.ok) return onSucess(false)
+    return onReactivationError?.(result?.error)
+  }
+
   const customerCreatPost = async (id, coupon) => {
+    if (reactivation) return reactivateSubscription(id, coupon)
+
     if (enableChatbotTrial) {
       const trial = await fetch(`/api/stripe/startChatbotTrial?p=${btoa(id)}`, {method: "GET"})
         .then(res => res.json())

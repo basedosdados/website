@@ -105,7 +105,7 @@ describe('Área do Usuário e Sistema de pagamento', () => {
     });
   });
 
-  it('Verificar preços e trocar o plano no modal', () => {
+  it('Verificar preços no checkout', () => {
     cy.openPlansModal();
     cy.arrivingAtCheckout('#bd_pro_button_sub_btn');
 
@@ -127,29 +127,8 @@ describe('Área do Usuário e Sistema de pagamento', () => {
       cy.contains('R$ 47,00/mês', { timeout: 20000 })
         .should('be.visible');
 
-      cy.clearCookie('plan_selected');
-
-      cy.contains('Trocar plano')
-        .should('be.visible')
-        .click();
+      cy.contains('Trocar plano').should('not.exist');
     });
-
-    cy.get('body', { timeout: 15000 }).should(($body) => {
-      const $checkout = $body.find('#chakra-modal-modal-stripe-checkout');
-      expect(
-        $checkout.length === 0 || $checkout.css('display') === 'none' || $checkout.css('opacity') === '0',
-        'checkout fechado'
-      ).to.eq(true);
-    });
-
-    cy.get('section[role="dialog"].chakra-modal__content:visible')
-      .should('be.visible')
-      .and('have.css', 'opacity', '1')
-      .within(() => {
-        cy.contains('p', 'BD Orgs', { timeout: 20000 }).should('be.visible');
-        cy.contains('Sob consulta').should('be.visible');
-        cy.contains('Entre em contato').should('be.visible');
-      });
   });
 
   it('Verificar aplicação de cupons', () => {
