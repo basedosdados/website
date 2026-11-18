@@ -212,6 +212,12 @@
       "tryAgain": "Tente novamente.",
       "openIdeas": "Abrir central de ideias"
     },
+    "chart": {
+      "loading": "Gerando gráfico...",
+      "error": "Não foi possível exibir o gráfico.",
+      "expand": "Ampliar gráfico",
+      "viewFull": "Ver gráfico completo"
+    },
     "table": {
       "seeMore": "ver mais",
       "seeLess": "ver menos",

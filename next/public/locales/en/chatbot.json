@@ -212,6 +212,12 @@
       "tryAgain": "Please try again.",
       "openIdeas": "Open idea center"
     },
+    "chart": {
+      "loading": "Generating chart...",
+      "error": "The chart could not be displayed.",
+      "expand": "Expand chart",
+      "viewFull": "View full chart"
+    },
     "table": {
       "seeMore": "see more",
       "seeLess": "see less",
