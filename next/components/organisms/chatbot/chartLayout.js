@@ -8,11 +8,11 @@
 //
 // Nothing here depends on React, so it can be checked in a plain page.
 
-// Small multiples: a panel's width aims for the target, and is never made narrower than
-// the minimum (the chart needs fewer columns instead) or wider than the maximum.
+// Small multiples: as many columns are laid out as fit panels about the target width,
+// and a panel is never made narrower than the minimum (the chart needs fewer columns
+// instead). The panels then share the whole width, as a single chart fills it.
 const PANEL_TARGET_WIDTH = 220;
 const PANEL_MIN_WIDTH = 140;
-const PANEL_MAX_WIDTH = 360;
 // A panel with a continuous y axis is this many times as tall as it is wide.
 const PANEL_ASPECT = 0.75;
 const PANEL_MIN_HEIGHT = 120;
@@ -313,12 +313,9 @@ function naturalPlan(spec, width) {
 // axes, so it repeats in every column; a facet shares one axis per row.
 function gridPlan({ kind, width, minColumns, maxColumns, legendAllowance, perColumnOverhead, build }) {
   const panelWidth = (columns, overhead) =>
-    Math.min(
-      PANEL_MAX_WIDTH,
-      Math.floor(
-        (width - (perColumnOverhead ? columns * overhead : overhead) - (columns - 1) * SPACING) /
-          columns
-      )
+    Math.floor(
+      (width - (perColumnOverhead ? columns * overhead : overhead) - (columns - 1) * SPACING) /
+        columns
     );
 
   const guess = perColumnOverhead ? AXIS_ALLOWANCE : AXIS_ALLOWANCE + legendAllowance;
