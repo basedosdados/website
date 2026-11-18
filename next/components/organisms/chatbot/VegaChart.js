@@ -1,260 +1,268 @@
 import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { useTranslation } from "next-i18next";
 import { useEffect, useRef, useState } from "react";
 
 import BodyText from "../../atoms/Text/BodyText";
+import {
+  Cancelled,
+  PREVIEW_MAX_HEIGHT,
+  drawChart,
+  isNarrowPanel,
+  titleText,
+} from "./chartDraw";
+import { MaximizeIcon } from "./Icons";
 
-// Chart palette from design — single source of truth, don't hand-pick colors elsewhere.
-// The two categorical sets are separate palettes, not one truncated into the other;
-// `pickCategoryPalette` chooses between them per render, based on series count.
-const BRAND_GREEN = "#2B8C4D"; // "1 color"
-const CATEGORY_PALETTE_LOW = ["#2B8C4D", "#7EC876", "#42B0FF"]; // "2 or 3 colors"
-const CATEGORY_PALETTE_HIGH = [
-  "#7EC876",
-  "#CA6FE0",
-  "#FF8484",
-  "#FBEA53",
-  "#42B0FF",
-  "#F358C8",
-  "#F69E4C",
-  "#61DCC6",
-  "#8C564B",
-  "#7F7F7F",
-]; // "+3 colors"
-// "1 color - gradient", light -> dark (low -> high magnitude).
-const SEQUENTIAL_RAMP = ["#EAEAEA", "#CCEDC6", "#77C679", "#2B8C4D", "#004529"];
+// The chart is laid out again when its panel's width changes by at least this much
+// (a window resized, a phone turned, the sidebar opened).
+const RESIZE_STEP = 8;
 
-const CHART_CONFIG = {
-  font: "Roboto",
-  background: "transparent",
-  axis: {
-    labelColor: "#464A51",
-    titleColor: "#252A32",
-    gridColor: "#EEEEEE",
-    domainColor: "#DEDFE0",
-    tickColor: "#DEDFE0",
-    labelFontSize: 11,
-    titleFontSize: 12,
-  },
-  legend: {
-    labelColor: "#464A51",
-    titleColor: "#252A32",
-    labelFontSize: 11,
-    titleFontSize: 12,
-  },
-  title: {
-    color: "#252A32",
-    fontSize: 15,
-    fontWeight: 600,
-    anchor: "start",
-  },
-  view: { stroke: "transparent" },
-  range: {
-    category: CATEGORY_PALETTE_LOW, // overridden per render by `pickCategoryPalette`
-    ordinal: SEQUENTIAL_RAMP,
-    ramp: SEQUENTIAL_RAMP,
-    heatmap: SEQUENTIAL_RAMP,
-    // No `diverging`: design gave no diverging pair.
-    // No `symbol` (the default for the `shape` channel, e.g. marker shapes): nothing here maps `shape`.
-  },
-  bar: { color: BRAND_GREEN },
-  line: { color: BRAND_GREEN },
-  area: { color: BRAND_GREEN },
-  point: { color: BRAND_GREEN },
-  circle: { color: BRAND_GREEN },
-  arc: { fill: BRAND_GREEN },
+// Width of an element, updated as it is resized.
+function useWidth(ref) {
+  const [width, setWidth] = useState(null);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return undefined;
+    setWidth(element.clientWidth);
+    if (typeof ResizeObserver === "undefined") return undefined;
+    let timer = null;
+    const observer = new ResizeObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        const next = element.clientWidth;
+        setWidth((current) =>
+          current === null || Math.abs(next - current) >= RESIZE_STEP ? next : current
+        );
+      }, 150);
+    });
+    observer.observe(element);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [ref]);
+  return width;
+}
+
+const iconButtonStyle = {
+  position: "absolute",
+  right: "4px",
+  zIndex: 10,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "28px",
+  height: "28px",
+  borderRadius: "8px",
+  color: "#71757A",
+  backgroundColor: "rgba(255, 255, 255, 0.9)",
+  border: "1px solid #E5E7EB",
+  cursor: "pointer",
+  opacity: 0.55,
+  transition: "opacity 0.2s ease, background-color 0.2s ease",
+  _hover: { opacity: 1, backgroundColor: "#FFFFFF" },
+  _focusVisible: { opacity: 1 },
 };
 
-function mergeConfig(base, override) {
-  if (!override || typeof override !== "object" || Array.isArray(override)) {
-    return override === undefined ? base : override;
-  }
-  const out = { ...base };
-  for (const [key, value] of Object.entries(override)) {
-    const current = out[key];
-    out[key] =
-      current &&
-      typeof current === "object" &&
-      !Array.isArray(current) &&
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value)
-        ? mergeConfig(current, value)
-        : value;
-  }
-  return out;
-}
-
-const EMBED_ACTIONS = {
-  export: true,
-  source: false,
-  compiled: false,
-  editor: false,
-};
-
-// First candidate encoding (top-level, or a layer's) with a nominal/ordinal `color` field.
-// Returns the whole encoding, not just `.color`, so callers can also read `.detail`.
+// Draws a chart laid out for the width it has (see `chartLayout.js`).
 //
-// Edge case: assumes one shared color scale for the chart. `resolve: {scale: {color:
-// "independent"}}` lets layers use unrelated color fields with separate legends — unhandled,
-// since nothing here emits that; would need a palette per scale, not one global category range.
-function findColorEncoding(spec) {
-  const candidates = [spec.encoding, ...(spec.layer || []).map((layer) => layer.encoding)];
-  return candidates.find(
-    (encoding) => encoding?.color?.field && ["nominal", "ordinal"].includes(encoding.color.type)
-  );
-}
-
-// Distinct values of `field` in the raw rows. Returns null (not 0) when the field isn't
-// found there, so callers can fall back to another field instead of reading it as zero series.
-function distinctRawValues(rows, field) {
-  if (!field) return null;
-  const distinct = new Set(rows.map((row) => row?.[field]));
-  distinct.delete(undefined);
-  distinct.delete(null);
-  return distinct.size || null;
-}
-
-// Every inline row array in the spec. Not just `spec.data.values`: a choropleth's rows live
-// in its lookup transform's `from.data.values`, since its top-level `data` is the geometry.
-function collectRowArrays(node, out = []) {
-  if (Array.isArray(node)) {
-    node.forEach((item) => collectRowArrays(item, out));
-  } else if (node && typeof node === "object") {
-    // Guard on row-like objects so an axis/legend `values` (tick values) isn't taken for data.
-    if (Array.isArray(node.values) && node.values.some((v) => v && typeof v === "object")) {
-      out.push(node.values);
-    }
-    Object.values(node).forEach((value) => collectRowArrays(value, out));
-  }
-  return out;
-}
-
-// Real series count, for `pickCategoryPalette`. Null means no categorical color (a
-// single-series chart, or color mapped to a quantitative field).
-//
-// Fall back to `detail.field` when `color.field` is a `calculate`-derived label absent from
-// the raw rows. Each field is tried across every row array, since the color field may sit in
-// a different source than the top-level data (e.g. a choropleth's lookup transform).
-function countColorSeries(spec) {
-  const encoding = findColorEncoding(spec);
-  if (!encoding) return null;
-
-  const rowArrays = collectRowArrays(spec);
-  const detail = Array.isArray(encoding.detail) ? encoding.detail[0] : encoding.detail;
-
-  for (const field of [encoding.color.field, detail?.field]) {
-    for (const rows of rowArrays) {
-      const count = distinctRawValues(rows, field);
-      if (count !== null) return count;
-    }
-  }
-
-  return null;
-}
-
-function pickCategoryPalette(spec) {
-  const seriesCount = countColorSeries(spec);
-  if (seriesCount === null) return CATEGORY_PALETTE_LOW;
-  return seriesCount > 3 ? CATEGORY_PALETTE_HIGH : CATEGORY_PALETTE_LOW;
-}
-
-export default function VegaChart({ spec, onStatusChange }) {
+// Inline, a chart that does not fit even so (a grid of panels too wide for a phone, a
+// very tall chart) is shown as a preview image that opens it in full, through
+// `onExpand`. Expanded, it is always drawn, and scrolls where it does not fit.
+export default function VegaChart({ spec, onStatusChange, onExpand, expanded = false }) {
+  const { t } = useTranslation("chatbot");
+  const frameRef = useRef(null);
   const containerRef = useRef(null);
   const onStatusChangeRef = useRef(onStatusChange);
   const [status, setStatus] = useState("loading");
+  const [preview, setPreview] = useState(null);
+  const frameWidth = useWidth(frameRef);
 
   onStatusChangeRef.current = onStatusChange;
 
   useEffect(() => {
+    const report = (next) => {
+      setStatus(next);
+      onStatusChangeRef.current?.(next);
+    };
+
     if (!spec || typeof spec !== "object") {
-      setStatus("error");
-      onStatusChangeRef.current?.("error");
+      report("error");
       return undefined;
     }
+    if (!frameWidth) return undefined;
 
     let cancelled = false;
-    let embedded = null;
-    const container = containerRef.current;
+    const handle = { embedded: null };
+    // Each layout draws into an element of its own, so that a draw still running when the
+    // layout is replaced (a new width) cannot leave its chart beside the new one.
+    const container = document.createElement("div");
+    containerRef.current?.replaceChildren(container);
 
     setStatus("loading");
+    setPreview(null);
 
     (async () => {
       try {
         const { default: embed } = await import("vega-embed");
-        if (cancelled || !container) return;
+        // Measure the titles with the real font, not a fallback with other widths.
+        await document.fonts?.ready;
+        if (cancelled) return;
 
-        const chartConfig = {
-          ...CHART_CONFIG,
-          range: { ...CHART_CONFIG.range, category: pickCategoryPalette(spec) },
-        };
-
-        const responsiveSpec = {
-          ...spec,
-          width: "container",
-          autosize: { type: "fit", contains: "padding", ...(spec.autosize || {}) },
-          config: mergeConfig(chartConfig, spec.config),
-        };
-
-        const embedOptions = {
-          actions: EMBED_ACTIONS,
-          renderer: "canvas",
-          downloadFileName: spec.title || "grafico",
-        };
-
-        embedded = await embed(container, responsiveSpec, embedOptions);
-
-        if (cancelled) {
-          embedded.finalize?.();
-          return;
-        }
-        setStatus("ready");
-        onStatusChangeRef.current?.("ready");
+        const result = await drawChart({
+          embed,
+          container,
+          spec,
+          frameWidth,
+          expanded,
+          handle,
+          isCancelled: () => cancelled,
+        });
+        if (cancelled) return;
+        if (result.status === "preview") setPreview(result.preview);
+        report(result.status);
       } catch (error) {
+        if (cancelled || error instanceof Cancelled) return;
         console.error("Falha ao renderizar o gráfico:", error);
-        if (!cancelled) {
-          setStatus("error");
-          onStatusChangeRef.current?.("error");
-        }
+        report("error");
       }
     })();
 
     return () => {
       cancelled = true;
-      embedded?.finalize?.();
-      if (container) container.innerHTML = "";
+      handle.embedded?.finalize?.();
+      container.remove();
     };
-  }, [spec]);
+  }, [spec, frameWidth, expanded]);
+
+  const isDrawn = status === "ready";
+  const narrow = frameWidth !== null && isNarrowPanel(frameWidth);
+  const croppedRight = preview && preview.width > frameWidth;
+  const croppedBottom = preview && preview.height > PREVIEW_MAX_HEIGHT;
 
   return (
-    <Box position="relative" width="100%" minWidth={0}>
+    <Box ref={frameRef} position="relative" width="100%" minWidth={0}>
       {status === "loading" && (
         <Flex align="center" justify="center" gap="8px" padding="24px 0" color="#71757A">
           <Spinner width="16px" height="16px" thickness="2px" />
           <BodyText typography="small" color="inherit">
-            Gerando gráfico...
+            {t("ui.chart.loading")}
           </BodyText>
         </Flex>
       )}
       {status === "error" && (
         <Flex align="center" justify="center" padding="24px 0" color="#71757A">
           <BodyText typography="small" color="inherit">
-            Não foi possível exibir o gráfico.
+            {t("ui.chart.error")}
           </BodyText>
         </Flex>
       )}
+
+      {status === "preview" && preview && (
+        <Box
+          as="button"
+          type="button"
+          onClick={onExpand}
+          aria-label={t("ui.chart.expand")}
+          title={t("ui.chart.expand")}
+          display="block"
+          position="relative"
+          width="100%"
+          maxHeight={`${PREVIEW_MAX_HEIGHT}px`}
+          overflow="hidden"
+          cursor="zoom-in"
+          textAlign="left"
+          sx={{ "&:hover .chart-preview-hint, &:focus-visible .chart-preview-hint": { opacity: 1 } }}
+        >
+          <img
+            src={preview.url}
+            alt={titleText(spec?.title)}
+            width={preview.width}
+            height={preview.height}
+            style={{ display: "block", maxWidth: "none" }}
+          />
+          {croppedRight && (
+            <Box
+              position="absolute"
+              top={0}
+              right={0}
+              bottom={0}
+              width="48px"
+              pointerEvents="none"
+              background="linear-gradient(to right, rgba(255,255,255,0), #FFFFFF)"
+            />
+          )}
+          {croppedBottom && (
+            <Box
+              position="absolute"
+              left={0}
+              right={0}
+              bottom={0}
+              height="72px"
+              pointerEvents="none"
+              background="linear-gradient(to bottom, rgba(255,255,255,0), #FFFFFF)"
+            />
+          )}
+          <Flex
+            className="chart-preview-hint"
+            position="absolute"
+            left="50%"
+            bottom="12px"
+            transform="translateX(-50%)"
+            align="center"
+            gap="6px"
+            padding="6px 12px"
+            borderRadius="999px"
+            backgroundColor="#FFFFFF"
+            border="1px solid #E5E7EB"
+            boxShadow="0px 1.5px 8px rgba(0, 0, 0, 0.12)"
+            color="#252A32"
+            fontFamily="Roboto"
+            fontSize="13px"
+            lineHeight="20px"
+            whiteSpace="nowrap"
+            opacity={0.92}
+            transition="opacity 0.2s ease"
+          >
+            <MaximizeIcon width="14px" height="14px" />
+            {t("ui.chart.viewFull")}
+          </Flex>
+        </Box>
+      )}
+
+      {onExpand && !expanded && (isDrawn || status === "preview") && (
+        <Box
+          as="button"
+          type="button"
+          onClick={onExpand}
+          aria-label={t("ui.chart.expand")}
+          title={t("ui.chart.expand")}
+          // Beside the actions menu on a narrow panel, under it in the gutter otherwise.
+          {...iconButtonStyle}
+          top={isDrawn && !narrow ? "36px" : "4px"}
+          right={isDrawn && narrow ? "36px" : "4px"}
+        >
+          <MaximizeIcon width="16px" height="16px" />
+        </Box>
+      )}
+
       <Box
         ref={containerRef}
         width="100%"
         minWidth={0}
-        position={status === "ready" ? "relative" : "absolute"}
+        position={isDrawn ? "relative" : "absolute"}
+        top={0}
         left={0}
-        right={status === "ready" ? undefined : 0}
-        opacity={status === "ready" ? 1 : 0}
-        pointerEvents={status === "ready" ? "auto" : "none"}
-        overflowX="auto"
+        right={isDrawn ? undefined : 0}
+        opacity={isDrawn ? 1 : 0}
+        pointerEvents={isDrawn ? "auto" : "none"}
+        // Expanded, a chart that does not fit even the larger panel scrolls.
+        overflow={expanded ? "auto" : "visible"}
         sx={{
-          canvas: { maxWidth: "100%" },
-          "svg.marks": { maxWidth: "100%", height: "auto" },
+          // No size cap on the canvas: CSS scaling would squash the chart (its height is
+          // set in pixels) and put the pointer off its marks.
+          // vega-embed keeps the gutter right of the chart for its menu; a narrow panel
+          // gives it to the chart instead (see `ACTIONS_GUTTER`).
+          ...(narrow ? { ".vega-embed.has-actions": { paddingRight: "0 !important" } } : {}),
           details: {
             position: "absolute !important",
             top: "4px",
