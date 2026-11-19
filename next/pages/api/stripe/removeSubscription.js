@@ -40,7 +40,7 @@ async function removeSubscriptionById(id, token) {
   }
 }
 
-async function getSubscriptionIdByAccount(id, token, subscriptionType) {
+export async function getSubscriptionIdByAccount(id, token, subscriptionType) {
   if (!/^\d+$/.test(String(id))) return null
 
   try {
