@@ -484,11 +484,12 @@ export function wrapTitle(title, maxWidth) {
   return wrapped;
 }
 
-// The size a drawn chart takes on the page.
+// The size a drawn chart takes on the page, from its layout box rather than its box on
+// screen, which a transform would scale (the expanded view opens with a zoom, and a chart
+// measured during it would be laid out too wide).
 export function measureDrawn(container) {
   const marks = container.querySelector(".marks");
-  const rect = marks ? marks.getBoundingClientRect() : { width: 0, height: 0 };
-  return { width: rect.width, height: rect.height };
+  return { width: marks?.offsetWidth ?? 0, height: marks?.offsetHeight ?? 0 };
 }
 
 // Lays a chart out for `width`, drawing it with `draw` (which embeds a spec and resolves
