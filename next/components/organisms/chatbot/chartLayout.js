@@ -24,13 +24,14 @@ const LEGEND_ALLOWANCE = 140;
 // Vega-Lite's default space between panels and between concatenated views.
 const SPACING = 20;
 
-// A single view whose plot area is narrower than this is squeezed by its legend or its
-// labels, and gets its legend moved below it.
-const PLOT_MIN_WIDTH = 160;
+// Below this width, legends go under the chart: beside it they take the room the plot
+// or the panels need.
+const COMPACT_WIDTH = 480;
 
-// Below this width, legends go under the chart from the start: beside it they take
-// the room the panels need.
-export const COMPACT_WIDTH = 480;
+// A single view fitted on its width alone grows to hold every mark, so marks drawn far
+// outside their scale (a fixed domain narrower than the values) can make it this tall
+// or more. It is then fitted on both sides, which keeps it at its height.
+const MAX_FIT_X_HEIGHT = 10000;
 
 // Width of one entry of a legend under the chart, which lays its entries in columns.
 const LEGEND_ENTRY_WIDTH = 150;
@@ -90,7 +91,7 @@ function omit(object, keys) {
 
 // Every encoding in the spec: top-level, a layer's (nested too), a concatenated view's,
 // and a facet's inner spec.
-export function collectEncodings(node, out = []) {
+function collectEncodings(node, out = []) {
   if (!isObject(node)) return out;
   if (isObject(node.encoding)) out.push(node.encoding);
   for (const key of ["layer", ...CONCAT_KEYS]) {
@@ -102,7 +103,7 @@ export function collectEncodings(node, out = []) {
 
 // Every inline row array in the spec. Not just `spec.data.values`: a choropleth's rows live
 // in its lookup transform's `from.data.values`, since its top-level `data` is the geometry.
-export function collectRowArrays(node, out = []) {
+function collectRowArrays(node, out = []) {
   if (Array.isArray(node)) {
     node.forEach((item) => collectRowArrays(item, out));
   } else if (isObject(node)) {
@@ -162,21 +163,22 @@ function hasDiscreteY(view) {
   );
 }
 
-// Width and height for one panel of small multiples. The height follows the width,
-// unless the y axis lists categories, whose bands decide it.
+// Width and height for one panel of small multiples or one concatenated view. A map or a
+// pie is as tall as it is wide. Otherwise a height the spec gives is kept, and so is the
+// height of a y axis that lists categories, which its bands decide; any other height
+// follows the width.
 function sizePanel(view, width) {
   if (isComposite(view)) return view;
   if (isRound(view)) return { ...view, width, height: width };
-  if (hasDiscreteY(view)) return { ...view, width };
+  if (typeof view.height === "number" || hasDiscreteY(view)) return { ...view, width };
   const height = clamp(Math.round(width * PANEL_ASPECT), PANEL_MIN_HEIGHT, PANEL_MAX_HEIGHT);
   return { ...view, width, height };
 }
 
-// A concatenated view keeps a height it was given; only its width follows the layout.
-// Its own title is wrapped to it, as a long one would widen the whole chart.
+// A concatenated view is sized as a panel, and its own title is wrapped to it, as a long
+// one would widen the whole chart.
 function sizeConcatView(view, width) {
-  if (isComposite(view)) return view;
-  const sized = view.height === undefined ? sizePanel(view, width) : { ...view, width };
+  const sized = sizePanel(view, width);
   return view.title ? { ...sized, title: wrapTitle(view.title, width + AXIS_ALLOWANCE) } : sized;
 }
 
@@ -234,62 +236,71 @@ function compactSpec(spec, width) {
   return { ...legendsBelow(spec, width), config: mergeConfig(compactConfig(width), spec.config) };
 }
 
-// A facet as an encoding channel, or a facet operator over `column` alone, puts every
-// panel in one row however many there are. Both become a wrapped facet, whose number
-// of columns can then be chosen for the width.
-export function wrapFacet(spec) {
+// Small multiples written as encoding channels (`facet`, `row`, `column`), as the
+// equivalent facet operator: the channels go in `facet`, the view they repeat in `spec`.
+function facetOperator(spec) {
   const encoding = spec.encoding;
-  if (
-    !isComposite(spec) &&
-    isObject(encoding) &&
-    !encoding.row &&
-    isObject(encoding.column || encoding.facet)
-  ) {
-    const { column, facet, ...rest } = encoding;
-    const definition = facet || column;
-    const outer = {};
-    const inner = {};
-    for (const [key, value] of Object.entries(spec)) {
-      (VIEW_KEYS.includes(key) ? inner : outer)[key] = value;
-    }
+  if (isComposite(spec) || !isObject(encoding)) return spec;
+  const { row, column, facet, ...rest } = encoding;
+  if (!isObject(row) && !isObject(column) && !isObject(facet)) return spec;
+
+  const outer = {};
+  const inner = {};
+  for (const [key, value] of Object.entries(spec)) {
+    (VIEW_KEYS.includes(key) ? inner : outer)[key] = value;
+  }
+  inner.encoding = rest;
+
+  if (isObject(facet)) {
     const layout = Object.fromEntries(
-      FACET_LAYOUT_KEYS.filter((key) => definition[key] !== undefined).map((key) => [
-        key,
-        definition[key],
-      ])
+      FACET_LAYOUT_KEYS.filter((key) => facet[key] !== undefined).map((key) => [key, facet[key]])
     );
-    return {
-      ...outer,
-      ...layout,
-      facet: omit(definition, FACET_LAYOUT_KEYS),
-      spec: { ...inner, encoding: rest },
-    };
+    return { ...outer, ...layout, facet: omit(facet, FACET_LAYOUT_KEYS), spec: inner };
   }
-  if (isObject(spec.facet) && isObject(spec.spec) && spec.facet.column && !spec.facet.row) {
-    return { ...spec, facet: spec.facet.column };
-  }
-  return spec;
+  const channels = { ...(row ? { row } : {}), ...(column ? { column } : {}) };
+  return { ...outer, facet: channels, spec: inner };
 }
 
-// A single or layered view: Vega-Lite fits it to the container. It is only checked for a
-// plot squeezed by its legend or labels, which then move out of its way.
+// Small multiples split by `column` alone lay every panel out in one row, and by `row`
+// alone in one column, however many there are. Both become a wrapped facet, whose number
+// of columns is then chosen for the width; panels split by `row` stay one under another.
+function wrapFacet(spec) {
+  const operator = facetOperator(spec);
+  if (!isObject(operator.facet) || !isObject(operator.spec)) return operator;
+  const { row, column } = operator.facet;
+  if (column && !row) return { ...operator, facet: column };
+  if (row && !column) return { ...operator, facet: row, columns: 1 };
+  return operator;
+}
+
+// A single or layered view: Vega-Lite fits it to the container's width.
+//
+// On a narrow screen its legends go under it, and only its width is fitted (`fit-x`), so
+// a legend under it adds to its height rather than squeezing the plot. A map or a pie
+// there is also no taller than it is wide: the shape, about as tall as it is wide, would
+// leave the rest of a taller box empty.
 function singlePlan(spec, width) {
-  const autosize = { type: "fit", contains: "padding", ...(isObject(spec.autosize) ? spec.autosize : {}) };
+  const compact = width < COMPACT_WIDTH;
+  let height = spec.height;
+  if (compact && isRound(spec)) {
+    height = Math.min(typeof spec.height === "number" ? spec.height : width, width);
+  }
   return {
     kind: "single",
-    initial: { legendBottom: false },
-    build: ({ legendBottom }) => ({
-      ...(legendBottom ? compactSpec(spec, width) : spec),
+    initial: { fitX: compact },
+    build: ({ fitX }) => ({
+      ...(compact ? compactSpec(spec, width) : spec),
       width: "container",
-      autosize,
+      ...(height !== undefined ? { height } : {}),
+      autosize: {
+        contains: "padding",
+        ...(isObject(spec.autosize) ? spec.autosize : {}),
+        type: fitX ? "fit-x" : "fit",
+      },
     }),
-    // Vega-Lite fits the view to the width, so it always fits; a narrow plot is only
-    // given more room where there is some to take.
     fits: (drawn) => drawn.width <= width + 1,
     adjust: (state, drawn) =>
-      drawn.plotWidth !== null && drawn.plotWidth < PLOT_MIN_WIDTH && !state.legendBottom
-        ? { legendBottom: true }
-        : null,
+      state.fitX && drawn.height > MAX_FIT_X_HEIGHT ? { fitX: false } : null,
   };
 }
 
@@ -363,40 +374,14 @@ function sizeFacet(spec, panel) {
   };
 }
 
+// Small multiples in a wrapped facet, in as many columns as fit. The spec's own `columns`
+// is an upper bound: fewer may be chosen for a narrow panel, never more, as a single
+// column may be what was asked for. A grid of rows by columns has a column per value of
+// its column field, so it is drawn at its own sizes.
 function facetPlan(spec, width, legendAllowance) {
-  const { facet } = spec;
-  const wrapped = !facet.row && !facet.column;
-  if (!wrapped && facet.column) {
-    // A grid of rows by columns: its columns are the column field's values, so only the
-    // panels' width can change.
-    const columns = distinctCount(spec, facet.column.field);
-    if (columns === null) return naturalPlan(spec, width);
-    return gridPlan({
-      kind: "facet-grid",
-      width,
-      minColumns: columns,
-      maxColumns: columns,
-      legendAllowance,
-      perColumnOverhead: false,
-      build: ({ panel }) => sizeFacet(spec, panel),
-    });
-  }
-  if (!wrapped) {
-    // Rows only: one column of panels as wide as the panel allows.
-    return gridPlan({
-      kind: "facet-rows",
-      width,
-      minColumns: 1,
-      maxColumns: 1,
-      legendAllowance,
-      perColumnOverhead: false,
-      build: ({ panel }) => sizeFacet(spec, panel),
-    });
-  }
+  if (spec.facet.row || spec.facet.column) return naturalPlan(spec, width);
 
-  // The spec's own `columns` is an upper bound: fewer may be chosen for a narrow panel,
-  // never more, as a single column may be what was asked for.
-  const count = distinctCount(spec, facet.field) ?? Infinity;
+  const count = distinctCount(spec, spec.facet.field) ?? Infinity;
   const maxColumns = Math.max(1, Math.min(count, positiveInteger(spec.columns) ?? Infinity));
   return gridPlan({
     kind: "facet",
@@ -437,7 +422,7 @@ function concatPlan(spec, width, legendAllowance) {
 }
 
 // Chooses how a chart is laid out for a width: what is sized here, and how.
-export function planLayout(rawSpec, width) {
+function planLayout(rawSpec, width) {
   const spec = wrapFacet(rawSpec);
   if (!isComposite(spec)) return singlePlan(spec, width);
 
@@ -499,19 +484,11 @@ export function wrapTitle(title, maxWidth) {
   return wrapped;
 }
 
-// The size a drawn chart takes on the page, and the width of its plot area when it is a
-// single view (null for a composition, whose views each have their own).
-export function measureDrawn(container, view) {
+// The size a drawn chart takes on the page.
+export function measureDrawn(container) {
   const marks = container.querySelector(".marks");
   const rect = marks ? marks.getBoundingClientRect() : { width: 0, height: 0 };
-  let plotWidth = null;
-  try {
-    const value = view.signal("width");
-    if (typeof value === "number" && Number.isFinite(value)) plotWidth = value;
-  } catch {
-    // A composition has no `width` signal of its own.
-  }
-  return { width: rect.width, height: rect.height, plotWidth };
+  return { width: rect.width, height: rect.height };
 }
 
 // Lays a chart out for `width`, drawing it with `draw` (which embeds a spec and resolves
