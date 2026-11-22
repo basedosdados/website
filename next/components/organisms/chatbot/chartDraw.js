@@ -8,7 +8,6 @@
 import {
   SUBTITLE_FONT,
   TITLE_FONT,
-  collectRowArrays,
   fitChart,
   measureDrawn,
   mergeConfig,
@@ -17,7 +16,7 @@ import {
 
 // Chart palette from design — single source of truth, don't hand-pick colors elsewhere.
 // The two categorical sets are separate palettes, not one truncated into the other;
-// `pickCategoryPalette` chooses between them per render, based on series count.
+// `categoryPalette` chooses between them by the number of series the chart draws.
 const BRAND_GREEN = "#2B8C4D"; // "1 color"
 const CATEGORY_PALETTE_LOW = ["#2B8C4D", "#7EC876", "#42B0FF"]; // "2 or 3 colors"
 const CATEGORY_PALETTE_HIGH = [
@@ -64,7 +63,7 @@ const CHART_CONFIG = {
   },
   view: { stroke: "transparent" },
   range: {
-    category: CATEGORY_PALETTE_LOW, // overridden per render by `pickCategoryPalette`
+    category: CATEGORY_PALETTE_LOW, // replaced per chart (see `categoryPalette`)
     ordinal: SEQUENTIAL_RAMP,
     ramp: SEQUENTIAL_RAMP,
     heatmap: SEQUENTIAL_RAMP,
@@ -105,56 +104,18 @@ export const PREVIEW_MAX_HEIGHT = 420;
 
 export class Cancelled extends Error {}
 
-// First candidate encoding (top-level, or a layer's) with a nominal/ordinal `color` field.
-// Returns the whole encoding, not just `.color`, so callers can also read `.detail`.
-//
-// Edge case: assumes one shared color scale for the chart. `resolve: {scale: {color:
-// "independent"}}` lets layers use unrelated color fields with separate legends — unhandled,
-// since nothing here emits that; would need a palette per scale, not one global category range.
-function findColorEncoding(spec) {
-  const candidates = [spec.encoding, ...(spec.layer || []).map((layer) => layer.encoding)];
-  return candidates.find(
-    (encoding) => encoding?.color?.field && ["nominal", "ordinal"].includes(encoding.color.type)
-  );
-}
-
-// Distinct values of `field` in the raw rows. Returns null (not 0) when the field isn't
-// found there, so callers can fall back to another field instead of reading it as zero series.
-function distinctRawValues(rows, field) {
-  if (!field) return null;
-  const distinct = new Set(rows.map((row) => row?.[field]));
-  distinct.delete(undefined);
-  distinct.delete(null);
-  return distinct.size || null;
-}
-
-// Real series count, for `pickCategoryPalette`. Null means no categorical color (a
-// single-series chart, or color mapped to a quantitative field).
-//
-// Fall back to `detail.field` when `color.field` is a `calculate`-derived label absent from
-// the raw rows. Each field is tried across every row array, since the color field may sit in
-// a different source than the top-level data (e.g. a choropleth's lookup transform).
-function countColorSeries(spec) {
-  const encoding = findColorEncoding(spec);
-  if (!encoding) return null;
-
-  const rowArrays = collectRowArrays(spec);
-  const detail = Array.isArray(encoding.detail) ? encoding.detail[0] : encoding.detail;
-
-  for (const field of [encoding.color.field, detail?.field]) {
-    for (const rows of rowArrays) {
-      const count = distinctRawValues(rows, field);
-      if (count !== null) return count;
-    }
+// The categorical palette for a drawn chart: the larger set when its color scale has more
+// than 3 categories. Read from the drawn chart, so it counts the series the chart really
+// shows, wherever its color encoding sits (a layer, small multiples, a computed label).
+// A chart with no shared `color` scale, or a continuous one, keeps the default.
+function categoryPalette(view) {
+  try {
+    const scale = view.scale("color");
+    if (scale.type === "ordinal" && scale.domain().length > 3) return CATEGORY_PALETTE_HIGH;
+  } catch {
+    // Vega throws for a scale the chart does not have.
   }
-
-  return null;
-}
-
-function pickCategoryPalette(spec) {
-  const seriesCount = countColorSeries(spec);
-  if (seriesCount === null) return CATEGORY_PALETTE_LOW;
-  return seriesCount > 3 ? CATEGORY_PALETTE_HIGH : CATEGORY_PALETTE_LOW;
+  return CATEGORY_PALETTE_LOW;
 }
 
 export function titleText(title) {
@@ -191,10 +152,7 @@ export async function drawChart({
   const width = narrow ? frameWidth : frameWidth - ACTIONS_GUTTER;
   const titleWidth = narrow ? width - ACTIONS_ROW_WIDTH : width - 16;
 
-  const chartConfig = {
-    ...CHART_CONFIG,
-    range: { ...CHART_CONFIG.range, category: pickCategoryPalette(spec) },
-  };
+  let palette = CATEGORY_PALETTE_LOW;
   const options = {
     actions: EMBED_ACTIONS,
     renderer: "canvas",
@@ -208,14 +166,15 @@ export async function drawChart({
     container.innerHTML = "";
   };
 
-  const draw = async (candidate) => {
+  const embedOnce = async (candidate) => {
     clear();
+    const config = { ...CHART_CONFIG, range: { ...CHART_CONFIG.range, category: palette } };
     const result = await embed(
       container,
       {
         ...candidate,
         ...(candidate.title ? { title: wrapTitle(candidate.title, titleWidth) } : {}),
-        config: mergeConfig(chartConfig, candidate.config),
+        config: mergeConfig(config, candidate.config),
       },
       options
     );
@@ -224,7 +183,19 @@ export async function drawChart({
       throw new Cancelled();
     }
     handle.embedded = result;
-    return measureDrawn(container, result.view);
+    return result;
+  };
+
+  // The palette depends on how many series the chart draws, known once it is drawn: a
+  // chart with more than 3 is drawn again, once, with the larger palette.
+  const draw = async (candidate) => {
+    let result = await embedOnce(candidate);
+    const needed = categoryPalette(result.view);
+    if (needed !== palette) {
+      palette = needed;
+      result = await embedOnce(candidate);
+    }
+    return measureDrawn(container);
   };
 
   const { drawn, fits, kind, passes } = await fitChart(spec, width, draw);
