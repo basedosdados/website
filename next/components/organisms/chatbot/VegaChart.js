@@ -308,7 +308,9 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
         gap="4px"
       >
         {isDrawn && (
-          <Menu placement="bottom-end">
+          // Lazy: a closed list Chakra keeps in the page sits outside the chart until the
+          // menu first opens, and widens the expanded view's scroll area.
+          <Menu placement="bottom-end" isLazy>
             {({ isOpen }) => (
               <>
                 <Tooltip {...ActionTooltipProps} label={t("ui.chart.download")} isDisabled={isOpen}>
@@ -341,7 +343,12 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
           </Menu>
         )}
         {onExpand && !expanded && (isDrawn || status === "preview") && (
-          <Tooltip {...ActionTooltipProps} label={t("ui.chart.expand")}>
+          <Tooltip
+            {...ActionTooltipProps}
+            label={t("ui.chart.expand")}
+            // Under the download button, it opens downward so as not to cover it.
+            placement={isDrawn && !narrow ? "bottom-end" : "top-end"}
+          >
             <Box
               as="button"
               type="button"
