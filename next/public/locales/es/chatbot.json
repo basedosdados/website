@@ -216,7 +216,12 @@
       "loading": "Generando gráfico...",
       "error": "No fue posible mostrar el gráfico.",
       "expand": "Ampliar gráfico",
-      "viewFull": "Ver gráfico completo"
+      "viewFull": "Ver gráfico completo",
+      "download": "Descargar gráfico",
+      "save": {
+        "png": "Descargar PNG",
+        "svg": "Descargar SVG"
+      }
     },
     "table": {
       "seeMore": "ver más",

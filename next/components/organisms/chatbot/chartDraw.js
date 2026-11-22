@@ -78,17 +78,9 @@ const CHART_CONFIG = {
   arc: { fill: BRAND_GREEN },
 };
 
-const EMBED_ACTIONS = {
-  export: true,
-  source: false,
-  compiled: false,
-  editor: false,
-};
-
-// On a wide panel, the actions menu and the expand button sit in a gutter this wide,
-// right of the chart (vega-embed keeps it for its menu). On a narrow one the chart keeps
-// that width, and they sit side by side over the right end of its title, which is
-// wrapped short of them.
+// On a wide panel, the chart's download and expand buttons sit in a gutter this wide,
+// right of the chart. On a narrow one the chart keeps that width, and they sit side by
+// side over the right end of its title, which is wrapped short of them.
 export const ACTIONS_GUTTER = 38;
 const ACTIONS_ROW_WIDTH = 72;
 const NARROW_PANEL = 480;
@@ -123,6 +115,14 @@ export function titleText(title) {
   return (Array.isArray(text) ? text.join(" ") : text) || "grafico";
 }
 
+// Downloads a drawn chart as an image (`format` "png" or "svg"), named after its title.
+export async function saveChart(view, format, title) {
+  const link = document.createElement("a");
+  link.href = await view.toImageURL(format);
+  link.download = `${titleText(title)}.${format}`;
+  link.click();
+}
+
 // Whether a panel this wide gives the chart the actions gutter (see `ACTIONS_GUTTER`).
 export function isNarrowPanel(frameWidth) {
   return frameWidth < NARROW_PANEL;
@@ -150,15 +150,15 @@ export async function drawChart({
 }) {
   const narrow = isNarrowPanel(frameWidth);
   const width = narrow ? frameWidth : frameWidth - ACTIONS_GUTTER;
+  // A single view fills its container, so the container is given the chart's width,
+  // leaving the gutter free on a wide panel.
+  container.style.width = `${width}px`;
   const titleWidth = narrow ? width - ACTIONS_ROW_WIDTH : width - 16;
 
   let palette = CATEGORY_PALETTE_LOW;
-  const options = {
-    actions: EMBED_ACTIONS,
-    renderer: "canvas",
-    downloadFileName: titleText(spec.title),
-    ...embedOptions,
-  };
+  // vega-embed's own actions menu is left out: the chat draws its own buttons beside the
+  // chart (see `saveChart`).
+  const options = { actions: false, renderer: "canvas", ...embedOptions };
 
   const clear = () => {
     handle.embedded?.finalize?.();

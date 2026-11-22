@@ -1,4 +1,13 @@
-import { Box, Flex, Spinner, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spinner,
+  Tooltip,
+} from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { useEffect, useRef, useState } from "react";
 
@@ -8,9 +17,10 @@ import {
   PREVIEW_MAX_HEIGHT,
   drawChart,
   isNarrowPanel,
+  saveChart,
   titleText,
 } from "./chartDraw";
-import { MaximizeIcon } from "./Icons";
+import { DownloadIcon, MaximizeIcon } from "./Icons";
 
 // The chart is laid out again when its panel's width changes by at least this much
 // (a window resized, a phone turned, the sidebar opened).
@@ -43,8 +53,8 @@ function useWidth(ref) {
   return width;
 }
 
-// The chat's action tooltips (as in `Message.js`), opening toward the left: the expand
-// button sits at the right edge of the chart.
+// The chat's action tooltips (as in `Message.js`), opening toward the left: the chart's
+// buttons sit at its right edge.
 const ActionTooltipProps = {
   hasArrow: true,
   backgroundColor: "#252A32",
@@ -60,10 +70,34 @@ const ActionTooltipProps = {
   placement: "top-end",
 };
 
+// The chart's download menu, as the chat's results download menu (`DownloadResults.js`).
+const MenuListProps = {
+  boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16)",
+  _focus: { boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16) !important" },
+  padding: "8px 0",
+  borderRadius: "8px",
+  zIndex: "11",
+  color: "#252A32",
+  // As wide as its items, not Chakra's default minimum.
+  minWidth: "auto",
+};
+
+const MenuItemProps = {
+  letterSpacing: "0.1px",
+  lineHeight: "20px",
+  fontWeight: "400",
+  fontSize: "14px",
+  fontFamily: "Roboto",
+  color: "#252A32",
+  backgroundColor: "#FFF",
+  padding: "8px 16px",
+  _focus: { backgroundColor: "transparent" },
+  _hover: { backgroundColor: "transparent", opacity: "0.7" },
+};
+
+// The chart's buttons (download, expand) are faint until the pointer is over the chart,
+// and the one under the pointer darkens.
 const iconButtonStyle = {
-  position: "absolute",
-  right: "4px",
-  zIndex: 10,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -75,8 +109,9 @@ const iconButtonStyle = {
   border: "1px solid #E5E7EB",
   cursor: "pointer",
   opacity: 0.55,
-  transition: "opacity 0.2s ease, background-color 0.2s ease",
-  _hover: { opacity: 1, backgroundColor: "#FFFFFF" },
+  transition: "opacity 0.2s ease, background-color 0.2s ease, color 0.2s ease",
+  _groupHover: { opacity: 1 },
+  _hover: { opacity: 1, color: "#252A32", backgroundColor: "#EEEEEE" },
   _focusVisible: { opacity: 1 },
 };
 
@@ -94,6 +129,8 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
   const [status, setStatus] = useState("loading");
   const [preview, setPreview] = useState(null);
   const frameWidth = useWidth(frameRef);
+  // The drawn chart, for its download menu.
+  const handleRef = useRef(null);
 
   onStatusChangeRef.current = onStatusChange;
 
@@ -111,6 +148,7 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
 
     let cancelled = false;
     const handle = { embedded: null };
+    handleRef.current = handle;
     // Each layout draws into an element of its own, so that a draw still running when the
     // layout is replaced (a new width) cannot leave its chart beside the new one.
     const container = document.createElement("div");
@@ -158,7 +196,7 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
   const croppedBottom = preview && preview.height > PREVIEW_MAX_HEIGHT;
 
   return (
-    <Box ref={frameRef} position="relative" width="100%" minWidth={0}>
+    <Box ref={frameRef} role="group" position="relative" width="100%" minWidth={0}>
       {status === "loading" && (
         <Flex align="center" justify="center" gap="8px" padding="24px 0" color="#71757A">
           <Spinner width="16px" height="16px" thickness="2px" />
@@ -259,22 +297,63 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
         </Box>
       )}
 
-      {onExpand && !expanded && (isDrawn || status === "preview") && (
-        <Tooltip {...ActionTooltipProps} label={t("ui.chart.expand")}>
-          <Box
-            as="button"
-            type="button"
-            onClick={onExpand}
-            aria-label={t("ui.chart.expand")}
-            // Beside the actions menu on a narrow panel, under it in the gutter otherwise.
-            {...iconButtonStyle}
-            top={isDrawn && !narrow ? "36px" : "4px"}
-            right={isDrawn && narrow ? "36px" : "4px"}
-          >
-            <MaximizeIcon width="16px" height="16px" />
-          </Box>
-        </Tooltip>
-      )}
+      {/* Download and expand: one above the other in the gutter right of the chart, or
+          side by side over the end of its title on a narrow panel (see `ACTIONS_GUTTER`). */}
+      <Flex
+        position="absolute"
+        top="4px"
+        right="4px"
+        zIndex={10}
+        direction={narrow ? "row-reverse" : "column"}
+        gap="4px"
+      >
+        {isDrawn && (
+          <Menu placement="bottom-end">
+            {({ isOpen }) => (
+              <>
+                <Tooltip {...ActionTooltipProps} label={t("ui.chart.download")} isDisabled={isOpen}>
+                  <MenuButton
+                    as={Box}
+                    role="button"
+                    aria-label={t("ui.chart.download")}
+                    {...iconButtonStyle}
+                    // Chakra wraps the icon in an inline span; centered like the expand icon.
+                    sx={{ "& > span": { display: "flex", justifyContent: "center" } }}
+                  >
+                    <DownloadIcon width="16px" height="16px" />
+                  </MenuButton>
+                </Tooltip>
+                <MenuList {...MenuListProps}>
+                  {["png", "svg"].map((format) => (
+                    <MenuItem
+                      key={format}
+                      {...MenuItemProps}
+                      onClick={() =>
+                        saveChart(handleRef.current.embedded.view, format, spec.title)
+                      }
+                    >
+                      {t(`ui.chart.save.${format}`)}
+                    </MenuItem>
+                  ))}
+                </MenuList>
+              </>
+            )}
+          </Menu>
+        )}
+        {onExpand && !expanded && (isDrawn || status === "preview") && (
+          <Tooltip {...ActionTooltipProps} label={t("ui.chart.expand")}>
+            <Box
+              as="button"
+              type="button"
+              onClick={onExpand}
+              aria-label={t("ui.chart.expand")}
+              {...iconButtonStyle}
+            >
+              <MaximizeIcon width="16px" height="16px" />
+            </Box>
+          </Tooltip>
+        )}
+      </Flex>
 
       <Box
         ref={containerRef}
@@ -286,70 +365,8 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
         right={isDrawn ? undefined : 0}
         opacity={isDrawn ? 1 : 0}
         pointerEvents={isDrawn ? "auto" : "none"}
-        sx={{
-          // No size cap on the canvas: CSS scaling would squash the chart (its height is
-          // set in pixels) and put the pointer off its marks.
-          // vega-embed keeps the gutter right of the chart for its menu; a narrow panel
-          // gives it to the chart instead (see `ACTIONS_GUTTER`).
-          ...(narrow ? { ".vega-embed.has-actions": { paddingRight: "0 !important" } } : {}),
-          details: {
-            position: "absolute !important",
-            top: "4px",
-            right: "4px",
-            margin: "0 !important",
-          },
-          summary: {
-            listStyle: "none !important",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "28px !important",
-            height: "28px !important",
-            borderRadius: "8px",
-            color: "#71757A",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
-            border: "1px solid #E5E7EB",
-            boxShadow: "none !important",
-            opacity: 0.55,
-            transition: "opacity 0.2s ease, background-color 0.2s ease",
-          },
-          "&:hover summary": { opacity: 1 },
-          "summary:hover": { backgroundColor: "#FFFFFF" },
-          "summary::-webkit-details-marker": { display: "none !important" },
-          "summary svg": {
-            width: "16px !important",
-            height: "16px !important",
-          },
-          ".vega-actions": {
-            position: "absolute",
-            top: "36px",
-            right: "0",
-            display: "flex",
-            flexDirection: "column",
-            backgroundColor: "#FFFFFF",
-            borderRadius: "8px",
-            boxShadow: "0px 1.5px 16px rgba(0, 0, 0, 0.16)",
-            padding: "8px 0",
-            zIndex: 20,
-          },
-          ".vega-actions::before, .vega-actions::after": {
-            display: "none !important",
-          },
-          ".vega-actions a": {
-            padding: "6px 16px",
-            fontFamily: "Roboto",
-            fontSize: "13px",
-            lineHeight: "20px",
-            color: "#252A32",
-            textDecoration: "none",
-            whiteSpace: "nowrap",
-          },
-          ".vega-actions a:hover": {
-            backgroundColor: "#F7F7F7",
-            color: "#252A32",
-          },
-        }}
+        // No size cap on the canvas: CSS scaling would squash the chart (its height is set
+        // in pixels) and put the pointer off its marks.
       />
     </Box>
   );
