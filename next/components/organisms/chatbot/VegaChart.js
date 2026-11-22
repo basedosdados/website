@@ -1,4 +1,4 @@
-import { Box, Flex, Spinner } from "@chakra-ui/react";
+import { Box, Flex, Spinner, Tooltip } from "@chakra-ui/react";
 import { useTranslation } from "next-i18next";
 import { useEffect, useRef, useState } from "react";
 
@@ -43,6 +43,23 @@ function useWidth(ref) {
   return width;
 }
 
+// The chat's action tooltips (as in `Message.js`), opening toward the left: the expand
+// button sits at the right edge of the chart.
+const ActionTooltipProps = {
+  hasArrow: true,
+  backgroundColor: "#252A32",
+  borderRadius: "8px",
+  letterSpacing: "0.1px",
+  lineHeight: "18px",
+  fontWeight: "400",
+  fontSize: "12px",
+  fontFamily: "Roboto",
+  color: "#FFFFFF",
+  padding: "8px 12px",
+  boxShadow: "0 2px 16px rgba(0, 0, 0, 0.16)",
+  placement: "top-end",
+};
+
 const iconButtonStyle = {
   position: "absolute",
   right: "4px",
@@ -67,7 +84,8 @@ const iconButtonStyle = {
 //
 // Inline, a chart that does not fit even so (a grid of panels too wide for a phone, a
 // very tall chart) is shown as a preview image that opens it in full, through
-// `onExpand`. Expanded, it is always drawn, and scrolls where it does not fit.
+// `onExpand`. Expanded, it is always drawn, and the expanded view scrolls where it does
+// not fit.
 export default function VegaChart({ spec, onStatusChange, onExpand, expanded = false }) {
   const { t } = useTranslation("chatbot");
   const frameRef = useRef(null);
@@ -161,17 +179,18 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
         <Box
           as="button"
           type="button"
+          role="group"
           onClick={onExpand}
           aria-label={t("ui.chart.expand")}
-          title={t("ui.chart.expand")}
           display="block"
           position="relative"
           width="100%"
           maxHeight={`${PREVIEW_MAX_HEIGHT}px`}
           overflow="hidden"
+          borderRadius="8px"
           cursor="zoom-in"
           textAlign="left"
-          sx={{ "&:hover .chart-preview-hint, &:focus-visible .chart-preview-hint": { opacity: 1 } }}
+          _focusVisible={{ outline: "2px solid #2B8C4D", outlineOffset: "2px" }}
         >
           <img
             src={preview.url}
@@ -202,9 +221,12 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
               background="linear-gradient(to bottom, rgba(255,255,255,0), #FFFFFF)"
             />
           )}
+          {/* The pill lifts with the card, and under the pointer itself takes the hover of
+              the site's outlined buttons (`atoms/Button.js`). It sits above the card's
+              hover tint (see `ChartCard`), so it stays white. */}
           <Flex
-            className="chart-preview-hint"
             position="absolute"
+            zIndex={1}
             left="50%"
             bottom="12px"
             transform="translateX(-50%)"
@@ -220,8 +242,16 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
             fontSize="13px"
             lineHeight="20px"
             whiteSpace="nowrap"
-            opacity={0.92}
-            transition="opacity 0.2s ease"
+            transition="all 0.2s ease"
+            _groupHover={{
+              transform: "translateX(-50%) translateY(-2px)",
+              boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.16)",
+            }}
+            _groupFocusVisible={{
+              transform: "translateX(-50%) translateY(-2px)",
+              boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.16)",
+            }}
+            _hover={{ color: "#22703E", borderColor: "#22703E" }}
           >
             <MaximizeIcon width="14px" height="14px" />
             {t("ui.chart.viewFull")}
@@ -230,19 +260,20 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
       )}
 
       {onExpand && !expanded && (isDrawn || status === "preview") && (
-        <Box
-          as="button"
-          type="button"
-          onClick={onExpand}
-          aria-label={t("ui.chart.expand")}
-          title={t("ui.chart.expand")}
-          // Beside the actions menu on a narrow panel, under it in the gutter otherwise.
-          {...iconButtonStyle}
-          top={isDrawn && !narrow ? "36px" : "4px"}
-          right={isDrawn && narrow ? "36px" : "4px"}
-        >
-          <MaximizeIcon width="16px" height="16px" />
-        </Box>
+        <Tooltip {...ActionTooltipProps} label={t("ui.chart.expand")}>
+          <Box
+            as="button"
+            type="button"
+            onClick={onExpand}
+            aria-label={t("ui.chart.expand")}
+            // Beside the actions menu on a narrow panel, under it in the gutter otherwise.
+            {...iconButtonStyle}
+            top={isDrawn && !narrow ? "36px" : "4px"}
+            right={isDrawn && narrow ? "36px" : "4px"}
+          >
+            <MaximizeIcon width="16px" height="16px" />
+          </Box>
+        </Tooltip>
       )}
 
       <Box
@@ -255,8 +286,6 @@ export default function VegaChart({ spec, onStatusChange, onExpand, expanded = f
         right={isDrawn ? undefined : 0}
         opacity={isDrawn ? 1 : 0}
         pointerEvents={isDrawn ? "auto" : "none"}
-        // Expanded, a chart that does not fit even the larger panel scrolls.
-        overflow={expanded ? "auto" : "visible"}
         sx={{
           // No size cap on the canvas: CSS scaling would squash the chart (its height is
           // set in pixels) and put the pointer off its marks.
