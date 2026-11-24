@@ -32,7 +32,7 @@ jobs:
           url: https://vault.basedosdados.org
           token: ${{ secrets.VAULT_TOKEN }}
           secrets: |
-            secret/data/gcp_credentials/basedosdados-dev    GCP_SA_KEY_BASE64 | GCP_SA_KEY_BASE64 ;
+            secret/data/gcp_credentials/basedosdados-dev    GH_ACTIONS_SA     | GCP_SA ;
             secret/data/gcp_credentials/basedosdados-dev    GCP_PROJECT_ID    | GCP_PROJECT_ID ;
             secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_NAME  | GKE_CLUSTER_NAME ;
             secret/data/gcp_credentials/basedosdados-dev    GKE_CLUSTER_ZONE  | GKE_CLUSTER_ZONE ;
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Google Cloud CLI
         uses: google-github-actions/setup-gcloud@v0.2.1
         with:
-          service_account_key: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+          service_account_key: ${{ steps.import_secrets.outputs.GCP_SA }}
           project_id: ${{ steps.import_secrets.outputs.GCP_PROJECT_ID }}
           export_default_credentials: true
 
@@ -49,7 +49,7 @@ jobs:
         with:
           cluster_name: ${{ steps.import_secrets.outputs.GKE_CLUSTER_NAME }}
           location: ${{ steps.import_secrets.outputs.GKE_CLUSTER_ZONE }}
-          credentials: ${{ steps.import_secrets.outputs.GCP_SA_KEY_BASE64 }}
+          credentials: ${{ steps.import_secrets.outputs.GCP_SA }}
 
       - name: Write values.yaml file
         run: |
