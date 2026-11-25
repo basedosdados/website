@@ -25,6 +25,7 @@ import {
   Leaf,
   Lightbulb,
   LogOut,
+  Maximize2,
   MessageCircleMore,
   MessageCircleText,
   PanelLeft,
@@ -94,6 +95,7 @@ export const FileIcon = makeIcon(File);
 export const InfoIcon = makeIcon(Info);
 export const LightbulbIcon = makeIcon(Lightbulb);
 export const LinkIcon = makeIcon(ExternalLink);
+export const MaximizeIcon = makeIcon(Maximize2);
 export const MoreVerticalIcon = makeIcon(EllipsisVertical);
 export const ReloadIcon = makeIcon(RotateCw);
 export const SearchIcon = makeIcon(Search);
