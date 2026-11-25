@@ -957,7 +957,7 @@ function DesktopLinks({
                   component: (
                     <Link
                       id="menu_help_widge_download_catalog"
-                      href={`${process.env.NEXT_PUBLIC_API_URL}/export/catalog/?locale=${locale || "pt"}`}
+                      href={`https://storage.googleapis.com/basedosdados-website/catalog/catalog_bd_${locale || "pt"}.csv`}
                     >
                       {t("tooltip.downloadCatalog")}
                     </Link>
