@@ -17,7 +17,7 @@ thumbnail: /blog/artigo-arquitetura-de-um-data-lakehouse-escalavel/thumnb_1.png
 categories: [analise]
 medium_slug: >-
 published: true
-order: 0
+order: 1
 ---
 
 ## TL;DR
