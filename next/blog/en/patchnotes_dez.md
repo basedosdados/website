@@ -9,7 +9,7 @@ thumbnail: /blog/patchnotes_dez/thumb_patchnotes.png
 categories: [institucional]
 medium_slug: >-
 published: true
-order: 0
+order: 1
 ---
 
 
